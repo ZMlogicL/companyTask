@@ -1,0 +1,20 @@
+1,ae_weight_tbl.c修改为类aeweighttbl.c
+将常量AE_WEIGHT_MEM修改为AeWeightTbl_AE_WEIGHT_MEM
+
+2,af_task.c修改为类aftask.c
+1)AF_Task修改为af_task_start_task
+2)AF_Set_Before_Config修改为af_task_set_before_config
+3)Snd_Msg_To_AF修改为af_task_snd_msg_to_af
+4)AF_Set_Lens_Pos修改为af_task_set_lens_pos
+
+3，cezzane.h修改为bitcode1.h 到　bitcode10.h
+
+４、categoryparameter.h拆分为
+categorydata.h
+categorydebug.h
+categoryinit.h
+categoryopt.h
+categoryparameter.h
+categoryutils.h
+
+５、clk.h修改为userclk.h

@@ -1,0 +1,785 @@
+一、9月2日修改记录：
+1) 将sdram_map_movie_record_es3.c拆分为sdrammapmovierecordes3.c和sdrammapmovierecordes3com.c
+2) 将tlv320aic3204.c拆分为ktlv320aic3204.c和ktlv320aic3204tool.c
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+二、9月3日修改记录：
+1、新建类KCommand
+将command.c新建为kcommand.c，并删除command.c
+修改kcommand.c中的公有属性如下：
+1) VOID command_help_all(const T_CMD_ENTRY cmdTbl[])   ----------->>    VOID k_command_help_all(KCommand* self, const T_CMD_ENTRY cmdTbl[])
+2) VOID Command_Observer(INT32 stacd) -------------->>    VOID k_command_observer(INT32 stacd)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2、新建类SdramMapMoviePlay
+1) 将sdram_map_movie_play.c新建为sdrammapmovieplay.c，并删除sdram_map_movie_play.c
+2) 将target/cpu_tkernel/cmd_entry/include/command.h  移动到  target/cpu_tkernel/cmd_entry/src/command.h
+3) 将target/cpu_tkernel/board/sdram/include/sdram_map_movie_play.h  移动到  target/cpu_tkernel/board/sdram/src/sdram_map_movie_play.h
+4) 修改sdrammapmovieplay.c中的公有方法如下：
+VOID	Sdram_Map_Movie_Play_H264_Initialize( UINT32 yBankSize, UINT32 cBankSize, UINT32* bankNum );  ---------->>  VOID  sdram_map_movie_play_h264_initialize( UINT32 yBankSize, UINT32 cBankSize, UINT32* bankNum );
+VOID	Sdram_Map_Movie_Play_H264_Stream_Ctrl_Initialize( VOID );  ---------->>  VOID  sdram_map_movie_play_h264_stream_ctrl_initialize( VOID );
+VOID 	Sdram_Map_Movie_Play_H264_Get_Vdec( UINT32 idx, UINT32* yAddr, UINT32* cAddr );  ---------->>  VOID	sdram_map_movie_play_h264_get_vdec( UINT32 idx, UINT32* yAddr, UINT32* cAddr );
+VOID	Sdram_Map_Movie_Play_H264_Get_LastVdec( UINT32* yAddr, UINT32* cAddr );  ---------->>  VOID		sdram_map_movie_play_h264_get_lastvdec( UINT32* yAddr, UINT32* cAddr );
+INT32	Sdram_Map_Movie_Play_H264_Get_Stream_Area( UINT32* size, UINT32* address );  ---------->>  INT32		sdram_map_movie_play_h264_get_stream_area( UINT32* size, UINT32* address );
+BOOL	Sdram_Map_Movie_Play_H264_Check_Stream_Area( UINT32 size, UINT32 address );  ---------->>  BOOL		sdram_map_movie_play_h264_check_stream_area( UINT32 size, UINT32 address );
+VOID	Sdram_Map_Movie_Play_H264_Release_Stream_Area( UINT32 address );  ---------->>  VOID		sdram_map_movie_play_h264_release_stream_area( UINT32 address );
+VOID	Sdram_Map_Movie_Play_H264_Get_Stream_Empty_Size( UINT32* size );  ---------->>  VOID		sdram_map_movie_play_h264_get_stream_empty_size( UINT32* size );
+
+VOID	Sdram_Map_Movie_Play_H265_Initialize( UINT32 yBankSize, UINT32 cBankSize, UINT32* bankNum );  ---------->>  VOID	sdram_map_movie_play_h265_initialize( UINT32 yBankSize, UINT32 cBankSize, UINT32* bankNum );
+VOID	Sdram_Map_Movie_Play_H265_Stream_Ctrl_Initialize( VOID );  ---------->>  VOID		sdram_map_movie_play_h265_stream_ctrl_initialize( VOID );
+VOID	Sdram_Map_Movie_Play_H265_Get_Vdec( UINT32 idx, UINT32* yAddr, UINT32* cAddr );  ---------->>  VOID	sdram_map_movie_play_h265_get_vdec( UINT32 idx, UINT32* yAddr, UINT32* cAddr );
+VOID	Sdram_Map_Movie_Play_H265_Get_LastVdec( UINT32* yAddr, UINT32* cAddr );  ---------->>  VOID		sdram_map_movie_play_h265_get_lastvdec( UINT32* yAddr, UINT32* cAddr );
+VOID	Sdram_Map_Movie_Play_H265_Get_Vdec_Area( UINT32* yStartAddr, UINT32* yEndAddr, UINT32* cStartAddr, UINT32* cEndAddr );  ---------->>  VOID	sdram_map_movie_play_h265_get_vdec_area( UINT32* yStartAddr, UINT32* yEndAddr, UINT32* cStartAddr, UINT32* cEndAddr );
+INT32	Sdram_Map_Movie_Play_H265_Get_Stream_Area( UINT32* size, UINT32* address );  ---------->>  INT32		sdram_map_movie_play_h265_get_stream_area( UINT32* size, UINT32* address );
+BOOL	Sdram_Map_Movie_Play_H265_Check_Stream_Area( UINT32 size, UINT32 address );  ---------->>  BOOL		sdram_map_movie_play_h265_check_stream_area( UINT32 size, UINT32 address );
+VOID	Sdram_Map_Movie_Play_H265_Release_Stream_Area( UINT32 address );  ---------->>  VOID		sdram_map_movie_play_h265_release_stream_area( UINT32 address );
+VOID	Sdram_Map_Movie_Play_H265_Get_Stream_Empty_Size( UINT32* size );  ---------->>  VOID		sdram_map_movie_play_h265_get_stream_empty_size( UINT32* size );
+
+VOID		Sdram_Map_Movie_Play_Audio_Initialize( VOID );  ---------->>  VOID		sdram_map_movie_play_audio_initialize( VOID );
+UINT32	Sdram_Map_Movie_Play_Get_AStream_in( VOID );  ---------->>  UINT32	sdram_map_movie_play_get_astream_in( VOID );
+INT32		Sdram_Map_Movie_Play_Chg_AStream_in( VOID );  ---------->>  INT32		sdram_map_movie_play_chg_astream_in( VOID );
+UINT32	Sdram_Map_Movie_Play_Get_AStream_out( VOID );  ---------->>  UINT32	sdram_map_movie_play_get_astream_out( VOID );
+INT32		Sdram_Map_Movie_Play_Chg_AStream_out( VOID );  ---------->>  INT32		sdram_map_movie_play_chg_astream_out( VOID );
+UINT32	Sdram_Map_Movie_Play_Get_AStream_Area_Size( VOID );  ---------->>  UINT32	sdram_map_movie_play_get_astream_area_size( VOID );
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3、新建类AudioCodecWrapper
+1) 将audio_codec_wrapper.c 新建为 audiocodecwrapper.c，并删除audio_codec_wrapper.c
+2) 将target/cpu_tkernel/board/audio_codec/include/audio_codec_wrapper.h 移动到 target/cpu_tkernel/board/audio_codec/src/audio_codec_wrapper.h
+3) 修改audiocodecwrapper.c中的公有方法名如下：
+void AudioCodecWrapper_PowerUp( void );  --------->>  void audio_codec_wrapper_powerup( void );
+void AudioCodecWrapper_PowerDown( void );  ---------->>  void audio_codec_wrapper_powerdown( void );
+void AudioCodecWrapper_Play_Start( void );  --------->>  void audio_codec_wrapper_play_start( void );
+void AudioCodecWrapper_Play_Stop( void );  --------->>  void audio_codec_wrapper_play_stop( void );
+void AudioCodecWrapper_Record_Start( void );  --------->>  void audio_codec_wrapper_record_start( void );
+void AudioCodecWrapper_Record_Stop( void );  --------->>  void audio_codec_wrapper_record_stop( void );
+void AudioCodecWrapper_Set_Vol( unsigned char vol );  --------->>  void audio_codec_wrapper_set_vol( unsigned char vol );
+
+int AudioCodecWrapper_Hardware_Reset( void );  --------->>  int audio_codec_wrapper_hardware_reset( void );
+int AudioCodecWrapper_Setup_Pll( void );  --------->>  int audio_codec_wrapper_setup_pll( void );
+int AudioCodecWrapper_I2s( void );  --------->>  int audio_codec_wrapper_i2s( void );
+int AudioCodecWrapper_Analog_Init( void );  --------->>  int audio_codec_wrapper_analog_init( void );
+int AudioCodecWrapper_Int_Mic_Setup( void );  --------->>  int audio_codec_wrapper_int_mic_setup( void );
+int AudioCodecWrapper_Ext_Mic_Setup( void );  --------->>  int audio_codec_wrapper_ext_mic_setup( void );
+int AudioCodecWrapper_Setup_Input( void );  --------->>  int audio_codec_wrapper_setup_input( void );
+int AudioCodecWrapper_Iir_Biquad_Filters( void );  --------->>  int audio_codec_wrapper_iir_biquad_filters( void );
+int AudioCodecWrapper_Set_Mute( int mute );  --------->>  int audio_codec_wrapper_set_mute( int mute );
+int AudioCodecWrapper_Setup_Speaker_Playback( void );  --------->>  int audio_codec_wrapper_setup_speaker_playback( void );
+int AudioCodecWrapper_Set_Speaker_Amp_Attenuation( unsigned int atten );  --------->>  int audio_codec_wrapper_set_speaker_amp_attenuation( unsigned int atten );
+int AudioCodecWrapper_I2s_Setup( void );  --------->>  int audio_codec_wrapper_i2s_setup( void );
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4、新建类KLt6911ux
+1) 将LT6911UX.c 新建为 klt6911ux.c，并删除LT6911UX.c
+2) 将target/cpu_tkernel/board/bridge/include/LT6911UX.h 移动到 target/cpu_tkernel/board/bridge/src/LT6911UX.h
+3) 修改klt6911ux.c中的公有方法名如下：
+void LT6911UX_GPIO_init(void);  ---------->>  void k_lt6911ux_gpio_init(void);
+int LT6911UX_inqury_va_info(FJ_PERI_CH i2c_ch, T_SHARE_HDMI_IN_VA_INFO* va_info);  ---------->>  int k_lt6911ux_inqury_va_info(FJ_PERI_CH i2c_ch, T_SHARE_HDMI_IN_VA_INFO* va_info);
+void LT6911UX_StartStop_Straming(FJ_PERI_CH i2cCh, BOOL startstop);  ---------->>  void k_lt6911ux_startstop_straming(FJ_PERI_CH i2c_ch, BOOL startstop);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+三、9月4日修改记录
+1、新建类SdramMapPlay
+1) 将sdram_map_play.c 新建为 sdrammapplay.c，并删除sdram_map_play.c
+2) 将target/cpu_tkernel/board/sdram/include/sdram_map_play.h 移动到 target/cpu_tkernel/board/sdram/src/sdram_map_play.h
+3) 修改SdramMapPlay中的公有属性如下：
+	a：修改公有方法名
+	BF_Sdram_Map_Play_Get_Vga_Out_Addr( VOID );  ---------->>  	sdram_map_play_bf_get_vga_out_addr( VOID );
+	BF_Sdram_Map_Play_Get_Hd_Out_Addr( VOID );  ---------->>   	sdram_map_play_bf_get_hd_out_addr( VOID );
+	BF_Sdram_Map_Play_Get_Image_Load_Addr( VOID ); ------>>  	sdram_map_play_bf_get_image_load_addr( VOID );
+	BF_Sdram_Map_Play_Get_Image_Work_Addr( VOID ); ------>>  	sdram_map_play_bf_get_image_work_addr( VOID );
+
+ 	BF_Sdram_Map_Play_Get_Index_Load_Addr( VOID ); -------->> 	 	sdram_map_play_bf_get_index_load_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Rotate_Img_Work_0_Addr( VOID ); ---------->> 	sdram_map_play_bf_get_rotate_img_work_0_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Rotate_Img_Work_1_Addr( VOID ); ---------->> 	sdram_map_play_bf_get_rotate_img_work_1_addr( VOID );
+	BF_Sdram_Map_Play_Get_Rotate_Img_Work_2_Addr( VOID ); ---------->> 	sdram_map_play_bf_get_rotate_img_work_2_addr( VOID );
+
+	BF_Sdram_Map_Play_Get_Half_Rec_Addr( VOID );  ---------->>  	sdram_map_play_bf_get_half_rec_addr( VOID );
+	BF_Sdram_Map_Play_Get_Ahead_Load_Addr(VOID); ------->>   	sdram_map_play_bf_get_ahead_load_addr(VOID);
+
+ 	BF_Sdram_Map_Play_Get_Decoded_YUV_Main_Addr( VOID ); -------->> sdram_map_play_bf_get_decoded_yuv_main_addr( VOID );
+	BF_Sdram_Map_Play_Get_Decoded_YUV_Main_Size( VOID );  -------->>  sdram_map_play_bf_get_decoded_yuv_main_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Decoded_YUV_Thumb_Addr( VOID ); ----->>  sdram_map_play_bf_get_decoded_yuv_thumb_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Decoded_YUV_Thumb_Size( VOID ); ------>>   	sdram_map_play_bf_get_decoded_yuv_thumb_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Resize_YUV_Addr( VOID );         ----------->>    	sdram_map_play_bf_get_resize_yuv_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Resize_YUV_Size( VOID );         ------------>>    	sdram_map_play_bf_get_resize_yuv_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Screen_RGB_Addr( VOID );    -------------->>    	sdram_map_play_bf_get_screen_rgb_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Screen_RGB_Size( VOID );     --------------->>    	sdram_map_play_bf_get_screen_rgb_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Thumb_RGB_Addr( VOID );   --------------->>   	sdram_map_play_bf_get_thumb_rgb_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Thumb_RGB_Size( VOID );    --------------->>    	sdram_map_play_bf_get_thumb_rgb_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Disp_YUV_LCD_Addr( VOID );  ------------->>    	sdram_map_play_bf_get_disp_yuv_lcd_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Disp_YUV_LCD_Size( VOID );   ------------->>     	sdram_map_play_bf_get_disp_yuv_lcd_size( VOID );
+ 	BF_Sdram_Map_Play_Get_Disp_YUV_HDMI_Addr( VOID );  ---------->>     	sdram_map_play_bf_get_disp_yuv_hdmi_addr( VOID );
+ 	BF_Sdram_Map_Play_Get_Disp_YUV_HDMI_Size( VOID );   ----------->>    	sdram_map_play_bf_get_disp_yuv_hdmi_size( VOID );
+
+ 	Sdram_Map_Play_Change_HDMI_HD(BOOL update);       ------------->>    	sdram_map_play_change_hdmi_hd(BOOL update);
+ 	Sdram_Map_Play_Free_HDMI_LockIdx(VOID);                -------------->>   		sdram_map_play_free_hdmi_lockidx(VOID);
+ 	Sdram_Map_Play_Get_HDMI_HD(VOID);                         -------------->>    	sdram_map_play_get_hdmi_hd(VOID);
+ 	Sdram_Map_Play_Get_HDMI_HD_Y(VOID);                     -------------->>     	sdram_map_play_get_hdmi_hd_y(VOID);
+ 	Sdram_Map_Play_Get_HDMI_HD_Cb(VOID);                   ------------->>      	sdram_map_play_get_hdmi_hd_cb(VOID);
+
+	b：宏定义修改如下
+	PIX_SIZ_PLAY_DEFAULT_WIDTH  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_DEFAULT_WIDTH
+	PIX_SIZ_PLAY_DEFAULT_LINES  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_DEFAULT_LINES
+	PIX_SIZ_PLAY_DEFAULT_SIZE  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_DEFAULT_SIZE
+	
+	SDRAM_SIZ_PLAY_IMAGE_YCC_Y  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_IMAGE_YCC_Y
+	SDRAM_SIZ_PLAY_IMAGE_YCC_C  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_IMAGE_YCC_C
+	
+	PIX_SIZ_PLAY_REC_MIDDLE_WIDTH  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_REC_MIDDLE_WIDTH
+	PIX_SIZ_PLAY_REC_MIDDLE_LINES  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_REC_MIDDLE_LINES
+	PIX_SIZ_PLAY_REC_MIDDLE_SIZE  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_REC_MIDDLE_SIZE 
+	
+	PIX_SIZ_PLAY_3RDIP_EDIT  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_3RDIP_EDIT
+	PIX_SIZ_PLAY_DRAW_FILE  ---------->>  SdramMapPlay_PIX_SIZ_PLAY_DRAW_FILE
+	
+	SDRAM_BNK_PLAY_THUMB_CACHE  ---------->>  SdramMapPlay_BNK_PLAY_THUMB_CACHE
+	D_SDRAM_MAP_PLAY_SDRAM_BNK_VDE  ---------->>  SdramMapPlay_MAP_PLAY_SDRAM_BNK_VDE
+	SDRAM_SIZ_PTP_BUFFER  ---------->>  SdramMapPlay_SIZ_PTP_BUFFER
+	SDRAM_SIZ_USB_MASS_STORAGE_BUFFER  ---------->>  SdramMapPlay_SIZ_USB_MASS_STORAGE_BUFFER
+	SDRAM_SIZ_PLAY_DISP_HALF_REC  ---------->>  SdramMapPlay_SIZ_PLAY_DISP_HALF_REC
+	
+	SDRAM_SIZ_PLAY_VGAOUT_YCC420  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC420
+	SDRAM_SIZ_PLAY_VGAOUT_YCC420_Y  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC420_Y
+	SDRAM_SIZ_PLAY_VGAOUT_YCC420_C  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC420_C
+	SDRAM_SIZ_PLAY_VGAOUT_YCC422  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC422
+	SDRAM_SIZ_PLAY_VGAOUT_YCC422_Y  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC422_Y
+	SDRAM_SIZ_PLAY_VGAOUT_YCC422_C  ---------->>  SdramMapPlay_SIZ_PLAY_VGAOUT_YCC422_C
+	
+	SDRAM_SIZ_PLAY_HDOUT_YCC420  ---------->>  SdramMapPlay_SIZ_PLAY_HDOUT_YCC420
+	SDRAM_SIZ_PLAY_HDOUT_YCC422  ---------->>  SdramMapPlay_SIZ_PLAY_HDOUT_YCC422
+	
+	SDRAM_SIZ_PLAY_ROTATE_VGA_WORK  ---------->>  SdramMapPlay_SIZ_PLAY_ROTATE_VGA_WORK
+	SDRAM_SIZ_PLAY_ROTATE_HD_WORK  ---------->>  SdramMapPlay_SIZ_PLAY_ROTATE_HD_WORK
+	SDRAM_SIZ_PLAY_DRAW_WORK_AREA  ---------->>  SdramMapPlay_SIZ_PLAY_DRAW_WORK_AREA
+	
+	SDRAM_SIZ_PLAY_THUMB_WORK  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_THUMB_WORK
+	SDRAM_SIZ_PLAY_THUMB_YCC_Y  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_THUMB_YCC_Y
+	SDRAM_SIZ_PLAY_THUMB_YCC_C  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_THUMB_YCC_C
+	
+	SDRAM_SIZ_PLAY_THUMB_H_WORK  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_THUMB_H_WORK
+	SDRAM_SIZ_PLAY_THUMB_LOAD  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_THUMB_LOAD
+	
+	SDRAM_SIZ_PLAY_3RDIP_EDIT_AREA  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_3RDIP_EDIT_AREA
+	SDRAM_SIZ_PLAY_NSM_PROC_WIDTH  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_NSM_PROC_WIDTH
+	SDRAM_SIZ_PLAY_NSM_PROC_LINES  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_NSM_PROC_LINES
+	
+	SDRAM_SIZ_PLAY_NSM_WORK_AREA  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_NSM_WORK_AREA
+	SDRAM_SIZ_PLAY_MAIN_ENC_AREA  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_MAIN_ENC_AREA
+	SDRAM_SIZ_PLAY_STARTUP_IMAGE_AREA  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_STARTUP_IMAGE_AREA
+	
+	SDRAM_SIZ_PLAY_PCM  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_PCM
+	SDRAM_SIZ_PLAY_AUDIO  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_AUDIO
+	
+	SDRAM_BNK_PLAY_WAV  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_WAV
+	SDRAM_BNK_PLAY_PCM  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_PCM
+	SDRAM_BNK_PLAY_AUDIO  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_AUDIO
+	
+	SDRAM_SIZ_PLAY_AUDIO_WAV_SIZE  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_AUDIO_WAV_SIZE
+	SDRAM_SIZ_PLAY_SLIDE_PCM  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_SLIDE_PCM
+	SDRAM_SIZ_PLAY_SLIDE_AUDIO  ---------->>  SdramMapPlay_SDRAM_SIZ_PLAY_SLIDE_AUDIO
+	
+	SDRAM_BNK_PLAY_SLIDE_WAV  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_SLIDE_WAV
+	SDRAM_BNK_PLAY_SLIDE_PCM  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_SLIDE_PCM
+	SDRAM_BNK_PLAY_SLIDE_AUDIO  ---------->>  SdramMapPlay_SDRAM_BNK_PLAY_SLIDE_AUDIO
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2、新建类SdramMapShare
+1) 将sdram_map_share.c 新建为 sdrammapshare.c，并删除sdram_map_share.c
+2) 将target/cpu_tkernel/board/sdram/include/sdram_map_share.h 移动到 target/cpu_tkernel/board/sdram/src/sdram_map_share.h
+3) 修改sdrammapshare.c中的公有方法名如下：
+	Sdram_Map_Is_Shared(UINT32 adr);  ---------->>  sdram_map_share_is_shared(UINT32 adr);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3、新建类SdramMapOsd
+1) 将sdram_map_osd.c 新建为 sdrammaposd.c，并删除sdram_map_osd.c
+2) 修改sdrammaposd.c中的公有属性如下：
+	a：int gSdram_Map_Osd_buf_index_plus = 0;  ----------->>  int gSdramMapOsdBufIndexPlus = 0;
+	b：公有方法名修改如下
+	Sdram_Map_Osd_Copy_Gui_Info  ---------->>  sdram_map_osd_copy_gui_info
+	Sdram_Map_Osd_Set_OSD_Draw_Area_Buffer_Addr  ---------->>  sdram_map_osd_set_osd_draw_area_buffer_addr
+	Sdram_Map_Osd_Get_OSD_Addr  ---------->>  sdram_map_osd_get_osd_addr
+	Sdram_Map_Osd_Get_OSD_Chg_Addr  ---------->>  sdram_map_osd_get_osd_chg_addr
+	Sdram_Map_Osd_Get_Current_OSD_Addr  ---------->>  sdram_map_osd_get_current_osd_addr
+	Sdram_Map_Osd_Change_OSD_Area_Index  ---------->>  sdram_map_osd_change_osd_area_index
+	Sdram_Map_Osd_Get_OSD_Next_Buffer  ---------->>  sdram_map_osd_get_osd_next_buffer
+	Sdram_Map_Osd_Get_OSD_Buffer_Size   ---------->>  sdram_map_osd_get_osd_buffer_size
+	Sdram_Map_Osd_Get_VDE_Chg_Addr      ---------->>  sdram_map_osd_get_vde_chg_addr
+	Sdram_Map_Osd_Get_WORK_Addr       	--------->>   sdram_map_osd_get_work_addr
+	Sdram_Map_Osd_Get_TV_Work_Area       ---------->>  sdram_map_osd_get_tv_work_area
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4、新建类SdramMapCommon
+1) 将sdram_map_common.c 新建为 sdrammapcommon.c，并删除sdram_map_common.c
+2) 将target/cpu_tkernel/board/sdram/include/sdram_map_common.h 移动到 target/cpu_tkernel/board/sdram/src/sdram_map_common.h
+	并将sdram_map_common.h中内容移动到sdrammapcommon.h中
+3) 修改sdrammapcommon.c中的公有属性如下：
+	a：公有方法名修改如下
+	Sdram_Map_Common_Get_Vde  ---------->>  sdram_map_common_get_vde
+	Sdram_Map_Common_Get_Vde_Y  ------->>  sdram_map_common_get_vde_y
+	Sdram_Map_Common_Get_Vde_Cb ------>>  sdram_map_common_get_vde_cb
+	Sdram_Map_Common_Change_Vde ----->>  sdram_map_common_change_vde
+	Sdram_Map_Common_Next_Vde  -------->>  sdram_map_common_next_vde
+	
+	Sdram_Map_Common_Get_HDMI_HD  ---------->>  sdram_map_common_get_hdmi_hd
+	Sdram_Map_Common_Get_HDMI_HD_Y -------->>  sdram_map_common_get_hdmi_hd_y
+	Sdram_Map_Common_Get_HDMI_HD_Cb ------>>  sdram_map_common_get_hdmi_hd_cb
+	Sdram_Map_Common_Change_HDMI_HD ------>> sdram_map_common_change_hdmi_hd_cb
+	Sdram_Map_Common_Next_HDMI_HD  --------->> sdram_map_common_next_hdmi_hd 
+	
+	Sdram_Map_Common_Get_HDMI_HD_Current_Index -------->> sdram_map_common_get_hdmi_hd_current_index
+	
+	b：枚举类型修改如下
+	(1)
+	枚举名：E_BF_SDRAM_MAP_COMMON_OSD_DISP_BUF  --------->>  SdramMapCommonOsdDispBuf
+	枚举成员：E_BF_SDRAM_MAP_COMMON_OSD_DISP_BUF_0  ---------->>  SdramMapCommon_OSD_DISP_BUF_0
+					   E_BF_SDRAM_MAP_COMMON_OSD_DISP_BUF_1  ---------->>  SdramMapCommon_OSD_DISP_BUF_1
+					   E_BF_SDRAM_MAP_COMMON_OSD_DISP_BUF_2  ---------->>  SdramMapCommon_OSD_DISP_BUF_2
+					   E_BF_SDRAM_MAP_COMMON_OSD_DISP_BUF_THE_END  ---------->>  SdramMapCommon_OSD_DISP_BUF_THE_END
+	(2)
+	枚举名：E_BF_SDRAM_MAP_COMMON_OSD_DISP_BLOCK  ---------->>  SdramMapCommonOsdDispBlock
+	枚举成员：E_BF_SDRAM_MAP_COMMON_OSD_DISP_BLOCK_HDMI  ---------->>  SdramMapCommon_OSD_DISP_BLOCK_HDMI
+					   E_BF_SDRAM_MAP_COMMON_OSD_DISP_BLOCK_LCD  ---------->>  SdramMapCommon_OSD_DISP_BLOCK_LCD
+					   E_BF_SDRAM_MAP_COMMON_OSD_DISP_BLOCK_END  ---------->>  SdramMapCommon_OSD_DISP_BLOCK_END
+	(3)
+	枚举名：E_BF_SDRAM_MAP_COMMON_OSD_GR_NO  ---------->>  SdramMapCommonOsdGrNo
+	枚举成员：E_BF_SDRAM_MAP_COMMON_OSD_GR_NO_0  ---------->>  SdramMapCommon_OSD_GR_NO_0
+					   E_BF_SDRAM_MAP_COMMON_OSD_GR_NO_1  ---------->>  SdramMapCommon_OSD_GR_NO_1
+					   E_BF_SDRAM_MAP_COMMON_OSD_GR_NO_END  ---------->>  SdramMapCommon_OSD_GR_NO_END
+	(4)
+	枚举名：E_BF_SDRAM_MAP_COMMON_COPY_SELECT  ---------->>  SdramMapCommonCopySelect
+	枚举成员：E_BF_SDRAM_MAP_COMMON_COPY_NONE  ---------->>  SdramMapCommon_COPY_NONE
+					   E_BF_SDRAM_MAP_COMMON_COPY_HDMI_FROM_LCD  ---------->>  SdramMapCommon_COPY_HDMI_FROM_LCD
+					   E_BF_SDRAM_MAP_COMMON_COPY_LCD_FROM_HDMI  ---------->>  SdramMapCommon_COPY_LCD_FROM_HDMI
+					   E_BF_SDRAM_MAP_COMMON_COPY_END  ---------->>  SdramMapCommon_COPY_END
+	
+	c：结构体类型修改如下
+	结构体名：T_BF_SDRAM_MAP_COMMON_OSD  ---------->>  TBfSdramMapCommonOsd
+	结构体成员变量：layer_name  ---------->>  layerName
+								  disp_block_no  ---------->>  dispBlockNo
+								  gr_no  ---------->>  grNo
+								  draw_area  ---------->>  drawArea
+	d：宏定义修改如下
+	D_SDRAM_MAP_COMMON_SDRAM_BASE  ---------->>  SdramMapCommon_SDRAM_BASE
+	D_SDRAM_MAP_COMMON_DCACHE_OR  ---------->>  SdramMapCommon_DCACHE_OR
+	D_SDRAM_MAP_COMMON_DCACHE_AND  ---------->>  SdramMapCommon_DCACHE_AND
+	D_SDRAM_MAP_COMMON_DCACHE_PHY2LOG  ---------->>  SdramMapCommon_DCACHE_PHY2LOG
+	D_SDRAM_MAP_COMMON_DCACHE_LOG2PHY  ---------->>  SdramMapCommon_DCACHE_LOG2PHY
+	D_SDRAM_MAP_COMMON_DCACHE_60P  ---------->>  SdramMapCommon_DCACHE_60P
+	D_SDRAM_MAP_COMMON_SDRAM_SIZ  ---------->>  SdramMapCommon_SDRAM_SIZ
+	D_SDRAM_MAP_COMMON_SDRAM_END  ---------->>  SdramMapCommon_SDRAM_END
+	D_SDRAM_MAP_COMMON_SDRAM_FW_END  ---------->>  SdramMapCommon_SDRAM_FW_END
+	D_SDRAM_MAP_COMMON_IMG_SRAM_TOP  ---------->>  SdramMapCommon_IMG_SRAM_TOP
+	
+	WIDTH_36M  ---------->>  SdramMapCommon_WIDTH_36M
+	LINES_36M  ---------->>  SdramMapCommon_LINES_36M
+	PIX_SIZ_36M  ---------->>  SdramMapCommon_PIX_SIZ_36M
+	WIDTH_22M  ---------->>  SdramMapCommon_WIDTH_22M
+	LINES_22M  ---------->>  SdramMapCommon_LINES_22M
+	PIX_SIZ_22M  ---------->>  SdramMapCommon_PIX_SIZ_22M
+	WIDTH_20M  ---------->>  SdramMapCommon_WIDTH_20M
+	LINES_20M  ---------->>  SdramMapCommon_LINES_20M
+	PIX_SIZ_20M  ---------->>  SdramMapCommon_PIX_SIZ_20M
+	WIDTH_16M  ---------->>  SdramMapCommon_WIDTH_16M
+	LINES_16M  ---------->>  SdramMapCommon_LINES_16M
+	PIX_SIZ_16M  ---------->>  SdramMapCommon_PIX_SIZ_16M
+	WIDTH_14M  ---------->>  SdramMapCommon_WIDTH_14M
+	LINES_14M  ---------->>  SdramMapCommon_LINES_14M
+	PIX_SIZ_14M  ---------->>  SdramMapCommon_PIX_SIZ_14M
+	WIDTH_12M  ---------->>  SdramMapCommon_WIDTH_12M
+	LINES_12M  ---------->>  SdramMapCommon_LINES_12M
+	PIX_SIZ_12M  ---------->>  SdramMapCommon_PIX_SIZ_12M
+	
+	
+	WIDTH_12M_3_2  ---------->>  SdramMapCommon_WIDTH_12M_3_2
+	LINES_12M_3_2  ---------->>  SdramMapCommon_LINES_12M_3_2
+	PIX_SIZ_12M_3_2  ---------->>  SdramMapCommon_PIX_SIZ_12M_3_2
+	
+	WIDTH_12M_16_9  ---------->>  SdramMapCommon_WIDTH_12M_16_9
+	LINES_12M_16_9  ---------->>  SdramMapCommon_LINES_12M_16_9
+	PIX_SIZ_12M_16_9  ---------->>  SdramMapCommon_PIX_SIZ_12M_16_9
+	
+	WIDTH_10M  ---------->>  SdramMapCommon_WIDTH_10M
+	LINES_10M  ---------->>  SdramMapCommon_LINES_10M
+	PIX_SIZ_10M  ---------->>  SdramMapCommon_PIX_SIZ_10M
+	
+	WIDTH_10M_3_2  ---------->>  SdramMapCommon_WIDTH_10M_3_2
+	LINES_10M_3_2  ---------->>  SdramMapCommon_LINES_10M_3_2
+	PIX_SIZ_10M_3_2  ---------->>  SdramMapCommon_PIX_SIZ_10M_3_2
+	
+	WIDTH_10M_16_9  ---------->>  SdramMapCommon_WIDTH_10M_16_9
+	LINES_10M_16_9  ---------->>  SdramMapCommon_LINES_10M_16_9
+	PIX_SIZ_10M_16_9  ---------->>  SdramMapCommon_PIX_SIZ_10M_16_9
+	
+	WIDTH_8M  ---------->>  SdramMapCommon_WIDTH_8M
+	LINES_8M  ---------->>  SdramMapCommon_LINES_8M
+	PIX_SIZ_8M  ---------->>  SdramMapCommon_PIX_SIZ_8M
+	
+	WIDTH_8M_3_2  ---------->>  SdramMapCommon_WIDTH_8M_3_2
+	LINES_8M_3_2  ---------->>  SdramMapCommon_LINES_8M_3_2
+	PIX_SIZ_8M_3_2  ---------->>  SdramMapCommon_PIX_SIZ_8M_3_2
+	
+	WIDTH_8M_16_9  ---------->>  SdramMapCommon_WIDTH_8M_16_9
+	LINES_8M_16_9  ---------->>  SdramMapCommon_LINES_8M_16_9
+	PIX_SIZ_8M_16_9  ---------->>  SdramMapCommon_PIX_SIZ_8M_16_9
+	
+	WIDTH_7M  ---------->>  SdramMapCommon_WIDTH_7M
+	LINES_7M  ---------->>  SdramMapCommon_LINES_7M
+	PIX_SIZ_7M  ---------->>  SdramMapCommon_PIX_SIZ_7M
+	
+	WIDTH_6M  ---------->>  SdramMapCommon_WIDTH_6M
+	LINES_6M  ---------->>  SdramMapCommon_LINES_6M
+	PIX_SIZ_6M  ---------->>  SdramMapCommon_PIX_SIZ_6M
+	
+	WIDTH_5M  ---------->>  SdramMapCommon_WIDTH_5M
+	LINES_5M  ---------->>  SdramMapCommon_LINES_5M
+	PIX_SIZ_5M  ---------->>  SdramMapCommon_PIX_SIZ_5M
+	
+	WIDTH_4M  ---------->>  SdramMapCommon_WIDTH_4M
+	LINES_4M  ---------->>  SdramMapCommon_LINES_4M
+	PIX_SIZ_4M  ---------->>  SdramMapCommon_PIX_SIZ_4M
+	
+	WIDTH_3M  ---------->>  SdramMapCommon_WIDTH_3M
+	LINES_3M  ---------->>  SdramMapCommon_LINES_3M
+	PIX_SIZ_3M  ---------->>  SdramMapCommon_PIX_SIZ_3M
+	
+	WIDTH_3M_16_9  ---------->>  SdramMapCommon_WIDTH_3M_16_9
+	LINES_3M_16_9  ---------->>  SdramMapCommon_LINES_3M_16_9
+	PIX_SIZ_3M_16_9  ---------->>  SdramMapCommon_PIX_SIZ_3M_16_9
+	
+	WIDTH_2M  ---------->>  SdramMapCommon_WIDTH_2M
+	LINES_2M  ---------->>  SdramMapCommon_LINES_2M
+	PIX_SIZ_2M  ---------->>  SdramMapCommon_PIX_SIZ_2M
+	
+	WIDTH_1440  ---------->>  SdramMapCommon_WIDTH_1440
+	LINES_1440  ---------->>  SdramMapCommon_LINES_1440
+	PIX_SIZ_1440  ---------->>  SdramMapCommon_PIX_SIZ_1440
+	
+	WIDTH_1_2M  ---------->>  SdramMapCommon_WIDTH_1_2M
+	LINES_1_2M  ---------->>  SdramMapCommon_LINES_1_2M
+	LINES_1_2M_3_2  ---------->>  SdramMapCommon_LINES_1_2M_3_2
+	LINES_1_2M_16_9  ---------->>  SdramMapCommon_LINES_1_2M_16_9
+	PIX_SIZ_1_2M  ---------->>  SdramMapCommon_PIX_SIZ_1_2M
+	PIX_SIZ_1_2M_16_9  ---------->>  SdramMapCommon_PIX_SIZ_1_2M_16_9
+	
+	WIDTH_1M  ---------->>  SdramMapCommon_WIDTH_1M
+	LINES_1M  ---------->>  SdramMapCommon_LINES_1M
+	PIX_SIZ_1M  ---------->>  SdramMapCommon_PIX_SIZ_1M
+	
+	WIDTH_VGA  ---------->>  SdramMapCommon_WIDTH_VGA
+	WIDTH_VGA_AFN  ---------->>  SdramMapCommon_WIDTH_VGA_AFN
+	LINES_VGA  ---------->>  SdramMapCommon_LINES_VGA
+	LINES_VGA_3_2  ---------->>  SdramMapCommon_LINES_VGA_3_2
+	LINES_VGA_16_9  ---------->>  SdramMapCommon_LINES_VGA_16_9
+	LINES_VGA_AFN  ---------->>  SdramMapCommon_LINES_VGA_AFN
+	PIX_SIZ_VGA  ---------->>  SdramMapCommon_PIX_SIZ_VGA
+	PIX_SIZ_VGA_3_2  ---------->>  SdramMapCommon_PIX_SIZ_VGA_3_2
+	PIX_SIZ_VGA_16_9  ---------->>  SdramMapCommon_PIX_SIZ_VGA_16_9
+	
+	WIDTH_HVGA  ---------->>  SdramMapCommon_WIDTH_HVGA
+	LINES_HVGA  ---------->>  SdramMapCommon_LINES_HVGA
+	LINES_HVGA_16_9  ---------->>  SdramMapCommon_LINES_HVGA_16_9
+	PIX_SIZ_HVGA  ---------->>  SdramMapCommon_PIX_SIZ_HVGA
+	
+	WIDTH_QVGA  ---------->>  SdramMapCommon_WIDTH_QVGA
+	WIDTH_QVGA_AFN  ---------->>  SdramMapCommon_WIDTH_QVGA_AFN
+	LINES_QVGA  ---------->>  SdramMapCommon_LINES_QVGA
+	LINES_QVGA_3_2  ---------->>  SdramMapCommon_LINES_QVGA_3_2
+	LINES_QVGA_16_9  ---------->>  SdramMapCommon_LINES_QVGA_16_9
+	LINES_QVGA_AFN  ---------->>  SdramMapCommon_LINES_QVGA_AFN
+	PIX_SIZ_QVGA  ---------->>  SdramMapCommon_PIX_SIZ_QVGA
+	PIX_SIZ_QVGA_3_2  ---------->>  SdramMapCommon_PIX_SIZ_QVGA_3_2
+	PIX_SIZ_QVGA_16_9  ---------->>  SdramMapCommon_PIX_SIZ_QVGA_16_9
+	
+	WIDTH_THUMB  ---------->>  SdramMapCommon_WIDTH_THUMB
+	LINES_THUMB  ---------->>  SdramMapCommon_LINES_THUMB
+	LINES_THUMB_3_2  ---------->>  SdramMapCommon_LINES_THUMB_3_2
+	LINES_THUMB_16_9  ---------->>  SdramMapCommon_LINES_THUMB_16_9
+	PIX_SIZ_THUMB  ---------->>  SdramMapCommon_PIX_SIZ_THUMB
+	PIX_SIZ_THUMB_3_2  ---------->>  SdramMapCommon_PIX_SIZ_THUMB_3_2
+	PIX_SIZ_THUMB_16_9  ---------->>  SdramMapCommon_PIX_SIZ_THUMB_16_9
+	
+	WIDTH_FHD  ---------->>  SdramMapCommon_WIDTH_FHD
+	WIDTH_FHD_3_2  ---------->>  SdramMapCommon_WIDTH_FHD_3_2
+	WIDTH_FHD_4_3  ---------->>  SdramMapCommon_WIDTH_FHD_4_3
+	WIDTH_FHD_AFN  ---------->>  SdramMapCommon_WIDTH_FHD_AFN
+	LINES_FHD  ---------->>  SdramMapCommon_LINES_FHD
+	LINES_FHD_AFN  ---------->>  SdramMapCommon_LINES_FHD_AFN
+	PIX_SIZ_FHD  ---------->>  SdramMapCommon_PIX_SIZ_FHD
+	PIX_SIZ_FHD_3_2  ---------->>  SdramMapCommon_PIX_SIZ_FHD_3_2
+	PIX_SIZ_FHD_4_3  ---------->>  SdramMapCommon_PIX_SIZ_FHD_4_3
+	
+	WIDTH_4K2K_QFHD  ---------->>  SdramMapCommon_WIDTH_4K2K_QFHD
+	WIDTH_4K2K_2_1  ---------->>  SdramMapCommon_WIDTH_4K2K_2_1
+	LINES_4K2K_QFHD  ---------->>  SdramMapCommon_LINES_4K2K_QFHD
+	LINES_4K2K_2_1  ---------->>  SdramMapCommon_LINES_4K2K_2_1
+	LINES_4K2K_QFHD_4_3  ---------->>  SdramMapCommon_LINES_4K2K_QFHD_4_3
+	WIDTH_4K2K_4096  ---------->>  SdramMapCommon_WIDTH_4K2K_4096
+	LINES_4K2K_2160  ---------->>  SdramMapCommon_LINES_4K2K_2160
+	WIDTH_4K2K  ---------->>  SdramMapCommon_WIDTH_4K2K
+	LINES_4K2K  ---------->>  SdramMapCommon_LINES_4K2K
+	WIDTH_4K2K  ---------->>  SdramMapCommon_WIDTH_4K2K
+	LINES_4K2K  ---------->>  SdramMapCommon_LINES_4K2K
+	PIX_SIZ_4K2K  ---------->>  SdramMapCommon_PIX_SIZ_4K2K
+	
+	WIDTH_3K3K  ---------->>  SdramMapCommon_WIDTH_3K3K
+	LINES_3K3K  ---------->>  SdramMapCommon_LINES_3K3K
+	PIX_SIZ_3K3K  ---------->>  SdramMapCommon_PIX_SIZ_3K3K
+	
+	WIDTH_2K2K  ---------->>  SdramMapCommon_WIDTH_2K2K
+	LINES_2K2K  ---------->>  SdramMapCommon_LINES_2K2K
+	PIX_SIZ_2K2K  ---------->>  SdramMapCommon_PIX_SIZ_2K2K
+	
+	WIDTH_2P7K  ---------->>  SdramMapCommon_WIDTH_2P7K
+	LINES_2P7K  ---------->>  SdramMapCommon_LINES_2P7K
+	PIX_SIZ_2P7K  ---------->>  SdramMapCommon_PIX_SIZ_2P7K
+	
+	WIDTH_HD  ---------->>  SdramMapCommon_WIDTH_HD
+	WIDTH_HD_4_3  ---------->>  SdramMapCommon_WIDTH_HD_4_3
+	WIDTH_HD_AFN  ---------->>  SdramMapCommon_WIDTH_HD_AFN
+	LINES_HD  ---------->>  SdramMapCommon_LINES_HD
+	LINES_HD_AFN  ---------->>  SdramMapCommon_LINES_HD_AFN
+	LINES_HD_16_9  ---------->>  SdramMapCommon_LINES_HD_16_9
+	WIDTH_HD_256  ---------->>  SdramMapCommon_WIDTH_HD_256
+	LINES_HD_135  ---------->>  SdramMapCommon_LINES_HD_135
+	PIX_SIZ_HD  ---------->>  SdramMapCommon_PIX_SIZ_HD
+	PIX_SIZ_HD_4_3  ---------->>  SdramMapCommon_PIX_SIZ_HD_4_3
+	
+	WIDTH_SD  ---------->>  SdramMapCommon_WIDTH_SD
+	WIDTH_SD_4_3  ---------->>  SdramMapCommon_WIDTH_SD_4_3
+	LINES_SD_NTSC  ---------->>  SdramMapCommon_LINES_SD_NTSC
+	LINES_SD_PAL  ---------->>  SdramMapCommon_LINES_SD_PAL
+	LINES_SD_NTSC_16_9  ---------->>  SdramMapCommon_LINES_SD_NTSC_16_9
+	LINES_SD_PAL_16_9  ---------->>  SdramMapCommon_LINES_SD_PAL_16_9
+	PIX_SIZ_SD_NTSC  ---------->>  SdramMapCommon_PIX_SIZ_SD_NTSC
+	PIX_SIZ_SD_PAL  ---------->>  SdramMapCommon_PIX_SIZ_SD_PAL
+	
+	WIDTH_PAL_VGA  ---------->>  SdramMapCommon_WIDTH_PAL_VGA
+	LINES_PAL_VGA  ---------->>  SdramMapCommon_LINES_PAL_VGA
+	PIX_SIZ_PAL_VGA  ---------->>  SdramMapCommon_PIX_SIZ_PAL_VGA
+	
+	WIDTH_PAL_QVGA  ---------->>  SdramMapCommon_WIDTH_PAL_QVGA
+	LINES_PAL_QVGA  ---------->>  SdramMapCommon_LINES_PAL_QVGA
+	PIX_SIZ_PAL_QVGA  ---------->>  SdramMapCommon_PIX_SIZ_PAL_QVGA
+	
+	WIDTH_480x270  ---------->>  SdramMapCommon_WIDTH_480x270
+	LINES_480x270  ---------->>  SdramMapCommon_LINES_480x270
+	PIX_SIZ_480x270  ---------->>  SdramMapCommon_PIX_SIZ_480x270
+	
+	WIDTH_THM  ---------->>  SdramMapCommon_WIDTH_THM
+	LINES_THM  ---------->>  SdramMapCommon_LINES_THM
+	PIX_SIZ_THM  ---------->>  SdramMapCommon_PIX_SIZ_THM
+	
+	WIDTH_RGB_DELTA  ---------->>  SdramMapCommon_WIDTH_RGB_DELTA
+	LINES_RGB_DELTA  ---------->>  SdramMapCommon_LINES_RGB_DELTA
+	PIX_SIZ_RGB_DELTA  ---------->>  SdramMapCommon_PIX_SIZ_RGB_DELTA
+	
+	WIDTH_SXVGA  ---------->>  SdramMapCommon_WIDTH_SXVGA
+	LINES_SXVGA  ---------->>  SdramMapCommon_LINES_SXVGA
+	
+	WIDTH_HVGAW  ---------->>  SdramMapCommon_WIDTH_HVGAW
+	LINES_HVGAW  ---------->>  SdramMapCommon_LINES_HVGAW
+	PIX_SIZ_HVGAW  ---------->>  SdramMapCommon_PIX_SIZ_HVGAW
+	
+	WIDTH_320x480  ---------->>  SdramMapCommon_WIDTH_320x480
+	LINES_320x480  ---------->>  SdramMapCommon_LINES_320x480
+	PIX_SIZ_320x480  ---------->>  SdramMapCommon_PIX_SIZ_320x480
+	
+	WIDTH_FWQVGA  ---------->>  SdramMapCommon_WIDTH_FWQVGA
+	LINES_FWQVGA  ---------->>  SdramMapCommon_LINES_FWQVGA
+	LINES_FWQVGA_4_3  ---------->>  SdramMapCommon_LINES_FWQVGA_4_3
+	PIX_SIZ_FWQVGA  ---------->>  SdramMapCommon_PIX_SIZ_FWQVGA
+	
+	LINES_FILL_16_9  ---------->>  SdramMapCommon_LINES_FILL_16_9
+	LINES_FILL_3_2  ---------->>  SdramMapCommon_LINES_FILL_3_2
+	LINES_FILL_16_9_VGA  ---------->>  SdramMapCommon_LINES_FILL_16_9_VGA
+	LINES_FILL_3_2_VGA  ---------->>  SdramMapCommon_LINES_FILL_3_2_VGA
+	LINES_FILL_16_9_QVGA  ---------->>  SdramMapCommon_LINES_FILL_16_9_QVGA
+	LINES_FILL_3_2_QVGA  ---------->>  SdramMapCommon_LINES_FILL_3_2_QVGA
+	LINES_FILL_16_9_THUMB  ---------->>  SdramMapCommon_LINES_FILL_16_9_THUMB
+	LINES_FILL_3_2_THUMB  ---------->>  SdramMapCommon_LINES_FILL_3_2_THUMB
+	
+	MAX_ZOOM_RATIO_ENLARGE  ---------->>  SdramMapCommon_MAX_ZOOM_RATIO_ENLARGE
+	SDRAM_SIZ_VGR  ---------->>  SdramMapCommon_SDRAM_SIZ_VGR
+	D_SDRAM_MAP_COMMON_SDRAM_BNK_VDE  ---------->>  
+
+						  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5、新建类SdramMapManager
+1) 将sdram_map_manager.c 新建为 sdrammapmanager.c，并删除sdram_map_manager.c
+2) 将target/cpu_tkernel/board/sdram/include/sdram_map_manager.h 移动到 target/cpu_tkernel/board/sdram/src/sdram_map_manager.h
+	并将sdram_map_manager.h中内容移动到sdrammapmanager.h中
+3) 修改sdrammapmanager.c中的公有属性如下：
+	a：公有方法名修改如下
+	sdram_map_mgr_get_table_idx  ---------->>  sdram_map_manager_get_table_idx
+	Sdram_Map_Mgr_Init_MxicSlaveRegion  ---------->>  sdram_map_manager_init_mxicslaveregion
+	Sdram_Map_Mgr_Set_SdramMap_Mode  ---------->>  sdram_map_manager_set_sdrammap_mode
+	Sdram_Map_Mgr_Get_SdramMap_Mode  ---------->>  sdram_map_manager_get_sdrammap_mode
+	Sdram_Map_Mgr_Get_Movie_Record_Table_Idx  ---------->>  sdram_map_manager_get_movie_record_table_idx
+	Sdram_Map_Mgr_Init_Mode_Table  ---------->>  sdram_map_manager_init_mode_table
+	b：枚举类型修改如下
+	(1)
+	枚举名：E_SDRAM_MAP_MGR_MODE  --------->>  SdramMapManagerMode
+	枚举成员：E_SDRAM_MAP_MGR_MODE_VIDEO  ---------->>  SdramMapManager_MODE_VIDEO
+					   E_SDRAM_MAP_MGR_MODE_CAP  ---------->>  SdramMapManager_MODE_CAP
+					   E_SDRAM_MAP_MGR_MODE_BURST  ---------->>  SdramMapManager_MODE_BURST
+					   E_SDRAM_MAP_MGR_MODE_PIV  ---------->>  SdramMapManager_MODE_PIV
+					   E_SDRAM_MAP_MGR_MODE_3DNR_EXT  ---------->>  SdramMapManager_MODE_3DNR_EXT
+					   E_SDRAM_MAP_MGR_MODE_STITCH  ---------->>  SdramMapManager_MODE_STITCH
+					   E_SDRAM_MAP_MGR_MODE_STILL_STITCH  ---------->>  SdramMapManager_MODE_STILL_STITCH
+					   E_SDRAM_MAP_MGR_MODE_MULTI_OUT  ---------->>  SdramMapManager_MODE_MULTI_OUT
+					   E_SDRAM_MAP_MGR_MODE_STILL_HDR  ---------->>  SdramMapManager_MODE_STILL_HDR
+					   E_SDRAM_MAP_MGR_MODE_MAX  ---------->>  SdramMapManager_MODE_MAX
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+四、9月5日修改记录
+1、新建类DrvLcd
+1) 将drv_lcd.c 新建为 drvlcd.c，并删除drv_lcd.c
+2) 将target/cpu_tkernel/board/lcd/include/drv_lcd.h 移动到 target/cpu_tkernel/board/lcd/src/drv_lcd.h
+	并将drv_lcd.h中内容移动到drvlcd.h中
+3) 修改类DrvLcd中的公有属性如下：
+	a：宏定义修改如下
+	ERR_MSG  ---------->>  DrvLcd_ERR_MSG
+	RTOS_MAX_NAME_LENGTH  ---------->>  
+	b：枚举类型修改如下
+	(1)
+	枚举名：GP_RET_CODE  --------->>  DrvLcdGpRetCode
+	枚举成员：GP_RET_SUCCESS  ---------->>  DrvLcd_GP_RET_SUCCESS
+					   GP_RET_FAILURE  ---------->>  DrvLcd_GP_RET_FAILURE
+	c：结构体类型修改如下
+	(1)
+	结构体名：drv_lcd_t  ---------->>  DrvLcdT
+	结构体中函数指针：post_config  ---------->>  postConfig
+								  	  get_resolution  ---------->>  getResolution
+								      set_backlight  ---------->>  setBacklight
+								      get_brightness  ---------->>  getBrightness
+								      set_brightness  ---------->>  setBrightness
+								      set_contrast  ---------->>  setContrast
+								      set_color_balance  ---------->>  setColorBalance
+	(2)
+	结构体名：lcd_vout_config  ---------->>  LcdVoutConfig
+	结构体中成员变量：pixel_clk  ---------->>  pixelClk
+								  	  pixel_repetition  ---------->>  pixelRepetition
+								      pixel_format  ---------->>  pixelFormat
+								      display_timing  ---------->>  displayTiming
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2、新建类KTlv320aic3204、KTlv320aic3204Tool
+1) 将tlv320aic3204.c 新建为 ktlv320aic3204.c、ktlv320aic3204tool.c，并删除tlv320aic3204.c
+2) 将target/cpu_tkernel/board/audio_codec/include/tlv320aic3204.h 移动到 target/cpu_tkernel/board/audio_codec/src/tlv320aic3204.h
+	并将tlv320aic3204.h中内容移动到ktlv320aic3204.h中
+3) 修改ktlv320aic3204.c中的公有属性如下：
+	a：公有方法名修改如下
+	AIC3204_Open  ---------->>  k_tlv320aic3204_open
+	AIC3204_Close  ---------->>  k_tlv320aic3204_close
+	AIC3204_PowerUp  ---------->>  k_tlv320aic3204_powerup
+	AIC3204_PowerDown  ---------->>  k_tlv320aic3204_powerdown
+	AIC3204_Play_Start  ---------->>  k_tlv320aic3204_play_start
+	AIC3204_Play_Stop  ---------->>  k_tlv320aic3204_play_stop
+	AIC3204_Record_Start  ---------->>  k_tlv320aic3204_record_start
+	AIC3204_Record_Stop  ---------->>  k_tlv320aic3204_record_stop
+	AIC3204_Set_Volume  ---------->>  k_tlv320aic3204_set_volume
+	AIC3204_Set_Mute  ---------->>  k_tlv320aic3204_set_mute
+	AIC3204_Is_Used  ---------->>  k_tlv320aic3204_is_used
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+四、9月7日修改记录
+1、新建类SdramMapMovieRecordEs3，SdramMapMovieRecordEs3Com
+1) 将sdram_map_movie_record_es3.c 新建为 sdrammapmovierecordes3.c，sdrammapmovierecordes3com.c，并删除sdram_map_movie_record_es3.c
+2) 将target/cpu_tkernel/board/sdram/include/sdram_map_movie_record_es3.h 移动到 target/cpu_tkernel/board/sdram/src/sdram_map_movie_record_es3.h
+	并将sdram_map_movie_record_es3.h中内容移动到sdrammapmovierecordes3com.h中
+3) 修改类SdramMapMovieRecordEs3中的公有属性如下：
+	a：结构体类型修改如下
+	（1）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_RIBERY_REDUCTION  ---------->>  TSdramMapMovieRecordRiberyReduction
+	结构体中成员变量：max_bank  ---------->>  maxBank
+								  	  g_width  ---------->>  gWidth
+								      y_bank  ---------->>  yBank
+								      c_bank  ---------->>  cBank
+								      y_addr  ---------->>  maxBank
+								  	  c_addr  ---------->>  cAddr
+	（2）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_RIBERY_LOCALDEC  ---------->>  TSdramMapMovieRecordRiberyLocaldec
+	结构体中成员变量：max_bank  ---------->>  maxBank
+								  	  g_width  ---------->>  gWidth
+								      y_bank  ---------->>  yBank
+								      c_bank  ---------->>  cBank
+								      y_addr  ---------->>  maxBank
+								  	  c_addr  ---------->>  cAddr
+	（3）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_RIBERY_YC  ---------->>  TSdramMapMovieRecordRiberyYc
+	结构体中成员变量：max_bank  ---------->>  maxBank
+								  	  g_width  ---------->>  gWidth
+								      y_bank  ---------->>  yBank
+								      c_bank  ---------->>  cBank
+	（4）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_HEADER  ---------->>  TSdramMapMovieRecordWaveHeader
+	（5）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_CMPRS  ---------->>  TSdramMapMovieRecordWaveCmprs
+	结构体中成员变量：start_addr  ---------->>  startAddr
+								  	  end_addr  ---------->>  endAddr
+	（6）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_LOCALDEC  ---------->>  TSdramMapMovieRecordWaveLocaldec
+	结构体中成员变量：max_bank  ---------->>  maxBank
+								  	  g_width  ---------->>  gWidth
+								  	  g_lines  ---------->>  gLines
+	（7）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_YC  ---------->>  TSdramMapMovieRecordWaveYc
+	结构体中成员变量：max_bank  ---------->>  maxBank
+								  	  g_width  ---------->>  gWidth
+								  	  g_lines  ---------->>  gLines
+								  	  y_bank  ---------->>  yBank
+								      c_bank  ---------->>  cBank
+	（8）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_STREAM  ---------->>  TSdramMapMovieRecordWaveStream
+	结构体中成员变量：max_bank  ---------->>  maxBank
+	（9）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE_STREAM_WORK  ---------->>  TSdramMapMovieRecordWaveStreamWork
+	（10）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_WAVE  ---------->>  TSdramMapMovieRecordWave
+	结构体中成员变量：nal_report  ---------->>  nalReport
+									  stream_work  ---------->>  streamWork
+	（11）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_BASE_INFORMATION  ---------->>  TSdramMapMovieRecordBaseInformation
+	结构体中成员变量：wave_localdec_top_addr  ---------->>  waveLocaldecTopAddr
+									  wave_localdec_bottom_addr  ---------->>  waveLocaldecBottomAddr
+									  wave_yc_top_addr  ---------->>  waveYcTopAddr
+									  wave_yc_bottom_addr  ---------->>  waveYcBottomAddr
+									  wave_stream_top_addr  ---------->>  waveStreamTopAddr
+									  wave_stream_bottom_addr  ---------->>  waveStreamBottomAddr
+									  ribery_reduction_top_addr  ---------->>  riberyReductionTopAddr
+									  ribery_reduction_bottom_addr  ---------->>  riberyReductionBottomAddr
+									  ribery_localdec_top_addr  ---------->>  riberyLocaldecTopAddr
+									  ribery_localdec_bottom_addr  ---------->>  riberyLocaldecBottomAddr
+									  ribery_yc_top_addr  ---------->>  riberyYcTopAddr
+									  ribery_yc_bottom_addr  ---------->>  riberyYcBottomAddr
+									  ribery_dummy_top_addr  ---------->>  riberyDummyTopAddr
+									  ribery_dummy_bottom_addr  ---------->>  riberyDummyBottomAddr
+	（12）
+	结构体名：T_SDRAM_MAP_MOVIE_RECORD_INFORMATION  ---------->>  TSdramMapMovieRecordInformation
+	结构体中成员变量：wave_map_count  ---------->>  waveMapCount
+									  wave_map_size  ---------->>  waveMapSize
+									  wave_map_localdec_total_size  ---------->>  waveMapLocaldecTotalSize
+									  wave_map_localdec_top_addr  ---------->>  waveMapLocaldecTopAddr
+									  wave_map_localdec_bottom_addr  ---------->>  waveMapLocaldecBottomAddr  
+									  wave_map_localdec_free_size  ---------->>  waveMapLocaldecFreeSize
+									  wave_map_localdec_use  ---------->>  waveMapLocaldecUse
+									  wave_map_yc_total_size  ---------->>  waveMapYcTotalSize
+									  wave_map_yc_top_addr  ---------->>  waveMapYcTopAddr
+									  wave_map_yc_bottom_addr  ---------->>  waveMapYcBottomAddr
+									  wave_map_yc_free_size  ---------->>  waveMapYcFreeSize
+									  wave_map_yc_use  ---------->>  waveMapYcUse
+									  wave_map_stream_total_size  ---------->>  waveMapStreamTotalSize
+									  wave_map_stream_top_addr  ---------->>  waveMapStreamTopAddr
+									  wave_map_stream_bottom_addr  ---------->>  waveMapStreamBottomAddr
+									  wave_map_stream_free_size  ---------->>  waveMapStreamFreeSize
+									  wave_map_stream_use  ---------->>  waveMapStreamUse
+									  
+									  
+									  ribery_map_count  ---------->>  riberyMapCount
+									  ribery_map_size  ---------->>  riberyMapSize  
+									  ribery_map_reduction_total_size  ---------->>  riberyMapReductionTotalSize
+									  ribery_map_reduction_top_addr  ---------->>  riberyMapReductionTopAddr
+									  ribery_map_reduction_bottom_addr  ---------->>  riberyMapReductionBottomAddr
+									  ribery_map_reduction_free_size  ---------->>  riberyMapReductionFreeSize
+									  ribery_map_reduction_use  ---------->>  riberyMapReductionUse
+									  ribery_map_localdec_total_size  ---------->>  riberyMapLocaldecTotalSize
+									  ribery_map_localdec_top_addr  ---------->>  riberyMapLocaldecTopAddr
+									  ribery_map_localdec_bottom_addr  ---------->>  riberyMapLocaldecBottomAddr
+									  ribery_map_localdec_free_size  ---------->>  riberyMapLocaldecFreeSize
+									  ribery_map_localdec_use  ---------->>  riberyMapLocaldecUse
+									  ribery_map_yc_total_size  ---------->>  riberyMapYcTotalSize
+									  ribery_map_yc_top_addr  ---------->>  riberyMapYcTopAddr
+									  ribery_map_yc_bottom_addr  ---------->>  riberyMapYcBottomAddr
+									  ribery_map_yc_free_size  ---------->>  riberyMapYcFreeSize
+									  ribery_map_yc_use  ---------->>  riberyMapYcUse
+---------------------------------------------------------------------------------------------------
+	b：枚举类型修改如下
+	(1)
+	枚举名：E_SDRAM_MAP_MOVIE_RECORD_PATTERN  --------->>  SdramMapMovieRecordEs3ComESdramMapMovieRecordPattern
+	枚举成员：E_SDRAM_MAP_MOVIE_RECORD_PATTERN_0  ---------->>  SdramMapMovieRecordEs3Com_PATTERN_0
+					   E_SDRAM_MAP_MOVIE_RECORD_PATTERN_STITCH  ---------->>  SdramMapMovieRecordEs3Com__PATTERN_STITCH
+					   E_SDRAM_MAP_MOVIE_RECORD_PATTERN_MAX  ---------->>  SdramMapMovieRecordEs3Com__PATTERN_MAX
+---------------------------------------------------------------------------------------------------					   
+	c：公有方法名修改如下
+	Sdram_Map_Movie_Record_Initialize  ---------->>  sdram_map_movie_record_initialize
+	Sdram_Map_Movie_Record_Get_TS_Work0  ---------->>  sdram_map_movie_record_get_ts_work0
+	Sdram_Map_Movie_Record_Get_TS_Work1  ---------->>  sdram_map_movie_record_get_ts_work1
+	Sdram_Map_Movie_Record_Get_Audio_Stream0  ---------->>  sdram_map_movie_record_get_audio_stream0
+	Sdram_Map_Movie_Record_Get_Audio_Stream1  ---------->>  sdram_map_movie_record_get_audio_stream1
+	Sdram_Map_Movie_Record_Chg_Audio_Stream0  ---------->>  sdram_map_movie_record_chg_audio_stream0
+	Sdram_Map_Movie_Record_Chg_Audio_Stream1  ---------->>  sdram_map_movie_record_chg_audio_stream1
+	Sdram_Map_Movie_Record_Get_Audio_Stream0_Max_Bank  ---------->>  sdram_map_movie_record_get_audio_stream0_max_bank
+	Sdram_Map_Movie_Record_Get_Audio_Stream1_Max_Bank  ---------->>  sdram_map_movie_record_get_audio_stream1_max_bank
+	
+	//h265
+	Sdram_Map_Movie_Record_Get_H265_Code  ---------->>  sdram_map_movie_record_get_h265_code
+	Sdram_Map_Movie_Record_Get_H265_Map  ---------->>  sdram_map_movie_record_get_h265_map				
+	Sdram_Map_Movie_Record_Get_H265_Vin_Dummy  ---------->>  sdram_map_movie_record_get_h265_vin_dummy
+	
+	
+	Sdram_Map_Movie_Record_Get_H265_SEI  ---------->>  sdram_map_movie_record_es3_com_get_h265_sei
+	Sdram_Map_Movie_Record_Get_H265_VUI  ---------->>  sdram_map_movie_record_es3_com_get_h265_vui
+	Sdram_Map_Movie_Record_Get_H265_NAL_Report  ---------->>  sdram_map_movie_record_es3_com_get_h265_nal_report
+	Sdram_Map_Movie_Record_Get_H265_Header  ---------->>  sdram_map_movie_record_es3_com_get_h265_header
+	Sdram_Map_Movie_Record_Get_H265_Vin  ---------->>  sdram_map_movie_record_get_h265_vin
+	Sdram_Map_Movie_Record_Get_H265_Stream_Bank  ---------->>  sdram_map_movie_record_es3_com_get_h265_stream_bank
+	Sdram_Map_Movie_Record_Get_H265_Stream_Index  ---------->>  sdram_map_movie_record_es3_com_get_h265_stream_index
+	Sdram_Map_Movie_Record_Get_H265_Stream_Work  ---------->>  sdram_map_movie_record_get_h265_stream_work
+	Sdram_Map_Movie_Record_Get_H265_Stream_Bank_Num  ---------->>  sdram_map_movie_record_es3_com_get_h265_stream_bank_num
+	Sdram_Map_Movie_Record_Set_H265_Map  ---------->>  sdram_map_movie_record_es3_com_set_h265_map	 
+
+	Sdram_Map_Movie_Record_Get_H265_Map_YC_Information  ---------->>  sdram_map_movie_record_get_h265_map_yc_information
+	Sdram_Map_Movie_Record_Set_H265_Map_YC_Information  ---------->>  sdram_map_movie_record_set_h265_map_yc_information
+	
+	//h264
+	Sdram_Map_Movie_Record_Get_H264_Stream_Work0  ---------->>  sdram_map_movie_record_get_h264_stream_work0
+	Sdram_Map_Movie_Record_Get_H264_Stream_Work1  ---------->>  sdram_map_movie_record_get_h264_stream_work1
+	Sdram_Map_Movie_Record_Get_H264_Stream_Work_Size  ---------->>  sdram_map_movie_record_get_h264_stream_work_size
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Stream0_Start_Address  ---------->>  sdram_map_movie_record_get_h264_ribery_stream0_start_address
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Stream0_End_Address  ---------->>  sdram_map_movie_record_get_h264_ribery_stream0_end_address
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Stream1_Start_Address  ---------->>  sdram_map_movie_record_get_h264_ribery_stream1_start_address	
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Stream1_End_Address  ---------->>  sdram_map_movie_record_get_h264_ribery_stream1_end_address
+	
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Work0  ---------->>  sdram_map_movie_record_get_h264_ribery_work0
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Work1  ---------->>  sdram_map_movie_record_get_h264_ribery_work1
+	Sdram_Map_Movie_Record_Get_H264_Ribery_Work2  ---------->>  sdram_map_movie_record_get_h264_ribery_work2
+	Sdram_Map_Movie_Record_Get_H264_Vin_Dummy  ---------->>  sdram_map_movie_record_get_h264_vin_dummy
+	Sdram_Map_Movie_Record_Get_H264_Vin  ---------->>  sdram_map_movie_record_get_h264_vin
+	Sdram_Map_Movie_Record_Get_H264_Map_Reduction_Information  ---------->>  sdram_map_movie_record_get_h264_map_reduction_information
+	Sdram_Map_Movie_Record_Set_H264_Map_Reduction_Information  ---------->>  sdram_map_movie_record_set_h264_map_reduction_information	
+	Sdram_Map_Movie_Record_Get_H264_Map_Local_Dec_Information  ---------->>  sdram_map_movie_record_get_h264_map_local_dec_information
+	Sdram_Map_Movie_Record_Set_H264_Map_Local_Dec_Information  ---------->>  sdram_map_movie_record_set_h264_map_local_dec_information
+	Sdram_Map_Movie_Record_Get_H264_Map_YC_Information  ---------->>  sdram_map_movie_record_get_h264_map_yc_information
+	Sdram_Map_Movie_Record_Set_H264_Map_YC_Information  ---------->>  sdram_map_movie_record_set_h264_map_yc_information
+	
+	
+	//commom
+	Sdram_Map_Movie_Record_Get_Map_Base_Information  ---------->>  sdram_map_movie_record_get_map_base_information
+	Sdram_Map_Movie_Record_Get_Map_Information  ---------->>  sdram_map_movie_record_get_map_information
+	Sdram_Map_Movie_Record_Set_H264_Map_Information  ---------->>  sdram_map_movie_record_set_h264_map_information
+	Sdram_Map_Movie_Record_Set_H265_Map_Information  ---------->>  sdram_map_movie_record_set_h265_map_information	
+	Sdram_Map_Movie_Record_Get_H265_Temp_Addr_YC  ---------->>  sdram_map_movie_record_get_h265_temp_addr_yc
+	Sdram_Map_Movie_Record_Get_H265_Temp_Addr_CMP  ---------->>  sdram_map_movie_record_get_h265_temp_addr_cmp	
+	Sdram_Map_Movie_Record_Check_Address  ---------->>  sdram_map_movie_record_check_address
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------			   	
+四、9月8日修改记录
+1、新建类PalladiumTestR2y，PalladiumTestR2yCom，PalladiumTestR2yCom2
+1) 将palladium_test_r2y.c 新建为 palladiumtestr2y.c，palladiumtestr2ycom.c，palladiumtestr2ycom2.c并删除palladium_test_r2y.c 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------			   	
+2、新建类PalladiumTestTmr64
+1) 将palladium_test_tmr64.c 新建为palladiumtesttmr64.c，并删除palladium_test_tmr64.c
+	
+	
+	
+	
+	
+	
+	

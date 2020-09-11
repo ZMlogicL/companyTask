@@ -1,0 +1,349 @@
+如果格式看不清楚，请移步：smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录
+
+movie_common:smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录    //sheet1
+h264_decode:smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录    //sheet2
+h264_encode:smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录    //sheet3
+h264_movie:smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录    //sheet4
+RB.h  --  :smb://192.168.16.98/snsprojects/设备组1/黄天福修改记录    //sheet5
+
+target/cpu_tkernel/basefw/fj/movie/h264/rb/include/RB.h
+把宏定义全部拆到RB1.h里面
+
+movie_common.c	-------->	moviecommon.c
+movie_common.h	-------->	moviecommon.h
+
+h264_decode.c	-------->	h264decode.c
+h264_decode.h	-------->	h264decode.h
+
+h264_encode.c	-------->	h264encode.c
+h264_encode.h	-------->	h264encode.h
+
+h264_movie.c	-------->	h264_movie.c
+h264_movie.h	-------->	h264_movie.h
+		
+RB.h  -------->rb.h  rb1.h
+{
+	宏定义全放在rb1.h
+	结构体枚举名字更改见附表sheet5
+	函数声明无法更改
+}
+
+h文件变化		
+D_BF_MOVIE_COMMON_OK	-------->	MovieCommon_OK
+D_BF_MOVIE_COMMON_NG	-------->	MovieCommon_NG
+D_BF_MOVIE_COMMON_ON	-------->	MovieCommon_ON
+D_BF_MOVIE_COMMON_OFF	-------->	MovieCommon_OFF
+		
+D_BF_MOVIE_COMMON_SCAN_MODE_PROGRESSIVE	-------->	MovieCommon_SCAN_MODE_PROGRESSIV
+D_BF_MOVIE_COMMON_SCAN_MODE_INTERLACE	-------->	MovieCommon_SCAN_MODE_INTERLACE
+	-------->	
+D_BF_MOVIE_COMMON_TIMERESO_239_76	-------->	MovieCommon_TIMERESO_239_76
+D_BF_MOVIE_COMMON_TIMERESO_240_0	-------->	MovieCommon_TIMERESO_240_0
+D_BF_MOVIE_COMMON_TIMERESO_50_0	-------->	MovieCommon_IMERESO_50_0
+		
+D_BF_MOVIE_COMMON_TIMEINC_239_76	-------->	MovieCommon_TIMEINC_239_76
+D_BF_MOVIE_COMMON_TIMEINC_240_0	-------->	MovieCommon_TIMEINC_240_0
+D_BF_MOVIE_COMMON_TIMEINC_50_0	-------->	MovieCommon_TIMEINC_50_0
+D_BF_MOVIE_COMMON_PATTERN_NUM	-------->	MovieCommon_PATTERN_NUM
+		
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_TIMER_FRAME_RATE_239_76 = 0,	-------->	MovieCommon_TIMER_FRAME_RATE_239_76 = 0,
+E_BF_MOVIE_COMMON_TIMER_FRAME_RATE_240_0,	-------->	MovieCommon_TIMER_FRAME_RATE_240_0,
+E_BF_MOVIE_COMMON_TIMER_FRAME_RATE_50_0,	-------->	MovieCommon_TIMER_FRAME_RATE_50_0,
+E_BF_MOVIE_COMMON_TIMER_FRAME_RATE_INITIALIZE,	-------->	MovieCommon_TIMER_FRAME_RATE_INITIALIZE,
+} E_BF_MOVIE_COMMON_TIMER_FRAME_RATE;	-------->	} MovieCommonTimerFrameRate;
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_RTIMER_MODE_ENC = 0,	-------->	MovieCommon_RTIMER_MODE_ENC = 0,
+E_BF_MOVIE_COMMON_RTIMER_MODE_DEC,	-------->	MovieCommon_RTIMER_MODE_DEC,
+}E_BF_MOVIE_COMMON_RTIMER_MODE;	-------->	} MovieCommonRtimerMode;
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_STREAM_STATUS_STOP = 0,	-------->	MovieCommon_STREAM_STATUS_STOP = 0,
+E_BF_MOVIE_COMMON_STREAM_STATUS_START = 1,	-------->	MovieCommon_STREAM_STATUS_START = 1,
+E_BF_MOVIE_COMMON_STREAM_STATUS_CHANGETO_START = 2, 	-------->	MovieCommon_STREAM_STATUS_CHANGETO_START = 2, 
+E_BF_MOVIE_COMMON_STREAM_STATUS_CHANGETO_STOP = 3, 	-------->	MovieCommon_STREAM_STATUS_CHANGETO_STOP = 3, 
+}E_BF_MOVIE_COMMON_STREAM_STATUS;	-------->	} MovieCommonStreamStatus;
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_MODULE_AUDIO = 0,	-------->	MovieCommon_MODULE_AUDIO = 0,
+E_BF_MOVIE_COMMON_MODULE_H264 ,	-------->	MovieCommon_MODULE_H264,
+E_BF_MOVIE_COMMON_MODULE_MAX	-------->	MovieCommon_MODULE_MAX
+}E_BF_MOVIE_COMMON_MODULE;	-------->	} MovieCommonModule;
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_MOVIE_STOP = 0,	-------->	MovieCommon_MOVIE_STOP = 0,
+E_BF_MOVIE_COMMON_MOVIE_SETUP ,	-------->	MovieCommon_MOVIE_SETUP,
+E_BF_MOVIE_COMMON_MOVIE_SETUP_COMPLETE ,	-------->	MovieCommon_MOVIE_SETUP_COMPLETE,
+E_BF_MOVIE_COMMON_MOVIE_SETMODE ,	-------->	MovieCommon_MOVIE_SETMODE,
+E_BF_MOVIE_COMMON_MOVIE_RUNNING ,	-------->	MovieCommon_MOVIE_RUNNING,
+E_BF_MOVIE_COMMON_MOVIE_STOPING	-------->	MovieCommon_MOVIE_STOPING
+}E_BF_MOVIE_COMMON_MOVIE_CTL;	-------->	} MovieCommonMovieCtl;
+		
+		typedef enum
+typedef enum{		{
+E_BF_MOVIE_COMMON_NOTIFIER_START = 0,	-------->	MovieCommon_NOTIFIER_START = 0,
+E_BF_MOVIE_COMMON_NOTIFIER_STOP ,	-------->	MovieCommon_NOTIFIER_STOP,
+E_BF_MOVIE_COMMON_NOTIFIER_ERR ,	-------->	MovieCommon_NOTIFIER_ERR,
+E_BF_MOVIE_COMMON_NOTIFIER_TYPE_MAX	-------->	MovieCommon_NOTIFIER_TYPE_MAX
+}E_BF_MOVIE_COMMON_NOTIFIER_TYPE;	-------->	} MovieCommonNotifierType;
+		
+		
+typedef VOID (*T_Mode_Change_Callback)(FJ_MODE, E_BF_MOVIE_COMMON_NOTIFIER_TYPE);	-------->	typedef VOID (*T_Mode_Change_Callback)(FJ_MODE , MovieCommonNotifierType);
+		
+		
+		typedef struct
+typedef struct{		{
+USHORT tmcsr_csl; // select clock	-------->	USHORT tmcsrCsl; // select clock
+USHORT soft_tmrlr; // Soft Count	-------->	USHORT softTmrlr; // Soft Count
+UINT32 tmrlr; // TMRLR value	-------->	UINT32 tmrlr; // TMRLR value
+}T_BF_MOVIE_COMMON_RTIME_CTL;	-------->	} MovieCommonRtimeCtl;
+		
+extern VOID BF_Movie_Common_Timer_Calculate(UINT32 time_inc, UINT32 time_inc_resol, UINT32 scan_mode);	-------->	VOID movie_common_timer_calculate(MovieCommon *self, UINT32 timeInc, UINT32 timeIncResol, UINT32 scanMode);
+extern INT32 BF_Movie_Common_Timer_Start(E_BF_MOVIE_COMMON_RTIMER_MODE mode);	-------->	INT32 movie_common_timer_start(MovieCommon *self, MovieCommonRtimerMode mode);
+extern VOID BF_Movie_Common_Timer_Stop(E_BF_MOVIE_COMMON_RTIMER_MODE mode);	-------->	VOID movie_common_timer_stop(MovieCommon *self, MovieCommonRtimerMode mode);
+		
+// Movie Timer Control		// Movie Timer Control
+extern INT32 BF_Movie_Common_Convert_Framerate(E_BF_MOVIE_COMMON_TIMER_FRAME_RATE framerate, ULONG *vop_time_increment, ULONG *vop_time_inc_resol);	-------->	INT32 movie_common_convert_framerate(MovieCommon *self, MovieCommonTimerFrameRate framerate,ULONG *vopTimeIncrement, ULONG *vopTimeIncResol);
+extern VOID BF_Movie_Common_Sync_Setting(E_VIDEO_ENOCDE_ID video_enc_id);	-------->	VOID movie_common_sync_setting(MovieCommon *self, E_VIDEO_ENOCDE_ID videoEncId);
+extern VOID BF_Movie_Common_Timer_Start_View(VOID);	-------->	VOID movie_common_timer_start_view(MovieCommon *self);
+extern VOID BF_Movie_Common_Set_Timer_Start_Flag(BOOL start);	-------->	VOID movie_common_set_timer_start_flag(MovieCommon *self, BOOL start);
+extern BOOL BF_Movie_Common_Get_Timer_Start_Flag(VOID);	-------->	BOOL movie_common_get_timer_start_flag(MovieCommon *self);
+extern INT32 BF_Movie_Common_Timer_Counter_Reset(VOID);	-------->	INT32 movie_common_timer_counter_reset(MovieCommon *self);
+extern ULLONG BF_Movie_Common_Timer_Counter_Get(VOID);	-------->	ULLONG movie_common_timer_counter_get(MovieCommon *self);
+extern INT32 BF_Movie_Common_Timer_Setting(E_VIDEO_ENOCDE_ID video_enc_id);	-------->	INT32 movie_common_timer_setting(MovieCommon *self, E_VIDEO_ENOCDE_ID videoEncId);
+extern VOID BF_Movie_Common_Sync_Start_H264(ULONG stream_ch);	-------->	VOID movie_common_sync_start_h264(MovieCommon *self, ULONG streamCh);
+extern VOID BF_Movie_Common_Sync_Stop_H264(VOID);	-------->	VOID movie_common_sync_stop_h264(MovieCommon *self);
+extern VOID BF_Movie_Common_Sync_Start_H265(ULONG stream_ch);	-------->	VOID movie_common_sync_start_h265(MovieCommon *self, ULONG streamCh);
+extern VOID BF_Movie_Common_Sync_Stop_H265(VOID);	-------->	VOID movie_common_sync_stop_h265(MovieCommon *self);
+	-------->	
+#if defined(CO_H264_ENC_DEBUG_VIEW_DUMMY) || defined(CO_H265_ENC_DEBUG_VIEW_DUMMY)		#if defined(CO_H264_ENC_DEBUG_VIEW_DUMMY) || defined(CO_H265_ENC_DEBUG_VIEW_DUMMY)
+extern VOID BF_Movie_Common_Set_Dummy_Sync(E_VIDEO_ENOCDE_ID enc_id, BOOL flag);	-------->	VOID movie_common_set_dummy_sync(MovieCommon *self, E_VIDEO_ENOCDE_ID encId, BOOL flag);
+#endif		#endif
+VOID BF_Movie_Common_Reload_Enc_Handler(VOID);	-------->	VOID movie_common_reload_enc_handler(MovieCommon *self);
+VOID BF_Movie_Common_RecTimer_Enable(BOOL enable);	-------->	VOID movie_common_rectimer_enable(MovieCommon *self, BOOL enable);
+
+
+
+
+h264_decode.c .h ------>h264decode.c .h
+详情请见第一行代码的sheet2
+H264_Decode.h		﻿	
+#define H264_TYPE_DECODE (h264_decode_get_type())	-------->	#define H264_TYPE_DECODE (h264_decode_get_type())	
+#define H264_DECODE(obj) (K_TYPE_CHECK_INSTANCE_CAST(obj, H264Decode))	-------->	#define H264_DECODE(obj) (K_TYPE_CHECK_INSTANCE_CAST(obj, H264Decode))	
+#define H264_IS_DECODE(obj) (K_TYPE_CHECK_INSTANCE_TYPE((obj), H264_TYPE_DECODE))	-------->	#define H264_IS_DECODE(obj) (K_TYPE_CHECK_INSTANCE_TYPE((obj), H264_TYPE_DECODE))	
+			
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+/* Definition */		/* Definition */	
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+#define D_H264_DEC_SAVE_SAMPLE_MAX_NUM (500) /* ** tentative value */		#define H264Decode_SAVE_SAMPLE_MAX_NUM (500) /* ** tentative value */	
+			
+/* Number of VOP to Lch-Decode */		/* Number of VOP to Lch-Decode */	
+#define D_H264_DEC_VOP_TOP_NUM (1)	-------->	#define H264Decode_VOP_TOP_NUM (1)	
+#define D_H264_DEC_VOP_MAX_NUM (16)	-------->	#define H264Decode_VOP_MAX_NUM (16)	
+#define D_H264_DEC_VOP_TRICK_NUM (2)	-------->	#define H264Decode_VOP_TRICK_NUM (2)	
+			
+/* Stop Request */		/* Stop Request */	
+#define D_H264_DEC_REQ_NONE (0)	-------->	#define H264Decode_REQ_NONE (0)	
+#define D_H264_DEC_REQ_STOP (1)	-------->	#define H264Decode_REQ_STOP (1)	
+#define D_H264_DEC_REQ_FORCE_STOP (2)	-------->	#define H264Decode_REQ_FORCE_STOP (2)	
+#define D_H264_DEC_REQ_TTR_END_POINT (3)	-------->	#define H264Decode_REQ_TTR_END_POINT (3)	
+			
+/* End Cause */		/* End Cause */	
+#define D_H264_DEC_END_CAUSE_NONE (0)	-------->	#define H264Decode_END_CAUSE_NONE (0)	
+#define D_H264_DEC_END_CAUSE_STREAM_ERR (1)	-------->	#define H264Decode_END_CAUSE_STREAM_ERR (1)	
+#define D_H264_DEC_END_CAUSE_FATAL_ERR (2)	-------->	#define H264Decode_END_CAUSE_FATAL_ERR (2)	
+			
+/* Kind of Video Chunk */		/* Kind of Video Chunk */	
+#define D_H264_DEC_IP_VOP (0)	-------->	#define H264Decode_IP_VOP (0)	
+#define D_H264_DEC_I_VOP (1)	-------->	#define H264Decode_I_VOP (1)	
+			
+/* Video Chunk for Sync Flag */		/* Video Chunk for Sync Flag */	
+#define D_H264_DEC_SYNC_OFF (0)	-------->	#define H264Decode_SYNC_OFF (0)	
+#define D_H264_DEC_SYNC_ON (1)	-------->	#define H264Decode_SYNC_ON (1)	
+			
+/* User Data Size */		/* User Data Size */	
+#define D_H264_DEC_USER_DATA_SIZE (6)	-------->	#define H264Decode_USER_DATA_SIZE (6)	
+			
+// semaphore wait time		// semaphore wait time	
+#define H264_DEC_SEMAPHORE_TIMEOUT (5000)	-------->	#define H264Decode_SEMAPHORE_TIMEOUT (5000)	
+			
+// VDPB Num		// VDPB Num	
+#define D_H264_DEC_VDPB_MAX_NUM (48)	-------->	#define H264Decode_VDPB_MAX_NUM (48)	
+#define D_H264_DEC_VDPB_MIN_NUM (9)	-------->	#define H264Decode_VDPB_MIN_NUM (9)	
+#define D_H264_DEC_NOT_SET_PTS (0xFFFFFFFFFFFFFFFF)	-------->	#define H264Decode_NOT_SET_PTS (0xFFFFFFFFFFFFFFFF)	
+			
+typedef struct _H264Decode H264Decode;		typedef struct _H264Decode H264Decode;	
+			
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+/* Enumeration */		/* Enumeration */	
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+typedef enum		typedef enum	
+{		{	
+E_H264_DEC_PTS_SEARCH_MODE_SAME = 0, // ex.Use Normal Play	-------->	H264Decode_PTS_SEARCH_MODE_SAME = 0, // ex.Use Normal Play	
+E_H264_DEC_PTS_SEARCH_MODE_SMALL = 1, // ex.Use FF	-------->	H264Decode_PTS_SEARCH_MODE_SMALL = 1, // ex.Use FF	
+E_H264_DEC_PTS_SEARCH_MODE_BIG = 2, // ex.Use REW	-------->	H264Decode_PTS_SEARCH_MODE_BIG = 2, // ex.Use REW	
+} E_H264_DEC_PTS_SEARCH_MODE;	-------->	} H264Decode_PTS_SEARCH_MODE;	
+			
+typedef enum		typedef enum	
+{		{	
+E_H264_DEC_PLAY_START_TRICK_NORMAL = 0,	-------->	H264Decode_PLAY_START_TRICK_NORMAL = 0,	
+E_H264_DEC_PLAY_START_TRICK_FF = 1,	-------->	H264Decode_PLAY_START_TRICK_FF = 1,	
+E_H264_DEC_PLAY_START_TRICK_REW = 2,	-------->	H264Decode_PLAY_START_TRICK_REW = 2,	
+E_H264_DEC_PLAY_START_TRICK_SLOW_FWD = 3,	-------->	H264Decode_PLAY_START_TRICK_SLOW_FWD = 3,	
+E_H264_DEC_PLAY_START_TRICK_SLOW_RWD = 4,	-------->	H264Decode_PLAY_START_TRICK_SLOW_RWD = 4,	
+} E_H264_DEC_PLAY_START_TRICK;	-------->	} H264DecodePlayStartTrick;	
+			
+typedef enum		typedef enum	
+{		{	
+E_H264_DEC_FRAME_PLAY_MODE_NONE = 0, // No frame play	-------->	H264Decode_FRAME_PLAY_MODE_NONE = 0, // No frame play	
+E_H264_DEC_FRAME_PLAY_MODE_NFRM = 1, // Forward: Next frame sending	-------->	H264Decode_FRAME_PLAY_MODE_NFRM = 1, // Forward: Next frame sending	
+E_H264_DEC_FRAME_PLAY_MODE_PFRM = 2, // Backward: Previous frame returning	-------->	H264Decode_FRAME_PLAY_MODE_PFRM = 2, // Backward: Previous frame returning	
+E_H264_DEC_FRAME_PLAY_MODE_NFRM_SYNC = 3, // Forward: Next sync frame sending	-------->	H264Decode_FRAME_PLAY_MODE_NFRM_SYNC = 3, // Forward: Next sync frame sending	
+E_H264_DEC_FRAME_PLAY_MODE_PFRM_SYNC = 4, // Backward: Previous sync frame returning	-------->	H264Decode_FRAME_PLAY_MODE_PFRM_SYNC = 4, // Backward: Previous sync frame returning	
+} E_H264_DEC_FRAME_PLAY_MODE;	-------->	} H264DecodeFramePlayMode;	
+			
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+/* Structure */		/* Structure */	
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+/* Play Control Data */		/* Play Control Data */	
+typedef struct		typedef struct	
+{		{	
+E_H264_PLAY_MODE mode; // PLAY Mode	-------->	E_H264_PLAY_MODE mode; // PLAY Mode	
+E_H264_PLAY_MODE next_mode; // PLAY Mode (Next)	-------->	E_H264_PLAY_MODE nextMode; // PLAY Mode (Next)	
+E_H264_IF_PLAY_DIRECTION direction; // Play direction	-------->	H264If_PLAY_DIRECTION direction; // Play direction	
+E_H264_IF_PLAY_SPEED speed; // Play speed	-------->	H264If_PLAY_SPEED speed; // Play speed	
+BOOL trick_limit; // Trick limit mode.	-------->	BOOL trickLimit; // Trick limit mode.	
+BOOL pause; // Play pause	-------->	BOOL pause; // Play pause	
+BOOL iframe_only; // I frame only	-------->	BOOL iframeOnly; // I frame only	
+UINT8 task_result; // Result of Task Control Process	-------->	UINT8 taskResult; // Result of Task Control Process	
+BOOL error; // Error is occurred?	-------->	BOOL error; // Error is occurred?	
+ULLONG last_display_pts;	-------->	ULLONG lastDisplayPts;	
+ULLONG last_stream_pts;	-------->	ULLONG lastStreamPts;	
+BOOL last_stream_dec_done;	-------->	BOOL lastStreamDecDone;	
+UINT32 bank_y_width;	-------->	UINT32 bankYWidth;	
+UINT32 bank_y_lines;	-------->	UINT32 bankYLines;	
+UINT32 bank_c_lines;	-------->	UINT32 bankCLines;	
+UINT32 bank_y_size;	-------->	UINT32 bankYSize;	
+UINT32 bank_c_size;	-------->	UINT32 bankCSize;	
+} T_H264_DEC_CTL;	-------->	} H264DecodeDecCtl;	
+			
+typedef struct		typedef struct	
+{		{	
+UINT8 stream_end_flag; /**< Last stream = 1, Otherwise = 0. <br> */	-------->	UINT8 streamEndFlag; /**< Last stream = 1, Otherwise = 0. <br> */	
+UINT8 stss; /**< It exists in MP4 of stss atom = 1, Not exist = 0. <br> */	-------->	UINT8 stss; /**< It exists in MP4 of stss atom = 1, Not exist = 0. <br> */	
+UINT32 stream_size; /**< Stream size. <br> */	-------->	UINT32 streamSize; /**< Stream size. <br> */	
+UINT32 stream_address; /**< Stored stream address. <br> */	-------->	UINT32 streamAddress; /**< Stored stream address. <br> */	
+ULLONG pts; /**< Presentation Time Stamp (ex. 1001) <br> */	-------->	ULLONG pts; /**< Presentation Time Stamp (ex. 1001) <br> */	
+ULLONG dts; /**< Decoding Time Stamp (ex. 1001) <br> */	-------->	ULLONG dts; /**< Decoding Time Stamp (ex. 1001) <br> */	
+UINT32 vcpb_index;	-------->	UINT32 vcpbIndex;	
+} T_H264_DEC_SAMPLE;	-------->	} H264DecodeSample;	
+			
+typedef struct		typedef struct	
+{		{	
+BOOL stream_end;	-------->	BOOL streamEnd;	
+T_H264_DEC_SAMPLE decode_video[D_H264_DEC_SAVE_SAMPLE_MAX_NUM];	-------->	H264DecodeSample decodeVideo[H264Decode_SAVE_SAMPLE_MAX_NUM];	
+UINT32 read_pointer;	-------->	UINT32 readPointer;	
+UINT32 write_pointer;	-------->	UINT32 writePointer;	
+UINT32 free_pointer;	-------->	UINT32 freePointer;	
+} T_H264_DEC_DMUX_CTL;	-------->	} H264DecodeDmuxCtl;	
+			
+typedef struct		typedef struct	
+{		{	
+BOOL use_flg; // Use flag (as Ribery use)	-------->	BOOL useFlg; // Use flag (as Ribery use)	
+BOOL release_flg; // Release flag	-------->	BOOL releaseFlg; // Release flag	
+ULLONG PTS; // PTS: Picture Time Stamp	-------->	ULLONG PTS; // PTS: Picture Time Stamp	
+ULLONG DTS; // DTS: Decoder Time Stamp	-------->	ULLONG DTS; // DTS: Decoder Time Stamp	
+} T_H264_DEC_DISP_INF;	-------->	} H264DecodeDispInf;	
+			
+typedef struct		typedef struct	
+{		{	
+UINT8 lcd_decide;	-------->	UINT8 lcdDecide;	
+UINT8 lcd_displaying;	-------->	UINT8 lcdDisplaying;	
+UINT8 hdmi_decide;	-------->	UINT8 hdmiDecide;	
+UINT8 hdmi_displaying;	-------->	UINT8 hdmiDisplaying;	
+} T_H264_DEC_DISP_REFER_INDEX;	-------->	} H264DecodeDispReferIndex;	
+			
+typedef struct		typedef struct	
+{		{	
+T_H264_IF_DISPLAY_INFO device_info;	-------->	H264If_IF_DISPLAY_INFO deviceInfo;	
+T_H264_DEC_DISP_REFER_INDEX refer_index;	-------->	H264DecodeDispReferIndex referIndex;	
+BOOL last_picture_keep;	-------->	BOOL lastPictureKeep;	
+ULLONG display_target_pts; // display target pts	-------->	ULLONG displayTargetPts; // display target pts	
+ULLONG display_pts; // current pts	-------->	ULLONG displayPts; // current pts	
+ULLONG display_dts; // current dts	-------->	ULLONG displayDts; // current dts	
+UINT32 display_index; // (YC area bank) display index	-------->	UINT32 displayIndex; // (YC area bank) display index	
+UINT32 use_count; // (YC area bank) use count	-------->	UINT32 useCount; // (YC area bank) use count	
+UINT32 buf_count; // (YC area bank) image data buffering count	-------->	UINT32 bufCount; // (YC area bank) image data buffering count	
+UINT32 vdpb_use_num;	-------->	UINT32 vdpbUseNum;	
+BOOL last_pts_display;	-------->	BOOL lastPtsDisplay;	
+T_H264_DEC_DISP_INF inf[D_H264_DEC_VDPB_MAX_NUM];	-------->	H264DecodeDispInf inf[H264Decode_VDPB_MAX_NUM];	
+} T_H264_DEC_DISP_CTL;	-------->	} H264DecodeDispCtl;	
+			
+/* Time Trimming Function */		/* Time Trimming Function */	
+typedef struct		typedef struct	
+{	-------->	{	
+ULONG start_dt; /* (1)Time Trimming Start DT */	-------->	ULONG startDt; /* (1)Time Trimming Start DT */	
+ULONG end_dt; /* (1)Time Trimming End DT */	-------->	ULONG endDt; /* (1)Time Trimming End DT */	
+UINT32 media_vc_size; /* (1)MEDIA Vacant Size */	-------->	UINT32 mediaVcSize; /* (1)MEDIA Vacant Size */	
+ULONG video_total_dur; /* (3)total duration - during file creation */	-------->	ULONG videoTotalDur; /* (3)total duration - during file creation */	
+ULONG audio_start_dt; /* (3)Audio Start Duration */	-------->	ULONG audioStartDt; /* (3)Audio Start Duration */	
+ULONG ttr_max_time; /* (1)Trimming Total Time */	-------->	ULONG ttrMaxTime; /* (1)Trimming Total Time */	
+ULONG ttr_start_time; /* (1)Trimming Start Time */	-------->	ULONG ttrStartTime; /* (1)Trimming Start Time */	
+ULONG video_time; /* (3)Video Time - during file creation */	-------->	ULONG videoTime; /* (3)Video Time - during file creation */	
+ULONG audio_time; /* (3)Audio Time - during file creation */	-------->	ULONG audioTime; /* (3)Audio Time - during file creation */	
+UCHAR dummy1;	-------->	UCHAR dummy1;	
+USHORT dummy2;	-------->	USHORT dummy2;	
+ULONG udta_atom_size;	-------->	ULONG udtaAtomSize;	
+ULONG free_atom_size;	-------->	ULONG freeAtomSize;	
+ULONG size_copyed;	-------->	ULONG sizeCopyed;	
+ULONG size_total;	-------->	ULONG sizeTotal;	
+} T_H264_DEC_TTR_CTL;	-------->	} H264DecodeTtrCtl;	
+			
+struct _H264Decode		struct _H264Decode	
+{		{	
+KObject parent;		KObject parent;	
+};		};	
+			
+KConstType h264_decode_get_type(void);		KConstType h264_decode_get_type(void);	
+H264Decode *h264_decode_new(void);		H264Decode *h264_decode_new(void);	
+			
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+/* Function Prototype Definition */		/* Function Prototype Definition */	
+/*----------------------------------------------------------------------*/		/*----------------------------------------------------------------------*/	
+私有方法	-------->	INT32 h264_decode_init_param(H264Decode *self);	h264decode.h
+私有方法	-------->	VOID h264_decode_display_image(H264Decode *self, T_H264_IF_DISPLAY_PARAM *displayInfo, T_H264_MOVIE_ADDR *decAddr, T_H264_MOVIE_ADDR *dispAddr, BOOL riberyOutput);	
+	-------->	INT32 h264_decode_top_image_get(H264Decode *self, ULLONG reqPts, T_H264_IF_VIDEO_YUV_INFO *decodeYuvInfo);	
+extern VOID H264_Decode_ENT_Main(VOID);	-------->	VOID h264_decode_ent_main(H264Decode *self);	
+extern VOID H264_Decode_CC_Main(VOID);	-------->	VOID h264_decode_cc_main(H264Decode *self);	
+			
+extern INT32 H264_Decode_Video_Stream_Set(UINT32 store_num, T_H264_IF_PARAM_SET_STREAM *video_stream_param);	-------->	INT32 h264_decode_video_stream_set(H264Decode *self, UINT32 storeNum, T_H264_IF_PARAM_SET_STREAM *videoStreamParam);	h264decode.h
+extern INT32 H264_Decode_Video_Display_Frame_Get(T_H264_IF_VIDEO_YUV_INFO *display_yuv_info);	-------->	INT32 h264_decode_video_display_frame_get(H264Decode *self, H264IfVideoYuvInfo *displayYuvInfo);	
+extern VOID H264_Decode_Stop_Request(BOOL last_picture_keep);	-------->	VOID h264_decode_stop_request(H264Decode *self, BOOL lastPictureKeep);	
+			
+extern BOOL H264_IsLastPTSSet_Or_Error(void);	-------->	BOOL h264_decode_islastptsset_or_error(H264Decode *self);	h264decode.h
+extern BOOL H264_IsLastPTSDisplay_Or_Error(void);	-------->	BOOL h264_decode_islastptsdisplay_or_error(H264Decode *self);	
+extern ULLONG H264_GetLastPTS(void);	-------->	ULLONG h264_decode_getlastpts(H264Decode *self);	
+			
+extern VOID H264_Decode_DISP_Main( VOID );	-------->	VOID h264_decode_disp_main(H264DecodeDisp* self);	h264decodedisp.h
+extern VOID H264_Decode_DISP_LCD_Main( VOID );	-------->	VOID h264_decode_disp_lcd_main(H264DecodeDisp* self);	
+extern VOID H264_Decode_DISP_HDMI_Main( VOID );	-------->	VOID h264_decode_disp_hdmi_main(H264DecodeDisp* self);	
+extern INT32 H264_Decode_Top_Main( ULLONG req_pts, T_H264_IF_VIDEO_YUV_INFO* decode_yuv_info );	-------->	INT32 h264_decode_disp_top_main(H264DecodeDisp* self,ULLONG reqPts, T_H264_IF_VIDEO_YUV_INFO* decodeYuvInfo);	
+﻿		﻿	
+extern INT32 H264_Decode_Main( VOID );	-------->	INT32 h264_decode_contorl_main(H264DecodeContorl* self);	h264decodecontorl.h
+私有方法	-------->	VOID h264_decode_contorl_task_start(H264DecodeContorl* self, UINT32 taskId);	
+			
+extern INT32 H264_Decode_Top_Init( T_H264_IF_DECODER_PARAM* decoder_param, T_H264_IF_DISPLAY_INFO* display_info );	-------->	INT32 h264_decode_initialize_top_init(H264DecodeInitialize* self,T_H264_IF_DECODER_PARAM* decoderParam,T_H264_IF_DISPLAY_INFO* displayInfo);	h264decodeinitialize.h
+extern VOID H264_Decode_Flush_Request( VOID );	-------->	VOID h264_decode_initialize_flush_request(H264DecodeInitialize* self);	
+		﻿	
+extern INT32 H264_Decode_Play_Start( ULLONG start_pts, E_H264_IF_PLAY_DIRECTION direction, E_H264_IF_PLAY_SPEED speed, BOOL pause );	-------->	INT32 h264_decode_play_start(H264DecodePlay* self,ULLONG startPts, E_H264_IF_PLAY_DIRECTION direction, E_H264_IF_PLAY_SPEED speed, BOOL pause);	h264decodeplay.h
+extern INT32 H264_Decode_Play_Initialize( VOID );	-------->	INT32 h264_decode_play_initialize(H264DecodePlay* self);	
+extern INT32 H264_Decode_Play_Release( VOID );	-------->	INT32 h264_decode_play_release(H264DecodePlay* self);	
+extern INT32 H264_Decode_Play_Delete( UCHAR play_index );	-------->	INT32 h264_decode_play_delete(H264DecodePlay* self, UCHAR playindex);	
+

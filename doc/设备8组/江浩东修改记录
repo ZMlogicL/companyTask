@@ -1,0 +1,135 @@
+一、ct_dd_arm.c创建新的类
+将ct_dd_arm.c 移植为ctddarm.c
+将ct_dd_arm.h 移植为ctddarm.h
+Ct_Dd_ARM_Main改为ct_dd_arm_main_main
+
+二、ct_dd_cache.c创建新的类
+将ct_dd_cache.c 移植为ctddcache.c
+将ct_dd_cache.h 移植为ctddcache.h
+Ct_Dd_CACHE_Main改为ct_dd_cache_main_main
+
+三、ct_dd_exiu.c创建新的类
+将ct_dd_exiu.c 移植为ctddexiu.c
+ct_dd_exiu.h改为ctddexiu.h
+Ct_Dd_EXIU_Main改为ct_dd_exiu_main_main
+
+四、ct_dd_gic.c创建新的类
+ct_dd_gic.c 移植为 ctddgic.c
+ct_dd_gic.h 移植为 ctddgic.h
+Ct_Dd_GIC_Main 改为 ct_dd_gic_main_main
+
+五、ct_dd_i2c.c创建新的类
+将ct_dd_i2c.c 移植为ctddi2c.c
+ct_dd_i2c.h 改为ctddi2c.h
+Ct_Dd_I2C_Main改为ct_dd_i2c_main_main
+
+六、ct_im_ltm_rbk.c创建新的类
+
+将ct_im_ltm_rbk.c 移植为ctimltmrbk.c
+			ctimrbkrun1.c
+			ctimrbkrun2.c
+			ctimrbkrun3.c
+
+CT_Im_Ltm_Rbk_1_1改为ct_im_rbk_run1_rbk_1_1
+CT_Im_Ltm_Rbk_1_2改为ct_im_rbk_run1_rbk_1_2
+CT_Im_Ltm_Rbk_1_3改为ct_im_rbk_run1_rbk_1_3
+CT_Im_Ltm_Rbk_1_4改为ct_im_rbk_run1_rbk_1_4
+CT_Im_Ltm_Rbk_1_5改为ct_im_rbk_run1_rbk_1_5
+CT_Im_Ltm_Rbk_1_6改为ct_im_rbk_run1_rbk_1_6
+CT_Im_Ltm_Rbk_1_7改为ct_im_rbk_run1_rbk_1_7
+CT_Im_Ltm_Rbk_1_8改为ct_im_rbk_run1_rbk_1_8
+CT_Im_Ltm_Rbk_1_9改为ct_im_rbk_run1_rbk_1_9
+CT_Im_Ltm_Rbk_1_10改为ct_im_rbk_run1_rbk_1_10
+CT_Im_Ltm_Rbk_1_11改为ct_im_rbk_run1_rbk_1_11
+CT_Im_Ltm_Rbk_1_12改为ct_im_rbk_run1_rbk_1_12
+CT_Im_Ltm_Rbk_1_13改为ct_im_rbk_run1_rbk_1_13
+CT_Im_Ltm_Rbk_1_14改为ct_im_rbk_run1_rbk_1_14
+CT_Im_Ltm_Rbk_1_15改为ct_im_rbk_run1_rbk_1_15
+CT_Im_Ltm_Rbk_1_16改为ct_im_rbk_run1_rbk_1_16
+CT_Im_Ltm_Rbk_1_17改为ct_im_rbk_run1_rbk_1_17
+
+CT_Im_Ltm_Rbk_2_1改为ct_im_rbk_run2_rbk_2_1
+CT_Im_Ltm_Rbk_2_2改为ct_im_rbk_run2_rbk_2_2
+CT_Im_Ltm_Rbk_2_3改为ct_im_rbk_run2_rbk_2_3
+CT_Im_Ltm_Rbk_2_4改为ct_im_rbk_run2_rbk_2_4
+CT_Im_Ltm_Rbk_2_5改为ct_im_rbk_run2_rbk_2_5
+CT_Im_Ltm_Rbk_2_6改为ct_im_rbk_run2_rbk_2_6
+CT_Im_Ltm_Rbk_2_7改为ct_im_rbk_run2_rbk_2_7
+CT_Im_Ltm_Rbk_2_8改为ct_im_rbk_run2_rbk_2_8
+CT_Im_Ltm_Rbk_2_9改为ct_im_rbk_run2_rbk_2_9
+CT_Im_Ltm_Rbk_2_10改为ct_im_rbk_run2_rbk_2_10
+CT_Im_Ltm_Rbk_2_11改为ct_im_rbk_run2_rbk_2_11
+CT_Im_Ltm_Rbk_2_12改为ct_im_rbk_run2_rbk_2_12
+CT_Im_Ltm_Rbk_2_13改为ct_im_rbk_run2_rbk_2_13
+
+CT_Im_Ltm_Rbk_3_1改为ct_im_rbk_run3_3_1
+CT_Im_Ltm_Rbk_3_2改为ct_im_rbk_run3_3_2
+CT_Im_Ltm_Rbk_3_3改为ct_im_rbk_run3_3_3
+CT_Im_Ltm_Rbk_3_4改为ct_im_rbk_run3_3_4
+CT_Im_Ltm_Rbk_3_5改为ct_im_rbk_run3_3_5
+CT_Im_Ltm_Rbk_3_6改为ct_im_rbk_run3_3_6
+CT_Im_Ltm_Rbk_3_7改为ct_im_rbk_run3_3_7
+CT_Im_Ltm_Rbk_3_8改为ct_im_rbk_run3_3_8
+CT_Im_Ltm_Rbk_3_9改为ct_im_rbk_run3_3_9
+CT_Im_Ltm_Rbk_3_10改为ct_im_rbk_run3_3_10
+
+CT_Im_Ltm_Rbk_3_11改为ct_im_rbk_run2_rbk_3_11
+CT_Im_Ltm_Rbk_3_12改为ct_im_rbk_run2_rbk_3_12
+CT_Im_Ltm_Rbk_3_13改为ct_im_rbk_run2_rbk_3_13
+CT_Im_Ltm_Rbk_3_14改为ct_im_rbk_run2_rbk_3_14
+CT_Im_Ltm_Rbk_3_15改为ct_im_rbk_run2_rbk_3_15
+CT_Im_Ltm_Rbk_3_16改为ct_im_rbk_run2_rbk_3_16
+
+CT_Im_Ltm_Rbk_3_18改为ct_im_rbk_run3_3_18
+
+
+CT_Im_LTM_RBK_Run改为ct_im_ltm_rbk_run
+
+CT_Im_LTM_RBK_Main改为 ct_im_ltm_rbk_main
+
+
+七、ct_im_mipi.c创建新的类
+
+ct_im_mipi.c 移植为 ctimmipi.c 和 ctimmipimain.c
+
+ct_im_mipi.h 移植为 ctimmipi.h 和 ctimmipimain.h（在原ct_im_mipi.h中includectimmipi.h 和 ctimmipimain.h）
+
+Ct_Im_Mipi_Main(int argc, char** argv)改为ct_im_mipi_main_main(CtImMipiMain* self,int argc, char** argv)
+Ct_Im_Mipi_PCSim_Test(VOID)	      改为ct_im_mipi_pcsim_test(CtImMipi* self)
+
+
+
+八、ct_im_mxic.c创建新的类
+
+ct_im_mxic.c移植为 ctimmxiccreate.c    ctimmxicfunc1.c  ctimmxicfunc2.c 
+ctimmxicmain1.c ctimmxicmain2.c ctimmxicmain.c
+ ctimmxicprint.c     ctmxiccheckerr1.c   ctmxiccheckerr2.c   
+
+ct_im_mxic.h移植为 ctimmxicfunc1.h ctimmxicfunc2.h ctimmxicmain.h（在原ct_im_mxic.h中
+includectimmxicfunc1.h ctimmxicfunc2.h ctimmxicmain.h）
+
+ctimmxicmain.c：
+Ct_Im_MXIC_Main(INT32 argc, CHAR** argv)改为ct_im_mxic_main_main(INT32 argc, CHAR** argv)
+
+ctimmxicfunc1.c  :
+CT_Im_MXIC_1_01( UCHAR unit )改为ct_im_mxic_func1_01
+CT_Im_MXIC_1_02( UCHAR unit )改为ct_im_mxic_func1_02
+CT_Im_MXIC_1_03( UCHAR unit )改为ct_im_mxic_func1_03
+CT_Im_MXIC_1_04( UCHAR unit )改为ct_im_mxic_func1_04
+CT_Im_MXIC_1_05( UCHAR unit )改为ct_im_mxic_func1_05
+CT_Im_MXIC_1_06( UCHAR unit )改为ct_im_mxic_func1_06
+CT_Im_MXIC_1_07( UCHAR unit )改为ct_im_mxic_func1_07
+CT_Im_MXIC_1_08( UCHAR unit )改为ct_im_mxic_func1_08
+CT_Im_MXIC_1_09( UCHAR unit )改为ct_im_mxic_func1_09
+CT_Im_MXIC_1_10( UCHAR unit )改为ct_im_mxic_func1_10
+CT_Im_MXIC_1_11( UCHAR unit )改为ct_im_mxic_func1_11
+
+ctimmxicfunc2.c  :
+CT_Im_MXIC_1_12( UCHAR unit )改为ct_im_mxic_func2_12
+CT_Im_MXIC_1_13( UCHAR unit )改为ct_im_mxic_func2_13
+CT_Im_MXIC_1_14( UCHAR unit )改为ct_im_mxic_func2_14
+CT_Im_MXIC_1_15( UCHAR unit )改为ct_im_mxic_func2_15
+CT_Im_MXIC_1_16( UCHAR unit )改为ct_im_mxic_func2_16
+CT_Im_MXIC_1_17( UCHAR unit )改为ct_im_mxic_func2_17
+CT_Im_MXIC_1_19( UCHAR unit )改为ct_im_mxic_func2_19
+

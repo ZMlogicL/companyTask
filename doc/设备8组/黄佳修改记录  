@@ -1,0 +1,31 @@
+1)newlib_syscalls  	
+  建立对应类
+  newlib_syscalls  	NewlibSyscalls
+  对外部调用共公有函数命名
+  _kill 		newlib_syscalls_kill_params
+  _sbrk			newlib_syscalls_sbrk_params
+  _write		newlib_syscalls_writr_params
+  _lseek		newlib_syscalls_lseek_params
+  _close		newlib_syscalls_close_params
+  _isatty		newlib_syscalls_isatty_params
+  _fstat		newlib_syscalls_fstat_params
+  _read			newlib_syscalls_read_params
+
+2)newlib_syscalls_r	
+  建立对应类
+  newlib_syscalls_r	NewlibSyscallsr
+  对外部调用公有函数命名
+  _kill_r		newlib_syscallsr_kill_r
+  _sbrk_r		newlib_syscallsr_sbrk _r 
+  _isatty		newlib_syscallsr_isatty_r
+  _read_r      		newlib_syscallsr_read_r 
+  _lseek_r      	newlib_syscallsr_lseek_r
+  _write_r      	newlib_syscallsr_write_r 
+  _close_r      	newlib_syscallsr_close_r 
+  _fstat_r      	newlib_syscallsr_fstat_r
+
+3)newlib_getreent	
+  建立对应类
+  newlib_getreent	NewlibGetreent
+  对外部调用的公有函数命名
+  newlib_getreent_init_intr_tbl		newlib_getreent_init_intr_tbl

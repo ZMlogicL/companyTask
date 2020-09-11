@@ -1,0 +1,329 @@
+创建playattr.c和playarrt.h类，删除play_attr.c和play_attr.h
+创建 playcommon.c,playcommonone.c,playattrtwo.c,playcommonthree.c,playcommon.h,playcommonone.h,playcommontwo.h,playcommonthree.h删除 play_common.c和.h
+创建 playindex.c和.h,playindexone.c和.h,删除play_index.c和.h
+创建 playjpeg.c和.h,删除play_jpeg.c和.h
+创建playsingle.c和.h,删除 play_single.c和.h
+创建playmacrowrap.c和.h、playmacrowrapone.c和.h、playmacrowraptwo.c和.h，删除playmacrowrap.c和.h
+创建snsplayback.c和.h，删除playback.c和.h
+创建snsplayback2.c和.h，删除playback2.c和.h
+
+（1） 对playattr.c 
+1、添加了头文件（在原有基础上添加）
+#include "../../src/fjfilesystem.h"
+#include "../../src/fjmemory.h"
+#include "../../src/fjfilesystem.h"
+#include "fjhost.h"
+#include "osdattr.h"
+#include "sdrammapcachedefine.h"
+#include "fjdemux.h"
+#include "fjmuxdemuxcommon.h"
+#include "playindex.h"
+#include "snsplayback.h"
+#include "fscontroller.h"	/* for UTxxx Message */
+#include "h264user.h"
+#include "playindexone.h"
+
+2、对文件中出现的结构体名，枚举名修改
+T_BF_PLAY_ATTR_MAIN 修改为 PlayAttrMain
+T_PB_IMAGE_WINDOW 修改为 TPbImageWindow
+gPlay_Attr 修改为 gPlayAttr
+THUMBNAIL_CONFIGURATION 修改为 ThumbNailConfiguration
+E_BF_PLAY_COMMON_DISP_DEVICE 修改为 PlayCommonDispDevice 
+
+
+3、对文件中出现的宏定义名称修改
+WIDTH_36M 修改为 PlayAttr_WIDTH_36M
+LINES_36M 修改为 PlayAttr_LINES_36M
+WIDTH_THUMB 修改为 PlayAttr_WIDTH_THUMB
+LINES_THUMB 修改为 PlayAttr_LINES_THUMB
+WIDTH_VGA 修改为 PlayAttr_WIDTH_VGA
+LINES_VGA 修改为 PlayAttr_LINES_VGA
+WIDTH_FHD 修改为 PlayAttr_WIDTH_FHD
+LINES_FHD 修改为 PlayAttr_LINES_FHD
+3、枚举项名
+FJ_MODE_DISP_IMAGE_MAIN 修改为 PlayAttr_FJ_MODE_DISP_IMAGE_MAIN
+
+
+（2）playattr.h
+所有的公有方法都有前缀 BF_ ,修改为： 所有的公有方法都去掉前缀，并按规范修改
+BF_Play_Attr_Set_Disp_Win_Play_Hdmi_Width 改为 play_attr_set_disp_win_play_hdmi_width
+BF_Play_Attr_Set_Disp_Win_Play_Hdmi_Lines 改为 play_attr_set_disp_win_play_hdmi_lines
+BF_Play_Attr_Set_Image_Index 改为 play_attr_set_image_index
+BF_Play_Attr_Get_Image_Index 改为 play_attr_get_image_index
+BF_Play_Attr_Set_File_Type 改为 play_attr_set_file_type
+BF_Play_Attr_Set_Thumb_Width_Hdmi 改为 play_attr_set_thumb_width_hdmi
+BF_Play_Attr_Set_Thumb_Height_Hdmi改为 play_attr_set_thumb_height_hdmi
+BF_Play_Attr_Set_Thumb_Draw_Width_Lcd 改为 play_attr_set_thumb_draw_width_lcd
+BF_Play_Attr_Get_Thumb_Draw_Width_Lcd 改为 play_attr_get_thumb_draw_width_lcd
+BF_Play_Attr_Set_Thumb_Draw_Lines_Lcd 改为 play_attr_set_thumb_draw_lines_lcd
+BF_Play_Attr_Get_Thumb_Draw_Lines_Lcd 改为 play_attr_get_thumb_draw_lines_lcd
+BF_Play_Attr_Set_Thumb_Draw_Width_Hdmi 改为 play_attr_set_thumb_draw_width_hdmi
+BF_Play_Attr_Get_Thumb_Draw_Width_Hdmi 改为 play_attr_get_thumb_draw_width_hdmi
+BF_Play_Attr_Set_Thumb_Draw_Lines_Hdmi 改为 play_attr_set_thumb_draw_lines_hdmi
+BF_Play_Attr_Get_Thumb_Draw_Lines_Hdmi 改为 play_attr_get_thumb_draw_lines_hdmi
+BF_Play_Attr_Get_Thumbnail_Config 改为 play_attr_get_thumb_nail_config
+BF_Play_Attr_Get_Thumbnail_Pos 改为 play_attr_get_thumb_nail_pos
+
+
+包含的头文件由
+#include "fjplayback.h"
+#include "sdrammapcommon.h"
+#include "playindex.h"
+修改为：
+#include <klib.h>
+#include "../../src/fjplayback.h"
+#include "sdrammapcommon.h"
+#include "playindex.h"
+
+结构体名：
+T_PB_IMAGE_WINDOW 改为 TPbImageWindow
+T_BF_PLAY_ATTR_IMAGE_WIN 改为 TBfPlayAttrImageWin
+T_PB_DISP_WINDOW 改为 TBfPlayAttrDispWin
+T_BF_PLAY_ATTR_DATA 改为 TBflayAttrData
+FJ_MODE 改为 FjMode
+
+play_common
+
+创建playcommon.c和.h文件
+创建playcommonone.c和.h文件
+创建playcommontwo.c和.h文件
+删除play_common.c和.h
+
+playcommon.c
+添加#include“playcommonone.h”
+
+
+枚举名
+E_IM_DISP_WAIT 改为 EImDispWait
+E_IM_DISP_SEL 改为 EImDispSel
+
+
+枚举内容名
+E_IM_DISP_WAIT_1_TIME 改为 ImDisp_E_IM_DISP_WAIT_1_TIME
+E_IM_DISP_HDMI 改为 ImDisp_E_IM_DISP_HDMI
+
+结构体名
+FJ_ERR_CODE 改为 FjErrCode
+FJ_GR_FILE_TYPE 改为 FjGrFileType
+
+playcommon.h
+包头
+#include <klib.h>
+
+枚举内容名
+E_BF_PLAY_COMMON_EXEC_MODE_DEC_ONLY 改为 PlayCommon_EXEC_MODE_DEC_ONLY
+E_BF_PLAY_COMMON_EXEC_MODE_DEC_DISP 改为 PlayCommon_EXEC_MODE_DEC_DISP
+E_BF_PLAY_COMMON_LOAD_STATUS_NG 改为 PlayCommon_LOAD_STATUS_NG
+
+
+枚举名
+E_BF_PLAY_COMMON_EXEC_MODE 改为 PlayCommonExecMode
+E_BF_DCF_IF_ROTATE 改为 DcfIfRotate
+E_BF_DCF_IF_JPEG_FORMAT 改为 DcfIfJpegFormat
+
+结构体名 
+T_BF_PLAY_COMMON_DRAW_PARAM 改为 PlayCommonDrawParam
+T_BF_PLAY_MACRO_WRAP_JPEG_DEC_MNG 改为 PlayMacroJpegDec
+
+公有方法
+BF_Play_Common_Draw_Jpeg 改为 bf_play_common_draw_jpeg
+
+playcommonone.h
+包头
+#include <klib.h>
+#include"../../include/fj_std.h"
+#include"../../src/fjplayback.h"
+#include"../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "playmacrowraptwo.h"
+#include "playattr.h"
+
+playcommontwo.h
+包头
+#include <klib.h>
+#include"../../include/fj_std.h"
+#include"../../src/fjplayback.h"
+#include"../MILB_API/Project/ImageMacro/src/imdisp.h"
+
+
+
+playmacrowrap.h
+结构体名
+T_BF_PLAY_MACRO_WRAP_SIZE_ADDR 改为 PlayMacroWrapSize
+T_BF_PLAY_MACRO_WRAP_JPEG_DEC_MNG 改为 PlayMacroJpegDec
+
+公有方法
+BF_Play_Macro_Wrap_Check_Jpeg_Thumbnail 改为 play_macro_wrap_check_jpeg_thumbnail
+
+
+拆分playindex文件：playindex.c,playindex.h,playindexone.c,playindexone.h
+playindex.h
+头文件包含
+#include <klib.h>
+#include "playcommon.h"
+#include "playmacrowrapone.h"
+#include "playmacrowrap.h"
+
+playondexone.h
+头文件包含
+#include <klib.h>
+#include "../../MILB_API/include/ddim_typedef.h"
+#include "../../system/src/busarb.h"
+#include "../../src/fjplayback.h"
+#include "../../board/sdram/include/sdram_map_cache_define.h"
+#include "../../include/fj_std.h"
+#include "../../src/fjdecoder.h"
+#include "playcommon.h"
+#include "playmacrowrap.h"
+#include "playattr.h"
+
+宏定义
+FJ_MOVIE_PLAY_VIDEO_SCAN_MODE_PROGRESSIVE 改为 PlayIndexOne_MOVIE_PLAY_VIDEO_SCAN_MODE_PROGRESSIVE
+FJ_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP 改为 PlayIndexOne_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP
+
+playjpeg.h
+包头
+#include <klib.h>
+#include "playcommon.h"
+#include "playcommonone.h"
+#include "playcommonthree.h"
+#include "playattr.h"
+#include "playmacrowrap.h"
+#include "playmacrowraptwo.h"
+
+playjpeg.h
+包头
+#include "tkernelid.h"
+#include "sdram_map_cache_define.h"
+#include "playsingle.h"
+#include "playattr.h"
+#include "osdhistogramcomm.h"
+#include "osdattr.h"
+#include "fj_host.h"
+#include "playcommonone.h"
+#include "playmacrowrapone.h"
+#include "playmacrowraptwo.h"
+#include "playjpeg.h"
+
+playsingle.h
+包头
+#include <klib.h>
+#include "playcommon.h"
+#include "playattr.h"
+#include "playjpeg.h"
+
+playsingle.c
+包头
+#include "sdram_map_cache_define.h"
+#include "../../src/fjfilesystem.h"
+#include "playattr.h"
+#include "playjpeg.h"
+#include "movievideoattr.h"
+#include "h264user.h"
+#include "osdattr.h"
+#include "systemmode.h"
+#include "playmacrowrapone.h"
+#include "playsingle.h"
+
+snsplayback.h包头
+#include <klib.h>
+#include "../../src/fjplayback.h"
+#include "ddim_typedef.h"
+#include "fj_std.h"
+#include "playmacrowrap.h"
+#include "playattr.h"
+#include "playcommon.h"
+#include "playcommonone.h"
+#include "playjpeg.h"
+#include "playsingle.h"
+
+公有方法
+
+fj_setcurrentimage 改为 sns_play_back_set_current_image
+fj_getcurrentimage 改为 sns_play_back_get_current_image
+fj_setfiletype 改为 sns_play_back_set_file_type
+fj_getfileattributes 改为 sns_play_back_get_file_attributes
+fj_getimageattributes 改为 sns_play_back_get_image_attributes
+fj_set_pb_autodisplay 改为 sns_play_back_set_pb_auto_display
+fj_get_pb_autodisplay 改为 sns_play_back_get_pb_auto_display 
+fj_show_pb_dispimage 改为 sns_play_back_show_pb_disp_image
+fj_get_pb_histogram_size 改为 sns_play_back_get_pb_histogram_size
+fj_set_pb_display_window 改为 sns_play_back_set_pb_display_window
+fj_set_pb_image_window 改为 sns_play_back_set_pb_image_window
+fj_can_pb_image_window 改为 sns_play_back_can_pb_image_window
+fj_configthumbindex 改为 sns_play_back_config_thumb_index
+fj_playback_singledisplay 改为 sns_play_back_single_display
+fj_playback_thumbnailindex 改为 sns_play_back_thumb_nail_index
+
+snsplayback.c
+包头
+#include "../../src/fjfilesystem.h"
+#include "playattr.h"
+#include "playindex.h"
+#include "playjpeg.h"
+#include "playindex.h"
+#include "playsingle.h"
+#include "bfstartup1.h"
+#include "h264user.h"
+#include "fj_host.h"
+#include "osdattr.h"
+#include "mbaif.h"
+#include "playcommonone.h"
+#include "playmacrowraptwo.h"
+#include "snsplayback.h"
+
+snsplayback2.h
+包头
+#include <klib.h>
+#include "ddim_typedef.h"
+#include "fj_std.h"
+#include "../../src/fjplayback.h"
+#include "playmacrowraptwo.h"
+
+公有方法
+fj_stillplayback_getmeminfo 改为 sns_play_back2_get_mem_info
+fj_stillplayback_imagedecode 改为 sns_play_back2_image_decode
+fj_stillplayback_imageconvert 改为 sns_play_back2_image_convert
+
+snsplayback2.c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

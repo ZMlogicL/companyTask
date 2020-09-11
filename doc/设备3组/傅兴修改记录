@@ -1,0 +1,623 @@
+创建类：IqBinTuning
+函数修改：
+从iqbinpara.h中移植结构体：
+T_IQ_BIN
+将以下函数从iqbinpara.c中移到类IqBinTuning：
+INT32 IQPara_Tune_SetTuneBin(ULONG *piqbin, ULONG binsize);
+int iq_tune_bin_scene_mapping(int scene);
+void IQPara_Tune_PrintState(void);
+void  IQPara_Tune_Reset();
+INT32 IQPara_Tune_UpdateOnOff(int isOn); 
+INT32 IQPara_Tune_TuningBinMode();
+INT32 IQPara_Tune_NormalBinMode();
+void  IQPara_Tune_SceneMapping(UCHAR  targetscene, UCHAR mappingscene);
+void  IQPara_Tune_ForceGainNumber(float newgain); 
+修改函数：
+IQPara_Tune_SetTuneBin->iq_bin_tuning_set_tune_bin
+iq_tune_bin_scene_mapping->iq_bin_tuning_scene_mapping
+IQPara_Tune_PrintState->iq_bin_tuning_print_state
+IQPara_Tune_Reset->iq_bin_tuning_reset
+IQPara_Tune_UpdateOnOff->iq_bin_tuning_update_on_off
+IQPara_Tune_TuningBinMode->iq_bin_tuning_tuning_bin_mode
+IQPara_Tune_NormalBinMode->iq_bin_tuning_normal_bin_mode
+IQPara_Tune_SceneMapping->iq_bin_tuning_tune_scene_mapping
+IQPara_Tune_ForceGainNumber->iq_bin_tuning_tune_force_gain_number
+将以下静态变量从iqbinpara.c移植到IqBinTuning
+static T_IQ_BIN   		g_bin_v0121_;
+static T_IQ_BIN   * 	g_pcurr_bin_v0121_;
+static T_IQ_BIN   	g_tuningbin_v0121_;
+static UINT32   		g_tuningbin_v0121_size;
+static kuchar    		g_tuning_target_scene = 0xFF;
+static kuchar    		g_tuning_mapping_scene = 0xFF;
+static FLOAT    		g_tuning_forcegain=0.0;
+static T_eBinSate	g_tuning_binstate= e_Bin_Normal;
+static UCHAR    g_tuning_scene_mapping_tbl[sMaxStream][2];
+新建函数：
+kboolean iq_bin_tuning_bin_state_is_no_update(void);
+FLOAT iq_bin_tuning_get_force_gain(void);
+kboolean iq_bin_tuning_v0121_is_exist_mode_head(void);
+kboolean iq_bin_tuning_pcurr_is_exist(void);
+kint32 iq_bin_tuning_param_init(ULONG *piqbin,ULONG binsize);
+T_IQ_BIN* iq_bin_tuning_get_pcurr_v0121(void);
+kuchar iq_bin_tuning_pcurr_get_iso_index_num(void);
+kuchar iq_bin_tuning_pcurr_get_zoom_index_num(void);
+修改结构体：
+T_IQ_CMN_HEAD_v0121e ->CommonHeadV0121e
+T_IQ_CMN_MAIN_v0121e->CommonMainV0121e
+T_IQ_MODE_HEAD_v0121e->ModeHeadV0121e
+T_IQ_BIN->IqBin
+修改结构体成员变量命名，去掉下划线，改为代码规范的形式
+修改宏名：
+IQ_Err_Head->IqBinTuning_ERROR_HEAD
+IQ_Err_OpenBinFailure->IqBinTuning_ERROR_OPEN_BIN_FAILURE
+IQ_Err_MemoryNotEnough->IqBinTuning_ERROR_MEMORY_NOT_ENOUGH
+IQ_Err_InvalidHeader->IqBinTuning_ERROR_INVALID_HEADER
+IQ_Err_BinNotInit->IqBinTuning_ERROR_BIN_Not_INIT
+IQ_Err_Invalid_StreamUnit->IqBinTuning_ERROR_INVALID_STREAM_UNIT
+
+
+
+创建类：IqBinBlend
+从iqbinpara.h中移植枚举
+E_PARA_TYPE;
+修改枚举：
+E_PARA_TYPE->BlendParaType
+修改枚举变量符合代码规范
+修改宏：
+kUNIT_MAX->IqBinBlend_KUNIT_MAX
+kPara_Blend_Cache_Hit->IqBinBlend_KPARA_BLEND_CACHE_HIT
+kPara_Blend_Cache_Dirty->IqBinBlend_KPARA_BLEND_CACHE_DIRTY
+kPara_Blend_Cache_Error->IqBinBlend_KPARA_BLEND_CACHE_ERROR
+kFix_U8_ins->IqBinBlend_KFIX_U8_iNS
+kBlend_U8->IqBinBlend_KBLEND_U8
+kFix_U16->IqBinBlend_KFIX_U16
+kBlend_U16->IqBinBlend_KBLEND_U16
+kFix_S8_ins->IqBinBlend_KFIX_S8_INS
+kBlend_S8->IqBinBlend_KBLEND_S8
+kFix_S16->IqBinBlend_KFIX_S16
+kBlend_S16->IqBinBlend_KBLEND_S16
+从iqbinpara.h中移植结构体
+T_BLEND;
+修改结构体：
+T_BLEND->TBlend
+从iqbinpara.c中移植静态变量：
+static UINT8 g_zoompos[E_SHARE_SENSOR_NUM_MAX];
+static float		g_iq_index_fix_delta = 0.00f;
+static UCHAR*			g_iq_scene_stream_tbl;
+static UCHAR				g_iq_scene_stream_tbl_maxscene;
+static UCHAR				g_iq_lens_stream_tbl_maxlens;
+static UCHAR*			g_iq_lens_stream_tbl;
+static T_BLEND    g_para_blend_im_cache[E_PARA_Max][2]; 
+static T_BLEND		g_iq_isoblend[E_SHARE_SENSOR_NUM_MAX];
+static T_BLEND		g_iq_zoomblend[E_SHARE_SENSOR_NUM_MAX];
+从iqbinpara.c中移植函数：
+int iq_parablendcache_isnew(E_PARA_TYPE paratype, UCHAR stream, UCHAR unit, T_BLEND  *out_parablend);
+void iq_parablendcache_mark(E_PARA_TYPE paratype, UCHAR unit, T_BLEND  *parablend);
+void iq_parablendcache_dirt(E_PARA_TYPE paratype, UCHAR unit);
+void iq_parablendcache_cleanall();
+INT32 IQPara_UpdateGainArray(FLOAT gain[], FLOAT  delta);
+INT32 IQPara_UpdateGain(FLOAT gain); 
+INT32 IQPara_UpdateZoomPositionArray(UINT8 zoompos[]);
+INT32 IQPara_UpdateZoomPosition(UINT8 zoompos);
+VOID IQPara_Scene_Stream_Table(UCHAR *pscenetable, UCHAR max_stream); 
+VOID IQPara_Lens_Stream_Table(UCHAR *plenstable, UCHAR max_stream); 
+修改函数：
+iq_parablendcache_isnew->iq_bin_blend_para_blend_cache_is_new
+iq_parablendcache_mark->iq_bin_blend_para_blend_cache_mark
+iq_parablendcache_dirt->iq_bin_blend_para_blend_cache_dirt
+iq_parablendcache_cleanall->iq_bin_blend_para_blend_cache_clean_all
+IQPara_UpdateGainArray->iq_bin_blend_update_gain_array
+IQPara_UpdateGain->iq_bin_blend_update_gain
+IQPara_UpdateZoomPositionArray->iq_bin_blend_update_zoom_position_array
+IQPara_UpdateZoomPosition->iq_bin_blend_update_zoom_position
+IQPara_Scene_Stream_Table->iq_bin_blend_scene_stream_table
+IQPara_Lens_Stream_Table->iq_bin_blend_lens_stream_table
+新建函数：
+UCHAR iq_bin_blend_get_scene_stream_tbl(UCHAR stream);
+T_BLEND* iq_bin_blend_get_iso_blend(UCHAR stream);
+kboolean iq_bin_blend_judge_stream_or_unit(UCHAR stream, UCHAR unit);
+kboolean iq_bin_blend_judge_stream(UCHAR stream);
+
+
+创建类：IqBinB2b
+从iqbinpara.c中移植函数：
+INT32 IQPara_B2B(UCHAR stream, UCHAR ch); 
+void  IQPara_Get_CagCtrl(T_IM_PRO_CAG_CTRL *ctrl_0, T_IM_PRO_CAG_CTRL *ctrl_1);
+修改函数：
+IQPara_B2B->iq_bin_b2b_para
+IQPara_Get_CagCtrl->iq_bin_b2b_get_cag_ctrl
+从iqbinpara.c中移植静态变量：
+static T_IM_PRO_ELF_a0_FILTER  ga0_filter[kUNIT_MAX];
+static T_IM_PRO_ELF_CTRL		gelf_ctrl[kUNIT_MAX];
+static T_IM_PRO_ELF_NOISE_FUNC  gnoise_curve[3][kUNIT_MAX];
+static T_IM_PRO_ELF_LGT_EDG_FUNC glgt_filter[kUNIT_MAX];
+static T_IM_PRO_ELF_L_E_FUNC ge_l_filter[kUNIT_MAX];
+static T_IM_PRO_ELF_f9_SAMPLING gf9_filter[kUNIT_MAX];
+static T_IM_PRO_ELF_1s5_SAMPLING  gs1s5_sampling[kUNIT_MAX];
+static T_IM_PRO_ELF_5s9_SAMPLING  gs5s9_sampling[kUNIT_MAX];
+static T_IM_PRO_ELF_Noise_Adj gnoise_adj_filter[kUNIT_MAX];
+static UCHAR				  g_cag_trigger[kUNIT_MAX];
+static T_IM_PRO_CAG_CTRL g_cag_ctrl[kUNIT_MAX];
+static T_IM_PRO_CAG_CTRL_GLEVEL_DIFF g_cag_ctrl_glevel_diff[kUNIT_MAX];
+static T_IM_PRO_FFC_CTRL  g_ffc_ctrl[kUNIT_MAX];
+static int iq_elf_v0121e(UCHAR unit, T_BLEND* parablend);
+static int iq_cag_b2b_v0121e(UCHAR unit, T_BLEND* blend);
+
+创建类：IqBinB2r
+从iqbinpara.c中移植函数：
+INT32 IQPara_B2R(UCHAR stream, UCHAR ch);
+修改函数：
+IQPara_B2R->iq_bin_b2r_para
+从iqbinpara.c中移植静态变量：
+static T_IM_B2R_CTRL_ADIP g_b2r_ctrl_adip[kUNIT_MAX];
+static T_IM_B2R_CTRL_HPF  g_b2r_ctrl_hpf[kUNIT_MAX];
+static int iq_sharp_v0121e(UCHAR unit, T_BLEND* parablend);
+static int iq_hfe_hfa_v0121e(UCHAR unit, T_BLEND* parablend);
+
+创建类：IqBinCnr
+从iqbinpara.c中移植函数：
+INT32 IQPara_CNR(UCHAR stream, UCHAR ch); 
+void  IQPara_Get_IQ_CNR_Ctrl(T_IQ_PARAM_CNR_CTRL *ctrl_0, T_IQ_PARAM_CNR_CTRL *ctrl_1);
+修改函数：
+IQPara_CNR->iq_bin_cnr_para
+IQPara_Get_IQ_CNR_Ctrl->iq_bin_cnr_get_cnr_ctrl
+从iqbinpara.h中移植结构体：
+T_IQ_PARAM_CNR_CTRL
+修改结构体：
+T_IQ_PARAM_CNR_CTRL->IqParamCnrCtrl
+修改结构体变量符合代码规范
+EXSPRMODE->exsPRMode
+EXSPRCNTL->exsPRCntl
+CNRMODE->cnrMode
+CNR_ONOFF->cnrOnOff
+新建函数：
+void iq_bin_cnr_set_cap_mode(kboolean capMode);
+void iq_bin_cnr_init(void);
+从iqbinpara.c中移植静态变量：
+static BOOL g_Cap_Mode = FALSE;
+static T_IM_CNR_CTRL_C g_cnr_ctrl_c[kUNIT_MAX];
+static T_IM_CNR_TABLE g_cnr_cspr_mid_y[kUNIT_MAX];
+static T_IM_CNR_TABLE g_cnr_cspr_low_y[kUNIT_MAX];
+static T_IM_CNR_CTRL_CC_SRC_DST g_cnr_sprs_ctrl[kUNIT_MAX];
+static T_IM_CNR_CTRL_CC_SRC_DST g_cnr_sprd_ctrl[kUNIT_MAX];
+static T_IM_CNR_OFL_CTRL_Y g_cnr_ofl_ex_ctrl_y_1st[kUNIT_MAX];
+static T_IM_CNR_OFL_CTRL_Y g_cnr_ofl_ex_ctrl_y_2nd[kUNIT_MAX];
+static T_IM_CNR_CTRL_C g_cnr_ofl_ex_ctrl_c[kUNIT_MAX];
+static T_IM_CNR_TABLE g_cnr_ofl_ex_cspr_mid_y[kUNIT_MAX];
+static T_IM_CNR_TABLE g_cnr_ofl_ex_cspr_low_y[kUNIT_MAX];
+static T_IM_CNR_CTRL_CC_SRC_DST g_cnr_ofl_ex_sprs_ctrl[kUNIT_MAX];
+static T_IM_CNR_CTRL_CC_SRC_DST g_cnr_ofl_ex_sprd_ctrl[kUNIT_MAX];
+static T_IQ_PARAM_CNR_CTRL g_iq_cnr_ctrl[kUNIT_MAX];
+static int iq_cnr_ctrl_v0121e(UCHAR unit, UCHAR stream);
+static int iq_cnr_otf_v0121e(UCHAR unit, T_BLEND* blend);
+static int iq_cnr_ofl_ex_v0121e(UCHAR unit, T_BLEND  *blend);
+
+创建类：IqBinDbg
+修改iq_bin_dbg.c为iqbindbg.c，iq_bin_dbg.h修改为iqbindbg.h，并从include中拿出来
+修改枚举：
+typedef enum {
+	E_IQ_DBG_DUMP_NONE = 0,->IqBinDbg_DUMP_NONE
+	E_IQ_DBG_DUMP_DPC,->IqBinDbg_DUMP_DPC
+	E_IQ_DBG_DUMP_ELF,->IqBinDbg_DUMP_ELF
+	E_IQ_DBG_DUMP_CIA,->IqBinDbg_DUMP_CIA
+	E_IQ_DBG_DUMP_HFA,->IqBinDbg_DUMP_HFA
+	E_IQ_DBG_DUMP_TC,->IqBinDbg_DUMP_TC
+	E_IQ_DBG_DUMP_GAM,->IqBinDbg_DUMP_GAM
+	E_IQ_DBG_DUMP_EE,->IqBinDbg_DUMP_EE
+	E_IQ_DBG_DUMP_CLPF,->IqBinDbg_DUMP_CLPF
+	E_IQ_DBG_DUMP_CSCO,->IqBinDbg_DUMP_CSCO
+	E_IQ_DBG_DUMP_CNR_OTF,->IqBinDbg_DUMP_CNR_OTF
+	E_IQ_DBG_DUMP_CNR_OFL,->IqBinDbg_DUMP_CNR_OFL
+	E_IQ_DBG_DUMP_CAG,->IqBinDbg_DUMP_CAG
+	E_IQ_DBG_DUMP_FSHD,->IqBinDbg_DUMP_FSHD
+	E_IQ_DBG_DUMP_TBL,->IqBinDbg_DUMP_TBL
+	E_IQ_DBG_DUMP_ALL,->IqBinDbg_DUMP_ALL
+} E_IQ_DBG_DUMP;->IqDbgDump
+
+IQDbg_Dump_IQ_SetFlag->iq_bin_dbg_set_flag
+IQDbg_Dump_IQ_PrintOut->iq_bin_dbg_print_out
+
+创建类：IqBinDbgPro
+修改函数:
+IQDbg_Dump_IQ_DPC->iqBinDbgDumpType1=iqBinDbgProDumpDpc_od;
+IQDbg_Dump_IQ_ELF->iqBinDbgDumpType2=iqBinDbgProDumpElf_od;
+IQDbg_Dump_IQ_CAG->iqBinDbgDumpType3=iqBinDbgProDumpCag_od;
+IQDbg_Dump_IQ_FSHD->iqBinDbgDumpType4=iqBinDbgProDumpFshd_od;
+
+创建类：IqBinDbgB2r
+修改函数:
+IQDbg_Dump_IQ_CIA->iqBinDbgDumpType1=iqBinDbgB2rDumpCia_od;
+IQDbg_Dump_IQ_HFA->iqBinDbgDumpType2=iqBinDbgB2rDumpHfa_od;
+
+创建类：IqBinDbgR2y
+修改函数:
+IQDbg_Dump_IQ_TC->iqBinDbgDumpType1=iqBinDbgR2yDumpTc_od;
+IQDbg_Dump_IQ_GAM->iqBinDbgDumpType2=iqBinDbgR2yDumpGam_od;
+IQDbg_Dump_IQ_EE->iqBinDbgDumpType3=iqBinDbgR2yDumpEe_od;
+IQDbg_Dump_IQ_CLPF->iqBinDbgDumpType4=iqBinDbgR2yDumpClpf_od;
+IQDbg_Dump_IQ_CSCO->iqBinDbgDumpType5=iqBinDbgR2yDumpCsco_od;
+IQDbg_Dump_IQ_TBL->iqBinDbgDumpType6=iqBinDbgR2yDumpTbl_od;
+
+
+创建类：IqBinDbgCnr
+修改函数:
+IQDbg_Dump_IQ_CNR_OTF->iqBinDbgDumpType1=iqBinDbgCnrDumpOtf_od;
+IQDbg_Dump_IQ_CNR_OFL->iqBinDbgDumpType2=iqBinDbgCnrDumpOfl_od;
+
+创建类：IqBinDbgBuffer
+#ifdef D_IQ_DBG_SAVE_FILE条件内的代码和变量
+
+创建类：IqBinDbgDump
+IqBinDbgPro、IqBinDbgB2r、IqBinDbgR2y、IqBinDbgCnr的父类，提供关于打印的抽象方法
+
+创建类：IqBinDbg2
+修改iq_bin_dbg2.c为iqbindbg2.c，iq_bin_dbg2.h修改为iqbindbg2.h，并从include中拿出来
+修改宏：
+IQ_DBG2_CONV_FLG->IqBinDbg2_CONV_FLG
+IQ_DBG2_SET_FLG->IqBinDbg2_SET_FLG
+IQ_DBG2_CLR_FLG->IqBinDbg2_CLR_FLG
+修改函数：
+IQ_Dbg2_Enable->iq_bin_dbg2_enable
+IQ_Dbg2_Init->iq_bin_dbg2_init
+IQ_Dbg2_Assign_Data->iq_bin_dbg2_assign_data
+IQ_Dbg2_Set_Address->iq_bin_dbg2_set_address
+IQ_Dbg2_Set_Data_for_Pipe_Direct->iq_bin_dbg2_set_data_for_pipe_direct
+IQ_Dbg2_Start->iq_bin_dbg2_start
+IQ_Dbg2_Set_Data->iq_bin_dbg2_set_data
+IQ_Dbg2_Wait_End->iq_bin_dbg2_wait_end
+IQ_Dgb2_Get_Head->iq_bin_dbg2_get_head
+IQ_Dbg2_Save_File->iq_bin_dbg2_save_file
+
+修改枚举：
+typedef enum {
+	E_IQ_DBG2_DATA_TYPE_NONE ->IqBinDbg2_DATA_TYPE_NONE
+	E_IQ_DBG2_DATA_TYPE_SEN,->IqBinDbg2_DATA_TYPE_SEN
+	E_IQ_DBG2_DATA_TYPE_SEN_TBL,->IqBinDbg2_DATA_TYPE_SEN_TBL
+	E_IQ_DBG2_DATA_TYPE_SRO,->IqBinDbg2_DATA_TYPE_SRO
+	E_IQ_DBG2_DATA_TYPE_B2B,->IqBinDbg2_DATA_TYPE_B2B
+	E_IQ_DBG2_DATA_TYPE_B2R,->IqBinDbg2_DATA_TYPE_B2R
+	E_IQ_DBG2_DATA_TYPE_LTM,->IqBinDbg2_DATA_TYPE_LTM
+	E_IQ_DBG2_DATA_TYPE_R2Y,->IqBinDbg2_DATA_TYPE_R2Y
+	E_IQ_DBG2_DATA_TYPE_CNR,->IqBinDbg2_DATA_TYPE_CNR
+	E_IQ_DBG2_DATA_TYPE_SRO_TBL,->IqBinDbg2_DATA_TYPE_SRO_TBL
+	E_IQ_DBG2_DATA_TYPE_B2B_TBL,->IqBinDbg2_DATA_TYPE_B2B_TBL
+	E_IQ_DBG2_DATA_TYPE_B2R_TBL,->IqBinDbg2_DATA_TYPE_B2R_TBL
+	E_IQ_DBG2_DATA_TYPE_LTM_TBL,->IqBinDbg2_DATA_TYPE_LTM_TBL
+	E_IQ_DBG2_DATA_TYPE_R2Y_TBL,->IqBinDbg2_DATA_TYPE_R2Y_TBL
+	E_IQ_DBG2_DATA_TYPE_MAX = 32,->IqBinDbg2_DATA_TYPE_MAX
+} E_IQ_DBG2_DATA_TYPE;->IqDbg2DataType
+
+创建类：IqBinGamaTbl
+从iqbinpara.c中移植函数：
+unsigned short* IQPara_Get_gamma(void);
+unsigned char* IQPara_Get_rgamma(void);
+void iq_rgamma( void );
+修改函数:
+IQPara_Get_gamma->iq_bin_gama_tbl_get_gamma
+IQPara_Get_rgamma->iq_bin_gama_tbl_get_rgamma
+iq_rgamma->iq_bin_gama_tbl_rgamma
+新建函数:
+void iq_bin_gama_tbl_set_ref_gama_tbl(USHORT* src_full_tbl);
+从iqbinpara.c中移植静态变量：
+static USHORT *g_ref_gam_tbl;
+static UCHAR  g_rgam_tbl[256];
+
+创建类：IqBinLtm
+从iqbinpara.c中移植函数：
+INT32 IQPara_LTM(UCHAR stream, UCHAR ch);
+修改函数：
+IQPara_LTM->iq_bin_ltm_para
+新建函数：
+void iq_bin_ltm_set_is_first_set(kboolean isFirstSet);
+从iqbinpara.c中移植静态变量：
+static BOOL g_ltm_ltmmap_log_tbl_first_set = 0;
+static T_IM_LTM_MAP_CTRL_GENERATION_MODE g_ltmmap_mode[kUNIT_MAX];
+static T_IM_LTM_CTRL_YLOG g_ylog_ctrl_map[kUNIT_MAX];
+static T_IM_LTM_CTRL_YLOG g_ylog_ctrl_ltm[kUNIT_MAX];
+static ULONG g_ltm_ylog_tbl0_map[kUNIT_MAX];
+static ULONG g_ltm_ylog_tbl1_map[kUNIT_MAX];
+static ULONG g_ltm_ylog_tbl0_ltm[kUNIT_MAX];
+static ULONG g_ltm_ylog_tbl1_ltm[kUNIT_MAX];
+static T_IM_LTM_LTM_CTRL_HF_STRENGTH g_hf_ctrl[kUNIT_MAX];
+static T_IM_LTM_LTM_CTRL_BLEND g_blend_ctrl[kUNIT_MAX];
+static T_IM_LTM_LTM_CTRL_CHROMA g_chroma_ctrl[kUNIT_MAX];
+
+创建类：IqBinPara：
+修改函数：
+IQPara_Init->iq_bin_para_para_init->iq_bin_para_new( config.IQ_BIN_addr, config.IQ_BIN_size, config.cap_mode );
+修改结构体：
+typedef struct {
+	kint16 		obt;
+	kushort *	gamma_FL;->gammaFL
+	unsigned long long *gamma_DF;->gammaDF
+	kint16	saturation; // -50% ~ +50%
+	kint16	sharpness; // -100% ~ +200%
+	kushort	level_3dnr; // 0 ~ 8->level3Dnr
+}T_IQ_PARAM ;->TIqParam
+
+创建类：IqBin3Dnr
+从iqbinpara.c中移植函数：
+INT32 IQPara_3DNR(UCHAR stream, T_IQ_3DNR_IM_ARG* im_arg);
+修改宏:
+IQ_NoErr->IqBin3Dnr_NO_ERR
+修改函数：
+IQPara_3DNR->iq_bin_3dnr_para
+从iqbinpara.h中移植结构体：
+T_IQ_3DNR_IM_ARG
+修改结构体：
+T_IQ_3DNR_IM_ARG->Iq3DnrImArg
+结构体成员去掉下滑下改为第一个单词首字母小写其余单词首字母大写的形式
+从iqbinpara.c中移植静态变量：
+static T_IM_SHDR_CTRL		g_3dnr_shdr_ctrl;
+static T_IM_SHDR_PRE		g_3dnr_shdr_pre;
+static T_IM_SHDR_FMD		g_3dnr_shdr_fmd;
+static T_IM_SHDR_SPNR		g_3dnr_shdr_spnr;
+static T_IM_SHDR_MSK		g_3dnr_shdr_msk;
+static T_IM_SHDR_PMSK		g_3dnr_shdr_pmsk;
+static UINT32				g_3dnr_shdr_in;
+
+创建类：IqBinR2y
+从iqbinpara.c中移植函数：
+INT32 IQPara_R2Y(UCHAR stream, UCHAR ch);
+修改函数：
+IQPara_R2Y->iq_bin_r2y_para
+从iqbinpara.c中移植静态变量：
+static T_IM_R2Y_CTRL_YCC  g_r2y_ctrl_ycc[kUNIT_MAX];
+static T_IM_R2Y_CTRL_CLPF  g_r2y_ctrl_clpf[kUNIT_MAX];
+static T_IM_R2Y_CTRL_CS  g_r2y_ctrl_csco[kUNIT_MAX];
+static T_IM_R2Y_CTRL_YNR g_r2y_ctrl_ynr[kUNIT_MAX];
+
+创建类：IqBinR2yAxis
+从iqbinpara.c中移植函数：
+int iq_mcc1_v0121e(UCHAR unit, T_BLEND* blend);
+修改函数：
+iq_mcc1_v0121e->iq_bin_r2y_axis_mcc1_v0121e
+新建函数：
+kint32 iq_bin_r2y_axis_ctrl_multi_axis(UCHAR unit);
+iq_bin_r2y_set_sharpness_r2y_tbl:用于在new IqBinR2y和IqBinR2yTbl时将Tbl传给sharpness
+从iqbinpara.c中移植静态变量：
+static T_IM_R2Y_CTRL_MULTI_AXIS g_r2y_ctrl_multi_axis[kUNIT_MAX];
+
+
+创建类:
+IqBinR2ySharpness
+从iqbinpara.c中移植函数：
+int iq_ee_tone_v0121e(UCHAR unit, T_BLEND  *blend);
+int iq_ee_scale_v0121e(UCHAR unit, T_BLEND  *blend);
+int iq_ee_hpf_v0121e(UCHAR unit, T_BLEND  *blend);
+int iq_ee_coring_v0121e(UCHAR unit, T_BLEND  *blend);
+int iq_ee_clip_v0121e(UCHAR unit, T_BLEND  *blend);
+int iq_ee_cmp_v0121e(UCHAR unit, T_BLEND  *blend);
+修改函数：
+iq_ee_tone_v0121e->iq_bin_r2y_sharpness_tone_v0121e
+iq_ee_scale_v0121e->iq_bin_r2y_sharpness_scale_v0121e
+iq_ee_hpf_v0121e->iq_bin_r2y_sharpness_hpf_v0121e
+iq_ee_coring_v0121e->iq_bin_r2y_sharpness_coring_v0121e
+iq_ee_clip_v0121e->iq_bin_r2y_sharpness_clip_v0121e
+iq_ee_cmp_v0121e->iq_bin_r2y_sharpness_cmp_v0121e
+新建函数：
+kint32 iq_bin_r2y_sharpness_ctrl_edge(SHORT	sharpness,UCHAR unit);
+从iqbinpara.c中移植静态变量：
+static T_IM_R2Y_CTRL_HEDGE  g_r2y_ctrl_hedge[kUNIT_MAX];
+static T_IM_R2Y_CTRL_MEDGE  g_r2y_ctrl_medge[kUNIT_MAX];
+static T_IM_R2Y_CTRL_LEDGE  g_r2y_ctrl_ledge[kUNIT_MAX];
+static T_IM_R2Y_CTRL_EDGE_CMN  g_r2y_ctrl_edge_cmn[kUNIT_MAX];
+static T_IM_R2Y_CTRL_EDGE_BLEND g_r2y_ctrl_edge_blend[kUNIT_MAX];
+
+创建类：IqBinR2yTbl
+从iqbinpara.c中移植函数：
+INT32 IQPara_R2Y_Tbl(UCHAR stream, UCHAR ch);
+修改函数：
+IQPara_R2Y_Tbl->iq_bin_r2y_tbl_para
+新建函数
+void iq_bin_r2y_tbl_set_edge_tone_tbl(USHORT	*tone,kuchar Horizontal,kuchar Vertical);
+void iq_bin_r2y_tbl_set_edge_scl_tbl(kuchar	*scl,kuchar Horizontal,kuchar Vertical);
+从iqbinpara.c中移植静态变量：
+static T_IM_R2Y_CTRL_GAMMA  gr2y_ctrl_gamma[kUNIT_MAX];
+static ULLONG *g_Gamma_diff[kUNIT_MAX][5];
+static USHORT *g_Gamma_full[kUNIT_MAX][5];
+
+创建类：IqBinRgbGain
+从iqbinpara.c中移植函数：
+INT32 IQPara_UpdateRGBGainArray(FLOAT rgain[], FLOAT ggain[], FLOAT bgain[]); 
+INT32 IQPara_UpdateRGBGain(FLOAT rgain, FLOAT ggain, FLOAT bgain); 
+修改函数：
+IQPara_UpdateRGBGainArray->iq_bin_rgb_gain_update_rgb_gain_array
+IQPara_UpdateRGBGain->iq_bin_rgb_gain_update_rgb_gain
+从iqbinpara.c中移植静态变量：
+static FLOAT g_rgbgain[E_SHARE_SENSOR_NUM_MAX][3];
+
+创建类：IqBinSen
+从iqbinpara.c中移植函数：
+INT32 IQPara_SEN(UCHAR stream, UCHAR ch); 
+修改函数：
+IQPara_SEN->iq_bin_sen_para
+从iqbinpara.c中移植静态变量：
+static T_IM_PRO_RGB2		  g_obt_14bit[E_SHARE_SENSOR_NUM_MAX];
+
+创建类：IqBinSro
+从iqbinpara.c中移植函数：
+INT32 IQPara_SRO(UCHAR stream, UCHAR ch);
+修改函数：
+IQPara_SRO
+从iqbinpara.c中移植静态变量：
+static UCHAR				  g_dpc_trigger[kUNIT_MAX];
+static T_IM_PRO_DPC_CTRL      g_dpc_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_AB_CTRL   g_dpc_ab_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_DDD_CTRL  g_dpc_ddd_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_MDD_CTRL  g_dpc_mdd_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_MDC_CTRL  g_dpc_mdc_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_ESDC_CTRL g_dpc_esdc_ctrl[kUNIT_MAX];
+static T_IM_PRO_DPC_OCD_CTRL  g_dpc_ocd_ctrl[kUNIT_MAX];
+
+创建类：CoordSys
+修改函数：
+CoordSys_Init->coord_sys_new(PanoramaAffine *poseinworld, float objscale, CoordSysAxis axPole);
+在snspose中new
+CoordSys_SetPose->coord_sys_set_pose
+CoordSys_XYZ2Geo->coord_sys_xyz_2_geo
+CoordSys_Geo2XYZ->coord_sys_geo_2_xyz
+CoordSys_XYZ2Sph->coord_sys_xyz_2_sph
+CoordSys_Sph2XYZ->coord_sys_sph_2_xyz
+CoordSys_Local2World->coord_sys_local_2_world
+CoordSys_World2Local->coord_sys_world_2_local
+
+创建类：CoordSysAxis
+修改参数类型：
+CoordSysAxis由枚举改为类，将原来的枚举改名为CoordSysAxisEnum，放到公有属性里
+修改函数：
+CoordSysAxis_CycleForward->coord_sys_axis_cycle_forward
+CoordSysAxis_CycleReverse->coord_sys_axis_cycle_reverse
+CoordSysAxis_Pole2PlaneX->coord_sys_axis_pole_2_plane_x
+CoordSysAxis_Pole2PlaneY->coord_sys_axis_pole_2_plane_y
+删除类CoordSysAxis,将方法改为CoordSys的静态方法
+
+创建类：CoordSysPair
+修改函数：
+CoordSysPair_Init->coord_sys_pair_init
+CoordSysPair_Compose->coord_sys_pair_compose
+CoordSysPair_ChangeBasis_Inverse->coord_sys_pair_change_basis_inverse
+CoordSysPair_ChangeBasis_Forward->coord_sys_pair_change_basis_forward
+
+创建类：GridCell
+添加结构体：
+CellInfo，封装outw，outh，cellw，cellh这四个init时用的int变量
+需要在SnsStitch中k_slice
+修改函数：
+GridCell_Init->grid_cell_init
+GridCell_IsIncompleteX->grid_cell_is_incomplete_x
+GridCell_IsIncompleteY->grid_cell_is_incomplete_y
+GridCell_GetSizeTotalX->grid_cell_get_size_total_x
+GridCell_GetSizeTotalY->grid_cell_get_size_total_y
+GridCell_GetRasterId->grid_cell_get_raster_id
+
+创建类：PanoramaAffine
+修改结构体：
+Affine->PanoramaAffine
+修改函数：
+Affine_Init->panorama_accel_set
+Affine_CopyMat->panorama_affine_copy_mat
+Affine_CopyVec->panorama_affine_copy_vec
+Affine_CopyMatVec->panorama_affine_copy_mat_vec
+Affine_Transform->panorama_affine_transform
+Affine_GetInv->panorama_affine_get_inv
+Affine_Compose->panorama_affine_compose
+Affine_Copy->panorama_affine_copy
+Affine_MulScalarToVec->panorama_affine_mul_scalar_to_vec
+Affine_Init_Identity->panorama_affine_init_identity
+Affine_Init_RotX->panorama_affine_init_rotx
+Affine_Init_RotY->panorama_affine_init_roty
+Affine_Init_RotZ->panorama_affine_init_rotz
+Affine_Init_Rot->panorama_affine_init_rot
+Affine_Init_RotEuler->panorama_affine_init_rot_euler
+
+创建类：PanoramaProj
+修改函数：
+ProjType_Front2Pole->panorama_proj_type_front_2_pole
+ProjType_Pole2Front->panorama_proj_type_pole_2_front
+Proj_Init->panorama_proj_set
+Proj_Inverse_Lens->panorama_proj_inverse_lens
+Proj_Inverse_Equirectangular->panorama_proj_inverse_equirectangular
+Proj_Inverse_Cylindrical->panorama_proj_inverse_cylindrical
+Proj_Inverse_Rectilinear->panorama_proj_inverse_rectilinear
+Proj_Forward_Lens->panorama_proj_forward_lens
+Proj_Forward_Equirectangular->panorama_proj_forward_equirectangular
+Proj_Forward_Cylindrical->panorama_proj_forward_cylindrical
+Proj_Forward_Rectilinear->panorama_proj_forward_rectilinear
+
+创建类：PanoramaCamera
+修改函数
+Camera_Init->panorama_camera_init->panorama_camera_new(ParamCamera *param, float objscale)
+Camera_UpdatePose->panorama_camera_update_pose
+Camera_ProjInverse->panorama_camera_proj_inverse
+Camera_ProjForward->panorama_camera_proj_forward
+
+创建类：PanoramaCameraPair
+修改函数：
+CameraPair_Init->panorama_camera_pair_init->panorama_camera_pair_set
+CameraPair_UpdateDstPose->panorama_camera_pair_update_dst_pose
+CameraPair_ProjInverse->panorama_camera_pair_proj_inverse
+CameraPair_ProjInverse_GetSrc3->panorama_camera_pair_proj_inverse_get_src3
+
+创建类：PanoramaDist
+修改结构体：
+Dist->PanoramaDist->panorama_dist_new(float *tableinput, float *tableoutput,int tablelength, float in2rad, float out2pix)
+修改函数：
+Dist_Init->panorama_dist_init
+Dist_ProjForward->panorama_dist_proj_forward
+
+创建类：PanoramaAccel
+修改结构体：
+Accel->PanoramaAccel
+修改函数：
+Accel_Init->panorama_accel_set
+Accel_Floor->panorama_accel_floor
+
+创建类：RingBuffer
+修改函数：
+RingBuffer_Init->ring_buffer_init
+RingBuffer_Inc->ring_buffer_inc
+RingBuffer_Push->ring_buffer_push
+RingBuffer_Pop->ring_buffer_pop
+RingBuffer_GetAverage->ring_buffer_get_average
+
+创建类：AccelFilter
+修改函数：
+AccelFilter_Init->accel_filter_init
+AccelFilter_GetFiltered->accel_filter_get_filtered
+
+创建类：TemporalFilter
+修改函数：
+TemporalFilter_Init->temporal_filter_init->temporal_filter_new
+TemporalFilter_GetFiltered->temporal_filter_get_filtered
+
+创建类：GeoRegion
+修改函数
+GeoRegionLat_Get->static GeoRegionLat 	geoRegionLatGet
+GeoRegionLon_Get->static GeoRegionLon geoRegionLonGet
+GeoRegion_Init->geo_region_init
+
+创建类：GeoRegionGrid
+修改函数
+GeoRegionGrid_Init->删除，
+合并至geo_region_grid_new(float bordernorth, float bordersouth, CellInfo* cellInfo)
+在SnsStitch里面new
+GeoRegionGrid_GetNodePtr->geo_region_grid_get_node_ptr
+GeoRegionGrid_SetNodeFromDst2->geo_region_grid_set_node_from_dst2
+GeoRegionGrid_GetCellRegion->geo_region_grid_get_cell_region
+
+
+创建类：GridPair
+修改函数：
+GridPair_Init->grid_pair_init
+GridPair_Dst_GetCoord_IntX->grid_pair_dst_get_coord_int_x
+GridPair_Dst_GetCoord_IntY->grid_pair_dst_get_coord_int_y
+GridPair_Dst_GetCoord_Int->grid_pair_dst_get_coord_int
+GridPair_Dst_GetCoord_Vec2->grid_pair_dst_get_coord_vec2
+GridPair_Dst_ComputeCoordAt->grid_pair_dst_compute_coord_at
+GridPair_Dst_ComputeCoordAll->grid_pair_dst_compute_coord_all
+GridPair_Src_ComputeCoordAt->grid_pair_src_compute_coord_at
+GridPair_Src_ComputeCoordAt_Raster->grid_pair_src_compute_coord_at_raster
+GridPair_Src_ComputeCoordAll->grid_pair_src_compute_coord_all
+GridPair_Src_ComputeCoordAll_Step->grid_pair_src_compute_coord_all_step
+GridPair_Src_ComputeCoordAll_StepInterpolate->grid_pair_src_compute_coord_all_step_Interpolate
+GridPair_Src_ShiftCoord_CrossingBorderX->grid_pair_src_shift_coord_crossing_border_x
+GridPair_Src_ShiftCoordAll->grid_pair_src_shift_coord_all
+
+创建类Accel2Pose
+修改函数：
+accel2pose->accel2_pose_set
+
+修改变量类型：
+USHORT->kushort
+UINT32->kuint
+UCHAR->kuchar
+ULONG->kulong
+INT32->kin32
+FLOAT->float
+VOID->void
+UINT8->kuint8
+SHORT->kint16
+ULLONG->unsigned long long
+BOOL->kboolean
+INT8->kint8

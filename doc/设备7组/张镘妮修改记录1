@@ -1,0 +1,179 @@
+ 一　新建类，删除原文件
+cpu_tkernel/media_meta/mp4/demux/src/demux_if.c　　创建类demuxif(demuxif.c  demuxif.h)
+
+cpu_tkernel/media_meta/mp4/demux/src/demux.c　　　　　创建类mp4demux(mp4demux.c  mp4demux.h)，
+						　　　　　　mp4demux1(mp4demux1.c  mp4demux1.h)，
+						　　　　　　mp4demux2(mp4demux1.c  mp4demux1.h)，
+						　　　　　　mp4demuxutils(mp4demuxutils.c mp4demuxutils.h)
+						　　　新建文件mp4demuxdef.h
+
+cpu_tkernel/media_meta/mp4/mux/src/mux_if.c　　　　　创建类 muxif(muxif.c  muxif.h)
+
+cpu_tkernel/media_meta/mp4/mux/src/mux.c	创建类	mp4mux(mp4mux.c  mp4mux.h)
+						mp4mux1(mp4mux1.c  mp4mux1.h)
+						mp4mux2(mp4mux2.c  mp4mux2.h)
+						mp4muxutils(mp4muxutils.c mp4muxutils.h)
+						新建文件mp4muxdef.h
+
+cpu_tkernel/media_meta/mp4/src/mp4_common.c　	创建类mp4common(mp4common.c  mp4common.h)
+						mp4common1(mp4common1.c  mp4common1.h)
+						mp4commonutils(mp4commonutils.c  mp4commonutils.h)
+						新建文件mp4commondef.h
+
+cpu_tkernel/media_meta/src/fj_dcf.c　		创建类fjdcf(fjdcf.c  fjdcf.h)
+
+cpu_tkernel/media_meta/src/fj_demux.c　　　　　　　　　　创建类fjdemux(fjdemux.c  fjdemux.h)
+
+cpu_tkernel/media_meta/src/fj_exif.c	　　　　　　　创建类fjexif(fjexif.c   fjexif.h)
+
+cpu_tkernel/media_meta/src/fj_mux_demux_common.c　　创建类fjmuxdemuxcommon(fjmuxdemuxcommon.c fjmuxdemuxcommon.h)
+
+cpu_tkernel/media_meta/src/fj_mux.c　　　　　　　　　　　创建类fjmux(fjmux.c fjmuc.h)
+
+
+
+二　公有方法修改
+fj_demux_initialize(　　改为　demux_if_fj_demux_initialize(DemuxIf *self,
+fj_demux_videosetup(　改为　demux_if_fj_demux_videosetup(DemuxIf *self,
+fj_demux_audiosetup(  改为   demux_if_fj_demux_audiosetup(DemuxIf *self,
+fj_demux_freeatomsizeget(  改为    demux_if_fj_demux_freeatomsizeget(DemuxIf *self,
+fj_demux_freeatomget(  改为   demux_if_fj_demux_freeatomget(DemuxIf *self, 
+fj_demux_streamread(   改为    demux_if_fj_demux_streamread(DemuxIf *self,
+fj_demux_streamreadsync(  改为　demux_if_fj_demux_streamreadsync(DemuxIf *self,
+fj_demux_finalize(　　　改为　　demux_if_fj_demux_finalize(DemuxIf *self, 
+
+BF_Demux_Initialize( 改为　mp4_demux_bf_demux_initialize(Mp4Demux *self,
+BF_Demux_VideoSetup(　改为 mp4_demux_bf_demux_videosetup(Mp4Demux *self,
+BF_Demux_AudioSetup(　改为 mp4_demux_bf_demux_audiosetup(Mp4Demux *self,
+BF_Demux_FreeAtomSizeGet( 改为mp4_demux_bf_demux_freeatomsizeget(Mp4Demux *self,
+BF_Demux_FreeAtomGet(　改为 mp4_demux_bf_demux_freeatomget(Mp4Demux *self,
+BF_Demux_StreamRead(　改为 mp4_demux_bf_demux_streamread(Mp4Demux *self,
+BF_Demux_StreamReadSync(　改为 mp4_demux_bf_demux_streamreadsync(Mp4Demux *self,
+BF_Demux_Finalize(　改为　 mp4_demux_bf_demux_finalize(Mp4Demux *self,
+fj_mux_initialize(     改为  mux_if_fj_mux_initialize(MuxIf *self,
+fj_mux_fixedatomsetting(  改为　 mux_if_fj_mux_fixedatomsetting(MuxIf *self,
+
+fj_mux_videoaddsample(  改为  mux_if_fj_mux_videoaddsample(MuxIf *self, 
+fj_mux_audioaddsample(   改为 mux_if_fj_mux_audioaddsample(MuxIf *self,
+fj_mux_addfreeatom(  改为   mux_if_fj_mux_addfreeatom(MuxIf *self, 
+fj_mux_finalize(      改为        mux_if_fj_mux_finalize(MuxIf *self, 
+fj_mux_wifi_out_emmc(    改为　 mux_if_fj_mux_wifi_out_emmc(MuxIf *self, 
+fj_mux_atom_creat(         mux_if_fj_mux_atom_creat(MuxIf *self, 
+fj_mux_movie_file_old_set(   mux_if_fj_mux_movie_file_old_set(MuxIf *self, 
+fj_mux_close_file(   mux_if_fj_mux_close_file(MuxIf *self, 
+
+BF_Mux_Initialize(　　改为　mp4_mux_bf_mux_initialize(Mp4Mux*self,
+BF_Mux_FixedAtomSetting(　　改为　mp4_mux_bf_mux_fixedatomsetting(Mp4Mux*self,
+BF_Mux_VideoAddSample(　　改为　mp4_mux_bf_mux_videoaddsample(Mp4Mux*self,
+BF_Mux_AudioAddSample(　改为　mp4_mux_bf_mux_audioaddsample(Mp4Mux*self,
+BF_Mux_AddFreeAtom(　改为　mp4_mux_bf_mux_addfreeatom(Mp4Mux*self,
+BF_Mux_Finalize(　改为　mp4_mux_bf_mux_finalize(Mp4Mux*self,
+BF_Mux_WIFI_Out_EMMC(　改为　mp4_mux_bf_mux_wifi_out_emmc(Mp4Mux*self,
+BF_Mux_Atom_Creat(　改为　mp4_mux_bf_mux_atom_creat(Mp4Mux*self,
+BF_Mux_Movie_File_Old_Set(　改为　mp4_mux_bf_mux_movie_file_old_set(Mp4Mux*self,
+BF_Mux_Close_File(　改为　mp4_mux_bf_mux_close_file(Mp4Mux*self,
+
+bf_mux_hvcc_create( 改为 mp4_mux1_bf_mux_hvcc_create(Mp4Mux1* self,
+bf_mux_file_close_all( 改为  mp4_mux1_bf_mux_file_close_all(Mp4Mux1* self,
+bf_mux_convert_endian( 改为 mp4_mux1_bf_mux_convert_endian(Mp4Mux1* self,
+
+bf_mux_init_param(	改为 mp4_mux2_bf_mux_init_param(Mp4Mux2* self,
+bf_mux_channel_ctrl_get(　改为 mp4_mux2_bf_mux_channel_ctrl_get(Mp4Mux2* self,
+bf_mux_fixed_atom_create(　改为 mp4_mux2_bf_mux_fixed_atom_create(Mp4Mux2* self,
+bf_mux_video_sample_time_check(　改为 mp4_mux2_bf_mux_video_sample_time_check(Mp4Mux2* self,
+bf_mux_video_sample_size_check(　改为 mp4_mux2_bf_mux_video_sample_size_check(Mp4Mux2* self,
+bf_mux_fixed_atom_create2(　改为 mp4_mux2_bf_mux_fixed_atom_create2(Mp4Mux2* self,
+
+BF_MP4_Common_Memory_Initialize( 改为　mp4_common_bf_mp4_common_memory_initialize(Mp4Common*self,
+BF_MP4_Common_Memory_Finalize(  　改为　mp4_common_bf_mp4_common_memory_finalize(Mp4Common*self,
+fj_mux_demux_common_memory_initialize(  　改为 mp4_common_fj_mux_demux_common_memory_initialize(Mp4Common*self,
+fj_mux_demux_common_memory_finalize(    改为　mp4_common_fj_mux_demux_common_memory_finalize(Mp4Common*self,
+BF_MP4_Common_Fs_Memory_Initialize(  改为   mp4_common_bf_mp4_common_fs_memory_initialize(Mp4Common*self,
+BF_MP4_Common_Fs_Memory_Update(   改为　mp4_common_bf_mp4_common_fs_memory_update(Mp4Common*self,
+BF_MP4_Common_BS_Get_Remain_Bits( 改为　mp4_common1_bf_mp4_common_bs_get_remain_bits(Mp4Common1* self
+BF_MP4_Common_BS_Write_64_U_Nbit(　改为　mp4_common1_bf_mp4_common_bs_write_64_u_nbit(Mp4Common1* self
+BF_MP4_Common_Start_Code_Emuration_Convert(　改为　mp4_common1_bf_mp4_common_start_code_emuration_convert(Mp4Common1* self
+BF_MP4_Common_Fs_Create_Time_Initialize(　改为　mp4_common1_bf_mp4_common_fs_create_time_initialize(Mp4Common1* self
+BF_MP4_Common_WIFI_Out_EMMC(　改为　mp4_common1_bf_mp4_common_wifi_out_emmc(Mp4Common1* self
+BF_MP4_Common_Fs_Mediasize_Get(　改为　mp4_common1_bf_mp4_common_fs_mediasize_get(Mp4Common1* self
+
+
+
+FJ_DcfdCreate(　　　改为　fj_dcf_fj_dcfdcreate(FjDcf* self,
+FJ_DcfdRenew(　　　改为	fj_dcf_fj_dcfdrenew(FjDcf* self,
+FJ_DirectDcfDirectoryCreate(	改为　　fj_dcf_FJ_directdcfdirectorycreate(FjDcf* self,
+FJ_DirectDcfDirNum(　	改为	fj_dcf_fj_directdcfdirnum(FjDcf* self,
+FJ_DirectDcfDumpDirIAttr(	改为	fj_dcf_fj_directdcfdumpdirIattr(FjDcf* self,
+FJ_DirectDcfDumpDirIAttrEx(	fj_dcf_fj_directdcfdumpdirIattrex(FjDcf* self,
+FJ_GetAllowdNum(	改为　　fj_dcf_fj_getallowdnum(FjDcf* self,
+FJ_GetDCFDBLongVal(	改为　　fj_dcf_fj_getdcfdblongval(FjDcf* self,
+FJ_GetDCFInfo(		改为　　fj_dcf_fj_getdcfinfo(FjDcf* self,
+FJ_GetDirDuplicateStatus(　　改为		fj_dcf_fj_getdirduplicatestatus(FjDcf* self,
+FJ_GetDirInfo(		改为	fj_dcf_fj_getdirinfo(FjDcf* self,
+FJ_GetMaxFileNumAsDirNum(改为		fj_dcf_fj_getmaxfilenumasdirnum(FjDcf* self,
+FJ_GetParamArray(	改为	fj_dcf_fj_getparamarray(FjDcf* self,
+FJ_Is_DCF_File_Type(	改为	fj_dcf_fj_is_dcf_file_type(FjDcf* self,
+FJ_SetCurrentDirectory(		改为	fj_dcf_fj_setcurrentdirectory(FjDcf* self,
+FJ_SetDCFDBLongVal(	改为	fj_dcf_fj_setdcfdblongval(FjDcf* self,
+FJ_SetDCFFreeChars(	改为	fj_dcf_fj_setdcffreechars(FjDcf* self,
+FJ_GetDCFLastFileNumber(	改为	fj_dcf_fj_getdcflastfilenumber(FjDcf* self,
+FJ_SetNextDCFKey(	改为	fj_dcf_fj_setnextdcfkey(FjDcf* self,
+FJ_Get_Latest_Index(	改为	fj_dcf_fj_get_latest_index(FjDcf* self,
+FJ_GetFirstFreeFileNo(	改为	fj_dcf_fj_getfirstfreefileno(FjDcf* self,
+
+FJ_SetDCFDBStrVal(	改为	fj_dcf_fj_setdcfdbstrval(FjDcf* self,
+FJ_GetDCFDBStrVal(	改为	fj_dcf_fj_getdcfdbstrval(FjDcf* self,
+FJ_GetDCFDBLongValByStr(	改为	fj_dcf_fj_getdcfdblongvalbystr(FjDcf* self,
+FJ_Dcf_Execute_Multi_Delete(	改为	fj_dcf_fj_dcf_execute_multi_delete(FjDcf* self,
+FJ_Dcf_Init_Select_List(	改为	fj_dcf_fj_dcf_init_select_list(FjDcf* self,
+FJ_Dcf_Add_File_To_Select_List(	改为	fj_dcf_fj_dcf_add_file_to_select_list(FjDcf* self,
+FJ_Dcf_Remove_File_From_Select_List(	改为	fj_dcf_fj_dcf_remove_file_from_select_list(FjDcf* self,
+FJ_GetDCFDirFileExist(	改为	fj_dcf_fj_getdcfdirfileexist(FjDcf* self,
+FJ_DcfDirectoryDelete(	改为	fj_dcf_fj_dcfdirectorydelete(FjDcf* self,
+FJ_Dcf_Make_New_File_Path_By_Ext(	改为	fj_dcf_fj_dcf_make_new_file_path_by_ext(FjDcf* self,
+FJ_Dcf_Del_Single_Obj(		改为	fj_dcf_fj_dcf_del_single_obj(FjDcf* self,
+FJ_Dcf_Del_All_Obj(	改为	fj_dcf_fj_dcf_del_all_obj(FjDcf* self,
+FJ_Dcf_Update_DcfDb_Add_File(	改为	fj_dcf_fj_dcf_update_dcfdb_add_file(FjDcf* self,
+
+
+FJ_Demux_Initialize(	改为	fj_demux_initialize(FjDemux *self, 
+FJ_Demux_VideoSetup(	改为	fj_demux_videosetup(FjDemux *self, 
+FJ_Demux_AudioSetup(	改为	fj_demux_audiosetup(FjDemux *self, 
+FJ_Demux_FreeAtomSizeGet(	改为	fj_demux_freeatomsizeget(FjDemux *self, 
+FJ_Demux_FreeAtomGet(	改为	fj_demux_freeatomget(FjDemux *self, 
+FJ_Demux_StreamRead(	改为	fj_demux_streamread(FjDemux *self, 
+FJ_Demux_StreamReadSync(	改为	fj_demux_streamreadsync(FjDemux *self, 
+FJ_Demux_Finalize(	改为	fj_demux_finalize(FjDemux *self, 
+
+
+
+FJ_Mux_Initialize(	改为	fj_mux_initialize(FjMux *self,
+FJ_Mux_Fixed_Atom_Setting(	改为	fj_mux_fixed_atom_setting(FjMux *self,
+FJ_Mux_Video_Add_Sample(	改为	fj_mux_video_add_sample(FjMux *self,
+FJ_Mux_Audio_Add_Sample(	改为	fj_mux_audio_add_sample(FjMux *self,
+FJ_Mux_Add_FreeAtom(		改为	fj_mux_add_freeAtom(FjMux *self,
+FJ_Mux_Finalize(	改为	fj_mux_finalize(FjMux *self,
+FJ_Mux_WIFI_Out_EMMC(	改为	fj_mux_wifi_out_emmc(FjMux *self,
+FJ_Mux_Atom_Creat(	改为	fj_mux_atom_creat(FjMux *self,
+FJ_Mux_Movie_File_Old_Set(	改为	fj_mux_movie_file_old_set(FjMux *self,
+FJ_Mux_Close_File(	改为	fj_mux_close_file(FjMux *self,
+
+
+FJ_Mux_Demux_Common_Memory_Initialize(	fj_mux_demux_common_memory_initialize(FjMuxDemuxCommon* self,
+
+FJ_Mux_Demux_Common_Memory_Finalize(	fj_mux_demux_common_memory_finalize(FjMuxDemuxCommon* self
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

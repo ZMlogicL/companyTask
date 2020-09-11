@@ -1,0 +1,430 @@
+一、ct_im_xch.c移植成ctimxch.c
+公有函数名字更改：
+	1.ct_xch_callback_0 改为 ct_im_xch_callback_0_cb
+	2.ct_xch_callback_1 改为 ct_im_xch_callback_1_cb
+	3.Ct_Im_Xch_Main( 改为 ct_im_xch_main( CtImXch *self, 
+
+公有宏定义更改：
+	1.D_CT_XCH_SRC_TOP_ADDR 改为 CtImXch_D_CT_XCH_SRC_TOP_ADDR
+	2.D_CT_XCH_DST_TOP_ADDR 改为 CtImXch_D_CT_XCH_DST_TOP_ADDR
+	3.D_CT_XCH_SRC_TOP_ADDR2 改为 CtImXch_D_CT_XCH_SRC_TOP_ADDR2
+	4.D_CT_XCH_DST_TOP_ADDR2 改为 CtImXch_D_CT_XCH_DST_TOP_ADDR2
+
+引用外部的公有变量名字:
+Im_Xch_Init 改为 im_xch_init
+Im_Xch_Open 改为 im_xch_open
+Im_Xch_Close 改为 im_xch_close
+Im_Xch_Ctrl_Common 改为 im_xch1_ctrl_common
+Im_Xch_Ctrl_Hist 改为 im_xch1_ctrl_hist
+Im_Xch_Ctrl_Half_Thin 改为 im_xch1_ctrl_half_thin
+Im_Xch_Ctrl_Copy 改为 im_xch1_ctrl_copy
+Im_Xch_Ctrl_Fill 改为 im_xch1_ctrl_fill
+Im_Xch_Start_Sync 改为 im_xch_start_sync
+Im_Xch_Start_Async 改为 im_xch_start_async
+Im_Xch_Wait_End 改为 im_xch_wait_end
+Im_Xch_Get_Histogram_Max 改为 im_xch1_get_histogram_max
+Im_Xch_Get_Ctrl_Common 改为 im_xch1_get_ctrl_common
+Im_Xch_Get_Ctrl_Thin 改为 im_xch1_get_ctrl_thin
+Im_Xch_Get_Ctrl_Hist 改为 im_xch1_get_ctrl_hist
+Im_Xch_Get_Ctrl_Half_Thin 改为 im_xch1_get_ctrl_half_thin
+Im_Xch_Get_Ctrl_Copy 改为 im_xch1_get_ctrl_copy
+Im_Xch_Get_Ctrl_Fill 改为 im_xch1_get_ctrl_fill
+Im_Xch_Stop 改为 im_xch_stop
+Im_Xch_Get_Xtrg 改为 im_xch1_get_xtrg
+Im_Xch_Int_Handler 改为 im_xch_int_handler
+Im_Xch_Copy 改为 im_xch2_copy
+Im_Xch_Copy_Ex_Sync 改为 im_xch2_copy_ex_sync
+Im_Xch_Copy_Ex_Async 改为 im_xch2_copy_ex_async
+Im_Xch_Fill 改为 im_xch_fill
+Im_Xch_Fill_Ex_Sync 改为 im_xch_fill_ex_sync
+Im_Xch_Fill_Ex_Async 改为 im_xch_fill_ex_async
+Im_Xch_Convert_Thinning_Sync 改为 im_xch2_convert_thinning_sync
+Im_Xch_Convert_Thinning_Async 改为 im_xch2_convert_thinning_async
+Im_Xch_Examine_Histogram_Sync 改为 im_xch2_examine_histogram_sync
+Im_Xch_Examine_Histogram_Async 改为 im_xch2_examine_histogram_async
+Im_Xch_Get_Histogram 改为 im_xch_get_histogram
+Im_Xch_Ctrl_Thin 改为 im_xch1_ctrl_thin
+DDIM_User_L1l2cache_Clean_Flush_All 改为 ddim_user_custom_l1l2cache_clean_flush_all
+
+引用外部的结构体更改：
+T_IM_XCH_CTRL_THIN 改为 ImXchCtrlThin
+T_IM_XCH_CTRL_HALF_THIN 改为 ImXchCtrlHalfThin
+T_IM_XCH_CTRL_HIST 改为 ImXchCtrlHist
+T_IM_XCH_CTRL_COPY 改为 ImXchCtrlCopy
+T_IM_XCH_CTRL_CMN 改为 ImXchCtrlCmn
+T_IM_XCH_COPY_EX 改为 ImXchCopyEx
+T_IM_XCH_CONV_THIN 改为 ImXchConvThin
+T_IM_XCH_EXAMINE_HIST 改为 ImXchExamineHist
+T_IM_XCH_FILL_EX 改为 ImXchFillEx
+
+引用外部的枚举更改（根据规范规则命名的，回头还要复查）：
+E_IM_XCH_CH_SEL 改为 ImXchEImXchChSel
+E_IM_XCH_CH_SEL_0 改为 ImXch_E_IM_XCH_CH_SEL_0
+E_IM_XCH_CH_SEL_1 改为 ImXch_E_IM_XCH_CH_SEL_1
+E_IM_XCH_ST 改为 ImXchEImXchSt
+E_IM_XCH_ST_RUNNING 改为 ImXch_E_IM_XCH_ST_RUNNING
+E_IM_XCH_COPY_SEL 改为 ImXchEImXchCopySel
+E_IM_XCH_COPY_SEL_HI 改为 ImXch_E_IM_XCH_COPY_SEL_HI
+E_IM_XCH_COPY_SEL_NORMAL 改为 ImXch_E_IM_XCH_COPY_SEL_NORMAL
+
+引用外部的宏定义更改：
+D_IM_XCH_THIN_SEL_1_1 改为 ImXch_D_IM_XCH_THIN_SEL_1_1
+D_IM_XCH_THIN_SEL_1_2 改为 ImXch_D_IM_XCH_THIN_SEL_1_2
+D_IM_XCH_THIN_SEL_1_4 改为 ImXch_D_IM_XCH_THIN_SEL_1_4
+D_IM_XCH_THIN_SEL_3_4 改为 ImXch_D_IM_XCH_THIN_SEL_3_4
+
+引用外部的公有变量名字：
+s_hsize 改为 sHsize
+src_addr 改为 srcAddr
+g_hsize 改为 gHsize
+d_hsize  改为 dHsize
+d_vsize 改为 dVsize
+dst_addr 改为 dstAddr 
+src_gl_width 改为 srcGlWidth
+dst_gl_width 改为 dstGlWidth
+thin_width 改为 thinWidth
+thin_lines 改为 thinLines
+fill_data 改为 fillData 
+gl_width 改为 glWidth
+hist_addr 改为 histAddr
+g_width 改为 gWidth
+copy_type 改为 copyType
+fill_addr 改为 fillAddr
+IO_XCH 改为 ioXch
+
+回调函数名字（复查）：
+VP_CALLBACK 改为 VpCallbackFunc
+
+二、ct_im_sdramc.c移植成ctimsdramc.c
+公有函数名字更改：
+CT_Im_SDRAMC_1_01( UCHAR ch ) 改为 ct_im_sdramc_1_01( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_02 改为 ct_im_sdramc_1_02( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_03 改为 ct_im_sdramc_1_03( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_04 改为 ct_im_sdramc_1_04( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_05 改为 ct_im_sdramc_1_05( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_06 改为 ct_im_sdramc_1_06( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_07 改为 ct_im_sdramc_1_07( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_08 改为 ct_im_sdramc_1_08( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_09 改为 ct_im_sdramc_1_09( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_10 改为 ct_im_sdramc_1_10( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_11 改为 ct_im_sdramc_1_11( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_1_12 改为 ct_im_sdramc_1_12( CtImSdramc *self, UCHAR ch )
+CT_Im_SDRAMC_2_01( VOID ); 改为 ct_im_sdramc_2_01( CtImSdramc *self )
+CT_Im_SDRAMC_2_02 改为 ct_im_sdramc_2_02( CtImSdramc *self )
+CT_Im_SDRAMC_2_03 改为 ct_im_sdramc_2_03( CtImSdramc *self )
+CT_Im_SDRAMC_2_04 改为 ct_im_sdramc_2_04( CtImSdramc *self )
+CT_Im_SDRAMC_2_05 改为 ct_im_sdramc_2_05( CtImSdramc *self )
+CT_Im_SDRAMC_2_06 改为 ct_im_sdramc_2_06( CtImSdramc *self )
+CT_Im_SDRAMC_2_07 改为 ct_im_sdramc_2_07( CtImSdramc *self )
+CT_Im_SDRAMC_2_08 改为 ct_im_sdramc_2_08( CtImSdramc *self )
+CT_Im_SDRAMC_2_09 改为 ct_im_sdramc_2_09( CtImSdramc *self )
+CT_Im_SDRAMC_2_10 改为 ct_im_sdramc_2_10( CtImSdramc *self )
+CT_Im_SDRAMC_2_11 改为 ct_im_sdramc_2_11( CtImSdramc *self )
+CT_Im_SDRAMC_2_12 改为 ct_im_sdramc_2_12( CtImSdramc *self )
+CT_Im_SDRAMC_2_13 改为 ct_im_sdramc_2_13( CtImSdramc *self )
+CT_Im_SDRAMC_2_14 改为 ct_im_sdramc_2_14( CtImSdramc *self )
+CT_Im_SDRAMC_2_15 改为 ct_im_sdramc_2_15( CtImSdramc *self )
+CT_Im_SDRAMC_2_16 改为 ct_im_sdramc_2_16( CtImSdramc *self )
+CT_Im_SDRAMC_2_17 改为 ct_im_sdramc_2_17( CtImSdramc *self )
+CT_Im_SDRAMC_2_18 改为 ct_im_sdramc_2_18( CtImSdramc *self )
+CT_Im_SDRAMC_2_19 改为 ct_im_sdramc_2_19( CtImSdramc *self )
+Ct_Im_SDRAMC_Main(int argc, char** argv) 改为 ct_im_sdramc_main(CtImSdramc *self, int argc, char** argv)
+
+引用外部的公有函数名：
+Im_SDRAMC_Set_Cmd_Arbitration_Rate 改为 im_sdramc1_set_acceptancecapability
+Im_SDRAMC_Get_Cmd_Arbitration_Rate 改为 im_sdramc1_get_acceptancecapability
+Im_SDRAMC_Set_Cmd_Arbitration_Priority 改为 im_sdramc1_set_cmd_arbitration_priority
+Im_SDRAMC_Get_Cmd_Arbitration_Priority 改为 im_sdramc1_get_cmd_arbitration_priority
+Im_SDRAMC_Set_Mode_Register 改为 im_sdramc1_set_mode_register
+Im_SDRAMC_Get_Mode_Register 改为 im_sdeamc1_get_mode_register
+Im_SDRAMC_Set_Clock_Enable_BusIf 改为 im_sdramc1_set_clock_enable_busIf
+Im_SDRAMC_Set_Clock_Enable_DataBuf 改为 im_sdramc_set_clock_enable_databuf
+Im_SDRAMC_Strat_SelfRefresh 改为 im_sdramc_strat_selfrefresh
+Im_SDRAMC_Stop_SelfRefresh 改为 im_sdramc_stop_selfrefresh
+Im_SDRAMC_Start_Access_Detection 改为 im_sdramc_start_access_detection
+Im_SDRAMC_Stop_Access_Detection 改为 im_sdramc_stop_access_detection
+Im_SDRAMC_Get_Access_Detection 改为 im_sdramc_get_access_detection
+Im_SDRAMC_Start_Monitor 改为 im_sdramc_start_monitor
+Im_SDRAMC_Stop_Monitor 改为 im_sdramc_stop_monitor
+Im_SDRAMC_Get_Monitor 改为 im_sdramc_get_monitor
+Im_SDRAMC_Start_Monitor_Mxic 改为 im_sdramc_start_monitor_mxic
+Im_SDRAMC_Stop_Monitor_Mxic 改为 im_sdramc_stop_monitor_mxic
+Im_SDRAMC_Get_Monitor_Mxic 改为 im_sdramc_get_monitor_mxic
+Im_SDRAMC_Start_ManualMode 改为 im_sdramc_start_manualmode
+Im_SDRAMC_Stop_ManualMode 改为 im_sdramc_stop_manualmode
+Im_SDRAMC_ReLock_DLL 改为 im_sdramc_relock_dll
+Im_SDRAMC_Start_Training 改为 im_sdramc_start_training
+
+引用外部的枚举（根据规范规则命名的，回头还要复查）：
+E_IM_SDRAMC_PORT 改为 ImSdramcPortEImSdramcPort
+E_IM_SDRAMC_PORT_MX10 改为 ImSdramc_E_IM_SDRAMC_PORT_MX10
+E_IM_SDRAMC_PORT_MAX 改为 ImSdramc_E_IM_SDRAMC_PORT_MAX
+E_IM_SDRAMC_CH 改为 ImSdramcEImSdramcCh
+E_IM_SDRAMC_ACCESS_READ 改为 ImSdramc_E_IM_SDRAMC_ACCESS_READ
+E_IM_SDRAMC_ACCESS_WRITE 改为 ImSdram_E_IM_SDRAMC_ACCESS_WRITE
+E_IM_SDRAMC_EN_ENABLE 改为 ImSdramc_E_IM_SDRAMC_EN_ENABLE
+E_IM_SDRAMC_EN_DISABLE 改为 ImSdramc_E_IM_SDRAMC_EN_DISABLE
+E_IM_SDRAMC_AREA 改为 ImSdramcEImSdramcArea
+E_IM_SDRAMC_AREA_A 改为 ImSdram_E_IM_SDRAMC_AREA_A
+E_IM_SDRAMC_RANK 改为 ImSdramcEImSdramcRank
+E_IM_SDRAMC_RANK_0 改为 ImSdram_E_IM_SDRAMC_RANK_0
+E_IM_SDRAMC_DATABUF 改为 ImSdramcEImSdramcDatabuf
+E_IM_SDRAMC_MONMODE 改为 ImSdramcEImSdramcMonmode
+E_IM_SDRAMC_MONMODE_SIZE 改为 ImSdram_E_IM_SDRAMC_MONMODE_SIZE
+E_IM_SDRAMC_SUBID_MAX 改为 ImSdram_E_IM_SDRAMC_SUBID_MAX
+E_IM_SDRAMC_CH_MAX 改为 ImSdram_E_IM_SDRAMC_CH_MAX
+E_IM_SDRAMC_CH_0 改为 ImSdram_E_IM_SDRAMC_CH_0
+E_IM_SDRAMC_EN 改为 ImSdram_E_IM_SDRAMC_EN
+E_IM_SDRAMC_ACCESS 改为 ImSdramcEImSdramcAccess
+E_IM_SDRAMC_DATABUF_0 改为 ImSdram_E_IM_SDRAMC_DATABUF_0
+E_IM_SDRAMC_DATABUF_MAX 改为 ImSdram_E_IM_SDRAMC_DATABUF_MAX
+E_IM_SDRAMC_TRAINING_MODE_CA 改为 ImSdram_E_IM_SDRAMC_TRAINING_MODE_CA
+E_IM_SDRAMC_TRAINING_MODE_WRITE 改为 ImSdram_E_IM_SDRAMC_TRAINING_MODE_WRITE
+E_IM_SDRAMC_TRAINING_MODE 改为 ImSdramcEImSdramcTrainingMode
+
+引用外部的结构体更改（根据规范规则命名的，回头还要复查）：
+T_IM_SDRAMC_ACCESS_DETECTION 改为 ImSdramcAccessDetection
+T_IM_SDRAMC_MONITOR 改为 TImSdramcMonitor
+T_IM_SDRAMC_CMD_ARB_RATE 改为 SdramcCmdArbRate
+T_IM_SDRAMC_CMD_ARB_PRI 改为 SdramcCmdArbPri
+T_IM_SDRAMC_MONITOR_MXIC 改为 ImSdramcMonitorMxic
+T_IM_SDRAMC_CALLBACK 改为 TImSdramcCallback
+
+引用外部的公有变量名字：
+e_addr 改为 eAddr
+s_addr 改为 sAddr
+w_port 改为 wPort
+r_port 改为 rPort
+w_port_l 改为 wPortL
+r_port_l 改为 rPortL
+w_port_u 改为 wPortU
+r_port_u 改为 rPortU
+
+三、ct_im_iip_frect.c移植成ctimiipfrect.c
+公有函数名字更改：
+CT_Im_IIP_4_1_1( VOID ) 改为 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
+CT_Im_IIP_Run_4_1( const UINT32 ct_no_3rd ) 改为 ct_im_iip_frect_run_4_1( CtImIipFrect *self, const UINT32 ct_no_3rd )
+
+引用外部的变量名更改（根据规范规则命名的，回头还要复查）：
+g_ct_im_iip_unit_param_frect0 改为 gCtImIipUnitParamFrect0
+g_ct_im_iip_unit_param_sl0 改为 gCtImIipUnitParamSl0
+g_ct_im_iip_pixfmttbl_base 改为 gCtImIipPixfmttblBase
+g_ct_im_iip_param_frect_base 改为 gCtImIipParamFrectBase
+g_ct_im_iip_param_sts_base 改为 gCtImIipParamStsBase
+
+引用外部的结构体更改（根据规范规则命名的，回头还要复查）：
+T_IM_IIP_PIXFMTTBL 改为 TImIipPixfmttbl
+T_IM_IIP_UNIT_CFG 改为 ImIipUnitCfg
+T_IM_IIP_PARAM_FRECT 改为 ImIipParamFrect
+T_IM_IIP_PARAM_FRECT_OPCOL_0 改为 IipParamFrectOpcol0
+T_IM_IIP_PARAM_STS 改为 ImIipParamSts
+
+引用外部的宏定义（根据规范规则命名的，回头还要复查）：
+D_IM_IIP_INT_FACTOR_AXIERR 改为 ImIipDefine_D_IM_IIP_INT_FACTOR_AXIERR
+D_IM_IIP_PARAM_PLDUNIT_FRECT0 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_FRECT0
+D_IM_IIP_INT_FACTOR_SL2END 改为 ImIipDefine_D_IM_IIP_INT_FACTOR_SL2END
+D_IM_IIP_PARAM_PLDUNIT_SL2 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL2
+D_IM_IIP_OK 改为 ImIipDefine_D_IM_IIP_OK
+D_IM_IIP_HW_CTRL_SWTRG 改为 ImIip_D_IM_IIP_HW_CTRL_SWTRG
+D_IM_IIP_PLDUNIT_CHAIN_DISABLE 改为 ImIip_D_IM_IIP_PLDUNIT_CHAIN_DISABLE
+D_IM_IIP_ABORT 改为 ImIip_D_IM_IIP_ABORT
+
+D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH 改为 CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH
+D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH 改为 CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH
+D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH 改为 CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A
+D_IM_IIP_PARAM_FRECT_VAL_1_0 改为 ImIipParam_D_IM_IIP_PARAM_FRECT_VAL_1_0
+ct_im_iip_clean_l1l2_dcache_addr 改为 CtImIip_CT_IM_IIP_CLEAN_L1L2_DCACHE_ADDR
+D_IM_IIP_REGDUMP_ADDR 改为 CtImIip_D_IM_IIP_REGDUMP_ADDR
+D_DDIM_INPUT_PARAM_ERROR 改为 DriverCommon_D_DDIM_INPUT_PARAM_ERROR
+Dd_ARM_Dmb_Pou()改为 DdArm_DD_ARM_DMB_POU
+D_DDIM_OK 改为 DriverCommon_D_DDIM_OK
+D_IM_IIP_VGA_RGBA5551_GLOBAL_WIDTH 改为 CtImIip_D_IM_IIP_VGA_RGBA5551_GLOBAL_WIDTH
+D_IM_IIP_IMG_MEM_ADDR_0_RGBA5551 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_RGBA5551
+
+引用外部的枚举（根据规范规则命名的，回头还要复查）：
+E_IM_IIP_PIXID_4 改为 ImIip_E_IM_IIP_PIXID_4
+E_IM_IIP_PIXID_5 改为 ImIip_E_IM_IIP_PIXID_5
+E_IM_IIP_UNIT_ID 改为 ImIipEImIipUnitId
+E_IM_IIP_UNIT_ID_FRECT0 改为 ImIip_E_IM_IIP_UNIT_ID_FRECT0
+E_IM_IIP_UNIT_ID_SL2 改为 ImIip_E_IM_IIP_UNIT_ID_SL2
+E_IM_IIP_PARAM_PORTID 改为 ImIipParamEImIipParamPortid
+E_IM_IIP_PARAM_PORTID_FRECT0 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_FRECT0
+E_IM_IIP_PARAM_PORTID_SL2 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_SL2
+E_IM_IIP_OPEN_RES_CACHE0 改为 ImIip_E_IM_IIP_OPEN_RES_CACHE0
+E_IM_IIP_PARAM_SZPOWH_64 改为 ImIipParamEnum_E_IM_IIP_PARAM_SZPOWH_64
+E_IM_IIP_PARAM_SZPOWV_8 改为 ImIipParamEnum_E_IM_IIP_PARAM_SZPOWV_8
+E_IM_IIP_PFMT_RGBA5551 改为 ImIip_E_IM_IIP_PFMT_YCC444
+
+引用外部的公有函数名（先列出来，还未改）
+Im_IIP_Open_SWTRG改为 im_iip_counter_open_swtrg 
+Palladium_Set_Out_Localstack 改为 palladium_test_set_out_localstack
+Im_IIP_Ctrl_PIXFMTTBL改为 im_iip_void_ctrl_pixfmttbl 
+Im_IIP_Off_Pclk 改为 im_iip_struct_off_pclk 
+Im_IIP_Start_SWTRG改为 im_iip_sub_start_swtrg 
+Im_IIP_Wait_End改为 im_iip_main_wait_end
+Im_IIP_Stop 改为 im_iip_main_stop 
+Im_IIP_Get_UNIT_PARAM  改为 im_iip_static_get_unit_param 
+Im_IIP_Close_SWTRG改为 im_iip_counter_close_swtrg 
+
+引用外部的公有变量名字：
+line_bytes 改为 lineBytes
+unit_ctrl 改为 unitCtrl
+chain_enable 改为 chainEnable
+unit_param_addr 改为 unitParamAddr
+load_unit_param_flag 改为 loadUnitParamFlag
+SL_TOPCNF0 改为 slTopcnf0
+SL_PHSZ 改为 slPhsz
+SL_PVSZ 改为 slPvsz
+IO_IIP 改为 ioIip
+g_get_unit_param 改为 gGetUnitParam
+
+四、ct_im_iip_flt.c移植成ctimiipflt.c
+公有函数名字更改：
+CT_Im_IIP_9_1_1( VOID ) 改为 ct_im_iip_9_1_1( CtImIipFlt *self )
+CT_Im_IIP_9_1_2( VOID ) 改为 ct_im_iip_9_1_2( CtImIipFlt *self )
+CT_Im_IIP_Run_9_1( const UINT32 ct_no_3rd ) 改为 ct_im_iip_run_9_1( CtImIipFlt *self, 
+CT_Im_IIP_9_2_1( VOID ) 改为 ct_im_iip_9_2_1( CtImIipFlt *self )
+CT_Im_IIP_Run_9_2( const UINT32 ct_no_3rd ) 改为 ct_im_iip_run_9_2( CtImIipFlt *self, 
+CT_Im_IIP_9_3_1( VOID ) 改为 ct_im_iip_9_3_1( CtImIipFlt *self )
+CT_Im_IIP_Run_9_3( const UINT32 ct_no_3rd ) 改为 ct_im_iip_run_9_3( CtImIipFlt *self, 
+
+引用外部的变量名更改（根据规范规则命名的，回头还要复查）：
+g_ct_im_iip_unit_param_1dl0 改为 gCtImIipUnitParam1Dl0
+g_ct_im_iip_unit_param_csc 改为 gCtImIipUnitParamCsc
+g_ct_im_iip_unit_param_flt 改为 gCtImIipUnitParamFlt
+g_ct_im_iip_param_1dl_base 改为 gCtImIipParam1DlBase
+g_ct_im_iip_param_flt_base 改为 gCtImIipParamFltBase
+g_ct_im_iip_param_blend_base 改为 gCtImIipParamBlendBase
+g_ct_im_iip_unit_param_blend 改为 gCtImIipUnitParamBlend
+g_ct_im_iip_param_csc_base 改为 gCtImIipParamCscBase
+
+引用外部的结构体更改（根据规范规则命名的，回头还要复查）：
+T_IM_IIP_PARAM_1DL 改为 ImIipParam1Dl
+T_IM_IIP_PARAM_CSC 改为 ImIipParamCsc
+T_IM_IIP_PARAM_FLT 改为 ImIipParamFlt
+T_IM_IIP_PARAM_BLEND 改为 ImIipParamBlend
+
+引用外部的宏定义（根据规范规则命名的，回头还要复查）：
+D_CT_IM_IIP_OPEN_TIMEOUT_MSEC 改为 CtImIip_D_CT_IM_IIP_OPEN_TIMEOUT_MSEC
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C
+D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A
+D_IM_IIP_VGA_RGBA8888_GLOBAL_WIDTH 改为 CtImIip_D_IM_IIP_VGA_RGBA8888_GLOBAL_WIDTH
+D_IM_IIP_IMG_MEM_ADDR_0_RGBA8888 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_RGBA8888
+D_IM_IIP_IMG_MEM_ADDR_1_RGBA8888 改为 CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_RGBA8888
+D_IM_IIP_PARAM_PLDUNIT_LD1 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LD1
+D_IM_IIP_PARAM_PLDUNIT_CSC1 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_CSC1
+D_IM_IIP_PARAM_PLDUNIT_FLT 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_FLT
+D_IM_IIP_INT_FACTOR_SL6END 改为 ImIipDefine_D_IM_IIP_INT_FACTOR_SL6END
+D_IM_IIP_PARAM_PLDUNIT_CSC2 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_CSC2
+D_IM_IIP_PARAM_PLDUNIT_SL6 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL6
+D_IM_IIP_MASTER_IF1 改为 ImIipDefine_D_IM_IIP_MASTER_IF1
+D_IM_IIP_ALPHA_TRUE 改为 ImIipDefine_D_IM_IIP_ALPHA_TRUE
+D_IM_IIP_SWTRG_ON 改为 ImIipDefine_D_IM_IIP_SWTRG_ON
+D_IM_IIP_OR_WAIT 改为 ImIipDefine_D_IM_IIP_OR_WAIT
+D_IM_IIP_PARAM_PLDUNIT_LD2 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LD2
+D_IM_IIP_PARAM_PLDUNIT_BLEND0 改为 ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_BLEND0
+D_IM_IIP_PDEPTH_12BITS 改为 ImIipDefine_D_IM_IIP_PDEPTH_12BITS
+D_IM_IIP_ENABLE_ON 改为 ImIipDefine_D_IM_IIP_ENABLE_ON
+
+引用外部的枚举（根据规范规则命名的，回头还要复查）：
+E_IM_IIP_UNIT_ID_LD1 改为 ImIip_E_IM_IIP_UNIT_ID_LD1
+E_IM_IIP_UNIT_ID_CSC1 改为 ImIip_E_IM_IIP_UNIT_ID_CSC1
+E_IM_IIP_UNIT_ID_FLT 改为 ImIip_E_IM_IIP_UNIT_ID_FLT
+E_IM_IIP_PARAM_LD_MODE_LINK 改为 ImIipParamEnum_E_IM_IIP_PARAM_LD_MODE_LINK
+E_IM_IIP_PARAM_SLOW_1PIX_CYC 改为 ImIipParamEnum_E_IM_IIP_PARAM_SLOW_1PIX_CYC
+E_IM_IIP_PARAM_PORTID_NONE 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE
+E_IM_IIP_PARAM_INPUT_MODE_SLINK 改为 ImIipParamEnum_E_IM_IIP_PARAM_INPUT_MODE_SLINK
+E_IM_IIP_PARAM_PF_ON_INVALID 改为 ImIipParamEnum_E_IM_IIP_PARAM_PF_ON_INVALID
+E_IM_IIP_PIXID_10 改为 ImIip_E_IM_IIP_PIXID_10
+E_IM_IIP_PIXID_11 改为 ImIip_E_IM_IIP_PIXID_11
+E_IM_IIP_UNIT_ID_CSC2 改为 ImIip_E_IM_IIP_UNIT_ID_CSC2
+E_IM_IIP_UNIT_ID_SL6 改为 ImIip_E_IM_IIP_UNIT_ID_SL6
+E_IM_IIP_PARAM_PORTID_LD1 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LD1
+E_IM_IIP_PARAM_PORTID_CSC2 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_CSC2
+E_IM_IIP_PARAM_PORTID_FLT_P0 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_FLT_P0
+E_IM_IIP_PARAM_PORTID_SL6 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_SL6
+E_IM_IIP_FTYPE_CHUNKY 改为 ImIip_E_IM_IIP_FTYPE_CHUNKY
+E_IM_IIP_PFMT_YCC444 改为 ImIip_E_IM_IIP_PFMT_YCC444
+E_IM_IIP_ADEPTH_8BITS 改为 ImIip_E_IM_IIP_ADEPTH_8BITS
+E_IM_IIP_PARAM_ALPHA_OUT_P0_ALPHA 改为 ImIipParamEnum_E_IM_IIP_PARAM_ALPHA_OUT_P0_ALPHA
+E_IM_IIP_PARAM_ALPHA_SEL_P0_ALPHA 改为 ImIipParamEnum_E_IM_IIP_PARAM_ALPHA_SEL_P0_ALPHA
+E_IM_IIP_PARAM_INPUT_MODE_DLINK 改为 ImIipParamEnum_E_IM_IIP_PARAM_INPUT_MODE_DLINK
+E_IM_IIP_PARAM_CSEL_1 改为 ImIipParamEnum_E_IM_IIP_PARAM_CSEL_1
+E_IM_IIP_PARAM_UNIT_OUT_EP 改为 ImIipParamEnum_E_IM_IIP_PARAM_UNIT_OUT_EP
+E_IM_IIP_UNIT_ID_BLEND0 改为 ImIip_E_IM_IIP_UNIT_ID_BLEND0
+E_IM_IIP_UNIT_ID_LD2 改为 ImIip_E_IM_IIP_UNIT_ID_LD2
+E_IM_IIP_PIXID_9 改为 ImIip_E_IM_IIP_PIXID_9
+E_IM_IIP_PARAM_PORTID_BLEND0_P0 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_BLEND0_P0
+E_IM_IIP_PARAM_PORTID_BLEND0_P1 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_BLEND0_P1
+E_IM_IIP_PARAM_PORTID_LD2 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LD2
+E_IM_IIP_PARAM_UNIT_OUT_ISO 改为 ImIipParamEnum_E_IM_IIP_PARAM_UNIT_OUT_ISO
+E_IM_IIP_PARAM_UNIT_OUT_DISABLE 改为 ImIipParamEnum_E_IM_IIP_PARAM_UNIT_OUT_DISABLE
+E_IM_IIP_PARAM_PORTID_CSC1 改为 ImIipParamEnum_E_IM_IIP_PARAM_PORTID_CSC1
+E_IM_IIP_PFMT_BAYER 改为 ImIip_E_IM_IIP_PFMT_BAYER
+
+引用外部的公有函数名（先列出来，还未改）:
+Im_IIP_Wait_End  im_iip_main_wait_end
+Im_IIP_Ctrl_SWTRG_Unit  im_iip_static_ctrl_swtrg_unit
+Im_IIP_Set_Interrupt  im_iip_void_set_interrupt
+Im_IIP_On_Pclk 改为 im_iip_struct_on_pclk
+
+引用外部的公有变量名字:
+blend_cfg 改为 blendCfg
+blend_unit_inf 改为 blendUnitInf
+frame_type 改为 frameType
+alpha_depth 改为 alphaDepth
+LD_TOPCNF0 改为 ldTopcnf0
+LD_TOPCNF1 改为 ldCtl
+LINK_UID 改为 linkUid
+LD_MODE 改为 ldMode
+TDL_CTL 改为 tdlCtl
+TDL_PF 改为 tdlPf
+INPUT_MODE 改为 inputMode
+PF_ON 改为 pfOn
+pix_format 改为 pixFormat
+pix_depth 改为 pixDepth
+masterIF_Alpha 改为 masterIfAlpha
+masterIF_Cr_R 改为 masterIfCrR
+masterIF_Cb_B 改为 masterIfCbB
+masterIF_Y_G 改为 masterIfYG
+UNIT_OUT 改为 unitOut
+UNIT_OUT_A_D0 改为 unitOutAD0
+UNIT_OUT_A_D1 改为 unitOutAD1
+UNIT_OUT_A_D2 改为 unitOutAD2
+ISO_UTH_D 改为 isoUthD
+ISO_LTH_D 改为 isoLthD
+WAITCONF_0 改为 waitconf0
+WAITCONF_1 改为 waitconf1
+UNITINFTBL_LD1 改为 unitnftblLd1
+UNITINFTBL_CSC1 改为 unitinftblCsc1
+UNITINFTBL_FLT 改为 unitinftblFlt
+UNITINFTBL_SL2 改为 unitinftblSl2
+
+五、拆分出来的iipfrecttblarraya5.h-iipfrecttblarraya16.h
+引用外部的变量：
+g_ct_im_iip_frecttbl_a5_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A5_FULLHD_VIS
+g_ct_im_iip_frecttbl_a6_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A6_FULLHD_VIS
+g_ct_im_iip_frecttbl_a7_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A7_FULLHD_VIS
+g_ct_im_iip_frecttbl_a8_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A8_FULLHD_VIS
+g_ct_im_iip_frecttbl_a9_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A9_FULLHD_VIS
+g_ct_im_iip_frecttbl_a10_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A10_FULLHD_VIS
+g_ct_im_iip_frecttbl_a11_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A11_FULLHD_VIS
+g_ct_im_iip_frecttbl_a12_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A12_FULLHD_VIS
+g_ct_im_iip_frecttbl_a13_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A13_FULLHD_VIS
+g_ct_im_iip_frecttbl_a14_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A14_FULLHD_VIS
+g_ct_im_iip_frecttbl_a15_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A15_FULLHD_VIS
+g_ct_im_iip_frecttbl_a16_fullhd_vis 改为 G_CT_IM_IIP_FRECTTBL_A16_FULLHD_VIS
+
+引用外部的枚举：
+E_IM_IIP_PARAM_SZPOWH_64 改为 ImIipParamEnum_E_IM_IIP_PARAM_SZPOWH_64
+E_IM_IIP_PARAM_SZPOWV_8 改为 ImIipParamEnum_E_IM_IIP_PARAM_SZPOWV_8
+
+引用外部的宏定义：
+M_IM_IIP_FRECTTBL_CALC_POS 改为 ImIipParam_M_IM_IIP_FRECTTBL_CALC_POS
+
+
+

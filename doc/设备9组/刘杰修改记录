@@ -1,0 +1,548 @@
+**************************************************************************************************************
+9.2修改记录
+    1)拆分rtc_ext.c为rtcext.c和rtcextget.c，并删除原文件
+
+**************************************************************************************************************
+9.3修改记录
+    1)拆分Icm20948DataBaseControl.c为icm20948databasecontrol.c和icm20948databasecontrolpr.c，并删除原文件
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    2)新建类DrvLcdLpm030m369f
+        a.将drv_lcd_lpm030m369f.c替换为drvlcdlpm030m369f.c和drvlcdlpm030m369f.h，删除原文件
+        b.修改变量命名规范
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    3)新建类DrvLcdSt7796s
+        a.将drv_lcd_st7796s.c替换为drvlcdst7796s.c和drvlcdst7796s.h，删除原文件
+        b.将cpu_tkernel/board/lcd/include/drv_lcd_st7796s.h移动到cpu_tkernel/board/lcd/src/drv_lcd_st7796s.h
+        c.公有方法命名修改如下：
+            drv_st7796s_init----->drv_lcd_st7796s_init
+            drv_st7796s_write_cmd----->drv_lcd_st7796s_write_cmd
+            drv_st7796s_write_reg_u8----->drv_lcd_st7796s_write_reg_u8
+            drv_st7796s_set_pattern------>drv_lcd_st7796s_set_pattern
+            st7796s_clear_window----->drv_lcd_st7796s_clear_window
+            drv_st7796s_test_pattern_init----->drv_lcd_st7796s_test_pattern_init
+        d.修改命名规范
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    4)新建类LcdCasio
+        a.将lcd_casio.c替换为lcdcasio.c和lcdcasio.h，删除原文件
+        b.修改命名规范
+        c.公有方法命名修改如下：
+            send_lcd_cmd----->lcd_casio_send_lcd_cmd
+            lcd_set_hook----->lcd_casio_set_hook
+            lcd_init----->lcd_casio_init
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    5)新建类LcdCtrl
+        a.将LCDCtrl.c替换为lcdctrl.c和lcdctrl.h，删除原文件，并修改规范
+        b.将cpu_tkernel/board/lcd/include/LCDCtrl.h移动到cpu_tkernel/board/lcd/src/LCDCtrl.h
+        c.INT32             drv_lcd_init( void );在drv_lcd.c中
+        d.公有属性修改如下：
+            变量：extern UCHAR DUMMY_PORT;----->extern UCHAR dummyPort;
+        枚举：LCD_DISPLAY_AR----->LcdDisplayAr
+        共用体：lcd_reg_addr_t----->LcdRegAddrT
+        结构体：lcd_drv_s----->LcdDrvS
+                        LCD_TYPE_MODE----->LcdTypeMode
+        函数指针：INT32 (*backlight_ctrl) (UCHAR onOff);----->INT32 (*backlightCtrl) (UCHAR onOff);
+                            INT32 (*rb_sub_contrast) (UCHAR contrast);----->INT32 (*rbSubContrast) (UCHAR contrast);
+                            INT32 (*rb_sub_brightness) (UCHAR brightness);----->INT32 (*rbSubBrightness) (UCHAR brightness);
+                            INT32 (*power_saving) (UCHAR onOff);----->INT32 (*powerSaving) (UCHAR onOff);
+                            INT32 (*aspect_ratio) (LcdDisplayAr ar);----->INT32 (*aspectRatio) (LcdDisplayAr ar);
+                            INT32 (*display_direction) (UCHAR hDir, unsigned char vDir);----->INT32 (*displayDirection) (UCHAR hDir, unsigned char vDir);
+                            INT32 (*wr_reg)(UCHAR addr, UCHAR data);----->INT32 (*wrReg)(UCHAR addr, UCHAR data);
+                            INT32 (*rd_reg)(UCHAR addr, UCHAR *data);----->INT32 (*rdReg)(UCHAR addr, UCHAR *data);
+
+**************************************************************************************************************
+9.4修改记录
+    1)规范类RtcExt
+        a.规范rtcext.c/.h
+        b.将cpu_tkernel/board/peripheral/include/rtc_ext.h移动到cpu_tkernel/board/peripheral/src/rtc_ext.h
+        c.公有属性修改如下：
+            宏：D_RTC_EXT_SLAVE_ADDRESS----->RtcExt_SLAVE_ADDRESS
+                    D_RTC_EXT_I2C_CHANNEL_NO----->RtcExt_I2C_CHANNEL_NO
+                    D_RTC_EXT_YEAR_BASE----->RtcExt_YEAR_BASE
+                    D_RTC_EXT_OK----->RtcExt_OK
+                    D_RTC_EXT_NG----->RtcExt_NG
+                    D_RTC_EXT_INPUT_PARAM_ERROR----->RtcExt_INPUT_PARAM_ERROR
+            枚举：E_RTC_EXT_ADDR----->RtcExtAddr
+                        E_RTC_EXT_INTA_OUTPUT_STATUS----->RtcExtIntaOutputStatus
+                        E_RTC_EXT_INTA_OUTPUT_MODE----->RtcExtIntaOutputMode
+                        E_RTC_EXT_HOURS_MODE----->RtcExtHoursMode
+                        E_RTC_EXT_ALARM_TIME_STATUS----->RtcExtAlarmTimeStatus
+                        E_RTC_EXT_POWERON_RESET_STATUS----->RtcExtPoweronResetStatus
+                        E_RTC_EXT_CRYSTAL_STOP_STATUS----->RtcExtCrystalStopStatus
+                        E_RTC_EXT_LOW_VOLTAGE_LEVEL_VALUE----->RtcExtLowVoltageLevelValue
+                        E_RTC_EXT_LOW_VOLTAGE_LEVEL_STATUS----->RtcExtLowVoltageLevelStatus
+                        E_RTC_EXT_FOUT_STATUS----->RtcExtFoutStatus
+            以上所有枚举里的变量E_RTC_EXT_替换为RtcExt_，例如E_RTC_EXT_ADDR_SECONDS----->RtcExt_ADDR_SECONDS
+            结构体：T_RTC_EXT_DATA----->RtcExtData
+                            T_RTC_EXT_ALARM_W----->RtcExtAlarmW
+                            T_RTC_EXT_ALARM_D----->RtcExtAlarmD
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    2)新建类将Icm20948LoadFirmware
+        a.将Icm20948LoadFirmware.c替换为icm20948loadfirmware.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948LoadFirmware.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948LoadFirmware.h
+        c.公有属性修改如下：
+            int inv_icm20948_firmware_load(struct inv_icm20948 * s, const unsigned char *dataStart,
+                                unsigned short sizeStart, unsigned short loadAddr)----->
+            int icm20948_load_firmware_inv(Icm20948LoadFirmware* self, struct inv_icm20948 * s, const unsigned char *dataStart,
+                                unsigned short sizeStart, unsigned short loadAddr)
+
+**************************************************************************************************************
+9.5修改记录（提交日期：09.07）
+    1)新建类Icm20948AuxTransport
+        a.将Icm20948AuxTransport.c替换为icm20948auxtransport.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948AuxTransport.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948AuxTransport.h
+        c.公有属性修改如下：
+            公有方法：
+                1.void inv_icm20948_init_secondary(struct inv_icm20948 * s)----->
+                   void icm20948_aux_transport_inv_init_secondary(Icm20948AuxTransport* self, struct inv_icm20948 * s)
+                2.int inv_icm20948_read_secondary(struct inv_icm20948 * s, int index, unsigned char addr, unsigned char reg, char len)----->
+                   int icm20948_aux_transport_inv_read_secondary(Icm20948AuxTransport* self, struct inv_icm20948 * s, int index, unsigned char addr, unsigned char reg, char len)
+                3.int inv_icm20948_execute_read_secondary(struct inv_icm20948 * s, int index, unsigned char addr, int reg, int len, uint8_t *d)----->
+                   int icm20948_aux_transport_inv_execute_read_secondary(Icm20948AuxTransport* self, struct inv_icm20948 * s, int index, unsigned char addr, int reg, int len, uint8_t *d)
+                4.int inv_icm20948_write_secondary(struct inv_icm20948 * s, int index, unsigned char addr, unsigned char reg, char v)----->
+                   int icm20948_aux_transport_inv_write_secondary(Icm20948AuxTransport* self, struct inv_icm20948 * s, int index, unsigned char addr, unsigned char reg, char v)
+                5.int inv_icm20948_execute_write_secondary(struct inv_icm20948 * s, int index, unsigned char addr, int reg, uint8_t v)----->
+                   int icm20948_aux_transport_inv_execute_write_secondary(Icm20948AuxTransport* self, struct inv_icm20948 * s, int index, unsigned char addr, int reg, uint8_t v)
+                6.void inv_icm20948_secondary_saveI2cOdr(struct inv_icm20948 * s)----->
+                   void icm20948_aux_transport_inv_secondary_saveI2cOdr(Icm20948AuxTransport* self, struct inv_icm20948 * s)
+                7.void inv_icm20948_secondary_restoreI2cOdr(struct inv_icm20948 * s)----->
+                   void icm20948_aux_transport_inv_secondary_restoreI2cOdr(Icm20948AuxTransport* self, struct inv_icm20948 * s)
+                8.int inv_icm20948_secondary_stop_channel(struct inv_icm20948 * s, int index)----->
+                   int icm20948_aux_transport_inv_secondary_stop_channel(Icm20948AuxTransport* self, struct inv_icm20948 * s, int index)
+            9.int inv_icm20948_secondary_enable_i2c(struct inv_icm20948 * s)----->
+               int icm20948_aux_transport_inv_secondary_enable_i2c(Icm20948AuxTransport* self, struct inv_icm20948 * s)
+            10.int inv_icm20948_secondary_disable_i2c(struct inv_icm20948 * s)----->
+                 int icm20948_aux_transport_inv_secondary_disable_i2c(Icm20948AuxTransport* self, struct inv_icm20948 * s)
+            11.int inv_icm20948_secondary_set_odr(struct inv_icm20948 * s, int divider, unsigned int* effectiveDivider)----->
+                 int icm20948_aux_transport_inv_secondary_set_odr(Icm20948AuxTransport* self, struct inv_icm20948 * s, int divider, unsigned int* effectiveDivider)
+            宏：
+                COMPASS_I2C_SLV_READ----->Icm20948AuxTransport_COMPASS_I2C_SLV_READ
+                COMPASS_I2C_SLV_WRITE----->Icm20948AuxTransport_COMPASS_I2C_SLV_WRITE
+                ALS_I2C_SLV----->Icm20948AuxTransport_ALS_I2C_SLV
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    2)规范类Icm20948DataBaseControl
+        a.规范icm20948databasecontrol.c/.h icm20948databasecontrolpr.c/.h
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948DataBaseControl.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948DataBaseControl.h
+        c.公有属性修改如下：
+            公有方法：
+                1.unsigned long inv_icm20948_ctrl_androidSensor_enabled(struct inv_icm20948 * s, unsigned char androidSensor)----->
+                   unsigned long icm20948_data_base_control_inv_androidSensor_enabled(Icm20948DataBaseControl *self,
+                                                                                 struct inv_icm20948 * s, unsigned char androidSensor)
+                2.int inv_icm20948_base_control_init(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_control_inv_init(Icm20948DataBaseControl *self, struct inv_icm20948 * s)
+                3.int inv_icm20948_set_odr(struct inv_icm20948 * s, unsigned char androidSensor, unsigned short delayInMs)----->
+                   int icm20948_data_base_control_inv_set_odr(Icm20948DataBaseControl *self, struct inv_icm20948 * s, 
+                                           unsigned char androidSensor, unsigned short delayInMs)
+                4.int inv_icm20948_ctrl_get_odr(struct inv_icm20948 * s, unsigned char SensorId, uint32_t *odr, enum INV_ODR_TYPE odrUnits)----->
+                   int icm20948_data_base_control_inv_ctrl_get_odr(Icm20948DataBaseControl *self, struct inv_icm20948 * s, 
+                                                unsigned char SensorId, uint32_t *odr, enum INV_ODR_TYPE odrUnits)
+                5.int inv_icm20948_ctrl_enable_sensor(struct inv_icm20948 * s, unsigned char androidSensor, unsigned char enable)----->
+                   int icm20948_data_base_control_inv_enable_sensor(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                 unsigned char androidSensor, unsigned char enable)
+                6.void inv_icm20948_ctrl_enable_activity_classifier(struct inv_icm20948 * s, unsigned char enable)----->
+                   void icm20948_data_base_control_inv_enable_activity_classifier(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                               unsigned char enable)
+                7.void inv_icm20948_ctrl_enable_tilt(struct inv_icm20948 * s, unsigned char enable)----->
+                   void icm20948_data_base_control_inv_eenable_tilt(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                 unsigned char enable)
+                8.int inv_icm20948_ctrl_enable_batch(struct inv_icm20948 * s, unsigned char enable)----->
+                   int icm20948_data_base_control_inv_eenable_batch(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                 unsigned char enable)
+                9.void inv_icm20948_ctrl_set_batch_mode_status(struct inv_icm20948 * s, unsigned char enable)----->
+                   void icm20948_data_base_control_set_batch_mode_status(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                      unsigned char enable)
+                10.unsigned char inv_icm20948_ctrl_get_batch_mode_status(struct inv_icm20948 * s)----->
+                     unsigned char icm20948_data_base_control_get_batch_mode_status(Icm20948DataBaseControl *self,
+                                                               struct inv_icm20948 * s)
+                11.int inv_icm20948_ctrl_set_batch_timeout(struct inv_icm20948 * s, unsigned short batchTimeInSeconds)----->
+                     int icm20948_data_base_control_set_batch_timeout(Icm20948DataBaseControl *self, struct inv_icm20948 * s, 
+                                                 unsigned short batchTimeInSeconds)
+                12.int inv_icm20948_ctrl_set_batch_timeout_ms(struct inv_icm20948 * s, unsigned short batchTimeInMs)----->
+                     int icm20948_data_base_control_set_batch_timeout_ms(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                    unsigned short batchTimeInMs)
+                13.unsigned long *inv_icm20948_ctrl_get_androidSensorsOn_mask(struct inv_icm20948 * s)----->
+                     unsigned long *icm20948_data_base_control_get_android_sensors_mask(Icm20948DataBaseControl *self,
+                                                                   struct inv_icm20948 * s)
+                14.unsigned short inv_icm20948_ctrl_get_activitiy_classifier_on_flag(struct inv_icm20948 * s)----->
+                     unsigned short icm20948_data_base_control_get_activitiy_classifier_flag(Icm20948DataBaseControl *self,
+                                                                        struct inv_icm20948 * s)
+                15.int inv_icm20948_ctrl_set_accel_quaternion_gain(struct inv_icm20948 * s, unsigned short hwSmplrtDivider)----->
+                     int icm20948_data_base_control_set_accel_quaternion_gain(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                         unsigned short hwSmplrtDivider)
+                16.int inv_icm20948_ctrl_set_accel_cal_params(struct inv_icm20948 * s, unsigned short hwSmplrtDivider)----->
+                     int icm20948_data_base_control_set_accel_cal_params(Icm20948DataBaseControl *self, struct inv_icm20948 * s,
+                                                    unsigned short hwSmplrtDivider)
+                17.int inv_icm20948_ctrl_enable_pickup(struct inv_icm20948 * s, unsigned char enable)----->
+                     int icm20948_data_base_control_enable_pickup(Icm20948DataBaseControl *self, struct inv_icm20948 * s, 
+                                             unsigned char enable)
+                18.int inv_icm20948_ctrl_get_acc_bias(struct inv_icm20948 * s, int * accBias)----->
+                     int icm20948_data_base_control_get_acc_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * accBias)
+                19.int inv_icm20948_ctrl_get_gyr_bias(struct inv_icm20948 * s, int * gyrBias)----->
+                     int icm20948_data_base_control_get_gyr_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * gyrBias)
+                20.int inv_icm20948_ctrl_get_mag_bias(struct inv_icm20948 * s, int * magBias)----->
+                     int icm20948_data_base_control_get_mag_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * magBias)
+                21.int inv_icm20948_ctrl_set_acc_bias(struct inv_icm20948 * s, int * accBias)----->
+                     int icm20948_data_base_control_set_acc_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * accBias)
+                22.int inv_icm20948_ctrl_set_gyr_bias(struct inv_icm20948 * s, int * gyrBias)----->
+                     int icm20948_data_base_control_set_gyr_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * gyrBias)
+                23.int inv_icm20948_ctrl_set_mag_bias(struct inv_icm20948 * s, int * magBias)----->
+                     int icm20948_data_base_control_set_mag_bias(Icm20948DataBaseControl *self, struct inv_icm20948 * s, int * magBias)
+            宏：
+                ACCEL_SET----->Icm20948DataBaseControl_ACCEL_SET   涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c
+                GYRO_SET----->Icm20948DataBaseControl_GYRO_SET     涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                CPASS_SET----->Icm20948DataBaseControl_CPASS_SET   涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                ALS_SET----->Icm20948DataBaseControl_ALS_SET        涉及文件有：Icm20948MPUFifoControl.c
+                QUAT6_SET----->Icm20948DataBaseControl_QUAT6_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                QUAT9_SET----->Icm20948DataBaseControl_QUAT9_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                PQUAT6_SET----->Icm20948DataBaseControl_PQUAT6_SET 涉及文件有：Icm20948MPUFifoControl.c
+                GEOMAG_SET----->Icm20948DataBaseControl_GEOMAG_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                PRESSURE_SET----->Icm20948DataBaseControl_PRESSURE_SET 涉及文件有：Icm20948MPUFifoControl.c
+                GYRO_CALIBR_SET----->Icm20948DataBaseControl_GYRO_CALIBR_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                CPASS_CALIBR_SET----->Icm20948DataBaseControl_CPASS_CALIBR_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                PED_STEPDET_SET----->Icm20948DataBaseControl_PED_STEPDET_SET 涉及文件有：Icm20948Dmp3Driver.c、Icm20948MPUFifoControl.c、Icm20948Setup.c
+                HEADER2_SET----->Icm20948DataBaseControl_HEADER2_SET 涉及文件有：Icm20948MPUFifoControl.c
+                ACCEL_ACCURACY_SET----->Icm20948DataBaseControl_ACCEL_ACCURACY_SET 涉及文件有：Icm20948MPUFifoControl.c
+                GYRO_ACCURACY_SET----->Icm20948DataBaseControl_GYRO_ACCURACY_SET 涉及文件有：Icm20948MPUFifoControl.c
+                CPASS_ACCURACY_SET----->Icm20948DataBaseControl_CPASS_ACCURACY_SET 涉及文件有：Icm20948MPUFifoControl.c
+                FLIP_PICKUP_SET----->Icm20948DataBaseControl_FLIP_PICKUP_SET 涉及文件有：Icm20948MPUFifoControl.c、Icm20948Setup.c
+                ACT_RECOG_SET----->Icm20948DataBaseControl_ACT_RECOG_SET 涉及文件有：Icm20948MPUFifoControl.c、Icm20948Setup.c
+                HEADER_SZ----->Icm20948DataBaseControl_HEADER_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                ACCEL_DATA_SZ----->Icm20948DataBaseControl_ACCEL_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                GYRO_DATA_SZ----->Icm20948DataBaseControl_GYRO_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                CPASS_DATA_SZ----->Icm20948DataBaseControl_CPASS_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                ALS_DATA_SZ----->Icm20948DataBaseControl_ALS_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                QUAT6_DATA_SZ----->Icm20948DataBaseControl_QUAT6_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                QUAT9_DATA_SZ----->Icm20948DataBaseControl_QUAT9_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                PQUAT6_DATA_SZ----->Icm20948DataBaseControl_PQUAT6_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                GEOMAG_DATA_SZ----->Icm20948DataBaseControl_GEOMAG_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                PRESSURE_DATA_SZ----->Icm20948DataBaseControl_PRESSURE_DATA_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                GYRO_BIAS_DATA_SZ----->Icm20948DataBaseControl_GYRO_BIAS_DATA_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                CPASS_CALIBR_DATA_SZ----->Icm20948DataBaseControl_CPASS_CALIBR_DATA_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                PED_STEPDET_TIMESTAMP_SZ----->Icm20948DataBaseControl_CPED_STEPDET_TIMESTAMP_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                FOOTER_SZ----->Icm20948DataBaseControl_FOOTER_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                HEADER2_SZ----->Icm20948DataBaseControl_HEADER2_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                ACCEL_ACCURACY_SZ----->Icm20948DataBaseControl_ACCEL_ACCURACY_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                GYRO_ACCURACY_SZ----->Icm20948DataBaseControl_GYRO_ACCURACY_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                CPASS_ACCURACY_SZ----->Icm20948DataBaseControl_CPASS_ACCURACY_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                FLIP_PICKUP_SZ----->Icm20948DataBaseControl_FLIP_PICKUP_SZ  涉及文件有：Icm20948MPUFifoControl.c
+                ACT_RECOG_SZ----->Icm20948DataBaseControl_ACT_RECOG_SZ 涉及文件有：Icm20948MPUFifoControl.c
+                ODR_CNT_GYRO_SZ----->Icm20948DataBaseControl_ODR_CNT_GYRO_SZ 涉及文件有：Icm20948MPUFifoControl.c
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    3)新建类Icm20948Augmented
+        a.将Icm20948Augmented.c替换为icm20948augmented.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948Augmented.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948Augmented.h
+        c.公有属性修改如下：
+            公有方法（前四个公有方法只涉及Icm20948Setup.c）：
+                1.int inv_icm20948_augmented_init(struct inv_icm20948 * s)----->
+                   int icm20948_augmented_inv_init(Icm20948Augmented *self, struct inv_icm20948 * s)
+                2.int inv_icm20948_augmented_sensors_get_gravity(struct inv_icm20948 * s, long gravity[3], const long quat6axis3e[3])----->
+                   int icm20948_augmented_inv_sensors_get_gravity(Icm20948Augmented *self, struct inv_icm20948 * s, long gravity[3], 
+                                               const long quat6axis3e[3])
+                3.int inv_icm20948_augmented_sensors_get_linearacceleration(long linacc[3], const long gravity[3], const long accel[3])----->
+                   int icm20948_augmented_inv_sensors_get_linearacceleration(Icm20948Augmented *self, long linacc[3], 
+                                                          const long gravity[3], const long accel[3])
+                4.int inv_icm20948_augmented_sensors_get_orientation(long orientation[3], const long quat9axis3e[4])----->
+                   int icm20948_augmented_inv_sensors_get_orientation(Icm20948Augmented *self, long orientation[3], 
+                                                   const long quat9axis3e[4])
+                5.unsigned short inv_icm20948_augmented_sensors_set_odr(struct inv_icm20948 * s, unsigned char androidSensor, unsigned short delayInMs)----->
+                   unsigned short icm20948_augmented_inv_sensors_get_odr(Icm20948Augmented *self, struct inv_icm20948 * s, 
+                                                      unsigned char androidSensor, unsigned short delayInMs)
+                6.void inv_icm20948_augmented_sensors_update_odr(struct inv_icm20948 * s, unsigned char androidSensor, unsigned short * updatedDelayPtr)----->
+                   void icm20948_augmented_inv_sensors_update_odr(Icm20948Augmented *self, struct inv_icm20948 * s, 
+                                               unsigned char androidSensor, unsigned short * updatedDelayPtr)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    4)新建类Icm20948Transport
+        a.将Icm20948Transport.c替换为icm20948transport.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948Transport.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948Transport.h
+        c.公有属性修改如下：
+            变量：struct inv_icm20948 * icm20948_instance;----->struct inv_icm20948 * icm20948Instance;（涉及文件有Icm20948.h、cpu_tkernel/board/camera/src/camera_gyro_icm20948.c）
+            公有方法（1、5只涉及Icm20948Setup.c，4、6只涉及Icm20948MPUFifoControl.c，7涉及Icm20948Setup.c和Icm20948MPUFifoControl.c，9、10涉及Icm20948Dmp3Driver.c和Icm20948LoadFirmware.c）：
+                1.int inv_icm20948_read_reg(struct inv_icm20948 * s, uint8_t reg, uint8_t * buf, uint32_t len)----->
+                   int icm20948_transport_inv_read_reg(Icm20948Transport *self, struct inv_icm20948 * s, uint8_t reg, 
+                                    uint8_t * buf, uint32_t len)
+                2.int inv_icm20948_write_reg(struct inv_icm20948 * s, uint8_t reg, const uint8_t * buf, uint32_t len)----->
+                   int icm20948_transport_inv_write_reg(Icm20948Transport *self, struct inv_icm20948 * s, uint8_t reg,
+                                     const uint8_t * buf, uint32_t len)
+                3.void inv_icm20948_sleep_100us(unsigned long nHowMany100MicroSecondsToSleep)----->
+                   void icm20948_transport_inv_sleep_100us(Icm20948Transport *self, 
+                                        unsigned long nHowMany100MicroSecondsToSleep)
+                4.long inv_icm20948_get_tick_count(void)----->
+                   long icm20948_transport_inv_get_tick_count(Icm20948Transport *self)
+                5.void inv_icm20948_transport_init(struct inv_icm20948 * s)----->
+                   void icm20948_transport_inv_init(Icm20948Transport *self, struct inv_icm20948 * s)
+                6.int inv_icm20948_write_mems_reg(struct inv_icm20948 * s, uint16_t reg, unsigned int length, const unsigned char *data)----->
+                   int icm20948_transport_inv_write_mems_reg(Icm20948Transport *self, struct inv_icm20948 * s, uint16_t reg, 
+                                          unsigned int length, const unsigned char *data)
+                7.int inv_icm20948_write_single_mems_reg(struct inv_icm20948 * s, uint16_t reg, const unsigned char data)----->
+                   int icm20948_transport_inv_write_single_mems_reg(Icm20948Transport *self, struct inv_icm20948 * s, uint16_t reg, 
+                                                 const unsigned char data)
+                8.int inv_icm20948_read_mems_reg(struct inv_icm20948 * s, uint16_t reg, unsigned int length, unsigned char *data)----->
+                   int icm20948_transport_inv_read_mems_reg(Icm20948Transport *self, struct inv_icm20948 * s, uint16_t reg, 
+                                         unsigned int length, unsigned char *data)
+                9.int inv_icm20948_read_mems(struct inv_icm20948 * s, unsigned short reg, unsigned int length, unsigned char *data)----->
+                   int icm20948_transport_inv_read_mems(Icm20948Transport *self, struct inv_icm20948 * s, unsigned short reg, 
+                                     unsigned int length, unsigned char *data)
+                10.int inv_icm20948_write_mems(struct inv_icm20948 * s, unsigned short reg, unsigned int length, const unsigned char *data)----->
+                     int icm20948_transport_inv_write_mems(Icm20948Transport *self, struct inv_icm20948 * s, unsigned short reg, 
+                                      unsigned int length, const unsigned char *data)
+                11.int inv_icm20948_write_single_mems_reg_core(struct inv_icm20948 * s, uint16_t reg, const uint8_t data)----->
+                     int icm20948_transport_inv_write_single_mems_reg_core(Icm20948Transport *self, struct inv_icm20948 * s, uint16_t reg,
+                                                      const uint8_t data)
+            宏：
+                INV_MAX_SERIAL_READ----->Icm20948Transport_INV_MAX_SERIAL_READ（涉及Icm20948MPUFifoControl.c和Icm20948LoadFirmware.c）
+                INV_MAX_SERIAL_WRITE----->Icm20948Transport_INV_MAX_SERIAL_WRITE（涉及Icm20948LoadFirmware.c）
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    5)新建类Icm20948SelfTest
+        a.将Icm20948SelfTest.c替换为icm20948selftest.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948SelfTest.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948SelfTest.h
+        c.公有属性修改如下：
+            公有方法：
+                int inv_icm20948_run_selftest(struct inv_icm20948 * s, int gyro_bias_regular[], int accel_bias_regular[])----->
+                int icm20948_selftest_inv_run(Icm20948SelfTest *self, struct inv_icm20948 * s, int gyroBiasRegular[],
+                              int accelBiasRegular[])
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    6)新建类Icm20948DataBaseDriver
+        a.将Icm20948DataBaseDriver.c替换为icm20948databasedriver.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948DataBaseDriver.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948DataBaseDriver.h
+        c.公有属性修改如下：
+            公有方法（6、9、10、11、14、23、24、26、27涉及Icm20948Setup.c，22涉及Icm20948Dmp3Driver.c）：
+                1.void inv_icm20948_prevent_lpen_control(struct inv_icm20948 * s)----->
+                   void icm20948_data_base_driver_inv_prevent_lpen_control(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                2.void inv_icm20948_allow_lpen_control(struct inv_icm20948 * s)----->
+                   void icm20948_data_base_driver_inv_allow_lpen_control(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                3.int inv_icm20948_set_chip_power_state(struct inv_icm20948 * s, unsigned char func, unsigned char on_off)----->
+                   int icm20948_data_base_driver_set_chip_power_state(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                                   unsigned char func, unsigned char onOff)
+                4.uint8_t inv_icm20948_get_chip_power_state(struct inv_icm20948 * s)----->
+                   uint8_t icm20948_data_base_driver_get_chip_power_state(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                5.int inv_icm20948_wakeup_mems(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_driver_inv_wakeup_mems(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                6.int inv_icm20948_sleep_mems(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_driver_inv_sleep_mems(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                7.int inv_icm20948_set_dmp_address(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_driver_inv_set_dmp_address(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                8.int inv_icm20948_set_secondary(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_driver_inv_set_secondary(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                9.int inv_icm20948_enter_duty_cycle_mode(struct inv_icm20948 * s)----->
+                   int icm20948_data_base_driver_enter_duty_cycle_mode(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                10.int inv_icm20948_enter_low_noise_mode(struct inv_icm20948 * s)----->
+                     int icm20948_data_base_driver_enter_low_noise_mode(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                11.int inv_icm20948_initialize_lower_driver(struct inv_icm20948 * s, enum SMARTSENSOR_SERIAL_INTERFACE type,
+                    const uint8_t *dmp3_image, uint32_t dmp3_image_size)----->
+                     int icm20948_data_base_driver_inv_initialize_lower_driver(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                                          enum SMARTSENSOR_SERIAL_INTERFACE type,
+                                                          const uint8_t *dmp3Image, uint32_t dmp3ImageSize)
+                12.int inv_icm20948_get_compass_availability(struct inv_icm20948 * s)----->
+                     int icm20948_data_base_driver_inv_get_compass_availability(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                13.int inv_icm20948_get_proximity_availability(struct inv_icm20948 * s)----->
+                     int icm20948_data_base_driver_inv_get_proximity_availability(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                14.int inv_icm20948_set_slave_compass_id(struct inv_icm20948 * s, int id)----->
+                     int icm20948_data_base_driver_set_slave_compass_id(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int id)
+                15.int inv_icm20948_set_gyro_divider(struct inv_icm20948 * s, unsigned char div)----->
+                     int icm20948_data_base_driver_inv_set_gyro_divider(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                                   unsigned char div)
+                16.unsigned char inv_icm20948_get_gyro_divider(struct inv_icm20948 * s)----->
+                     unsigned char icm20948_data_base_driver_inv_get_gyro_divider(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                17.int inv_icm20948_set_secondary_divider(struct inv_icm20948 * s, unsigned char div)----->
+                     int icm20948_data_base_driver_inv_set_secondary_divider(Icm20948DataBaseDriver *self, struct inv_icm20948 * s,
+                                                        unsigned char div)
+                18.unsigned short inv_icm20948_get_secondary_divider(struct inv_icm20948 * s)----->
+                     unsigned short icm20948_data_base_driver_inv_get_secondary_divider(Icm20948DataBaseDriver *self, 
+                                                                   struct inv_icm20948 * s)
+                19.int inv_icm20948_set_accel_divider(struct inv_icm20948 * s, short div)----->
+                     int icm20948_data_base_driver_inv_set_accel_divider(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, short div)
+                20.short inv_icm20948_get_accel_divider(struct inv_icm20948 * s)----->
+                     short icm20948_data_base_driver_inv_get_accel_divider(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                21.uint32_t inv_icm20948_get_odr_in_units(struct inv_icm20948 * s, unsigned short odrInDivider, unsigned char odr_units )----->
+                     uint32_t icm20948_data_base_driver_get_odr_in_units(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                                    unsigned short odrInDivider, unsigned char odrUnits )
+                22.int inv_icm20948_set_gyro_sf(struct inv_icm20948 * s, unsigned char div, int gyro_level)----->
+                     int icm20948_data_base_driver_inv_set_gyro_sf(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                              unsigned char div, int gyroLevel)
+                23.int inv_icm20948_set_gyro_fullscale(struct inv_icm20948 * s, int level)----->
+                     int icm20948_data_base_driver_inv_set_gyro_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int level)
+                24.uint8_t inv_icm20948_get_gyro_fullscale(struct inv_icm20948 * s)----->
+                     uint8_t icm20948_data_base_driver_inv_get_gyro_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                25.int inv_icm20948_set_icm20948_gyro_fullscale(struct inv_icm20948 * s, int level)----->
+                     int icm20948_data_base_driver_set_icm20948_gyro_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int level)
+                26.int inv_icm20948_set_accel_fullscale(struct inv_icm20948 * s, int level)----->
+                     int icm20948_data_base_driver_inv_set_accel_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int level)
+                27.uint8_t inv_icm20948_get_accel_fullscale(struct inv_icm20948 * s)----->
+                     uint8_t icm20948_data_base_driver_inv_get_accel_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s)
+                28.int inv_icm20948_set_icm20948_accel_fullscale(struct inv_icm20948 * s, int level)----->
+                     int icm20948_data_base_driver_set_icm20948_accel_fullscale(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, 
+                                                           int level)
+                29.int inv_icm20948_enable_hw_sensors(struct inv_icm20948 * s, int bit_mask)----->
+                     int icm20948_data_base_driver_enable_hw_sensors(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int bitMask)
+                30.int inv_icm20948_set_serial_comm(struct inv_icm20948 * s, enum SMARTSENSOR_SERIAL_INTERFACE type)----->
+                     int icm20948_data_base_driver_set_serial_comm(Icm20948DataBaseDriver *self, struct inv_icm20948 * s,
+                                              enum SMARTSENSOR_SERIAL_INTERFACE type)
+                31.int inv_icm20948_set_int1_assertion(struct inv_icm20948 * s, int enable)----->
+                     int icm20948_data_base_driver_set_int1_assertion(Icm20948DataBaseDriver *self, struct inv_icm20948 * s, int enable)
+                32.int inv_icm20948_accel_read_hw_reg_data(struct inv_icm20948 * s, short accel_hw_reg_data[3])----->
+                     int icm20948_data_base_driver_accel_read_hw_regdata(Icm20948DataBaseDriver *self, struct inv_icm20948 * s,
+                                                    short accelHwRegData[3])
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    7)新建类Icm20948AuxCompassAkm
+        a.将Icm20948AuxCompassAkm.c替换为icm20948auxcompassakm.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948AuxCompassAkm.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948AuxCompassAkm.h
+        c.公有属性修改如下：
+            公有方法（1涉及camera_gyro_icm20948.c，10涉及Icm20948Setup.c，11涉及Icm20948MPUFifoControl.c）：
+                1.void inv_icm20948_register_aux_compass(struct inv_icm20948 * s, enum inv_icm20948_compass_id compass_id, uint8_t compass_i2c_addr)----->
+                   void icm20948_aux_compass_akm_inv_register(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s,
+                                           enum inv_icm20948_compass_id compassId, uint8_t compassI2cAddr)
+                2.int inv_icm20948_setup_compass_akm(struct inv_icm20948 * s)----->
+                   int icm20948_aux_compass_akm_inv_setup(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                3.int inv_icm20948_check_akm_self_test(struct inv_icm20948 * s)----->
+                   int icm20948_aux_compass_akm_inv_check_self_test(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                4.int inv_icm20948_write_akm_scale(struct inv_icm20948 * s, int data)----->
+                   int icm20948_aux_compass_akm_inv_write_akm_scale(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s, int data)
+                5.int inv_icm20948_read_akm_scale(struct inv_icm20948 * s, int *scale)----->
+                   int icm20948_aux_compass_akm_inv_read_scale(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s, int *scale)
+                6.int inv_icm20948_suspend_akm(struct inv_icm20948 * s)----->
+                   int icm20948_aux_compass_akm_inv_suspend(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                7.int inv_icm20948_resume_akm(struct inv_icm20948 * s)----->
+                   int icm20948_aux_compass_akm_inv_resume(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                8.char inv_icm20948_compass_getstate(struct inv_icm20948 * s)----->
+                   char icm20948_aux_compass_akm_inv_getstate(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                9.int inv_icm20948_compass_isconnected(struct inv_icm20948 * s)----->
+                   int icm20948_aux_compass_akm_inv_isconnected(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s)
+                10.int inv_icm20948_compass_dmp_cal(struct inv_icm20948 * s, const signed char *m, const signed char *compass_m)----->
+                     int icm20948_aux_compass_akm_inv_dmp_cal(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s, const signed char *m,
+                                         const signed char *compassM)
+                11.int inv_icm20948_apply_raw_compass_matrix(struct inv_icm20948 * s, short *raw_data, long *compensated_out)----->
+                     int icm20948_aux_compass_akm_inv_apply_raw_matrix(Icm20948AuxCompassAkm *self, struct inv_icm20948 * s,
+                                                  short *rawData, long *compensatedOut)
+            枚举：
+                Icm20948AuxCompassAkmInvId中变量修改（以下均涉及camera_gyro_icm20948.c）：
+                INV_ICM20948_COMPASS_ID_AK09911----->Icm20948AuxCompassAkm_INV_ICM20948_COMPASS_ID_AK09911
+                INV_ICM20948_COMPASS_ID_AK09916----->Icm20948AuxCompassAkm_INV_ICM20948_COMPASS_ID_AK09916
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    8)新建类Icm20948DataConverter
+        a.将Icm20948DataConverter.c替换为icm20948dataconverter.c/.h，删除原文件
+        b.将cpu_tkernel/board/camera/MotionDriver_ICM20948/include/Icm20948DataConverter.h移动到cpu_tkernel/board/camera/MotionDriver_ICM20948/src/Icm20948DataConverter.h
+        c.公有属性修改如下：
+            公有方法（2、4、7、8涉及Icm20948Setup.c，24、25、26涉及Icm20948Dmp3Driver.c）：
+                1.void inv_icm20948_q_mult_q_qi(const long *q1, const long *q2, long *qProd)----->
+                   void icm20948_data_converter_inv_q_mult_q_qi(Icm20948DataConverter *self, const long *q1, const long *q2, long *qProd)
+                2.void inv_icm20948_convert_quat_rotate_fxp(const long *quat_q30, const long *in, long *out)----->
+                   void icm20948_data_converter_inv_quat_rotate_fxp(Icm20948DataConverter *self, const long *quatQ30, const long *in, 
+                                                 long *out)
+                3.void inv_icm20948_set_chip_to_body(struct inv_icm20948 * s, long *quat)----->
+                   void icm20948_data_converter_inv_set_chip_to_body(Icm20948DataConverter *self, struct inv_icm20948 * s, long *quat)
+                4.void inv_icm20948_convert_rotation_vector(struct inv_icm20948 * s, const long *quat, float *values)----->
+                   void icm20948_data_converter_inv_rotation_vector(Icm20948DataConverter *self, struct inv_icm20948 * s,
+                                                 const long *quat, float *values)
+                5.void inv_icm20948_convert_rotation_vector_2(struct inv_icm20948 * s, const long *quat, long *quat4_world)----->
+                   void icm20948_data_converter_inv_rotation_vector_2(Icm20948DataConverter *self, struct inv_icm20948 * s,
+                                                   const long *quat, long *quat4World)
+                6.void inv_icm20948_convert_rotation_vector_3(const long *quat4_world, float *values)----->
+                   void icm20948_data_converter_inv_rotation_vector_3(Icm20948DataConverter *self, const long *quat4World, float *values)
+                7.void inv_icm20948_set_chip_to_body_axis_quaternion(struct inv_icm20948 * s, signed char *accel_gyro_matrix, float angle)----->
+                   void icm20948_data_converter_set_chiptobody_axis_quaternion(Icm20948DataConverter *self, struct inv_icm20948 * s,
+                                                            signed char *accelGyroMatrix, float angle)
+                8.void inv_icm20948_convert_dmp3_to_body(struct inv_icm20948 * s, const long *vec3, float scale, float *values)----->
+                   void icm20948_data_converter_inv_dmp3_to_body(Icm20948DataConverter *self, struct inv_icm20948 * s, const long *vec3,
+                                              float scale, float *values)
+                9.unsigned char *inv_icm20948_int32_to_little8(long x, unsigned char *little8)----->
+                   unsigned char *icm20948_data_converter_inv_int32_to_little8(Icm20948DataConverter *self, long x,
+                                                            unsigned char *little8)
+                10.float inv_icm20948_convert_deg_to_rad(float deg_val)----->
+                     float icm20948_data_converter_inv_deg_to_rad(Icm20948DataConverter *self, float degVal)
+                11.long inv_icm20948_convert_mult_q30_fxp(long a_q30, long b_q30)----->
+                     long icm20948_data_converter_inv_mult_q30_fxp(Icm20948DataConverter *self, long aQ30, long bQ30)
+                12.int inv_icm20948_convert_compute_scalar_part_fxp(const long * inQuat_q30, long* outQuat_q30)----->
+                     int icm20948_data_converter_inv_compute_scalar_part_fxp(Icm20948DataConverter *self, const long * inQuatQ30,
+                                                        long* outQuatQ30)
+                13.long inv_icm20948_convert_fast_sqrt_fxp(long x0_q30)----->
+                     long icm20948_data_converter_inv_fast_sqrt_fxp(Icm20948DataConverter *self, long x0Q30)
+                14.int inv_icm20948_convert_test_limits_and_scale_fxp(long *x0_q30, int *pow)----->
+                     int icm20948_data_converter_test_limits_and_scale_fxp(Icm20948DataConverter *self, long *x0Q30, int *pow)
+                15.int16_t inv_icm20948_convert_get_highest_bit_position(uint32_t *value)----->
+                     int16_t icm20948_data_converter_get_highest_bit_position(Icm20948DataConverter *self, uint32_t *value)
+                16.void inv_icm20948_convert_matrix_to_quat_fxp(long *Rcb_q30, long *Qcb_q30)----->
+                     void icm20948_data_converter_matrix_to_quat_fxp(Icm20948DataConverter *self, long *rcbQ30, long *qcbQ30)
+                17.long inv_icm20948_convert_sqrt_q30_fxp(long x_q30)----->
+                     long icm20948_data_converter_sqrt_q30_fxp(Icm20948DataConverter *self, long xQ30)
+                18.long inv_icm20948_convert_inv_sqrt_q30_fxp(long x_q30, int *pow2)----->
+                     long icm20948_data_converter_inv_sqrt_q30_fxp(Icm20948DataConverter *self, long xQ30, int *pow2)
+                19.long inv_icm20948_convert_inverse_q30_fxp(long x_q30, int *pow2)----->
+                     long icm20948_data_converter_inverse_q30_fxp(Icm20948DataConverter *self, long xQ30, int *pow2)
+                20.void inv_icm20948_convert_matrix_to_quat_flt(float *R, float *q)----->
+                     void icm20948_data_converter_matrix_to_quat_flt(Icm20948DataConverter *self, float *R, float *q)
+                21.long inv_icm20948_convert_mult_qfix_fxp(long a, long b, unsigned char qfix)----->
+                     long icm20948_data_converter_mult_qfix_fxp(Icm20948DataConverter *self, long a, long b, unsigned char qfix)
+                22.void inv_icm20948_convert_quat_to_col_major_matrix_fxp(const long *quat_q30, long *rot_q30)----->
+                     void icm20948_data_converter_quattocol_major_matrix_fxp(Icm20948DataConverter *self, const long *quatQ30, 
+                                                        long *rotQ30)
+                23.long inv_icm20948_math_atan2_q15_fxp(long y_q15, long x_q15)----->
+                     long icm20948_data_converter_math_atan2_q15_fxp(Icm20948DataConverter *self, long yQ15, long xQ15)
+                24.uint8_t *inv_icm20948_convert_int16_to_big8(int16_t x, uint8_t *big8)----->
+                     uint8_t *icm20948_data_converter_int16_to_big8(Icm20948DataConverter *self, int16_t x, uint8_t *big8)
+                25.uint8_t *inv_icm20948_convert_int32_to_big8(int32_t x, uint8_t *big8)----->
+                     uint8_t *icm20948_data_converter_int32_to_big8(Icm20948DataConverter *self, int32_t x, uint8_t *big8)
+                26.int32_t inv_icm20948_convert_big8_to_int32(const uint8_t *big8)----->
+                     int32_t icm20948_data_converter_big8_to_int32(Icm20948DataConverter *self, const uint8_t *big8)
+            宏：
+                M_PI----->Icm20948DataConverter_M_PI   camera_gyro_icm20948.c
+
+**************************************************************************************************************
+9.7修改记录
+    1)新建类PalladiumTestHdmac
+        a.将palladium_test_hdmac.c替换为palladiumtesthdmac.c/.h，删除原文件
+        b.公有属性修改如下：
+            公有方法：
+                void Pt_Dd_HDMAC_Main( void )----->void palladium_test_hdmac_dd_main( void )
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    2)新建类PalladiumTestHdmac0
+        a.将palladium_test_hdmac0.c替换为palladiumtesthdmac0.c/.h，删除原文件
+        b.公有属性修改如下：
+            公有方法：
+                void Pt_Dd_HDMAC0_Main( void )----->void palladium_test_hdmac0_dd_main( void )
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    3)新建类PalladiumTestShdr
+        a.将palladium_test_shdr.c替换为palladiumtesthshdr.c/.h，删除原文件
+        b.公有属性修改如下：
+            公有方法：
+                void Pt_Im_SHDR_Main( void )----->void palladium_test_shdr_im_main( void )
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    4)新建类PalladiumTestMxic
+        a.将palladium_test_mxic.c替换为palladiumtestmxic.c/.h，删除原文件
+        b.公有属性修改如下：
+            公有方法：
+                void Pt_Im_MXIC_Main( void )----->void palladium_test_mxic_im_main( void )
+
+**************************************************************************************************************
+9.8修改记录
+    1)规范类LcdCtrl
+        a.公有属性修改如下：
+            宏：
+                D_LCDCTRL_WITH_GPIO----->LcdCtrl_WITH_GPIO（涉及文件：lcda027dn01.c）
+                D_LCDTYPE_A027CN01----->LcdCtrl_LCDTYPE_A027CN01（涉及文件：lcda027dn01.c）
+                D_LCDMODE_RGB_DELTA----->LcdCtrl_LCDMODE_RGB_DELTA（涉及文件：lcda027dn01.c）
+                _DLCD_MODE----->LcdCtrl_DLCD_MODE（涉及文件：osd_config_comm.c）
+                LCD_TYPE_KIND----->LcdCtrl_TYPE_KIND（涉及文件：lcda027dn01.c）
+                LCD_MODE_KIND----->LcdCtrl_MODE_KIND（涉及文件：lcda027dn01.c）
+                LCD_SEN_DDR_SET----->LcdCtrl_SEN_DDR_SET（涉及文件：lcda027dn01.c）
+                LCD_SEN_PDR_SET----->LcdCtrl_SEN_PDR_SET（涉及文件：lcda027dn01.c）
+                LCD_SDA_EPCR_SET----->LcdCtrl_SDA_EPCR_SET（涉及文件：lcda027dn01.c）
+                LCD_SDA_DDR_SET----->LcdCtrl_SDA_DDR_SET（涉及文件：lcda027dn01.c）
+                LCD_SDA_PDR_GET----->LcdCtrl_SDA_PDR_GET（涉及文件：lcda027dn01.c）
+                LCD_SDA_PDR_SET----->LcdCtrl_SDA_PDR_SET（涉及文件：lcda027dn01.c）
+                LCD_SCK_EPCR_SET----->LcdCtrl_SCK_EPCR_SET（涉及文件：lcda027dn01.c）
+                LCD_SCK_DDR_SET----->LcdCtrl_SCK_DDR_SET（涉及文件：lcda027dn01.c）
+                LCD_SCK_PDR_SET----->LcdCtrl_SCK_PDR_SET（涉及文件：lcda027dn01.c）
+                LCD_BLC_EPCR----->LcdCtrl_BLC_EPCR（涉及文件：lcda027dn01.c）
+                LCD_BLC_DDR----->LcdCtrl_BLC_DDR（涉及文件：lcda027dn01.c）
+                LCD_BLC_PDR----->LcdCtrl_BLC_PDR（涉及文件：lcda027dn01.c）
+            枚举变量：
+                LCD_ERR_OK----->LcdCtrl_ERR_OK（涉及文件：lcda027dn01.c）
+                LCD_ERR_NG----->LcdCtrl_ERR_NG（涉及文件：lcda027dn01.c）
+
+**************************************************************************************************************
+9.9修改记录
+    将struct inv_icm20948（Icm20948.h没人改）替换为InvIcm20948T
+    将enum ANDROID_SENSORS（Icm20948Defs.h没人改）替换为AndroidSensors
+    将enum INV_SENSORS（Icm20948Dmp3Driver.h没人改）替换为InvSensors
+    将struct inv_icm20948_serif（Icm20948Serif.h没人改）替换为InvIcm20948Serif
+    将enum SMARTSENSOR_SERIAL_INTERFACE（Icm20948Defs.h没人改）替换为SmartsensorSerialInterface
+    修改类型和变量

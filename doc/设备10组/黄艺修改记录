@@ -1,0 +1,56 @@
+
+
+mwusb_driver4文件公有方法命名
+前一排为之前的 每行后面一排标识修改过后的名字
+有的带了self指针参数可以自己对照添加
+
+MWUSB_Initialize(MwusbDriver4*self,guchar confMode);  void mwusb_driver4_initialize(MwusbDriver4*self, guchar confMode);
+MWUSB_Uninitialize(MwusbDriver4*self);           void mwusb_driver4_uninitialize(MwusbDriver4*self);
+MWUSB_CheckConnect( MwusbDriver4*self );          glong mwusb_driver4_check_connect(MwusbDriver4*self);
+MWUSB_IntConnect(MwusbDriver4*self);         glong mwusb_driver4_int_connect(MwusbDriver4*self);
+MWUSB_IntDisconnect(MwusbDriver4*self);      void mwusb_driver4_int_disconnect(MwusbDriver4*self);
+MWUSB_PlugWait(MwusbDriver4*self);        gint mwusb_driver4_plug_wait(MwusbDriver4*self);
+MWUSB_Read1Packet(MwusbDriver4*self,guchar *buf);           gshort mwusb_driver4_read_1_packet(MwusbDriver4*self, guchar *buf);
+MWUSB_Read(MwusbDriver4*self, guchar *buf, gulong Size, guchar nfifo);           glong mwusb_driver4_read(MwusbDriver4*self, guchar *buf, gulong Size, guchar nfifo);
+MWUSB_Write(MwusbDriver4*self,guchar *buf, gulong Size, guchar nfifo );           glong mwusb_driver4_write(MwusbDriver4*self, guchar *buf, gulong Size, guchar nfifo);
+MWUSB_InterruptWrite(MwusbDriver4*self, guchar *buf, gulong Size );           glong mwusb_driver4_interrupt_write(MwusbDriver4*self, guchar *buf, gulong Size);
+MWUSB_BulkRead_Dummy(guchar nfifo, gulong size);           void mwusb_driver4_bulk_read_dummy(guchar nfifo, gulong size);
+MWUSB_EPStalled(MwusbDriver4*self,guchar fiFo);           glong mwusb_driver4_ep_stalled(MwusbDriver4*self, guchar fiFo);
+MWUSB_EPStallClr(MwusbDriver4*self,guchar fiFo);           glong mwusb_driver4_ep_stall_clr(MwusbDriver4*self, guchar fiFo);
+MWUSB_EPStallCancel(MwusbDriver4*self,guchar fiFo);           glong mwusb_driver4_ep_stall_cancel(MwusbDriver4*self, guchar fiFo);
+MWUSB_EPInit(MwusbDriver4*self,guchar fiFo);           glong mwusb_driver4_ep_init(MwusbDriver4*self, guchar fiFo);
+MWUSB_SendNullPacket(guchar fiFo);           glong mwusb_driver4_send_null_packet(guchar fiFo);
+MWUSB_ReleaseWaitBulkIO(void);           void mwusb_driver4_release_wait_bulk_io(MwusbDriver4*self);
+MWUSB_SetMode(glong mode);           void mwusb_driver4_set_mode(glong mode);
+MWUSB_GetMode(void);           glong mwusb_driver4_get_mode(void);
+MWUSB_SetConfigurationMode(guchar mode);           void mwusb_driver4_set_configuration_mode(guchar mode);
+MWUSB_GetConfigurationMode(void);           guchar mwusb_driver4_get_configuration_mode(void);
+MWUSB_GetMaxPacketSize(MwusbDriver4*self,guchar fiFo);           gshort mwusb_driver4_get_max_packet_size(MwusbDriver4*self, guchar fiFo);
+MWUSB_SetReqSpeed(gulong speed);            mwusb_driver_another_set_req_speed(gulong speed);
+MWUSB_GetReqSpeed(void);           gulong mwusb_driver_another_get_req_speed(void);
+MWUSB_GetSpeed(void);           gulong mwusb_driver_another_get_speed(void);
+MWUSB_AbortReset(MwusbDriver4*self);        void mwusb_driver_another_abort_reset(MwusbDriverAnother*self);   
+MWUSB_WaitConfig(MwusbDriver4*self);           glong mwusb_driver_another_wait_config(MwusbDriverAnother*self);
+MWUSB_CheckConfig(MwusbDriver4*self);           glong mwusb_driver_another_check_config(MwusbDriverAnother*self);
+MWUSB_CheckFifoEmpty(MwusbDriver4*self,guchar fiFo);    glong mwusb_driver_another_check_fifo_empty(MwusbDriverAnother*self, guchar fiFo);       
+MWUSB_ReleaseWaitAbort(void);           void mwusb_driver_another_release_wait_abort(void);
+MWUSB_ReleaseWaitCancel(void);        void mwusb_driver_another_release_wait_cancel(void);   
+MWUSB_ReleaseWaitTout(void);          void mwusb_driver_another_release_wait_tout(void); 
+MWUSB_DriverEntryCallback(MwusbDriver4*self,guchar callbackID, gpointer pcallback);     gint mwusb_driver_another_driver_entry_callback(MwusbDriverAnother*self, guchar callbackID, gpointer pcallback);      
+MWUSB_PhyConnect(MwusbDriver4*self);        glong mwusb_driver_another_phy_connect(MwusbDriverAnother*self);   
+MWUSB_PhyDisconnect(MwusbDriver4*self);           void mwusb_driver_another_phy_disconnect(MwusbDriverAnother*self);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

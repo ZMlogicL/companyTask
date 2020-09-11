@@ -1,0 +1,1073 @@
+1.osd_general.c修改为类osdgeneral
+(1)移动osd_general.h到cpu_tkernel/basefw/fj/disp/src/osdgeneral.h
+
+公有函数名修改
+(2)BF_Osd_General_Strnicmp　修改为osd_general_bf_osd_general_strnicmp
+(3)BF_Osd_General_Fill_Box 修改为 osd_general_bf_osd_general_fill_box
+(4)BF_Osd_General_Fill_Box_For_GR 修改为osd_general_bf_osd_general_fill_box_for_gr　
+(5)BF_Osd_General_Fill_Box_Part_For_GR  修改为osd_general_bf_osd_general_fill_box_part_for_gr
+(6)BF_Osd_General_Copy_To_Box 修改为 osd_general_bf_osd_general_copy_to_box
+(7)BF_Osd_General_Copy_Box_To_Box  修改为osd_general_bf_osd_general_copy_box_to_box
+(8)BF_Osd_General_greatest_common_divisor  修改为osd_general_bf_osd_general_greateat_common_divisor
+(9)BF_Osd_General_Fraction 修改为 osd_general_bf_osd_general_fraction
+(10)BF_Osd_General_Conv_RGBA8888_To_RGBA4444    修改为　　osd_general_bf_osd_general_conv_rgba8888_to_rgba4444
+(11)BF_Osd_General_Get_Bit_Position  修改为osd_general_bf_osd_general_get_bit_position
+(12)BF_Osd_General_Conv_YCC420_To_RGBA   修改为osd_general_bf_osd_general_conv_ycc420_to_rgba
+(13)BF_Osd_General_Conv_Layer_To_Define 修改为osd_general_bf_osd_general_conv_layer_to_define
+(14)BF_Osd_General_Conv_Define_To_Layer  修改为osd_general_bf_osd_general_conv_define_to_layer
+
+宏名修改
+(1) D_BF_OSD_GENERAL_DMA_CH_OSD  修改为OsdGeneral_D_BF_OSD_GENERAL_DMA_CH_OSD
+(2) D_BF_OSD_GENERAL_OSD_WIDTH  修改为OsdGeneral_D_BF_OSD_GENERAL_OSD_WIDTH
+(3) D_BF_OSD_GENERAL_OSD_LINES  修改为OsdGeneral_D_BF_OSD_GENERAL_OSD_LINES
+(4) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_FHD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_FHD
+(5) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_FHD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_FHD
+(6) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_FHD_4_3  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_FHD_4_3
+(7) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_FHD_4_3  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_FHD_4_3
+(8) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_HD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_HD
+(9) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_HD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_HD
+(10) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_SXVGA  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_SXVGA
+(11) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_SXVGA  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_SXVGA
+(12) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_HVGAW  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_HVGAW
+(13) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_HVGAW  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_HVGAW
+
+
+(14) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_QVGA  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_WIDTH_QVGA
+(15) D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_QVGA  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_MAIN_INPUT_LINES_QVGA
+(16) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_FHD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_FHD
+(17) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_FHD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_FHD
+(18) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_HD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_HD
+(19) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_HD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_HD
+(20) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD60_WIDTH  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD60_WIDTH
+
+(21) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD60_LINES  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD60_LINES
+(22) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD50_WIDTH  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD50_WIDTH
+(23) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD50_LINES  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_SD50_LINES
+(24) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_SD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_WIDTH_SD
+(25) D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_SD  修改为OsdGeneral_D_BF_OSD_GENERAL_RESOLUTION_HGR_INPUT_LINES_SD
+(26) D_BF_OSD_GENERAL_ALPHA_OPAQUE  修改为OsdGeneral_D_BF_OSD_GENERAL_ALPHA_OPAQUE
+(27) D_BF_OSD_GENERAL_BIT_NUM_PER_PIXEL  修改为OsdGeneral_D_BF_OSD_GENERAL_BIT_NUM_PER_PIXEL
+
+(28) D_BF_OSD_GENERAL_ALPHA_TRANS  修改为OsdGeneral_D_BF_OSD_GENERAL_ALPHA_TRANS
+(29) BF_Osd_General_Get_Max 修改为 OsdGeneral_BF_OSD_GENERAL_GET_MAX
+(30) BF_Osd_General_Get_Min 修改为 OsdGeneral_BF_OSD_GENERAL_GET_MIN
+(31) BF_Osd_General_RGBA_To_R 修改为 OsdGeneral_BF_OSD_GENERAL_RGBA_TO_R
+(32) BF_Osd_General_RGBA_To_G 修改为 OsdGeneral_BF_OSD_GENERAL_RGBA_TO_G
+(33) BF_Osd_General_RGBA_To_B 修改为 OsdGeneral_BF_OSD_GENERAL_RGBA_TO_B
+(34) BF_Osd_General_RGBA_To_A 修改为 OsdGeneral_BF_OSD_GENERAL_RGBA_TO_A 
+(35) BF_Osd_General_TO_RGBA4444_FROM_RGBA8888  修改为OsdGeneral_BF_OSD_GENERAL_TO_RGBA4444_FROM_RGBA8888
+(36) BF_Osd_General_TO_RGBA8888_FROM_RGBA4444  修改为OsdGeneral_BF_OSD_GENERAL_TO_RGBA8888_FROM_RGBA4444
+(37) BF_Osd_General_GET_ARRAY_ELEMENT_NUMS  修改为 OsdGeneral_BF_OSD_GENERAL_GET_ARRAY_ELEMENT_NUMS
+
+
+
+
+枚举名与枚举变量
+(1) D_BF_OSD_GENERAL_YCC 修改为 OsdGeneral_DBfOsdGeneralYcc
+D_BF_OSD_GENERAL_YCC_Y 修改为 D_BF_OSD_GENERAL_YCC_Y
+D_BF_OSD_GENERAL_YCC_CB 修改为 OsdGeneral_D_BF_OSD_GENERAL_YCC_CB
+
+
+D_BF_OSD_GENERAL_YCC_CR 修改为 OsdGeneral_D_BF_OSD_GENERAL_YCC_CR
+D_BF_OSD_GENERAL_YCC_END 修改为OsdGeneral_D_BF_OSD_GENERAL_YCC_END
+
+
+
+(2) D_BF_OSD_GENERAL_RGBA 修改为 OsdGeneral_DBfOsdGeneralRgba
+
+D_BF_OSD_GENERAL_RGBA_R 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_R
+D_BF_OSD_GENERAL_RGBA_G 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_G
+D_BF_OSD_GENERAL_RGBA_B 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_B
+D_BF_OSD_GENERAL_RGBA_A 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_A
+D_BF_OSD_GENERAL_RGBA_END  修改为OsdGeneral_D_BF_OSD_GENERAL_RGBA_END
+
+(3) E_BF_OSD_GENERAL_RGBA_MASK 修改为 OsdGeneral_EBfOsdGeneralRgbaMask
+
+E_BF_OSD_GENERAL_RGBA_MASK_A  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_A
+E_BF_OSD_GENERAL_RGBA_MASK_B  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_B
+E_BF_OSD_GENERAL_RGBA_MASK_G  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_G
+E_BF_OSD_GENERAL_RGBA_MASK_R 修改为
+OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_R
+
+
+(4) E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT   修改为OsdGeneral_EBfOsdGeneralRgbaRightShift
+
+E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_B  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_B
+E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_G  修改为
+OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_G
+E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_R  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_R
+
+
+
+(5) E_BF_OSD_GENERAL_CLK 修改为 OsdGeneral_EBfOsdGeneralClk
+
+E_BF_OSD_GENERAL_CLK_ON 修改为 OsdGeneral_E_BF_OSD_GENERAL_CLK_ON
+E_BF_OSD_GENERAL_CLK_OFF 修改为 OsdGeneral_E_BF_OSD_GENERAL_CLK_OFF
+
+
+
+(6) E_BF_OSD_GENERAL_CLK_SEL 修改为 OsdGeneral_EBfOsdGeneralClkSel
+
+E_BF_OSD_GENERAL_CLK_SEL_594  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_594
+E_BF_OSD_GENERAL_CLK_SEL_297  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_297
+E_BF_OSD_GENERAL_CLK_SEL_148_5 修改为
+OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_148_5
+
+
+E_BF_OSD_GENERAL_CLK_SEL_74_25  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_74_25
+E_BF_OSD_GENERAL_CLK_SEL_27 修改为
+OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_27
+
+
+
+
+
+2． osd_histogram_comm.c 修改为类 osdhistogramcomm
+
+公有函数修改
+(1) 移动osd_histogram_comm.h到　cpu_tkernel/basefw/fj/disp/src/osdhistogramcomm.h
+(2) BF_Osd_Histogram_Comm_Set_Histogram　　修改为osd_histogram_comm_bf_osd_histogram_comm_set_histogram
+(3) BF_Osd_Histogram_Comm_Draw_Histogram_Box　修改为　osd_histogram_comm_bf_osd_histogram_comm_draw_histogram
+(4) BF_Osd_Histogram_Comm_Draw_Histogram_Graph　　修改为　osd_histogram_comm_bf_osd_histogram_comm_draw_histogram_graph
+(5) BF_Osd_Histogram_Comm_Show_Histogram　　修改为osd_histogram_comm_bf_osd_histogram_comm_show_histogram
+
+宏名修改
+(1) D_BF_OSD_HISTOGRAM_COMM_BOX_X  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_X
+(2) D_BF_OSD_HISTOGRAM_COMM_BOX_Y  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_Y
+(3) D_BF_OSD_HISTOGRAM_COMM_BOX_WIDTH  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_WIDTH
+(4) D_BF_OSD_HISTOGRAM_COMM_BOX_LINES  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_LINES
+
+
+(5) D_BF_OSD_HISTOGRAM_COMM_BOX_V_FRAME_THICKNESS OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_V_FRAME_THICKNESS
+(6) D_BF_OSD_HISTOGRAM_COMM_BOX_H_FRAME_THICKNESS  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_BOX_H_FRAME_THICKNESS
+(7) D_BF_OSD_HISTOGRAM_COMM_THRESHOLD  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_THRESHOLD
+(8) D_BF_OSD_HISTOGRAM_COMM_GRADATION_NUM  OsdHistogramComm_D_BF_OSD_HISTOGRAM_COMM_GRADATION_NUM
+(9) D_BF_OSD_HISTOGRAM_COMM_DRAW_BUF_SIZE  
+
+
+结构体
+(1) T_BF_OSD_HISTOGRAM_COMM_HIST_DRAW_INFO  TBfOsdHistogramCommHistDrawInfo
+
+write_address  writeAddress
+draw_rect  drawRect
+
+(2)T_BF_OSD_HISTOGRAM_COMM_HIST_ATTR
+TBfOsdHistogramCommHistAttr
+
+out_pos_x   outPosX
+out_pos_y   outPosY
+out_width   outWidth
+out_height  outHeight
+x_offset     xOffset
+y_offset     yOffset
+display_data displayData
+draw_data   drawData
+showing_area_No  showingAreaNo
+
+
+将结构体｀gBF_Osd_Histogram_Comm_LCD_Hist_Attr　、　gBF_Osd_Histogram_Comm_HDMI_Hist_Attrf放入工具类osdhistogramcommutils中
+调用的地方应改变：加	TBfOsdHistogramCommHistAttr* gBF_Osd_Histogram_Comm_HDMI_Hist_Attr =
+			k_disp_utils_get_gBF_Osd_Histogram_Comm_HDMI_Hist_Attr(k_disp_utils_get());
+
+gBF_Osd_Histogram_Comm_HDMI_Hist_Attr.  改为｀gBF_Osd_Histogram_Comm_HDMI_Hist_Attr->
+＆gBF_Osd_Histogram_Comm_HDMI_Hist_Attr　改为
+gBF_Osd_Histogram_Comm_HDMI_Hist_Attr
+
+
+
+
+
+3． osd_icon.c修改为类　osdicon
+(1) 移动　osd_icon.h　到　cpu_tkernel/basefw/fj/disp/src/osdicon.h
+(2) BF_Osd_Icon_Draw_GR_Icon　修改为  osd_icon_bf_osd_icon_draw_gr_icon
+
+
+
+
+4. osd_icon_cache.c 修改为类　osdiconcache（原.h也删，公用函数改完）
+(1) 移动osd_icon_cache.h　到　cpu_tkernel/basefw/fj/disp/src/osdiconcache.h
+(2) 修改宏名M_MBA_PRINTF　为　OsdIconCache_M_MBA_PRINTF
+(3) BF_Osd_Icon_Cache_Clear_Nodes　　修改为osd_icon_cache_bf_osd_icon_cache_clear_nodes
+(4) BF_Osd_Icon_Cache_Get_icon　　修改为osd_icon_cache_bf_osd_icon_cache_get_icon
+
+
+
+
+
+5. osd_icon_comm.c修改为类　osdiconcomm  将.c中的宏与结构体放入了osdiconcommdef.h中
+(1) 移动osd_icon_comm.h　到　cpu_tkernel/basefw/fj/disp/src/osdiconcomm.h
+(2) BF_Osd_Icon_Comm_Conv_Ascii_To_Icon_ID　修改为　osd_icon_comm_bf_osd_icon_comm_conv_ascii_to_icon_id　
+(3) BF_Osd_Icon_Calculate_String_Size　　修改为osd_icon_comm_bf_osd_icon_comm_calculate_string_size
+(4) BF_Osd_Icon_Get_String_Draw_Range　修改为　osd_icon_comm_bf_osd_icon_get_string_draw_range
+(5) BF_Osd_Icon_Is_Icon_Loaded　　修改为osd_icon_comm_bf_osd_icon_is_icon_loaded
+(6) BF_Osd_Icon_Is_String_Loaded　修改为osd_icon_comm_bf_osd_icon_is_string_loaded
+(7) osd_icon_comm_bf_osd_icon_load_icon_file　　修改为osd_icon_comm_bf_osd_icon_load_icon_file
+(8) osd_icon_comm_bf_osd_icon_load_string_file　　修改为osd_icon_comm_bf_osd_icon_load_string_file
+(9) BF_Osd_Icon_Load_RGB_Palette_Table　　修改为osd_icon_comm_bf_osd_icon_load_rgb_palette_table
+(10) BF_Osd_Icon_Load_Icon_File_Boot　　修改为osd_icon_comm_bf_osd_icon_file_boot
+(11) BF_Osd_Icon_Load_Icon_String_Boot　　修改为osd_icon_comm_bf_osd_icon_string_boot
+
+
+
+以下宏名全是加类名开头OsdIconComm_
+(1) D_BF_OSD_ICON_COMM_STR_ID_SURPRISE_MARK
+(2) D_BF_OSD_ICON_COMM_STR_ID_AND_MARK
+(3) D_BF_OSD_ICON_COMM_STR_ID_DASH_MARK
+(4) D_BF_OSD_ICON_COMM_STR_ID_LEFT_PARENTHESIS
+(5) D_BF_OSD_ICON_COMM_STR_ID_RIGHT_PARENTHESIS
+(6) D_BF_OSD_ICON_COMM_STR_ID_CROSS_MARK
+(7) D_BF_OSD_ICON_COMM_STR_ID_PLUS_MARK
+(8) D_BF_OSD_ICON_COMM_STR_ID_COMMA_MARK
+(9) D_BF_OSD_ICON_COMM_STR_ID_MINUS_MARK
+(10) D_BF_OSD_ICON_COMM_STR_ID_DOT_MARK
+(11) D_BF_OSD_ICON_COMM_STR_ID_SLASH_MARK
+(12) D_BF_OSD_ICON_COMM_STR_ID_NUM_ZERO
+(13) D_BF_OSD_ICON_COMM_STR_ID_012
+(14) D_BF_OSD_ICON_COMM_STR_ID_013
+(15) D_BF_OSD_ICON_COMM_STR_ID_014
+(16) D_BF_OSD_ICON_COMM_STR_ID_015
+(17) D_BF_OSD_ICON_COMM_STR_ID_016
+(18) D_BF_OSD_ICON_COMM_STR_ID_017
+(19) D_BF_OSD_ICON_COMM_STR_ID_018
+(20) D_BF_OSD_ICON_COMM_STR_ID_019
+(21) D_BF_OSD_ICON_COMM_STR_ID_NUM_NINE
+(22) D_BF_OSD_ICON_COMM_STR_ID_COLON_MARK
+(23) D_BF_OSD_ICON_COMM_STR_ID_QUESTION_MARK
+(24) D_BF_OSD_ICON_COMM_STR_ID_UPPER_A
+(25) D_BF_OSD_ICON_COMM_STR_ID_024
+(26) D_BF_OSD_ICON_COMM_STR_ID_025
+(27) D_BF_OSD_ICON_COMM_STR_ID_026
+(28) D_BF_OSD_ICON_COMM_STR_ID_027
+(29) D_BF_OSD_ICON_COMM_STR_ID_028
+(30) D_BF_OSD_ICON_COMM_STR_ID_029
+(31) D_BF_OSD_ICON_COMM_STR_ID_030
+(32) D_BF_OSD_ICON_COMM_STR_ID_031
+(33) D_BF_OSD_ICON_COMM_STR_ID_032
+(34) D_BF_OSD_ICON_COMM_STR_ID_033
+(35) D_BF_OSD_ICON_COMM_STR_ID_034
+(36) D_BF_OSD_ICON_COMM_STR_ID_035
+(37) D_BF_OSD_ICON_COMM_STR_ID_036
+(38) D_BF_OSD_ICON_COMM_STR_ID_037
+(39) D_BF_OSD_ICON_COMM_STR_ID_038
+(40) D_BF_OSD_ICON_COMM_STR_ID_039
+(41) D_BF_OSD_ICON_COMM_STR_ID_040
+(42) D_BF_OSD_ICON_COMM_STR_ID_041
+(43) D_BF_OSD_ICON_COMM_STR_ID_042
+(44) D_BF_OSD_ICON_COMM_STR_ID_043
+(45) D_BF_OSD_ICON_COMM_STR_ID_044
+(46) D_BF_OSD_ICON_COMM_STR_ID_045
+(47) D_BF_OSD_ICON_COMM_STR_ID_046
+(48) D_BF_OSD_ICON_COMM_STR_ID_047
+(49) D_BF_OSD_ICON_COMM_STR_ID_UPPER_Z
+(50) D_BF_OSD_ICON_COMM_STR_ID_UNDERLINE_MARK
+(51) D_BF_OSD_ICON_COMM_STR_ID_LOW_A
+(52) D_BF_OSD_ICON_COMM_STR_ID_051
+(53) D_BF_OSD_ICON_COMM_STR_ID_052
+(54) D_BF_OSD_ICON_COMM_STR_ID_053
+(55) D_BF_OSD_ICON_COMM_STR_ID_054
+(56) D_BF_OSD_ICON_COMM_STR_ID_055
+(57) D_BF_OSD_ICON_COMM_STR_ID_056
+(58) D_BF_OSD_ICON_COMM_STR_ID_057
+(59) D_BF_OSD_ICON_COMM_STR_ID_058
+(60) D_BF_OSD_ICON_COMM_STR_ID_059
+(61) D_BF_OSD_ICON_COMM_STR_ID_060
+(62) D_BF_OSD_ICON_COMM_STR_ID_061
+(63) D_BF_OSD_ICON_COMM_STR_ID_062
+(64) D_BF_OSD_ICON_COMM_STR_ID_063
+(65) D_BF_OSD_ICON_COMM_STR_ID_064
+(66) D_BF_OSD_ICON_COMM_STR_ID_065
+(67) D_BF_OSD_ICON_COMM_STR_ID_066
+(68) D_BF_OSD_ICON_COMM_STR_ID_067
+(69) D_BF_OSD_ICON_COMM_STR_ID_068
+(70) D_BF_OSD_ICON_COMM_STR_ID_069
+(71) D_BF_OSD_ICON_COMM_STR_ID_070
+(72) D_BF_OSD_ICON_COMM_STR_ID_071
+(73) D_BF_OSD_ICON_COMM_STR_ID_072
+(74) D_BF_OSD_ICON_COMM_STR_ID_073
+(75) D_BF_OSD_ICON_COMM_STR_ID_074
+(76) D_BF_OSD_ICON_COMM_STR_ID_LOW_Z
+(77) D_BF_OSD_ICON_COMM_STR_ID_076
+(78) D_BF_OSD_ICON_COMM_STR_ID_077
+(79) D_BF_OSD_ICON_COMM_STR_ID_078
+(80) D_BF_OSD_ICON_COMM_STR_ID_079
+(81) D_BF_OSD_ICON_COMM_STR_ID_080
+(82) D_BF_OSD_ICON_COMM_STR_ID_081
+(83) D_BF_OSD_ICON_COMM_STR_ID_082
+(84) D_BF_OSD_ICON_COMM_STR_ID_083
+(85) D_BF_OSD_ICON_COMM_STR_ID_084
+(86) D_BF_OSD_ICON_COMM_STR_ID_085
+(87) D_BF_OSD_ICON_COMM_STR_ID_086
+(88) D_BF_OSD_ICON_COMM_STR_ID_087
+(89) D_BF_OSD_ICON_COMM_STR_ID_088
+(90) D_BF_OSD_ICON_COMM_STR_ID_089
+(91) D_BF_OSD_ICON_COMM_STR_ID_090
+(92) D_BF_OSD_ICON_COMM_STR_ID_091
+(93) D_BF_OSD_ICON_COMM_STR_ID_092
+(94) D_BF_OSD_ICON_COMM_STR_ID_093
+(95) D_BF_OSD_ICON_COMM_STR_ID_094
+(96) D_BF_OSD_ICON_COMM_STR_ID_095
+(97) D_BF_OSD_ICON_COMM_STR_ID_096
+(98) D_BF_OSD_ICON_COMM_STR_ID_097
+(99) D_BF_OSD_ICON_COMM_STR_ID_098
+(100) D_BF_OSD_ICON_COMM_STR_ID_099
+(101) D_BF_OSD_ICON_COMM_STR_ID_100
+(102) D_BF_OSD_ICON_COMM_STR_ID_101
+(103) D_BF_OSD_ICON_COMM_STR_ID_102
+(104) D_BF_OSD_ICON_COMM_STR_ID_103
+(105) D_BF_OSD_ICON_COMM_STR_ID_104
+(106) D_BF_OSD_ICON_COMM_STR_ID_105
+(107) D_BF_OSD_ICON_COMM_STR_ID_106
+(108) D_BF_OSD_ICON_COMM_STR_ID_107
+(109) D_BF_OSD_ICON_COMM_STR_ID_108
+(110) D_BF_OSD_ICON_COMM_STR_ID_109
+(111) D_BF_OSD_ICON_COMM_STR_ID_110
+(112) D_BF_OSD_ICON_COMM_STR_ID_111
+(113) D_BF_OSD_ICON_COMM_STR_ID_112
+(114) D_BF_OSD_ICON_COMM_STR_ID_113
+(115) D_BF_OSD_ICON_COMM_STR_ID_114
+(116) D_BF_OSD_ICON_COMM_STR_ID_115
+(117) D_BF_OSD_ICON_COMM_STR_ID_116
+(118) D_BF_OSD_ICON_COMM_STR_ID_117
+(119) D_BF_OSD_ICON_COMM_STR_ID_118
+(120) D_BF_OSD_ICON_COMM_STR_ID_119
+(121) D_BF_OSD_ICON_COMM_STR_ID_120
+(122) D_BF_OSD_ICON_COMM_STR_ID_121
+(123) D_BF_OSD_ICON_COMM_STR_ID_122
+(124) D_BF_OSD_ICON_COMM_STR_ID_123
+(125) D_BF_OSD_ICON_COMM_STR_ID_124
+(126) D_BF_OSD_ICON_COMM_STR_ID_125
+(127) D_BF_OSD_ICON_COMM_STR_ID_126
+(128) D_BF_OSD_ICON_COMM_STR_ID_127
+(129) D_BF_OSD_ICON_COMM_STR_ID_128
+(130) D_BF_OSD_ICON_COMM_STR_ID_129
+(131) D_BF_OSD_ICON_COMM_STR_ID_130
+(132) D_BF_OSD_ICON_COMM_STR_ID_131
+(133) D_BF_OSD_ICON_COMM_STR_ID_132
+(134) D_BF_OSD_ICON_COMM_STR_ID_133
+(135) D_BF_OSD_ICON_COMM_STR_ID_134
+(136) D_BF_OSD_ICON_COMM_STR_ID_135
+(137) D_BF_OSD_ICON_COMM_STR_ID_136
+(138) D_BF_OSD_ICON_COMM_STR_ID_137
+(139) D_BF_OSD_ICON_COMM_STR_ID_138
+(140) D_BF_OSD_ICON_COMM_STR_ID_139
+(141) D_BF_OSD_ICON_COMM_STR_ID_140
+(142) D_BF_OSD_ICON_COMM_STR_ID_141
+(143) D_BF_OSD_ICON_COMM_STR_ID_142
+(144) D_BF_OSD_ICON_COMM_STR_ID_DEGREE_MARK
+(145) D_BF_OSD_ICON_COMM_STR_ID_SPACE_MARK
+(146) D_BF_OSD_ICON_COMM_STR_ID_145
+(147) D_BF_OSD_ICON_COMM_STR_ID_146
+(148) D_BF_OSD_ICON_COMM_STR_ID_147
+(149) D_BF_OSD_ICON_COMM_STR_ID_148
+(150) D_BF_OSD_ICON_COMM_ALPHA_TRANS
+(151) D_BF_OSD_ICON_COMM_HEIGHT_MASK
+(152) D_BF_OSD_ICON_ID_CAPTURE
+(153) D_BF_OSD_ICON_ID_VIDEO
+(154) D_BF_OSD_ICON_ID_RECORDING
+
+
+枚举(枚举变量全是加类名　OsdIconComm_)
+(1) E_BF_OSD_ICON_COMM_ICON_FMT  修改为 OsdIconComm_EBfOsdIconCommIconFmt
+
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_1bit
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_2bit
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_4bit
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_8bit
+E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_16bit
+
+
+(2) E_BF_OSD_ICON_COMM_ICON_SIZE  修改为  OsdIconComm_EBfOsdIconCommIconSize
+
+E_BF_OSD_ICON_COMM_ICON_SIZE_WIDTH
+E_BF_OSD_ICON_COMM_ICON_SIZE_LINES
+E_BF_OSD_ICON_COMM_ICON_SIZE_END
+
+(3) E_BF_OSD_ICON_COMM_ICON_FORMAT  修改为  OsdIconComm_EBfOsdIconCommIconFormat
+
+E_BF_OSD_ICON_COMM_ICON_FORMAT_RGBA
+E_BF_OSD_ICON_COMM_ICON_FORMAT_16BIT
+E_BF_OSD_ICON_COMM_ICON_FORMAT_8BIT
+E_BF_OSD_ICON_COMM_ICON_FORMAT_4BIT
+E_BF_OSD_ICON_COMM_ICON_FORMAT_2BIT
+E_BF_OSD_ICON_COMM_ICON_FORMAT_1BIT
+E_BF_OSD_ICON_COMM_ICON_FORMAT_NON
+
+(4) E_BF_OSD_ICON_COMM_COMPRESS_FORMAT 修改为  OsdIconComm_EBfOsdIconCommCompressFormat
+
+E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_NONE
+E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_LZW
+E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_OTHER
+
+
+结构体
+(1) T_BF_OSD_ICON_COMM_ICON_INFO 修改为 TBfOsdIconCommIconInfo
+
+mWidth_Height  mWidthHeight
+icon_format  iconFormat
+
+(2) U_BF_OSD_ICON_COMM_ICON_NUM_FORMAT 修改为 UBfOsdIconCommIconNumFormat
+
+Compress_Flag  compressFlag
+Icon_Num_flag  iconNumFlag
+
+(3) U_BF_OSD_ICON_COMM_ICON_TABLE_ID 修改为 UBfOsdIconCommIconTableId
+
+short_data  shortData
+
+(4) T_BF_OSD_ICON_COMM_ICON_FILE_FMT 修改为 TBfOsdIconCommIconFileFmt
+
+mIcon_offset  mIconOffset
+(5) T_BF_OSD_ICON_COMM_STRING_INFO  修改为  TBfOsdIconCommIconStringInfo
+
+Icon_id_num  iconIdNum
+icon_id_list_ptr  iconIdListPtr
+
+(6) T_BF_OSD_ICON_COMM_PARAMETER4CACHE  修改为 TBfOsdIconCommParameter4cache
+
+IconKind_id  iconKindId
+compressed_size  compressedSize
+uncompressed_size  uncompressedSize
+Compress_Format_Icon_num  compressFormatIconNum
+
+(7) T_BF_OSD_ICON_COMM_STRING_FILE_FMT  修改为 TBfOsdIconCommStringFileFmt
+
+string_data_offset  stringDataOffset
+
+(8) T_BF_OSD_ICON_COMM_DRAW_ICON_INFO  修改为 TBfOsdIconCommDrawIconInfo
+
+string_iocn_pos  stringIocnPos
+icon_data  iconData
+display_window  displayWindow
+draw_flag  drawFlag
+rgba_palette_table  rgbaPaletteTable
+start_pos_is_odd  startPosIsOdd
+
+
+将全局结构体gBF_Osd_Icon_String_Table_Num　、gBF_Osd_Icon_Font_ID　、gBF_Osd_Icon_Font_Boot_ID 放入了工具类kdisputils
+
+
+
+
+
+6． osd_image.c 修改为类　Osdimage（里面没有函数）
+(1) 移动　osd_image.h　到　cpu_tkernel/basefw/fj/disp/src/osdimage.h（已经删除原本的.h）
+
+
+
+
+7． osd_image_comm.c 修改为类 osdimagecomm
+(1) 移动　osd_image_comm.h 到cpu_tkernel/basefw/fj/disp/src/osdimagecomm.h(已经删除原本的.h)
+(2) 公有函数BF_Osd_Image_Comm_Draw_Jpeg_To_HD、BF_Osd_Drawfile在汇编中调用，没有改名
+
+枚举(枚举变量名加类名前缀　OsdImageComm_)
+(1) E_BF_OSD_IMAGE_COMM_FILE_KIND  修改为OsdImageComm_EBfOsdImageCommFileKind
+
+	E_BF_OSD_IMAGE_COMM_FILE_KIND_PHOTFRAME 
+	E_BF_OSD_IMAGE_COMM_FILE_KIND_JPEG,				E_BF_OSD_IMAGE_COMM_FILE_KIND_ERROR
+
+
+
+
+
+
+8． osd_shape.c 修改为类 osdshape(里面没有函数)
+(1)移动　osd_shape.h　到 cpu_tkernel/basefw/fj/disp/src/osdshape.h（已经删除原本的.h）
+
+
+
+
+9. osd_shape_comm.c　修改为类　osdshapecomm，并拆分出类osdshapecomm1
+(1)移动　osd_shape_comm.h 到　osdshapecomm1.h
+Osdshapecomm里面
+(3) BF_Osd_Shape_Comm_Draw_Rect_GR  修改为osd_shape_comm_bf_osd_shape_comm_draw_gect_gr
+(4) BF_Osd_Shape_Comm_Draw_Triangle  修改为osd_shape_comm_bf_osd_shape_comm_draw_triangle
+(5) BF_Osd_Shape_Comm_Divide_Rect_5_Parts  修改为osd_shape_comm_bf_osd_shape_comm_divide_rect_5_parts
+(6) BF_Osd_Shape_Comm_Draw_2color_Frame  修改为
+osd_shape_comm_bf_osd_shape_comm_draw_2color_frame
+(7) BF_Osd_Shape_Comm_Draw_Circle  修改为osd_shape_comm_bf_osd_shape_comm_draw_circle
+(8) BF_Osd_Shape_Comm_drawstraight  修改为osd_shape_comm_bf_osd_shape_comm_drawstraight
+(9) BF_Osd_Shape_Comm_drawslant  修改为osd_shape_comm_bf_osd_shape_comm_drawslant
+Osdshapecomm１里面
+(1) BF_Osd_Shape_Comm_Draw_Shape_GR  修改为osd_shape_comm1_bf_osd_shape_comm_draw_shape_gr
+
+
+
+枚举(枚举变量名加类名前缀　OsdShapeComm1_)
+(1) E_BF_OSD_SHAPE_COMM_SHAPE_PARTS  OsdShapeComm1_EBfOsdShapeCommShapeParts
+	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_OUTLINE 	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_BODY	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_END
+(2) E_BF_OSD_SHAPE_COMM_ROUND_POS  OsdShapeComm1_EBfOsdShapeCommRoundPos
+
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_RIGHT_TOP	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_LEFT_TOP
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_LEFT_BOTTOM	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_RIGHT_BOTTOM
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_TOP_FRAME	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_BOTTOM_FRAME
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_LEFT_FRAME	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_RIGHT_FRAME
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_TOP_BODY	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_CENCER
+	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_BOTTOM_BODY	E_BF_OSD_SHAPE_COMM_ROUND_POS_END
+
+(3) E_BF_OSD_SHAPE_COMM_QUADRANT  OsdShapeComm1_EBfOsdShapeCommQuadrant
+
+	E_BF_OSD_SHAPE_COMM_QUADRANT_ONE	E_BF_OSD_SHAPE_COMM_QUADRANT_TWO	E_BF_OSD_SHAPE_COMM_QUADRANT_THREE
+	E_BF_OSD_SHAPE_COMM_QUADRANT_FOUR	E_BF_OSD_SHAPE_COMM_QUADRANT_ALL	
+
+(4) E_BF_OSD_SHAPE_COMM_DIV_RECT  OsdShapeComm1_EBfOsdShapeCommDivRect
+
+	E_BF_OSD_SHAPE_COMM_DIV_RECT_CENTER
+	E_BF_OSD_SHAPE_COMM_DIV_RECT_LEFT
+	E_BF_OSD_SHAPE_COMM_DIV_RECT_RIGHT
+	E_BF_OSD_SHAPE_COMM_DIV_RECT_TOP	E_BF_OSD_SHAPE_COMM_DIV_RECT_BOTTOM
+	E_BF_OSD_SHAPE_COMM_DIV_RECT_END
+
+(5) E_BF_OSD_SHAPE_COMM_DIV_DONUT_RECT  OsdShapeComm1_EBfOsdShapeCommDivDonutRect
+
+
+结构体
+(1) T_BF_OSD_SHAPE_COMM_SHAPE_INFO  TBfOsdShapeCommShapeInfo	
+(2) T_BF_OSD_SHAPE_COMM_COLOR_SHAPE_INFO  TBfOsdShapeCommColorShapeInfo
+rect_data rectData
+Color_Blending  colorBlending
+
+(3) T_BF_OSD_SHAPE_COMM_RING  TBfOsdShapeCommRing
+
+	Circle_Start1  circleStart1
+	Circle_End1  circleEnd1
+Circle_Start2  circleStart2
+	Circle_End2  circleEnd2
+
+(4) T_BF_OSD_SHAPE_COMM_ROUND_CORNER  TBfOsdShapeCommRoundCurner
+
+
+round_corner_data  roundCornerData
+circle_frame_buffer_left  circleFrameBufferLeft
+circle_frame_buffer_right  circleFrameBufferRight
+
+(5)T_REPEAT_DRAW    RepeatDraw
+
+
+
+
+10. dcf_db,c 修改为类 dcfdb,并拆分出类dcfdb1,dcfdb2,dcfdb3
+(1) 移动 dcf_db.h 到  cpu_tkernel/media_meta/dcf/src/dcfdb.h 与 dcfdb1.h
+(2) 将宏与结构体放到了dcfdbdef.h
+在dcfdb里
+(3) BF_DcfDb_Get_DuplicateNo 修改为 dcf_db_bf_dcfdb_get_duplicate_no
+(4) BF_Dcf_Db_Read_Allowed_Ext_Count  修改为dcf_db_bf_dcf_db_read_allowed_ext_count
+(5) BF_Dcf_Db_Set_Allowed_Ext_List 修改为 dcf_db_bf_dcf_db_set_allowed_ext_list
+(6) BF_Dcf_Db_Get_Type_By_Ext 修改为 dcf_db_bf_dcf_db_get_type_by_ext
+(7) BF_Dcf_Db_Get_Ext_By_Type 修改为 dcf_db_bf_dcf_db_get_ext_by_type
+(8) BF_Dcf_Db_Get_Info 修改为 dcf_db_bf_dcf_db_get_info
+(9) BF_Dcf_Db_Create_Dir 修改为 dcf_db_bf_dcf_db_create_dir
+(10) BF_Dcf_Db_Make_Dir_Path 修改为 dcf_db_bf_dcf_db_make_dir_path
+(11) BF_Dcf_Db_Make_File_Path修改为  dcf_db_bf_dcf_db_make_file_path
+(12) BF_Dcf_Db_Get_Last_File 修改为 dcf_db_bf_dcf_db_get_last_file
+(13) BF_Dcf_Db_Get_Duplicate_No 修改为 dcf_db_bf_dcf_db_get_duplicate_no
+(14) BF_Dcf_Db_Get_Hidden_No 修改为 dcf_db_bf_dcf_db_get_hidden_no
+(15) BF_Dcf_Db_Set_Prio_File_Name 修改为 dcf_db_bf_dcf_db_set_prio_file_name
+(16) BF_Dcf_Db_Set_Prio_Dir_Name 修改为 dcf_db_bf_dcf_db_set_prio_dir_name
+(17) BF_Dcf_Db_Get_Last_File_Number 修改为 dcf_db_bf_dcf_db_get_last_file_number
+(18) BF_Dcf_Db_Get_First_Free_File_No 修改为 dcf_db_bf_dcf_db_get_first_free_file_no
+(19) BF_Dcf_Db_Append_Latest_File 修改为 dcf_db_bf_dcf_db_append_latest_file
+(20) BF_Dcf_Db_Delete_File 修改为 dcf_db_bf_dcf_db_delete_file
+(21) dcf_db_bf_dcf_db_delete_file 修改为 dcf_db_bf_dcf_db_update_attr
+(22) BF_Dcf_Db_Update_Attr_Dir 修改为 dcf_db_bf_dcf_db_update_attr_dir
+(23) BF_Dcf_Db_Update_Attr_Dir_For_Stop  修改为dcf_db_bf_dcf_db_update_attr_dir_for_stop
+(24) BF_Dcf_Db_Change_File_Type_To_Char  修改为dcf_db_bf_dcf_db_change_file_type_to_char
+(25) BF_Dcf_Db_Get_Last_File_In_Db 修改为 dcf_db_bf_dcf_db_get_last_file_in_db
+(26) BF_Dcf_Db_Get_Max_Number_Linear  修改为dcf_db_bf_dcf_db_get_max_number_linear
+(27) BF_Dcf_Db_Restruct_Current_Dir_Only  修改为dcf_db_bf_dcf_db_restruct_current_dir_only
+(28) BF_Dcf_Db_Delete_Obj 修改为 dcf_db_bf_dcf_db_delete_obj
+(29) BF_Dcf_Db_Delete_Multi_Obj_In_Current_Dir  修改为dcf_db_bf_dcf_db_delete_multi_obj_in_current_dir
+
+
+
+
+在dcfdb1里面
+(30) BF_Dcf_Db_Get_Dir_No　修改为　dcf_db1_bf_dcf_db_get_dir_no
+(31) BF_Dcf_Db_Get_Obj_No　修改为　dcf_db1_bf_dcf_db_get_obj_no
+(32) BF_Dcf_Db_Make_Full_Path　修改为　dcf_db1_bf_dcf_db_make_full_path
+(33) BF_Dcf_Db_Is_File_Name　修改为　dcf_db1_bf_dcf_db_is_file_name
+(34) BF_Dcf_Db_Search_Obj_Info　修改为　dcf_db1_bf_dcf_db_search_obj_info
+(35) BF_Dcf_Db_Clear_Db_buf　修改为　dcf_db1_bf_dcf_db_clear_db_buf
+(36) BF_Dcf_Db_Clear　修改为　dcf_db1_bf_dcf_db_clear
+(37) BF_Dcf_Db_Get_Index_File_Info　修改为　dcf_db1_bf_dcf_db_get_index_file_info
+(38) BF_Dcf_Db_Get_Index_File_Type　修改为　dcf_db1_bf_dcf_db_get_index_file_type
+(39) BF_Dcf_Db_Set_Dir　修改为　dcf_db1_bf_dcf_db_set_dir
+
+
+
+在dcfdb2里面
+(40) BF_Dcf_Db_Read_Dir_Count 修改为 dcf_db2_bf_dcf_db_read_dir_count
+(41) BF_Dcf_Db_Get_Index_By_Dir 修改为 dcf_db2_bf_dcf_db_get_index_by_dir
+(42) BF_Dcf_Db_Read_Dir_Name 修改为 dcf_db2_bf_dcf_db_read_dir_name
+(43) BF_Dcf_Db_Read_Dir_Duplicatestatus  修改为dcf_db2_bf_dcf_db_read_dir_duplicatestatus
+(44) BF_Dcf_Db_Read_Dir_Date_Time 修改为 dcf_db2_bf_dcf_db_read_dir_date_time
+(45) BF_Dcf_Db_Get_Max_File_Num_As_Dir_Num  修改为dcf_db2_bf_dcf_db_get_max_file_num_as_dir_num
+(46) BF_Dcf_Db_Set_Current_Dir 修改为 dcf_db2_bf_dcf_db_set_current_dir
+(47) BF_Dcf_Db_Insert_Current_File 修改为 dcf_db2_bf_dcf_db_insert_current_file
+
+
+
+
+
+在dcfdb3里面
+
+(48) BF_Dcf_Db_Read_Obj_Count 修改为 dcf_db3_bf_dcf_read_obj_count
+(49) BF_Dcf_Db_Read_Obj_Info 修改为 dcf_db3_bf_dcf_read_obj_info
+(50) BF_Dcf_Db_Read_Obj_Name 修改为 dcf_db3_bf_dcf_read_obj_name
+(51) BF_Dcf_Db_Read_Dir_Obj_Name 修改为 dcf_db3_bf_dcf_read_dir_obj_name
+(52) BF_Dcf_Db_Get_Dir_Index_Num 修改为 dcf_db3_bf_dcf_read_dir_index_num
+(53) BF_Dcf_Db_Write_Obj_Attr 修改为 dcf_db3_bf_dcf_db_write_obj_attr
+(54) BF_Dcf_Db_Search_Obj_By_Name  修改为dcf_db3_bf_dcf_db_search_obj_by_name
+(55) BF_Dcf_Db_Read_Obj_Attr 修改为 dcf_db3_bf_dcf_db_read_obj_attr
+(56) BF_Dcf_Db_Get_Index_By_Object 修改为 dcf_db3_bf_dcf_db_get_index_by_object
+
+宏修改(原本的单词全部大写，再加上类名前缀　DcfDb3_ )
+
+结构体
+T_BF_DCF_DB_OBJ_INFO　　BfDcfDbObjInfo
+
+
+
+
+
+
+11. dcf_if,c 修改为类 dcfif,并拆分出类dcfif1
+(1) 移动 dcf_if.h 到  cpu_tkernel/media_meta/dcf/src/dcfif.h 与 dcfif1.h
+在dcfif里
+(2) BF_Dcf_If_Convert_File_Type 修改为 dcf_if_bf_dcf_if_convert_file_type
+(3) BF_Dcf_If_Get_First_Free_File_No 修改为 dcf_if_bf_dcf_if_get_first_free_file_no
+(4) BF_Dcf_If_Load_Thumb_Jpeg 修改为 dcf_if_bf_dcf_if_load_thumb_jpeg
+(5) BF_Dcf_If_Start_Div_Load_Jpeg 修改为 dcf_if_bf_dcf_if_start_div_load_jpeg
+(6) BF_Dcf_If_Start_Div_Load_Monitor 修改为 dcf_if_bf_dcf_if_start_div_load_monitor
+(7) BF_Dcf_If_Get_Div_Load_Image_Result  修改为dcf_if_bf_dcf_if_get_div_load_image_result
+(8) BF_Dcf_If_Load_Monitor_Thumb 修改为 dcf_if_bf_dcf_if_load_monitor_thumb
+(9) BF_Dcf_If_Fstat 修改为 dcf_if_bf_dcf_if_fstat
+(10) BF_Dcf_If_Format_As 修改为 dcf_if_bf_dcf_if_format_as
+(11) BF_Dcf_If_Save_Jpeg_As 修改为 dcf_if_bf_dcf_if_save_jpep_as
+(12) BF_Dcf_If_Del_Single_Obj 修改为 dcf_if_bf_dcf_if_single_obj
+
+
+(13) BF_Dcf_If_Del_All_Obj_In_Current_Dir  修改为dcf_if_bf_dcf_if_del_all_obj_in_current_dir
+(14) BF_Dcf_If_Del_All_Obj 修改为 dcf_if_bf_dcf_if_del_all_obj
+(15) BF_Dcf_If_Set_All_Obj_Attr_In_Current_Dir  修改为dcf_if_bf_dcf_if_set_all_obj_attr_in_current_dir
+(16) BF_Dcf_If_Get_File_Id  dcf_if_bf_dcf_if_get_file_id 修改为
+(17) BF_Dcf_If_Get_Series_File_No 修改为 dcf_if_bf_dcf_if_get_series_file_no
+(18) BF_Dcf_If_Get_Index_By_Dir_Name  修改为dcf_if_bf_dcf_if_get_index_by_dir_name
+(19) BF_Dcf_If_Read_Dir_Obj_Name 修改为 dcf_if_bf_dcf_if_read_dir_obj_name
+(20) BF_Dcf_If_Get_Index_By_Obj_Name  修改为dcf_if_bf_dcf_if_get_index_by_obj_name
+(21) BF_Dcf_If_Get_Ext_Name_By_Type 修改为 dcf_if_bf_dcf_if_get_ext_name_by_type
+(22) BF_Dcf_If_Get_Full_Path_By_File_Index  修改为dcf_if_bf_dcf_if_get_full_path_by_file_index
+(23) BF_Dcf_If_Get_Dir_File_Exist 修改为 dcf_if_bf_dcf_if_get_dir_file_exist
+(24) BF_Dcf_If_Del_Single_Dcf_Dir 修改为 dcf_if_bf_dcf_if_del_singie_dcf_dir
+(25) BF_Dcf_If_Del_All_Dcf_Dir 修改为 dcf_if_bf_dcf_if_del_all_dcf_dir
+(26) BF_Dcf_If_Init_Select_List 修改为 dcf_if_bf_dcf_if_init_select_list
+(27) BF_Dcf_If_Add_File_To_Select_List 修改为 dcf_if_bf_dcf_if_add_file_to_select_list
+(28) BF_Dcf_If_Remove_File_From_Select_List  修改为dcf_if_bf_dcf_if_remove_file_from_select_list
+(29) BF_Dcf_If_Execute_Multi_Delete 修改为 dcf_if_bf_dcf_if_execute_multi_delete
+
+在dcfif1里
+(30) BF_Dcf_If_Entry_Dummy 修改为 dcf_if1_bf_dcf_if_entry_dummy
+(31) BF_Dcf_If_Create_DataBase 修改为 dcf_if1_bf_dcf_if_create_database
+(32) BF_Dcf_If_Get_Index_File_Path 修改为 dcf_if1_bf_dcf_if_get_index_file_path
+(33) BF_Dcf_If_Set_Series_File_No 修改为 dcf_if1_bf_dcf_if_set_series_file_no
+(34) BF_Dcf_If_Set_Free_File_Name_As 修改为 dcf_if1_bf_dcf_if_set_free_file_name_as
+(35) BF_Dcf_If_Reset_Db 修改为 dcf_if1_bf_dcf_if_reset_db
+(36) BF_Dcf_If_Read_Dir_Total_Count 修改为 dcf_if1_bf_dcf_if_reset_dir_total_count
+(37) BF_Dcf_If_Read_Dir_Name 修改为 dcf_if1_bf_dcf_if_read_dir_name
+(38) BF_Dcf_If_Read_Dir_Duplicate_Status  修改为dcf_if1_bf_dcf_if_read_dir_duplicate_status
+(39) BF_Dcf_If_Get_Max_File_Num_As_Dir_Num  修改为dcf_if1_bf_dcf_if_get_max_file_num_as_dir_num
+(40) BF_Dcf_If_Set_Current_Dir 修改为 dcf_if1_bf_dcf_if_set_current_dir
+(41) BF_Dcf_If_Get_Dir_Index 修改为 dcf_if1_bf_dcf_if_get_dir_index
+(42) BF_Dcf_If_Read_Obj_Count 修改为 dcf_if1_bf_dcf_if_read_obj_count
+(43) BF_Dcf_If_Read_Obj_Name 修改为 dcf_if1_bf_dcf_if_read_obj_name
+(44) BF_Dcf_If_Read_Obj_Info 修改为 dcf_if1_bf_dcf_if_read_obj_info
+(45) BF_Dcf_If_Write_Obj_Attr 修改为 dcf_if1_bf_dcf_if_write_obj_attr
+(46) BF_Dcf_If_Set_Allowed_Ext_List 修改为 dcf_if1_bf_dcf_if_set_allowed_ext_list
+(47) BF_Dcf_If_Read_Allowed_Ext_Count  修改为dcf_if1_bf_dcf_if_read_allowed_ext_count
+(48) BF_Dcf_If_Is_File_Type 修改为 dcf_if1_bf_dcf_if_is_file_type
+(49) BF_Dcf_If_Get_Obj_Info 修改为 dcf_if1_bf_dcf_if_get_obj_info
+(50) BF_Dcf_If_Create_Dir 修改为 dcf_if1_bf_dcf_if_create_dir
+(51) BF_Dcf_If_Get_Dcf_Key 修改为 dcf_if1_bf_dcf_if_get_dcf_key
+(52) BF_Dcf_If_Set_Dir_Db 修改为 dcf_if1_bf_dcf_if_set_dir_db
+(53) BF_Dcf_If_Get_Exif_Info_Jpeg_Name  修改为dcf_if1_bf_dcf_if_get_exif_info_jpep_name
+(54) BF_Dcf_If_Get_Type_By_Ext_Name  修改为dcf_if1_bf_dcf_if_get_type_by_ext_name
+(55) BF_Dcf_If_Make_New_File_Path 修改为 dcf_if1_bf_dcf_if_make_new_file_path
+(56) BF_Dcf_If_Make_New_Thm_File_Path  修改为dcf_if1_bf_dcf_if_make_new_thm_file_path
+(57) BF_Dcf_If_Updata_File 修改为 dcf_if1_bf_dcf_if_updata_file
+(58) BF_Dcf_If_End_Task_Mdf 修改为 dcf_if1_bf_dcf_if_end_task_mdf
+(59) BF_Dcf_If_Set_Cur_Drive 修改为 dcf_if1_bf_dcf_if_set_cur_drive
+(60) BF_Dcf_If_Get_Entry 修改为 dcf_if1_bf_dcf_if_get_entry
+(61) BF_Dcf_If_Get_File_Info 修改为 dcf_if1_bf_dcf_if_get_file_info
+(62) BF_Dcf_If_Get_Last_File_Number 修改为 dcf_if1_bf_dcf_if_get_last_file_number
+(63) BF_Dcf_If_Get_Exif_Info_Jpeg 修改为 dcf_if1_bf_dcf_if_get_exif_info_jpeg
+
+
+宏名全部加类名前缀（DcfIf1_）
+改大小写的宏
+dcf_if_assert　　　　DcfIf1_DCF_IF_ASSERT
+dcf_if_bf_dcf_if_assert　　　	DcfIf1_DCF_IF_BF_DCF_IF_ASSERT
+
+枚举变量全部加类名前缀（DcfIf1_），下面是枚举名修改
+(1) E_BF_DCF_IF_EXPOSURE  DcfIf1_EBfDcfIfExposure
+(2) E_BF_DCF_IF_METERING  DcfIf1_EBfDcfIfMetering
+(3) E_BF_DCF_IF_WB  DcfIf1_EBfDcfIfWb
+(4) E_BF_DCF_IF_SCENE  DcfIf1_EBfDcfIfScene
+(5) E_BF_DCF_IF_FILE_TYPE  DcfIf1_EBfDcfIfFileType
+(6) E_BF_DCF_IF_FILE_INDEX_TYPE  DcfIf1_EBfDcfIfFileIndexType
+(7) E_BF_DCF_IF_ATTR  DcfIf1_EBfDcfIfAttr
+(8) E_BF_DCF_IF_DUPLICATION_STATUS  DcfIf1_EBfDcfIfDuplicationStatus
+(9) E_BF_DCF_IF_OPTION_FILE  DcfIf1_EBfDcfIfOptionFile
+(10) E_BF_DCF_IF_ROTATE  DcfIf1_EBfDcfIfRotate
+(11) E_BF_DCF_IF_DPOF_SET  DcfIf1_EBfDcfIfDpofSet
+(12) E_BF_DCF_IF_DPOF_INDEX  DcfIf1_EBfDcfIfDpofIndex
+(13) E_BF_DCF_IF_DPOF_SIZE  DcfIf1_EBfDcfIfDpofSize
+(14) E_BF_DCF_IF_JPEG_FORMAT  DcfIf1_EBfDcfIfJpegFormat
+(15) E_BF_DCF_IF_REMOVE_FLG  DcfIf1_EBfDcfIfRemoveFlg
+(16) E_BF_DCF_IF_FILE_NAME  DcfIf1_EBfDcfIfFileName
+(17) E_BF_DCF_IF_QT_TYPE  DcfIf1_EBfDcfIfQtType
+(18) E_BF_DCF_IF_LATEST_TYPE  DcfIf1_EBfDcfIfLatestType
+(19) E_BF_DCF_IF_CREATE  DcfIf1_EBfDcfIfCreate
+(20) E_BF_DCF_IF_UPDATE_KIND  DcfIf1_EBfDcfIfUpdateKind
+(21) E_BF_DCF_IF_MPF_EXT_MP_SELECT  DcfIf1_EBfDcfIfMpfExtMpSelect
+(22) E_BF_DCF_IF_APP11_FLG  DcfIf1_EBfDcfIfApp11Flg
+(23) E_BF_DCF_IF_DATA_TYPE  DcfIf1_EBfDcfIfDataType
+
+
+
+结构体
+(1) T_BF_DCF_IF_FILE_INDEX  BfDcfIfFileIndex
+
+obj_index   objIndex
+dir_index   dirIndex
+
+(2) T_BF_DCF_IF_DCFDB_OBJ_INFO BfDcfIfDcfdbObjInfo
+(3) T_BF_DCF_IF_DATE BfDcfDcfIfDate
+
+ad_year   adYear
+
+(4) T_BF_DCF_IF_FRACTION  BfDcfDcfIfFraction
+(5) T_BF_DCF_IF_SFRACTION  BfDcfDcfIfSfraction
+(6) T_BF_DCF_IF_GPS  BfDcfDcfIfGps
+
+latitude_ref  latitudeRef
+longitude_ref  longitudeRef
+img_direction_ref  imgDirectionRef
+img_direction  imgDirection
+
+
+(5) T_BF_DCF_IF_EXIF_INFO  BfDcfDcfIfExifInfo
+
+exposure_time    exposureTime
+f_value   fValue
+exposure_prog    exposureProg
+shutter_speed  shutterSpeed
+max_aperture  maxAperture
+light_source  lightSource
+dzoom_ratio  dzoomRatio
+focal_length  focalLength
+maker_note_length  makerNoteLength
+qvga_enable  qvgaEnable
+
+(6) T_BF_DCF_IF_DPOF_INFO  BfDcfIfDpofInfo
+
+dpof_set   dpofSet
+dpof_sheets  dpofSheets
+dpof_index  dpofIndex
+dpof_size   dpofSize
+
+
+(7) T_BF_DCF_IF_FILE_INFO   BfDcfIfFileInfo
+
+media_type  mediaType
+dir_no  dirNo
+file_no  fileNo
+file_char  fileChar
+file_type   fileType
+file_attr   fileAttr
+option_file   optionFile
+dpof_info   dpofInfo
+jpeg_format   jpegFormat
+file_dupstatus   fileDupstatus
+
+
+(8) T_BF_DCF_IF_EXT_MP_IMAGE_DETAIL  BfDcfIfExtMpImageDetail
+
+main_width  mainWidth
+main_lines   mainLines
+ycc_format   yccFormat
+ycc_format_thum  yccFormatThum
+class1_width  class1Width
+class1_lines  class1Lines
+class1_ycc_format  class1YccFormat
+class2_width  class2Width
+class2_lines  class2Lines
+class2_ycc_format  class2YccFormat
+(9) T_BF_DCF_IF_IMAGE_DETAIL  BfDcfIfImageDetail
+
+file_info  fileInfo
+rotate_thumb   rotateThumb
+edit_date_time  editDateTime
+maker_note_offset  makerNoteOffset
+date_time1   dateTime1
+byte_order   byteOrder
+firstIFD_flg  firstIFDFlg
+exiftag_flg  exiftagFlg
+baseline_mp_flag  baselineMpFlag
+ext_mp  extMp
+ext_mp_num  extMpNum
+extended_mp_flag  extendedMpFlag
+extended_mp_type  extendedMpType
+gpstag_flg  gpstagFlg
+app11_flg  app11Flg
+
+
+(10) T_BF_DCF_IF_SCREEN_DATA  BfDcfIfScreenData
+
+screen_addr  screenAddr
+screen_size  screenSize
+thumb_addr   thumbAddr
+thumb_size  thumbSize
+screen_width   screenWidth
+screen_lines   screenLines
+
+
+(11) T_BF_DCF_IF_EXT_MP_DATA  BfDcfIfExtMpData
+
+main_addr   mainAddr
+main_size  	mainSize
+exif_info   exifInfo
+screen_data1  screenData1
+screen_data2  screenData2
+
+
+(12) T_BF_DCF_IF_JPEG_DATA    BfDcfIfJpegData
+
+jpg_idx   jpgIdx
+mp_type  mpType
+
+
+(13) T_BF_DCF_IF_RAW_DATA  BfDcfIfRawData
+
+data_type  dataType
+main_idx  mainIdx
+
+
+(14) T_BF_DCF_IF_THM_DATA  BfDcfIfThmData
+
+thm_file_path  thmFilePath
+
+
+(15) T_BF_DCF_IF_DEBUG_DATA   BfDcfIfDebugData
+
+(16) T_BF_DCF_IF_CLOSE_DATA  BfDcfIfCloseData
+
+file_index  fileIndex
+file_id   fileId
+remove_flg   removeFlg
+
+
+(17) T_BF_DCF_IF_IMAGE_LOAD_DATA  BfDcfIfImageLoadData
+
+img_addr  imgAddr
+img_size   imgSize
+file_offset   fileOffset
+
+(18) T_BF_DCF_IF_OPEN_FILE_DATA   BfDcfIfOpenFileData
+(19) T_BF_DCF_IF_RESIZE_PARAM  BfDcfIfResizeParam
+
+jpeg_addr  jpegAddr
+jpeg_size   jpegSize
+create_flg  createFlg
+copy_flag  copyFlag
+class1_size  class1Size
+class1_addr  class1Addr
+class1_thumb_size  class1ThumbSize
+class1_thumb_addr  class1ThumbAddr
+class2_size  class2Size
+class2_addr  class2Addr
+class2_thumb_size  class2ThumbSize
+class2_thumb_addr  class2ThumbAddr
+
+(20) T_BF_DCF_IF_ROTATE_PARAM  BfDcfIfRotateParam
+
+(21) T_BF_DCF_IF_DEL_DATA  BfDcfIfDelData
+(22) T_BF_DCF_IF_DEL_SELECT_LIST  BfDcfIfDelSelectList
+
+sel_num  selNum
+sel_list  selList
+
+
+(23) T_BF_DCF_IF_DEL_SELECT  BfDcfIfDelSelect
+
+p_select_list  pSelectList
+select_num   selectNum
+
+(24) T_BF_DCF_IF_ATTR_DATA  BfDcfIfAttrData
+(25) T_BF_DCF_IF_ATTR_SELECT_LIST  BfDcfIfAttrSelectList
+(26) T_BF_DCF_IF_ATTR_ALL_DATA  BfDcfIfAttrAllData
+
+all_attr    allAttr
+
+(27) T_BF_DCF_IF_ATTR_IDX_TYPE_DATA  BfDcfIfAttrIdxTypeData
+
+file_idx_type  fileIdxType
+
+(28) T_BF_DCF_IF_DPOF_IMG_DATA  BfDcfIfDpofImgData
+(29) T_BF_DCF_IF_DPOF_PARAM_DATA   BfDcfIfDpofParamData
+
+job_id  jobId
+param_id   paramId
+
+
+(30) T_BF_DCF_IF_DPOF_STD_DATA   BfDcfIfDpofStdData
+(31) T_BF_DCF_IF_DPOF_STD_SELECT_LIST  BfDcfIfDpofStdSelectList
+(32) T_BF_DCF_IF_DPOF_STD_ALL_DATA  BfDcfIfDpofStdAllData
+(33) T_BF_DCF_IF_DPOF_SIZ_DATA  BfDcfIfDpofSizData
+(34) T_BF_DCF_IF_DPOF_SIZ_SELECT_LIST  BfDcfIfDpofSizSelectList
+(35) T_BF_DCF_IF_DPOF_SIZ_ALL_DATA  BfDcfIfDpofSizAllData
+(36) T_BF_DCF_IF_DPOF_FILE  BfDcfIfDpofFile
+(37) T_BF_DCF_IF_DPOF_HDR_PARAM  BfDcfIfDpofHdrParam
+
+hdr_param_id   hdrParamId
+
+(38) T_BF_DCF_IF_INDEX_FILE_DATA  BfDcfIfIndexFileData
+(39) T_BF_DCF_IF_FILE_NAME  BfDcfIfFileName
+
+file_name  fileName
+(40) T_BF_DCF_IF_FREE_FILE_NAME  BfDcfIfFreeFileName
+
+check_dir  checkDir
+free_char  freeChar
+
+
+(41) T_BF_DCF_IF_LOAD_EXT_MP_IMAGE_DATA  BfDcfIfLoadExtMpImageData
+
+main_offset  mainOffset
+thumb_offset  thumbOffset
+class1_offset  class1Offset
+class1_thumb_offset  class1ThumbOffset
+class2_offset  class2Offset
+class2_thumb_offset  class2ThumbOffset
+
+
+(42) T_BF_DCF_IF_LOAD_IMAGE_DATA  BfDcfIfLoadImageData
+
+(43) T_BF_DCF_IF_INDEX_LIST  BfDcfIfIndexList
+
+search_index  searchIndex
+index_list_num  indexListNum
+index_list_addr  indexListAddr
+
+(44) T_BF_DCF_IF_COPY_DATA  BfDcfIfCopyData
+
+tgt_index  tgtIndex
+dst_media  dstMedia
+load_addr  loadAddr
+load_area_size  loadAreaSize
+
+
+(45) T_BF_DCF_IF_JPEG_QT  BfDcfIfJpegQt
+
+qt_flg_y  qtFlgY
+qt_y   qtY
+qt_flg_cb  qtFlgCb
+qt_cb  qtCb
+qt_flg_cr   qtFlgCr
+qt_cr   qtCr
+
+
+(46) T_BF_DCF_IF_GET_QT_DATA  BfDcfIfGetQtData
+qt_type  qtType
+(47) T_BF_DCF_IF_FSTAT_DATA  BfDcfIfFstatData
+
+file_size  fileSize
+
+
+(48) T_BF_DCF_IF_INDEX_FILE_NAME  BfDcfIfIndexFileName
+
+file_path  filePath
+
+
+(49) T_BF_DCF_IF_LIST  BfDcfIfList
+(50) T_BF_DCF_IF_QUEUE  BfDcfIfQueue
+(51) T_BF_DCF_IF_SET_CUR_DIR  BfDcfIfSetCurDir
+
+act_mode  actMode
+
+(52) T_BF_DCF_IF_WRT_OBJ_ATTR  BfDcfIfWrtObjAttr
+(53) T_BF_DCF_IF_CREATE_CUR_DIR  BfDcfIfCreateCurDir
+(54) T_BF_DCF_IF_DB_INFO   BfDcfIfDbInfo
+
+ret_ercd  retErcd
+p_dirCnt  pDirCnt
+p_date   pDate
+p_time   pTime
+p_sec10m  pSec10m
+p_dirIndex  pDirIndex
+p_objectCnt  pObjectCnt
+p_extType  pExtType
+p_attr  pAttr
+
+
+(55) T_BF_DCF_IF_FSTAT  BfDcfIfFstat
+
+fsif_stat  fsifStat
+
+
+
+(56) T_BF_DCF_IF_DIR_FILE_EXIST  BfDcfIfDirFileExist
+
+file_exist_flag  fileExistFlag
+
+(57) T_BF_DCF_IF_MAKE_THM_FILE_PATH_PARAM  BfDcfIfMakeThmFilePathParam
+main_filepath  mainFilepath
+(58) T_BF_DCF_IF_YEAR_MONTH  BfDcfIfYearMonth
+(59) T_BF_DCF_IF_GET_DATE_IDX_BY_FILE_NUM   BfDcfIfGetDateIdxByFileNum
+
+dcf_root_dir_name  dcfRootDirName
+DirNum  dirNum
+FileNum  fileNum
+(60) T_BF_DCF_IF_UPDATA_FILE  BfDcfIfUpdataFile
+(61) T_BF_DCF_IF_WRITE_FILTER_ATTR  BfDcfIfWriteFilterAttr
+
+filter_attr   filterAttr
+
+(62) T_BF_DCF_IF_UPDATE_FILTER_ATTR  BfDcfIfUpdateFilterAttr
+
+DateIndex   dateIndex
+
+
+
+12.工具类dcfdbutils中
+(1).变量的改变
+g_bf_dcf_db_dir_name_dcf       gBfDcfDbDirNameDcf
+S_G_BF_DCF_DB_LATEST_DIR_NUM    gBfDcfDbLatestDirNum
+S_G_BF_DCF_DB_FILE_NAME_STILL    gBfDcfDbFileNameStill
+S_G_BF_DCF_DB_DIR_TBL					gBfDcfDbDirTbl
+S_G_BF_DCF_DB_DUPLICATE_DIR_NUM   gBfDcfDbDuplicateDirNum
+S_G_BF_DCF_DB_HIDDEN_DIR_NUM   gBfDcfDbHiddenDirNum
+S_G_BF_DCF_DB_DB_BUF_TBL         gBfDcfDbDbBufTbl
+S_G_BF_DCF_DB_CURRENT_DB      gBfDcfDbCurrentDb
+S_G_BF_DCF_DB_CASH1_DB        gBfDcfDbCash1Db
+S_G_BF_DCF_DB_CASH2_DB       gBfDcfDbCash2Db
+S_G_BF_DCF_DB_FILE_NUM_AS_DIR_NUM   gBfDcfDbFileNumAsDirNum
+S_G_BF_DCF_DB_OBJ_TBL     gBfDcfDbObjTbl
+
+(2)所创get方法全是在变量名前加类名＋get（dcf_db_utils_get_）
+(3)所创set方法全是在变量名前加类名＋set（dcf_db_utils_set_）
+
+
+13.工具类kdisputils中
+(1).变量的改变
+gBF_Osd_Histogram_Comm_HDMI_Hist_Attr      gBfOsdHistogramCommHdmlHistAttr
+gBF_Osd_Histogram_Comm_LCD_Hist_Attr    gBfOsdHistogramCommLcdHistAttr
+gBF_Osd_Icon_String_Table_Num    gBfOsdIconStringTableNum
+gBF_Osd_Icon_Font_ID    gBfOsdIconFontId
+gBF_Osd_Icon_Font_Boot_ID      gBfOsdIconFontBootId
+
+
+(2)所创get方法全是在变量名前加类名＋get（k_disp_utils_get_）
+(3)所创set方法全是在变量名前加类名＋set（k_disp_utils_set_）
+
+
+

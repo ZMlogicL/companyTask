@@ -1,0 +1,156 @@
+修改包含的头文件名：
+disp.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+fb_disp.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+hdmi.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+mipi.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+osd_icon_comm.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+play_macro_wrap.h
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+bf_startup.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+interrupt.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+ct_im_disp.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp2.h"
+#include "../../ImageMacro/src/imdisp3.h"
+#include "../../ImageMacro/src/imdisp4.h"
+#include "../../ImageMacro/src/imdisp5.h"
+#include "../../ImageMacro/src/imdisp6.h"
+#include "../../ImageMacro/src/imdisp7.h"
+#include "../../ImageMacro/src/imdisp8.h"
+ct_im_hdmi.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp8.h"
+ct_im_mipi.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp8.h"
+im_hdmi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+im_mipi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_disp.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_hdmi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_mipi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+sdram_map_common.h
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp8.h"
+user_utility_disp.c
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp8.h"
+
+
+
+ct_im_disp.c
+8588
+// im_disp_param_check_ctrl_osd_layer  修改为：// imDispParamCheckCtrlOsdLayer
+
+修改的公有方法名：
+imdisp1
+Im_DISP_Ctrl_Output   修改为： im_disp1_ctrl_output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

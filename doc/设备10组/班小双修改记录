@@ -1,0 +1,86 @@
+创建类WavLib
+将WAVPROP结构体放在WavLib类公有结构体里面
+int wav_parse(FW_CHAR * file,WAVPROP * oWavProp) 修改为kint wav_lib_parse(WavLib* self,FW_CHAR * file)
+
+创建类TiffLib
+将TIFFPROP结构体放在TiffLib类公有结构体里面
+int tiff_parse(char * file,TIFFPROP* poTiffProp)修改为kint tiff_lib_parse(TiffLib* self,kchar * file);
+
+创建类Mp3Lib
+将MP3PROP结构体放在Mp3Lib类公有结构体里面
+void  mp3_parse(FW_CHAR * file,MP3PROP *omp3Prop)修改为void   mp3_lib_parse(Mp3Lib* self,FW_CHAR* file);
+
+创建类MovLib
+修改宏定义的命名规范
+枚举变量MOV_ATOM_TYPE修改为MovLibAtomType
+枚举变量MOV_MINF_STREAM_TYPE修改为MovLibMinfStreamType
+结构体MOV放在私有结构体里面
+int mov_parse(FW_CHAR * file,MOVPROP *oMOVProp)改成kint mov_lib_parse(MovLib* self,FW_CHAR * file,MovLibProp *oMovProp);
+MOV* mov_new(char * file)修改成MovLib*  mov_lib_new(kchar * file);
+void mov_del(void)修改成void   mov_lib_del(MovLib* self);
+
+创建类JfifLib
+将JFIFPROP结构体放在JfifLib公有结构体里面
+void jfif_parse(char* file,JFIFPROP* oJFIFProp)修改成void jfif_lib_parse(JfifLib* self,kchar * file)
+
+创建类GifLib
+将GIFPROP放在GifLib公有结构体里面
+int gif_parse(char* file,GIFPROP* poGIFProp)改成kint gif_lib_parse(GifLib* self,kchar* file);
+
+创建类BmpLib
+将BMPPROP放在BmpLib公有结构体里面
+int bmp_parse(char* file,BMPPROP* bmpProp)改成kint bmp_lib_parse(BmpLib* self,kchar* file);
+
+创建类AviLib
+修改宏定义的命名规范
+枚举变量AVI_FOURCC_TYPE修改为AviLibFourccType
+结构体AVIPROP修改为AviLibProp
+结构体AVIHEADER改为AviLibHeader
+结构体AVI放在私有结构体里面
+int avi_parse(FW_CHAR * file,AVIPROP *oAVIProp)改成int    avi_lib_parse(AviLib* self,FW_CHAR * file, AviLibProp *oAviProp);
+AVI* avi_new(char * file)修改成AviLib* avi_lib_new(char * file);
+void avi_del(void)修改成void avi_lib_del(AviLib* self);
+
+将USBHDC_Dev_Api.c和USBHDC_Dev_Api.h拆成7个类
+HdcDev_PowerOnDevice ：usb_device_hardware_hdcdev_poweron_device(UsbDeviceHardware* self)
+ HdcDev_InitializeDevice： usb_device_hardware_hdcdev_initialize_device(UsbDeviceHardware* self);
+ HdcDev_PowerOffDevice： usb_device_hardware_hdcdev_poweroff_device(UsbDeviceHardware* self);
+ HdcDev_Initialize：        usb_device_driver_initialize(UsbDeviceDriver* self);
+ HdcDev_InitializeDriver：  usb_device_driver_hdcdev_initialize_driver(UsbDeviceDriver* self,void *pAllocTop, unsigned long allocSize)
+ HdcDev_UninitializeDriver： usb_device_driver_hdcdev_uninitialize_driver(UsbDeviceDriver* self)
+ HdcDev_Uninitialize：      usb_device_driver_uninitialize(UsbDeviceDriver* self)
+ HdcDev_CheckConnect： usb_device_driver_check_connect(UsbDeviceDriver* self, unsigned char chatteringFlag)
+ HdcDev_PhyConnect： usb_device_driver_phy_connect(UsbDeviceDriver* self)
+ HdcDev_PhyDisconnect： usb_device_driver_phy_disconnect(UsbDeviceDriver* self)
+ HdcDev_EntryCallback：usb_device_driver_hdcdev_entry_callback(UsbDeviceDriver* self,unsigned char callbackId, void* pCallback);
+HdcDev_StartFunction：usb_device_driver_start_function(UsbDeviceDriver* self);
+HdcDev_GetDeviceState：usb_device_driver_get_device_state(UsbDeviceDriver* self);
+HdcDev_GetBusSpeed：usb_device_driver_get_device_state(UsbDeviceDriver* self);
+HdcDev_GetDeviceRequest：usb_device_driver_get_device_request(UsbDeviceDriver* self);
+HdcDev_GetConfiguredNumber：usb_device_driver_get_configured_number(UsbDeviceDriver* self, unsigned char *configNo);
+HdcDev_EntryDescriptor：usb_dev_descriptor_hdcdev_entry_descriptor(UsbDevDescriptor* self, unsigned char descriptorType,unsigned char *pDescriptor, unsigned char busSpeed, unsigned short index);
+HdcDev_SetInTransferData：in_or_out_transfer_set_in_transfer_data(InOrOutTransfer*self...
+HdcDev_GetOutTransferData：in_or_out_transfer_get_out_transfer_data(InOrOutTransfer*self... 
+HdcDev_StopTransfer：in_or_out_transfer_stop_transfer(InOrOutTransfer*self...
+HdcDev_GetOutTransactionDataSize：in_or_out_transfer_get_out_transaction_data_size
+HdcDev_GetTransferredDataSize：in_or_out_transfer_get_transferred_data_size
+HdcDev_GetTransferredState：in_or_out_transfer_get_transferred_state
+HdcDev_SetEpBufferNum：endpoint_buffer_hdcdev_set_ep_buffer_num
+HdcDev_ClearEpBuffer：endpoint_buffer_clear_ep_buffer
+HdcDev_IsEpBufferEmpty：endpoint_buffer_is_ep_buffer_empty
+HdcDev_SetEndpointHalt：endpoint_buffer_set_endpoint_halt
+HdcDev_IsEndpointHalt：endpoint_buffer_is_endpoint_halt
+HdcDev_SetupDma：dma_transfer_setup_dma
+HdcDev_StartDmaTransfer：dma_transfer_start_dma_transfer
+HdcDev_StopDmaTransfer：dma_transfer_stop_dma_transfer
+HdcDev_GetDmaTransferredState：dma_transfer_get_dma_transferred_state
+HdcDev_SetEpIntEnable：device_interrupt_set_ep_int_enable
+HdcDev_GetInterruptEp：device_interrupt_get_interrupt_ep
+HdcDev_SetNackResponse：device_interrupt_set_nack_response
+HdcDev_SetNullResponse：device_interrupt_set_null_response
+HdcDev_IntHandler：device_interrupt_int_handler
+结构体改名：
+DEV_REQUEST_INFO：UsbDeviceDriverDevRequestInfo
+USB_REQUEST：UsbDeviceDriverUsbRequest
+TRANSFER_INFO：InOrOutTransferTransferInfo
+DMA_TRANSFER_INFO：DmaTransferInfo

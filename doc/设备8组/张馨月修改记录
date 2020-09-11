@@ -1,0 +1,71 @@
+1）ct_im_iip_gpc.c  target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_im_iip_gpc.c
+	建立对应类
+	ct_im_iip_gpc 	CtImIipGpc
+					CtImIipGpc1
+					CtImIipGpc2
+    被外部调用公有函数名字修改 
+    CT_Im_IIP_Run_13_1	ct_im_iip_gpc_run_13_1
+
+ 2）ct_im_bmh.c   target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_im_bmh.c
+ 	建立对应类
+ 	ct_im_bmh		ctImBmh
+ 					ctImBmh1
+ 					ctImBmh2
+ 					ctImBmh3
+ 					ctImBmh4
+ 					ctImBmh5
+ 					ctImBmh6
+ 					ctImBmh7
+ 					ctImBmh8
+
+	回调方法改名
+	ct_im_bmh_callback	ctImBmh1Callback_cb
+	bmh_callback_output_result  bmhCallbackOutputResult_cb				 
+
+3) ct_im_ela.c  target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_im_ela.c
+ 	建立对应类
+ 	ct_im_ela		ctImEla
+ 					ctImEla1
+ 					ctImEla2
+ 					ctImEla3
+ 					ctImEla4
+ 					ctImEla5
+ 					ctImEla6
+ 	
+	被外部调用公有函数名字修改 
+    CT_Im_Ela_Reg_Print	ct_im_ela_reg_print
+	CT_Im_Ela_2_01		ct_im_ela3_2_01
+	CT_Im_Ela_2_02		ct_im_ela3_2_02			
+	CT_Im_Ela_2_03		ct_im_ela3_2_03
+	CT_Im_Ela_2_04		ct_im_ela3_2_04
+	CT_Im_Ela_2_05		ct_im_ela3_2_05
+	CT_Im_Ela_2_06		ct_im_ela3_2_06
+	CT_Im_Ela_2_07		ct_im_ela3_2_07
+	CT_Im_Ela_2_08		ct_im_ela3_2_08
+	CT_Im_Ela_2_09		ct_im_ela4_2_09
+	CT_Im_Ela_2_10		ct_im_ela4_2_10
+	CT_Im_Ela_2_11		ct_im_ela4_2_11
+	CT_Im_Ela_2_12		ct_im_ela4_2_12
+	CT_Im_Ela_2_13		ct_im_ela4_2_13
+	CT_Im_Ela_2_14		ct_im_ela4_2_14
+	CT_Im_Ela_2_15		ct_im_ela4_2_15
+	CT_Im_Ela_2_16		ct_im_ela4_2_16
+	CT_Im_Ela_2_17		ct_im_ela5_2_17	
+	CT_Im_Ela_2_18		ct_im_ela5_2_18
+	CT_Im_Ela_2_19		ct_im_ela5_2_19
+	CT_Im_Ela_2_20		ct_im_ela5_2_20
+	CT_Im_Ela_2_21		ct_im_ela5_2_21
+	CT_Im_Ela_2_22		ct_im_ela5_2_22
+	CT_Im_Ela_2_23		ct_im_ela5_2_23
+	CT_Im_Ela_2_24		ct_im_ela5_2_24
+
+	被调用宏名字修改
+	S_SDRAM_ELA_SIZ_4K2K		CtImEla_S_SDRAM_ELA_SIZ_4K2K		
+    S_SDRAM_ELA_NOISE_SUPPRESS	CtImEla_S_SDRAM_ELA_NOISE_SUPPRESS
+	S_SDRAM_ELA_EXTRACT_NOISE	CtImEla_S_SDRAM_ELA_EXTRACT_NOISE
+	S_SDRAM_ELA_OUT_BAYER		CtImEla_S_SDRAM_ELA_OUT_BAYER
+	S_SDRAM_ELA_ADR_IN_BAYER	CtImEla_S_SDRAM_ELA_ADR_IN_BAYER
+	S_SDRAM_ELA_ADR_NOISE_SUPPRESS	CtImEla_S_SDRAM_ELA_ADR_NOISE_SUPPRESS
+	S_SDRAM_ELA_ADR_EXTRACT_NOISE	CtImEla_S_SDRAM_ELA_ADR_EXTRACT_NOISE
+	S_SDRAM_ELA_ADR_OUT_BAYER	CtImEla_S_SDRAM_ELA_ADR_OUT_BAYER
+

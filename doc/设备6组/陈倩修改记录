@@ -1,0 +1,410 @@
+1、创建一个新类r2ytest
+2、移植CheckHeaderMain.c里面的r2y_test函数到r2ytest里面
+3、将r2ytest拆分为r2ytest1、r2ytest2、r2ytest3。
+4、屏蔽CheckHeaderMain.c里面的r2y_test函数.
+5、修改r2ytest函数里面的调用函数
+
+
+1、在MILB_Header/Project/Peri/src目录下新建一个新类 audioif
+2、将_audio_if.h、audio_if.c里面的代码移到 audioif 里面
+3、将audio_if.h里面的头文件_audio_if.h修改为audioif.h
+4、注释_audio_if.h里面的代码
+5、将Makefile里CSRC := audio_if.c修改为CSRC := audioif.c
+6、将audio_if.c代码移植到audioif.c里
+7、注释audio_if.c里面的代码
+8、在common.mk里面添加audioif.c的路径
+9、将audio_if.h中#include"_audio_if“修改为#include "../Project/Peri/src/audioif.h"
+
+
+1、新建类khdmac
+2、移植_hdmac.h、hdmac.c到khdmac.h、khdmac.c
+3、注释_hdmac.h、hdmac.c代码
+4、修改makefile里面的编译文件（hdmac-khdmac）
+5、将peripheral.h里面的头文件#include"_hdmac.h"修改为#include    "../Project/Peri/src/khdmac.h"
+
+
+1、新建类kjmiluart
+2、移植_jmiluart.h、_jmiluart.c代码到kjmiluart.h、kjmiluart.c
+3、注释_jmiluart.h、_jmiluart.c代码
+4、修改makefile里面的编译文件（jmiluart.c-kjmiluart.c）
+5、将uart_csio.h里面的头文件#include"_jmiluart.h"修改为#include	"../Project/Peri/src/kjmiluart.h"
+
+
+1、按照规范修改r2test、r2test1、r2test2、r2test3的变量以及宏
+2、新建类kpdm
+3、移植_pdm.h、pdm.c代码到kpdm.h、pdm.c
+4、注释_pdm.h、pdm.c代码
+5、修改makefile里面的编译文件（pdm.c-kpdm.c）
+6、将pdm.h里面的头文件#include "_pdm.h"修改为#include "../Project/Peri/src/kpdm.h"
+
+
+1、新建类kperipheral
+2、移植_peripheral.h、_peripheral.c代码到kperipheral.h、kperipheral.c
+3、注释peripheral.c、_peripheral.h代码
+4、修改makefile里面的编译文件（peripheral.c-kperipheral.c）
+5、将peripheral.h里面的头文件#include"_peripheral.h"修改为#include	"../Project/Peri/src/kperipheral.h"
+
+
+1、新建类kslimbus
+2、移植_slimbus.h、slimbus.c代码到kslimbus.h、kslimbus.c
+3、注释_slimbus.h、kslimbus.c代码
+4、修改makefile里面的编译文件（slimbus.c-kslimbus.c）
+5、在_slimbus.h里面包上头文件#include "../Project/Peri/src/kslimbus.h"
+
+
+1、新建类kspi
+2、移植_spi.h、spi.c代码到kspi.h、kspi.c
+3、注释spi.c、_spi.h代码
+4、修改makefile里面的编译文件（spi.c-kspi.c）
+5、将spi.h里面的头文件#include"_spi.h"修改为#include	"../Project/Peri/src/kspi.h"
+
+
+1、在MILB_Header/Project/Image/src目录下新建类jdsb2rf2e
+2、移植jdsb2r_f2e.c、_jdsb2r_f2e.h里的代码移植到jdsb2rf2e.c、jdsb2rf2e.h中
+3、注释jdsb2r_f2e.c、_jdsb2r_f2e.h的代码
+4、修改Makefile里面的编译文件（jdsb2r_f2e.c-jdsb2rf2e.c）
+5、将jdsb2r.h里面的头文件#include	"_jdsb2r_f2e.h"修改为#include	"../Project/Image/src/jdsb2rf2e.h"
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdscnr1a
+2、移植jdscnr1a.c、_jdscnr1a.h里的代码移植到kjdscnr1a.c、kjdscnr1a.h中
+3、注释jdscnr1a.c、_jdscnr1a.h的代码
+4、修改Makefile里面的编译文件（jdscnr1a.c-kjdscnr1a.c）
+5、将jdscnr.h里面的头文件#include	"_jdscnr1.h"修改为#include	"../Project/Image/src/kjdscnr1a.h"
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsdisp3a
+2、将_jdsdisp_top.h、_jdsdisp_tbl.h移植到kjdsdisp3a.h中
+3、注释_jdsdisp_top.h、_jdsdisp_tbl.h中的代码
+4、在jdsdisp3a.h中添加头文件#include "../Project/Image/src/kjdsdisp3a.h"
+5、在jdsdisp3a.h中注释掉#include "_jdsdisp_top.h"，#include "_jdsdisp_tbl.h"
+6、修改makefile
+
+
+1、将创建新类里面的priv注释掉
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsela2d
+2、将_jdsela2d.h、kjdsela2d.c移植到kjdsela2d中
+3、注释_jdsela2d.h、kjdsela2d.c中的代码
+4、将Jdsela.h中头文件#include	"_jdsela2d.h"修改为#include	"../Project/Image/src/kjdsela2d.h"
+5、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsfpt
+2、将_jdsfpt.h、_jdsfpt_ahb.h移植到kjdsfpt.h中
+3、注释_jdsfpt.h、_jdsfpt_ahb.h中的代码
+4、在jdsfpt.h中添加头文件#include "../Project/Image/src/kjdsfpt.h"
+5、在jdsfpt.h中注释掉#include "_jdsfpt.h"  #include "_jdsfpt_ahb.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsiip4b
+2、将_jdsiip4b.h、jdsiip4b.c移植到kjdsela2d中
+3、注释_jdsiip4b.h、jdsiip4b.c中的代码
+4、将jdsiip.h中头文件#include"_jdsiip4b.h"注释掉
+5、在jdsiip.h增加头文件#include	"../Project/Image/src/kjdsiip4b.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsimg
+2、将_jdsimg.h、jdsimg.c移植到kjdsimg中
+3、注释_jdsiip4b.h、jdsiip4b.c中的代码
+4、将jdsimg.h中头文件#include"_jdsimg.h"注释掉
+5、在jdsimg.h增加头文件#include	"../Project/Image/src/kjdsimg.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsjp7
+2、将_f_jpg7c_wrap1a.h、jdsjp7.c移植到kjdsjp7中
+3、注释_f_jpg7c_wrap1a.h、jdsjp7.c中的代码
+4、将jdsjp7.h中头文件#include"_jdsjp7.h"注释掉
+5、在jdsjp7.h增加头文件#include	"../Project/Image/src/kjdsjp7.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsltm1a
+2、将_jdsltm1a_top.h、jdsltm1a.c移植到kjdsltm1a中
+3、注释_jdsltm1a_top.h、jdsltm1a.c中的代码
+4、将jdsjp7.h中头文件#include"_jdsltm1a_top.h"注释掉
+5、在jdsjp7.h增加头文件#include	"../Project/Image/src/kjdsltm1a.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsltm1a
+2、将_jdsltm1a_top.h、jdsltm1a.c移植到kjdsltm1a中
+3、注释_jdsltm1a_top.h、jdsltm1a.c中的代码
+4、将jdsjp7.h中头文件#include"_jdsltm1a_top.h"注释掉
+5、在jdsjp7.h增加头文件#include	"../Project/Image/src/kjdsltm1a.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsme
+2、将_jdsme.h、jdsme.c移植到kjdsme中
+3、注释_jdsme.h、jdsme.c中的代码
+4、将jdsme.h中头文件#include"_jdsme.h"注释掉
+5、在jdsme.h增加头文件#include	"../Project/Image/src/kjdsme.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdsmxic
+2、将_jdsmxic.h、jdsmxic.c移植到kjdsmxic中
+3、注释_jdsmxic.h、jdsmxic.c中的代码
+4、将jdsmxic.h中头文件#include"_jdsmxic.h"注释掉
+5、在jdsmxic.h增加头文件#include	"../Project/Image/src/kjdsmxic.h"
+6、修改makefile
+
+
+1、在MILB_Header/Project/Image/src目录下新建类kjdspro
+2、将_jdspro.h、jdspro.c移植到kjdspro中
+3、注释_jdspro.h、jdspro.c中的代码
+4、将jdspro.h中头文件#include"_jdspro.h"注释掉
+5、在jdspro.h增加头文件#include	"../Project/Image/src/kjdspro.h"
+6、修改makefile
+
+
+1、规范kjdscnr1a、kjdsdisp3a的变量及结构体
+2、struct _io_cnr_reg改为typedef struct _IoCnrReg
+3、struct _io_cnr_reg改为IoCnrReg
+.....
+
+
+1、规范kjdsela2d的变量及结构体
+2、	ANBKR1-----anbkr1
+      	ANBKR_2-----anbkr22
+		ANBDR_1-----anbdr11
+		ANBDR_2-----anbdr22
+若出现两个变量名按规范修改后会有冲突，则
+变量_数字（A_0）-----变量数字数字（a00）
+变量数字（A0）-------变量数字（a0）
+——只针对冲突情况，未冲突时按照变量规范改
+3、在struct 和union前面添加typedef，结构体前的struct、union去掉
+如：union IoElaEawprot-----typedef union _IoElaEawprot
+		union IoElaEawprot-----IoElaEawprot
+4、将注释放在对应语句的前面
+		IoElaAnbkr anbkr; /* 288B_(0218 - 121Fh) */
+修改为：				
+		/* 288B_(0218 - 121Fh) */
+		IoElaAnbkr anbkr; 
+		
+
+1、规范kjdsfpt里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdsiip4b变量及结构体
+2、变量PDC_DTOUT_MON_1-----pdcDtoutMon11
+若出现两个变量名按规范修改后会有冲突，则
+变量_数字（A_0）-----变量数字数字（a00）
+变量数字（A0）-------变量数字（a0）
+——只针对冲突情况，未冲突时按照变量规范改
+3、在struct 和union前面添加typedef，结构体前的struct、union去掉
+4、将注释放在对应语句前面
+
+
+1、规范kjdsimg里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdsjp7里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdsltm1a里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdsme里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdsmxic里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjdspro里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范audioif里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范khdmac里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kjmiluart里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kpdm里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+
+
+1、规范kperipheral里的变量及结构体
+2、添加typedef
+       删除union、struct
+3、将注释放在对应语句的前面
+4、变量INT-----变量ksint
+
+
+1、规范kslimbus里的变量及结构体
+2、添加typedef
+       删除union、struct
+       
+       
+1、规范kspi里的变量及结构体
+2、添加typedef
+       删除union、struct
+       
+       
+1、在__jdspro_sen_top_apb.h添加头文件#include "../Project/Image/src/kjdspro.h"
+2、将__jdspro_sen_top_apb.h里的代码搬到kjdspro.h中
+3、注释__jdspro_sen_top_apb.h里的代码
+4、将结构体typedef struct _IoSenTopApb与结构体typedef struct _IoPro交换位置
+5、将kjdspro.h中的头文件#include "__jdspro_sen_top_apb.h"注释掉
+
+6、在__jdspro_sro_top_apb.h添加头文件#include "../Project/Image/src/kjdspro.h"
+7、将__jdspro_sro_top_apb.h里的代码搬到kjdspro.h中
+8、注释__jdspro_sro_top_apb.h里的代码
+9、将__jdspro_sro_top_apb.h里面的结构体搬到typedef struct _IoProPipe上面
+10、将kjdspro.h中的头文件#include "__jdspro_sro_top_apb.h"注释掉
+
+11、在__jdspro_b2b_top_apb.h添加头文件#include "../Project/Image/src/kjdspro.h"
+12、将__jdspro_b2b_top_apb.h里的代码搬到kjdspro.h中
+13、注释__jdspro_b2b_top_apb.h里的代码
+14、将结构体typedef struct _IoB2bTopApb搬到 typedef struct _IoProPipe上面
+15、将kjdspro.h中的头文件#include "__jdspro_b2b_top_apb.h"注释掉
+
+16、在__jdspro_stat_top_apb.h添加头文件#include "../Project/Image/src/kjdspro.h"
+17、将__jdspro_stat_top_apb.h里的代码搬到kjdspro.h中
+18、注释__jdspro_stat_top_apb.h里的代码
+19、将结构体typedef struct _IoStatTopApb搬到 typedef struct _IoPasTopApb上面
+20、将kjdspro.h中的头文件#include "__jdspro_stat_top_apb.h"注释掉
+
+21、在__jdspro_pas_top_apb.h添加头文件#include "../Project/Image/src/kjdspro.h"
+22、将__jdspro_pas_top_apb.h里的代码搬到kjdspro.h中
+23、注释__jdspro_pas_top_apb.h里的代码
+24、将结构体typedef struct _IoPasTopApb搬到typedef struct _IoPro上面
+25、将kjdspro.h中的头文件#include "__jdspro_pas_top_apb.h"注释掉
+
+26、在__jdspro_tbl.h添加头文件#include "../Project/Image/src/kjdspro.h"
+27、将__jdspro_tbl.h里的代码搬到kjdspro.h中
+28、注释__jdspro_tbl.h里的代码
+29、将结构体typedef struct _IoProTbl搬到kjdspro.h结构体定义区域最下面
+30、将kjdspro.h中的头文件#include "__jdspro_tbl.h"注释掉
+
+31、将搬过来的代码规范结构体变量
+
+
+1、规范r2ytest、r2ytest1、r2ytest2、r2ytest3的结构体与变量
+2、规范kjmiluart.h中变量SPI
+
+
+1、在__jdsltm1a_sram_top.h添加头文件#include "../Project/Image/src/kjdsltm1a.h"
+2、将__jdsltm1a_sram_top.h里的代码搬到kjdspro.h中
+3、注释__jdsltm1a_sram_top.h里的代码
+4、将kjdsltm1a.h中的头文件#include "__jdsltm1a_sram_top.h"注释掉
+
+
+1、在__jdsiip4b_ram_lut.h添加头文件#include "../Project/Image/src/kjdsiip4b.h"
+2、将__jdsiip4b_ram_lut.h里的代码搬到kjdsiip4b.h中
+3、注释__jdsiip4b_ram_lut.h里的代码
+4、将kjdsiip4b.h中的头文件#include "__jdsiip4b_ram_lut.h"注释掉
+
+5、在__jdsiip4b_ram.h添加头文件#include "../Project/Image/src/kjdsiip4b.h"
+6、将__jdsiip4b_ram.h里的代码搬到kjdsiip4b.h中
+7、注释__jdsiip4b_ram.h里的代码
+8、将kjdsiip4b.h中的头文件#include "__jdsiip4b_ram.h"注释掉
+
+9、在__jdsiip4b_ram.h添加头文件#include "../Project/Image/src/kjdsiip4b.h"
+10、将__jdsiip4b_ram.h里的代码搬到kjdsiip4b.h中
+11、注释__jdsiip4b_ram.h里的代码
+12、将kjdsiip4b.h中的头文件#include "__jdsiip4b_ram.h"注释掉
+
+1、规范kjdsiip4b.h的变量及结构体
+
+
+1、在__jdsltm1a_sram_map.h添加头文件#include "../Project/Image/src/kjdsltm1a.h"
+2、将__jdsltm1a_sram_map.h里的代码搬到kjdsltm1a.h中
+3、注释__jdsltm1a_sram_map.h里的代码
+4、将kjdsltm1a.h中的头文件#include "__jdsltm1a_sram_map.h"注释掉
+
+5、在__jdsltm1a_sram_ltm.h添加头文件#include "../Project/Image/src/kjdsltm1a.h"
+6、将__jdsltm1a_sram_ltm.h里的代码搬到kjdsltm1a.h中
+7、注释__jdsltm1a_sram_ltm.h里的代码
+8、将kjdsltm1a.h中的头文件#include "__jdsltm1a_sram_ltm.h"注释掉
+
+1、规范kjdsltm1a.h的变量及结构体
+2、结构体
+		io_ltm_map_sram_mylog0tbl0——MapSramMylog0tbl0
+		io_ltm_map_sram_mylog1tbl0——MapSramMylog1tbl0
+		io_ltm_map_sram_mylog0tbl1——MapSramMylog0tbl1
+		io_ltm_map_sram_mylog1tbl1——MapSramMylog1tbl1
+		io_ltm_ltm_sram_lylog0tbl0——ItmSramLylog0tbl0
+		io_ltm_ltm_sram_lylog1tbl0——ItmSramLylog1tbl0
+		io_ltm_ltm_sram_lylog0tbl1——ItmSramLylog0tbl1
+		io_ltm_ltm_sram_lylog1tbl1——ItmSramLylog1tbl1
+		
+
+1、在__jdsmxic_tbl.h添加头文件#include "../Project/Image/src/kjdsmxic.h"
+2、将__jdsmxic_tbl.h里的代码搬到kjdsmxic.h中
+3、注释__jdsmxic_tbl.h里的代码
+4、将kjdsltm1a.h中的头文件#include "__jdsmxic_tbl.h"注释掉
+5、规范结构体及变量
+
+
+1、将kjdsmxic拆分为kjdsmxic1
+2、将kjdsmxic中结构体
+		typedef union _IoMxicTslw
+		typedef union _IoMxicTslr
+		typedef struct _IoJdsmxicTbl
+		typedef union _IoMxicTmirst
+		typedef union _IoMxicTcken
+	搬到kjdsmxic1中
+3、将kjdsiip4b拆分为kjdsiip4b1
+4、将kjdsiip4b中的结构体
+		typedef union _IoIipIpxfmttbl0
+		typedef union _IoIipIpxfmttbl1
+		typedef union _IoIipIpxfmttbl2
+		typedef union _IoIipIpxfmttbl3
+		typedef union _IoIipIpxfmttbl4
+		typedef union _IoIipIpxfmttbl5
+		typedef union _IoIipIpxfmttbl6
+		typedef union _IoIipIpxfmttbl7
+		typedef union _IoIipIpxfmttbl8
+		typedef union _IoIipIpxfmttbl9
+		typedef union _IoIipIpxfmttbl10
+		typedef union _IoIipIpxfmttbl11
+		typedef union _IoIipIpxfmttbl12
+		typedef struct _IoIipPixfmttbl
+		typedef union _IoIipUinftbl0
+		typedef union _IoIipUinftbl1
+		typedef union _IoIipUinftbl2
+		typedef union _IoIipUinftblUnitsr
+		typedef struct _IoIipUinftbl
+		typedef union _IoIipLutram
+	搬到kjdsiip4b1中

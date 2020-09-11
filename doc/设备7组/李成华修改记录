@@ -1,0 +1,72 @@
+结构体修改
+
+1. T_BF_DCF_EXIF_MP_ENTRY                           -->>BfDcfExifMpEntry
+2. T_BF_DCF_EXIF_MPF_EXTENDED_APP2      -->>BfDcfExifMpfExtendedApp2 
+3. T_BF_DCF_EXIF_IMAGE_SIZE_INFO             -->>BfDcfExifImageSizeInfo         -->> ImageSizeInfo
+4. T_BF_DCF_EXIF_ORIENTATION_INFO         -->>BfDcfExifOrientationInfo     -->> OrientationInfo
+5. T_BF_DCF_EXIF_JPEG_HEADER_SECOND    -->>BfDcfExifJpegHeaderSecond
+6. T_BF_DCF_EXIF_JPEG_HEADER_FIRST         -->>BfDcfExifJpegHeaderFirst  --修改成 JpegHeaderFirst
+
+2.公有方法修改
+
+1. BF_Dcf_Exif_Copy_Exif_Jpeg    -->>exif_controller_copy_exif_jpeg
+2. BF_Dcf_Exif_Analyze_Ext    -->>exif_controller3_analyze_ext
+3. BF_Dcf_Exif_Analyze_Jpeg    -->>exif_controller4_analyze_jpeg
+4. BF_Dcf_Exif_Analyze_Jpeg_Resize    -->>exif_controller5_analyze_jpeg_resize
+5. BF_Dcf_Exif_Get_Image_Size_Offset_Jpeg    -->>exif_controller6_get_image_size_offset_jpeg
+6. BF_Dcf_Exif_Search_Half_Word_Code    -->>exif_controller6_search_half_word_code
+7. BF_Dcf_Exif_Exchange_Datetime    -->>exif_controller6_exchange_datetime
+8. BF_Dcf_Exif_Set_Value    -->>exif_controller6_set_value
+9. fj_getimageexif    -->>media_exif_fj_getimageexif
+10. fj_setimageexif     -->>media_exif_fj_setimageexif
+11. BF_Exif_Attr_Set_Attr_Maker_Note_Size    -->>exif_attr_set_attr_maker_note_size
+12. BF_Exif_Attr_Get_Attr_Maker_Note_Size    -->>exif_attr_get_attr_maker_note_size
+13. BF_Exif_Attr_Set_Attr_Appn_Size    -->>exif_attr_set_attr_appn_size
+14. BF_Exif_Attr_Get_Attr_Appn_Size    -->>exif_attr_get_attr_appn_size
+15. BF_Exif_Attr_Set_Attr_Tag_Auto    -->>exif_attr_set_attr_tag_auto
+16. BF_Exif_Attr_Get_Attr_Tag_Auto    -->>exif_attr_get_attr_tag_auto
+17. fj_setimageexif_class1    -->>media_exif_fj_setimageexif_class1
+18. fj_setimageexif_class2    -->>media_exif_fj_setimageexif_class2
+19. BF_Exif_Get_Exif_Info_Jpeg_Name    -->>media_exif_get_exif_info_jpeg_name
+20. exif_set_value    -->>media_exif_set_value
+21. BF_Exif_Reset_Index    -->>media_exif_reset_index
+22. BF_Exif_Set_Mem_Location_Ptr    -->>media_exif_set_mem_location_ptr
+23. BF_Exif_Unset_Mem_Location_Ptr    -->>media_exif_unset_mem_location_ptr
+24. BF_Dcf_Exif_Reset_Jpeg_Resize    -->>exif_controller7_reset_jpeg_resize
+25.  BF_Dcf_Exif_Get_Image_Offset_Jpeg    -->>exif_controller7_get_image_offset_jpeg
+26.  BF_Dcf_Exif_Analyze_Mpf_Resize    -->>exif_controller7_analyze_mpf_resize
+27. BF_Dcf_Exif_Exchange_Endian_Mpf_Entry     -->>exif_controller7_exchange_endian_mpf_entry
+28. BF_Dcf_Exif_Exchange_Endian_Mpf_App2    -->>exif_controller7_exchange_endian_mpf_app2
+29. BF_Dcf_Exif_Exchange_Endian_Mpf    -->>exif_controller7_exchange_endian_mpf
+30. BF_Dcf_Exif_Copy_Exif_Mpf    -->> exif_controller8_copy_exif_mpf
+31. BF_Dcf_Exif_Copy_App2_Mpf    -->> exif_controller7_copy_app2_mpf
+32. BF_Dcf_Exif_Copy_Extended_First_App2_Mpf    -->> exif_controller7_copy_extended_first_app2_mpf
+33. BF_Dcf_Exif_Reset_App2_Mpf     -->> exif_controller7_reset_app2_mpf
+34. BF_Dcf_Exif_Exchange_Endian_Mpf_Extended_First_App2    -->> exif_controller7_exchange_endian_mpf_extended_first_app2
+35. BF_Dcf_Exif_Exchange_Endian_Mpf_Extended_App2    -->> exif_controller7_exchange_endian_mpf_extended_app2
+36. BF_Dcf_Exif_Reset_Extended_First_App2_Mpf    -->>exif_controller7_reset_extended_first_app2_mpf
+37. BF_Dcf_Exif_Reset_Extended_App2_Mpf    -->>exif_controller7_reset_extended_app2_mpf
+38. BF_Dcf_Exif_Copy_Extended_App2_Mpf    -->>exif_controller7_copy_extended_app2_mpf
+39.  BF_Dcf_Exif_Get_Orientation_Offset_Jpeg     -->>exif_controller7_get_orientation_offset_jpeg
+40. BF_Dcf_Exif_Get_App1_Size_Mpf    -->>exif_controller8_get_app1_size_mpf
+41. BF_Dcf_Exif_Make_Exif_Mpg    -->>exif_controller8_make_exif_mpg
+42. BF_Dcf_Exif_Reset_App1_Mpf_Resize    -->>exif_controller8_reset_app1_mpf_resize
+43. BF_Dcf_Exif_Reset_App1_Mpf    -->>exif_controller8_reset_app1_mpf
+44. BF_Dcf_Exif_Set_Value_Mpf    -->>exif_controller8_set_Value_mpf
+45. BF_Dcf_Exif_Get_App1_Size_Mpf_For_Buf     -->> exif_controller8_get_app1_size_mpf_for_buf
+46. BF_Dcf_Exif_Analyze_Jpeg_Date     -->>exif_controller9_analyze_jpeg_date
+47. BF_Dcf_Exif_Make_Jpeg     -->>exif_controller9_make_jpeg
+48. BF_Dcf_Exif_Make_Ext    -->>exif_controller9_make_ext
+49. BF_Dcf_Exif_Make_Thm    -->>exif_controller9_make_thm
+50. BF_Dcf_Exif_Copy_Exif_Thm     -->>exif_controller9_copy_exif_thm
+51. BF_Dcf_Exif_Get_Exif_Endian    -->>exif_controller9_get_exif_endian
+52. BF_Dcf_Exif_Exchange_App_Size    -->>exif_controller9_exchange_app_size
+53. BF_Dcf_Exif_Copy_Jpeg_Resize    -->> exif_controller10_copy_jpeg_resize
+54. dcf_exif_set_tag_offset_thm    -->>exif_controller9_set_tag_offset_thm 
+
+
+3.宏修改
+
+
+
+4.全局变量

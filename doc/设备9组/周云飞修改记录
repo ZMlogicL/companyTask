@@ -1,0 +1,288 @@
+1）CnvBinTerm.c 建立对应类CnvBinTerm类
+       公有函数名字修改 
+        Bin2Term 	cnv_bin_term_transform_term
+        Term2Bin  	cnv_bin_term_transform_bin
+ 2）os_wrapper.c 建立对应类OsWrapper类
+        公有函数名字修改 
+        os_wrapper_bf_sys_stat 		BF_Os_Wrapper_sys_stat
+		os_wrapper_bf_tid_self 		BF_Os_Wrapper_tid_self
+		os_wrapper_bf_tsk_pri  		BF_Os_Wrapper_tsk_pri
+		os_wrapper_bf_tsk_self_pri	BF_Os_Wrapper_tsk_self_pri
+		os_wrapper_bf_tsk_stat		BF_Os_Wrapper_tsk_stat
+		os_wrapper_bf_ref_sem_wtsk	BF_Os_Wrapper_ref_sem_wtsk
+		os_wrapper_bf_ref_sem_cnt	BF_Os_Wrapper_ref_sem_cnt
+		os_wrapper_bf_ref_flg_wtsk	BF_Os_Wrapper_ref_flg_wtsk
+		os_wrapper_bf_ref_flg_ptn	BF_Os_Wrapper_ref_flg_ptn
+		os_wrapper_bf_ref_mbx_wtsk	BF_Os_Wrapper_ref_mbx_wtsk
+		os_wrapper_bf_ref_mbx_msg	BF_Os_Wrapper_ref_mbx_msg
+		os_wrapper_bf_ref_mpl_wtsk	BF_Os_Wrapper_ref_mpl_wtsk
+		os_wrapper_bf_ref_mpl_frsz	BF_Os_Wrapper_ref_mpl_frsz
+		os_wrapper_bf_ref_mpl_maxsz	BF_Os_Wrapper_ref_mpl_maxsz
+		os_wrapper_bf_ref_mpf_wtsk	BF_Os_Wrapper_ref_mpf_wtsk
+		os_wrapper_bf_ref_mpf_cnt	BF_Os_Wrapper_ref_mpf_cnt
+		os_wrapper_bf_mbox_snd_blfmsg	BF_Mbox_snd_blfmsg
+		os_wrapper_bf_mbox_psnd_blfmsg	BF_Mbox_psnd_blfmsg
+		os_wrapper_bf_mbox_rcv_blfmsg	BF_Mbox_rcv_blfmsg
+		os_wrapper_bf_mbox_prcv_blfmsg	BF_Mbox_prcv_blfmsg
+		os_wrapper_bf_mbox_clr_blfmsg	BF_Mbox_clr_blfmsg
+		os_wrapper_bf_mbox_snd_blkmsg	BF_Mbox_snd_blkmsg
+		os_wrapper_bf_mbox_rcv_blkmsg	BF_Mbox_rcv_blkmsg
+		os_wrapper_bf_mbox_prcv_blkmsg	BF_Mbox_prcv_blkmsg
+		os_wrapper_bf_mbox_clr_blkmsg	BF_Mbox_clr_blkmsg
+		os_wrapper_bf_mbox_ref_mbx	BF_Mbox_ref_mbx
+		结构体更改
+		T_MBOX_W  TMboxW
+		宏修改
+		BF_Mbox_Allocate_BLF 	OsWrapper_BF_MBOX_ALLOCATE_BLF
+		BF_Mbox_Release_BLF 	OsWrapper_BF_MBOX_RELEASE_BLF
+		BF_Mbox_Allocate_BLK 	OsWrapper_BF_MBOX_ALLOCATE_BLK
+		BF_Mbox_Release_BLK 	OsWrapper_BF_MBOX_RELEASE_BLK
+3) task_monitor.c 建立对应类TaskMonitor类
+    公有函数名字修改 
+    	OS_Task_Mointor       task_monitor_os
+		OS_Task_Mon_Log_Output   task_monitor_os_log_output
+ 		OS_Task_Mon_Set_Flag         task_monitor_os_set_flag
+		OS_Task_Mon_Log_Clear      task_monitor_os_log_clear
+4) dispatch_log.c 建立对应类DispatchLog类
+	公有函数名字修改 
+	OS_Dispatch_Log_Start dispatch_log_os_start
+	OS_Dispatch_Log_Stop dispatch_log_os_stop
+	OS_Dispatch_Log_Clear dispatch_log_os_clear
+	OS_Dispatch_Log_Output dispatch_log_os_output
+5) idle_task_monitor.c 建立对应类IdleTaskMonitor类
+	公有函数名字修改 
+	Monitor_Idle_Task idle_task_monitor_idle_task
+	Monitor_Idle_Measure idle_task_monitor_idle_measure
+6) monitor.c 建立对应类KMonitor类
+     公有宏修改  
+    FLG_MONITOR_PMU_CONTROLLER_INIT					KMonitor_FLG_MONITOR_PMU_CONTROLLER_INIT
+ 	FLG_MONITOR_PMU_CONTROLLER_CYCLE				KMonitor_FLG_MONITOR_PMU_CONTROLLER_CYCLE
+ 	FLG_MONITOR_PMU_CONTROLLER_CFG					KMonitor_FLG_MONITOR_PMU_CONTROLLER_CFG
+ 	FLG_MONITOR_PMU_CONTROLLER_START				KMonitor_FLG_MONITOR_PMU_CONTROLLER_START
+ 	FLG_MONITOR_PMU_CONTROLLER_STOP				KMonitor_FLG_MONITOR_PMU_CONTROLLER_STOP
+	FLG_MONITOR_PMU_CONTROLLER_GET					KMonitor_FLG_MONITOR_PMU_CONTROLLER_GET
+ 	FLG_MONITOR_PMU_CONTROLLER_GET_CYCLE			KMonitor_FLG_MONITOR_PMU_CONTROLLER_GET_CYCLE
+ 	FLG_MONITOR_PMU_CONTROLLER_GET_EVENT_COUNT		KMonitor_FLG_MONITOR_PMU_CONTROLLER_GET_EVENT_COUNT
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_INIT	KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_INIT
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_START	KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_START
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_GET_CYCLE		KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_GET_CYCLE
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_STOP		KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_CYCLE_STOP
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_TIME_START		KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_TIME_START
+ 	FLG_MONITOR_PMU_CONTROLLER_NOTWFI_TIME_STOP		KMonitor_FLG_MONITOR_PMU_CONTROLLER_NOTWFI_TIME_STOP
+ 	FLG_MONITOR_PMU_CONTROLLER_START2				                KMonitor_FLG_MONITOR_PMU_CONTROLLER_START2
+ 	FLG_MONITOR_PMU_CONTROLLER_STOP2				                    KMonitor_FLG_MONITOR_PMU_CONTROLLER_STOP2
+ 	FLG_MONITOR_PMU_CONTROLLER_TASK_RESULT						KMonitor_FLG_MONITOR_PMU_CONTROLLER_TASK_RESULT
+    D_CMD_CT_SDRAMC_BG_TASK_LOG_CYCLE_MSEC  K_MONITOR_D_CMD_CT_SDRAMC_BG_TASK_LOG_CYCLE_MSEC
+    D_CMD_CT_SDRAMC_BG_TASK_LOG_1SEC_COUNT K_MONITOR_D_CMD_CT_SDRAMC_BG_TASK_LOG_1SEC_COUNT
+    D_CMD_CT_SDRAMC_BG_TASK_LOG_NUM                K_MONITOR_D_CMD_CT_SDRAMC_BG_TASK_LOG_NUM
+    公有结构体修改
+    T_MONITOR_MXIC_PARAMETER  TMonitorMxicParamter
+    T_CMD_CT_SDRAMC_BG_TASK_LOG TCmdCtSdramcBgTaskLog
+    公有函数修改
+    fj_monitor_mxic_ctrl_on  		k_monitor_fj_mxic_ctrl_on
+	fj_monitor_mxic_ctrl_off  		k_monitor_fj_mxic_ctrl_off
+	fj_monitor_mxic_config    	k_monitor_fj_mxic_config
+	fj_monitor_mxic_start      		k_monitor_fj_mxic_start
+	fj_monitor_mxic_stop       	k_monitor_fj_mxic_stop
+	fj_monitor_sdramc_start		k_monitor_fj_sdramc_start									
+	fj_monitor_sdramc_stop		k_monitor_fj_sdramc_stop				
+	fj_monitor_sdramc_get_result k_monitor_fj_sdramc_get_result
+	fj_monitor_pmu_ctrl_cycle		k_monitor_fj_pmu_ctrl_cycle
+	fj_monitor_pmu_ctrl_event		k_monitor_fj_pmu_ctrl_event
+	fj_monitor_pmu_start               k_monitor_fj_pmu_start
+	fj_monitor_pmu_stop                k_monitor_fj_pmu_stop
+	fj_monitor_pmu_get_cycle_count  k_monitor_fj_pmu_get_cycle_count
+	fj_monitor_pmu_get_event_count k_monitor_fj_pmu_get_event_count
+7)mprofile.c 建立对应类KMprofile类
+    公有函数名字修改
+    cmd_mp_main   k_mprofile_cmd_mp_main
+    Mprofile_Init      k_mprofile_init
+    Mprofile_Reset  k_mprofile_reset
+    Mprofile_Start    k_mprofile_start
+    Mprofile_Stop    k_mprofile_stop
+    Mprofile_Open	 k_mprofile_open
+    Mprofile_Close	 k_mprofile_close
+    Mprofile_Dump k_mprofile_dump
+    全局变量
+   	 gCmd_MP_Entry_Table		k_mprofile_get_entry_table函数获取
+8)mxic_monitor.c 建立对应类MxicMonitor
+    Monitor_MXIC_Set_Timer_Getting_Flg  mxic_monitor_set_timer_getting_flg
+	Monitor_MXIC_Start_Timer                     mxic_monitor_start_timer
+	Monitor_MXIC_Stop_Timer   					mxic_monitor_stop_timer
+	Monitor_MXIC_Start									mxic_monitor_start
+	Monitor_MXIC_Stop									mxic_monitor_stop
+	Monitor_MXIC_Set_Parameter				mxic_monitor_set_parameter
+	Monitor_MXIC_Save_Result					mxic_monitor_save_result
+	Monitor_MXIC_Output_Result					mxic_monitor_output_result
+	Monitor_MXIC_Clear_Result					mxic_monitor_clear_result
+ 9)pmu_monitor.c 建立对应类pmumonitor
+Monitor_PMU_Controller                         pmu_monitor_controller
+Monitor_PMU_Set_Timer_Getting_Flg    pmu_monitor_set_timer_getting_flg
+Monitor_PMU_Start_Timer						pmu_monitor_start_timer
+Monitor_PMU_Stop_Timer						pmu_monitor_stop_timer
+Monitor_PMU_Ctrl_Cycle							pmu_monitor_ctrl_cycle
+Monitor_PMU_Set_Counter						pmu_monitor_set_counter
+Monitor_PMU_Set_Divider						pmu_monitor_set_divider
+Monitor_PMU_Init										pmu_monitor_init
+Monitor_PMU_Start									pmu_monitor_start
+Monitor_PMU_Stop									pmu_monitor_stop
+Monitor_PMU_Save_Result						pmu_monitor_save_result
+Monitor_PMU_Output_Result					pmu_monitor_output_result
+Monitor_PMU_Disp_Idle_Ratio				pmu_monitor_disp_idle_ratio
+Monitor_PMU_Disp_Cpu_Usage				pmu_monitor_disp_cpu_usage
+Monitor_PMU_Get_Cycle_Count				pmu_monitor_get_cycle_count
+Monitor_PMU_Get_Event_Count			pmu_monitor_get_event_count
+Monitor_PMU_Get_Event_Number		pmu_monitor_get_event_number
+Monitor_PMU_Clear_Result					pmu_monitor_clear_result
+Monitor_PMU_Start2								pmu_monitor_start2
+Monitor_PMU_Stop2								pmu_monitor_stop2
+Monitor_PMU_Cycle_Init							pmu_monitor_cycle_init
+Monitor_PMU_Cycle_Start						pmu_monitor_cycle_start
+Monitor_PMU_Get_Cycle							pmu_monitor_get_cycle
+Monitor_PMU_Cycle_Stop						pmu_monitor_cycle_stop
+Monitor_PMU_Measure_Time_Start		pmu_monitor_measure_time_start
+Monitor_PMU_Measure_Time_Stop		pmu_monitor_measure_time_stop
+公有变量
+gMonitor_PMU_Divide_Flag  提供了get 和set方法,但是需要传PmuMonitor对象,自己get一下这个对象.
+ 10)sdramc_monitor.c 建立对应类SdramcMonitor
+ 公有函数修改
+Monitor_SDRAMC_Set_Timer_Getting_Flg  	sdramc_monitor_set_timer_getting_flg
+Monitor_SDRAMC_Start_Timer						sdramc_monitor_start_timer
+Monitor_SDRAMC_Stop_Timer						sdramc_monitor_stop_timer
+Monitor_SDRAMC_Start									sdramc_monitor_start
+Monitor_SDRAMC_Stop									sdramc_monitor_stop
+Monitor_SDRAMC_Save_Result						sdramc_monitor_save_result
+Monitor_SDRAMC_Output_Result					sdramc_monitor_output_result
+Monitor_SDRAMC_Time									sdramc_monitor_time
+Monitor_SDRAMC_Add									sdramc_monitor_add
+Monitor_SDRAMC_Max									sdramc_monitor_max
+Monitor_SDRAMC_Print									sdramc_monitor_print
+Monitor_SDRAMC_Print_MB							sdramc_monitor_print_mb
+11)assertion.c 建立对应类KAssertion
+公有函数修改
+Assertion_Log_Init  k_assertion_get
+Assertion_Log_Write k_assertion_log_write
+宏修改
+ASSERTION_LOG_TBL_SIZE KAssertion_LOG_TBL_SIZE
+Assertion_Log_Write_Macro KAssertion_Log_Write_Macro
+结构体修改
+T_ASSERTION_DATA   TAssertionData
+全局变量修改
+gAssertion_tbl            通过 k_assertion_get_tbl_pointer
+gAssertion_tbl_idx     通过 k_assertion_get_tbl_index
+12)terminal_io.c 建立对应类TerminalIo   该类已经放入私有数据成员，使用改类的公有函数 
+必须新建该类的实例化对象，使用完自己释放
+公有函数修改
+BF_Com_Buff_Ini 	terminal_io_bf_com_buff_ini
+BF_Com_Buff_Is	terminal_io_bf_com_buff_is									
+BF_Com_Buff_Put_Char 	terminal_io_bf_com_buff_put_char
+BF_Com_Buff_Get_Char 	terminal_io_bf_com_buff_get_char   
+13)emergency_log.c 建立对应类EmergencyLog       
+公有函数修改
+fj_emergencylog_set_log_start_sector		emergency_log_fj_set_log_start_sector
+fj_emergencylog_store_memory				emergency_log_fj_store_memory
+fj_emergencylog_save									emergency_log_fj_save
+14)measure_time.c 建立对应类MeasureTime     该类get获取独一对象，所有公有函数调用都需要get自己
+BF_Get_Time_us	measure_time_bf_get_time_us
+BF_Get_Time_ms	measure_time_bf_get_time_ms
+BF_Get_Time_us_64	measure_time_bf_get_time_us_64
+BF_Measure_Time_Init	measure_time_bf_init
+BF_Measure_Time_Start_usec	measure_time_bf_start_usec
+BF_Measure_Time_Start	measure_time_bf_start
+BF_Measure_Time_Get_usec	measure_time_bf_get_usec
+BF_Measure_Time_Get	measure_time_bf_get
+BF_Measure_Time_Get_Long_usec	measure_time_bf_get_long_usec
+BF_Measure_Time_Get_Long	measure_time_bf_get_long
+BF_Measure_Time_Get_Print_usec 	measure_time_bf_get_print_usec
+BF_Measure_Time_Get_Print   measure_time_bf_get_print
+BF_Measure_Time_Print_usec  measure_time_bf_print_usec
+BF_Measure_Time_Print  measure_time_bf_print
+宏修改
+E_BF_MEASURE_TIME_ID_BOOT = 0,
+	E_BF_MEASURE_TIME_ID_FILE_SYSTEM,
+	E_BF_MEASURE_TIME_ID_FILE_WRITE,
+	E_BF_MEASURE_TIME_ID_FILE_READ,
+	E_BF_MEASURE_TIME_ID_DCF_DB,
+	E_BF_MEASURE_TIME_ID_SYSTEM,
+	E_BF_MEASURE_TIME_ID_AUDIO,
+	E_BF_MEASURE_TIME_ID_CAPTURE_TOTAL,
+	E_BF_MEASURE_TIME_ID_CAPTURE_PART,
+	E_BF_MEASURE_TIME_ID_LENS_MAIN,
+	E_BF_MEASURE_TIME_ID_LENS_SUB,
+	E_BF_MEASURE_TIME_ID_3A_0,
+	E_BF_MEASURE_TIME_ID_MJP_ENC_REC,
+	E_BF_MEASURE_TIME_ID_MJP_ENC_GCH,
+	E_BF_MEASURE_TIME_ID_PLAYBACK,
+	E_BF_MEASURE_TIME_ID_PB_ZOOM,
+	E_BF_MEASURE_TIME_ID_SLIDE,
+	E_BF_MEASURE_TIME_ID_OSD,
+	E_BF_MEASURE_TIME_ID_JPGTHUMB,
+	E_BF_MEASURE_TIME_ID_JPGMAIN,
+	E_BF_MEASURE_TIME_ID_FD,
+	E_BF_MEASURE_TIME_ID_MD,
+	E_BF_MEASURE_TIME_ID_HRZ,
+	E_BF_MEASURE_TIME_ID_IP_0,
+	E_BF_MEASURE_TIME_ID_IP_1,
+	E_BF_MEASURE_TIME_ID_IP_2,
+	E_BF_MEASURE_TIME_ID_IP_3,
+	E_BF_MEASURE_TIME_ID_IP_4,
+	E_BF_MEASURE_TIME_ID_DEBUG_0,
+	E_BF_MEASURE_TIME_ID_DEBUG_1,
+	E_BF_MEASURE_TIME_ID_DEBUG_2,
+	E_BF_MEASURE_TIME_ID_DEBUG_3,
+	E_BF_MEASURE_TIME_ID_DEBUG_4,
+	E_BF_MEASURE_TIME_ID_BUFFER_MAX
+	修改后
+	Measurettime_BF_ID_BOOT = 0,
+	Measurettime_BF_ID_FILE_SYSTEM,
+	Measurettime_BF_ID_FILE_WRITE,
+	Measurettime_BF_ID_FILE_READ,
+	Measurettime_BF_ID_DCF_DB,
+	Measurettime_BF_ID_SYSTEM,
+	Measurettime_BF_ID_AUDIO,
+	Measurettime_BF_ID_CAPTURE_TOTAL,
+	Measurettime_BF_ID_CAPTURE_PART,
+	Measurettime_BF_ID_LENS_MAIN,
+	Measurettime_BF_ID_LENS_SUB,
+	Measurettime_BF_ID_3A_0,
+	Measurettime_BF_ID_MJP_ENC_REC,
+	Measurettime_BF_ID_MJP_ENC_GCH,
+	Measurettime_BF_ID_PLAYBACK,
+	Measurettime_BF_ID_PB_ZOOM,
+	Measurettime_BF_ID_SLIDE,
+	Measurettime_BF_ID_OSD,
+	Measurettime_BF_ID_JPGTHUMB,
+	Measurettime_BF_ID_JPGMAIN,
+	Measurettime_BF_ID_FD,
+	Measurettime_BF_ID_MD,
+	Measurettime_BF_ID_HRZ,
+	Measurettime_BF_ID_IP_0,
+	Measurettime_BF_ID_IP_1,
+	Measurettime_BF_ID_IP_2,
+	Measurettime_BF_ID_IP_3,
+	Measurettime_BF_ID_IP_4,
+	Measurettime_BF_ID_DEBUG_0,
+	Measurettime_BF_ID_DEBUG_1,
+	Measurettime_BF_ID_DEBUG_2,
+	Measurettime_BF_ID_DEBUG_3,
+	Measurettime_BF_ID_DEBUG_4,
+	Measurettime_BF_ID_BUFFER_MAX
+	枚举修改
+	MeasureTimeBfId MeasureTimeBfId
+15)task_trace.c 建立对应类TaskTrace    
+BF_TaskTrace_Enable_TskTrace						task_trace_bf_enable_tsktrace
+BF_TaskTrace_Disable_TskTrace						task_trace_bf_disable_tsktrace
+BF_TaskTrace_Fill_Stack									task_trace_bf_fill_stack
+BF_TaskTrace_Get_ReservedStackBytes		task_trace_bf_get_reserved_stack_bytes
+    
+   16) palladium_test_raw.c 改为palladiumtestraw.c
+公有函数：
+Pt_Im_RAW_Main  改为pt_im_raw_main  (不加参数)
+
+
+17)palladium_test_hdmi.c改为palladiumtesthdmi.c
+公有函数：Pt_Im_Hdmi_Main 改为 pt_im_hdmi_main(不加参数)
+
+18)palladium_test_b2r改为palladiumtestb2r
+公有函数：Pt_Im_B2R_Main  改为pt_im_b2r_main
+    

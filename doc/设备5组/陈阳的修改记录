@@ -1,0 +1,3992 @@
+CT_Im_PRO_   -->   ct_im_pro_   对外仅涉及/data/workspace2/snssocionext/target/cpu_tkernel/basefw/MILB_API/Project/PalladiumTest/src/palladium_test_pro.c
+
+ctimpro8.c文档
+E_IM_PRO_PASTOP_CLK_TYPE    EImProPastopClkType
+T_IM_PRO_SENTOP_CTRL        TImProSentopCtrl
+sen_connect_type_sel        senConnectTypeSel
+blob_input_sel              blobInputSel
+sdram_output_type           sdramOutputType
+output_sel_sro2             outputSelSro2
+sencore_hmax_size_ctrl      sencoreHmaxSizeCtrl
+ldiv_hmax_size_ctrl         ldivHmaxSizeCtrl
+ldiv_multi_ch_input_ctrl    ldivMultiChInputCtrl
+first_pixel                 firstPixel
+shift_value                 shiftValue
+sat_compensation            satCompensation
+shift_dir                   shiftDir
+obt_comm_perttern           obtCommPerttern
+hd_insertion_en             hdInsertionEn
+in_width                    inWidth
+out_pos_x                    outPosX
+out_width                   outWidth
+int_mode                    intMode
+vd_enable                   vdEnable
+interrupt_bit               interruptBit
+permission_flg              permissionFlg
+hd_enable                   hdEnable
+user_param                  userParam
+
+ctimpro60.c文档
+ct_im_pro_6_*               ct_im_pro_6_0_*
+knee_enable                 kneeEnable
+lpf_mode                    lpfMode
+rec_mode                        recMode
+shift_bit       shiftBit
+clip_value          clipValue
+start_y           startY
+start_x                      startX
+vertical_thin               verticalThin
+horizon_thin                  horizonThin
+sample_line                 sampleLine
+sample_width                sampleWidth
+enable_mirror               enableMirror
+input_mode                      inputMode
+kntbl_ptr                   kntblPtr
+trans_to                    transTo
+req_threshold           reqThreshold
+write_mask          writeMask
+burst_align_size        burstAlignSize
+output_format           outputFormat
+
+ctimpro61.c文档
+cache_type              cacheType
+protect_type        protectType
+buffer_num          bufferNum
+buff_addr           buffAddr
+lnr_br              lnrBr
+lnr_incr            lnrIncr
+lnr_ofsr            lnrOfsr
+lnr_bgr             lnrBgr
+lnr_incgr           lnrIncgr
+lnr_ofsgr           lnrOfsgr
+lnr_bgb             lnrBgb
+lnr_incgb              lnrIncgb
+lnr_ofsgb           lnrOfsgb
+lnr_bb              lnrBb
+lnr_incb            lnrIncb
+lnr_ofsb            lnrOfsb
+
+ctimpro62.c文档
+R_offset        ROffset
+Gr_offset       GrOffset
+Gb_offset       GbOffset
+B_offset        BOffset
+decimal_point_position      decimalPointPosition
+offset_shift                offsetShift
+
+
+ctimpro63.c文档
+input_img_lines     inputImgLines          
+input_img_width     inputImgWidth           
+vertical_blanking   verticalBlanking       
+horizontal_blanking horizontalBlanking      
+start_blanking      startBlanking           
+monitor_mode        monitorMode
+hd_cnt_expect_val   hdCntExpectVal
+valid_pixel_expect_cnt_in_1frame    validPixelExpectCntIn1frame
+lower_limit_except_h_blank      lowerLimitExceptHBlank
+upper_limit_except_h_blank      upperLimitExceptHBlank
+additional_hd_cnt       additionalHdCnt
+additional_hd_gap_cnt   additionalHdGapCnt
+data_type           dataType
+shift_sat           shiftSat
+bit_shift           bitShift
+valid_bit_count     validBitCount
+shift_value          shiftValue
+lower_limit_clip_value lowerLimitClipValue
+upper_limit_clip_value       upperLimitClipValue
+deknee_enable       dekneeEnable
+pm2p_tbl            pm2pTbl
+dkntbl_ptr          dkntblPtr
+
+
+ctimpro64.c文档
+trans_mode          transMode
+global_width        globalWidth
+
+ctimpro71.c文档
+sg_sync             sgSync
+sg_vd_enable        sgVdEnable
+sg_hd_enable        sgHdEnable
+gyro_sof_enable     gyroSofEnable
+gyro_eof_enable     gyroEofEnable
+hd_delay            hdDelay
+vd_h_delay          vdHDelay 
+vd_v_delay          vd_v_delay
+reg_ptr             regPtr
+
+
+ctimpro73.c文档
+cmipi_int1_enable   cmipiInt1Enable
+cmipi_int2_enable   cmipiInt2Enable
+
+impro5print.c文档
+table_sel           tableSel
+IO_PRO_TBL          ioProTbl
+IO_PRO              ioPro       //涉及比较多
+ORG                 org
+PASTOPCTL1          pastopctl1
+PASTOP              pastop
+SPTTRG              spttrg
+SPT                 spt
+PAS                 pas
+SPTTBL              spttbl
+horizontal_pixel    horizontalPixel
+vertical_pixel      verticalPixel
+SPTBSH              sptbsh
+SPTBSV              sptbsv
+SPTBS               sptbs
+SPTBD               sptbd
+Inverse_base        InverseBase
+Inverse_exponent    InverseExponent
+SPTBDM              sptbdm
+SPTBDE              sptbde
+SPTV                sptv
+pos_y               posY
+pos_x               posX
+SPTH                spth
+SPTVBC              sptvbc
+v_block_size        vBlockSize
+h_block_size        hBlockSize
+SPTHBC              spthbc
+SPTCLPH             sptclph
+SPTCLP              sptclp
+upper_clip_value    upperClipValue
+lower_clip_value    lowerClipValue
+SPTCLPL             
+SPTNOPV             sptnopv
+correction_through_val  correctionThroughVal
+paen_trg            paenTrg
+SPTPAEN             sptpaen
+PAEN                paen
+cmp_ercd            cmpErcd
+tbl_sel             tblSel
+
+impro7print.c文档
+SEN                 sen    多
+SENTOP              sentop
+INTCTL              intctl
+INTMD               intmd
+VHDINTENB           vhdintenb
+VHDINTENB1          vhdintenb1
+VHDINTFLG           vhdintflg
+VHDINTFLG1          vhdintflg1
+VHDINTENB2          vhdintenb2
+VHDINTFLG2          vhdintflg2
+SGVHDINTENB         sgvhdintenb
+SGVHDINTFLG         sgvhdintflg
+GINTFLG             gintflg
+GINTENB             gintenb
+HMIHADR             hmihadr
+HMIHADR1            hmihadr1
+HMIHADR00           hmihadr00
+VMIHADR             vmihadr
+VMIHADR1            vmihadr1
+VMIHADR00           vmihadr00
+VMIVADR             vmivadr
+VMIVADR1            vmivadr1
+VMIVADR00           vmivadr00
+HMIHADR01           hmihadr01
+VMIHADR01           vmihadr01
+VMIVADR01           vmivadr01
+HMIHADR2            hmihadr2
+VMIVADR01           vmivadr01
+VMIHADR2            vmihadr2
+VMIHADR10           vmihadr10
+VMIVADR10           vmivadr10
+VMIVADR2            vmivadr2
+HMIHADR11           hmihadr11
+VMIHADR11           vmihadr11
+VMIVADR11           vmivadr11
+HMIHADR3            hmihadr3
+HMIHADR20           hmihadr20
+VMIHADR3            vmihadr3
+VMIHADR20           vmihadr20
+VMIVADR3            vmivadr3
+VMIVADR20           vmivadr20
+HMIHADR21           hmihadr21
+VMIHADR21           vmihadr21
+VMIVADR21           vmivadr21
+HMIHADR4            hmihadr4
+HMIHADR30           hmihadr30
+VMIHADR4            vmihadr4
+VMIHADR30           vmihadr30
+VMIVADR4            vmivadr4
+VMIVADR30           vmivadr30
+HMIHADR31           hmihadr31
+VMIHADR31           vmihadr31
+VMIVADR31           vmivadr31
+GHADR               ghadr
+GHADR1              ghadr1
+GHADR0              ghadr0
+GVADR               gvadr
+GVADR1              gvadr1
+GVADR0              gvadr0
+GHADR2              ghadr2
+GVADR2              gvadr2
+GHADR3              ghadr3
+SLVSEC              slvsec
+COMMON              common
+PEINTEN             peinten
+PEINTST             peintst
+INTST               intst
+INTEN               inten
+LEINTST             leintst
+LEINTEN             leinten
+MEINTST0            meintst0
+MEINTEN0            meinten0
+MEINTST1            meintst1
+MEINTEN1            meinten1
+LVDS                lvds
+LVDSINTENB0         lvdsintenb0
+LVDSINTFLG0         lvdsintflg0
+lvds_int_enable     lvdsIntEnable
+LVDSINTENB1         lvdsintenb1
+LVDSINTFLG1         lvdsintflg1
+LVDSINTENB2         lvdsintenb2
+LVDSINTFLG2         lvdsintflg2
+MIPID               mipid
+MPIINTE             mpiinte
+MPIINTF             mpiintf
+MIPIC               mipic
+MPICINTE1           mpicinte1
+MPICINTF1           mpicintf1
+MPICINTE2           mpicinte2
+MPICINTF2           mpicintf2
+MONIINTFLG          moniintflg
+MONIINTENB          moniintenb
+LDIV                ldiv
+LDIVINTENB          ldivintenb
+LDIVINTFLG          ldivintflg
+OBTINTFLG           obtintflg
+OBTINTENB           obtintenb
+OBT                 obt
+OBD                 obd
+OBDINTENB           obdintenb
+OBDINTFLG           obdintflg
+IMG_PIPE            imgPipe
+SRO                 sro
+SROTOP              srotop
+HMIHADR0            hmihadr0
+VMIHADR0            vmihadr0
+VMIVADR0            vmivadr0
+SDCINTFLG           sdcintflg
+SDC                 sdc
+SDCINTENB           sdcintenb
+B2B                 b2b
+B2BTOP              b2btop
+STAT                stat
+STATTOP             stattop
+LINEINTFLG          lineintflg
+LINEINTENB          lineintenb
+AEAWB               aeawb
+AFGBAL              afgbal
+AF                  af
+AFINTFLG            afintflg
+AFINTENB            afintenb
+HIST                hist
+HISTINTFLG          histintflg
+HISTINTENB          histintenb
+PWCHINTENB          pwchintenb
+PWCHINTFLG          pwchintflg
+PRCHINTENB          prchintenb
+PRCHINTFLG          prchintflg
+
+
+impro10print.c文档
+SENTOPCTL1          sentopctl1
+SENTOPCTL11         sentopctl11
+SENIN0              senin0
+SENIN1               senin1
+SENIN2               senin2
+SENIN3               senin3
+BLOBSET0              blobset0
+BLOBSET1              blobset1
+BLOBSET2              blobset2
+BLOBSET3              blobset3
+PWSW0                  pwsw0
+PWSW1                  pwsw1
+PWSW2                  pwsw2
+PWSW3                  pwsw3
+SENTOPCTL*             sentopctl*
+PIPE2S                  pipe2s
+SENRAMSW                senramsw
+LDIVRAMSW           ldivramsw
+LDIVMCH             ldivmch
+ORG00               org00
+ORG01               org01
+ORG10               org10
+ORG11               org11
+ORG20               org20
+ORG21               org21
+ORG30               org30
+ORG31               org31
+sentopctl2_1
+sentopctl2_2
+BSAMNT*             bsamnt*
+BSCTL1              bsctl1
+BSCTL              bsctl
+BSCTL2              bsctl2
+BSLMD0              bslmd0
+BSLMD1              bslmd1
+BSLMD2              bslmd2
+BSLMD3              bslmd3
+BSLR0               bslr0
+BSLR1               bslr1
+BSLR2               bslr2
+BSLR3               bslr3
+OBTCDCCTL2          obtcdcctl2
+OBTCDCCTL2_1        obtcdcctl2_1
+OBTDWC*            obtdwc*
+OBTCDCCTL*          btcdcctl*
+LVDSCTL             lvdsctl
+clock_lane_powerdown    clockLanePowerdown
+data_lane_powerdown     dataLanePowerdown
+LVDSCKPD            lvdsckpd
+LVDSDLPD            lvdsdlpd
+SLVSECCTL           slvsecctl
+SLVSECSEL           slvsecsel
+link_mode           linkMode
+
+PHY0_RXPDCK         phy0Rxpdck
+PHY1_RXPDCK         phy1Rxpdck
+PHY2_RXPDCK         phy2Rxpdck
+PHY3_RXPDCK         phy3Rxpdck
+PHY0_RXPCLK2AEN     phy0Rxpclk2aen
+PHY1_RXPCLK2AEN     phy1Rxpclk2aen
+
+phy0_rxpdck         phy0Rxpdck
+phy1_rxpdck         phy1Rxpdck
+phy2_rxpdck         phy2Rxpdck
+phy3_rxpdck         phy3Rxpdck
+phy0_rxpclk2aen     phy0Rxpclk2aen
+phy1_rxpclk2aen     phy1Rxpclk2aen
+
+
+impro11print.c文档        
+SGOUTCTL            sgoutctl 
+SGSEL*              sgsel*
+sg_if_output_sel    sgIfOutputSel
+PHYCIFCTL*          phycifctl*
+PHY_PREGCNT         phyPregcnt
+common_if_ctrl      commonIfCtrl
+PHY_FREQCNT         phyFreqcnt
+PHY_PDCCNT          phyPdccnt
+PHY_SETDF           phySetdf
+PHY_PICODETST       phyPicodetst
+PHY_PMONSEL         phyPmonsel
+PHY_DMONSEL         phyDmonsel
+PHY_CNTSEL          phyCntsel
+PHY_MULGAINF         
+PHY_MULGAINP         phyMulgainp
+PHY_CDRFUNC          phyCdrfunc
+PHY0_ZEROP3UICP0     phy0Zerop3uicp0
+PHY0_ZEROP4UICP0     phy0Zerop4uicp0
+PHY0_ZEROP5UICP0    phy0Zerop5uicp0
+PHY0_ZEROP6UICP0    phy0Zerop6uicp0
+PHY0MDCPCTL         phy0mdcpctl
+PHY0MDCPCTL1        phy0mdcpctl1
+PHY0_DETCNT_CP0     phy0DetcntCp0
+PHY0_EQ_SET_CP0     phy0EqSetCp0
+PHY0_ZEROP3UICP1    phy0Zerop3uicp1
+PHY0_ZEROP4UICP1    phy0Zerop4uicp1
+PHY0_ZEROP5UICP1    phy0Zerop5uicp1
+PHY0_ZEROP6UICP1    phy0Zerop6uicp1
+PHY0_DETCNT_CP1     phy0DetcntCp1
+PHY0_EQ_EN_CP1      phy0EqEnCp1
+PHY0_EQ_SET_CP1     phy0EqSetCp1
+PHY0_ZEROP3UICP2    phy0Zerop3uicp2
+PHY0_ZEROP4UICP2    phy0Zerop4uicp2
+PHY0_ZEROP5UICP2    phy0Zerop5uicp2
+PHY0_ZEROP6UICP2    phy0Zerop6uicp2
+PHY0MDCPCTL3        phy0mdcpctl3
+PHY0_DETCNT_CP2     phy0DetcntCp2
+PHY0_EQ_EN_CP2      phy0EqEnCp2
+PHY0_EQ_SET_CP2     phy0EqSetCp2
+PHY1_ZEROP3UICP*    phy1Zerop3uicp
+PHY1_ZEROP4UICP*    phy1Zerop4uicp
+PHY1_ZEROP5UICP*    phy1Zerop5uicp
+PHY1_ZEROP6UICP*    phy1Zerop6uicp
+PHY1MDCPCTL*        phy1mdcpctl*
+PHY1_DETCNT_CP*     phy1DetcntCp*
+PHY1_EQ_EN_CP*      phy1EqEnCp*
+PHY1_EQ_SET_CP*     phy1EqSetCp
+PHY2_EQ_SET_CP*      phy2EqSetCp*
+PHY3_EQ_SET_CP*      phy3EqSetCp*
+PHY2MDCPCTL*        phy2mdcpctl*    
+PHY2_ZEROP3UICP*    phy2Zerop3uicp*
+PHY2_ZEROP4UICP*    phy2Zerop4uicp*
+PHY2_ZEROP5UICP*    phy2Zerop5uicp*
+PHY2_ZEROP6UICP*    phy2Zerop6uicp*
+PHY2_EQ_EN_CP*      phy2EqEnCp* 
+PHY3_EQ_EN_CP*      phy3EqEnCp*
+PHY2_DETCNT_CP*     phy2DetcntCp*
+PHY3_DETCNT_CP*      phy3DetcntCp*
+cpmode_ctrl         cpmodeCtrl
+detcnt_cp2          detcntCp2
+eq_en_cp2_2           eqEnCp2_2
+eq_set_cp1          eqSetCp1
+eq_en_cp1           eqEnCp1
+detcnt_cp1          detcntCp1
+eq_en_cp0           eqEnCp0
+eq_set_cp0          eqSetCp0
+detcnt_cp0          detcntCp0
+eq_set_cp2          eqSetCp2
+PHY0MDCPCTL2        phy0mdcpctl2
+PHY3MDCPCTL*        phy3mdcpctl*
+PHY3_ZEROP3UICP*    phy3Zerop3uicp*
+PHY3_ZEROP4UICP*    phy3Zerop4uicp*
+PHY3_ZEROP5UICP*    phy3Zerop5uicp*
+PHY3_ZEROP6UICP*    phy3Zerop6uicp*
+PHY0DLCTL*          phy0dlctl*
+PHY0_D0RXSPEED      phy0D0rxspeed
+PHY0_D1RXSPEED      phy0D1rxspeed
+PHY0_D2RXSPEED      phy0D2rxspeed
+PHY0_D3RXSPEED      phy0D3rxspeed
+PHY1_D3RXSPEED      phy1D3rxspeed
+PHY2_D3RXSPEED      phy2D3rxspeed
+PHY3_D3RXSPEED      phy3D3rxspeed
+delay_ctrl          delayCtrl
+skwsel_cp*          skwselCp*
+PHY0_SKWSEL_CP*     phy0SkwselCp*
+PHY1_SKWSEL_CP*     phy1SkwselCp*
+PHY2_SKWSEL_CP*     phy2SkwselCp*
+PHY3_SKWSEL_CP*     phy3SkwselCp*
+PHY1_D0RXSPEED*     phy1D0rxspeed*
+PHY1_D1RXSPEED      phy1D1rxspeed
+PHY1_D2RXSPEED      phy1D2rxspeed
+PHY2_D0RXSPEED      phy2D0rxspeed
+PHY2_D1RXSPEED      phy2D1rxspeed
+PHY2_D2RXSPEED      phy2D2rxspeed
+PHY3_D2RXSPEED      phy3D2rxspeed
+PHY3_D1RXSPEED      phy3D1rxspeed
+PHY3_D0RXSPEED      phy3D0rxspeed
+PHY3DLCTL           phy3dlctl
+PHY1DLCTL           phy1dlctl
+PHY2DLCTL           phy2dlctl
+PHY0DSKCTL          phy0dskctl
+PHY0_RXSPDEN        phy0Rxspden
+PHY1_RXSPDEN        phy1Rxspden
+PHY2_RXSPDEN        phy2Rxspden
+PHY3_RXSPDEN        phy3Rxspden
+PHY0_DCNTNUM        phy0Dcntnum
+PHY1_DCNTNUM        phy1Dcntnum
+PHY2_DCNTNUM        phy2Dcntnum
+PHY3_DCNTNUM        phy3Dcntnum
+PHY0_GRDWIDTH       phy0Grdwidth
+PHY1_GRDWIDTH       phy1Grdwidth
+PHY2_GRDWIDTH       phy2Grdwidth
+PHY3_GRDWIDTH       phy3Grdwidth
+PHY1DSKCTL          phy1dskctl
+PHY2DSKCTL          phy2dskctl
+PHY3DSKCTL          phy3dskctl
+PHY0_VLDPRD         phy0Vldprd
+PHY1_VLDPRD         phy1Vldprd
+PHY2_VLDPRD         phy2Vldprd
+PHY3_VLDPRD         phy3Vldprd
+desknew_ctrl        desknewCtrl
+PHY2_RDWAIT         phy2Rdwait
+PHY1_RDWAIT         phy1Rdwait
+PHY3_RDWAIT         phy3Rdwait
+PLL0CTL             pll0ctl
+PLL0_IBCNT          pll0Ibcnt
+pll0_ctrl           pll0Ctrl
+PLL0_ILFSEL         pll0Ilfsel
+PLL0_IOCLKEN        pll0Ioclken
+PLL0_ITXPCLK2AEN    pll0Itxpclk2aen
+desknew_moni        desknewMoni
+PHY0DSKMONI*        phy0dskmoni*
+PHY0_DTYPEMON0*     phy0typemon0*
+PHY1_DTYPEMON0      phy1typemon0
+PHY2_DTYPEMON0      phy2typemon0
+PHY3_DTYPEMON0      phy3typemon0
+PHY0_DTYPEMON1      phy0Dtypemon1
+PHY1_DTYPEMON1      phy1Dtypemon1
+PHY2_DTYPEMON1      phy2Dtypemon1
+PHY3_DTYPEMON1      phy3Dtypemon1
+PHY3_DTYPEMON2      phy3Dtypemon2
+PHY2_DTYPEMON2      phy2Dtypemon2
+PHY1_DTYPEMON2      phy1Dtypemon2
+PHY1_DTYPEMON3      phy1Dtypemon3
+PHY2_DTYPEMON3      phy2Dtypemon3
+PHY3_DTYPEMON3      phy3Dtypemon3
+PHY0_DTYPEMON2      phy0Dtypemon2
+PHY0_DTYPEMON3      phy0Dtypemon3
+PHY0_VLDWINDOW0     phy0Vldwindow0
+PHY0_VLDWINDOW1     phy0Vldwindow1
+PHY0_VLDWINDOW2     phy0Vldwindow2
+PHY0_VLDWINDOW3     phy0Vldwindow3
+PHY1_VLDWINDOW3     phy1Vldwindow3
+PHY1_VLDWINDOW2     phy1Vldwindow2
+PHY1_VLDWINDOW1     phy1Vldwindow1
+PHY1_VLDWINDOW0     phy1Vldwindow0
+PHY3_VLDWINDOW0     phy3Vldwindow0
+PHY3_VLDWINDOW1     phy3Vldwindow1
+PHY3_VLDWINDOW2     phy3Vldwindow2
+PHY3_VLDWINDOW3     phy3Vldwindow3
+PHY2_VLDWINDOW3     phy2Vldwindow3
+PHY2_VLDWINDOW2     phy2Vldwindow2
+PHY2_VLDWINDOW1     phy2Vldwindow1
+PHY1DSKMONI         phy1dskmoni
+PHY1DSKMONI1        phy1dskmoni1
+PHY1DSKMONI2        phy1dskmoni2
+PHY2DSKMONI         phy2dskmoni
+PHY2DSKMONI1        phy2dskmoni1
+PHY2DSKMONI2        phy2dskmoni2
+SG                  sg
+SGTRG               sgtrg
+SGCTL1              sgctl1
+SGCTL2              sgctl2
+VHDO                vhdo
+VDOT                vdot
+VDINV               vdinv
+HDINV               hdinv
+HDCHG               hdchg
+VDDLY               vddly
+VDOCYC              vdocyc
+VDOW                vdow
+HDOCYC              hdocyc
+HDOW                hdow
+HDOCYC2             hdocyc2
+HDOW2               hdow2
+VDHDMON             vdhdmon
+input_vd_signal     inputVdSignal
+VDIN                vdin
+HDIN                hdin
+input_hd_signal     inputHdSignal
+SR                  sr
+UPDA                upda
+INITA               inita
+UPDB                updb
+INITB               initb
+
+
+impro12print.c文档       
+PHYCR2          phycr2
+PHYCR1          phycr1
+PHYCR0          phycr0
+PDX             pdx
+INVDATA         invdata
+IFVDCNT         ifvdcnt
+multiplication_factor       multiplicationFactor
+opt_init_param  optInitParam
+IPDPLLX         ipdpllx
+REFSEL          refsel
+ICPCODE         icpcode
+lane0_pd_state  lane0PdState
+lane1_pd_state  lane1PdState
+lane2_pd_state  lane2PdState
+lane3_pd_state  lane3PdState
+lane4_pd_state  lane4PdState
+lane5_pd_state  lane5PdState
+lane6_pd_state  lane6PdState
+lane7_pd_state  lane7PdState
+IRXPDX*         irxpdx*
+ATTR4           attr4
+ATTR3           attr3
+ATTR2           attr2
+ATTR1           attr1
+RAMPD           rampd
+ram_pd_state    ramPdState
+vdout_ctrl      vdoutCtrl
+ecccrc_opt      ecccrcOpt
+ECCCRC          ecccrc
+CFGR0           cfgr0
+VDEN            vden
+TRGR            trgr  
+expect_val      expectVal
+LNMAXCLP        lnmaxclp
+CFGR1           cfgr1
+OUTMD           outmd
+L0OUT           l0out
+LSWAP           lswap
+swap_lane       swapLane
+L1OUT           l1out
+L2OUT           l2out
+L3OUT           l3out
+L4OUT           l4out
+L5OUT           l5out
+L6OUT           l6out
+L7OUT           l7out
+VLANE           vlane
+LANE0           lane0
+LANE1           lane1
+LANE2           lane2
+LANE3           lane3
+LANE4           lane4
+LANE5           lane5
+LANE6           lane6
+LANE6           lane7
+valid_lane      validLane
+TRMG            trmg
+HSADD           hsadd
+HSIZE           hsize
+embedded_data_detect        embeddedDataDetect
+EBD             ebd
+EBDST           ebdst
+ebd_stored_line_num     ebdStoredLineNum
+LNUM            lnum
+expect_value_discontinuity  expectValueDiscontinuity
+LNEST       lnest
+EXPLN       expln
+DETLN       detln
+line_num_discontinuity      lineNumDiscontinuity
+TRG         trg
+
+
+impro13print.c文档     
+LDIVTRG         ldivtrg
+LDIVCTL         ldivctl
+LDSTMD          ldstmd
+LDIPMD          ldipmd
+LDVDMD          ldvdmd
+LDHDMD          ldhdmd
+LDMCH           ldmch
+LDDIVMD         lddivmd
+LDOPMD          ldopmd
+LDIVIHW         ldivihw
+LDIVOH1         ldivoh1
+LDIVOH          ldivoh
+LDIVOHW         ldivohw
+LDIVOHW1        ldivohw1
+LDIVOH2         ldivoh2
+LDIVOHW2        ldivohw2
+LDIVPAEN        ldivpaen
+LDPAEN          ldpaen
+OBDTRG          obdtrg
+OBDCORE         obdcore
+OBDTHBIT        obdthbit
+OBDLTHBIT       obdlthbit
+ob_min_value    obMinValue
+ob_max_value    obMaxValue
+OBDHTHBIT       obdhthbit
+OBDH            obdh
+OBDV            obdv
+OBDHW           obdhw
+OBDVW           obdvw
+OBDCNTR         obdcntr
+OBDCNTGR        obdcntgr
+OBDCNTGB        obdcntgb
+OBDCNTB         obdcntb
+
+
+impro14print.c文档 
+OBDDATAR        obddatar
+OBDDATAGR       obddatagr
+OBDDATAGB       obddatagb
+OBDDATAB        obddatab
+OBTTRG          obttrg
+OBTCORE     obtcore
+OBTCTL      obtctl
+OBTEN       obten
+obt_enable      obtEnable
+OBTMD       obtmd
+OBTSL       obtsl
+OBTCEN      obtcen
+OBTTHBIT        obtthbit
+OBTHTHBIT   obththbit
+OBTLTHBIT       obtlthbit
+OBTH            obth
+OBTV        obtv
+OBTHW       obthw
+OBTVW       obtvw
+OBTOFSR     obtofsr
+OBTOFSGR        obtofsgr
+OBTOFSGB        obtofsgb
+OBTOFSB     obtofsb
+OBTDATAR        obtdatar
+OBTDATAGR       obtdatagr
+OBTDATAGB       obtdatagb
+MPISR       mpisr
+
+
+impro15print.c文档 
+LANE            lane
+MPITRG          mpitrg
+lane_sel        laneSel
+input_data_mode inputDataMode
+DTMD0            dtmd0   
+MPIIOMD0        mpiiomd0
+MPILMODE        mpilmode
+OUTMD0          outmd0
+OUTMD1          outmd1
+OUTMD2          outmd2
+VCOUT0          vcout0
+output_data_mode        outputDataMode
+vc_mode_sel     vcModeSel
+output_dt_sel   outputDtSel
+DTCOMD0         dtcomd0
+DTCOMD1         dtcomd1
+DTCO0           dtco0
+DTMD1           dtmd1
+MPIIOMD1        mpiiomd1
+VCOUT1          vcout1
+DTCOMD1         dtcomd1
+DTCO1           dtco1
+output_dt_setting       outputDtSetting
+rxsmt_c_val     rxsmtCVal
+DPSMTC          dpsmtc
+DPSMTD          dpsmtd
+rxsmt_d_val     rxsmtDVal
+MPIDPI          mpidpi
+DPSM            dpsm
+HDPDSEL0        hdpdsel0
+HDPDSEL1        hdpdsel1
+out_cycle       outCycle
+MPIHDPDSEL      mpihdpdsel
+DPEN            dpen
+MPIPAEN0        mpipaen0
+MPIPAEN1        mpipaen1
+PAEN0           paen0
+PAEN1           paen1
+MPIDPVR         mpidpvr
+MPISCS          mpiscs
+skew_calibration_status     skewCalibrationStatus
+MPICSR          mpicsr
+MPICTRG         mpictrg
+MPICLMODE       mpiclmode
+MPICIOMD0       mpiciomd0
+MPICIOMD1       mpiciomd1
+MPICHDPDSEL     mpichdpdsel
+CP_HS_SETTLECNT     cpHsSettlecnt
+MPICCPI2        mpiccpi2
+MPICCPI1        mpiccpi1
+CP_HS_STOPCNT   cpHsStopcnt
+hs_stopcnt      hsStopcnt
+hs_settlecnt        hsSettlecnt
+CP_HS_SYNCMODE  cpHsSyncmode
+hs_syncmode     hsSyncmode
+CP_RLR_LCONFIG  cpRlrLconfig
+MPICPRLRLCONF   mpicprlrlconf
+rlr_lconfig     rlrLconfig
+rlr_tpsel       rlrTpsel
+CP_RLR_TPSEL    cpRlrRpsel  
+MPICPRLRLTPSEL  mpicprlrltpsel    
+MPICPRLRPRBS    mpicprlrprbs
+CP_RLR_PRBSSP   cpRlrPrbssp
+rlr_prbssp      rlrPrbssp
+tgr_progseq     tgrProgseq
+CP_TGR_PROGSEQ  cpTgrProgseq
+MPICPPROGSEQ    mpicpprogseq
+CP_FORCERXMODE2 cpForcerxmode2
+MPICPFRXMODE    mpicpfrxmode
+CP_FORCERXMODE1 cpForcerxmode1
+CP_FORCERXMODE0 cpForcerxmode0
+
+
+
+
+
+
+impro16print.c文档 
+MPICPAEN0       mpicpaen0
+MPICPAEN1       mpicpaen1
+MPICPVR         mpicpvr
+SSL0            ssl0
+SSL1            ssl1
+SSL2            ssl2
+rxstopstate_l0  rxstopstateL0
+rxstopstate_l1  rxstopstateL1
+rxstopstate_l2  rxstopstateL2
+MPICPRLRLST     mpicprlrlst
+CP_RLR_LSTATUS0 cpRlrLstatus0
+CP_RLR_LSTATUS1 cpRlrLstatus1
+CP_RLR_LSTATUS2 cpRlrLstatus2
+MPICPRLRWECNT0  mpicprlrwecnt0
+MPICPRLRWECNT1  mpicprlrwecnt1
+MPICPRLRWECNT2  mpicprlrwecnt2
+CP_RLR_WERRCNT0 cpRlrWerrcnt0
+CP_RLR_WERRCNT1 cpRlrWerrcnt1
+CP_RLR_WERRCNT2 cpRlrWerrcnt2
+MPICPRLRWCNT0   mpicprlrwcnt0
+MPICPRLRWCNT1   mpicprlrwcnt1
+MPICPRLRWCNT2   mpicprlrwcnt2
+CP_RLR_WCNT0    cpRlrWcnt0    
+CP_RLR_WCNT1    cpRlrWcnt1    
+CP_RLR_WCNT2    cpRlrWcnt2
+CP_RLR_SYERRCNT0    cpRlrSyerrcnt0
+CP_RLR_SYERRCNT1    cpRlrSyerrcnt1
+CP_RLR_SYERRCNT2    cpRlrSyerrcnt2
+MPICPRLRSERRCNT0    mpicprlrserrcnt0
+MPICPRLRSERRCNT1    mpicprlrserrcnt1
+MPICPRLRSERRCNT2    mpicprlrserrcnt2
+MPICPRLRSERRLOC0    mpicprlrserrloc0
+MPICPRLRSERRLOC1    mpicprlrserrloc1
+MPICPRLRSERRLOC2    mpicprlrserrloc2
+CP_RLR_SYERRLOC0    cpRlrSyerrloc0
+CP_RLR_SYERRLOC1    cpRlrSyerrloc1
+CP_RLR_SYERRLOC2    cpRlrSyerrloc2
+LVDSTRG             lvdstrg
+LMD                 lmd
+LCH                 lch
+output_ch_no        outputChNo
+LDW             ldw
+data_bit_width  dataBitWidth
+LSFT            lsft
+SYNT            synt
+sync_type       syncType
+data_input_type dataInputType
+SZEN            szen
+SYN16           syn16
+sync_bit_fix    syncBitFix
+DIVOT           divot
+divide_output   divideOutput
+inverted_output invertedOutput
+LMIR         lmir           
+DOLMD           dolmd
+output_mode     outputMode
+LMSK            lmsk
+lane_mask       laneMask
+LVDSCLKS        lvdsclks
+CLKS0       clks0
+CLKS1       clks1
+CLKS2       clks2
+CLKS3       clks3
+CLKS4       clks4
+CLKS5       clks5
+CLKS6       clks6
+CLKS7       clks7
+clock_select_sp0    clockSelectSp0
+clock_select_sp1    clockSelectSp1
+clock_select_sp2    clockSelectSp2
+clock_select_sp3    clockSelectSp3
+clock_select_sp4    clockSelectSp3
+clock_select_sp5    clockSelectSp5
+clock_select_sp6    clockSelectSp6
+clock_select_sp7    clockSelectSp7
+LVDSDATS        lvdsdats
+DATS00          dats00
+DATS01          dats01
+DATS10          dats10
+DATS11          dats11
+DATS20          dats20
+DATS21          dats21
+DATS30          dats30
+DATS31          dats31
+DATS40          dats40
+DATS41          dats41  
+DATS50          dats50
+DATS51          dats51
+DATS60          dats60
+DATS61          dats61
+DATS70          dats70
+DATS71          dats71
+SYNCSEL         syncsel
+lane_select     laneSelect
+LHSADD          lhsadd
+LHSIZE          lhsize
+
+LPDCHG          lpdchg
+SELA-->P            sela-->p
+ptn_a       ptnA
+ptn_b       ptnB
+ptn_c       ptnC
+ptn_d       ptnD
+ptn_e       ptnE
+ptn_f       ptnF
+ptn_g       ptnG
+ptn_h       ptnH
+ptn_i       ptnI
+ptn_j       ptnJ
+ptn_k       ptnK
+ptn_l       ptnL
+ptn_m       ptnM
+ptn_n       ptnN
+ptn_o       ptnO
+ptn_p       ptnP
+SAV0        sav0
+SAV1        sav1
+SAV2        sav2
+SAB0*       sab0*
+EAB0*       eab0*
+SAV11       sav11
+SAV1_*      sav1_*
+EAV1*       eav1*
+SAB1*       sab1*
+EAB1*       eab1*
+SAV2*       sav2*
+EAV2*        eav2*
+SAB2*       sab2*
+EAB2*       eab2*
+Msab0*      Msab0*
+Meav0*      meav0*        
+Msav0*      msav0*
+Meab0*      meab0*
+sync_mask   syncMask
+Meav1*       meav1*
+Msab1*      msab1*
+Meab1*      meab1*
+Msav2*      msav2*
+Meav2*      meav2*
+Msab2*      msab2*
+Meab2*      meab2*
+LVDSINTADR0     lvdsintadr0
+sol_addr        solAddr
+eol_addr        eolAddr
+
+
+impro17print.c文档 
+LVDSPAEN    lvdspaen
+delayline_moni  delaylineMoni
+phy_code_cp2    phyCodeCp2
+phy_code_cp1    phyCodeCp1
+phy_code_cp0    phyCodeCp0
+PHY0DLMONI      phy0dlmoni
+PHY0DLMONI1      phy0dlmoni1
+PHY0DLMONI2      phy0dlmoni2
+PHY0DLMONI3      phy0dlmoni3
+PHY0_CODE_CP0   phy0CodeCp0
+PHY0_CODE_CP0   phy0CodeCp1
+PHY0_CODE_CP0   phy0CodeCp2
+
+PHY1_CODE_CP0   phy1CodeCp0
+PHY1_CODE_CP0   phy1CodeCp1
+PHY1_CODE_CP0   phy1CodeCp2
+
+PHY2_CODE_CP0   phy2CodeCp0
+PHY2_CODE_CP0   phy2CodeCp1
+PHY2_CODE_CP0   phy2CodeCp2
+
+PHY3_CODE_CP0   phy3CodeCp0
+PHY3_CODE_CP0   phy3CodeCp1
+PHY3_CODE_CP0   phy3CodeCp2
+
+PHY1DLMONI*      phy1dlmoni*
+PHY2DLMONI*      phy2dlmoni*      
+PHY3DLMONI*      phy3dlmoni*    
+PHYCMONI*       phycmoni* 
+PHY0_CDRMON     phy0Cdrmon
+PHY1_CDRMON     phy1Cdrmon
+PHY2_CDRMON     phy2Cdrmon
+PHY3_CDRMON     phy3Cdrmon
+ltm_connect_path_sel    ltmConnectPathSel
+
+
+
+impro20print.c文档 
+SROTOPCTL1      srotopctl1
+SROISW          sroisw
+SROMD           sromd
+sro_mode_sel        sroModeSel
+cag_target_sel  cagTargetSel
+bay_out_path_sel    bayOutPathSel
+BRPSW2      brpsw2
+BRPSW1      brpsw1
+BRPSW0      brpsw0
+b2b_connect_path_sel    b2bConnectPathSel
+ORG1        org1  
+ORG0        org0
+WAITGENV        waitgenv
+GENV0       genv0
+GENV1       genv1
+GENH0       genh0
+GENH1       genh1
+v_wait_signal_pos   vWaitSignalPos
+h_wait_signal_pos   hWaitSignalPos
+WAITGENH    waitgenh
+WAITGENEN   waitgenen
+GENEN0      genen0
+GENEN1      genen1
+AFPB        afpb
+AFPBTRG     afpbtrg
+AFPBH       afpbh
+afpb_area   afpbArea
+AFPBV       afpbv
+AFPBHW      afpbhw
+AFPBVW      afpbvw
+
+
+impro21print.c文档 
+FFSHTRG     ffshtrg
+montage_mode    montageMode
+FFSHCTL ffshctl
+FFSHPTMD    ffshptmd
+FFSHUL1     ffshul1
+FFSHUL2     ffshul2
+clip_r      clipR
+FFSHULRR    ffshulrr
+FFSHULGR    ffshulgr
+clip_gr     clipGr
+clip_gb     clipGb
+FFSHULGB    ffshulgb
+clip_b      clipB
+FFSHBC      ffshbc
+FFSHBC0     ffshbc0
+FFSHBC1     ffshbc1
+FFSHV       ffshv
+FFSHH       ffshh
+FFSHVW      ffshvw
+FFSHHW      ffshhw
+FFSHPAEN    ffshpaen
+FFSHGFMT    ffshgfmt
+FFSHSUBPR   ffshsubpr
+FFSHSUBSP    ffshsubsp   
+FFSHSUBPRH  ffshsubprh
+FFSHSUBPRV  ffshsubprv
+FFSHSUBSPH  ffshsubsph
+ffshsubspv  ffshsubspv
+FFSHSUBDRM  ffshsubdrm
+FFSHSUBDR   ffshsubdr
+FFSHSUBDRE  ffshsubdre
+FFSHSUBST   ffshsubst
+FFSHSUBSTH  ffshsubsth
+start_pos_h startPosH
+FFSHSUBSTV  ffshsubstv
+start_pos_v startPosV
+montage_pos_h   montagePosH
+FFSHHWPH    ffshhwph
+FFSHCCTL    ffshcctl
+FFSHCEN     ffshcen
+FFSHLP1     ffshlp1
+FFSHLPRR     ffshlprr   
+sat_slope_gain  satSlopeGain
+sat_correction_enabled  satCorrectionEnabled
+FFSHLPGR    ffshlpgr
+FFSHLP2 ffshlp2
+FFSHLPGB        ffshlpgb
+FFSHLPBB        ffshlpbb
+frame_vertical_size frameVerticalSize
+frame_horizontal_size   frameHorizontalSize
+select_format   selectFormat
+FFSHWRIC    ffshwric
+CAGTRG      cagtrg
+CAG         cag
+
+
+impro22print.c文档 
+v_binning_ratio_reciprocal_num  vBinningRatioReciprocalNum
+RBR     rbr
+h_binning_ratio_reciprocal_num  hBinningRatioReciprocalNum
+ABOARH  aboarh
+opt_center_pos_h    optCenterPosH
+ABOAGH      aboagh
+ABOABH      aboabh
+ABOARV      ABOARV
+opt_center_pos_v    optCenterPosV
+ABOAGV      aboagv
+ABOABV      aboabv
+ABGAR       abgar
+ABGAG       abgag
+ABGAB       abgab
+ABLRH       ablrh
+ABLRHU      ablrhu
+transfer_u_limit_h  transferULimitH
+ABLGH       ablgh
+ABLGHU      ablghu
+ABLBH       ablbh
+ABLBHU      ablbhu
+ABLRHL      ablrhl
+ABLGHL      ablghl
+transfer_l_limit_h  transferLLimitH
+ABLBHL      ablbhl
+ABLRV       ablrv
+ABLRVU      ablrvu
+ABLGV       ablgv
+ABLGVU      ablgvu
+transfer_u_limit_v  transferULimitV
+ABLBV   ablbv
+ABLBVU      ablbvu
+ABLRVL      ablrvl
+transfer_l_limit_v  transferLLimitV
+ABLGVL      ablgvl
+ABLBVL      ablbvl
+ABOFSRH     abofsrh
+transfer_offset_h   transferOffsetH
+ABOFSGV     abofsgv
+ABOFSBV         abofsbv
+ABNLTHR1        abnlthr1
+ABNLTHR2        abnlthr2
+ABNLTHR3        abnlthr3
+ABNLTHR4        abnlthr4
+ABNLTHG1        abnlthg1
+ABNLTHG2        abnlthg2
+ABNLTHG3        abnlthg3
+ABNLTHG4        abnlthg4
+corner_thresh_1 cornerThresh1
+corner_thresh_2 cornerThresh2
+corner_thresh_3 cornerThresh3
+corner_thresh_4 cornerThresh4
+ABNLTHB1        abnlthb1
+ABNLTHB2        abnlthb2
+ABNLTHB3        abnlthb3
+ABNLTHB4        abnlthb4
+ABNLGAR4        abnlgar4
+ABNLGAR3        abnlgar3
+ABNLGAR2        abnlgar2
+ABNLGAR1        abnlgar1
+corner_gain_1   cornerGain1
+corner_gain_2   cornerGain2
+corner_gain_3   cornerGain3
+corner_gain_4   cornerGain4
+
+ABNLGAG1        abnlgag1
+ABNLGAG2        abnlgag2
+ABNLGAG3        abnlgag3
+ABNLGAG4        abnlgag4
+ABNLGAB1        abnlgab1
+ABNLGAB2        abnlgab2
+ABNLGAB3        abnlgab3
+ABNLGAB4        abnlgab4
+CAGPAEN     cagpaen
+g_pos_x         gPosX
+CAGGWP      caggwp
+CAGGH           caggh
+g_pos_y         gPosY
+CAGGV           caggv
+CAGGWS          caggws
+CAGGHW          cagghw
+g_width         gWidth
+g_lines         gLines
+CAGGVW          caggvw
+CAGH            cagh
+CAGV            cagv
+CAGWS           cagws
+CAGHW           caghw
+CAGVW           cagvw
+CAGMD           cagmd
+CLPSEL          clpsel
+clip_mode       clipMode
+g_gap_cor_mode  gGapCorMode
+GCAMD           gcamd
+g_gap_pad_mode  gGapPadMode
+g_gap_mode      gGapMode
+CAGPDD          cagpdd
+CAMD            camd
+BFGLMT          bfglmt
+BFGLMTH         bfglmth
+gradient_u_limit    gradientULimit
+gradient_l_limit    gradientLLimit
+gradient_threshold  gradientThreshold
+BFGTH               bfgth
+BFGLMTL         bfglmtl
+BFGTHA          bfgtha
+BFGTHK              bfgthk
+gradient_threshold_gain gradientThresholdGain
+DPC             dpc
+DPCTRG          dpctrgimpro22print.c文档 
+dpc_mode        dpcMode
+DPCRTZ          dpcrtz
+thre_conv_0     threConv0
+DPCPAEN         dpcpaen        
+DPAEN           dpaen
+
+__jdspro_dpc.h   -->impro23printf文档
+DPCGWP          dpcgwp
+DPCGH           dpcgh
+DPCGV           dpcgv
+DPCGHW          dpcghw
+DPCGVW          dpcgvw
+DPCV            dpcv
+DPCHW           dpchw
+DPCVW           dpcvw
+ DPCBLSP        dpcblsp
+DPCBLWP         dpcblwp
+DPCBLSM         dpcblsm
+DPCBLWM         dpcblwm
+DFGRGB          dfgrgb
+DFMDG           dfmdg
+DFMDRB      dfmdrb
+DFDCNT  dfdcnt
+DFRBUG  dfrbug
+DFAGND  dfagnd
+DFSRM       dfsrm
+DFSRP       dfsrp
+DFSGM       dfsgm
+DFSGP       dfsgp
+DFSBM       dfsbm
+DFSBP       dfsbp
+DFS1            dfs1
+DFS2            dfs2
+DFS3            dfs3
+DFO3            dfo3
+DFO2            dfo2
+DFO1            dfo1
+DFOBP       dfobp
+DFOBM       dfobm
+DFOGP       dfogp
+DFOGM       dfogm
+DFORP       dforp
+DFORM       dform
+DFKRM       dfkrm
+DFKRP       dfkrp
+DFKGM       dfkgm
+DFKBM       dfkbm
+DFKBP       dfkbp
+DFK1        dfk1    
+DFK2        dfk2  
+DFK3        dfk3  
+DFHRM       dfhrm
+DFHRP       dfhrp
+DFHGM       dfhgm
+DFHGP       dfhgp    
+DFHBM       dfhbm
+DFHBP       dfhbp
+DFH3        dfh3
+DFH2        dfh2
+DFH1        dfh1
+DFCSRM      dfcsrm
+DFCSRP      dfcsrp
+DFLSTHG     dflsthg
+DFLSTHR     dflsthr
+DFLSTHB     dflsthb
+DFLSTH1     dflsth1
+DFLSTH2     dflsth2
+DFAGEFM     dfagefm
+DFAGEFP     dfagefp
+DFAGEFM2    dfagefm2
+DFAGEFP2    dfagefp2    
+DFAGTHM     dfagthm
+DFAGTHP     dfagthp
+DFAGTHKM    dfagthkm    
+DFAGTHKP    dfagthkp    
+DMGUG       dmgug
+DMWKSM      dmwksm
+DMWKSP      dmwksp
+DMWKDM      dmwkdm
+DMWKDP      dmwkdp
+DMAGKM      dmagkm
+DMAGKP      dmagkp
+DEGRGB      degrgb
+DERBUG      derbug
+DEGUG       degug
+DENSS       denss
+DENSO       denso
+DENSK       densk
+DENSH       densh
+DENSMGN     densmgn
+DENDCTH     dendcth
+DEAGKM      deagkm
+DEAGKP      deagkp
+DCAGEFM     dcagefm
+DCAGEFP     dcagefp
+DCAGTHM dcagthm
+DCAGTHP dcagthp
+DPCGWS      dpcgws
+DPCWP       dpcwp
+DPCWS       dpcws
+DPCBLP      dpcblp
+DPCBLM      dpcblm
+DFCTL       dfctl
+DFS         dfs
+DFO         dfo
+DFK         dfk
+DFH         dfh
+DFCSR       dfcsr
+DFLSTH      dflsth
+DFAGEF      dfagef
+DFAGEF2     dfagef2
+DFAGTH      dfagth
+DFAGTHK     dfagthk
+DMCTL        dmctl   
+DMWKS        dmwks     
+DMWKD       dmwkd
+DMAGK       dmagk
+DECTL       dectl
+DEAGK       deagk
+DCAGEF      dcagef
+DCAGTH      dcagth
+
+
+
+impro22print.c文档 
+
+alpha_blend_transition_width_p  alphaBlendTransitionWidthP
+alpha_blend_start_pos_p     alphaBlendStartPosP
+alpha_blend_transition_width_m  alphaBlendTransitionWidthM
+alpha_blend_start_pos_m     alphaBlendStartPosM
+grgb_independent_setting        grgbIndependentSetting
+g_mode          gMode
+rb_mode         rbMode
+upper_limit_Local_registration      upperLimitLocalRegistration
+use_mdd         useMdd
+support_2concecutive_defect support2concecutiveDefect
+p_threshold_start_pos   pThresholdStartPos
+m_threshold_start_pos   mThresholdStartPos
+p_threshold_start_offset    pThresholdStartOffset
+m_threshold_start_offset     mThresholdStartOffset   
+p_threshold_gain            pThresholdGain
+m_threshold_gain            mThresholdGain
+p_threshold_upper_limit     pThresholdUpperLimit
+m_threshold_upper_limit     mThresholdUpperLimit
+p_threshold_2consecutive    pThreshold2consecutive
+m_threshold_2consecutive    mThreshold2consecutive    
+threshold_2consecutive_bright_pix   threshold2consecutiveBrightPix
+p_mdd_effect        pMddEffect
+m_mdd_effect        mMddEffect
+p_mdd_effect2       pMddEffect2
+m_mdd_effect2       mMddEffect2
+p_threshold_offset  pThresholdOffset
+m_threshold_offset  mThresholdOffset
+p_manual_adj_val_single pManualAdjValSingle
+m_manual_adj_val_single mManualAdjValSingle
+p_manual_adj_val_2consecutive   pManualAdjVal2consecutive
+m_manual_adj_val_2consecutive   mManualAdjVal2consecutive
+p_correction_level_on_ocd   pCorrectionLevelOnOcd
+m_correction_level_on_ocd    mCorrectionLevelOnOcd   
+
+esd_mode        esdMode
+use_rb_jdge     useRbJdge
+threshold_start_pos     thresholdStartPos
+threshold_offset    thresholdOffset
+threshold_gain      thresholdGain
+threshold_upper_limit   thresholdUpperLimit
+noise_tolerance     noiseTolerance
+threshold_calculation   thresholdCalculation
+p_ocd_effect        pOcdEffect
+m_ocd_effect        mOcdEffect
+p_threshold     pThreshold
+m_threshold     mThreshold
+FFC         ffc
+FCTRG       fctrg
+
+
+__jdspro_ffc.h文档
+
+FCPAEN      fcpaen
+FCV         fcv
+FCH          fch   
+FCVW        fcvw
+FCHW        fchw
+FCBC0       fcbc0
+FCBC1       fcbc1
+FCSUBPRH    fcsubprh
+FCSUBPRV    fcsubprv    
+FCSUBSPH    fcsubsph
+FCSUBSPV    fcsubspv
+FCSUBDRM     fcsubdrm   
+FCSUBDRE    fcsubdre
+FCSUBSTH    fcsubsth
+FCSUBSTV    fcsubstv
+FCWRIC      fcwric
+FCBC        fcbc
+FCSUBPR     fcsubpr
+FCSUBSP     fcsubsp
+FCSUBDR     fcsubdr
+FCSUBST     fcsubst
+coef_horizontal_size    coefHorizontalSize
+coef_vertical_size      coefVerticalSize
+inverse_base    inverseBase
+inverse_exponent    inverseExponent
+coef_pos_x      coefPosX
+coef_pos_y      coefPosY
+blend_ratio_0   blendRatio0
+blend_ratio_1   blendRatio1
+HRB         hrb
+HRBTRG      hrbtrg
+HRBH        hrbh
+in_pos_x    inPosX    
+in_pos_y    inPosY
+HRBV        hrbv
+HRBHW       hrbhw
+HRBVW   hrbvw
+in_lines    inLines
+HRBOHW      hrbohw    
+HRBSCYC     hrbscyc
+HRBOSM      hrbosm
+out_timing  outTiming
+HRBK    hrbk
+HRBK1   hrbk1
+HRBK_*  hrbk*       //hrbk0_3     
+HRBK*   hrbk*
+HRBPAEN hrbpaen
+
+__jdspro_vrb.h文档   25
+VRBTRG  vrbtrg
+VRB     vrb
+VRBH    vrbh    
+VRBV    vrbv    
+VRBHW   vrbhw
+VRBVW   vrbvw
+VRBSCYC vrbscyc
+VRB0K_* vrb0k*
+VRB0K*  vrb0k*   
+VRB1K_* vrb1k*
+VRB1K*  vrb1k*
+VRBPAEN vrbpaen
+FFSH    ffsh
+h_size_correction_coeff hSizeCorrectionCoeff
+v_size_correction_coeff vSizeCorrectionCoeff
+h_pixel_unit_interpolation  hPixelUnitInterpolation
+v_pixel_unit_interpolation  vPixelUnitInterpolation
+rad_inverse_coeff_interpolation radInverseCoeffInterpolation
+h_start_pos_coeff       hStartPosCoeff
+v_start_pos_coeff   vStartPosCoeff
+frame_correction_blend_0    frameCorrectionBlend0
+frame_correction_blend_1    frameCorrectionBlend1
+ffsh_area       ffshArea
+
+impro26print.c文档 __jdspro_ff.h
+FFTRG       fftrg
+FFV     ffv
+FFH     ffh
+FFVW    ffvw
+FFHW   ffhw     
+FFLPB0  fflpb0
+FFLPB1  fflpb1
+FFLPB2  fflpb2
+FFDEFTS ffdefts
+FFMNWGT ffmnwgt
+FFSBWGT ffsbwgt
+FF      ff
+SDCTRG  sdctrg
+SDCCTL  sdcctl
+SDCMD   sdcmd    
+sdc_mode    sdcMode
+afpb_output_ptn afpbOutputPtn
+SDCPTO  sdcpto
+SDCMONO sdcmono
+monochrome_mode monochromeMode
+SDCPDAFEN   sdcpdafen
+afpb_enabled    afpbEnabled
+
+impro27print.c文档
+SDCSGD  sdcsgd
+SDCPC*   sdcpc*
+h_column_pattern0 hColumnPattern0
+h_column_pattern1 hColumnPattern1
+SDCP1CW0    sdcp1cw0
+SDCP1CW1    sdcp1cw1
+SDCP2CW1    sdcp2cw1
+SDCP2CW0    sdcp2cw0
+h_column_pattern_valid_width0   hColumnPatternValidWidth0   
+h_column_pattern_valid_width1   hColumnPatternValidWidth1
+h_column_pattern1_valid_width0  hColumnPattern1ValidWidth0
+h_column_pattern1_valid_width1  hColumnPattern1ValidWidth1
+h_column_pattern2_valid_width1  hColumnPattern2ValidWidth1
+h_column_pattern2_valid_width0  hColumnPattern2ValidWidth0
+h_column_pattern1_invalid_width0    hColumnPattern1InvalidWidth0
+h_column_pattern1_invalid_width1    hColumnPattern1InvalidWidth1
+h_column_pattern2_invalid_width1    hColumnPattern2InvalidWidth1
+h_column_pattern2_invalid_width0    hColumnPattern2InvalidWidth0
+SDCN1CW0    sdcn1cw0
+SDCN1CW1    sdcn1cw1
+SDCN2CW1    sdcn2cw1
+SDCN2CW0    sdcn2cw0
+SDCGMAXMIN  sdcgmaxmin
+SDCGMAX sdcgmax
+SDCGMIN     sdcgmin
+afpb_gain_correction_u_threshold    afpbGainCorrectionUThreshold
+af_gain_correction_l_threshold  afGainCorrectionLThreshold
+afpb_neighbor_pixel_correction_level    afpbNeighborPixelCorrectionLevel
+SDCNMAX     sdcnmax
+SDCPAEN     sdcpaen
+tbl_reg_ptr tblRegPtr
+SDCGD       sdcgd
+
+impro30print.c文档
+B2BTOPCTL   b2btopctl
+B2BISW      b2bisw
+CAGSL       cagsl
+ELF         elf
+ELFTRG      elftrg
+ELFPAEN     elfpaen
+EPAEN       epaen
+ELFCTL      elfctl
+ELFPDD      elfpdd
+pix_padding pixPadding
+ELFRNG      elfrng
+padding_mode    paddingMode
+nr_select   nrSelect
+ELFAFS      elfafs
+N1S5EN      n1s5en
+n1s5_enable n1s5Enable
+n5s9_enable n5s9Enable
+f9_enable   f9Enable
+NFS9EN      nfs9en
+NLA0EN      nla0en
+a0_enable   a0Enable
+f5_filter_mode  f5FilterMode
+F5MD        f5md
+F9MD        f9md
+f9_filter_mode  f9FilterMode
+EFMD        efmd
+e_filter_mode    eFilterMode   
+l_filter_mode    lFilterMode   
+LFMD        lfmd
+ELFL*       elfl*
+
+impro31print.c文档
+ELFGWS      elfgws
+ELFGHW      elfghw
+ELFGVW      elfgvw    
+ELFGH       elfgh
+ELFGWP      elfgwp
+ELFWS       elfws
+ELFWP       elfwp
+ELFV        elfv
+ELFH        elfh
+ELFVW       elfvw
+ELFHW       elfhw
+ELFGV       elfgv
+EFTH1       efth1
+EFTH       efth
+EFL1TH      efl1th
+EFL2TH      efl2th
+EFL3TH      efl3th
+EFL4TH      efl4th
+e_threshold_1   eThreshold1
+e_threshold_2   eThreshold2
+e_threshold_3   eThreshold3
+e_threshold_4   eThreshold4
+EFTH2       efth2
+LFTH        lfth
+l_threshold lThreshold
+l_contour_2 lContour2
+l_contour_1 lContour1
+ELCOME2     elcome2
+ELCOME1     elcome1
+ELCOME     elcome
+ELCOMEN     elcomen
+ELCOME2N    elcome2n
+ELCOME1N    elcome1n
+l_cintensity_1  lCintensity1
+l_cintensity_2  lCintensity2
+A5S9E*      a5s9e*
+s5s9_threshold  s5s9Threshold
+A5S9L1*     a5s9l1*
+A5S9L1E1N   a5s9l1e1n
+A5S9L1E2N   a5s9l1e2n
+A5S9L1E3N   a5s9l1e3n
+s5s9_nr_l1_E13  s5s9NrL1E13
+s5s9_nr_l2_E13  s5s9NrL2E13
+s5s9_nr_l3_E13  s5s9NrL3E13
+A5S9L2      a5s9l2
+A5S9L21     a5s9l21
+A5S9L22     a5s9l22
+A5S9L2E1N   a5s9l2e1n
+A5S9L2E2N   a5s9l2e2n
+A5S9L2E3N   a5s9l2e3n
+A5S9L3      a5s9l3
+A5S9L4      a5s9l4
+A5S9L31     a5s9l31
+A5S9L32     a5s9l32
+A5S9L41     a5s9l41
+A5S9L42     a5s9l42
+A5S9L3E1N   a5s9l3e1n
+A5S9L3E2N   a5s9l3e2n
+A5S9L3E3N   a5s9l3e3n
+A5S9L4E1N   a5s9l4e1n
+s5s9_nr_l4_E13  s5s9NrL4E13
+A5S9L4E3N   a5s9l4e3n
+A5S9L4E2N   a5s9l4e2n
+NR5S9RGB    nr5s9rgb    
+NR5S9R      nr5s9r
+NR5S9G      nr5s9g
+s5s9_nr_adjustment  s5s9NrAdjustment
+NR5S9B      nr5s9b
+NS5S9LMP    ns5s9lmp
+NS5S9LM     ns5s9lm
+s5s9_noise_limit_plus   s5s9NoiseLimitPlus
+NS5S9LMM    ns5s9lmm
+s5s9_noise_limit_minus  s5s9NoiseLimitMinus
+ELFMNNRRL*   elfmnnrrl*
+nr_strength_l1  nrStrengthL1
+ELFMNNRGL*  elfmnnrgl*
+ELFMNNRBL   elfmnnrbl
+nr_strength_l2  nrStrengthL2
+nr_strength_l3  nrStrengthL3
+nr_strength_l4  nrStrengthL4
+ELFAFNR         elfafnr 
+af_path_nr_strength     afPathNrStrength
+ZELADCMD        zeladcmd    
+ZANBOR*     zanbor*
+ZANBOG*      zanbog*
+ZANBOB*     zanbob*
+ZANBKR*     zanbkr*
+ZANBKG*     zanbkg*
+ZANBKB*     zanbkb*
+ZANBDR*     zanbdr*
+ZANBDG*     zanbdg*
+area_boundary   areaBoundary
+ZANBDB*      zanbdb*
+ZLGTW           zlgtw
+ZLGTW1      zlgtw1
+ZLGTW2      zlgtw2
+ZLGTWR      zlgtwr
+ZLGTWG      zlgtwg
+lumi_rgb_gain       lumiRgbGain
+ZLGTWB      zlgtwb
+ZLGT        zlgt
+ZLGTR       zlgtr
+lumi_rgb_coeff      lumiRgbCoeff
+ZLGTG       zlgtg
+ZLGTB       zlgtb
+ZLGTC       zlgtc
+ZLGTER      zlgter
+ZLGTEG      zlgteg
+ZLGTEB          zlgteb
+ZLGTE       zlgte
+lumi_c_coeff    lumiCCoeff
+t_weight        tWeight
+ZEDG2ANBA       zedg2anba
+ZEDGSCLA        zedgscla
+t_adj_a     tAdjA
+ZEDG2ANBB       zedg2anbb
+t_adj_b     tAdjB
+ZEDGSCLB        zedgsclb
+ZALNGE*     zalnge*
+t_long_wavelength_threshold tLongWavelengthThreshold
+t_long_wavelength_nr_strength   tLongWavelengthNrStrength
+ZALNG       zalng
+ZALNG1      zalng1
+ZALNGL1E1N  zalngl1e1n
+ZALNGL1E2N  zalngl1e2n
+ZALNG2      zalng2
+ZALNGL1E3N  zalngl1e3n
+ZALNGL2E1N  zalngl2e1n
+ZALNGL2E2N  zalngl2e2n
+ZALNGL2E3N  zalngl2e3n
+ZALNGL3E3N  zalngl3e3n
+ZALNGL3E2N  zalngl3e2n
+ZALNGL3E1N  zalngl3e1n
+
+ZALNG3  zalng3
+ZALNG4  zalng4
+ZALNG5  zalng5
+ZALNG6  zalng6
+ZALNGL4E1N  zalngl4e1n
+ZALNGL4E2N  zalngl4e2n    
+ZALNGL4E3N  zalngl4e3n
+ZLCOME      zlcome
+ZLCOME1     zlcome1
+ZLCOME2     zlcome2
+l_filter_extraction_threshold   lFilterExtractionThreshold
+l_app_tolerance_threshold   lAppToleranceThreshold
+ZLFTH       zlfth
+ZLCOME1N    zlcome1n
+ZLCOME2N    zlcome2n
+l_app_strength  lAppStrength
+ZLCOMEN     zlcomen
+ZNSLNGLM        znslnglm
+ZNSLNGLMP       znslnglmp
+ZNSLNGLMM       znslnglmm
+long_wavelength_noise_p_limiter longWavelengthNoisePLimiter
+long_wavelength_noise_m_limiter longWavelengthNoiseMLimiter
+NSLTRG          nsltrg
+
+
+impro32print.c文档
+NSLMD   nslmd
+l_noise_mode    lNoiseMode
+l_noise_precision   lNoisePrecision
+NSLRES      nslres
+long_noise_comp     longNoiseComp
+NSLKNE      nslkne
+ANBOR*      anbor*
+ELFZP       elfzp
+ANBKR       anbkr
+ANBKR1      anbkr1
+ANBKR2      anbkr2
+ANBDR       anbdr
+ANBDR2       anbdr1
+ANBDR2       anbd2
+ANBOG       anbog
+ANBOG2       anbog2
+ANBOG3       anbog3
+ANBKG2      anbkg2
+ANBKG1      anbkg1
+ANBKG      anbkg
+ANBDG2  anbdg2
+ANBDG1  anbdg1
+ANBDG  anbdg
+ANBOB2      anbob2
+ANBOB1      anbob1
+ANBOB      anbob
+
+ANBKB2      anbkb2
+ANBKB1      anbkb1
+ANBKB      anbkb
+
+ANBDB2      anbdb2
+ANBDB1      anbdb1
+ANBDB      anbdb
+LGTW2       lgtw2
+LGTW1       lgtw1
+LGTW       lgtw
+LGT     lgt
+LGTE        lgte
+EDG2ANBA    edg2anba
+EDGSCLA     edgscla
+EDG2ANBB        edg2anbb
+EDGSCLB     edgsclb
+EDG2ANBC        edg2anbc
+EDGSCLC     edgsclc
+A1S5E       a1s5e
+A1S5E1      a1s5e1
+A1S5E2      a1s5e2
+A1S5L1      a1s5l1
+A1S5L11     a1s5l11
+A1S5L12     a1s5l12
+A1S5L2      a1s5l2
+A1S5L21     a1s5l21
+A1S5L22     a1s5l22
+A1S5L3      a1s5l3
+A1S5L31     a1s5l31
+A1S5L32      a1s5l32   
+A1S5L4*    a1s5l4*     
+NR1S5RGB*        nr1s5rgb*
+NS1S5LM     ns1s5lm
+FS9W*       fs9w*
+FS9YC*      fs9yc*
+CRVAF       crvaf
+FASTR       fastr
+FCRVABTOF   fcrvabtof
+FCRVABTGA    fcrvabtga   
+FCRVABTBD    fcrvabtbd      
+FCRVABTCP   fcrvabtcp
+FYABTGA     fyabtga
+FYABTBD     fyabtbd
+FYABTCLP    fyabtclp
+FAEHH       faehh
+FBSTR       fbstr
+CRVBF       crvbf
+FCRVBBTOF   fcrvbbtof
+FCRVBBTGA   fcrvbbtga
+FCRVBBTBD   fcrvbbtbd
+FCRVBBTCP   fcrvbbtcp
+FYBBTBD     fybbtbd
+FYBBTCLP    fybbtclp
+FBEHH       fbehh
+EDGCATH     edgcath
+EDGCATHA    edgcatha
+high_freq_area_adj_coeff    highFreqAreaAdjCoeff
+
+test_para_2     testPara2
+test_para_1     testPara1
+ELFTEST1        elftest1
+ELFTEST2        elftest2
+FSHD            fshd
+FSHDTRG         fshdtrg
+FSHDCTL         fshdctl
+FSMODE          fsmode
+FWMODE          fwmode
+correction_mode     correctionMode
+correction_mode_awb correctionModeAwb
+FSHDPTMD        fshdptmd
+FSULRR      fsulrr
+FSULGR      fsulgr
+FSULGB      fsulgb
+FSULBB      fsulbb
+FSUL1       fsul1
+FSUL2       fsul2
+FSHDPAEN    fshdpaen
+FSPAEN      fspaen
+
+
+impro32print.c文档
+FSHDH       fshdh
+FSHDV       fshdv
+FSHDHW      fshdhw
+FSHDVW      fshdvw
+FSHDBC      fshdbc
+FSHDBC0     fshdbc0
+FSHDBC1     fshdbc1
+FSCTL       fsctl
+FSFMT       fsfmt
+FSSUBPR     fssubpr
+FSSUBPRH    fssubprh
+FSSUBPRV    fssubprv
+FSSUBSP     fssubsp
+
+FSSUBSPH    fssubsph
+FSSUBSPV    fssubspv
+FSSUBDR     fssubdr
+FSSUBSTH    fssubsth
+FSSUBSTV    fssubstv
+FSA1        fsa1
+FSARR       fsarr
+magnification_r magnificationR
+FSAGR       fsagr
+magnification_gr    magnificationGr
+FSAGB       fsagb
+magnification_gb    magnificationGb
+FSABB       fsabb
+magnification_b magnificationB
+FSHDHCCTL   fshdhcctl
+FSHCEN      fshcen
+FSSLP1  fsslp1
+FSSLP2  fsslp2
+FSSLPRR fsslprr
+FSSLPGR fsslpgr
+FSSLPGB fsslpgb
+FSSLPBB fsslpbb
+CSCTL1  csctl1
+CSCTL2  csctl2
+CSSTBL  csstbl
+select_ram  selectRam
+CSFMT   csfmt
+CSHDLIR cshdlir
+CSHDPARH    cshdparh
+interval_h  intervalH
+interval_v  intervalV
+CSHDPARV    cshdparv
+start_address_r startAddressR
+CSTBLS1 cstbls1
+CSTBLS2 cstbls2
+CSTBLSRR    cstblsrr
+CSTBLSGR    cstblsgr
+start_address_gr    startAddressGr
+CSTBLSGB        cstblsgb
+start_address_gb    startAddressGb
+CSTBLSBB        cstblsbb
+start_address_b startAddressB
+CSHDDO      cshddo
+
+CSHDD   cshdd
+CSHDDM  cshddm
+CSHDOA  cshdoa
+CSHDOAH cshdoah
+pos_h   posH
+pos_v   posV
+CSHDOAV cshdoav
+CSARR   csarr
+CSA1    csa1
+CSA2    csa2
+CSAGR   csagr
+CSAGB   csagb
+CSABB   csabb
+FSWRIC  fswric
+CSTBLST cstblst
+FSHDCTBL    fshdctbl
+
+
+impro40print.c文档
+STATTOPCTL1 stattopctl1
+AFSW*   afsw*
+af_input_sel    afInputSel
+flck_input_sel  flckInputSel
+aeawb_input_sel aeawbInputSel
+AESW*       aesw*
+hist_input_sel  histInputSel
+HISW*       hisw*
+AETRG       aetrg
+AEAWBCTL        aeawbctl
+AEAWBWMD        aeawbwmd
+aeawb_ctrl  aeawbCtrl
+aeawb_mode  aeawbMode
+AWBGMD      awbgmd
+AEEWMD      aeewmd
+AEH         aeh
+awb_area    awbArea
+awb_wd_window_mode  awbWdWindowMode
+AEV     aev
+AEHW    aehw
+AEVW    aevw
+AETW    aetw
+top_lines   topLines
+bottom_lines    bottomLines
+AEBW    aebw
+left_width  leftWidth
+AELW        aelw
+right_width rightWidth
+h_bc_num    hBcNum
+AERW        aerw
+AEVBC   aevbc    
+AEHBC   aehbc
+v_bc_num    vBcNum
+AEAWBPAEN   aeawbpaen
+
+impro41print.c文档
+AECW1       aecw1
+AECW2       aecw2
+AECW3       aecw3
+AECVW       aecvw
+AECHW       aechw
+AECTW       aectw
+AECBW       aecbw
+AECLW       aeclw
+AECRW       aecrw
+AWBCW1      awbcw1
+AWBCW2      awbcw2
+AWBCW3      awbcw3
+AWBCVW      awbcvw
+AWBCHW      awbchw
+AWBCTW      awbctw
+AWBCBW      awbcbw
+AWBCLW      awbclw
+AWBCRW      awbcrw
+AWTDY       awtdy
+AWTDUY      awtduy
+AWTDR       awtdr
+AWTDUR      awtdur
+AWTDG       awtdg
+AWTDUG      awtdug
+AWTDB       awtdb
+AWTDUB      awtdub
+AWTDLY      awtdly
+AWTDLR      awtdlr
+AWTDLG      awtdlg
+AWTDLB      awtdlb
+AWMLCY      awmlcy
+AWMLUCY     awmlucy
+AWMLLCY     awmllcy
+AWMLCB      awmlcb
+AWMLUCB     awmlucb
+AWMLLCB     awmllcb
+AWMLUCR     awmlucr
+AWMLCR      awmlcr
+AWMLLCR     awmllcr
+AWMC*       awmc*
+AEYKGR      aeykgr
+AEYKRR      aeykrr
+AEYKGB      aeykgb
+AEYKBB      aeykbb
+LINEV*      linev*
+start_line  startLine
+
+
+impro42print.c文档
+global_data_width   globalDataWidth
+AFEBEN      afeben
+ENM0        enm0
+eval_calc0_enable   evalCalc0Enable    
+af_ctrl     afCtrl
+eval_calc1_enable   evalCalc1Enable
+eval_calc2_enable   evalCalc2Enable
+ENM1    enm1
+ENM2    enm2
+ENV0    env0
+vertical_enable verticalEnable
+ENH1    enh1
+ENH0    enh0
+horizon0_enable horizon0Enable
+horizon1_enable horizon1Enable
+horizon2_enable horizon2Enable
+ENH2    enh2
+ENW0    enw0    
+ENW1    enw1  
+ENW2    enw2  
+ENW3    enw3  
+ENW4    enw4  
+ENW5    enw5  
+ENW6    enw6  
+ENW7    enw7  
+ENW8    enw8  
+ENW9    enw9  
+ENW10    enw10  
+ENW11    enw11  
+ENW12   enw12  
+ENW13    enw13 
+ENW14    enw14  
+AFPAEN  afpaen
+AFTRG   aftrg
+AFGH    afgh
+global_win   globalWin
+AFGV    afgv
+AFGHW   afghw
+AFGVW   afgvw
+af_eval_calc_ctrl   afEvalCalcCtrl
+AFMAIN  afmain
+unit_no unitNo
+AFMTRXRR    afmtrxrr
+AFMTRXGR    afmtrxgr
+AFMTRXGB    afmtrxgb
+AFMTRXBB     afmtrxbb   
+AFMDEN      afmden
+AFKNEN      afknen
+median_enable   medianEnable
+AFKNB*      afknb*
+knee_boundary   kneeBoundary
+afknb_1     afknb1
+afknb_2     afknb2
+afknb_3     afknb3
+afknb_4     afknb4
+afknb_5     afknb5
+afknb_6     afknb6
+afknb_7     afknb7
+knee_slope  kneeSlope
+afkninc_1-7   afkninc1-7
+AFKNOFS*    afknofs*
+afknofs_*   afknofs*
+knee_offset kneeOffset
+
+impro43print.c文档
+update_cycle    updateCycle
+eval_cal_unit   evalCalUnit
+AFVS        afvs
+AFVSCTL     afvsctl
+AFVSCYC     afvscyc
+AFSLV       afslv
+AFVSH       afvsh
+start_addr  startAddr
+AFVSHW      afvshw
+horizon_size    horizonSize
+AFIIRVB*    afiirvb* 
+AFIIRVK     afiirvk
+iir_k       iirK
+iir_a0      iirA0
+AFIIRVA*    afiirva*
+iir_a1      iirA1
+iir_a*      iirA*
+iir_b*      iirB*
+AFCOR2V     afcor2v
+AFCOR2LVV   afcor2lvv
+cor_threshold   corThreshold
+AFFIRVB*    affirvb
+cor_level   corLevel
+fir_filter  firFilter
+group_a groupA
+AFHS        afhs
+AFHSCTLA    afhsctla
+AFIHA       afiha
+iir_enable  iirEnable
+fir_enable  firEnable
+input_select    inputSelect
+AFFHA       affha
+AFSLHA      afslha
+fir_coefficient firCoefficient
+AFFIRHBA*   affirhba*
+affirhba_*  affirhba*
+AFCOR1HA    afcor1ha
+fir_level   firLevel
+AFGAINHA    afgainha
+AFIIRHBA    afiirhba
+AFIIRHKA    afiirhka
+AFIIRHA0A   afiirha0a
+AFIIRHA1A   afiirha1a
+AFIIRHA2A   afiirha2a
+AFIIRHB1A   afiirhb1a
+AFIIRHB2A   afiirhb2a
+AFCORBHA*   afcorbha*
+afcorbha_*  afcorbha*
+coring_bounder  coringBounder
+AFCORINCHA*     afcorincha*
+coring_slope    coringSlope
+AFCOROFSHA  afcorofsha
+coring_offset   coringOffset
+AFHSCTLB        afhsctlb
+AFIHB       afihb
+AFFHB       affhb
+AFSLHB      afslhb
+group_b     groupB
+AFFIRHBB*   affirhbb*
+AFCOR1HB    afcor1hb
+AFGAINHB    afgainhb
+AFIIRHBB*   afiirhbb*    
+AFIIRHKB    afiirhkb
+AFIIRHA0B   afiirha0b
+AFIIRHA1B   afiirha1b
+AFIIRHA2B   afiirha2b
+AFIIRHB1B   afiirhb1b
+AFIIRHB2B   afiirhb2b
+AFCORBHB*    afcorbhb*    
+AFCORINCHB* afcorinchb*
+AFCOROFSHB* afcorofshb*
+AFWIN       afwin
+AFWINCTL    afwinctl
+AFSLWH0     afslwh0
+AFSLWH1     afslwh1
+AFSLWH2     afslwh2
+h_sel0      hSel0
+h_sel1      hSel1
+h_sel2      hSel2
+AFSLWC      afslwc
+AFCLVGE     afclvge
+bright_threshold    brightThreshold
+AFCLVL      afclvl
+dark_threshold  darkThreshold
+AFH     afh
+start_pos_x startPosX
+AFV     afv
+start_pos_y startPosY
+AFHW    afhw    
+AFVW    afvw
+AFSLWM  afslwm
+max_mix_select  maxMixSelect
+
+
+
+impro46print.c文档
+HISTTRG histtrg
+hist_ctrl   histCtrl
+hist_mode   histMode
+HISTCTL     histctl
+HISTCT      histct
+hist_cycle  histCycle
+HISTHCYC    histhcyc
+hist_shift_val  histShiftVal
+HISTSUMS    histsums
+HISTPAEN    histpaen
+HISTH       histh
+HISTV       histv
+HISTHW      histhw
+HISTVW      histvw
+HISTWBGR    histwbgr
+HISTWBGG    histwbgg
+HISTWBGB    histwbgb
+r_gain  rGain
+g_gain  gGain
+b_gain  bGain     
+HISTYKRR    histykrr
+HISTYKGR    histykgr    
+HISTYKGB    histykgb
+HISTYKBB    histykbb
+most_frequent_value mostFrequentValue
+accumulation_value  accumulationValue
+
+
+
+impro47print.c文档
+FLCK    flck
+FLTRG   fltrg
+FLCKCTL flckctl
+FLWPMD  flwpmd
+flck_type   flckType
+FLWLMD  flwlmd
+flck_mode   flckMode
+FLVW     flvw   
+FLCVW   flcvw
+FLBC    flbc
+bc_num  bcNum
+FLH     flh
+FLV     flv
+FLHW    flhw
+FLTDY   fltdy
+FLTDUY  fltduy
+FLTDR   fltdr
+FLTDUR  fltdur
+FLTDG   fltdg
+FLTDUG  fltdug
+FLTDB   fltdb
+FLTDUB  fltdub
+FLTDLY  fltdly
+FLTDLR  fltdlr    
+FLTDLG  fltdlg
+FLTDLB  fltdlb
+
+
+impro48print.c文档
+FLMLCY  flmlcy
+FLMLUCY flmlucy
+FLMLLCY flmllcy
+FLMLCB  flmlcb
+FLMLUCB flmlucb
+FLMLLCB flmllcb
+FLMLCR  flmlcr
+FLMLUCR flmlucr
+FLMLLCR flmllcr
+FLMC*    flmc*
+FLYKRR  flykrr
+FLYKGR  flykgr
+FLYKGB  flykgb
+FLYKBB  flykbb
+
+
+impro60print.c文档
+P2MTRG  p2mtrg
+P2MCTL  p2mctl
+PKNEMD  pknemd
+PLPF    plpf
+P2MTYP  p2mtyp
+P2MOFS  p2mofs    
+PBSFT   pbsft
+PCLPH   pclph
+PTRMV   ptrmv
+PTRMH   ptrmh
+PTRMVW  ptrmvw
+PTRMHW  ptrmhw
+PTRMXVCYC   ptrmxvcyc
+PTRMXHCYC   ptrmxhcyc
+PTRMXVEN    ptrmxven
+PTRMXHEN    ptrmxhen
+P2MMIR  p2mmir
+P2M2PMD     p2m2pmd
+P2MPAEN     p2mpaen
+P2MKNTBL    p2mkntbl
+PWCHTRG     pwchtrg
+PWCHCTL     pwchctl
+PWMW        pwmw
+PWVFM       pwvfm
+PWLV        pwlv
+
+
+impro61print.c文档
+PWAXCTL pwaxctl
+AWCACHE awcache
+AWPROT  awprot
+PWSA    pwsa
+PWLSIZE pwlsize
+LNRTRG  lnrtrg
+LNRBR    lnrbr   
+LNRINCR     lnrincr
+LNROFSR lnrofsr
+LNRBGR  lnrbgr
+LNRINCGR    lnrincgr
+LNROFSGR    lnrofsgr
+LNRINCGB    lnrincgb
+LNROFSGB    lnrofsgb
+LNRBB       lnrbb
+LNRINCB     lnrincb
+LNROFSB     lnrofsb
+
+impro62print.c文档
+PGAINTRG    pgaintrg
+PGAINR      pgainr
+PGAINGR     pgaingr
+PGAINGB     pgaingb
+PGAINB      pgainb
+POFSR       pofsr
+POFSGR      pofsgr
+POFSGB      pofsgb
+POFSB       pofsb
+PGAINDP     pgaindp
+PZSFTTRG    pzsfttrg    
+PZOFST      pzofst
+PGTRG       pgtrg
+
+
+impro63print.c文档
+PGCTL       pgctl
+PGMD        pgmd
+PGVW        pgvw
+PGHW        pghw
+PGVBLNK pgvblnk
+PGHBLNK pghblnk
+PGVDHDBLNK  PGVDHDBLNK
+PGVHBLNK    pgvhblnk    
+MONITRG     monitrg
+MONICTL     monictl
+MONIMD      monimd
+MONIHDEXP   monihdexp
+MONIEPFEXP  moniepfexp
+MONIBLLMINEXP   monibllminexp
+MONIBLLMAXEXP   monibllmaxexp
+MONIADHD    moniadhd
+MONIADHW    moniadhw
+vd_cnt  vdCnt
+hd_cnt  hdCnt
+min_val_h_valid_pixel_cnt   minValHValidPixelCnt
+max_val_h_valid_pixel_cnt   maxValHValidPixelCnt
+intra_frame_blank_cycle intraFrameBlankCycle
+min_val_h_blank_cycle   minValHBlankCycle
+max_val_h_blank_cycle   maxValHBlankCycle
+M2PTRG  m2ptrg
+M2PCTL  m2pctl
+MDKNMD  mdknmd
+deknee_enable   dekneeEnable
+M2PBSFT m2pbsft
+M2PBMD  m2pbmd
+M2PBLR  m2pblr
+M2PBT   m2pbt
+M2POFS  m2pofs
+M2PCLIP m2pclip
+M2PCLIPLW   m2pcliplw
+M2PCLIPHI   m2pcliphi
+M2PTYP  m2ptyp
+M2PPAEN m2ppaen
+MPPAEN  mppaen
+
+impro64print.c文档
+M2PDKNTBL   m2pdkntbl
+PRCHTRG     prchtrg  
+PRBMD       prbmd
+PRCHCTL     prchctl
+PRCHRS      prchrs
+PRS     prs
+PRAXCTL     praxctl
+ARCACHE     arcache
+ARPROT      arprot
+PRSA        prsa
+PRLSIZE     prlsize
+PRVSIZE     prvsize
+PRHSIZE     prhsize
+PRCHBRESP   prchbresp
+
+impro81slvs.c文档
+block_type  blockType
+PHY0_CLKLANESEL phy0Clklanesel
+PHY1_CLKLANESEL phy1Clklanesel
+PHY2_CLKLANESEL phy2Clklanesel
+PHY3_CLKLANESEL phy3Clklanesel
+
+PHY0_CLKOUTREN  phy0Clkoutren
+PHY1_CLKOUTREN  phy1Clkoutren
+PHY2_CLKOUTREN  phy2Clkoutren
+PHY3_CLKOUTREN  phy3Clkoutren
+
+PHY0_CLKMODESEL phy0Clkmodesel
+PHY1_CLKMODESEL phy1Clkmodesel
+PHY2_CLKMODESEL phy2Clkmodesel
+PHY3_CLKMODESEL phy3Clkmodesel
+
+PHY0_CLKOUTLEN  phy0Clkoutlen
+PHY1_CLKOUTLEN  phy1Clkoutlen
+PHY2_CLKOUTLEN  phy2Clkoutlen
+PHY3_CLKOUTLEN  phy3Clkoutlen
+BIASCTL biasctl
+PHY0_XBGRPD     phy0Xbgrpd
+PHY1_XBGRPD     phy1Xbgrpd
+PHY2_XBGRPD     phy2Xbgrpd
+PHY3_XBGRPD     phy3Xbgrpd
+phy0_xbgrpd    phy0Xbgrpd
+phy1_xbgrpd    phy1Xbgrpd
+phy2_xbgrpd    phy2Xbgrpd
+phy3_xbgrpd    phy3Xbgrpd
+PHY0CLKCTL    phy0clkctl
+PHY1CLKCTL    phy1clkctl
+PHY2CLKCTL    phy2clkctl
+PHY3CLKCTL    phy3clkctl
+common_ctrl     commonCtrl
+PHY0MDCTL       phy0mdctl
+PHY1MDCTL       phy1mdctl
+PHY2MDCTL       phy2mdctl
+PHY3MDCTL       phy3mdctl
+PHY0IFCTL       phy0ifctl
+PHY1IFCTL       phy1ifctl
+PHY2IFCTL       phy2ifctl
+PHY3IFCTL       phy3ifctl
+PHY0IFCTL*      phy0ifctl*
+PHY1IFCTL*      phy1ifctl*
+PHY2IFCTL*      phy2ifctl*
+PHY3IFCTL*      phy3ifctl*
+PHY0_BITWIDTHSEL    phy0Bitwidthsel
+PHY1_BITWIDTHSEL    phy1Bitwidthsel
+PHY2_BITWIDTHSEL    phy2Bitwidthsel
+PHY3_BITWIDTHSEL    phy3Bitwidthsel
+PHY0_RXMODE     phy0Rxmode
+PHY1_RXMODE     phy1Rxmode
+PHY2_RXMODE     phy2Rxmode
+PHY3_RXMODE     phy3Rxmode
+PHY3_D0SETSEL   phy3D0setsel
+PHY2_D0SETSEL   phy2D0setsel
+PHY1_D0SETSEL   phy1D0setsel
+PHY0_D0SETSEL   phy0D0setsel
+PHY0_D1SETSEL   phy0D1setsel
+PHY1_D1SETSEL   phy1D1setsel
+PHY2_D1SETSEL   phy2D1setsel
+PHY3_D1SETSEL   phy3D1setsel
+PHY0_D2SETSEL   phy0D2setsel
+PHY1_D2SETSEL   phy1D2setsel
+PHY2_D2SETSEL   phy2D2setsel
+PHY3_D2SETSEL   phy3D2setsel
+
+PHY0_D3SETSEL   phy0D3setsel
+PHY1_D3SETSEL   phy1D3setsel
+PHY2_D3SETSEL   phy2D3setsel
+PHY3_D3SETSEL   phy3D3setsel
+
+PHY0_PIMODE     phy0Pimode
+PHY1_PIMODE     phy1Pimode
+PHY2_PIMODE     phy2Pimode
+PHY3_PIMODE     phy3Pimode
+
+PHY0_PICNT      phy0Picnt
+PHY1_PICNT      phy1Picnt
+PHY2_PICNT      phy2Picnt
+PHY3_PICNT      phy3Picnt
+
+PHY0_CPHYSET_CP0    phy0CphysetCp0
+PHY0_CPHYSET_CP1    phy0CphysetCp1
+PHY0_CPHYSET_CP2    phy0CphysetCp2
+
+PHY1_CPHYSET_CP0    phy1CphysetCp0
+PHY1_CPHYSET_CP1    phy1CphysetCp1
+PHY1_CPHYSET_CP2    phy1CphysetCp2
+
+PHY2_CPHYSET_CP0    phy2CphysetCp0
+PHY2_CPHYSET_CP1    phy2CphysetCp1
+PHY2_CPHYSET_CP2    phy2CphysetCp2
+
+PHY3_CPHYSET_CP0    phy3CphysetCp0
+PHY3_CPHYSET_CP1    phy3CphysetCp1
+PHY3_CPHYSET_CP2    phy3CphysetCp2
+
+cphyset_cp0 cphysetCp0
+cphyset_cp1 cphysetCp1
+cphyset_cp2 cphysetCp2
+
+PHY0_CLKSETSEL  phy0Clksetsel
+PHY1_CLKSETSEL  phy1Clksetsel
+PHY2_CLKSETSEL  phy2Clksetsel
+PHY3_CLKSETSEL  phy3Clksetsel
+
+PHY0_FUNCSELCK  phy0Funcselck
+PHY1_FUNCSELCK  phy1Funcselck
+PHY2_FUNCSELCK  phy2Funcselck
+PHY3_FUNCSELCK  phy3Funcselck
+
+PHY0_FUNCSELD1  phy0Funcseld0
+PHY0_FUNCSELD2  phy0Funcseld1
+PHY0_FUNCSELD3  phy0Funcseld2
+PHY0_FUNCSELD3  phy0Funcseld3
+
+PHY1_FUNCSELD1  phy1Funcseld0
+PHY1_FUNCSELD2  phy1Funcseld1
+PHY1_FUNCSELD3  phy1Funcseld2
+PHY1_FUNCSELD3  phy1Funcseld3
+
+PHY2_FUNCSELD1  phy2Funcseld0
+PHY2_FUNCSELD2  phy2Funcseld1
+PHY2_FUNCSELD3  phy2Funcseld2
+PHY2_FUNCSELD3  phy2Funcseld3
+
+PHY3_FUNCSELD1  phy3Funcseld0
+PHY3_FUNCSELD2  phy3Funcseld1
+PHY3_FUNCSELD3  phy3Funcseld2
+PHY3_FUNCSELD3  phy3Funcseld3
+
+271文档
+SDCPH*      sdcph*
+h_pattern0  hPattern0
+h_pattern1  hPattern1
+h_pattern0_valid_width  hPattern0ValidWidth
+h_pattern1_valid_width  hPattern1ValidWidth
+SDCP1HW0*   sdcp1hw0*
+h_pattern0_r1_valid_width   hPattern0R1ValidWidth
+h_pattern0_r2_valid_width   hPattern0R2ValidWidth
+h_pattern1_r2_valid_width   hPattern1R2ValidWidth
+h_pattern1_r1_valid_width   hPattern1R1ValidWidth
+SDCP1HW1*       sdcp1hw1*
+SDCN1HW0*   SDCN1HW0*
+h_pattern0_r1_invalid_width hPattern0R1InvalidWidth
+h_pattern0_r2_invalid_width hPattern0R2InvalidWidth
+h_pattern1_r2_invalid_width  hPattern1R2InvalidWidth   
+SDCN1HW1*   sdcn1hw1*
+h_pattern1_r1_invalid_width hPattern1R1InvalidWidth
+SDCP2HW0*    sdcp2hw0*    
+SDCP2HW1        sdcp2hw1
+SDCN2HW0    sdcn2hw0
+SDCN2HW1    sdcn2hw1
+ANBOG_*     anbog_*
+ANBOB_*     anbob_*
+ANBKR_*     anbkr_*
+ANBKG_*     anbkg_*
+ANBKB_*      anbkb_*
+ANBDR_*     anbdr_*
+ANBDG_*     anbdg_*
+ANBDB_*     anbdb_*
+rgb_gain     rgbGain   
+yc_conv_matrix  ycConvMatrix
+f9a_group   f9aGroup
+CRVAFX1     crvafx1
+CRVAFX2     crvafx2
+e_focus_coord   eFocusCoord
+CRVAFY1    crvafy1
+CRVAFY2    crvafy2
+e_polygonal_line_offset1    ePolygonalLineOffset1
+FCRVABTOF1  fcrvabtof1
+FCRVABTGA0  fcrvabtga0
+FCRVABTGA1  fcrvabtga1
+e_polygonal_line_minus_inclination  ePolygonalLineMinusInclination
+FCRVABTBD1  fcrvabtbd1
+e_polygonal_line_boundary1  ePolygonalLineBoundary1
+FCRVABTCPH  fcrvabtcph
+e_upper_clip    eUpperClip
+e_lower_clip    eLowerClip
+FCRVABTCPL  fcrvabtcpl
+FYABTGA0    fyabtga0
+FYABTGA1    fyabtga1
+l_polygonal_line_plus_inclination0  lPolygonalLinePlusInclination0
+l_polygonal_line_minus_inclination1 lPolygonalLineMinusInclination1
+l_polygonal_line_boundary   lPolygonalLineBoundary
+FYABTBD0    fyabtbd0
+FYABTBD1    fyabtbd1
+FYABTCLPH   fyabtclph
+l_upper_clip    lUpperClip
+l_lower_clip    lLowerClip
+FYABTCLPL       fyabtclpl
+FAECHH      faechh
+t_f_profile_transition  tFProfileTransition
+f9b_group   f9bGroup
+CRVBFY2     crvbfy2
+CRVBFY1     crvbfy1
+FAETHH      faethh
+t_f_profile_threshold   tFProfileThreshold
+CRVBFX1 crvbfx1
+CRVBFX2 crvbfx2
+FCRVBBTOF1  fcrvbbtof1
+FCRVBBTGA0  fcrvbbtga0
+FCRVBBTGA1  fcrvbbtga1
+FCRVBBTBD1  fcrvbbtbd1
+FCRVBBTCPL  fcrvbbtcpl
+FCRVBBTCPH  fcrvbbtcph
+FYBBTGA0    fybbtga0    
+FYBBTGA1    fybbtga1
+FYBBTBD0    fybbtbd0
+FYBBTBD1    fybbtbd1
+FYBBTCLPL   fybbtclpl
+FYBBTCLPH   fybbtclph
+FBECHH      fbechh
+FBETHH      fbethh
+
+MONI0   moni0
+MONI1   moni1
+MONI2   moni2
+AFDATAS afdatas
+AFDATAGE    afdatage
+AFDATAL afdatal
+AFDATAH0    afdatah0
+AFDATAH1    afdatah1
+AFDATAH2    afdatah2
+AFDATAMAX   afdatamax
+AFDATAMIN   afdatamin
+AFDATAMH0   afdatamh0
+AFDATAMH1   afdatamh1
+AFDATAMH2   afdatamh2
+AFDATAMAXE  afdatamaxe
+AFDATAMINE  afdatamine
+STAT_TBL    statTbl
+HISTDATA    histdata
+HISTRDATA   histrdata
+HISTGDATA   histgdata
+HISTBDATA   histbdata
+HISTYDATA   histydata
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+疑问区
+LDIVOHW_3       ldivohw_3
+LDIVOHW_2       ldivohw_2
+LDIVOHW_1       ldivohw_1
+LDIVOHW_0       ldivohw_0
+LDIVOH_0         ldivoh_0
+LDIVOH_1         ldivoh_1
+LDIVOH_2         ldivoh_2
+LDIVOH_3         ldivoh_3
+R
+Gr
+Gb
+B
+
+linev_0
+
+SAV0*       sav0*   SAV0_0  -->sav0_0
+EAV0*       eav0    EAV0_0  -->eav0_0
+
+data_select_sp0_0   dataSelectSp0_0
+data_select_sp*     dataSelectSp*
+SOLVADR_0       solvadr_0
+SOLVADR_1       solvadr_1
+SOLVADR_2       solvadr_2
+EOLVADR_0       eolvadr_0
+EOLVADR_1       eolvadr_1
+EOLVADR_2       eolvadr_2
+LVDSINTADR1     lvdsintadr1
+LVDSINTADR2     lvdsintadr2
+phy0_cdrmon 
+phy1_cdrmon  -->PHY0_CDRMON     phy0Cdrmon
+phy2_cdrmon 
+phy3_cdrmon
+
+shading_blend_0 shadingBlend_0
+shading_blend_1 shadingBlend_1
+afcorofsha_*    afcorofsha* //问题
+afcorincha_*    afcorincha*    //问题
+pixel_cnt_in_1frame pixelCntIn1frame
+ANBOG_0     anbog_0
+ANBOG_*     anbog_*
+ANBOB_*     anbob_*
+ANBKR_*     anbkr_*
+ANBKG_*     anbkg_*
+ANBKB_*      anbkb_*
+ANBDR_*     anbdr_*
+ANBDG_*     anbdg_*
+ANBDB_*     anbdb_*
+
+
+
+
+
+
+
+
+T_IM_PRO_INT_SENTOP_CTRL    TImProIntSentopCtrl
+T_IM_PRO_CALLBACK_CFG   TImProCallbackCfg
+T_IM_PRO_SG_CTRL        TImProSgCtrl
+E_IM_PRO_ORG_R,
+TImProIntSentopCtrl
+E_IM_PRO_INT_INTMD_OR
+
+对外改变区
+
+VOID ct_im_pro_8_1_SLVS_Common_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Normal_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Link_Err_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Mac_Err1_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Mac_Err2_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_init_combo_phy(VOID);
+VOID ct_im_pro_8_1_mode_change_slvs(VOID);
+VOID ct_im_pro_8_1_init_slvs(VOID);
+VOID ct_im_pro_8_1_raw_output(VOID);
+VOID ct_im_pro_8_1_SEN_VD_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_PWCH_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+变为
+VOID im_pro_8_1_slvs_common_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_normal_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_link_err_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_mac_err1_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_mac_err2_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_sen_vd_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_pwch_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_init_combo_phy(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_mode_change(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_init(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_raw_output(ImPro81Slvs* self);
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_5_4_Print( const char* string, INT32 ercd );
+VOID ct_im_pro_5_5_Print( INT32 ercd );
+VOID ct_im_pro_5_6_Print( INT32 ercd, UCHAR force );
+VOID ct_im_pro_5_7_Print( const char* string, INT32 ercd, T_IM_PRO_SPT_CTRL* ctrl );
+VOID ct_im_pro_5_8_Print( INT32 ercd, UCHAR paenTrg );
+VOID ct_im_pro_5_9_Print( const char* string, INT32 ercd, INT32 cmpErcd );
+VOID ct_im_pro_5_10_Print( E_IM_PRO_SPT_TBL_SEL tblSel, INT32 ercd, const T_IM_PRO_RDMA_SPT_SHD_TBL_ADDR** addr );
+#endif //CO_CT_IM_PRO_DISABLE
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_5_print_4(ImPro5Print *self,const char* string, INT32 ercd );
+VOID im_pro_5_print_5(ImPro5Print *self,INT32 ercd );
+VOID im_pro_5_print_6(ImPro5Print *self,INT32 ercd, UCHAR force );
+VOID im_pro_5_print_7(ImPro5Print *self,const char* string, INT32 ercd, T_IM_PRO_SPT_CTRL* ctrl );
+VOID im_pro_5_print_8(ImPro5Print *self,INT32 ercd, UCHAR paenTrg );
+VOID im_pro_5_print_9(ImPro5Print *self,const char* string, INT32 ercd, INT32 cmpErcd );
+VOID im_pro_5_10_Print(ImPro5Print *self,E_IM_PRO_SPT_TBL_SEL tblSel, INT32 ercd, const T_IM_PRO_RDMA_SPT_SHD_TBL_ADDR** addr );
+#endif //CO_CT_IM_PRO_DISABLE
+
+
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_7_15_Print( INT32 ercd, TImProIntSentopCtrl* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_16_Print( INT32 ercd, T_IM_PRO_INT_SG_CTRL* intCtrl, UCHAR permissionFlg, UCHAR vhdeg );
+VOID ct_im_pro_7_17_Print( INT32 ercd, T_IM_PRO_INT_GYRO_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_18_Print( const char* string, UCHAR blockNum, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID ct_im_pro_7_19_Print( const char* string, UCHAR blockNum, INT32 ercd, T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID ct_im_pro_7_20_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_21_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_22_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_30_Print( INT32 ercd, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_31_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_32_Print( INT32 ercd, E_IM_PRO_SLVS_STREAM_TYPE streamType, E_IM_PRO_SLVS_INT_TYPE intType, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_33_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType, E_IM_PRO_SLVS_INT_TYPE intType, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_34_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_LVDS_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_35_Print( const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_36_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_37_Print( const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_38_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_CMIPI_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_39_Print( const char* string, UCHAR ch, UCHAR cate, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_40_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_41_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_42_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_43_Print( const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_44_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_45_Print( const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_46_Print( INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_47_Print( const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_48_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, T_IM_PRO_INT_SROTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_49_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID ct_im_pro_7_50_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_51_Print( const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_52_Print( const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_59_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_60_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+							TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_61_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, T_IM_PRO_INT_B2BTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_62_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID ct_im_pro_7_64_Print( const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_65_Print( const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_72_Print( INT32 ercd, T_IM_PRO_INT_STATTOP_CTRL* intCtrl );
+VOID ct_im_pro_7_74_Print( INT32 ercd, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_75_Print( const char* string, E_IM_PRO_AEAWB_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_76_Print( INT32 ercd, E_IM_PRO_AF_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_77_Print( const char* string, E_IM_PRO_AF_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_78_Print( INT32 ercd, E_IM_PRO_HIST_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_79_Print( const char* string, E_IM_PRO_HIST_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_80_Print( INT32 ercd, T_IM_PRO_INT_PASTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_81_Print( const char* string, UCHAR ch, INT32 ercd, T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID ct_im_pro_7_83_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_84_Print( const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_88_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_89_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID ct_im_pro_7_90_Print( INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID ct_im_pro_7_91_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+#endif
+    修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_7_15_Print(ImPro7Print *self, INT32 ercd, TImProIntSentopCtrl* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_16_Print(ImPro7Print *self, INT32 ercd, T_IM_PRO_INT_SG_CTRL* intCtrl, UCHAR permissionFlg, UCHAR vhdeg );
+VOID im_pro_7_17_Print(ImPro7Print *self, INT32 ercd, T_IM_PRO_INT_GYRO_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_18_Print(ImPro7Print *self, const char* string, UCHAR blockNum, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID im_pro_7_19_Print(ImPro7Print *self, const char* string, UCHAR blockNum, INT32 ercd, T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID im_pro_7_20_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_21_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_22_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_30_Print(ImPro7Print *self, INT32 ercd, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_31_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_32_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_SLVS_STREAM_TYPE streamType, E_IM_PRO_SLVS_INT_TYPE intType, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_33_Print(ImPro7Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType, E_IM_PRO_SLVS_INT_TYPE intType, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_34_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_LVDS_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_35_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_36_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_37_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_38_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_CMIPI_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_39_Print(ImPro7Print *self, const char* string, UCHAR ch, UCHAR cate, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_40_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_41_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_42_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_43_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_44_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_45_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_46_Print(ImPro7Print *self, INT32 ercd, UCHAR ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_47_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_48_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, T_IM_PRO_INT_SROTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_49_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID im_pro_7_50_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_51_Print(ImPro7Print *self, const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_52_Print(ImPro7Print *self, const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_59_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_60_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+							TImProCallbackCfg* intCtrl );
+VOID im_pro_7_61_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, T_IM_PRO_INT_B2BTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_62_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID im_pro_7_64_Print(ImPro7Print *self, const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_65_Print(ImPro7Print *self, const char* string, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_72_Print(ImPro7Print *self, INT32 ercd, T_IM_PRO_INT_STATTOP_CTRL* intCtrl );
+VOID im_pro_7_74_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_75_Print(ImPro7Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_76_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_AF_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_77_Print(ImPro7Print *self, const char* string, E_IM_PRO_AF_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_78_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_HIST_CH ch, T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_79_Print(ImPro7Print *self, const char* string, E_IM_PRO_HIST_CH ch, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_80_Print(ImPro7Print *self, INT32 ercd, T_IM_PRO_INT_PASTOP_CTRL* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_81_Print(ImPro7Print *self, const char* string, UCHAR ch, INT32 ercd, T_IM_PRO_INT_VHD_DELAY_CTRL* intCtrl );
+VOID im_pro_7_83_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_84_Print(ImPro7Print *self, const char* string, INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_88_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_89_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+VOID im_pro_7_90_Print(ImPro7Print *self, INT32 ercd, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							T_IM_PRO_INT_CFG* intCtrl, UCHAR permissionFlg );
+VOID im_pro_7_91_Print(ImPro7Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, TImProCallbackCfg* intCtrl );
+
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_1_4_Print( const char* string, TImProSentopCtrl* sentop_ctrl );
+VOID ct_im_pro_1_5_Print( const char* string, TImProSentopBsCtrl* sentop_ctrl );
+VOID ct_im_pro_1_6_Print( const char* string, TImProSentopObtCtrl* sentop_ctrl );
+VOID ct_im_pro_1_7_Print( const char* string, TImProSentopObtWeightCoeff* sentop_ctrl );
+VOID ct_im_pro_1_8_Print( const char* string, T_IM_PRO_SENTOP_LVDS_CTRL* sentop_ctrl );
+VOID ct_im_pro_1_9_Print( const char* string, T_IM_PRO_SENTOP_SLVS_CTRL* sentop_ctrl );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_0_print_4(ImPro10Print *self, const char* string, TImProSentopCtrl* sentopCtrl );
+VOID im_pro_1_0_print_5(ImPro10Print *self, const char* string, TImProSentopBsCtrl* sentopCtrl );
+VOID im_pro_1_0_print_6(ImPro10Print *self, const char* string, TImProSentopObtCtrl* sentopCtrl );
+VOID im_pro_1_0_print_7(ImPro10Print *self, const char* string, TImProSentopObtWeightCoeff* sentopCtrl );
+VOID im_pro_1_0_print_8(ImPro10Print *self, const char* string, T_IM_PRO_SENTOP_LVDS_CTRL* sentopCtrl );
+VOID im_pro_1_0_print_9(ImPro10Print *self, const char* string, T_IM_PRO_SENTOP_SLVS_CTRL* sentopCtrl );
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_1_10_Print( const char* string, T_IM_PRO_SENTOP_SG_CTRL* sentop_ctrl );
+VOID ct_im_pro_1_11_Print( const char* string, T_IM_PRO_SENTOP_CPHY_CTRL* cphy_ctrl );
+VOID ct_im_pro_1_12_Print( const char* string, T_IM_PRO_SENTOP_CPHY_DESKNEW_MONITOR* cphy_moni );
+VOID ct_im_pro_1_13_Print( const char* string );
+VOID ct_im_pro_1_14_Print( const char* string, UCHAR force );
+VOID ct_im_pro_1_15_Print( const char* string, E_IM_PRO_SG_CH ch, TImProSgCtrl* sg_ctrl );
+VOID ct_im_pro_1_16_Print( const char* string, E_IM_PRO_SG_CH ch, TImProSgCtrl* sg_ctrl );
+VOID ct_im_pro_1_17_Print( const char* string, E_IM_PRO_SG_CH ch, T_IM_PRO_SG_MONI_INFO* sg_moni_info );
+VOID ct_im_pro_1_18_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type );
+VOID ct_im_pro_1_19_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_1_print_0(ImPro11Print *self, const char* string, T_IM_PRO_SENTOP_SG_CTRL* sentopCtrl );
+VOID im_pro_1_1_print_1(ImPro11Print *self, const char* string, T_IM_PRO_SENTOP_CPHY_CTRL* cphyCtrl );
+VOID im_pro_1_1_print_2(ImPro11Print *self, const char* string, T_IM_PRO_SENTOP_CPHY_DESKNEW_MONITOR* cphyMoni );
+VOID im_pro_1_1_print_3(ImPro11Print *self, const char* string );
+VOID im_pro_1_1_print_4(ImPro11Print *self, const char* string, UCHAR force );
+VOID im_pro_1_1_print_5(ImPro11Print *self, const char* string, E_IM_PRO_SG_CH ch, TImProSgCtrl* sgCtrl );
+VOID im_pro_1_1_print_6(ImPro11Print *self, const char* string, E_IM_PRO_SG_CH ch, TImProSgCtrl* sgCtrl );
+VOID im_pro_1_1_print_7(ImPro11Print *self, const char* string, E_IM_PRO_SG_CH ch, T_IM_PRO_SG_MONI_INFO* sgMoniInfo );
+VOID im_pro_1_1_print_8(ImPro11Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType );
+VOID im_pro_1_1_print_9(ImPro11Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType );
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_1_20_Print( const char* string, T_IM_PRO_SLVS_PMA_INIT* pma_init );
+VOID ct_im_pro_1_21_Print( const char* string, T_IM_PRO_SLVS_PMA_PD* pma_pd );
+VOID ct_im_pro_1_22_Print( const char* string, T_IM_PRO_SLVS_COMMON_CFG* common_cfg );
+VOID ct_im_pro_1_23_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_CTRL* slvs_ctrl );
+VOID ct_im_pro_1_24_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_MODE_CFG* mode_ctrl );
+VOID ct_im_pro_1_25_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_TRIM_CFG* trim_ctrl );
+VOID ct_im_pro_1_26_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_STATUS* status );
+VOID ct_im_pro_1_27_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type );
+VOID ct_im_pro_1_28_Print( const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, UCHAR force );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_1_2_print_0(ImPro12Print *self, const char* string, T_IM_PRO_SLVS_PMA_INIT* pma_init );
+VOID im_pro_1_2_print_1(ImPro12Print *self, const char* string, T_IM_PRO_SLVS_PMA_PD* pma_pd );
+VOID im_pro_1_2_print_2(ImPro12Print *self, const char* string, T_IM_PRO_SLVS_COMMON_CFG* common_cfg );
+VOID im_pro_1_2_print_3(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_CTRL* slvs_ctrl );
+VOID im_pro_1_2_print_4(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_MODE_CFG* mode_ctrl );
+VOID im_pro_1_2_print_5(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_TRIM_CFG* trim_ctrl );
+VOID im_pro_1_2_print_6(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, T_IM_PRO_SLVS_STATUS* status );
+VOID im_pro_1_2_print_7(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type );
+VOID im_pro_1_2_print_8(ImPro12Print *self, const char* string, E_IM_PRO_SLVS_STREAM_TYPE stream_type, UCHAR force );
+#endif
+
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID 			ct_im_pro_1_30_Print( const char* string, UCHAR ch );
+VOID 			ct_im_pro_1_31_Print( const char* string, UCHAR ch, UCHAR force );
+VOID 			ct_im_pro_1_32_Print( const char* string, UCHAR ch, TImProLdivCtrl* ldivCtrl );
+VOID 			ct_im_pro_1_33_Print( const char* string, UCHAR ch, TImProLdivArea* ldivArea );
+VOID 			ct_im_pro_1_34_Print( const char* string, UCHAR ch, UCHAR paenTrg );
+VOID 			ct_im_pro_1_35_Print( const char* string, UCHAR ch );
+VOID 			ct_im_pro_1_36_Print( const char* string, UCHAR ch, UCHAR force );
+VOID 			ct_im_pro_1_37_Print( const char* string, UCHAR ch, T_IM_PRO_OBD_CTRL* obCtrl );
+VOID 			ct_im_pro_1_38_Print( const char* string, UCHAR ch, T_IM_PRO_AREA_INFO* obArea );
+VOID 			ct_im_pro_1_39_Print( const char* string, UCHAR ch, T_IM_PRO_RGB4* status );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID 			im_pro_1_3_print_0(ImPro13Print *self, const char* string, UCHAR ch );
+VOID 			im_pro_1_3_print_1(ImPro13Print *self, const char* string, UCHAR ch, UCHAR force );
+VOID 			im_pro_1_3_print_2(ImPro13Print *self, const char* string, UCHAR ch, TImProLdivCtrl* ldivCtrl );
+VOID 			im_pro_1_3_print_3(ImPro13Print *self, const char* string, UCHAR ch, TImProLdivArea* ldivArea );
+VOID 			im_pro_1_3_print_4(ImPro13Print *self, const char* string, UCHAR ch, UCHAR paenTrg );
+VOID 			im_pro_1_3_print_5(ImPro13Print *self, const char* string, UCHAR ch );
+VOID 			im_pro_1_3_print_6(ImPro13Print *self, const char* string, UCHAR ch, UCHAR force );
+VOID 			im_pro_1_3_print_7(ImPro13Print *self, const char* string, UCHAR ch, T_IM_PRO_OBD_CTRL* obCtrl );
+VOID 			im_pro_1_3_print_8(ImPro13Print *self, const char* string, UCHAR ch, T_IM_PRO_AREA_INFO* obArea );
+VOID 			im_pro_1_3_print_9(ImPro13Print *self, const char* string, UCHAR ch, T_IM_PRO_RGB4* status );
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_1_40_Print( const char* string, UCHAR ch, T_IM_PRO_RGB4* status );
+VOID ct_im_pro_1_41_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_42_Print( const char* string, UCHAR ch, UCHAR force );
+VOID ct_im_pro_1_43_Print( const char* string, UCHAR ch, T_IM_PRO_OBT_CTRL* obCtrl );
+VOID ct_im_pro_1_44_Print( const char* string, UCHAR ch, T_IM_PRO_AREA_INFO* obArea );
+VOID ct_im_pro_1_45_Print( const char* string, UCHAR ch, T_IM_PRO_RGB2* offset );
+VOID ct_im_pro_1_46_Print( const char* string, UCHAR ch, T_IM_PRO_RGB2* status );
+VOID ct_im_pro_1_47_Print( const char* string, UCHAR ch, const T_IM_PRO_RDMA_OBT_ADDR** addr );
+VOID ct_im_pro_1_48_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_49_Print( const char* string, UCHAR ch );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_4_print_0(ImPro14Print *self, const char* string, UCHAR ch, T_IM_PRO_RGB4* status );
+VOID im_pro_1_4_print_1(ImPro14Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_4_print_2(ImPro14Print *self, const char* string, UCHAR ch, UCHAR force );
+VOID im_pro_1_4_print_3(ImPro14Print *self, const char* string, UCHAR ch, T_IM_PRO_OBT_CTRL* obCtrl );
+VOID im_pro_1_4_print_4(ImPro14Print *self, const char* string, UCHAR ch, T_IM_PRO_AREA_INFO* obArea );
+VOID im_pro_1_4_print_5(ImPro14Print *self, const char* string, UCHAR ch, T_IM_PRO_RGB2* offset );
+VOID im_pro_1_4_print_6(ImPro14Print *self, const char* string, UCHAR ch, T_IM_PRO_RGB2* status );
+VOID im_pro_1_4_print_7(ImPro14Print *self, const char* string, UCHAR ch, const T_IM_PRO_RDMA_OBT_ADDR** addr );
+VOID im_pro_1_4_print_8(ImPro14Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_4_print_9(ImPro14Print *self, const char* string, UCHAR ch );
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+
+VOID ct_im_pro_1_50_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_51_Print( const char* string, UCHAR ch, UCHAR force );
+VOID ct_im_pro_1_52_Print( const char* string, UCHAR ch, T_IM_PRO_DMIPI_CTRL* dmipiCtrl );
+VOID ct_im_pro_1_53_Print( const char* string, UCHAR ch, UCHAR paenTrg0, UCHAR paenTrg1 );
+VOID ct_im_pro_1_54_Print( const char* string, UCHAR ch, T_IM_PRO_DMIPI_STATUS* status );
+VOID ct_im_pro_1_55_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_56_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_57_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_58_Print( const char* string, UCHAR ch, UCHAR force );
+VOID ct_im_pro_1_59_Print( const char* string, UCHAR ch, T_IM_PRO_CMIPI_CTRL* cmipiCtrl );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_5_print_0(ImPro15Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_5_print_1(ImPro15Print *self, const char* string, UCHAR ch, UCHAR force );
+VOID im_pro_1_5_print_2(ImPro15Print *self, const char* string, UCHAR ch, T_IM_PRO_DMIPI_CTRL* dmipiCtrl );
+VOID im_pro_1_5_print_3(ImPro15Print *self, const char* string, UCHAR ch, UCHAR paenTrg0, UCHAR paenTrg1 );
+VOID im_pro_1_5_print_4(ImPro15Print *self, const char* string, UCHAR ch, T_IM_PRO_DMIPI_STATUS* status );
+VOID im_pro_1_5_print_5(ImPro15Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_5_print_6(ImPro15Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_5_print_7(ImPro15Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_5_print_8(ImPro15Print *self, const char* string, UCHAR ch, UCHAR force );
+VOID im_pro_1_5_print_9(ImPro15Print *self, const char* string, UCHAR ch, T_IM_PRO_CMIPI_CTRL* cmipiCtrl );
+#endif
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_1_60_Print( const char* string, UCHAR ch, UCHAR paen_trg0, UCHAR paen_trg1 );
+VOID ct_im_pro_1_61_Print( const char* string, UCHAR ch, T_IM_PRO_CMIPI_STATUS* status );
+VOID ct_im_pro_1_62_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_63_Print( const char* string, UCHAR ch );
+VOID ct_im_pro_1_64_Print( const char* string, UCHAR ch, T_IM_PRO_LVDS_CTRL* lvds_ctrl );
+VOID ct_im_pro_1_65_Print( const char* string, UCHAR ch, USHORT input_pos, USHORT input_size );
+VOID ct_im_pro_1_66_Print( const char* string, UCHAR ch, T_IM_PRO_LVDS_PIXEL_ORDER* lvds_order );
+VOID ct_im_pro_1_67_Print( const char* string, UCHAR ch, T_IM_PRO_LVDS_SYNC_CODE_CTRL* syncCode );
+VOID ct_im_pro_1_68_Print( const char* string, UCHAR ch, T_IM_PRO_LVDS_SYNC_MASK_CTRL* syncMask );
+VOID ct_im_pro_1_69_Print( const char* string, UCHAR ch, T_IM_PRO_LVDS_INT_ADDR_CTRL* intAddr );
+#endif //CO_CT_IM_PRO_DISABLE
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_6_print_0(ImPro16Print *self, const char* string, UCHAR ch, UCHAR paen_trg0, UCHAR paen_trg1 );
+VOID im_pro_1_6_print_1(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_CMIPI_STATUS* status );
+VOID im_pro_1_6_print_2(ImPro16Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_6_print_3(ImPro16Print *self, const char* string, UCHAR ch );
+VOID im_pro_1_6_print_4(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_LVDS_CTRL* lvds_ctrl );
+VOID im_pro_1_6_print_5(ImPro16Print *self, const char* string, UCHAR ch, USHORT input_pos, USHORT input_size );
+VOID im_pro_1_6_print_6(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_LVDS_PIXEL_ORDER* lvds_order );
+VOID im_pro_1_6_print_7(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_LVDS_SYNC_CODE_CTRL* syncCode );
+VOID im_pro_1_6_print_8(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_LVDS_SYNC_MASK_CTRL* syncMask );
+VOID im_pro_1_6_print_9(ImPro16Print *self, const char* string, UCHAR ch, T_IM_PRO_LVDS_INT_ADDR_CTRL* intAddr );
+#endif //CO_CT_IM_PRO_DISABLE
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_1_70_Print( const char* string, UCHAR ch, UCHAR paenTrg );
+VOID ct_im_pro_1_71_Print( const char* string, T_IM_PRO_SENTOP_CPHY_DELAYLINE_MONITOR* status );
+VOID ct_im_pro_1_72_Print( const char* string, T_IM_PRO_SENTOP_CPHY_COMMON_IF_MONITOR* status );
+#endif //CO_CT_IM_PRO_DISABLE
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_1_7_print_0(ImPro17Print *self, const char* string, UCHAR ch, UCHAR paenTrg );
+VOID im_pro_1_7_print_1(ImPro17Print *self, const char* string, T_IM_PRO_SENTOP_CPHY_DELAYLINE_MONITOR* status );
+VOID im_pro_1_7_print_2(ImPro17Print *self, const char* string, T_IM_PRO_SENTOP_CPHY_COMMON_IF_MONITOR* status );
+#endif //CO_CT_IM_PRO_DISABLE
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_2_20_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			ct_im_pro_2_21_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_CAG_CTRL* cagCtrl);
+VOID 			ct_im_pro_2_22_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			ct_im_pro_2_23_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_CAG_AREA* cagCtrl);
+VOID 			ct_im_pro_2_24_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_CAG_CTRL_GLEVEL_DIFF* cagCtrl);
+VOID 			ct_im_pro_2_25_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_CAG_ADDR** cagCtrl);
+VOID 			ct_im_pro_2_26_Print(E_IM_PRO_UNIT_NUM unitNo);
+VOID 			ct_im_pro_2_27_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			ct_im_pro_2_28_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_DPC_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_29_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_2_2_print_0(Impro22Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			im_pro_2_2_print_1(Impro22Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_CAG_CTRL* cagCtrl);
+VOID 			im_pro_2_2_print_2(Impro22Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			im_pro_2_2_print_3(Impro22Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_CAG_AREA* cagCtrl);
+VOID 			im_pro_2_2_print_4(Impro22Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_CAG_CTRL_GLEVEL_DIFF* cagCtrl);
+VOID 			im_pro_2_2_print_5(Impro22Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_CAG_ADDR** cagCtrl);
+VOID 			im_pro_2_2_print_6(Impro22Print *self,E_IM_PRO_UNIT_NUM unitNo);
+VOID 			im_pro_2_2_print_7(Impro22Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			im_pro_2_2_print_8(Impro22Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_CTRL* dpcCtrl);
+VOID 			im_pro_2_2_print_9(Impro22Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_2_30_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_DPC_AREA* dpcCtrl);
+VOID 			ct_im_pro_2_31_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_AB_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_32_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_DDD_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_33_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_MDD_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_34_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_MDC_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_35_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_ESDC_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_36_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_OCD_CTRL* dpcCtrl);
+VOID 			ct_im_pro_2_37_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_DPC_ADDR** dpcCtrl);
+VOID 			ct_im_pro_2_38_Print(E_IM_PRO_UNIT_NUM unitNo);
+VOID 			ct_im_pro_2_39_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_2_3_print_0(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_DPC_AREA* dpcCtrl);
+VOID 			im_pro_2_3_print_1(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_AB_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_2(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_DDD_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_3(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_MDD_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_4(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_MDC_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_5(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_ESDC_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_6(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_DPC_OCD_CTRL* dpcCtrl);
+VOID 			im_pro_2_3_print_7(Impro23Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_DPC_ADDR** dpcCtrl);
+VOID 			im_pro_2_3_print_8(Impro23Print *self,E_IM_PRO_UNIT_NUM unitNo);
+VOID 			im_pro_2_3_print_9(Impro23Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_2_40_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_FFC_CTRL* ffcCtrl);
+VOID 			ct_im_pro_2_41_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_FFC_BLEND_CTRL* ffcCtrl);
+VOID 			ct_im_pro_2_42_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			ct_im_pro_2_43_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_FFC_AREA* ffcCtrl);
+VOID 			ct_im_pro_2_44_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, USHORT ffcCtrl);
+VOID 			ct_im_pro_2_45_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_FFC_ADDR** ffcCtrl);
+VOID 			ct_im_pro_2_46_Print(E_IM_PRO_UNIT_NUM unitNo);
+VOID 			ct_im_pro_2_47_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			ct_im_pro_2_48_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_HRB_CTRL* hrbCtrl);
+VOID 			ct_im_pro_2_49_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_2_4_print_0(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_FFC_CTRL* ffcCtrl);
+VOID 			im_pro_2_4_print_1(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									T_IM_PRO_FFC_BLEND_CTRL* ffcCtrl);
+VOID 			im_pro_2_4_print_2(Impro24Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			im_pro_2_4_print_3(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_FFC_AREA* ffcCtrl);
+VOID 			im_pro_2_4_print_4(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, USHORT ffcCtrl);
+VOID 			im_pro_2_4_print_5(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+									const T_IM_PRO_RDMA_FFC_ADDR** ffcCtrl);
+VOID 			im_pro_2_4_print_6(Impro24Print *self,E_IM_PRO_UNIT_NUM unitNo);
+VOID 			im_pro_2_4_print_7(Impro24Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			im_pro_2_4_print_8(Impro24Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_HRB_CTRL* hrbCtrl);
+VOID 			im_pro_2_4_print_9(Impro24Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_2_60_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									USHORT ffshCtrl);
+VOID 			ct_im_pro_2_61_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									const T_IM_PRO_RDMA_FFSH_ADDR** ffshCtrl);
+VOID 			ct_im_pro_2_62_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch);
+VOID 			ct_im_pro_2_63_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, UCHAR force);
+VOID 			ct_im_pro_2_64_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_FF_CTRL* ffCtrl);
+VOID 			ct_im_pro_2_65_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_AREA_INFO* ffCtrl);
+VOID 			ct_im_pro_2_66_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_FF_LPF_CTRL* ffCtrl);
+VOID 			ct_im_pro_2_67_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch);
+VOID 			ct_im_pro_2_68_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR force);
+VOID 			ct_im_pro_2_69_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									T_IM_PRO_SDC_CTRL* sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_2_6_print_0(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									USHORT ffshCtrl);
+VOID 			im_pro_2_6_print_1(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									const T_IM_PRO_RDMA_FFSH_ADDR** ffshCtrl);
+VOID 			im_pro_2_6_print_2(Impro26Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch);
+VOID 			im_pro_2_6_print_3(Impro26Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, UCHAR force);
+VOID 			im_pro_2_6_print_4(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_FF_CTRL* ffCtrl);
+VOID 			im_pro_2_6_print_5(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_AREA_INFO* ffCtrl);
+VOID 			im_pro_2_6_print_6(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FF_CH ch, INT32 ercd, 
+									T_IM_PRO_FF_LPF_CTRL* ffCtrl);
+VOID 			im_pro_2_6_print_7(Impro26Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch);
+VOID 			im_pro_2_6_print_8(Impro26Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR force);
+VOID 			im_pro_2_6_print_9(Impro26Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									T_IM_PRO_SDC_CTRL* sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_3_4_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_B2BTOP_CTRL* b2btopCtrl );
+VOID 			ct_im_pro_3_5_Print( E_IM_PRO_UNIT_NUM unitNo );
+VOID 			ct_im_pro_3_6_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			ct_im_pro_3_7_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			ct_im_pro_3_8_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_COMMON_CTRL* elfCtrl );
+VOID 			ct_im_pro_3_9_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_CTRL* elfCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_3_0_print_4(Impro30Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_B2BTOP_CTRL* b2btopCtrl );
+VOID 			im_pro_3_0_print_5(Impro30Print *self, E_IM_PRO_UNIT_NUM unitNo );
+VOID 			im_pro_3_0_print_6(Impro30Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			im_pro_3_0_print_7(Impro30Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			im_pro_3_0_print_8(Impro30Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_COMMON_CTRL* elfCtrl );
+VOID 			im_pro_3_0_print_9(Impro30Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_CTRL* elfCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_3_20_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			ct_im_pro_3_21_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_NSL_CTRL* elfCtrl );
+VOID 			ct_im_pro_3_22_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			ct_im_pro_3_23_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			ct_im_pro_3_24_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, const T_IM_PRO_RDMA_ELF_ADDR** elfCtrl );
+VOID 			ct_im_pro_3_25_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_HIGH_FREQ_AREA_EDGE_ADJ* elfCtrl );
+VOID 			ct_im_pro_3_26_Print( E_IM_PRO_UNIT_NUM unitNo );
+VOID 			ct_im_pro_3_27_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			ct_im_pro_3_28_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_COMMON_CTRL* fshdCtrl );
+VOID 			ct_im_pro_3_29_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_3_2_print_0(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			im_pro_3_2_print_1(Impro32Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_NSL_CTRL* elfCtrl );
+VOID 			im_pro_3_2_print_2(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			im_pro_3_2_print_3(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+VOID 			im_pro_3_2_print_4(Impro32Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, const T_IM_PRO_RDMA_ELF_ADDR** elfCtrl );
+VOID 			im_pro_3_2_print_5(Impro32Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_ELF_HIGH_FREQ_AREA_EDGE_ADJ* elfCtrl );
+VOID 			im_pro_3_2_print_6(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo );
+VOID 			im_pro_3_2_print_7(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
+VOID 			im_pro_3_2_print_8(Impro32Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_COMMON_CTRL* fshdCtrl );
+VOID 			im_pro_3_2_print_9(Impro32Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_4_Print( const char* string, INT32 ercd, T_IM_PRO_STATTOP_CTRL* ctrl );
+VOID ct_im_pro_4_5_Print( E_IM_PRO_AEAWB_CH ch );
+VOID ct_im_pro_4_6_Print( E_IM_PRO_AEAWB_CH ch, UCHAR force );
+VOID ct_im_pro_4_7_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_CTRL* aeawbCtrl );
+VOID ct_im_pro_4_8_Print( E_IM_PRO_AEAWB_CH ch, UCHAR paenTrg );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_0_print_4(Impro40Print *self, const char* string, INT32 ercd, T_IM_PRO_STATTOP_CTRL* ctrl );
+VOID im_pro_4_0_print_5(Impro40Print *self, E_IM_PRO_AEAWB_CH ch );
+VOID im_pro_4_0_print_6(Impro40Print *self, E_IM_PRO_AEAWB_CH ch, UCHAR force );
+VOID im_pro_4_0_print_7(Impro40Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_CTRL* aeawbCtrl );
+VOID im_pro_4_0_print_8(Impro40Print *self, E_IM_PRO_AEAWB_CH ch, UCHAR paenTrg );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_14_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_CW* aeawbCtrl );
+VOID ct_im_pro_4_15_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_LV_GATE* aeawbCtrl );
+VOID ct_im_pro_4_16_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_MATRIX_LV_GATE* aeawbCtrl );
+VOID ct_im_pro_4_17_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_STAT_YK* aeawbCtrl );
+VOID ct_im_pro_4_18_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_STAT_YK* aeyk );
+VOID ct_im_pro_4_19_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_LINE_INFO* aeawbCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_1_print_4(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_CW* aeawbCtrl );
+VOID im_pro_4_1_print_5(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_LV_GATE* aeawbCtrl );
+VOID im_pro_4_1_print_6(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_MATRIX_LV_GATE* aeawbCtrl );
+VOID im_pro_4_1_print_7(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_STAT_YK* aeawbCtrl );
+VOID im_pro_4_1_print_8(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_STAT_YK* aeyk );
+VOID im_pro_4_1_print_9(Impro41Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_LINE_INFO* aeawbCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_20_Print( const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* lineData );
+VOID ct_im_pro_4_21_Print( const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* dataAddress );
+VOID ct_im_pro_4_22_Print( const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* dataAddress );
+VOID ct_im_pro_4_23_Print( const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_WD_INFO* wdInfo );
+VOID ct_im_pro_4_24_Print( E_IM_PRO_AF_CH ch );
+VOID ct_im_pro_4_25_Print( E_IM_PRO_AF_CH ch, UCHAR force );
+VOID ct_im_pro_4_26_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AF_CTRL* afCtrl );
+VOID ct_im_pro_4_27_Print( E_IM_PRO_AF_CH ch, UCHAR paenTrg );
+VOID ct_im_pro_4_28_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AREA_INFO* globalWin );
+VOID ct_im_pro_4_29_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_EVAL_CALC_UNIT unitNo, T_IM_PRO_AF_EVAL_CALC_CTRL* afEvalCalcCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_2_print_0(Impro42Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* lineData );
+VOID im_pro_4_2_print_1(Impro42Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* dataAddress );
+VOID im_pro_4_2_print_2(Impro42Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, ULONG* dataAddress );
+VOID im_pro_4_2_print_3(Impro42Print *self, const char* string, E_IM_PRO_AEAWB_CH ch, T_IM_PRO_AEAWB_WD_INFO* wdInfo );
+VOID im_pro_4_2_print_4(Impro42Print *self, E_IM_PRO_AF_CH ch );
+VOID im_pro_4_2_print_5(Impro42Print *self, E_IM_PRO_AF_CH ch, UCHAR force );
+VOID im_pro_4_2_print_6(Impro42Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AF_CTRL* afCtrl );
+VOID im_pro_4_2_print_7(Impro42Print *self, E_IM_PRO_AF_CH ch, UCHAR paenTrg );
+VOID im_pro_4_2_print_8(Impro42Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AREA_INFO* globalWin );
+VOID im_pro_4_2_print_9(Impro42Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_EVAL_CALC_UNIT unitNo, T_IM_PRO_AF_EVAL_CALC_CTRL* afEvalCalcCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID ct_im_pro_4_30_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AF_VERTICAL_CTRL* afVerticalCtrl );
+VOID ct_im_pro_4_31_Print( const char* string, E_IM_PRO_AF_CH ch, UCHAR           tap_no, 
+							T_IM_PRO_AF_HORIZON_CTRL* afCtrl );
+VOID ct_im_pro_4_32_Print( const char* string, E_IM_PRO_AF_CH ch, 
+							E_IM_PRO_AF_WINDOW_NO winNo, T_IM_PRO_AF_WIN_CTRL* afCtrl );
+VOID ct_im_pro_4_33_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_34_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_35_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_36_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_37_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_38_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_39_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID im_pro_4_3_print_0(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_AF_VERTICAL_CTRL* afVerticalCtrl );
+VOID im_pro_4_3_print_1(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, UCHAR           tap_no, 
+							T_IM_PRO_AF_HORIZON_CTRL* afCtrl );
+VOID im_pro_4_3_print_2(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, 
+							E_IM_PRO_AF_WINDOW_NO winNo, T_IM_PRO_AF_WIN_CTRL* afCtrl );
+VOID im_pro_4_3_print_3(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_4(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_5(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_6(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_7(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_8(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_3_print_9(Impro43Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_40_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_41_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_42_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_43_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_44_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_45_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_46_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_47_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_48_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_49_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_4_print_0(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_1(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_2(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_3(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_4(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_5(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_6(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_7(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_8(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_4_print_9(Impro44Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_50_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_51_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_52_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_53_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_54_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_55_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_56_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_57_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_58_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_59_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_5_print_0(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_1(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_2(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_3(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_4(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_5(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_6(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_7(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_8(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_5_print_9(Impro45Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_60_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID ct_im_pro_4_61_Print( E_IM_PRO_HIST_CH ch );
+VOID ct_im_pro_4_62_Print( E_IM_PRO_HIST_CH ch, UCHAR force );
+VOID ct_im_pro_4_63_Print( const char* string, E_IM_PRO_HIST_CH ch, T_IM_PRO_HIST_CTRL* histCtrl );
+VOID ct_im_pro_4_64_Print( E_IM_PRO_AF_CH ch, UCHAR paenTrg );
+VOID ct_im_pro_4_65_Print( const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_HIST_CYCLE histCycle );
+VOID ct_im_pro_4_66_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_AREA* histCtrl );
+VOID ct_im_pro_4_67_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_GAIN* histCtrl );
+VOID ct_im_pro_4_68_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_STAT_YK* histCtrl );
+VOID ct_im_pro_4_69_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_DATA* histCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_6_print_0(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_AF_WINDOW_NO winNo, ULONG* calcData );
+VOID im_pro_4_6_print_1(Impro46Print *self, E_IM_PRO_HIST_CH ch );
+VOID im_pro_4_6_print_2(Impro46Print *self, E_IM_PRO_HIST_CH ch, UCHAR force );
+VOID im_pro_4_6_print_3(Impro46Print *self, const char* string, E_IM_PRO_HIST_CH ch, T_IM_PRO_HIST_CTRL* histCtrl );
+VOID im_pro_4_6_print_4(Impro46Print *self, E_IM_PRO_AF_CH ch, UCHAR paenTrg );
+VOID im_pro_4_6_print_5(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, E_IM_PRO_HIST_CYCLE histCycle );
+VOID im_pro_4_6_print_6(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_AREA* histCtrl );
+VOID im_pro_4_6_print_7(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_GAIN* histCtrl );
+VOID im_pro_4_6_print_8(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_STAT_YK* histCtrl );
+VOID im_pro_4_6_print_9(Impro46Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_DATA* histCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_70_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_RAM_DATA* histCtrl );
+VOID ct_im_pro_4_71_Print( E_IM_PRO_FLCK_CH ch );
+VOID ct_im_pro_4_72_Print( E_IM_PRO_FLCK_CH ch, UCHAR force );
+VOID ct_im_pro_4_73_Print( const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_CTRL* flckCtrl );
+VOID ct_im_pro_4_74_Print( const char* string, E_IM_PRO_FLCK_CH ch, E_IM_PRO_FLCK_TYPE flckCtrl );
+VOID ct_im_pro_4_75_Print( const char* string, E_IM_PRO_FLCK_CH ch, E_IM_PRO_FLCK_TYPE flckCtrl );
+VOID ct_im_pro_4_76_Print( const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_AREA* flckCtrl );
+VOID ct_im_pro_4_77_Print( const char* string, E_IM_PRO_FLCK_CH ch, USHORT flckCtrl );
+VOID ct_im_pro_4_78_Print( const char* string, E_IM_PRO_FLCK_CH ch, USHORT flckCtrl );
+VOID ct_im_pro_4_79_Print( const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_LV_GATE* flckCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_7_print_0(Impro47Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_HIST_RAM_DATA* histCtrl );
+VOID im_pro_4_7_print_1(Impro47Print *self, E_IM_PRO_FLCK_CH ch );
+VOID im_pro_4_7_print_2(Impro47Print *self, E_IM_PRO_FLCK_CH ch, UCHAR force );
+VOID im_pro_4_7_print_3(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_CTRL* flckCtrl );
+VOID im_pro_4_7_print_4(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, E_IM_PRO_FLCK_TYPE flckCtrl );
+VOID im_pro_4_7_print_5(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, E_IM_PRO_FLCK_TYPE flckCtrl );
+VOID im_pro_4_7_print_6(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_AREA* flckCtrl );
+VOID im_pro_4_7_print_7(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, USHORT flckCtrl );
+VOID im_pro_4_7_print_8(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, USHORT flckCtrl );
+VOID im_pro_4_7_print_9(Impro47Print *self, const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_LV_GATE* flckCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_4_80_Print( const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_MATRIX_LV_GATE* flckCtrl );
+VOID ct_im_pro_4_81_Print( const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_STAT_YK* histCtrl );
+VOID ct_im_pro_4_82_Print( E_IM_PRO_FLCK_CH ch, ULONG flckCtrl );
+VOID ct_im_pro_4_83_Print( E_IM_PRO_FLCK_CH ch, ULONG flckCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_4_8_print_0(Impro48Print *self, const char* string, E_IM_PRO_FLCK_CH ch, T_IM_PRO_FLCK_MATRIX_LV_GATE* flckCtrl );
+VOID im_pro_4_8_print_1(Impro48Print *self, const char* string, E_IM_PRO_AF_CH ch, T_IM_PRO_STAT_YK* histCtrl );
+VOID im_pro_4_8_print_2(Impro48Print *self, E_IM_PRO_FLCK_CH ch, ULONG flckCtrl );
+VOID im_pro_4_8_print_3(Impro48Print *self, E_IM_PRO_FLCK_CH ch, ULONG flckCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_6_0_1_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_2_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_3_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							UCHAR ch, INT32 ercd, T_IM_PRO_P2M_CTRL* p2m_ctrl );
+VOID ct_im_pro_6_0_4_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR paenTrg );
+VOID ct_im_pro_6_0_5_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, INT32 cmpErcd );
+VOID ct_im_pro_6_0_6_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+							const T_IM_PRO_RDMA_P2M_KNEE_TBL_ADDR** addr );
+VOID ct_im_pro_6_0_7_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_8_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_9_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							UCHAR ch, INT32 ercd, T_IM_PRO_PWCH_CTRL* pwchCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_6_0_print_1(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_0_print_2(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_0_print_3(Impro60Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							UCHAR ch, INT32 ercd, T_IM_PRO_P2M_CTRL* p2m_ctrl );
+VOID im_pro_6_0_print_4(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR paenTrg );
+VOID im_pro_6_0_print_5(Impro60Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							INT32 ercd, INT32 cmpErcd );
+VOID im_pro_6_0_print_6(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+							const T_IM_PRO_RDMA_P2M_KNEE_TBL_ADDR** addr );
+VOID im_pro_6_0_print_7(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_0_print_8(Impro60Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_0_print_9(Impro60Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							UCHAR ch, INT32 ercd, T_IM_PRO_PWCH_CTRL* pwchCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID ct_im_pro_6_0_10_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_AXI_CTRL* axiCtrl );
+VOID ct_im_pro_6_0_11_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_13_Print( UINT32 buf_idx, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_14_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, ULONG lineFeed );
+VOID ct_im_pro_6_0_15_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR axiResponse );
+VOID ct_im_pro_6_0_16_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_17_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_18_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_LNR_CTRL* lnrCtrl );
+VOID ct_im_pro_6_0_19_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, const T_IM_PRO_RDMA_LNR_ADDR** addr );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID im_pro_6_1_print_0(Impro61Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_AXI_CTRL* axiCtrl );
+VOID im_pro_6_1_print_1(Impro61Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_1_print_3(Impro61Print *self, UINT32 buf_idx, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_1_print_4(Impro61Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, ULONG lineFeed );
+VOID im_pro_6_1_print_5(Impro61Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR axiResponse );
+VOID im_pro_6_1_print_6(Impro61Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_1_print_7(Impro61Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_1_print_8(Impro61Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_LNR_CTRL* lnrCtrl );
+VOID im_pro_6_1_print_9(Impro61Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, const T_IM_PRO_RDMA_LNR_ADDR** addr );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID ct_im_pro_6_0_20_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_21_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							 UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_22_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							 UCHAR ch, INT32 ercd, T_IM_PRO_PGAIN_CTRL* pgainCtrl );
+VOID ct_im_pro_6_0_23_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+						     const T_IM_PRO_RDMA_PGAIN_ADDR** addr );
+VOID ct_im_pro_6_0_24_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_25_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_26_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							 T_IM_PRO_PZSFT_CTRL* pzsftCtrl );
+VOID ct_im_pro_6_0_27_Print( E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, const T_IM_PRO_RDMA_PZSFT_ADDR** addr );
+VOID ct_im_pro_6_0_28_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd );
+VOID ct_im_pro_6_0_29_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID im_pro_6_2_print_0(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_2_print_1(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							 UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_2_print_2(Impro62Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, 
+							 UCHAR ch, INT32 ercd, T_IM_PRO_PGAIN_CTRL* pgainCtrl );
+VOID im_pro_6_2_print_3(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+						     const T_IM_PRO_RDMA_PGAIN_ADDR** addr );
+VOID im_pro_6_2_print_4(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd );
+VOID im_pro_6_2_print_5(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_2_print_6(Impro62Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+							 T_IM_PRO_PZSFT_CTRL* pzsftCtrl );
+VOID im_pro_6_2_print_7(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, const T_IM_PRO_RDMA_PZSFT_ADDR** addr );
+VOID im_pro_6_2_print_8(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd );
+VOID im_pro_6_2_print_9(Impro62Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID ct_im_pro_6_0_30_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd, T_IM_PRO_PG_CTRL* pg_ctrl );
+VOID ct_im_pro_6_0_31_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_32_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_33_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_MONI_CTRL* moni_ctrl );
+VOID ct_im_pro_6_0_34_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_MONI_RESULT* moniResult );
+VOID ct_im_pro_6_0_35_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd );
+VOID ct_im_pro_6_0_36_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_37_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, T_IM_PRO_M2P_CTRL* m2p_ctrl );
+VOID ct_im_pro_6_0_38_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, UCHAR paenTrg );
+VOID ct_im_pro_6_0_39_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, INT32 cmpErcd );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID im_pro_6_3_print_0(Impro63Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, INT32 ercd, T_IM_PRO_PG_CTRL* pg_ctrl );
+VOID im_pro_6_3_print_1(Impro63Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_3_print_2(Impro63Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_3_print_3(Impro63Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_MONI_CTRL* moni_ctrl );
+VOID im_pro_6_3_print_4(Impro63Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, T_IM_PRO_MONI_RESULT* moniResult );
+VOID im_pro_6_3_print_5(Impro63Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd );
+VOID im_pro_6_3_print_6(Impro63Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, UCHAR force );
+VOID im_pro_6_3_print_7(Impro63Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, T_IM_PRO_M2P_CTRL* m2p_ctrl );
+VOID im_pro_6_3_print_8(Impro63Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, UCHAR paenTrg );
+VOID im_pro_6_3_print_9(Impro63Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR           ch, INT32 ercd, INT32 cmpErcd );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+VOID ct_im_pro_6_0_40_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+							 const T_IM_PRO_RDMA_M2P_DEKNEE_TBL_ADDR** addr );
+VOID ct_im_pro_6_0_41_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID ct_im_pro_6_0_42_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, UCHAR force );
+VOID ct_im_pro_6_0_43_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, T_IM_PRO_PRCH_CTRL* prchCtrl );
+VOID ct_im_pro_6_0_44_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, T_IM_PRO_AXI_CTRL* axiCtrl );
+VOID ct_im_pro_6_0_45_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, ULONG prAddr );
+VOID ct_im_pro_6_0_46_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+						     INT32 ercd, T_IM_PRO_PRCH_AREA* prArea );
+VOID ct_im_pro_6_0_47_Print( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, UCHAR axiResponse );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID im_pro_6_4_print_0(Impro64Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd, 
+							 const T_IM_PRO_RDMA_M2P_DEKNEE_TBL_ADDR** addr );
+VOID im_pro_6_4_print_1(Impro64Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, INT32 ercd );
+VOID im_pro_6_4_print_2(Impro64Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, UCHAR force );
+VOID im_pro_6_4_print_3(Impro64Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, T_IM_PRO_PRCH_CTRL* prchCtrl );
+VOID im_pro_6_4_print_4(Impro64Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, T_IM_PRO_AXI_CTRL* axiCtrl );
+VOID im_pro_6_4_print_5(Impro64Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, ULONG prAddr );
+VOID im_pro_6_4_print_6(Impro64Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+						     INT32 ercd, T_IM_PRO_PRCH_AREA* prArea );
+VOID im_pro_6_4_print_7(Impro64Print *self, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_BLOCK_TYPE blockType, UCHAR ch, 
+							 INT32 ercd, UCHAR axiResponse );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_8_1_SLVS_Common_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Normal_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Link_Err_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Mac_Err1_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_SLVS_Mac_Err2_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_init_combo_phy(VOID);
+VOID ct_im_pro_8_1_mode_change_slvs(VOID);
+VOID ct_im_pro_8_1_init_slvs(VOID);
+VOID ct_im_pro_8_1_raw_output(VOID);
+VOID ct_im_pro_8_1_SEN_VD_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID ct_im_pro_8_1_PWCH_CB(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+
+#endif
+修改为#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_8_1_slvs_common_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_normal_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_link_err_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_mac_err1_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_mac_err2_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_sen_vd_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+VOID im_pro_8_1_slvs_pwch_cb(T_CALLBACK_ID* id, ULONG result, ULONG userParam);
+
+VOID im_pro_8_1_slvs_init_combo_phy(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_mode_change(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_init(ImPro81Slvs* self);
+VOID im_pro_8_1_slvs_raw_output(ImPro81Slvs* self);
+#endif
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_3_1_1_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+                            T_IM_PRO_ELF_NOISE_FUNC* elfCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_3_1_1_Print(Impro311Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+                            T_IM_PRO_ELF_NOISE_FUNC* elfCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID ct_im_pro_SEN_VD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_HD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_SLVS_Common_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_SLVS_INTN_O_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_SLVS_LINK_ERR_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_SLVS_MAC_ERR1_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_SLVS_MAC_ERR2_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_LVDS_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_DMIPI_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_CMIPI_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_MONI_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_LDIV_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_OBD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SEN_OBT_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_PWCH_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_PRCH_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SRO_VD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SRO_HD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_SRO_SDC_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_B2B_VD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_B2B_HD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_STAT_AEAWB_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_STAT_AF_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_STAT_HIST_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_PAS_VD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+VOID ct_im_pro_PAS_HD_INT_CB( T_CALLBACK_ID* cb_id, ULONG result, ULONG userParam );
+#endif
+修改为
+#ifndef CO_CT_IM_PRO_DISABLE
+VOID im_pro_callback_sen_vd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_hd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_slvs_common_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_slvs_intn_o_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_slvs_link_err_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_slvs_mac_err1_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_slvs_mac_err2_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_lvds_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_dmipi_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_cmipi_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_moni_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_ldiv_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_obd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_obt_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sen_pwch_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_prch_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sro_vd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sro_hd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_sro_sdc_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_b2b_vd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_b2b_hd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_stat_aeawb_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_stat_af_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_stat_hist_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_pas_vd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+VOID im_pro_callback_pas_hd_int_cb( T_CALLBACK_ID* cbId, ULONG result, ULONG userParam );
+#endif
+
+#ifdef CO_DEBUG_ON_PC
+VOID ct_im_pro_pwch_intflg_fill( UINT32 unitNo, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_prch_intflg_fill( UINT32 unitNo, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_ldiv_intflg_fill( UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_obd_intflg_fill( UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_obt_intflg_fill( UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_sentop_vd_intflg_fill( UINT32 vdInte, UINT32 vdIntf, UINT32 sgVdInte, 
+								UINT32 sgVdIntf, UINT32 gyroVdInte, UINT32 gyroVdIntf );
+VOID ct_im_pro_sentop_hd_intflg_fill( UINT32 hdInte, UINT32 hdIntf, UINT32 sgHdInte, UINT32 sgHdIntf );
+VOID ct_im_pro_slvs_comm_intflg_fill( UINT32 inte, UINT32 intf );
+VOID ct_im_pro_slvs_strm_intflg_fill( UINT32 ch, UINT32 inte, UINT32 intf, UINT32 leinte, 
+								UINT32 leintf, UINT32 meinte0, UINT32 meintf0, UINT32 meinte1, UINT32 meintf1 );
+VOID ct_im_pro_lvds_intflg_fill( UINT32 ch, UINT32 inte1, UINT32 intf1, UINT32 inte2, UINT32 intf2, 
+								UINT32 inte3, UINT32 intf3 );
+VOID ct_im_pro_dmipi_intflg_fill( UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_cmipi_intflg_fill( UINT32 ch, UINT32 inte1, UINT32 intf1, UINT32 inte2, UINT32 intf2 );
+VOID ct_im_pro_moni_intflg_fill( UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_sro_moni_intflg_fill( UINT32 unitNo, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_sro_sdc_intflg_fill( UINT32 unitNo, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID ct_im_pro_srotop_vd_intflg_fill( UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID ct_im_pro_srotop_hd_intflg_fill( UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+VOID ct_im_pro_b2btop_vd_intflg_fill( UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID ct_im_pro_b2btop_hd_intflg_fill( UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+VOID ct_im_pro_stat_aeawb_intflg_fill( UINT32 ch, UINT32 aeawb_inte, UINT32 aeawbIntf );
+VOID ct_im_pro_stat_af_intflg_fill( UINT32 ch, UINT32 afInte, UINT32 afIntf );
+VOID ct_im_pro_stat_hist_intflg_fill( UINT32 ch, UINT32 histInte, UINT32 histIntf );
+VOID ct_im_pro_pastop_vd_intflg_fill( UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID ct_im_pro_pastop_hd_intflg_fill( UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+#endif  // CO_DEBUG_ON_PC
+修改为
+#ifdef CO_DEBUG_ON_PC
+VOID im_pro_debug_pwch_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_prch_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_ldiv_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_obd_intflg_fill(ImProDebug *self, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_obt_intflg_fill(ImProDebug *self, UINT32 blockNum, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_sentop_vd_intflg_fill(ImProDebug *self, UINT32 vdInte, UINT32 vdIntf, UINT32 sgVdInte, 
+								UINT32 sgVdIntf, UINT32 gyroVdInte, UINT32 gyroVdIntf );
+VOID im_pro_debug_sentop_hd_intflg_fill(ImProDebug *self, UINT32 hdInte, UINT32 hdIntf, UINT32 sgHdInte, UINT32 sgHdIntf );
+VOID im_pro_debug_slvs_comm_intflg_fill(ImProDebug *self, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_slvs_strm_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte, UINT32 intf, UINT32 leinte, 
+								UINT32 leintf, UINT32 meinte0, UINT32 meintf0, UINT32 meinte1, UINT32 meintf1 );
+VOID im_pro_debug_lvds_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte1, UINT32 intf1, UINT32 inte2, UINT32 intf2, 
+								UINT32 inte3, UINT32 intf3 );
+VOID im_pro_debug_dmipi_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_cmipi_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte1, UINT32 intf1,
+                                 UINT32 inte2, UINT32 intf2 );
+VOID im_pro_debug_moni_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_sro_moni_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_sro_sdc_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 ch, UINT32 inte, UINT32 intf );
+VOID im_pro_debug_srotop_vd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID im_pro_debug_srotop_hd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+VOID im_pro_debug_b2btop_vd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID im_pro_debug_b2btop_hd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+VOID im_pro_debug_stat_aeawb_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 aeawb_inte, UINT32 aeawbIntf );
+VOID im_pro_debug_stat_af_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 afInte, UINT32 afIntf );
+VOID im_pro_debug_stat_hist_intflg_fill(ImProDebug *self, UINT32 ch, UINT32 histInte, UINT32 histIntf );
+VOID im_pro_debug_pastop_vd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 vdInte, UINT32 vdIntf );
+VOID im_pro_debug_pastop_hd_intflg_fill(ImProDebug *self, UINT32 unitNo, UINT32 hdInte, UINT32 hdIntf );
+#endif  // CO_DEBUG_ON_PC
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			ct_im_pro_2_4_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_SROTOP_CTRL* ctrl);
+VOID 			ct_im_pro_2_5_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+									T_IM_PRO_SROTOP_WEITGEN_CTRL* ctrl);
+VOID 			ct_im_pro_2_6_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, 
+									INT32 ercd, E_IM_PRO_WEITGEN_ENABLE ctrl);
+VOID 			ct_im_pro_2_7_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch);
+VOID 			ct_im_pro_2_8_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch, UCHAR force);
+VOID 			ct_im_pro_2_9_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch, 
+									T_IM_PRO_AFPB_CTRL* afpbCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID 			im_pro_2_0_print_4(Impro20Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_SROTOP_CTRL* ctrl);
+VOID 			im_pro_2_0_print_5(Impro20Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, INT32 ercd, 
+									T_IM_PRO_SROTOP_WEITGEN_CTRL* ctrl);
+VOID 			im_pro_2_0_print_6(Impro20Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR ch, 
+									INT32 ercd, E_IM_PRO_WEITGEN_ENABLE ctrl);
+VOID 			im_pro_2_0_print_7(Impro20Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch);
+VOID 			im_pro_2_0_print_8(Impro20Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch, UCHAR force);
+VOID 			im_pro_2_0_print_9(Impro20Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_AFPB_CH ch, 
+									T_IM_PRO_AFPB_CTRL* afpbCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			ct_im_pro_2_10_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch);
+VOID 			ct_im_pro_2_11_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, UCHAR force);
+VOID 			ct_im_pro_2_12_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									T_IM_PRO_FSHDL_COMMON_CTRL* fshdlCtrl);
+VOID 			ct_im_pro_2_13_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									T_IM_PRO_FSHDL_BLEND_CTRL* fshdlCtrl);
+VOID 			ct_im_pro_2_14_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									UCHAR fshdlCtrl);
+VOID 			ct_im_pro_2_15_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									T_IM_PRO_AREA_INFO* fshdlCtrl);
+VOID 			ct_im_pro_2_16_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									T_IM_PRO_FSHDL_FRAME_CTRL* fshdlCtrl);
+VOID 			ct_im_pro_2_17_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									USHORT fshdlCtrl);
+VOID 			ct_im_pro_2_18_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch, INT32 ercd, 
+									const T_IM_PRO_RDMA_FSHDL_ADDR** fshdlCtrl);
+VOID 			ct_im_pro_2_19_Print(E_IM_PRO_UNIT_NUM unitNo);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			im_pro_2_1_print_0(Impro21Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FSHDL_CH ch);
+VOID 			im_pro_2_1_print_1(Impro21Print *self,E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, UCHAR force);
+VOID 			im_pro_2_1_print_2(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, T_IM_PRO_FSHDL_COMMON_CTRL* fshdlCtrl);
+VOID 			im_pro_2_1_print_3(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, T_IM_PRO_FSHDL_BLEND_CTRL* fshdlCtrl);
+VOID 			im_pro_2_1_print_4(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, UCHAR fshdlCtrl);
+VOID 			im_pro_2_1_print_5(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, T_IM_PRO_AREA_INFO* fshdlCtrl);
+VOID 			im_pro_2_1_print_6(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, T_IM_PRO_FSHDL_FRAME_CTRL* fshdlCtrl);
+VOID 			im_pro_2_1_print_7(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd, USHORT fshdlCtrl);
+VOID 			im_pro_2_1_print_8(Impro21Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, 
+									E_IM_PRO_FSHDL_CH ch, INT32 ercd,  const T_IM_PRO_RDMA_FSHDL_ADDR** fshdlCtrl);
+VOID 			im_pro_2_1_print_9(Impro21Print *self,E_IM_PRO_UNIT_NUM unitNo);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			ct_im_pro_2_50_Print(E_IM_PRO_UNIT_NUM unitNo);
+VOID 			ct_im_pro_2_51_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			ct_im_pro_2_52_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_VRB_CTRL* vrbCtrl);
+VOID 			ct_im_pro_2_53_Print(E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			ct_im_pro_2_54_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch);
+VOID 			ct_im_pro_2_55_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, UCHAR force);
+VOID 			ct_im_pro_2_56_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_CTRL* ffshCtrl);
+VOID 			ct_im_pro_2_57_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_BLEND_CTRL* ffshCtrl);
+VOID 			ct_im_pro_2_58_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_AREA* ffshCtrl);
+VOID 			ct_im_pro_2_59_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			im_pro_2_5_print_0(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo);
+VOID 			im_pro_2_5_print_1(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR force);
+VOID 			im_pro_2_5_print_2(Impro25Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, T_IM_PRO_VRB_CTRL* vrbCtrl);
+VOID 			im_pro_2_5_print_3(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg);
+VOID 			im_pro_2_5_print_4(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch);
+VOID 			im_pro_2_5_print_5(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, UCHAR force);
+VOID 			im_pro_2_5_print_6(Impro25Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_CTRL* ffshCtrl);
+VOID 			im_pro_2_5_print_7(Impro25Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_BLEND_CTRL* ffshCtrl);
+VOID 			im_pro_2_5_print_8(Impro25Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, 
+									T_IM_PRO_FFSH_AREA* ffshCtrl);
+VOID 			im_pro_2_5_print_9(Impro25Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_FFSH_CH ch, INT32 ercd, UCHAR paenTrg);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			ct_im_pro_2_70_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL sdcCtrl);
+VOID 			ct_im_pro_2_71_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									T_IM_PRO_SDC_CTRL_AFPB* sdcCtrl);
+VOID 			ct_im_pro_2_72_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL tblSel, INT32 ercd, T_IM_PRO_SDC_GAIN_TABLE* sdcCtrl, INT32 cmpErcd);
+VOID 			ct_im_pro_2_73_Print(E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, UCHAR paenTrg);
+VOID 			ct_im_pro_2_74_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									const T_IM_PRO_RDMA_SDC_ADDR** sdcCtrl);
+VOID 			ct_im_pro_2_75_Print(const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL tblSel, INT32 ercd, const T_IM_PRO_RDMA_SDC_GAIN_TBL_ADDR** sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			im_pro_2_7_print_0(Impro27Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL sdcCtrl);
+VOID 			im_pro_2_7_print_1(Impro27Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									T_IM_PRO_SDC_CTRL_AFPB* sdcCtrl);
+VOID 			im_pro_2_7_print_2(Impro27Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL tblSel, INT32 ercd, T_IM_PRO_SDC_GAIN_TABLE* sdcCtrl, INT32 cmpErcd);
+VOID 			im_pro_2_7_print_3(Impro27Print *self,E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, UCHAR paenTrg);
+VOID 			im_pro_2_7_print_4(Impro27Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, INT32 ercd, 
+									const T_IM_PRO_RDMA_SDC_ADDR** sdcCtrl);
+VOID 			im_pro_2_7_print_5(Impro27Print *self,const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+									E_IM_PRO_SDC_GAIN_TABLE_SEL tblSel, INT32 ercd, const T_IM_PRO_RDMA_SDC_GAIN_TBL_ADDR** sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			ct_im_pro_3_30_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_AREA_INFO* fshdCtrl );
+VOID 			ct_im_pro_3_31_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_BLEND_CTRL* fshdCtrl );
+VOID 			ct_im_pro_3_32_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_FRAME_CTRL* fshdCtrl );
+VOID 			ct_im_pro_3_33_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_CONCENTRIC_CTRL* fshdCtrl );
+VOID 			ct_im_pro_3_35_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR tblSel, 
+									INT32 ercd, INT32 cmpErcd );
+VOID 			ct_im_pro_3_36_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, USHORT fshdCtrl );
+VOID 			ct_im_pro_3_37_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, const T_IM_PRO_RDMA_FSHD_ADDR** fshdCtrl );
+VOID 			ct_im_pro_3_38_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR tblSel, 
+									INT32 ercd, const T_IM_PRO_RDMA_FSHD_CTBL_ADDR** fshdCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+
+VOID 			im_pro_3_3_print_0(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_AREA_INFO* fshdCtrl );
+VOID 			im_pro_3_3_print_1(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_BLEND_CTRL* fshdCtrl );
+VOID 			im_pro_3_3_print_2(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_FRAME_CTRL* fshdCtrl );
+VOID 			im_pro_3_3_print_3(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, T_IM_PRO_FSHD_CONCENTRIC_CTRL* fshdCtrl );
+VOID 			im_pro_3_3_print_5(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR tblSel, 
+									INT32 ercd, INT32 cmpErcd );
+VOID 			im_pro_3_3_print_6(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, USHORT fshdCtrl );
+VOID 			im_pro_3_3_print_7(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo,
+						 			INT32 ercd, const T_IM_PRO_RDMA_FSHD_ADDR** fshdCtrl );
+VOID 			im_pro_3_3_print_8(Impro33Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, UCHAR tblSel, 
+									INT32 ercd, const T_IM_PRO_RDMA_FSHD_CTBL_ADDR** fshdCtrl );
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_2_7_1_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch,
+                         INT32 ercd, T_IM_PRO_SDC_CTRL_AFPB* sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_2_7_1_Print(Impro271Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch,
+                         INT32 ercd, T_IM_PRO_SDC_CTRL_AFPB* sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_2_7_4_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+INT32 ercd, const T_IM_PRO_RDMA_SDC_ADDR** sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_2_7_4_Print(Impro274Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, 
+INT32 ercd, const T_IM_PRO_RDMA_SDC_ADDR** sdcCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID ct_im_pro_3_1_4_Print( const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+                        T_IM_PRO_ELF_f9_SAMPLING* elfCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+修改为
+
+#ifndef CO_CT_IM_PRO_DISABL
+VOID im_pro_3_1_4_Print(Impro314Print *self, const char* string, E_IM_PRO_UNIT_NUM unitNo, INT32 ercd, 
+                        T_IM_PRO_ELF_f9_SAMPLING* elfCtrl);
+#endif /*CO_CT_IM_PRO_DISABL*/
+
+
+

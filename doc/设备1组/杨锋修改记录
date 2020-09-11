@@ -1,0 +1,2463 @@
+1)拆分h265_movie.c，
+	拆分为	 h265moviecommon.c.h,
+			h265moviewrapper.c.h
+	
+
+
+将h264_if.c.h文件搬运到新建类 h264if.c.h文件
+
+h264if.h文件中修改
+#define CO_H264_INFO_PRINT         更改为 H264If_INFO_PRINT
+#define CO_H264_WARNING_PRINT      更改为 H264If_WARNING_PRINT
+#define CO_H264_ERROR_PRINT        更改为 H264If_ERROR_PRINT
+#define H264_OK (0)                更改为 H264If_OK
+#define H264_NG (-1)               更改为 H264If_NG
+#define H264_PARAM_ERR (-2)        更改为 H264If_PARAM_ERR
+#define H264_FATAL_ERR (-3)        更改为 H264If_FATAL_ERR
+#define H264_OFF (0)               更改为 H264If_OFF
+#define H264_ON (1)                更改为 H264If_ON
+#define H264_NAL_UNIT_MAX_NUM (11) 更改为 H264If_NAL_UNIT_MAX_NUM
+
+枚举 
+E_H264_IF_TYPE                更名为 H264IfType
+枚举中变量前缀 E_H264_IF_TYPE   更改为 H264If
+
+E_H264_IF_STOP_NOTIFY         更名为 H264IfStopNotify
+E_H264_IF_MSG_WAIT            更名为 H264IfMsgWait
+E_H264_IF_STREAM_CH           更名为 H264IfStreamCh
+E_H264_IF_IMAGE_SIZE          更名为 H264IfImageSize
+E_H264_IF_STREAM_FORMAT       更名为 H264IfStreamFormat
+E_H264_IF_FRAME_RATE          更名为 H264IfFrameRate
+E_H264_IF_RATE_MODE           更名为 H264IfRateMode
+E_H264_IF_PROFILE             更名为 H264IfProfile
+E_H264_IF_LEVEL               更名为 H264IfLevel
+E_H264_IF_VLC_MODE            更名为 H264IfVlcMode
+E_H264_IF_SCAN_MODE           更名为 H264IfScanMode
+E_H264_IF_PIC_TYPE            更名为 H264IfPicType
+E_H264_IF_GOP_STR             更名为 H264IfGopStr
+E_H264_IF_WEIGHT_CTRL         更名为 H264IfWeightCtrl
+E_H264_IF_PLAY_SPEED          更名为 H264IfPlaySpeed
+E_H264_IF_PLAY_DIRECTION      更名为 H264IfPlayDirection
+E_H264_IF_PLAY_DECODER_STATUS 更名为 H264IfPlayDecoderStatus
+E_H264_IF_VIDEO_FORMAT 	      更名为 H264IfVideoFormat
+E_H264_IF_POINT_TYPE          更名为 H264IfPointType
+E_H264_IF_CONCEAL_ERROR       更名为 H264IfConcealError
+E_H264_IF_YUV_FORMAT          更名为 H264IfYuvFormat
+E_H264_IF_DISP_ROTATE         更名为 H264IfDispRotate
+
+以上枚举中变量的前缀由 E_H264_IF_ 更改为 H264If_
+
+
+结构体
+T_H264_IF_PARAM_VUI            更名为 H264IfParamVui
+T_H264_INITIAL_SCALINGLIST     更名为 H264InitialScalinglist
+T_H264_IF_PARAM_RECORD         更名为 H264IfParamRecord
+T_H264_IF_DYNAMIC_PARAM_RECORD 更名为 H264IfDynamicParamRecord
+T_H264_IF_VIDEO_STREAM_PARAM   更名为 H264IfVideoStreamParam
+T_H264_IF_VIDEO_VECTOR_PARAM   更名为 H264IfVideoVectorParam
+T_H264_IF_SCALINGLIST          更名为 H264IfScalinglist
+T_H264_IF_SPECIFIC_FIELD       更名为 H264IfSpecificField
+T_H264_IF_SPECIFIC_FIELD_QP    更名为 H264IfSpecificFieldQp
+T_H264_IF_GET_IMAGE_ADDR_PARAM 更名为 H264IfGetImageAddrParam
+T_H264_IF_DECODER_PARAM        更名为 H264IfDecoderParam
+T_H264_IF_DISPLAY_PARAM        更名为 H264IfDisplayParam
+T_H264_IF_DISPLAY_INFO         更名为 H264IfDisplayInfo
+T_H264_IF_PARAM_INIT           更名为 H264IfParamInit
+T_H264_IF_PARAM_PLAY           更名为 H264IfParamPlay
+T_H264_IF_PARAM_PLAY_STOP      更名为 H264IfParamPlayStop
+T_H264_IF_PARAM_SET_STREAM     更名为 H264IfParamSetStream
+T_H264_IF_PARAM_TRICK          更名为 H264IfParamTrick
+T_H264_IF_VIDEO_YUV_INFO       更名为 H264IfVideoYuvInfo
+T_H264_IF_PARAM_TOPIMAGE       更名为 H264IfParamTopimage
+U_H264_IF_PARAM                更名为 UH264IfParam
+T_H264_IF_MSG                  更名为 H264IfMsg
+T_H264_IF_HANDLER              更名为 H264IfHandler
+T_H264_IF_MBOX                 更名为 H264IfMbox
+
+结构体内的变量按照规范更名
+
+函数名更改
+extern	VOID	H264_Controller( INT32 stacd );
+// [H264 Task Interface (MailBOX)]
+extern	INT32	H264_If_Set_Msg( T_H264_IF_MSG* msg, E_H264_IF_MSG_WAIT wait);
+extern	INT32	H264_If_Get_Msg( T_H264_IF_MSG* msg, E_H264_IF_MSG_WAIT wait);
+extern	INT32	H264_If_Clear_Msg( VOID );
+// [Function call IF]
+/* (Record) */
+/*  -Input YC Image setting Address get */
+extern	INT32	H264_If_Get_Record_Image_Address(
+					E_H264_IF_STREAM_CH		stream_ch,
+					E_H264_IF_IMAGE_SIZE	size,
+					ULLONG					frame_no, 
+					T_H264_IF_GET_IMAGE_ADDR_PARAM* addr_param
+					);
+extern	VOID	H264_If_Decide_Record_Image_Address( E_H264_IF_STREAM_CH stream_ch, ULLONG frame_no, BOOL dummy_flg );
+extern	VOID	H264_If_Record_Frame_Enabled( E_H264_IF_STREAM_CH stream_ch, ULLONG frame_no, BOOL dummy_flg, BOOL enabled );
+extern	VOID	H264_If_Record_Valid_Image_Address( E_H264_IF_STREAM_CH stream_ch );
+extern	VOID	H264_If_Record_Dynamic_Param_Set( E_H264_IF_STREAM_CH stream_ch, T_H264_IF_DYNAMIC_PARAM_RECORD* dynamic_param );
+/*  -Free video stream */
+extern	INT32	H264_If_Record_Free_Video_Index( E_H264_IF_STREAM_CH stream_ch, UINT32 free_vstream_index, BOOL last_free_flg );
+
+/* (Play)  */
+/*  -Total Play Time get */
+extern	INT32	H264_If_Play_Set_Video_Stream( UINT32 store_num, T_H264_IF_PARAM_SET_STREAM* video_stream_param );
+/*  -Current Display Frame get */
+extern	INT32	H264_If_Play_Get_Display_Frame( T_H264_IF_VIDEO_YUV_INFO* display_yuv_info );
+/*  -Top Image get */
+extern	INT32	H264_If_Get_Play_Topimage( T_H264_IF_MSG* msg );	// I: messange
+// [Host definition Function]
+/* (Common) */
+extern	VOID	H264_If_Set_Codec_CoreMode( UINT32 core_mode );
+
+extern	VOID	Host_H264_Notify_Stop_Trigger( E_H264_IF_STOP_NOTIFY param );
+extern	VOID	Host_H264_Notify_Stop_Complete( VOID );
+extern	VOID	Host_H264_Notify_Vstrm_Free_Timeout( VOID );
+extern	VOID	Host_H264_Notify_State_Change_Complete( INT32 result );
+/* (Record) */
+extern	BOOL	Host_H264_Notify_Video_Stream(T_H264_IF_VIDEO_STREAM_PARAM* vstream_info);
+extern	BOOL	Host_H264_Notify_Vector_Info(T_H264_IF_VIDEO_VECTOR_PARAM* vector_info);
+extern	BOOL	Host_H264_Notify_PreEncode( E_H264_IF_STREAM_CH stream_ch );
+extern	BOOL	Host_H264_Notify_RepeatFrame( E_H264_IF_STREAM_CH stream_ch );
+/* (Play) */
+extern	BOOL	Host_H264_Notify_Video_Stream_Request( VOID );
+extern	BOOL	Host_H264_Notify_FirstFrameDisplayCB( E_H264_IF_PLAY_DECODER_STATUS decoder_status, ULLONG display_pts, BOOL error );
+extern	BOOL	Host_H264_Notify_VideoDecodeCB( E_H264_IF_PLAY_DECODER_STATUS decoder_status, ULLONG display_pts, BOOL error );
+extern	VOID	Host_H264_Notify_Lcd_Update( UINT32* y_addr, UINT32* c_addr, BOOL update );
+extern	VOID	Host_H264_Notify_Tv_Update( ULONG* y_addr, ULONG* c_addr );
+extern	VOID	Host_H264_Notify_Hdmi_Update( UINT32* y_addr, UINT32* c_addr, BOOL update );
+
+更改为
+VOID h264_if_controller(INT32 stacd);
+// [H264 Task Interface (MailBOX)]
+INT32 h264_if_set_msg(H264If* self, H264IfMsg *msg, H264IfMsgWait wait);
+INT32 h264_if_get_msg(H264If* self, H264IfMsg *msg, H264IfMsgWait wait);
+INT32 h264_if_clear_msg(H264If* self);
+// [Function call IF]
+/* (Record) */
+/*  -Input YC Image setting Address get */
+INT32 h264_if_get_record_image_address(
+	H264If* self, 
+	H264IfStreamCh streamCh,
+	H264IfImageSize size,
+	ULLONG frameNo,
+	H264IfGetImageAddrParam *addrParam);
+VOID h264_if_decide_record_image_address(H264If* self, H264IfStreamCh streamCh, ULLONG frameNo, BOOL dummyFlg);
+VOID h264_if_record_frame_enabled(H264If* self, H264IfStreamCh streamCh, ULLONG frameNo, BOOL dummyFlg, BOOL enabled);
+VOID h264_if_record_valid_image_address(H264If* self, H264IfStreamCh streamCh);
+VOID h264_if_record_dynamic_param_set(H264If* self, H264IfStreamCh streamCh, H264IfDynamicParamRecord *dynamicParam);
+/*  -Free video stream */
+INT32 h264_if_record_free_video_index(H264If* self, H264IfStreamCh streamCh, UINT32 freeVstreamIndex, BOOL lastFreeFlg);
+/* (Play)  */
+/*  -Total Play Time get */
+INT32 h264_if_play_set_video_stream(H264If* self, UINT32 storeNum, H264IfParamSetStream *videoStreamParam);
+/*  -Current Display Frame get */
+INT32 h264_if_play_get_display_frame(H264If* self, H264IfVideoYuvInfo *displayYuvInfo);
+
+/*  -Top Image get */
+INT32 h264_if_get_play_topimage(H264If* self, H264IfMsg *msg); // I: messange
+// [Host definition Function]
+/* (Common) */
+VOID h264_if_set_codec_coremode(H264If* self, UINT32 coreMode);
+VOID h264_if_notify_stop_trigger(H264IfStopNotify param);
+VOID h264_if_notify_stop_complete(VOID);
+VOID h264_if_notify_vstrm_free_timeout(VOID);
+VOID h264_if_notify_state_change_complete(INT32 result);
+/* (Record) */
+BOOL h264_if_notify_video_stream(H264IfVideoStreamParam *vstreamInfo);
+BOOL h264_if_notify_vector_info(H264IfVideoVectorParam *vectorInfo);
+BOOL h264_if_notify_preencode(H264IfStreamCh streamCh);
+BOOL h264_if_notify_repeatframe(H264IfStreamCh streamCh);
+/* (Play) */
+BOOL h264_if_notify_video_stream_request(VOID);
+BOOL h264_if_notify_firstframedisplaycb(H264IfPlayDecoderStatus decoderStatus, ULLONG displayPts, BOOL error);
+BOOL h264_if_notify_videodecodecb(H264IfPlayDecoderStatus decoderStatus, ULLONG displayPts, BOOL error);
+VOID h264_if_notify_lcd_update(UINT32 *yAddr, UINT32 *cAddr, BOOL update);
+VOID h264_if_notify_tv_update(ULONG *yAddr, ULONG *cAddr);
+VOID h264_if_notify_hdmi_update(UINT32 *yAddr, UINT32 *cAddr, BOOL update);
+
+
+
+
+
+h264_if_record.c文件搬运到新建 h264ifrecord.c.h文件，头文件的公有函数声明从h264_if_common.h搬运过来
+公有函数更名
+VOID 		H264_If_Record_Callback(H264IfType type, INT32 param);
+VOID 		H264_If_Record_Notify_NORMAL_END(VOID);
+VOID 		H264_If_Record_Notify_VRAW_MULTI_ERR(VOID);
+VOID 		H264_If_Record_Notify_VSTRM_EMPTY_ERR(VOID);
+VOID 		H264_If_Record_Notify_FATAL_ERR(VOID);
+VOID 		H264_If_Record_Notify_STOP_COMPLETE(VOID);
+VOID 		H264_If_Record_Notify_STATE_CHANGE_COMPLETE(INT32 result);
+BOOL 		H264_If_Record_Notify_Video_Stream(H264IfVideoStreamParam *vstreamInfo);
+BOOL 		H264_If_Record_Notify_Vector_Info(H264IfVideoVectorParam *vectorInfo);
+BOOL 		H264_If_Record_Notify_PreEncode(H264IfStreamCh streamCh);
+BOOL 		H264_If_Record_Notify_RepeatFrame(H264IfStreamCh streamCh);    
+
+更名为
+VOID 		h264_if_record_callback(H264IfType type, INT32 param);
+VOID 		h264_if_record_notify_normal_end(VOID);
+VOID 		h264_if_record_notify_vraw_multi_err(VOID);
+VOID 		h264_if_record_notify_vstrm_empty_err(VOID);
+VOID 		h264_if_record_notify_fatal_err(VOID);
+VOID 		h264_if_record_notify_stop_complete(VOID);
+VOID 		h264_if_record_notify_state_change_complete(INT32 result);
+BOOL 		h264_if_record_notify_video_stream(H264IfVideoStreamParam* vstreamInfo);
+BOOL 		h264_if_record_notify_vector_info(H264IfVideoVectorParam* vectorInfo);
+BOOL 		h264_if_record_notify_preencode(H264IfStreamCh streamCh);
+BOOL 		h264_if_record_notify_repeatframe(H264IfStreamCh streamCh);    
+
+
+
+h264_if_record_api.c文件搬运到 h264ifrecordapi.c.h文件，公有函数声明从h264_if_common.h搬运 
+枚举 E_H264_IF_RECORD_STATUS也搬运过来
+typedef enum{	
+	E_H264_IF_RECORD_STATUS_END = 0,
+	E_H264_IF_RECORD_STATUS_INIT,
+	E_H264_IF_RECORD_STATUS_RUNNING,
+}E_H264_IF_RECORD_STATUS;
+更改为
+typedef enum{	
+	H264IfRecordApi_END = 0,
+	H264IfRecordApi_INIT,
+	H264IfRecordApi_RUNNING,
+}H264IfRecordApiStatus;
+
+公有函数更名 
+VOID 					H264_If_Record_Api_Set_Status(H264IfRecordApiStatus status);
+H264IfRecordApiStatus 	H264_If_Record_Api_Get_Status(VOID);
+VOID 					H264_If_Record_Api_Initialize(VOID);
+VOID 					H264_If_Record_Api_Finalize(VOID);
+INT32					H264_If_Record_Api_Param_Set(T_H264_IF_MSG *msg);
+INT32					H264_If_Record_Api_Ready(T_H264_IF_MSG *msg);
+INT32					H264_If_Record_Api_Stop(T_H264_IF_MSG *msg);
+INT32					H264_If_Record_Api_Check_End(VOID);  
+
+
+
+
+
+h264_if_play.c文件搬运到 h264ifplay.c.h文件，公有函数从h264_if_common.h搬运 
+公有函数更名
+extern VOID H264_If_Play_Callback(H264IfType type, INT32 param);
+extern VOID H264_If_Play_Notify_STOP_COMPLETE(VOID);
+extern VOID H264_If_Play_Notify_STATE_CHANGE_COMPLETE(INT32 result);
+extern VOID H264_If_Play_Notify_LCD_UPDATE(UINT32 *y_addr, UINT32 *c_addr, BOOL update);
+extern VOID H264_If_Play_Notify_TV_UPDATE(ULONG *y_addr, ULONG *c_addr);
+extern VOID H264_If_Play_Notify_HDMI_UPDATE(UINT32 *y_addr, UINT32 *c_addr, BOOL update);
+extern VOID H264_If_Play_Event_Check(T_H264_IF_MSG *msg);
+extern VOID H264_Play_Controller(T_H264_IF_MSG *in_msg);
+更名为
+VOID h264_if_play_callback(H264IfPlay* self, H264IfType type, INT32 param);
+VOID h264_if_play_notify_stop_complete(H264IfPlay* self);
+VOID h264_if_play_notify_state_change_complete(H264IfPlay* self, INT32 result);
+VOID h264_if_play_notify_lcd_update(H264IfPlay* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+VOID h264_if_play_notify_tv_update(H264IfPlay* self, ULONG* yAddr, ULONG* cAddr);
+VOID h264_if_play_notify_hdmi_update(H264IfPlay* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+VOID h264_if_play_event_check(H264IfPlay* self, H264IfMsg* msg);
+VOID h264_if_play_controller(H264IfPlay* self, H264IfMsg* inMsg);
+
+
+
+
+
+
+h264_if_play_api.c文件搬运到 h264ifplayapi.c.h文件，公有函数从h264_if_common.h搬运 
+枚举也搬运过来
+typedef enum{	
+	E_H264_IF_PLAY_STATUS_END = 0,
+	E_H264_IF_PLAY_STATUS_INIT,
+	E_H264_IF_PLAY_STATUS_PLAY_NOR,
+	E_H264_IF_PLAY_STATUS_PLAY_PAUSE,
+	E_H264_IF_PLAY_STATUS_PLAY_FLUSH,
+	E_H264_IF_PLAY_STATUS_PLAY_STOP,
+	E_H264_IF_PLAY_STATUS_PLAY_DISPTOP,
+}E_H264_IF_PLAY_STATUS;
+更改为
+typedef enum{	
+	H264IfPlayApi_END = 0,
+	H264IfPlayApi_INIT,
+	H264IfPlayApi_PLAY_NOR,
+	H264IfPlayApi_PLAY_PAUSE,
+	H264IfPlayApi_PLAY_FLUSH,
+	H264IfPlayApi_PLAY_STOP,
+	H264IfPlayApi_PLAY_DISPTOP,
+}H264IfPlayApiStatus;
+
+公有函数更名
+extern	INT32					H264_If_Play_Api_Start_Init( T_H264_IF_MSG* msg );
+extern	VOID					H264_If_Play_Api_Set_Status( H264IfPlayApiStatus status );
+extern	H264IfPlayApiStatus			H264_If_Play_Api_Get_Status( VOID );
+extern	VOID					H264_If_Play_Api_Set_Last_Picture_Keep( BOOL last_picture_keep );
+extern	BOOL					H264_If_Play_Api_Get_Last_Picture_Keep( VOID );
+extern	VOID					H264_If_Play_Api_Set_User_Event( T_H264_IF_MSG* msg );
+extern	INT32					H264_If_Play_Api_Check_Event( VOID );
+extern	INT32					H264_If_Play_Api_Param_Check_Init( T_H264_IF_MSG* msg );
+extern	INT32					H264_If_Play_Api_Param_Check_Topimage( T_H264_IF_MSG* msg );
+extern	INT32					H264_If_Play_Api_Param_Check_Play( T_H264_IF_MSG* msg );
+extern	VOID					H264_If_Play_Api_Initialize( VOID );
+extern	VOID					H264_If_Play_Api_Finalize( VOID );
+extern	INT32					H264_If_Play_Api_TopImage_Get( T_H264_IF_MSG* msg );
+extern	INT32					H264_If_Play_Api_Start( T_H264_IF_MSG* msg );
+
+更名为
+INT32 				h264_if_play_api_start_init(H264IfMsg* msg);
+VOID 				h264_if_play_api_set_status(H264IfPlayApiStatus status);
+H264IfPlayApiStatus h264_if_play_api_get_status(VOID);
+VOID 				h264_if_play_api_set_last_picture_keep(BOOL lastPictureKeep);
+BOOL 				h264_if_play_api_get_last_picture_keep(VOID);
+VOID 				h264_if_play_api_set_user_event(H264IfMsg* msg);
+INT32 				h264_if_play_api_check_event(VOID);
+INT32 				h264_if_play_api_param_check_init(H264IfMsg* msg);
+INT32 				h264_if_play_api_param_check_topimage(H264IfMsg* msg);
+INT32 				h264_if_play_api_param_check_play(H264IfMsg* msg);
+VOID 				h264_if_play_api_initialize(VOID);
+VOID 				h264_if_play_api_finalize(VOID);
+INT32 				h264_if_play_api_topimage_get(H264IfMsg* msg);
+INT32 				h264_if_play_api_start(H264IfMsg* msg);
+
+
+
+
+
+==================================================================h265_movie.c.h搬运到h265movie.c.h文件
+
+
+
+.h文件修改如下
+#define FLG_H265_START (0x00000001) 
+#define FLG_H265_STOP (0x00000002)
+#define FLG_H265_FLUSH_OPS (0x00000004)
+#define FLG_H265_WDT (0x00000008)
+#define FLG_H265_FORCE_STOP (0x00000010)
+#define FLG_H265_ENC_FREE_ALL_VSTREAM (0x00000020)
+#define FLG_H265_ENC_VEB_INFO_SET (0x00000040)
+
+#define FLG_H265_STOP_ENT_TSK (0x00000100)
+#define FLG_H265_STOP_ENT_TSK_CC2 (0x00000200)
+#define FLG_H265_DEC_STREAM_RECEIVE (0x00000400)
+
+/* SIRIUS Control */
+#define FLG_H265_CODEC_STOP_COMP0 (0x00004000)
+#define FLG_H265_CODEC_STOP_COMP1 (0x00008000)
+#define FLG_H265_CODEC_FLUSH_COMP (0x00010000)
+#define FLG_H265_ENC_VSLICE_COMP0 (0x00020000)
+#define FLG_H265_ENC_VSLICE_COMP1 (0x00040000)
+#define FLG_H265_ENC_VFRAME_COMP0_TO_CC (0x00080000)
+#define FLG_H265_ENC_VFRAME_COMP0_TO_ENT (0x00100000)
+#define FLG_H265_ENC_VFRAME_COMP1_TO_CC (0x00200000)
+#define FLG_H265_ENC_VFRAME_COMP1_TO_ENT (0x00400000)
+#define FLG_H265_ENC_VSTRM_COMP0 (0x00800000)
+#define FLG_H265_ENC_VSTRM_COMP1 (0x01000000)
+#define FLG_H265_DEC_FRAMEEND_COMP (0x02000000)
+#define FLG_H265_DEC_ERROR (0x04000000)
+#define FLG_H265_DEC_STREAM_INPUT (0x08000000)
+
+/* FID_H265_TASK */
+#define FLG_H265_TASK_ENT_INT_INIT_END (0x00000001)
+#define FLG_H265_TASK_ENT_INT_STOP (0x00000002)
+#define FLG_H265_TASK_ENT_INIT_END (0x00000100)
+#define FLG_H265_TASK_ENT_STATE_CHANGE (0x00000200)
+#define FLG_H265_TASK_ENT_STOP (0x00000400)
+#define FLG_H265_TASK_CC_INIT_END (0x00000800)
+#define FLG_H265_TASK_CC_STATE_CHANGE (0x00001000)
+#define FLG_H265_TASK_CC_STOP (0x00002000)
+#define FLG_H265_TASK_CC_2_INIT_END (0x00004000)
+#define FLG_H265_TASK_CC_2_STATE_CHANGE (0x00008000)
+#define FLG_H265_TASK_CC_2_STOP (0x00010000)
+#define FLG_H265_TASK_DISP_INIT_END (0x00020000)
+#define FLG_H265_TASK_DISP_STATE_CHANGE (0x00040000)
+#define FLG_H265_TASK_DISP_STOP (0x00080000)
+#define FLG_H265_TASK_DISP_LCD_INIT_END (0x00100000)
+#define FLG_H265_TASK_DISP_LCD_STOP (0x00200000)
+#define FLG_H265_TASK_DISP_HDMI_INIT_END (0x00400000)
+#define FLG_H265_TASK_DISP_HDMI_STOP (0x00800000)
+#define FLG_H265_TASK_CONTROLLER_STOP (0x01000000)
+
+/* FID_H265_DECODER */
+#define FLG_H265_DECODER_DISP_START (0x00000001)
+#define FLG_H265_DECODER_DISP_PAUSE_REQUEST (0x00000002)
+#define FLG_H265_DECODER_DISP_LCD_PAUSE (0x00000004)
+#define FLG_H265_DECODER_DISP_HDMI_PAUSE (0x00000008)
+#define FLG_H265_DECODER_DISP_IDX_SET (0x00000010)
+#define FLG_H265_DECODER_DISP_UPDATE (0x00000020)
+#define FLG_H265_DECODER_DISP_FRAME_DONE (0x00000040)
+
+/* FID_H265_SYNC */
+/* Sync Control */
+#define FLG_H265_SYNC_ENC_MASTER (0x00000001)
+#define FLG_H265_SYNC_ENC_MASTER_2 (0x00000002)
+#define FLG_H265_SYNC_ENC_CH0 (0x00000004)
+#define FLG_H265_SYNC_ENC_CH1 (0x00000008)
+#define FLG_H265_SYNC_DEC (0x00000010)
+/* Sync Stop Control */
+#define FLG_H265_SYNC_STOP_ENC_CH0 (0x00000020)
+#define FLG_H265_SYNC_STOP_ENC_CH1 (0x00000040)
+
+#ifdef CO_H265_ENC_DEBUG_VIEW_DUMMY
+#define FLG_H265_SYNC_ENC_DUMMY_CH0 (0x00000100)
+#define FLG_H265_SYNC_ENC_DUMMY_CH1 (0x00000200)
+
+更改为
+
+#define H265Movie_START (0x00000001)
+#define H265Movie_STOP (0x00000002)
+#define H265Movie_FLUSH_OPS (0x00000004)
+#define H265Movie_WDT (0x00000008)
+#define H265Movie_FORCE_STOP (0x00000010)
+#define H265Movie_ENC_FREE_ALL_VSTREAM (0x00000020)
+#define H265Movie_ENC_VEB_INFO_SET (0x00000040)
+
+#define H265Movie_STOP_ENT_TSK (0x00000100)
+#define H265Movie_STOP_ENT_TSK_CC2 (0x00000200)
+#define H265Movie_DEC_STREAM_RECEIVE (0x00000400)
+
+/* SIRIUS Control */
+#define H265Movie_CODEC_STOP_COMP0 (0x00004000)
+#define H265Movie_CODEC_STOP_COMP1 (0x00008000)
+#define H265Movie_CODEC_FLUSH_COMP (0x00010000)
+#define H265Movie_ENC_VSLICE_COMP0 (0x00020000)
+#define H265Movie_ENC_VSLICE_COMP1 (0x00040000)
+#define H265Movie_ENC_VFRAME_COMP0_TO_CC (0x00080000)
+#define H265Movie_ENC_VFRAME_COMP0_TO_ENT (0x00100000)
+#define H265Movie_ENC_VFRAME_COMP1_TO_CC (0x00200000)
+#define H265Movie_ENC_VFRAME_COMP1_TO_ENT (0x00400000)
+#define H265Movie_ENC_VSTRM_COMP0 (0x00800000)
+#define H265Movie_ENC_VSTRM_COMP1 (0x01000000)
+#define H265Movie_DEC_FRAMEEND_COMP (0x02000000)
+#define H265Movie_DEC_ERROR (0x04000000)
+#define H265Movie_DEC_STREAM_INPUT (0x08000000)
+
+/* FID_H265_TASK */
+#define H265Movie_TASK_ENT_INT_INIT_END (0x00000001)
+#define H265Movie_TASK_ENT_INT_STOP (0x00000002)
+#define H265Movie_TASK_ENT_INIT_END (0x00000100)
+#define H265Movie_TASK_ENT_STATE_CHANGE (0x00000200)
+#define H265Movie_TASK_ENT_STOP (0x00000400)
+#define H265Movie_TASK_CC_INIT_END (0x00000800)
+#define H265Movie_TASK_CC_STATE_CHANGE (0x00001000)
+#define H265Movie_TASK_CC_STOP (0x00002000)
+#define H265Movie_TASK_CC_2_INIT_END (0x00004000)
+#define H265Movie_TASK_CC_2_STATE_CHANGE (0x00008000)
+#define H265Movie_TASK_CC_2_STOP (0x00010000)
+#define H265Movie_TASK_DISP_INIT_END (0x00020000)
+#define H265Movie_TASK_DISP_STATE_CHANGE (0x00040000)
+#define H265Movie_TASK_DISP_STOP (0x00080000)
+#define H265Movie_TASK_DISP_LCD_INIT_END (0x00100000)
+#define H265Movie_TASK_DISP_LCD_STOP (0x00200000)
+#define H265Movie_TASK_DISP_HDMI_INIT_END (0x00400000)
+#define H265Movie_TASK_DISP_HDMI_STOP (0x00800000)
+#define H265Movie_TASK_CONTROLLER_STOP (0x01000000)
+
+/* FID_H265_DECODER */
+#define H265Movie_DECODER_DISP_START (0x00000001)
+#define H265Movie_DECODER_DISP_PAUSE_REQUEST (0x00000002)
+#define H265Movie_DECODER_DISP_LCD_PAUSE (0x00000004)
+#define H265Movie_DECODER_DISP_HDMI_PAUSE (0x00000008)
+#define H265Movie_DECODER_DISP_IDX_SET (0x00000010)
+#define H265Movie_DECODER_DISP_UPDATE (0x00000020)
+#define H265Movie_DECODER_DISP_FRAME_DONE (0x00000040)
+
+/* FID_H265_SYNC */
+/* Sync Control */
+#define H265Movie_SYNC_ENC_MASTER (0x00000001)
+#define H265Movie_SYNC_ENC_MASTER_2 (0x00000002)
+#define H265Movie_SYNC_ENC_CH0 (0x00000004)
+#define H265Movie_SYNC_ENC_CH1 (0x00000008)
+#define H265Movie_SYNC_DEC (0x00000010)
+/* Sync Stop Control */
+#define H265Movie_SYNC_STOP_ENC_CH0 (0x00000020)
+#define H265Movie_SYNC_STOP_ENC_CH1 (0x00000040)
+
+#ifdef CO_H265_ENC_DEBUG_VIEW_DUMMY
+#define H265Movie_SYNC_ENC_DUMMY_CH0 (0x00000100)
+#define H265Movie_SYNC_ENC_DUMMY_CH1 (0x00000200)
+
+
+原来的
+/* SIRIUS Control(internal) */
+#define FLG_SIRIUS_SYSTEM_BOOT_COMP (0x00000001)
+#define FLG_SIRIUS_VIDEO_BOOT_COMP (0x00000002)
+#define FLG_SIRIUS_CODEC_ENC_START_COMP0 (0x00000004)
+#define FLG_SIRIUS_CODEC_ENC_START_COMP1 (0x00000008)
+#define FLG_SIRIUS_CODEC_DEC_START_COMP (0x00000040)
+#define FLG_SIRIUS_CODEC_DEC_STOP_COMP (0x00000080)
+
+更改为
+/* SIRIUS Control(internal) */
+#define H265Movie_SYSTEM_BOOT_COMP (0x00000001)
+#define H265Movie_VIDEO_BOOT_COMP (0x00000002)
+#define H265Movie_CODEC_ENC_START_COMP0 (0x00000004)
+#define H265Movie_CODEC_ENC_START_COMP1 (0x00000008)
+#define H265Movie_CODEC_DEC_START_COMP (0x00000040)
+#define H265Movie_CODEC_DEC_STOP_COMP (0x00000080)
+
+原来的
+#define H265_TASK_PRI_ENC_DISP (24)	  // View task (dummy)
+#define H265_TASK_PRI_ENC_CC (25)	  // CC    task
+#define H265_TASK_PRI_ENC_CC_2 (25)	  // CC2   task
+#define H265_TASK_PRI_ENC_ENT (33)	  // ENT   task
+#define H265_TASK_PRI_ENC_ENT_INT (9) // ENT INT  task
+#define H265_TASK_PRI_ENC_MAIN (34)	  // Main  task
+
+/* Play */
+#define H265_TASK_PRI_DEC_DISP_LCD (23)	 // Disp LCD task
+#define H265_TASK_PRI_DEC_DISP_HDMI (23) // Disp HDMI task
+#define H265_TASK_PRI_DEC_DISP (24)		 // Disp  task
+#define H265_TASK_PRI_DEC_CC (25)		 // CC    task
+#define H265_TASK_PRI_DEC_ENT (26)		 // ENT   task
+#define H265_TASK_PRI_DEC_MAIN (27)		 // Main  task
+
+//----------------------
+// User Interface
+//----------------------
+/* Error Definition */
+#define H265_OK_USER_REQ (1)			 // User Request
+#define H265_OK_MAX_TIME_END (2)		 // Normal End(MaxTime)
+#define H265_OK_COMPLETE (3)			 // Complete End
+#define H265_OK_STAP_OVER (4)			 // Normal End(Start Point Over)
+#define H265_OK_NORMAL_END (5)			 // Normal End(User Request)
+#define H265_ERR_INPUT_PARAM (10)		 // Input Parameter Error
+#define H265_ERR_MEDIA_AREA_NOTHING (11) // Media Vacant Area Nothing
+#define H265_ERR_FILE_CREATE (12)		 // Create File Error
+#define H265_ERR_FILE_SIZE (13)			 // File Size Error
+#define H265_ERR_MACRO (14)				 // Macro Error
+#define H265_ERR_FILE_WRITE_TO (15)		 // FS_write Time Out
+#define H265_ERR_FILE_WRITE (16)		 // FS_write Error
+#define H265_ERR_FILE_ACCESS (17)		 // File Access Error
+#define H265_ERR_FILE_NO_SUPPORT (18)	 // Not Support File Error
+#define H265_ERR_FILE_READ (19)			 // Read Error
+#define H265_ERR_FILE_BUFF_OVER (20)	 // FS buffer over Error
+#define H265_ERR_FILE_STREAM (21)		 // Stream Error
+#define H265_ERR_AUDIO_PAUSE (22)		 // MUX Error (Audio Pause)
+#define H265_ERR_TTR_SIZE_OVER (23)		 // TTR size over
+#define H265_ERR_MEDIA_CHANGE (24)		 // Media is changed
+#define H265_ERR_SYSTEM (99)			 // System Error
+
+/* ON/OFF */
+//#define H265_OFF						(0)			// h265_if.h
+//#define H265_ON						(1)			// h265_if.h
+
+/* START/END */
+#define H265_START (0)
+#define H265_END (1)
+
+/* Execution Mode */
+#define H265_MODE_RECORD (0)
+#define H265_MODE_PLAY (1)
+#define H265_MODE_TRANSCODE (2)
+#define H265_MODE_COMMON (3)
+
+//----------------------
+// Video (Ribery)
+//----------------------
+/* Core Mode */
+#define H265_CORE_MODE_1 (1)
+#define H265_CORE_MODE_2 (2)
+#define H265_CORE_MODE_3 (3)
+
+/* PTS base value(360KHz base) */
+#define H265_PTS_BASE (360000) // 360 KHz
+
+/* PTS base value(90KHz base) */
+#define H265_PTS_90K_BASE (90000) // 90KHz
+
+/* VOP Time Increment Resolution */
+#define H265_TIMERESO_239_76 (240000) // 239.76 fps
+#define H265_TIMERESO_119_88 (120000) // 119.88 fps
+#define H265_TIMERESO_59_94 (60000)	  // 59.94 fps
+#define H265_TIMERESO_29_97 (30000)	  // 29.97 fps
+#define H265_TIMERESO_23_97 (24000)	  // 23.97 fps
+#define H265_TIMERESO_14_98 (15000)	  // 14.98 fps
+
+#define H265_TIMERESO_240_0 (240) // 240 fps
+#define H265_TIMERESO_120_0 (120) // 120 fps
+#define H265_TIMERESO_60_0 (60)	  // 60 fps
+#define H265_TIMERESO_50_0 (50)
+#define H265_TIMERESO_30_0 (30) // 30 fps
+#define H265_TIMERESO_24_0 (24) // 24 fps
+#define H265_TIMERESO_15_0 (15) // 15 fps
+
+#define H265_TIMERESO_73_0 (73)
+#define H265_TIMERESO_72_0 (72)
+#define H265_TIMERESO_70_0 (70)
+#define H265_TIMERESO_29_0 (29)
+#define H265_TIMERESO_25_0 (25)
+
+/* VOP Time Increment */
+#define H265_TIMEINC_239_76 (1001) // 239.76 fps
+#define H265_TIMEINC_119_88 (1001) // 119.88 fps
+#define H265_TIMEINC_59_94 (1001)  // 59.94 fps
+#define H265_TIMEINC_29_97 (1001)  // 29.97 fps (90KHz/29.97frame)
+#define H265_TIMEINC_23_97 (1001)  // 23.97 fps
+#define H265_TIMEINC_14_98 (1001)  // 14.98 fps
+
+#define H265_TIMEINC_240_0 (1) // 240 fps
+#define H265_TIMEINC_120_0 (1) // 120 fps
+#define H265_TIMEINC_60_0 (1)  // 60 fps
+#define H265_TIMEINC_50_0 (1)
+#define H265_TIMEINC_30_0 (1) // 30 fps
+#define H265_TIMEINC_24_0 (1) // 24 fps
+#define H265_TIMEINC_15_0 (1) // 15 fps
+#define H265_TIMEINC_73_0 (1)
+#define H265_TIMEINC_72_0 (1)
+#define H265_TIMEINC_70_0 (1)
+#define H265_TIMEINC_29_0 (1)
+#define H265_TIMEINC_25_0 (1)
+
+更改为
+
+/* FID_H265_TASK */
+#define H265Movie_TASK_ENT_INT_INIT_END (0x00000001)
+#define H265Movie_TASK_ENT_INT_STOP (0x00000002)
+#define H265Movie_TASK_ENT_INIT_END (0x00000100)
+#define H265Movie_TASK_ENT_STATE_CHANGE (0x00000200)
+#define H265Movie_TASK_ENT_STOP (0x00000400)
+#define H265Movie_TASK_CC_INIT_END (0x00000800)
+#define H265Movie_TASK_CC_STATE_CHANGE (0x00001000)
+#define H265Movie_TASK_CC_STOP (0x00002000)
+#define H265Movie_TASK_CC_2_INIT_END (0x00004000)
+#define H265Movie_TASK_CC_2_STATE_CHANGE (0x00008000)
+#define H265Movie_TASK_CC_2_STOP (0x00010000)
+#define H265Movie_TASK_DISP_INIT_END (0x00020000)
+#define H265Movie_TASK_DISP_STATE_CHANGE (0x00040000)
+#define H265Movie_TASK_DISP_STOP (0x00080000)
+#define H265Movie_TASK_DISP_LCD_INIT_END (0x00100000)
+#define H265Movie_TASK_DISP_LCD_STOP (0x00200000)
+#define H265Movie_TASK_DISP_HDMI_INIT_END (0x00400000)
+#define H265Movie_TASK_DISP_HDMI_STOP (0x00800000)
+#define H265Movie_TASK_CONTROLLER_STOP (0x01000000)
+
+/* FID_H265_DECODER */
+#define H265Movie_DECODER_DISP_START (0x00000001)
+#define H265Movie_DECODER_DISP_PAUSE_REQUEST (0x00000002)
+#define H265Movie_DECODER_DISP_LCD_PAUSE (0x00000004)
+#define H265Movie_DECODER_DISP_HDMI_PAUSE (0x00000008)
+#define H265Movie_DECODER_DISP_IDX_SET (0x00000010)
+#define H265Movie_DECODER_DISP_UPDATE (0x00000020)
+#define H265Movie_DECODER_DISP_FRAME_DONE (0x00000040)
+
+/* FID_H265_SYNC */
+/* Sync Control */
+#define H265Movie_SYNC_ENC_MASTER (0x00000001)
+#define H265Movie_SYNC_ENC_MASTER_2 (0x00000002)
+#define H265Movie_SYNC_ENC_CH0 (0x00000004)
+#define H265Movie_SYNC_ENC_CH1 (0x00000008)
+#define H265Movie_SYNC_DEC (0x00000010)
+/* Sync Stop Control */
+#define H265Movie_SYNC_STOP_ENC_CH0 (0x00000020)
+#define H265Movie_SYNC_STOP_ENC_CH1 (0x00000040)
+
+#ifdef CO_H265_ENC_DEBUG_VIEW_DUMMY
+#define H265Movie_SYNC_ENC_DUMMY_CH0 (0x00000100)
+#define H265Movie_SYNC_ENC_DUMMY_CH1 (0x00000200)
+#endif
+
+/* SIRIUS Control(internal) */
+#define H265Movie_SYSTEM_BOOT_COMP (0x00000001)
+#define H265Movie_VIDEO_BOOT_COMP (0x00000002)
+#define H265Movie_CODEC_ENC_START_COMP0 (0x00000004)
+#define H265Movie_CODEC_ENC_START_COMP1 (0x00000008)
+#define H265Movie_CODEC_DEC_START_COMP (0x00000040)
+#define H265Movie_CODEC_DEC_STOP_COMP (0x00000080)
+
+//----------------------
+// Task Priority
+//----------------------
+/* Record */
+#define H265Movie_TASK_PRI_ENC_DISP (24)	  // View task (dummy)
+#define H265Movie_TASK_PRI_ENC_CC (25)	  // CC    task
+#define H265Movie_TASK_PRI_ENC_CC_2 (25)	  // CC2   task
+#define H265Movie_TASK_PRI_ENC_ENT (33)	  // ENT   task
+#define H265Movie_TASK_PRI_ENC_ENT_INT (9) // ENT INT  task
+#define H265Movie_TASK_PRI_ENC_MAIN (34)	  // Main  task
+
+/* Play */
+#define H265Movie_TASK_PRI_DEC_DISP_LCD (23)	 // Disp LCD task
+#define H265Movie_TASK_PRI_DEC_DISP_HDMI (23) // Disp HDMI task
+#define H265Movie_TASK_PRI_DEC_DISP (24)		 // Disp  task
+#define H265Movie_TASK_PRI_DEC_CC (25)		 // CC    task
+#define H265Movie_TASK_PRI_DEC_ENT (26)		 // ENT   task
+#define H265Movie_TASK_PRI_DEC_MAIN (27)		 // Main  task
+
+//----------------------
+// User Interface
+//----------------------
+/* Error Definition */
+#define H265Movie_OK_USER_REQ (1)			 // User Request
+#define H265Movie_OK_MAX_TIME_END (2)		 // Normal End(MaxTime)
+#define H265Movie_OK_COMPLETE (3)			 // Complete End
+#define H265Movie_OK_STAP_OVER (4)			 // Normal End(Start Point Over)
+#define H265Movie_OK_NORMAL_END (5)			 // Normal End(User Request)
+#define H265Movie_ERR_INPUT_PARAM (10)		 // Input Parameter Error
+#define H265Movie_ERR_MEDIA_AREA_NOTHING (11) // Media Vacant Area Nothing
+#define H265Movie_ERR_FILE_CREATE (12)		 // Create File Error
+#define H265Movie_ERR_FILE_SIZE (13)			 // File Size Error
+#define H265Movie_ERR_MACRO (14)				 // Macro Error
+#define H265Movie_ERR_FILE_WRITE_TO (15)		 // FS_write Time Out
+#define H265Movie_ERR_FILE_WRITE (16)		 // FS_write Error
+#define H265Movie_ERR_FILE_ACCESS (17)		 // File Access Error
+#define H265Movie_ERR_FILE_NO_SUPPORT (18)	 // Not Support File Error
+#define H265Movie_ERR_FILE_READ (19)			 // Read Error
+#define H265Movie_ERR_FILE_BUFF_OVER (20)	 // FS buffer over Error
+#define H265Movie_ERR_FILE_STREAM (21)		 // Stream Error
+#define H265Movie_ERR_AUDIO_PAUSE (22)		 // MUX Error (Audio Pause)
+#define H265Movie_ERR_TTR_SIZE_OVER (23)		 // TTR size over
+#define H265Movie_ERR_MEDIA_CHANGE (24)		 // Media is changed
+#define H265Movie_ERR_SYSTEM (99)			 // System Error
+
+/* ON/OFF */
+//#define H265Movie_OFF						(0)			// h265_if.h
+//#define H265Movie_ON						(1)			// h265_if.h
+
+/* START/END */
+#define H265Movie_START (0)
+#define H265Movie_END (1)
+
+/* Execution Mode */
+#define H265Movie_MODE_RECORD (0)
+#define H265Movie_MODE_PLAY (1)
+#define H265Movie_MODE_TRANSCODE (2)
+#define H265Movie_MODE_COMMON (3)
+
+//----------------------
+// Video (Ribery)
+//----------------------
+/* Core Mode */
+#define H265Movie_CORE_MODE_1 (1)
+#define H265Movie_CORE_MODE_2 (2)
+#define H265Movie_CORE_MODE_3 (3)
+
+/* PTS base value(360KHz base) */
+#define H265Movie_PTS_BASE (360000) // 360 KHz
+
+/* PTS base value(90KHz base) */
+#define H265Movie_PTS_90K_BASE (90000) // 90KHz
+
+/* VOP Time Increment Resolution */
+#define H265Movie_TIMERESO_239_76 (240000) // 239.76 fps
+#define H265Movie_TIMERESO_119_88 (120000) // 119.88 fps
+#define H265Movie_TIMERESO_59_94 (60000)	  // 59.94 fps
+#define H265Movie_TIMERESO_29_97 (30000)	  // 29.97 fps
+#define H265Movie_TIMERESO_23_97 (24000)	  // 23.97 fps
+#define H265Movie_TIMERESO_14_98 (15000)	  // 14.98 fps
+
+#define H265Movie_TIMERESO_240_0 (240) // 240 fps
+#define H265Movie_TIMERESO_120_0 (120) // 120 fps
+#define H265Movie_TIMERESO_60_0 (60)	  // 60 fps
+#define H265Movie_TIMERESO_50_0 (50)
+#define H265Movie_TIMERESO_30_0 (30) // 30 fps
+#define H265Movie_TIMERESO_24_0 (24) // 24 fps
+#define H265Movie_TIMERESO_15_0 (15) // 15 fps
+
+#define H265Movie_TIMERESO_73_0 (73)
+#define H265Movie_TIMERESO_72_0 (72)
+#define H265Movie_TIMERESO_70_0 (70)
+#define H265Movie_TIMERESO_29_0 (29)
+#define H265Movie_TIMERESO_25_0 (25)
+
+/* VOP Time Increment */
+#define H265Movie_TIMEINC_239_76 (1001) // 239.76 fps
+#define H265Movie_TIMEINC_119_88 (1001) // 119.88 fps
+#define H265Movie_TIMEINC_59_94 (1001)  // 59.94 fps
+#define H265Movie_TIMEINC_29_97 (1001)  // 29.97 fps (90KHz/29.97frame)
+#define H265Movie_TIMEINC_23_97 (1001)  // 23.97 fps
+#define H265Movie_TIMEINC_14_98 (1001)  // 14.98 fps
+
+#define H265Movie_TIMEINC_240_0 (1) // 240 fps
+#define H265Movie_TIMEINC_120_0 (1) // 120 fps
+#define H265Movie_TIMEINC_60_0 (1)  // 60 fps
+#define H265Movie_TIMEINC_50_0 (1)
+#define H265Movie_TIMEINC_30_0 (1) // 30 fps
+#define H265Movie_TIMEINC_24_0 (1) // 24 fps
+#define H265Movie_TIMEINC_15_0 (1) // 15 fps
+#define H265Movie_TIMEINC_73_0 (1)
+#define H265Movie_TIMEINC_72_0 (1)
+#define H265Movie_TIMEINC_70_0 (1)
+#define H265Movie_TIMEINC_29_0 (1)
+#define H265Movie_TIMEINC_25_0 (1)
+
+原来的 
+//#define RS_printf printf
+#define H265_PRINTF RS_printf
+#define H265_VA_PRINTER(arg) (H265_PRINTF arg)
+
+#ifndef CO_H265_INFO_PRINT // "info" print
+#define H265_Info_Print(arg)
+#else
+#if 0
+#define H265_Info_Print(arg)  \
+	do                        \
+	{                         \
+		H265_VA_PRINTER(arg); \
+	} while (0)
+#endif
+#define H265_Info_Print(arg) BF_Debug_Print_Information(arg)
+#endif
+
+#ifndef CO_H265_WARNING_PRINT // "warning" print
+#define H265_Warning_Print(arg)
+#else
+#if 0
+#define H265_Warning_Print(arg) \
+	do                          \
+	{                           \
+		H265_VA_PRINTER(arg);   \
+	} while (0)
+#endif
+#define H265_Warning_Print(arg) BF_Debug_Print_Warning(arg)
+#endif
+
+#ifndef CO_H265_ERROR_PRINT // "error" print
+#define H265_Err_Print(arg)
+#else
+#if 0
+#define H265_Err_Print(arg)   \
+	do                        \
+	{                         \
+		H265_VA_PRINTER(arg); \
+	} while (0)
+#endif
+#define H265_Err_Print(arg) BF_Debug_Print_Error(arg)
+#endif
+
+更改为
+
+//----------------------
+// Print ON/OFF
+//----------------------
+//#define RS_printf printf
+#define H265Movie_PRINTF RS_printf
+#define H265Movie_VA_PRINTER(arg) (H265Movie_PRINTF arg)
+
+#ifndef CO_H265_INFO_PRINT // "info" print
+#define H265Movie_Info_Print(arg)
+#else
+#if 0
+#define H265Movie_Info_Print(arg)  \
+	do                        \
+	{                         \
+		H265Movie_VA_PRINTER(arg); \
+	} while (0)
+#endif
+#define H265Movie_Info_Print(arg) BF_Debug_Print_Information(arg)
+#endif
+
+#ifndef CO_H265_WARNING_PRINT // "warning" print
+#define H265Movie_Warning_Print(arg)
+#else
+#if 0
+#define H265Movie_Warning_Print(arg) \
+	do                          \
+	{                           \
+		H265Movie_VA_PRINTER(arg);   \
+	} while (0)
+#endif
+#define H265Movie_Warning_Print(arg) BF_Debug_Print_Warning(arg)
+#endif
+
+#ifndef CO_H265_ERROR_PRINT // "error" print
+#define H265Movie_Err_Print(arg)
+#else
+#if 0
+#define H265Movie_Err_Print(arg)   \
+	do                        \
+	{                         \
+		H265Movie_VA_PRINTER(arg); \
+	} while (0)
+#endif
+#define H265Movie_Err_Print(arg) BF_Debug_Print_Error(arg)
+#endif
+
+枚举
+
+原来的
+/*----------------------------------------------------------------------*/
+/* Enumeration															*/
+/*----------------------------------------------------------------------*/
+/* User Event for Playback */
+typedef enum
+{
+	E_H265_EVENT_NONE = 0,	 // No Event
+	E_H265_EVENT_PLAY = 1,	 // Play
+	E_H265_EVENT_PAUSE = 2,	 // Pause
+	E_H265_EVENT_REPLAY = 3, // Replay
+	E_H265_EVENT_FLUSH = 4,	 // Flush
+	E_H265_EVENT_STOP = 5,	 // Stop
+} E_H265_EVENT;
+
+/* Playing Status */
+typedef enum
+{
+	E_H265_PLAY_MODE_FLUSH = 0,	 // FLUSH
+	E_H265_PLAY_MODE_PLAY = 1,	 // PLAY
+	E_H265_PLAY_MODE_PAUSE = 2,	 // PAUSE
+	E_H265_PLAY_MODE_RESUME = 3, // RESUME
+	E_H265_PLAY_MODE_STOP = 4,	 // STOP
+	E_H265_PLAY_MODE_END = 5,	 // Play End
+	E_H265_PLAY_MODE_MAX = 6	 // Max.Value of Movie Play Status
+} E_H265_PLAY_MODE;
+
+/* IIP */
+typedef enum
+{
+	E_H265_RESIZE_MODE_NEAREST = 0,
+	E_H265_RESIZE_MODE_BILINEAR = 1,
+	E_H265_RESIZE_MODE_BICUBIC = 2,
+} E_H265_RESIZE_MODE;
+
+// Sirius Core Block
+typedef enum
+{
+	E_H265_PMU_BLOCK_IPP = 0,
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	E_H265_PMU_BLOCK_PXF,
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	E_H265_PMU_BLOCK_WAVE,
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	E_H265_PMU_BLOCK_VDF,
+} E_H265_PMU_BLOCK;
+
+// Reset Request to Sirius
+typedef enum
+{
+	E_H265_TOP_RESET_ON = 0,
+	E_H265_TOP_RESET_OFF
+
+} E_H265_TOP_RESET;
+
+// Clock Stop to Sirius
+typedef enum
+{
+	E_H265_TOP_CLOCK_STOP_ON = 0,
+	E_H265_TOP_CLOCK_STOP_OFF
+} E_H265_TOP_CLOCK_STOP;
+
+// Setting to Sdramc Sirius
+typedef enum
+{
+	E_H265_SDRAMC_CH_0 = 0, /**< Channel 0.				*/
+	E_H265_SDRAMC_CH_1,		/**< Channel 1.				*/
+} E_H265_SDRAMC_CH;
+
+typedef enum
+{
+	E_H265_SDRAMC_PORT_DS0 = 0, /**< H.265 Common(DS0).		*/
+	E_H265_SDRAMC_PORT_DS1,		/**< H.265 Common(DS1).		*/
+	E_H265_SDRAMC_PORT_SDM,		/**< H.265 Common(SDM).		*/
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	E_H265_SDRAMC_PORT_VE0, /**< H.265 Encode(VE0).		*/
+	E_H265_SDRAMC_PORT_VE1, /**< H.265 Encode(VE1).		*/
+	E_H265_SDRAMC_PORT_VE2, /**< H.265 Encode(VE2).		*/
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	E_H265_SDRAMC_PORT_VCOREW,	/**< H.265 Encode(VCOREW).	*/
+	E_H265_SDRAMC_PORT_VCORER0, /**< H.265 Encode(VCORER0).	*/
+	E_H265_SDRAMC_PORT_VCORER1, /**< H.265 Encode(VCORER1).	*/
+	E_H265_SDRAMC_PORT_VCPU,	/**< H.265 Encode(VCPU).	*/
+	E_H265_SDRAMC_PORT_VCOREM,	/**< H.265 Encode(VCOREM).	*/
+// --- REMOVE_ES3_HARDWARE END --
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif						// CO_ES3_HARDWARE
+							// --- REMOVE_ES_COMPILE_OPT END ---
+	E_H265_SDRAMC_PORT_VD0, /**< H.265 Decode(VD0).		*/
+	E_H265_SDRAMC_PORT_VD1, /**< H.265 Decode(VD1).		*/
+	E_H265_SDRAMC_PORT_VD2, /**< H.265 Decode(VD2).		*/
+} E_H265_SDRAMC_PORT;
+
+typedef enum
+{
+	E_H265_SDRAMC_DATABUF_DS01 = 0, /**< Data buffer 13(DS0/DS1).		*/
+	E_H265_SDRAMC_DATABUF_SDM,		/**< Data buffer 14(SDM).			*/
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	E_H265_SDRAMC_DATABUF_VE012, /**< Data buffer 15(VE0/VE1/VE2).	*/
+	E_H265_SDRAMC_DATABUF_VD01,	 /**< Data buffer 16(VD0/VD1).		*/
+	E_H265_SDRAMC_DATABUF_VD2,	 /**< Data buffer 17(VD2).			*/
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	E_H265_SDRAMC_DATABUF_VD01,		/**< Data buffer 16(VD0/VD1).		*/
+	E_H265_SDRAMC_DATABUF_VCPU,		/**< Data buffer 18(VCPU).			*/
+	E_H265_SDRAMC_DATABUF_VCOREWR0, /**< Data buffer 19(VCOREW/VCORER0).*/
+	E_H265_SDRAMC_DATABUF_VCORER1,	/**< Data buffer 20(VCORER1).		*/
+	E_H265_SDRAMC_DATABUF_VCOREM,	/**< Data buffer 21(VCOREM).		*/
+	E_H265_SDRAMC_DATABUF_VD2,		/**< Data buffer 22(VD2).			*/
+// --- REMOVE_ES3_HARDWARE END --
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+} E_H265_SDRAMC_DATABUF;
+
+typedef enum
+{
+	E_H265_SDRAMC_CLOCK_EN_DISABLE = 0, /**< disable.				*/
+	E_H265_SDRAMC_CLOCK_EN_ENABLE		/**< enable.				*/
+} E_H265_SDRAMC_CLOCK_EN;
+
+
+更改为
+/*----------------------------------------------------------------------*/
+/* Enumeration															*/
+/*----------------------------------------------------------------------*/
+/* User Event for Playback */
+typedef enum
+{
+	H265Movie_EVENT_NONE = 0,	 // No Event
+	H265Movie_EVENT_PLAY = 1,	 // Play
+	H265Movie_EVENT_PAUSE = 2,	 // Pause
+	H265Movie_EVENT_REPLAY = 3, // Replay
+	H265Movie_EVENT_FLUSH = 4,	 // Flush
+	H265Movie_EVENT_STOP = 5,	 // Stop
+} H265MovieEvent;
+
+/* Playing Status */
+typedef enum
+{
+	H265Movie_PLAY_MODE_FLUSH = 0,	 // FLUSH
+	H265Movie_PLAY_MODE_PLAY = 1,	 // PLAY
+	H265Movie_PLAY_MODE_PAUSE = 2,	 // PAUSE
+	H265Movie_PLAY_MODE_RESUME = 3, // RESUME
+	H265Movie_PLAY_MODE_STOP = 4,	 // STOP
+	H265Movie_PLAY_MODE_END = 5,	 // Play End
+	H265Movie_PLAY_MODE_MAX = 6	 // Max.Value of Movie Play Status
+} H265MoviePlayMode;
+
+/* IIP */
+typedef enum
+{
+	H265Movie_RESIZE_MODE_NEAREST = 0,
+	H265Movie_RESIZE_MODE_BILINEAR = 1,
+	H265Movie_RESIZE_MODE_BICUBIC = 2,
+} H265MovieResizeMode;
+
+// Sirius Core Block
+typedef enum
+{
+	H265Movie_PMU_BLOCK_IPP = 0,
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	H265Movie_PMU_BLOCK_PXF,
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	H265Movie_PMU_BLOCK_WAVE,
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	H265Movie_PMU_BLOCK_VDF,
+} H265MoviePmuBlock;
+
+// Reset Request to Sirius
+typedef enum
+{
+	H265Movie_TOP_RESET_ON = 0,
+	H265Movie_TOP_RESET_OFF
+} H265MovieTopReset;
+
+// Clock Stop to Sirius
+typedef enum
+{
+	H265Movie_TOP_CLOCK_STOP_ON = 0,
+	H265Movie_TOP_CLOCK_STOP_OFF
+} H265MovieTopClockStop;
+
+// Setting to Sdramc Sirius
+typedef enum
+{
+	H265Movie_SDRAMC_CH_0 = 0, /**< Channel 0.				*/
+	H265Movie_SDRAMC_CH_1,		/**< Channel 1.				*/
+} H265MovieSdramcCh;
+
+typedef enum
+{
+	H265Movie_SDRAMC_PORT_DS0 = 0, /**< H.265 Common(DS0).		*/
+	H265Movie_SDRAMC_PORT_DS1,		/**< H.265 Common(DS1).		*/
+	H265Movie_SDRAMC_PORT_SDM,		/**< H.265 Common(SDM).		*/
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	H265Movie_SDRAMC_PORT_VE0, /**< H.265 Encode(VE0).		*/
+	H265Movie_SDRAMC_PORT_VE1, /**< H.265 Encode(VE1).		*/
+	H265Movie_SDRAMC_PORT_VE2, /**< H.265 Encode(VE2).		*/
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	H265Movie_SDRAMC_PORT_VCOREW,	/**< H.265 Encode(VCOREW).	*/
+	H265Movie_SDRAMC_PORT_VCORER0, /**< H.265 Encode(VCORER0).	*/
+	H265Movie_SDRAMC_PORT_VCORER1, /**< H.265 Encode(VCORER1).	*/
+	H265Movie_SDRAMC_PORT_VCPU,	/**< H.265 Encode(VCPU).	*/
+	H265Movie_SDRAMC_PORT_VCOREM,	/**< H.265 Encode(VCOREM).	*/
+// --- REMOVE_ES3_HARDWARE END --
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif						// CO_ES3_HARDWARE
+							// --- REMOVE_ES_COMPILE_OPT END ---
+	H265Movie_SDRAMC_PORT_VD0, /**< H.265 Decode(VD0).		*/
+	H265Movie_SDRAMC_PORT_VD1, /**< H.265 Decode(VD1).		*/
+	H265Movie_SDRAMC_PORT_VD2, /**< H.265 Decode(VD2).		*/
+} H265MovieSdramcPort;
+
+typedef enum
+{
+	H265Movie_SDRAMC_DATABUF_DS01 = 0, /**< Data buffer 13(DS0/DS1).		*/
+	H265Movie_SDRAMC_DATABUF_SDM,		/**< Data buffer 14(SDM).			*/
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES1_HARDWARE BEGIN ---
+	H265Movie_SDRAMC_DATABUF_VE012, /**< Data buffer 15(VE0/VE1/VE2).	*/
+	H265Movie_SDRAMC_DATABUF_VD01,	 /**< Data buffer 16(VD0/VD1).		*/
+	H265Movie_SDRAMC_DATABUF_VD2,	 /**< Data buffer 17(VD2).			*/
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+	// --- REMOVE_ES3_HARDWARE BEGIN ---
+	H265Movie_SDRAMC_DATABUF_VD01,		/**< Data buffer 16(VD0/VD1).		*/
+	H265Movie_SDRAMC_DATABUF_VCPU,		/**< Data buffer 18(VCPU).			*/
+	H265Movie_SDRAMC_DATABUF_VCOREWR0, /**< Data buffer 19(VCOREW/VCORER0).*/
+	H265Movie_SDRAMC_DATABUF_VCORER1,	/**< Data buffer 20(VCORER1).		*/
+	H265Movie_SDRAMC_DATABUF_VCOREM,	/**< Data buffer 21(VCOREM).		*/
+	H265Movie_SDRAMC_DATABUF_VD2,		/**< Data buffer 22(VD2).			*/
+// --- REMOVE_ES3_HARDWARE END --
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+	// --- REMOVE_ES_COMPILE_OPT END ---
+} H265MovieSdramcDatabuf;
+
+typedef enum
+{
+	H265Movie_SDRAMC_CLOCK_EN_DISABLE = 0, /**< disable.				*/
+	H265Movie_SDRAMC_CLOCK_EN_ENABLE		/**< enable.				*/
+} H265MovieSdramcClockEn;
+
+
+
+
+结构体
+原来的
+/*----------------------------------------------------------------------*/
+/* Structure															*/
+/*----------------------------------------------------------------------*/
+typedef struct
+{
+	/* --- Video Part */
+	T_H265_IF_PARAM_RECORD codec_param[E_H265_IF_STREAM_CH_MAX];
+	UINT32 scan_mode; // progressive/interlace
+} T_H265_MOVIE_UI;	  // ** It requires scrutiny. **
+
+typedef struct
+{
+	UINT32 y_address;
+	UINT32 c_address;
+} T_H265_MOVIE_ADDR;
+
+/* --- Movie Rec Data --- */
+typedef struct
+{
+	ULONG src_addr[2];				// src address
+	ULONG dst_addr[2];				// dst address
+	USHORT g_src_width;				// global src width
+	USHORT g_src_lines;				// global src lines
+	USHORT src_width;				// src width
+	USHORT src_lines;				// src lines
+	USHORT g_dst_width;				// global dst width
+	USHORT g_dst_lines;				// global dst lines
+	USHORT dst_width;				// dst width
+	USHORT dst_lines;				// dst lines
+	USHORT ribery_mode;				// Ribery Mode
+	H265MovieResizeMode resize_mode; // resize mode
+	E_H265_IF_DISP_ROTATE rotate;	// rotate(clockwise)
+} T_H265_MOVIE_REC_TBL;
+
+/* --- Bit Stream Control --- */
+typedef struct
+{
+	UCHAR *pointer;
+	UCHAR bit_remain;
+} T_H265_MOVIE_STREAM_CONTROL;
+
+更改为
+/*----------------------------------------------------------------------*/
+/* Structure															*/
+/*----------------------------------------------------------------------*/
+typedef struct
+{
+	/* --- Video Part */
+	T_H265_IF_PARAM_RECORD codecParam[E_H265_IF_STREAM_CH_MAX];
+	UINT32 scanMode; // progressive/interlace
+} H265MovieUi;	  // ** It requires scrutiny. **
+
+typedef struct
+{
+	UINT32 yAddress;
+	UINT32 cAddress;
+} H265MovieAddr;
+
+/* --- Movie Rec Data --- */
+typedef struct
+{
+	ULONG srcAddr[2];				// src address
+	ULONG dstAddr[2];				// dst address
+	USHORT gSrcWidth;				// global src width
+	USHORT gSrcLines;				// global src lines
+	USHORT srcWidth;				// src width
+	USHORT srcLines;				// src lines
+	USHORT gDstWidth;				// global dst width
+	USHORT gDstLines;				// global dst lines
+	USHORT dstWidth;				// dst width
+	USHORT dstLines;				// dst lines
+	USHORT riberyMode;				// Ribery Mode
+	H265MovieResizeMode resizeMode; // resize mode
+	E_H265_IF_DISP_ROTATE rotate;	// rotate(clockwise)
+} H265MovieRecTbl;
+
+/* --- Bit Stream Control --- */
+typedef struct
+{
+	UCHAR *pointer;
+	UCHAR bitRemain;
+} H265MovieStreamControl;
+
+
+
+公有函数名
+原来的
+/*----------------------------------------------------------------------*/
+/* Function Prototype Definition										*/
+/*----------------------------------------------------------------------*/
+// A. H265 Control
+extern VOID H265_CC_Process(INT32 stacd);
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+extern VOID H265_CC_2_Process(INT32 stacd);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE END ---
+extern VOID H265_ENT_Process(INT32 stacd);
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+extern VOID H265_ENT_INT_Process(INT32 stacd);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE END ---
+extern VOID H265_DISP_Process(INT32 stacd);
+
+// C. H265 Decode
+extern INT32 H265_Movie_Play_Top_Get(T_H265_IF_DECODER_PARAM *decoder_param, ULLONG req_pts, UINT32 store_num, T_H265_IF_PARAM_SET_STREAM *video_stream_param, T_H265_IF_VIDEO_YUV_INFO *decode_yuv_info);
+extern INT32 H265_Movie_Play_Top_Set(T_H265_IF_DECODER_PARAM *decoder_param, T_H265_IF_DISPLAY_INFO *display_info);
+extern INT32 H265_Movie_Play_Start_Init(VOID);
+extern INT32 H265_Movie_Play_Start(ULLONG start_pts, E_H265_IF_PLAY_DIRECTION direction, E_H265_IF_PLAY_SPEED speed, BOOL pause);
+extern H265MoviePlayMode H265_Movie_Play_Event_Check(H265MoviePlayMode current_mode);
+
+// N. Standard Library Wrapper
+extern VOID H265_Movie_Memset(VOID *ptr, UINT32 value, ULONG size);
+extern VOID H265_Movie_Memcpy(VOID *ptr1, VOID *ptr2, ULONG size);
+extern VOID *H265_Movie_Malloc(ULONG size);
+extern VOID H265_Movie_Free(VOID *ptr);
+
+// O. Bit Stream Control
+extern VOID H265_Movie_Bs_Set_Pointer_Address(H265MovieStreamControl *bit_stream, UCHAR *pointer_address);
+extern VOID H265_Movie_Bs_Skip_Pointer_Address(H265MovieStreamControl *bit_stream, ULONG skip_bytes);
+extern VOID H265_Movie_Bs_Skip_Pointer_Scope_Bit(H265MovieStreamControl *bit_stream, ULONG skip_bits);
+extern UCHAR *H265_Movie_Bs_Get_Pointer(H265MovieStreamControl *bit_stream);
+extern UCHAR H265_Movie_Bs_Get_Remain_Bits(H265MovieStreamControl *bit_stream);
+extern ULONG H265_Movie_Bs_Read_U_1bit(H265MovieStreamControl *bit_stream);
+extern ULONG H265_Movie_Bs_Read_U_Nbit(H265MovieStreamControl *bit_stream, UCHAR read_num);
+extern INT32 H265_Movie_Bs_Read_U_E(H265MovieStreamControl *bit_stream);
+extern INT32 H265_Movie_Bs_Read_S_E(H265MovieStreamControl *bit_stream);
+extern VOID H265_Movie_Bs_Write_U_1bit(H265MovieStreamControl *bit_stream, INT32 write_value);
+extern VOID H265_Movie_Bs_Write_U_Nbit(H265MovieStreamControl *bit_stream, UCHAR write_num, INT32 write_value);
+
+extern UINT32 H265_Movie_DI(VOID);
+extern VOID H265_Movie_EI(UINT32 status);
+
+// P. Flush & Clean
+extern VOID H265_Movie_Cache_Clean(ULONG addr, ULONG size);
+extern VOID H265_Movie_Cache_Flush(ULONG addr, ULONG size);
+extern VOID H265_Movie_Cache_Clean_Flush(ULONG addr, ULONG size);
+extern VOID H265_Movie_SGDE_Resize(H265MovieRecTbl *rec_tbl);
+
+更改为
+// A. H265 Control
+VOID 	h265_movie_cc_process(INT32 stacd);
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 	h265_movie_cc_2_process(INT32 stacd);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE END ---
+VOID 	h265_movie_ent_process(INT32 stacd);
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 	h265_movie_ent_int_process(INT32 stacd);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE END ---
+VOID 	h265_movie_disp_process(INT32 stacd);
+
+// C. H265 Decode
+INT32 	h265_movie_play_top_get(T_H265_IF_DECODER_PARAM* decoderParam, ULLONG reqPts, UINT32 storeNum, T_H265_IF_PARAM_SET_STREAM *videoStreamParam, T_H265_IF_VIDEO_YUV_INFO *decodeYuvInfo);
+INT32 	h265_movie_play_top_set(T_H265_IF_DECODER_PARAM* decoderParam, T_H265_IF_DISPLAY_INFO* displayInfo);
+INT32 	h265_movie_play_start_init(VOID);
+INT32 	h265_movie_play_start(ULLONG startPts, E_H265_IF_PLAY_DIRECTION direction, E_H265_IF_PLAY_SPEED speed, BOOL pause);
+H265MoviePlayMode h265_movie_play_event_check(H265MoviePlayMode currentMode);
+
+// N. Standard Library Wrapper
+VOID 	h265_movie_memset(VOID* ptr, UINT32 value, ULONG size);
+VOID 	h265_movie_memcpy(VOID* ptr1, VOID* ptr2, ULONG size);
+VOID*	h265_movie_malloc(ULONG size);
+VOID 	h265_movie_free(VOID* ptr);
+
+// O. Bit Stream Control
+VOID 	h265_movie_bs_set_pointer_address(H265MovieStreamControl* bitStream, UCHAR* pointerAddress);
+VOID 	h265_movie_bs_skip_pointer_address(H265MovieStreamControl* bitStream, ULONG skipBytes);
+VOID 	h265_movie_bs_skip_pointer_scope_bit(H265MovieStreamControl* bitStream, ULONG skipBits);
+UCHAR*	h265_movie_bs_get_pointer(H265MovieStreamControl* bitStream);
+UCHAR 	h265_movie_bs_get_remain_bits(H265MovieStreamControl* bitStream);
+ULONG 	h265_movie_bs_read_u_1bit(H265MovieStreamControl* bitStream);
+ULONG 	h265_movie_bs_read_u_nbit(H265MovieStreamControl* bitStream, UCHAR readNum);
+INT32 	h265_movie_bs_read_u_e(H265MovieStreamControl* bitStream);
+INT32 	h265_movie_bs_read_s_e(H265MovieStreamControl* bitStream);
+VOID 	h265_movie_bs_write_u_1bit(H265MovieStreamControl* bitStream, INT32 writeValue);
+VOID 	h265_movie_bs_write_u_nbit(H265MovieStreamControl* bitStream, UCHAR writeNum, INT32 writeValue);
+
+UINT32 	h265_movie_di(VOID);
+VOID 	h265_movie_ei(UINT32 status);
+
+// P. Flush & Clean
+VOID 	h265_movie_cache_clean(ULONG addr, ULONG size);
+VOID 	h265_movie_cache_flush(ULONG addr, ULONG size);
+VOID 	h265_movie_cache_clean_flush(ULONG addr, ULONG size);
+VOID 	h265_movie_sgde_resize(H265MovieRecTbl* recTbl);
+
+
+
+
+
+==================================================将文件h265moviecommon.h修改
+公有函数更名
+// D. H265 Common Function
+extern INT32 H265_Movie_Convert_Framerate(UINT32 framerate, ULONG *vop_time_increment, ULONG *vop_time_inc_resol);
+extern INT32 H265_Movie_Convert_Endian(VOID *input_data, ULONG convert_size);
+extern INT32 H265_Movie_Rec_Resize(T_H265_MOVIE_REC_TBL *rec_tbl);
+extern VOID H265_Movie_Lcd_Update(T_H265_IF_DISPLAY_PARAM *lcd_info, T_H265_MOVIE_ADDR *disp_addr, BOOL codec_format);
+extern VOID H265_Movie_Lcd_Wait(VOID);
+extern VOID H265_Movie_Tv_Update(T_H265_MOVIE_ADDR disp_addr, UCHAR *first_disp_flg, UCHAR color_matrix, UCHAR codec_format);
+extern VOID H265_Movie_Tv_Wait(VOID);
+extern VOID H265_Movie_Hdmi_Update(T_H265_IF_DISPLAY_PARAM *hdmi_info, T_H265_MOVIE_ADDR *disp_addr, BOOL codec_format);
+extern VOID H265_Movie_Hdmi_Wait(VOID);
+更改为
+// D. H265 Common Function
+INT32				h265_movie_common_convert_framerate(UINT32 framerate, ULONG* vopTimeIncrement, ULONG* vopTimeIncResol);
+INT32				h265_movie_common_convert_endian(VOID* inputData, ULONG convertSize);
+INT32				h265_movie_common_rec_resize(T_H265_MOVIE_REC_TBL* recTbl);
+VOID 				h265_movie_common_lcd_update(T_H265_IF_DISPLAY_PARAM* lcdInfo, T_H265_MOVIE_ADDR* dispAddr, BOOL codecFormat);
+VOID 				h265_movie_common_lcd_wait(VOID);
+VOID 				h265_movie_common_tv_update(T_H265_MOVIE_ADDR dispAddr, UCHAR* firstDispFlg, UCHAR colorMatrix, UCHAR codecFormat);
+VOID 				h265_movie_common_tv_wait(VOID);
+VOID 				h265_movie_common_hdmi_update(T_H265_IF_DISPLAY_PARAM* hdmiInfo, T_H265_MOVIE_ADDR* dispAddr, BOOL codecFormat);
+VOID 				h265_movie_common_hdmi_wait(VOID); 	
+
+
+
+
+
+==================================================将文件h265moviewrapper.h修改
+公有函数更名
+// H. DD Wrapper: Sirius
+extern	ULONG	H265_Movie_Sirius_Phy_To_Log( ULONG addr );
+extern	ULONG	H265_Movie_Sirius_Log_To_Phy( ULONG addr );
+extern	VOID	H265_Movie_Sirius_IPP_ASYNC_Reset( E_H265_TOP_RESET reset );
+extern	VOID	H265_Movie_Sirius_IPP_SYNC_Reset( E_H265_TOP_RESET reset );
+extern	VOID	H265_Movie_Sirius_VDF_Reset( E_H265_TOP_RESET reset );
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+extern	VOID	H265_Movie_Sirius_PXF_Reset( E_H265_TOP_RESET reset );
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+extern	VOID	H265_Movie_Sirius_IPP_Clock_Stop( E_H265_TOP_CLOCK_STOP clk_stop );
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+extern	VOID	H265_Movie_Sirius_PXF_Clock_Stop( E_H265_TOP_CLOCK_STOP clk_stop );
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+extern	VOID	H265_Movie_Sirius_VDF_Clock_Stop( E_H265_TOP_CLOCK_STOP clk_stop );
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+extern	VOID	H265_Movie_HEVENC_Clock_Stop( E_H265_TOP_CLOCK_STOP clk_stop );
+extern	VOID	H265_Movie_HEVENC_Reset( E_H265_TOP_RESET reset );
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+extern	VOID	H265_Movie_PMU_Setting( E_H265_PMU_BLOCK block, INT32 pmu );
+extern	VOID	H265_Movie_Sdramc_BusIf_Clock_Enable( E_H265_SDRAMC_CH ch, E_H265_SDRAMC_PORT port, E_H265_SDRAMC_CLOCK_EN enable );
+extern	VOID	H265_Movie_Sdramc_DataBuf_Clock_Enable( E_H265_SDRAMC_CH ch, E_H265_SDRAMC_DATABUF dbuf, E_H265_SDRAMC_CLOCK_EN enable );
+extern	VOID	H265_Movie_Sdramc_Remap_Address_Set( E_H265_SDRAMC_CH ch, E_H265_SDRAMC_PORT port, LONG address );
+extern	ULONG	H265_Movie_Sdram_Ch_Check( ULONG check_address );
+extern	VOID	H265_Movie_Arm_Sirius_Dsb_Poc( VOID );
+
+更改为
+// H. DD Wrapper: Sirius
+ULONG 		h265_movie_wrapper_sirius_phy_to_log(ULONG addr);
+ULONG 		h265_movie_wrapper_sirius_log_to_phy(ULONG addr);
+VOID 		h265_movie_wrapper_sirius_ipp_async_reset(H265MovieTopReset reset);
+VOID 		h265_movie_wrapper_sirius_ipp_sync_reset(H265MovieTopReset reset);
+VOID 		h265_movie_wrapper_sirius_vdf_reset(H265MovieTopReset reset);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+VOID 		h265_movie_wrapper_sirius_pxf_reset(H265MovieTopReset reset);
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 		h265_movie_wrapper_sirius_ipp_clock_stop(H265MovieTopClockStop clkStop);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+VOID 		h265_movie_wrapper_sirius_pxf_clock_stop(H265MovieTopClockStop clkStop);
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 		h265_movie_wrapper_sirius_vdf_clock_stop(H265MovieTopClockStop clkStop);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+VOID 		h265_movie_wrapper_hevenc_clock_stop(H265MovieTopClockStop clkStop);
+VOID 		h265_movie_wrapper_hevenc_reset(H265MovieTopReset reset);
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 		h265_movie_wrapper_pmu_setting(H265MoviePmuBlock block, INT32 pmu);
+VOID 		h265_movie_wrapper_sdramc_busif_clock_enable(H265MovieSdramcCh ch, H265MovieSdramcPort port, H265MovieSdramcClockEn enable);
+VOID 		h265_movie_wrapper_sdramc_databuf_clock_enable(H265MovieSdramcCh ch, H265MovieSdramcDatabuf dbuf, H265MovieSdramcClockEn enable);
+VOID 		h265_movie_wrapper_sdramc_remap_address_set(H265MovieSdramcCh ch, H265MovieSdramcPort port, LONG address);
+ULONG 		h265_movie_wrapper_sdram_ch_check(ULONG checkAddress);
+VOID 		h265_movie_wrapper_arm_sirius_dsb_poc(VOID);
+
+
+
+
+
+
+
+==================================================ae_task.c.h搬运到aetask.c.h 拆分为 aetasksensor.c.h
+aetask.h 修改如下
+原来的
+/*----------------------------------------------------------------------*/
+/* Enumeration															*/
+/*----------------------------------------------------------------------*/
+typedef enum
+{
+	E_AE_MSG_STAT_RDY = 0,
+} E_AE_MSG;
+
+enum
+{
+	E_AE_MODE_MANUAL = 0,
+	E_AE_MODE_METER_CETNER_AVG1,
+	E_AE_MODE_METER_ALL,
+	E_AE_MODE_METER_CETNER_AVG2,
+	E_AE_MODE_METER_CETNER_AVG3,
+	E_AE_MODE_METER_SPOT1,
+	E_AE_MODE_METER_SPOT2,
+	E_AE_MODE_METER_USER1,
+	E_AE_MODE_METER_TOUCH,
+	E_AE_MODE_METER_FD,
+	E_AE_MODE_METER_PORTRAIT,
+	E_AE_MODE_METER_RSV11,
+	E_AE_MODE_METER_RSV12,
+	E_AE_MODE_METER_RSV13,
+	E_AE_MODE_METER_RSV14,
+	E_AE_MODE_METER_RSV15,
+	E_AE_MODE_METER_ROI,
+};
+
+/*----------------------------------------------------------------------*/
+/* Structure															*/
+/*----------------------------------------------------------------------*/
+typedef union {
+	ULONG all_ratio;
+	struct
+	{
+		ULONG sensor0 : 8;
+		ULONG sensor1 : 8;
+		ULONG sensor2 : 8;
+		ULONG sensor3 : 8;
+	} bit;
+} T_AE_AVERAGE_RATIO;
+
+// E_AE_MSG msg: 4byte
+// Align: 4byte
+// ULLONG frame_no: 8bytes
+// UCHAR sensor_mode[E_SHARE_SENSOR_ID_MAX]: 4bytes
+// max bytes in T_AE_PARAM is 244(T_AE_MSG) - 4 - 4 - 8 - 4 = 224
+typedef struct
+{
+	// 4byte group
+	FLOAT ev_bias;
+	FLOAT m_gain;
+	FLOAT m_exp;
+	FLOAT fps;
+	FLOAT roi_ae_x_sta;
+	FLOAT roi_ae_y_sta;
+	FLOAT roi_ae_x_size;
+	FLOAT roi_ae_y_size;
+	T_AE_AVERAGE_RATIO ave_ratio;
+	// 2byte group
+	struct
+	{
+		USHORT aeyk[E_AEYK_MAX];
+	} sensor[E_SHARE_SENSOR_ID_MAX];
+	// 1byte group
+	UCHAR lock;
+	UCHAR mode;
+	UCHAR target;
+	UCHAR speed;
+	UCHAR iso;
+	UCHAR flicker;
+	UCHAR roi_weight_val;
+	UCHAR statAverage;
+	UCHAR evp_map_index;
+	UCHAR dol_en;
+	UCHAR system_mode;
+	USHORT dol_gap;
+
+	UCHAR wdr_en;
+	UCHAR wdr_lvl;
+	UCHAR wdr_contrast_ctl;
+	// 224 - (4byte x 9) - (2byte x 4 x 4) - (1byte x 11) - 5 = 156 bytes remaining
+} T_AE_PARAM;
+
+// max bytes in T_AE_MSG is 244bytes
+typedef struct
+{
+	E_AE_MSG msg;
+	ULLONG frame_no;
+	UCHAR sensor_mode[E_SHARE_SENSOR_ID_MAX];
+	T_AE_PARAM param;
+} T_AE_MSG;
+
+//MPFID_AE_IDX, { 0, TA_TPRI | TA_DSNAME, 0x20, 0x80, NULL, 0, "AE" } },
+typedef struct
+{
+	OS_USER_VP _os_reserve[2]; // OS reserve
+	OS_USER_VP blf_addr;	   // blf address
+	OS_USER_VB msg[244];	   // message // message mailbox size(0x100) - _os_reserve[2] (2x4bytes) - blf_addr (4bytes)
+} T_AE_MBOX;
+
+更改为
+/*----------------------------------------------------------------------*/
+/* Enumeration															*/
+/*----------------------------------------------------------------------*/
+typedef enum
+{
+	AeTask_MSG_STAT_RDY = 0,
+} AeTaskMsg;
+
+enum
+{
+	AeTask_MODE_MANUAL = 0,
+	AeTask_MODE_METER_CETNER_AVG1,
+	AeTask_MODE_METER_ALL,
+	AeTask_MODE_METER_CETNER_AVG2,
+	AeTask_MODE_METER_CETNER_AVG3,
+	AeTask_MODE_METER_SPOT1,
+	AeTask_MODE_METER_SPOT2,
+	AeTask_MODE_METER_USER1,
+	AeTask_MODE_METER_TOUCH,
+	AeTask_MODE_METER_FD,
+	AeTask_MODE_METER_PORTRAIT,
+	AeTask_MODE_METER_RSV11,
+	AeTask_MODE_METER_RSV12,
+	AeTask_MODE_METER_RSV13,
+	AeTask_MODE_METER_RSV14,
+	AeTask_MODE_METER_RSV15,
+	AeTask_MODE_METER_ROI,
+};
+
+/*----------------------------------------------------------------------*/
+/* Structure															*/
+/*----------------------------------------------------------------------*/
+typedef union {
+	ULONG allRatio;
+	struct
+	{
+		ULONG sensor0 : 8;
+		ULONG sensor1 : 8;
+		ULONG sensor2 : 8;
+		ULONG sensor3 : 8;
+	} bit;
+} AeAverageRatio;
+
+// AeTaskMsg msg: 4byte
+// Align: 4byte
+// ULLONG frameNo: 8bytes
+// UCHAR sensorMode[E_SHARE_SENSOR_ID_MAX]: 4bytes
+// max bytes in AeParam is 244(AeMsg) - 4 - 4 - 8 - 4 = 224
+typedef struct
+{
+	// 4byte group
+	FLOAT evBias;
+	FLOAT mGain;
+	FLOAT mExp;
+	FLOAT fps;
+	FLOAT roiAeXSta;
+	FLOAT roiAeYSta;
+	FLOAT roiAeXSize;
+	FLOAT roiAeYSize;
+	AeAverageRatio aveRatio;
+	// 2byte group
+	struct
+	{
+		USHORT aeyk[E_AEYK_MAX];
+	} sensor[E_SHARE_SENSOR_ID_MAX];
+	// 1byte group
+	UCHAR lock;
+	UCHAR mode;
+	UCHAR target;
+	UCHAR speed;
+	UCHAR iso;
+	UCHAR flicker;
+	UCHAR roiWeightVal;
+	UCHAR statAverage;
+	UCHAR evpMapIndex;
+	UCHAR dolEn;
+	UCHAR systemMode;
+	USHORT dolGap;
+
+	UCHAR wdrEn;
+	UCHAR wdrLvl;
+	UCHAR wdrContrastCtl;
+	// 224 - (4byte x 9) - (2byte x 4 x 4) - (1byte x 11) - 5 = 156 bytes remaining
+} AeParam;
+
+// max bytes in AeMsg is 244bytes
+typedef struct
+{
+	AeTaskMsg msg;
+	ULLONG frameNo;
+	UCHAR sensorMode[E_SHARE_SENSOR_ID_MAX];
+	AeParam param;
+} AeMsg;
+
+//MPFID_AE_IDX, { 0, TA_TPRI | TA_DSNAME, 0x20, 0x80, NULL, 0, "AE" } },
+typedef struct
+{
+	// OS reserve
+	OS_USER_VP osReserve[2]; 
+	// blf address
+	OS_USER_VP blfAddr;	  
+	// message // message mailbox size(0x100) - osReserve[2] (2x4bytes) - blfAddr (4bytes)
+	OS_USER_VB msg[244];	  
+} AeMbox;
+
+
+
+公有函数
+void 	AE_Task(INT32 stacd);
+INT32 Snd_Msg_To_AE(const AeMsg* msg);
+void Ae_Calc_EV_to_Exp(UCHAR sensor_id, UCHAR sensorMode, INT32 fixed_EV, INT32 fixed_DOL_EV, const AeParam *in, T_CAMERA_EXP *real, float *pgain, float *DOL_pgain, BOOL apply_result);
+更改为
+	void 	ae_task(INT32 stacd);
+	INT32 ae_task_snd_msg_to_ae(const AeMsg* msg);
+	void  ae_task_calc_ev_to_exp(UCHAR sensorId, UCHAR sensorMode, INT32 fixedEv, INT32 fixedDolEv, const AeParam* in, T_CAMERA_EXP* real, float* pgain, float* dolPgain, BOOL applyResult);
+
+
+
+
+
+
+===========================================将h265_sirius.c.h拆分为 h265sirius.c.h  和h265hevcsirius.c.h
+
+===============================================================h265hevcsirius.h
+原来的
+#define H265_Sirius_Power_Set		HEVC_Sirius_Power_Set
+#define H265_Sirius_Reset_Set		HEVC_Sirius_Reset_Set
+#define H265_Sirius_Clock_Set		HEVC_Sirius_Clock_Set
+#define H265_Sirius_DSB				HEVC_Sirius_DSB
+#define H265_Sirius_Memory_Read		HEVC_Sirius_READ
+#define H265_Sirius_Memory_Write	HEVC_Sirius_WRITE
+#define H265_Sirius_Clean			HEVC_Sirius_Clean
+#define H265_Sirius_Flush			HEVC_Sirius_Flush
+
+#define H265_Sirius_Dpd				HEVC_Sirius_Dpd
+#define H265_Sirius_Dpe				HEVC_Sirius_Dpe
+
+VOID H265_Sirius_Power_Set( UCHAR arg );
+VOID H265_Sirius_Reset_Set( UCHAR arg );
+VOID H265_Sirius_Clock_Set( UCHAR arg );
+VOID H265_Sirius_DSB( VOID );
+UINT32 H265_Sirius_Memory_Read( UINT32 address );
+VOID H265_Sirius_Memory_Write( UINT32 address, UINT32 data );
+VOID H265_Sirius_Clean( UINT32 address, UINT32 size );
+VOID H265_Sirius_Flush( UINT32 address, UINT32 size );
+UINT32 H265_Sirius_Dpd( VOID );
+VOID H265_Sirius_Dpe( UINT32 status);
+更改为
+
+VOID 	h265_hevc_sirius_power_set(UCHAR arg);
+VOID 	h265_hevc_sirius_reset_set(UCHAR arg);
+VOID 	h265_hevc_sirius_clock_set(UCHAR arg);
+VOID 	h265_hevc_sirius_dsb(VOID);
+UINT32 	h265_hevc_sirius_memory_read (UINT32 address);
+VOID 	h265_hevc_sirius_memory_write(UINT32 address, UINT32 data);
+VOID 	h265_hevc_sirius_clean(UINT32 address, UINT32 size);
+VOID 	h265_hevc_sirius_flush(UINT32 address, UINT32 size);
+UINT32 	h265_hevc_sirius_dpd(VOID );
+VOID 	h265_hevc_sirius_dpe(UINT32 status);
+
+
+
+==========================================================h265sirius.h文件更改
+
+原来的
+/*----------------------------------------------------------------------*/
+/* Definition															*/
+/*----------------------------------------------------------------------*/
+// SIRIUS Wait Time
+#define D_H265_SIRIUS_BOOT_TIMEOUT					(1000)
+#define D_H265_SIRIUS_START_TIMEOUT					(1000)
+#define D_H265_SIRIUS_STOP_TIMEOUT					(1000)
+
+// Definition of a fixed size of SIRIUS setting.
+#define D_H265_SIRIUS_BRIDGE_PARAM_SIZE				(SDRAM_SIZ_MOVIE_PLAY_H265_PARAM)	// 1Mbyte
+#define D_H265_SIRIUS_BRIDGE_COLPIC_SIZE			(SDRAM_SIZ_MOVIE_PLAY_H265_COLPIC)	// 1.125Mbyte
+#define D_H265_SIRIUS_BRIDGE_COMMON_SIZE_2GB		(0x80000000)
+#define D_H265_SIRIUS_BRIDGE_COMMON_SIZE_1_5GB		(0x60000000)
+#define D_H265_SIRIUS_BRIDGE_COMMON_SIZE_1GB		(0x40000000)
+#define D_H265_SIRIUS_BRIDGE_COMMON_SIZE_512MB		(0x20000000)
+#define D_H265_SIRIUS_BRIDGE_COMMON_SIZE_256MB		(0x10000000)
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// Table Number
+#define D_H265_SIRIUS_FM_EMPTY_FIFO_MAX_NUM			(ENC_FM_NUM)
+
+// Y/C or dpb bank size
+// ENC
+// NHD map
+// 960p:1280x960
+// 720p:1280x720
+// 480p: 848x480
+#define D_H265_ENC_MAP_MODE_NHD_NUM			(SR_ENCODE_MODE_0)
+#define D_H265_ENC_MAP_MODE_NHD_WIDTH		(1280)
+#define D_H265_ENC_MAP_MODE_NHD_Y_LINES		(960)
+#define D_H265_ENC_MAP_MODE_NHD_C_LINES		(480)
+#define D_H265_ENC_MAP_MODE_NHD_Y_BANK		0x0012C000
+#define D_H265_ENC_MAP_MODE_NHD_C_BANK		0x00098000
+
+// HD map
+// 1.5K(1:1):1504x1504
+// 1.4K(4:3):1920x1440
+// 1080p:1920x1080
+#define D_H265_ENC_MAP_MODE_HD_NUM			(SR_ENCODE_MODE_1)
+#define D_H265_ENC_MAP_MODE_HD_WIDTH		(1920)
+#define D_H265_ENC_MAP_MODE_HD_Y_LINES		(1504)
+#define D_H265_ENC_MAP_MODE_HD_C_LINES		(768)
+#define D_H265_ENC_MAP_MODE_HD_Y_BANK		0x002D0000
+#define D_H265_ENC_MAP_MODE_HD_C_BANK		0x00168000
+
+// 4K2K map
+// 4K Cinema:4096x2160
+// 4K:3840x2160
+// 2.7K(16:9): 2704x1520
+// 2.7K(4:3): 2704x2028
+// 2.5K(4:3): 2560x1920
+#define D_H265_ENC_MAP_MODE_4K2K_NUM		(SR_ENCODE_MODE_2)
+#define D_H265_ENC_MAP_MODE_4K2K_WIDTH		(4096)
+#define D_H265_ENC_MAP_MODE_4K2K_Y_LINES	(2176)
+#define D_H265_ENC_MAP_MODE_4K2K_C_LINES	(1088)
+#define D_H265_ENC_MAP_MODE_4K2K_Y_BANK		0x00880000
+#define D_H265_ENC_MAP_MODE_4K2K_C_BANK		0x00440000
+
+// 3K map
+// 3Kx3K(1:1):3000x3000
+#define D_H265_ENC_MAP_MODE_3K_NUM			(SR_ENCODE_MODE_3)
+#define D_H265_ENC_MAP_MODE_3K_WIDTH		(3072)
+#define D_H265_ENC_MAP_MODE_3K_Y_LINES		(3008)
+#define D_H265_ENC_MAP_MODE_3K_C_LINES		(1504)
+#define D_H265_ENC_MAP_MODE_3K_Y_BANK		0x008d0000
+#define D_H265_ENC_MAP_MODE_3K_C_BANK		0x00468000
+
+// 4K3K map
+// 4K3K:4000x3000
+#define D_H265_ENC_MAP_MODE_4K3K_NUM		(SR_ENCODE_MODE_4)
+#define D_H265_ENC_MAP_MODE_4K3K_WIDTH		(4096)
+#define D_H265_ENC_MAP_MODE_4K3K_Y_LINES	(3008)
+#define D_H265_ENC_MAP_MODE_4K3K_C_LINES	(1504)
+#define D_H265_ENC_MAP_MODE_4K3K_Y_BANK		0x00BC0000
+#define D_H265_ENC_MAP_MODE_4K3K_C_BANK		0x005E0000
+
+// 6K3K map
+// 6K:6000x3000
+#define D_H265_ENC_MAP_MODE_6K3K_NUM		(SR_ENCODE_MODE_5)
+#define D_H265_ENC_MAP_MODE_6K3K_WIDTH		(6016)
+#define D_H265_ENC_MAP_MODE_6K3K_Y_LINES	(3008)
+#define D_H265_ENC_MAP_MODE_6K3K_C_LINES	(1504)
+#define D_H265_ENC_MAP_MODE_6K3K_Y_BANK		0x01144000
+#define D_H265_ENC_MAP_MODE_6K3K_C_BANK		0x008A4000
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+// DEC
+// NHD map
+// 960p:1280x960
+// 720p:1280x720
+// 480p: 848x480
+#define D_H265_DEC_MAP_MODE_NHD_NUM			(SR_DECODE_MODE_0)
+#define D_H265_DEC_MAP_MODE_NHD_WIDTH		(1280)
+#define D_H265_DEC_MAP_MODE_NHD_Y_LINES		(960)
+#define D_H265_DEC_MAP_MODE_NHD_C_LINES		(480)
+#define D_H265_DEC_MAP_MODE_NHD_Y_BANK		0x0012C000
+#define D_H265_DEC_MAP_MODE_NHD_C_BANK		0x00098000
+
+// 1080p map
+// 1080p:1920x1080
+#define D_H265_DEC_MAP_MODE_1080P_NUM			(SR_DECODE_MODE_1)
+#define D_H265_DEC_MAP_MODE_1080P_WIDTH			(1920)
+#define D_H265_DEC_MAP_MODE_1080P_Y_LINES		(1088)
+#define D_H265_DEC_MAP_MODE_1080P_C_LINES		(544)
+#define D_H265_DEC_MAP_MODE_1080P_Y_BANK		0x00200000
+#define D_H265_DEC_MAP_MODE_1080P_C_BANK		0x00100000
+
+// HD map
+// 1.5K(1:1):1504x1504
+// 1.4K(4:3):1920x1440
+#define D_H265_DEC_MAP_MODE_HD_NUM				(SR_DECODE_MODE_2)
+#define D_H265_DEC_MAP_MODE_HD_WIDTH			(1920)
+#define D_H265_DEC_MAP_MODE_HD_Y_LINES			(1504)
+#define D_H265_DEC_MAP_MODE_HD_C_LINES			(768)
+#define D_H265_DEC_MAP_MODE_HD_Y_BANK			0x002D0000
+#define D_H265_DEC_MAP_MODE_HD_C_BANK			0x00168000
+
+// 2.7K(16:9) map
+// 2.7K(16:9): 2704x1520
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_NUM		(SR_DECODE_MODE_3)
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_WIDTH		(2816)
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_Y_LINES	(1536)
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_C_LINES	(768)
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_Y_BANK	0x00420000
+#define D_H265_DEC_MAP_MODE_2_7K_16_9_C_BANK	0x00210000
+
+// 2.7K(4:3) map
+// 2.7K(4:3): 2704x2028
+// 2.5K(4:3): 2560x1920
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_NUM		(SR_DECODE_MODE_4)
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_WIDTH		(2816)
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_Y_LINES	(2048)
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_C_LINES	(1024)
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_Y_BANK		0x00580000
+#define D_H265_DEC_MAP_MODE_2_7K_4_3_C_BANK		0x002C0000
+
+// 4K map
+// 4K:3840x2160
+#define D_H265_DEC_MAP_MODE_4K_NUM				(SR_DECODE_MODE_5)
+#define D_H265_DEC_MAP_MODE_4K_WIDTH			(3840)
+#define D_H265_DEC_MAP_MODE_4K_Y_LINES			(2176)
+#define D_H265_DEC_MAP_MODE_4K_C_LINES			(1088)
+#define D_H265_DEC_MAP_MODE_4K_Y_BANK			0x007F8000
+#define D_H265_DEC_MAP_MODE_4K_C_BANK			0x003FC000
+
+// 4KCinema map
+// 4K Cinema:4096x2160
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_NUM		(SR_DECODE_MODE_6)
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_WIDTH		(4096)
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_Y_LINES	(2176)
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_C_LINES	(1088)
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_Y_BANK	0x00880000
+#define D_H265_DEC_MAP_MODE_4K_CINEMA_C_BANK	0x00440000
+
+// 3K map
+// 3Kx3K(1:1):3000x3000
+#define D_H265_DEC_MAP_MODE_3K_NUM				(SR_DECODE_MODE_7)
+#define D_H265_DEC_MAP_MODE_3K_WIDTH			(3072)
+#define D_H265_DEC_MAP_MODE_3K_Y_LINES			(3008)
+#define D_H265_DEC_MAP_MODE_3K_C_LINES			(1504)
+#define D_H265_DEC_MAP_MODE_3K_Y_BANK			0x008d0000
+#define D_H265_DEC_MAP_MODE_3K_C_BANK			0x00468000
+
+// 4K3K map
+// 4K3K:4000x3000
+#define D_H265_DEC_MAP_MODE_4K3K_NUM			(SR_DECODE_MODE_8)
+#define D_H265_DEC_MAP_MODE_4K3K_WIDTH			(4096)
+#define D_H265_DEC_MAP_MODE_4K3K_Y_LINES		(3008)
+#define D_H265_DEC_MAP_MODE_4K3K_C_LINES		(1504)
+#define D_H265_DEC_MAP_MODE_4K3K_Y_BANK			0x00BC0000
+#define D_H265_DEC_MAP_MODE_4K3K_C_BANK			0x005E0000
+
+// 6K3K map
+// 6K:6000x3000
+#define D_H265_DEC_MAP_MODE_6K3K_NUM			(SR_DECODE_MODE_9)
+#define D_H265_DEC_MAP_MODE_6K3K_WIDTH			(6016)
+#define D_H265_DEC_MAP_MODE_6K3K_Y_LINES		(3008)
+#define D_H265_DEC_MAP_MODE_6K3K_C_LINES		(1504)
+#define D_H265_DEC_MAP_MODE_6K3K_Y_BANK			0x01144000
+#define D_H265_DEC_MAP_MODE_6K3K_C_BANK			0x008A4000
+
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// y/c or dpb compression mode
+#define D_H265_MAP_COMPRESS_ON			(1)		// for LossLess compression
+#define D_H265_MAP_COMPRESS_OFF			(0)		// for throuh
+
+// compression table size
+#define D_H265_MAP_SIZE_COMPRESSION_Y	(18*1024)
+#define D_H265_MAP_SIZE_COMPRESSION_C	(9*1024)
+
+// encbufy/encbufc bank num
+#define D_H265_MAP_ENCBUFY_BANK_NUM		(ENC_FM_NUM)
+#define D_H265_MAP_ENCBUFC_BANK_NUM		(ENC_FM_NUM)
+
+// dpb bank num
+#define D_H265_MAP_DPB_BANK_NUM			(5)
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+// support size
+// FHD (1920x1080)
+#define D_H265_MAP_SIZE_FHD_CODEC_WIDTH				(1920)
+#define D_H265_MAP_SIZE_FHD_CODEC_LINES				(1080)
+
+// 1440(1440x1080)
+#define D_H265_MAP_SIZE_1440_CODEC_WIDTH			(1440)
+#define D_H265_MAP_SIZE_1440_CODEC_LINES			(1080)
+
+// 1440P(1920x1440)
+#define D_H265_MAP_SIZE_1440P_CODEC_WIDTH			(1920)
+#define D_H265_MAP_SIZE_1440P_CODEC_LINES			(1440)
+
+// HD(1280x720)
+#define D_H265_MAP_SIZE_HD_CODEC_WIDTH				(1280)
+#define D_H265_MAP_SIZE_HD_CODEC_LINES				(720)
+
+// SD-NTSC(720x480)
+#define D_H265_MAP_SIZE_SD_NTSC_CODEC_WIDTH			(720)
+#define D_H265_MAP_SIZE_SD_NTSC_CODEC_LINES			(480)
+
+// SD-PAL(720x576)
+#define D_H265_MAP_SIZE_SD_PAL_CODEC_WIDTH			(720)
+#define D_H265_MAP_SIZE_SD_PAL_CODEC_LINES			(576)
+
+// VGA(640x480)
+#define D_H265_MAP_SIZE_VGA_CODEC_WIDTH				(640)
+#define D_H265_MAP_SIZE_VGA_CODEC_LINES				(480)
+
+// QVGA(320x240)
+#define D_H265_MAP_SIZE_QVGA_CODEC_WIDTH			(320)
+#define D_H265_MAP_SIZE_QVGA_CODEC_LINES			(240)
+
+// SXVGA(1280x960)
+#define D_H265_MAP_SIZE_SXVGA_CODEC_WIDTH			(1280)
+#define D_H265_MAP_SIZE_SXVGA_CODEC_LINES			(960)
+
+// HVGAW(640x360)
+#define D_H265_MAP_SIZE_HVGAW_CODEC_WIDTH			(640)
+#define D_H265_MAP_SIZE_HVGAW_CODEC_LINES			(360)
+
+// FWVGA(848x480)
+#define D_H265_MAP_SIZE_FWVGA_CODEC_WIDTH			(848)
+#define D_H265_MAP_SIZE_FWVGA_CODEC_LINES			(480)
+
+// FWQVGA(432x240)
+#define D_H265_MAP_SIZE_FWQVGA_CODEC_WIDTH			(432)
+#define D_H265_MAP_SIZE_FWQVGA_CODEC_LINES			(240)
+
+// 4K2K(16:9)(4096x2304)
+#define D_H265_MAP_SIZE_4K2K_16_9_CODEC_WIDTH		(4096)
+#define D_H265_MAP_SIZE_4K2K_16_9_CODEC_LINES		(2304)
+
+// 4K2K(1.90:1)(4096x2160)
+#define D_H265_MAP_SIZE_4K2K_1_9_1_CODEC_WIDTH		(4096)
+#define D_H265_MAP_SIZE_4K2K_1_9_1_CODEC_LINES		(2160)
+
+// 4K2K(2:1)(4096x2048)
+#define D_H265_MAP_SIZE_4K2K_2_1_CODEC_WIDTH		(4096)
+#define D_H265_MAP_SIZE_4K2K_2_1_CODEC_LINES		(2048)
+
+// 4K2K(QFHD)(3840x2160)
+#define D_H265_MAP_SIZE_4K2K_QFHD_CODEC_WIDTH		(3840)
+#define D_H265_MAP_SIZE_4K2K_QFHD_CODEC_LINES		(2160)
+
+// 2.7K(4:3)(2704x2028)
+#define D_H265_MAP_SIZE_2_7K_4_3_CODEC_WIDTH		(2704)
+#define D_H265_MAP_SIZE_2_7K_4_3_CODEC_LINES		(2028)
+
+// 2.7K(16:9)(2704x1520)
+#define D_H265_MAP_SIZE_2_7K_16_9_CODEC_WIDTH		(2704)
+#define D_H265_MAP_SIZE_2_7K_16_9_CODEC_LINES		(1520)
+
+// 2.7K(1.90:1)(2880x1524)
+#define D_H265_MAP_SIZE_2_7K_1_9_1_CODEC_WIDTH		(2880)
+#define D_H265_MAP_SIZE_2_7K_1_9_1_CODEC_LINES		(1524)		// for 1528
+
+更改为
+/*----------------------------------------------------------------------*/
+/* Definition															*/
+/*----------------------------------------------------------------------*/
+// SIRIUS Wait Time
+#define H265Sirius_SIRIUS_BOOT_TIMEOUT					(1000)
+#define H265Sirius_SIRIUS_START_TIMEOUT					(1000)
+#define H265Sirius_SIRIUS_STOP_TIMEOUT					(1000)
+
+// Definition of a fixed size of SIRIUS setting.
+#define H265Sirius_SIRIUS_BRIDGE_PARAM_SIZE				(SDRAM_SIZ_MOVIE_PLAY_H265_PARAM)	// 1Mbyte
+#define H265Sirius_SIRIUS_BRIDGE_COLPIC_SIZE			(SDRAM_SIZ_MOVIE_PLAY_H265_COLPIC)	// 1.125Mbyte
+#define H265Sirius_SIRIUS_BRIDGE_COMMON_SIZE_2GB		(0x80000000)
+#define H265Sirius_SIRIUS_BRIDGE_COMMON_SIZE_1_5GB		(0x60000000)
+#define H265Sirius_SIRIUS_BRIDGE_COMMON_SIZE_1GB		(0x40000000)
+#define H265Sirius_SIRIUS_BRIDGE_COMMON_SIZE_512MB		(0x20000000)
+#define H265Sirius_SIRIUS_BRIDGE_COMMON_SIZE_256MB		(0x10000000)
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// Table Number
+#define H265Sirius_SIRIUS_FM_EMPTY_FIFO_MAX_NUM			(ENC_FM_NUM)
+
+// Y/C or dpb bank size
+// ENC
+// NHD map
+// 960p:1280x960
+// 720p:1280x720
+// 480p: 848x480
+#define H265Sirius_ENC_MAP_MODE_NHD_NUM			(SR_ENCODE_MODE_0)
+#define H265Sirius_ENC_MAP_MODE_NHD_WIDTH		(1280)
+#define H265Sirius_ENC_MAP_MODE_NHD_Y_LINES		(960)
+#define H265Sirius_ENC_MAP_MODE_NHD_C_LINES		(480)
+#define H265Sirius_ENC_MAP_MODE_NHD_Y_BANK		0x0012C000
+#define H265Sirius_ENC_MAP_MODE_NHD_C_BANK		0x00098000
+
+// HD map
+// 1.5K(1:1):1504x1504
+// 1.4K(4:3):1920x1440
+// 1080p:1920x1080
+#define H265Sirius_ENC_MAP_MODE_HD_NUM			(SR_ENCODE_MODE_1)
+#define H265Sirius_ENC_MAP_MODE_HD_WIDTH		(1920)
+#define H265Sirius_ENC_MAP_MODE_HD_Y_LINES		(1504)
+#define H265Sirius_ENC_MAP_MODE_HD_C_LINES		(768)
+#define H265Sirius_ENC_MAP_MODE_HD_Y_BANK		0x002D0000
+#define H265Sirius_ENC_MAP_MODE_HD_C_BANK		0x00168000
+
+// 4K2K map
+// 4K Cinema:4096x2160
+// 4K:3840x2160
+// 2.7K(16:9): 2704x1520
+// 2.7K(4:3): 2704x2028
+// 2.5K(4:3): 2560x1920
+#define H265Sirius_ENC_MAP_MODE_4K2K_NUM		(SR_ENCODE_MODE_2)
+#define H265Sirius_ENC_MAP_MODE_4K2K_WIDTH		(4096)
+#define H265Sirius_ENC_MAP_MODE_4K2K_Y_LINES	(2176)
+#define H265Sirius_ENC_MAP_MODE_4K2K_C_LINES	(1088)
+#define H265Sirius_ENC_MAP_MODE_4K2K_Y_BANK		0x00880000
+#define H265Sirius_ENC_MAP_MODE_4K2K_C_BANK		0x00440000
+
+// 3K map
+// 3Kx3K(1:1):3000x3000
+#define H265Sirius_ENC_MAP_MODE_3K_NUM			(SR_ENCODE_MODE_3)
+#define H265Sirius_ENC_MAP_MODE_3K_WIDTH		(3072)
+#define H265Sirius_ENC_MAP_MODE_3K_Y_LINES		(3008)
+#define H265Sirius_ENC_MAP_MODE_3K_C_LINES		(1504)
+#define H265Sirius_ENC_MAP_MODE_3K_Y_BANK		0x008d0000
+#define H265Sirius_ENC_MAP_MODE_3K_C_BANK		0x00468000
+
+// 4K3K map
+// 4K3K:4000x3000
+#define H265Sirius_ENC_MAP_MODE_4K3K_NUM		(SR_ENCODE_MODE_4)
+#define H265Sirius_ENC_MAP_MODE_4K3K_WIDTH		(4096)
+#define H265Sirius_ENC_MAP_MODE_4K3K_Y_LINES	(3008)
+#define H265Sirius_ENC_MAP_MODE_4K3K_C_LINES	(1504)
+#define H265Sirius_ENC_MAP_MODE_4K3K_Y_BANK		0x00BC0000
+#define H265Sirius_ENC_MAP_MODE_4K3K_C_BANK		0x005E0000
+
+// 6K3K map
+// 6K:6000x3000
+#define H265Sirius_ENC_MAP_MODE_6K3K_NUM		(SR_ENCODE_MODE_5)
+#define H265Sirius_ENC_MAP_MODE_6K3K_WIDTH		(6016)
+#define H265Sirius_ENC_MAP_MODE_6K3K_Y_LINES	(3008)
+#define H265Sirius_ENC_MAP_MODE_6K3K_C_LINES	(1504)
+#define H265Sirius_ENC_MAP_MODE_6K3K_Y_BANK		0x01144000
+#define H265Sirius_ENC_MAP_MODE_6K3K_C_BANK		0x008A4000
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+// DEC
+// NHD map
+// 960p:1280x960
+// 720p:1280x720
+// 480p: 848x480
+#define H265Sirius_DEC_MAP_MODE_NHD_NUM			(SR_DECODE_MODE_0)
+#define H265Sirius_DEC_MAP_MODE_NHD_WIDTH		(1280)
+#define H265Sirius_DEC_MAP_MODE_NHD_Y_LINES		(960)
+#define H265Sirius_DEC_MAP_MODE_NHD_C_LINES		(480)
+#define H265Sirius_DEC_MAP_MODE_NHD_Y_BANK		0x0012C000
+#define H265Sirius_DEC_MAP_MODE_NHD_C_BANK		0x00098000
+
+// 1080p map
+// 1080p:1920x1080
+#define H265Sirius_DEC_MAP_MODE_1080P_NUM			(SR_DECODE_MODE_1)
+#define H265Sirius_DEC_MAP_MODE_1080P_WIDTH			(1920)
+#define H265Sirius_DEC_MAP_MODE_1080P_Y_LINES		(1088)
+#define H265Sirius_DEC_MAP_MODE_1080P_C_LINES		(544)
+#define H265Sirius_DEC_MAP_MODE_1080P_Y_BANK		0x00200000
+#define H265Sirius_DEC_MAP_MODE_1080P_C_BANK		0x00100000
+
+// HD map
+// 1.5K(1:1):1504x1504
+// 1.4K(4:3):1920x1440
+#define H265Sirius_DEC_MAP_MODE_HD_NUM				(SR_DECODE_MODE_2)
+#define H265Sirius_DEC_MAP_MODE_HD_WIDTH			(1920)
+#define H265Sirius_DEC_MAP_MODE_HD_Y_LINES			(1504)
+#define H265Sirius_DEC_MAP_MODE_HD_C_LINES			(768)
+#define H265Sirius_DEC_MAP_MODE_HD_Y_BANK			0x002D0000
+#define H265Sirius_DEC_MAP_MODE_HD_C_BANK			0x00168000
+
+// 2.7K(16:9) map
+// 2.7K(16:9): 2704x1520
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_NUM		(SR_DECODE_MODE_3)
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_WIDTH		(2816)
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_Y_LINES	(1536)
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_C_LINES	(768)
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_Y_BANK	0x00420000
+#define H265Sirius_DEC_MAP_MODE_2_7K_16_9_C_BANK	0x00210000
+
+// 2.7K(4:3) map
+// 2.7K(4:3): 2704x2028
+// 2.5K(4:3): 2560x1920
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_NUM		(SR_DECODE_MODE_4)
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_WIDTH		(2816)
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_Y_LINES	(2048)
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_C_LINES	(1024)
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_Y_BANK		0x00580000
+#define H265Sirius_DEC_MAP_MODE_2_7K_4_3_C_BANK		0x002C0000
+
+// 4K map
+// 4K:3840x2160
+#define H265Sirius_DEC_MAP_MODE_4K_NUM				(SR_DECODE_MODE_5)
+#define H265Sirius_DEC_MAP_MODE_4K_WIDTH			(3840)
+#define H265Sirius_DEC_MAP_MODE_4K_Y_LINES			(2176)
+#define H265Sirius_DEC_MAP_MODE_4K_C_LINES			(1088)
+#define H265Sirius_DEC_MAP_MODE_4K_Y_BANK			0x007F8000
+#define H265Sirius_DEC_MAP_MODE_4K_C_BANK			0x003FC000
+
+// 4KCinema map
+// 4K Cinema:4096x2160
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_NUM		(SR_DECODE_MODE_6)
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_WIDTH		(4096)
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_Y_LINES	(2176)
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_C_LINES	(1088)
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_Y_BANK	0x00880000
+#define H265Sirius_DEC_MAP_MODE_4K_CINEMA_C_BANK	0x00440000
+
+// 3K map
+// 3Kx3K(1:1):3000x3000
+#define H265Sirius_DEC_MAP_MODE_3K_NUM				(SR_DECODE_MODE_7)
+#define H265Sirius_DEC_MAP_MODE_3K_WIDTH			(3072)
+#define H265Sirius_DEC_MAP_MODE_3K_Y_LINES			(3008)
+#define H265Sirius_DEC_MAP_MODE_3K_C_LINES			(1504)
+#define H265Sirius_DEC_MAP_MODE_3K_Y_BANK			0x008d0000
+#define H265Sirius_DEC_MAP_MODE_3K_C_BANK			0x00468000
+
+// 4K3K map
+// 4K3K:4000x3000
+#define H265Sirius_DEC_MAP_MODE_4K3K_NUM			(SR_DECODE_MODE_8)
+#define H265Sirius_DEC_MAP_MODE_4K3K_WIDTH			(4096)
+#define H265Sirius_DEC_MAP_MODE_4K3K_Y_LINES		(3008)
+#define H265Sirius_DEC_MAP_MODE_4K3K_C_LINES		(1504)
+#define H265Sirius_DEC_MAP_MODE_4K3K_Y_BANK			0x00BC0000
+#define H265Sirius_DEC_MAP_MODE_4K3K_C_BANK			0x005E0000
+
+// 6K3K map
+// 6K:6000x3000
+#define H265Sirius_DEC_MAP_MODE_6K3K_NUM			(SR_DECODE_MODE_9)
+#define H265Sirius_DEC_MAP_MODE_6K3K_WIDTH			(6016)
+#define H265Sirius_DEC_MAP_MODE_6K3K_Y_LINES		(3008)
+#define H265Sirius_DEC_MAP_MODE_6K3K_C_LINES		(1504)
+#define H265Sirius_DEC_MAP_MODE_6K3K_Y_BANK			0x01144000
+#define H265Sirius_DEC_MAP_MODE_6K3K_C_BANK			0x008A4000
+
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+// y/c or dpb compression mode
+#define H265Sirius_MAP_COMPRESS_ON			(1)		// for LossLess compression
+#define H265Sirius_MAP_COMPRESS_OFF			(0)		// for throuh
+
+// compression table size
+#define H265Sirius_MAP_SIZE_COMPRESSION_Y	(18*1024)
+#define H265Sirius_MAP_SIZE_COMPRESSION_C	(9*1024)
+
+// encbufy/encbufc bank num
+#define H265Sirius_MAP_ENCBUFY_BANK_NUM		(ENC_FM_NUM)
+#define H265Sirius_MAP_ENCBUFC_BANK_NUM		(ENC_FM_NUM)
+
+// dpb bank num
+#define H265Sirius_MAP_DPB_BANK_NUM			(5)
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+// support size
+// FHD (1920x1080)
+#define H265Sirius_MAP_SIZE_FHD_CODEC_WIDTH				(1920)
+#define H265Sirius_MAP_SIZE_FHD_CODEC_LINES				(1080)
+
+// 1440(1440x1080)
+#define H265Sirius_MAP_SIZE_1440_CODEC_WIDTH			(1440)
+#define H265Sirius_MAP_SIZE_1440_CODEC_LINES			(1080)
+
+// 1440P(1920x1440)
+#define H265Sirius_MAP_SIZE_1440P_CODEC_WIDTH			(1920)
+#define H265Sirius_MAP_SIZE_1440P_CODEC_LINES			(1440)
+
+// HD(1280x720)
+#define H265Sirius_MAP_SIZE_HD_CODEC_WIDTH				(1280)
+#define H265Sirius_MAP_SIZE_HD_CODEC_LINES				(720)
+
+// SD-NTSC(720x480)
+#define H265Sirius_MAP_SIZE_SD_NTSC_CODEC_WIDTH			(720)
+#define H265Sirius_MAP_SIZE_SD_NTSC_CODEC_LINES			(480)
+
+// SD-PAL(720x576)
+#define H265Sirius_MAP_SIZE_SD_PAL_CODEC_WIDTH			(720)
+#define H265Sirius_MAP_SIZE_SD_PAL_CODEC_LINES			(576)
+
+// VGA(640x480)
+#define H265Sirius_MAP_SIZE_VGA_CODEC_WIDTH				(640)
+#define H265Sirius_MAP_SIZE_VGA_CODEC_LINES				(480)
+
+// QVGA(320x240)
+#define H265Sirius_MAP_SIZE_QVGA_CODEC_WIDTH			(320)
+#define H265Sirius_MAP_SIZE_QVGA_CODEC_LINES			(240)
+
+// SXVGA(1280x960)
+#define H265Sirius_MAP_SIZE_SXVGA_CODEC_WIDTH			(1280)
+#define H265Sirius_MAP_SIZE_SXVGA_CODEC_LINES			(960)
+
+// HVGAW(640x360)
+#define H265Sirius_MAP_SIZE_HVGAW_CODEC_WIDTH			(640)
+#define H265Sirius_MAP_SIZE_HVGAW_CODEC_LINES			(360)
+
+// FWVGA(848x480)
+#define H265Sirius_MAP_SIZE_FWVGA_CODEC_WIDTH			(848)
+#define H265Sirius_MAP_SIZE_FWVGA_CODEC_LINES			(480)
+
+// FWQVGA(432x240)
+#define H265Sirius_MAP_SIZE_FWQVGA_CODEC_WIDTH			(432)
+#define H265Sirius_MAP_SIZE_FWQVGA_CODEC_LINES			(240)
+
+// 4K2K(16:9)(4096x2304)
+#define H265Sirius_MAP_SIZE_4K2K_16_9_CODEC_WIDTH		(4096)
+#define H265Sirius_MAP_SIZE_4K2K_16_9_CODEC_LINES		(2304)
+
+// 4K2K(1.90:1)(4096x2160)
+#define H265Sirius_MAP_SIZE_4K2K_1_9_1_CODEC_WIDTH		(4096)
+#define H265Sirius_MAP_SIZE_4K2K_1_9_1_CODEC_LINES		(2160)
+
+// 4K2K(2:1)(4096x2048)
+#define H265Sirius_MAP_SIZE_4K2K_2_1_CODEC_WIDTH		(4096)
+#define H265Sirius_MAP_SIZE_4K2K_2_1_CODEC_LINES		(2048)
+
+// 4K2K(QFHD)(3840x2160)
+#define H265Sirius_MAP_SIZE_4K2K_QFHD_CODEC_WIDTH		(3840)
+#define H265Sirius_MAP_SIZE_4K2K_QFHD_CODEC_LINES		(2160)
+
+// 2.7K(4:3)(2704x2028)
+#define H265Sirius_MAP_SIZE_2_7K_4_3_CODEC_WIDTH		(2704)
+#define H265Sirius_MAP_SIZE_2_7K_4_3_CODEC_LINES		(2028)
+
+// 2.7K(16:9)(2704x1520)
+#define H265Sirius_MAP_SIZE_2_7K_16_9_CODEC_WIDTH		(2704)
+#define H265Sirius_MAP_SIZE_2_7K_16_9_CODEC_LINES		(1520)
+
+// 2.7K(1.90:1)(2880x1524)
+#define H265Sirius_MAP_SIZE_2_7K_1_9_1_CODEC_WIDTH		(2880)
+#define H265Sirius_MAP_SIZE_2_7K_1_9_1_CODEC_LINES		(1524)		// for 1528
+
+
+
+========================================================公有函数
+=======================================================原来的
+/*----------------------------------------------------------------------*/
+/* Function Prototype Definition										*/
+/*----------------------------------------------------------------------*/
+VOID H265_Sirius_dummy_system_inHandler( VOID );
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+VOID H265_Sirius_dummy_enc_inHandler( VOID );
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID H265_Sirius_dummy_dec_inHandler( VOID );
+VOID H265_Sirius_Cont_Process( VOID );
+
+VOID H265_Sirius_Clock_Stop( VOID );
+
+INT32 H265_Sirius_Initialize( UINT32 mode, T_SR_BRIDGE_MAP_PARAM *bridge_map );
+VOID  H265_Sirius_Finalize( VOID );
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+INT32 H265_Sirius_Enc_Start( UINT32 ch, T_SR_ENC_INITPARAM* initparam, T_SR_ENC_FM_TABLE *fmtable );
+INT32 H265_Sirius_Enc_Stop( UINT32 ch );
+INT32 H265_Sirius_Enc_Fm_Free_Get( UINT32 ch, T_SR_ENC_FM_TABLE *fmtable );
+INT32 H265_Sirius_Enc_Frame( UINT32 ch, T_SR_ENC_PARAM *vecparam, T_SR_ENC_FM_TABLE *fmtable );
+INT32 H265_Sirius_Enc_Veb_Info_Set( UINT32 ch, UINT32 picture_size );
+INT32 H265_Sirius_Enc_Frame_Info_Get( UINT32 ch, T_SR_ENC_VINFO *vinfo );
+
+VOID H265_Sirius_Enc_Fm_Empty_Init( UINT32 ch );
+INT32 H265_Sirius_Enc_Fm_Empty_Field_Set( UINT32 ch, UINT32 empty_index );
+INT32 H265_Sirius_Enc_Fm_Empty_Field_Get( UINT32 ch, UINT32* empty_index );
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+INT32 H265_Sirius_Dec_Start( UINT32 mode );
+INT32 H265_Sirius_Dec_Stop( VOID );
+INT32 H265_Sirius_Dec_Frame( T_SR_DEC_PICTURE_INFO *picture_info, UINT32 *alloc_result );
+INT32 H265_Sirius_Dec_Frame_Alloc( T_SR_FM_OUT_INFO *fminfo, UINT32 *alloc_result );
+INT32 H265_Sirius_Dec_Frame_Keepid( UINT32 id );
+INT32 H265_Sirius_Dec_Frame_Free( UINT32 id );
+
+=========================================================更改为
+VOID 		h265_sirius_dummy_system_inhandler(VOID);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+VOID 		h265_sirius_dummy_enc_inhandler(VOID);
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID 		h265_sirius_dummy_dec_inhandler(VOID);
+VOID 		h265_sirius_cont_process(VOID);
+VOID 		h265_sirius_clock_stop(VOID);
+INT32 		h265_sirius_initialize(UINT32 mode, T_SR_BRIDGE_MAP_PARAM* bridgeMap);
+VOID 		h265_sirius_finalize(VOID);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+INT32 		h265_sirius_enc_start(UINT32 ch, T_SR_ENC_INITPARAM* initparam, T_SR_ENC_FM_TABLE* fmtable);
+INT32 		h265_sirius_enc_stop(UINT32 ch);
+INT32 		h265_sirius_enc_fm_free_get(UINT32 ch, T_SR_ENC_FM_TABLE* fmtable);
+INT32 		h265_sirius_enc_frame(UINT32 ch, T_SR_ENC_PARAM* vecparam, T_SR_ENC_FM_TABLE* fmtable);
+INT32 		h265_sirius_enc_veb_info_set(UINT32 ch, UINT32 pictureSize);
+INT32 		h265_sirius_enc_frame_info_get(UINT32 ch, T_SR_ENC_VINFO* vinfo);
+VOID 		h265_sirius_enc_fm_empty_init(UINT32 ch);
+INT32 		h265_sirius_enc_fm_empty_field_set(UINT32 ch, UINT32 emptyIndex);
+INT32 		h265_sirius_enc_fm_empty_field_get(UINT32 ch, UINT32* emptyIndex);
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+INT32 		h265_sirius_dec_start(UINT32 mode);
+INT32 		h265_sirius_dec_stop(VOID);
+INT32 		h265_sirius_dec_frame(T_SR_DEC_PICTURE_INFO* pictureInfo, UINT32* allocResult);
+INT32 		h265_sirius_dec_frame_alloc(T_SR_FM_OUT_INFO* fminfo, UINT32* allocResult);
+INT32 		h265_sirius_dec_frame_keepid(UINT32 id); 
+INT32 		h265_sirius_dec_frame_free(UINT32 id);
+
+
+
+
+
+
+
+將user_view.c 搬运到userview.c.h
+.h 修改如下
+原来的
+E_USER_STATE User_View( E_USER_EVENT event, ULLONG frame_no )
+E_USER_STATE User_VIew_Get_Stat(VOID)
+E_USER_OP_STATE User_View_Get_OP_Stat(VOID)
+VOID User_View_Clear_OP_Stat(VOID)
+更改为
+EUserState 		user_view_view( EUserEvent event, ULLONG frameNo );
+EUserState 		user_view_get_stat(VOID);
+EUserOpState 	user_view_get_op_stat(VOID);
+VOID 			user_view_clear_op_stat(VOID);

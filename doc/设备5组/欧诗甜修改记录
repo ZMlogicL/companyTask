@@ -1,0 +1,372 @@
+一.文件名
+
+1.拆分部分
+=========================
+ipcu -> kipcu               
+              fjipcu
+=========================
+uart -> kuart
+              kuartcallback
+              kuartfj
+=========================
+iip_resmng ->  iipresmng
+                            iipresmngconfig                             
+=========================
+
+2.仅改名部分
+================================
+i2c -> ki2c
+udc -> kudc
+wdog -> kwdg
+gyroif -> kgyroif
+l1l2cache -> l1l2cache
+linux -> klinux
+pcie_ep -> pcieep
+pcie_rc -> pcierc
+pwm -> kpwm
+sio -> ksio
+slimbus -> kslimbus
+spi ->kspi
+timer32 -> ktimer32
+bf_iip_resource -> bfiipresourse
+iip_res_user_custom -> iipresusercustom
+=================================
+
+
+二.头文件位置更改
+
+1.device_driver/include 内所有头文件内容屏蔽(pmu.h除外)
+    添加跳转路径
+    以ipcu为例：
+    路径修改为 #include"../fj/device_driver/src/kipcu.h"
+    需手动将自己修改部分内的头文件替换成以上内容
+
+2.iip_lock/iip_resmng/include iip_resmng.h
+    路径修改为：#include "../fj/iip_lock/iip_resmng/src/iipresmng.h"
+            
+3.iip_lock/include/bf_iip_resource.h及/iip_res_user_custom.h 
+    路径修改为：#include "../fj/iip_lock/src/bfiipresource.h"
+                 以及：#include "../fj/iip_lock/src/iipresusercustom.h"
+
+
+三.全局变量及公有函数改名
+
+1.全局变量
+==================================================================
+①全小写仅带下划线的按代码规范修改 如data_size ->dataSize
+
+②大小写混合的：
+gSpin_Lock----------------------------------------------------------gSpinLock
+gBF_IPCU_Res_Cmd_Data_CM0---------------------------gBfIpcuResCmdDataCm0
+gBF_IPCU_MB_Data---------------------------------------------gBfIpcuMbData
+E_BF_IPCU_CMD_CM0-----------------------------------------EBfIpcuCmdCm0
+E_BF_IPCU_CMD_CM0_xxx----------------------------------FjIpcu_E_BF_IPCU_CMD_CM0
+
+E_BF_L1L2CACHE_ALL-----------------------------------------KL1l2cache_ALL
+E_BF_L1L2CACHE_ADDR-------------------------------------KL1l2cache_ADDR
+E_BF_L1L2CACHE_FLUSH-------------------------------------KL1l2cache_FLUSH
+E_BF_L1L2CACHE_CLEAN------------------------------------KL1l2cache_CLEAN
+E_BF_L1L2CACHE_CLEAN_FLUSH------------------------KL1l2cache_CLEAN_FLUSH
+E_BF_L1L2CACHE_TYPE---------------------------------------KL1l2cacheType
+E_BF_L1L2CACHE_METHOD---------------------------------KL1l2cacheMethod
+T_L1L2CACHE_INFORMATION------------------------------KL1l2cacheInformation
+
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH0------KSlimbus_CONTROLLER_MANAGER_CH0
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH1	
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH2
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH3
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH1-----KSlimbus_CONTROLLER_DATAPORT_CH1
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH2	
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH3	
+FLG_SLIMBUS_CONTROLLER_DMA_CH0--------------KSlimbus_CONTROLLER_xxxx_xxxx_xxxx		
+FLG_SLIMBUS_CONTROLLER_DMA_CH1		
+FLG_SLIMBUS_CONTROLLER_DMA_CH2		
+FLG_SLIMBUS_CONTROLLER_DMA_CH3	
+FLG_SLIMBUS_CONTROLLER_PORT_INT			
+FLG_SLIMBUS_CONTROLLER_MCH_INT		
+FLG_SLIMBUS_CONTROLLER_RCFG_INT		
+FLG_SLIMBUS_CONTROLLER_SYNC_LOST	
+FLG_SLIMBUS_CONTROLLER_TX_ERR		
+FLG_SLIMBUS_CONTROLLER_TX_INT		
+FLG_SLIMBUS_CONTROLLER_RX_INT			
+
+gBF_UART_Debug_Send_Buf-------------------------------gBfUartDebugSendBuf
+gBF_Uart_Spin_Lock--------------------------------------------gBfUartSpinLock
+
+D_UART_DEBUG_SEND_BUFF_SIZE----------------------KUart_DEBUG_SEND_BUFF_SIZE
+BF_UART_Debug_Command_Enable--------------------KUart_DEBUG_COMMAND_ENABLE
+BF_UART_IQ_Command_Enable---------------------------KUart_IQ_COMMAND_ENABLE
+BF_UART_IQ_Command_Disable--------------------------KUart_IQ_COMMAND_DISABLE
+E_BF_UART_DEBUG_TASK_STATE_INIT-----------------KUart_DEBUG_TASK_STATE_INIT
+E_BF_UART_DEBUG_TASK_STATE_SLEEP------------- KUart_DEBUG_TASK_STATE_SLEEP
+E_BF_UART_DEBUG_TASK_STATE_ACTIVE----------- KUart_DEBUG_TASK_STATE_ACTIVE
+E_BF_UART_DEBUG_TASK_STATE------------------------ KUartDebugTaskState
+E_BF_UART_READ-----------------------------------------------KUart_READ
+E_BF_UART_WRITE----------------------------------------------KUart_WRITE
+E_BF_UART_RW---------------------------------------------------KUartRw
+
+afn_0-------------------------------------------------------------------afnZero
+afn_1-------------------------------------------------------------------afnOne
+afn_2-------------------------------------------------------------------afnTwo
+sl_0_2------------------------------------------------------------------slZeroTwo
+sl_0_2_master_if_0----------------------------------------------slZeroTwoMasterIf0
+sl_0_2_master_if_1----------------------------------------------slZeroTwoMasterIf1 
+sl_0_2_master_if_2----------------------------------------------slZeroTwoMasterIf2
+sl_master_if_0------------------------------------------------------slMasterIfZero
+sl_master_if_1------------------------------------------------------slMasterIfOne
+sl_master_if_2------------------------------------------------------slMasterIfTwo
+
+ D_IIP_ERR_NG----------------------------------------------------IipResmng_ERR_NG		
+ D_IIP_ERR_OK----------------------------------------------------IipResmng_ERR_OK		
+ D_IIP_ERR_TMOUT---------------------------------------------IipResmng_ERR_TMOUT		
+
+D_FJ_IIP_ERR_OK------------------------------------------------BfIipResource_FJ_IIP_ERR_OK
+D_FJ_IIP_ERR_TMOUT-----------------------------------------BfIipResource_FJ_IIP_ERR_TMOUT
+
+
+==================================================================
+
+2.公有函数
+==================================================================
+bf_ipcu_req_cb----------------------------------------------------fj_ipcu_bf_req_cb
+fj_spin_lock---------------------------------------------------------fj_ipcu_spin_lock
+fj_spin_unlock------------------------------------------------------fj_ipcu_spin_unlock
+
+fj_gyroif_start_read---------------------------------------------k_gyroif_start_read
+fj_gyroif_stop_read----------------------------------------------k_gyroif_xxx
+fj_gyroif_get_read_count-------------------------------------k_gyroif_xxx
+
+fj_i2c_open----------------------------------------------------------k_i2c_xxx
+fj_i2c_close
+fj_i2c_ctrl
+fj_i2c_transfer
+fj_i2c_set_approxclock
+
+BF_IPCU_Open----------------------------------------------------k_ipcu_open
+BF_IPCU_Close----------------------------------------------------k_ipcu_xxx
+BF_IPCU_Send
+BF_IPCU_DISP_Send
+BF_IPCU_Send_CM0
+BF_IPCU_Int_Handler_Req
+BF_IPCU_Int_Handler_Req_CM0
+BF_IPCU_Int_Handler_Ack
+BF_IPCU_Int_Handler_Ack_CM0
+BF_IPCU_Get_Response_Commnad_CM0
+BF_IPCU_Set_Sync_CM0
+BF_IPCU_SetReqCB---------------------------------------------k_ipcu_set_req_cb
+BF_IPCU_SetResCB----------------------------------------------k_ipcu_set_res_cb
+
+BF_L1l2cache_CallBack----------------------------------------k_l1l2cache_cb
+BF_L1l2cache_Flush_All---------------------------------------k_l1l2cache_flush_all
+BF_L1l2cache_Clean_All---------------------------------------k_l1l2cache_xxx
+BF_L1l2cache_Clean_Flush_All
+BF_L1l2cache_Clean_Flush_Addr
+BF_L1l2cache_Run
+BF_L1l2cache_All_Main
+
+BF_L1l2cache_Clean_Addr（无法修改）
+
+fj_linux_get_state------------------------------------------------k_linux_get_state
+
+fj_pwm_open-------------------------------------------------------k_pwm_open
+fj_pwm_open_step-----------------------------------------------k_pwm_xxxx
+fj_pwm_open_step_2ch
+fj_pwm_set_by_ratio
+fj_pwm_set_by_time
+fj_pwm_set_2ch
+fj_pwm_set_step
+fj_pwm_start
+fj_pwm_2ch_start
+fj_pwm_calculate_clock_sel
+fj_pwm_calculate_array_clock_sel
+fj_pwm_set_buffer_data_window_by_step_data
+fj_pwm_calculate_cycle
+fj_pwm_stop
+fj_pwm_close
+pwm_cal_by_hz----------------------------------------------------k_pwm_call_by_hz
+
+fj_sio_open----------------------------------------------------------k_sio_open
+fj_sio_close----------------------------------------------------------k_sio_xxxx
+fj_sio_ctrl
+fj_sio_stop
+fj_sio_transfer
+fj_sio_full_duplex
+fj_sio_full_duplex_dma
+
+fj_slimbus_open---------------------------------------------------k_slimbus_open
+fj_slimbus_close---------------------------------------------------k_slimbus_close
+fj_slimbusCtrl-------------------------------------------------------k_slimbus_ctrl
+fj_slimbus_get_ctrl-----------------------------------------------k_slimbus_xxx
+fj_slimbus_start
+fj_slimbus_stop
+fj_slimbus_write_msg
+fj_slimbus_read_msg
+fj_slimbus_write_data
+fj_slimbus_read_data
+fj_slimbus_set_read_msg_area_addr
+fj_slimbus_get_read_msg_area_addr
+fj_slimbus_set_read_data_area_addr
+fj_slimbus_get_read_data_area_addr
+
+fj_spi_open----------------------------------------------------------k_spi_open
+fj_spi_close----------------------------------------------------------k_spi_xxxx
+fj_spi_ctrl
+fj_spi_stop
+fj_spi_transfer
+fj_spi_full_duplex
+fj_spi_full_duplex_dma
+
+fj_tmr32_open-----------------------------------------------------k_timer32_open
+fj_tmr32_set--------------------------------------------------------k_timer32_xxxx
+fj_tmr32_set_pwm
+fj_tmr32_ctrl
+fj_tmr32_start
+fj_tmr32_stop
+fj_tmr32_close
+
+uart_init_rx_buf_info-------------------------------------------k_uart_init_rx_buf_info
+uart_set_rx_buf_info-------------------------------------------k_uart_xxxx
+uart_set_rx_data_addr
+uart_get_rx_data_addr
+uart_set_rx_data_count
+uart_set_rx_data_idx
+uart_set_cb_info
+uart_get_mode
+uart_get_rx_data_count
+uart_get_rx_data_idx
+uart_get_cb_info
+uart_get_receive_swich
+uart_get_receive_sync_swich
+uart_get_ctrl_exe
+uart_get_rx_proc
+uart_get_rx_proc_all
+uart_get_char
+uart_get_timeout_flag
+uart_set_timeout_flag
+uart_set_ctrl_exe
+uart_set_mode
+uart_set_receive_swich
+uart_set_slave_addr_flag
+uart_set_rx_proc
+uart_set_timeout_handler_id
+uart_set_receive_sync_swich
+uart_timeout_hdr------------------------------------------------k_uart_timeout_hdr_cb
+BF_UART_Debug_Get_Char---------------------------------k_uart_debug_get_char
+BF_UART_Debug_Put_Char---------------------------------k_uart_debug_put_char
+BF_UART_Set_Write_Pointer-------------------------------k_uart_set_write_pointer
+BF_UART_Debug_Start----------------------------------------k_uart_debug_start
+BF_UART_Debug_Terminate--------------------------------k_uart_debug_terminate
+uart_rx_callback_comm---------------------------------------k_uart_rx_callback_comm
+Uart_Controller---------------------------------------------------k_uart_controller
+UART_Rx_Task-----------------------------------------------------k_uart_rx_task
+
+fj_uart_debug_start---------------------------------------------k_uart_fj_xxxx
+fj_uart_debug_stop
+fj_uart_debug_get_char
+fj_uart_debug_save
+fj_uart_debug_configure
+fj_uart_open
+fj_uart_close
+fj_uart_ctrl
+fj_uart_start
+fj_uart_stop
+fj_uart_send
+fj_uart_receive
+fj_uart_send_target_slave_addr
+fj_uart_set_slave_addr
+fj_uart_send_sync
+fj_uart_receive_sync
+
+fj_udc_init------------------------------------------------------------k_udc_xxxx
+fj_udc_open
+fj_udc_set_timer_mode
+fj_udc_start
+fj_udc_stop
+fj_udc_set_up_down_count_mode
+fj_udc_set_phase_lag_mode
+fj_udc_set_up_down_counter
+fj_udc_set_comp_counter
+fj_udc_set_callback
+fj_udc_get_up_down_counter
+fj_udc_get_up_down_flag
+fj_udc_clear_up_down_counter
+fj_udc_close
+
+fj_wdog_timer_init---------------------------------------------k_wdog_timer_xxxx
+fj_wdog_timer_open
+fj_wdog_timer_ctrl
+fj_wdog_timer_refresh
+fj_wdog_timer_get_reset_status
+fj_wdog_timer_get_load_value
+fj_wdog_timer_stop
+fj_wdog_timer_close
+
+fj_pcie_ep_open-------------------------------------------------pcie_ep_xxxx
+fj_pcie_ep_close
+fj_pcie_ep_init
+fj_pcie_ep_deinit
+fj_pcie_ep_dma_transfer
+fj_pcie_ep_dma_stop
+fj_pcie_ep_memory_ctrl
+fj_pcie_ep_req_int_ep
+fj_pcie_ep_transfer_msi
+fj_pcie_ep_aspm_on
+fj_pcie_ep_aspm_off
+fj_pcie_ep_transfer_speed_chg
+fj_pcie_ep_get_st_dl_up
+fj_pcie_ep_get_st_ltssm
+fj_pcie_ep_get_pmst
+fj_pcie_ep_get_current_link_speed
+fj_pcie_ep_get_st_aspm
+fj_pcie_ep_set_mps
+fj_pcie_ep_get_mps
+fj_pcie_ep_init_reg
+fj_pcie_ep_set_lu_cb
+
+fj_pcie_rc_open--------------------------------------------------pcie_rc_xxxx
+fj_pcie_rc_close
+fj_pcie_rc_init
+fj_pcie_rc_deinit
+fj_pcie_rc_config_ctrl
+fj_pcie_rc_config_read
+fj_pcie_rc_config_write
+fj_pcie_rc_dma_transfer
+fj_pcie_rc_dma_stop
+fj_pcie_rc_memory_ctrl
+fj_pcie_rc_msi_ctrl
+fj_pcie_rc_intx_ctrl
+fj_pcie_rc_aspm_on
+fj_pcie_rc_aspm_off
+fj_pcie_rc_transfer_speed_chg
+fj_pcie_rc_get_st_dl_up
+fj_pcie_rc_get_st_ltssm
+fj_pcie_rc_get_pmst
+fj_pcie_rc_get_current_link_speed
+fj_pcie_rc_get_st_aspm
+fj_pcie_rc_set_mps
+fj_pcie_rc_get_mps
+fj_pcie_rc_set_lu_cb
+
+iip_res_lock_unit-----------------------------------------------iip_resmng_xxxx
+iip_res_lock_pixid
+iip_res_wai_flg
+iip_res_lock_other
+
+IIP_Res_Config_Lock-----------------------------------------iip_res_config_lock
+IIP_Res_Config_Free-----------------------------------------iip_res_config_free
+IIP_Res_Config-------------------------------------------------iip_res_config
+IIP_Res_DebugPrint------------------------------------------iip_res_debug_print
+
+BF_IIP_Res_Config_Lock_BaseFW---------------------bf_iip_resource_config_lock_basefw
+BF_IIP_Res_Config_Free_BaseFW---------------------bf_iip_resource_config_free_basefw
+BF_IIP_Res_DebugPrint------------------------------------bf_iip_resource_debug_print
+fj_iipresconfiglockhost-------------------------------------bf_iip_resource_config_lock_host
+fj_iipresconfigfreehost-------------------------------------bf_iip_resource_config_free_host
+
+IIP_Res_Custom_Open-------------------------------------iip_res_user_custom_open
+IIP_Res_Custom_Close-------------------------------------iip_res_user_custom_close
+IIP_Res_Custom_Dly_Tsk----------------------------------iip_res_user_custom_dly_tsk
+IIP_Res_Custom_Get_Tim---------------------------------iip_res_user_custom_get_tim
+IIP_Res_Custom_Twai_Flg--------------------------------iip_res_user_custom_twai_flg
+IIP_Res_Custom_Set_Flg----------------------------------iip_res_user_custom_set_flg
+IIP_Res_Custom_Clr_Flg-----------------------------------iip_res_user_custom_clr_flg

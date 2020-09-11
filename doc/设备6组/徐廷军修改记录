@@ -1,0 +1,133 @@
+
+徐廷军修改记录：
+（1）：首先拆分文件：
+（2）：新建类并按规范修改代码
+
+
+在basefw/MILB_API/Project/DeviceDriver/ARM/src/目录下
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+dd_timestamp.c					新建文件：DdTimestamp.c				并按照ETK规范修改。还没用上new方法
+dd_timestamp.h					新建文件：DdTimestamp.h				并按照ETK规范修改。
+
+
+在basefw/MILB_API/Project/DeviceDriver/Exs/src/目录下
+@将dd_relc拆分为：
+dd_relc和dd_relc_common！！
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+dd_relc.c								新建文件：DdRelc.c							并按照ETK规范修改。还没用上new方法
+dd_relc.h								新建文件：DdRelc.h							并按照ETK规范修改。还没用上new方法
+dd_relc_common.c				新建文件：DdRelcCommon.c			并按照ETK规范修改。还没用上new方法
+dd_relc_common.h			新建文件：DdRelcCommon.h			并按照ETK规范修改。还没用上new方法
+
+
+在basefw/MILB_API/Project/ImageMacro/src/目录下
+@将im_fpt拆分为：im_fpt和im_fpt_common！！
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+im_fpt_common.c				新建文件：ImFptCommon.c				并按照ETK规范修改。还没用上new方法
+im_fpt_common.h				新建文件：ImFptCommon.h				并按照ETK规范修改。还没用上new方法
+
+E_IM_FPT_IO_MODE							EfptIoMode;
+E_IM_FPT_PIPE_EN							EfptPipeEn;
+E_IM_FPT_DEBUG_MODE				EfptDebugMode;
+E_IM_FPT_LUTSEL								EfptLutset;
+E_IM_FPT_LUTCFG							EfptLutcfg;
+
+T_IM_FPT_MODE0								TfptMode0;
+T_IM_FPT_MODE1								TfptMode1;
+T_IM_FPT_SEARCH_WINDOW			TfptSearchWindow;
+T_IM_FPT_MODE2								TfptMode2;
+T_IM_FPT_MODE3								TfptMode3;
+T_IM_FPT_MODE_CONFIG				TfptModeConfig;
+T_IM_FPT_BRC_CONFIG					TfptBrcConfig;
+T_IM_FPT_INTERRUPT						TfptInterrupt;
+
+im_fpt.c								新建文件：ImFpt.c								并按照ETK规范修改。还没用上new方法
+im_fpt.h								新建文件：ImFpt.h							并按照ETK规范修改。还没用上new方法
+
+@将im_hdmi拆分为：
+im_hdmi、im_hdmi_enum、im_hdmi_struct、im_hdmi_union！！
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+im_hdmi_enum.c				新建文件：ImHdmiEnum.c				并按照ETK规范修改。
+im_hdmi_enum.h				新建文件：ImHdmiEnum.h				并按照ETK规范修改。
+E_IM_HDMI_VIDEO_MAPPING	-->	EhdmiVideoMapping，前缀一致修改为Ehdmi。
+
+im_hdmi_struct.c				新建文件：ImHdmiStruct.c				并按照ETK规范修改。
+im_hdmi_struct.h				新建文件：ImHdmiStruct.h				并按照ETK规范修改。
+T_IM_HDMI_VIDEO_PACKETIZER		-->		ThdmiVideoPacketizer，前缀一致修改为Thdmi。
+
+im_hdmi_union.c				新建文件：ImHdmiUnion.c				并按照ETK规范修改。
+im_hdmi_union.h				新建文件：ImHdmiUnion.h				并按照ETK规范修改。
+U_IM_HDMI_AUD_CONF0		-->		UhdmiAudConf0,前缀一致修改为Uhdmi。
+
+im_hdmi.c							新建文件：ImHdmi.c							并按照ETK规范修改。
+im_hdmi.h							新建文件：ImHdmi.h						并按照ETK规范修改。
+
+@将im_iip_param拆分为：
+im_iip_afn_register、im_iip_flt_register、im_iip_frect_register、im_iip_gpc_parameter、im_iip_many_register、
+im_iip_multi_register、im_iip_param_enum、im_iip_param、im_iip_sl_register、im_iip_unit_parameter！！
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+im_iip_param.c					新建文件：ImIipParam.c					并按照ETK规范修改。
+im_iip_param.h					新建文件：ImIipParam.h					并按照ETK规范修改。
+
+im_iip_param_enum.c		新建文件：ImIipParamEnum.c			并按照ETK规范修改。
+im_iip_param_enum.h		新建文件：ImIipParamEnum.h		并按照ETK规范修改。
+枚举命名规范：
+E_IM_IIP_PARAM_CTL_CODE 	-->	EimCtlCode
+E_IM_IIP_PARAM_PORTID 		-->	EimPortid
+E_IM_IIP_PARAM_UPSU			-->	EimUpsu
+E_IM_IIP_PARAM_UPNUM		-->	EimUpnum
+。。。
+im_iip_afn_register.c			新建文件：ImIipAfnRegister.c			并按照ETK规范修改。
+联合命名规范：
+U_IM_IIP_PARAM_AFN_AFNTOPCNF		-->	UimAfnAfntopcnf
+U_IM_IIP_PARAM_AFN_AFNLDCNF		-->	UimAfnAfnldcnf
+U_IM_IIP_PARAM_AFN_AFNCTL				-->	UimAfnAfnctl
+U_IM_IIP_PARAM_AFN_PFCTL				-->	UimAfnPfctl
+U_IM_IIP_PARAM_AFN_PIXIDEF				-->	UimAfnPixidef
+U_IM_IIP_PARAM_AFN_CALMETHOD	-->	UimAfnCalmethod;
+U_IM_IIP_PARAM_AFN_FILVAL0				-->	UimAfnFilval0;
+U_IM_IIP_PARAM_AFN_FILVAL1				-->	UimAfnFilval1;
+U_IM_IIP_PARAM_AFN_OPMD				-->	UimAfnOpmd;
+U_IM_IIP_PARAM_AFN_OPY					-->	UImIipParamAfnOpy;
+...
+结构体命名规范
+T_IM_IIP_PARAM_AFN_DUMP				-->	TimAfnDump
+
+im_iip_afn_register.h			新建文件：ImIipAfnRegister.h			并按照ETK规范修改。
+im_iip_frect_register.c		新建文件：ImIipFrectRegister.c		并按照ETK规范修改。
+im_iip_frect_register.h		新建文件：ImIipFrectRegister.h		并按照ETK规范修改。
+U_IM_IIP_PARAM_FRECT_*		-->	UimFrect*
+im_iip_many_register.c		新建文件：ImIipManyRegister.c		并按照ETK规范修改。
+im_iip_many_register.h		新建文件：ImIipManyRegister.h		并按照ETK规范修改。
+im_iip_multi_register.c		新建文件：ImIipMultiRegister.c		并按照ETK规范修改。
+im_iip_multi_register.h		新建文件：ImIipMultiRegister.h		并按照ETK规范修改。
+im_iip_flt_register.c			新建文件：ImIipFltRegister.c			并按照ETK规范修改。
+im_iip_flt_register.h			新建文件：ImIipFltRegister.h			并按照ETK规范修改。
+T_IM_IIP_PARAM_FLT_*		-->	Timflt*
+U_IM_IIP_PARAM_FLT_*		-->	Uimflt*
+这几个是特殊情况，多了一个单词，故将末尾的：D->d
+typedef union _UimfltFinClpAd0				UimfltFinClpAd0;
+typedef union _UimfltFinClpAd1				UimfltFinClpAd1;
+typedef union _UimfltFinClpAd2				UimfltFinClpAd2;
+typedef union _UimfltFinClpBd0				UimfltFinClpBd0;
+typedef union _UimfltFinClpBd1				UimfltFinClpBd1;
+typedef union _UimfltFinClpBd2				UimfltFinClpBd2;
+im_iip_sl_register.c				新建文件：ImIipSlRegister.c				并按照ETK规范修改。
+im_iip_sl_register.h				新建文件：ImIipSlRegister.h				并按照ETK规范修改。
+im_iip_unit_parameter.c	新建文件：ImIipUnitParameter.c		并按照ETK规范修改。
+im_iip_unit_parameter.h	新建文件：ImIipUnitParameter.h		并按照ETK规范修改。
+im_iip_gpc_parameter.c		新建文件：ImIipGpcParameter.c		并按照ETK规范修改。
+im_iip_gpc_parameter.h	新建文件：ImIipGpcParameter.h		并按照ETK规范修改。
+T_IM_IIP_PARAM_GPC_*		-->	Timgpc*
+U_IM_IIP_PARAM_GPC_*		-->	Uimgpc*
+@im_jpeg拆分为：
+im_jpeg、im_jpeg_common、im_jpeg_share、im_jpeg_skip！！
+++++++++++++++++++++++++++++++++++++++新建类并修改规范+++++++++++++++++++++++++++++++++++++++
+im_jpeg_common.c			新建文件：ImJpegCommon.c			并按照ETK规范修改。
+im_jpeg_common.h			新建文件：ImJpegCommon.h			并按照ETK规范修改。没用上new方法
+im_jpeg_share.c					新建文件：ImJpegShare.c					并按照ETK规范修改。
+im_jpeg_share.h					新建文件：ImJpegShare.h					并按照ETK规范修改。
+im_jpeg_skip.c					新建文件：ImJpegSkip.c					并按照ETK规范修改。
+im_jpeg_skip.h					新建文件：ImJpegSkip.h					并按照ETK规范修改。
+im_jpeg.c							新建文件：ImJpeg.c							并按照ETK规范修改。
+im_jpeg.h							新建文件：ImJpeg.h							并按照ETK规范修改。

@@ -1,0 +1,46 @@
+1、源文件：snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_dd_uart.c
+1)抄写为ctdduart.c ctdduart1.c ctdduart2.c ctdduart3.c ，新建类CtDdUart　CtDdUart1　CtDdUart2　CtDdUart3
+2）公有方法
+原：
+VOID	Ct_Dd_Uart_Main(int argc, char** argv);
+VOID	Ct_Dd_Uart_PCSim_Test( VOID );
+
+更改后：
+void	ct_dd_uart_main(int argc, char** argv);
+void	ct_dd_uart_pcsim_test( void );
+
+2、源文件：snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_dd_xdmac.c
+1）抄写为ctddxdmac.c　ctddxdmac1.c　，新建类CtDdXdmac CtDdXdmac1
+2)公有方法
+原：
+VOID Ct_Dd_XDMAC_Main(int argc, char** argv);
+
+更改后：
+void ct_dd_xdmac_main(int argc, char** argv);
+
+3、源文件：snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_dd_xdmasnap.c
+1）抄写为：ctddxdmasnap.c ctddxdmasnap1.c ，新建类CtDdXdmasnap CtDdXdmasnap1
+2）公有方法
+原：
+VOID Ct_Dd_XDMASNAP_Main(int argc, char** argv);
+
+更改后：
+void ct_dd_xdmasnap_main(int argc, char** argv);
+
+4、源文件：snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_im_b2r.c
+1）抄写为：ctimb2r.c　ctimb2r1.c　ctimb2r2.c　ctimb2r3.c　ctimb2r4.c　ctimb2r5.c　ctimb2r6.c　ctimb2r7.c　ctimb2r8.c　ctimb2r9.c　ctimb2r10.c ，新建类:CtImB2r CtImB2r1 CtImB2r2 CtImB2r3 CtImB2r4 CtImB2r5 CtImB2r6 CtImB2r7 CtImB2r8 CtImB2r9 CtImB2r10
+
+2）公有方法
+原：
+VOID CT_Im_B2r_PrintReg( VOID );
+VOID CT_Im_B2R_Run( const UINT32 ct_idx_1st, const UINT32 ct_idx_2nd, const UINT32 ct_idx_3rd );
+VOID CT_Im_B2R_Main( INT32 argc, CHAR** argv );
+
+更改后：
+void 	ct_im_b2r1_printreg( void );
+void 	ct_im_b2r_run(  CtImB2r *self );
+void 	ct_im_b2r_main( kint32 argc, CHAR** argv );
+
+
+
+

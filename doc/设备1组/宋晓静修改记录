@@ -1,0 +1,625 @@
+
+1.user_sync_task.c , user_sync_task.h 改名为usersynctask.c，usersynctask.h
+2.将usersynctas.c　拆出　usersynctaskjpeg.c
+3.将user.h 改名为　hostfwuser.h　类名为　HostfwUser.h
+4.hostfwuser.h 中　extern "C"　中的函数声明是在其他文件中声明实现的，已经删除
+5.hostfwuser.h中宏定义:
+							#define D_USER_NF0_DRIVE	"A"
+							#define D_USER_NF1_DRIVE	"B"
+							#define D_USER_NF2_DRIVE	"C"
+							#define D_USER_NF3_DRIVE	"D"
+							#define D_USER_NF4_DRIVE	"E"
+							#define D_USER_NF5_DRIVE	"F"
+							#define D_USER_NF6_DRIVE	"G"
+							#define D_USER_SD1_DRIVE	"I"
+							#define D_USER_EM0_DRIVE	"A"
+							#define D_USER_EM1_DRIVE	"B"
+							#define D_USER_EM2_DRIVE	"C"
+							#define D_USER_EM3_DRIVE	"D"
+							#define D_USER_EM4_DRIVE	"E"
+							#define D_USER_EM5_DRIVE	"F"
+							#define D_USER_EM6_DRIVE	"G"
+							#define D_ADDR_UNLOCK		(0)
+							#define D_JPEG_RING_AREA_SIZE 0x1400000
+				改为：
+							#define HostfwUser_NF0_DRIVE	"A"
+							#define HostfwUser_NF1_DRIVE	"B"
+							#define HostfwUser_NF2_DRIVE	"C"
+							#define HostfwUser_NF3_DRIVE	"D"
+							#define HostfwUser_NF4_DRIVE	"E"
+							#define HostfwUser_NF5_DRIVE	"F"
+							#define HostfwUser_NF6_DRIVE	"G"
+							#define HostfwUser_SD1_DRIVE	"I"
+							#define HostfwUser_EM0_DRIVE	"A"
+							#define HostfwUser_EM1_DRIVE	"B"
+							#define HostfwUser_EM2_DRIVE	"C"
+							#define HostfwUser_EM3_DRIVE	"D"
+							#define HostfwUser_EM4_DRIVE	"E"
+							#define HostfwUser_EM5_DRIVE	"F"
+							#define HostfwUser_EM6_DRIVE	"G"
+							#define HostfwUser_ADDR_UNLOCK		(0)
+							#define HostfwUser_JPEG_RING_AREA_SIZE 0x1400000
+6.hostfwuser.h中枚举：
+					1.		typedef enum {
+								E_USER_EVENT_NONE = 0,
+								E_USER_EVENT_STANDBY,
+								E_USER_EVENT_VIEW_START,
+								E_USER_EVENT_SIMPLE_VIEW_START,
+								E_USER_EVENT_YUV_IN_VIEW_START,
+								E_USER_EVENT_CAPTURE_START,
+								E_USER_EVENT_CAPTURE_START_JPG_RAW_YUV,
+								E_USER_EVENT_PLAY_START,
+								E_USER_EVENT_STREAMING,
+								E_USER_EVENT_STREAM_DEC_START,
+								E_USER_EVENT_STREAM_DEC_STOP,
+								E_USER_EVENT_SYSTEM_MODE_END,
+								E_USER_EVENT_VD,
+								E_USER_EVENT_QVIEW,
+								E_USER_EVENT_YUV,
+								E_USER_EVENT_AEAWB_STAT,
+								E_USER_EVENT_AF_STAT,
+								E_USER_EVENT_AF_MODE_CHG,
+								E_USER_EVENT_AF_CTRL_CHG,
+								E_USER_EVENT_AF_RANGE_CHG,
+								E_USER_EVENT_AF_RELEASE,
+								E_USER_EVENT_SAVE_RAW,
+								E_USER_EVENT_SAVE_RAW_END,
+								E_USER_EVENT_SAVE_JPG,
+								E_USER_EVENT_SAVE_YUV,
+								E_USER_EVENT_SAVE_YUV_END,
+								E_USER_EVENT_JPG_ENC_END,
+								E_USER_EVENT_JPG_SAVE_END,
+								E_USER_EVENT_JPG_REQ_NUM_END,
+								E_USER_EVENT_RAWYUV_SAVE_END,
+								E_USER_EVENT_RECORD_START,
+								E_USER_EVENT_RECORD_START_AGAIN,
+								E_USER_EVENT_RECORD_CACHE_START,
+								E_USER_EVENT_RECORD_CACHE_START_AGAIN,
+								E_USER_EVENT_RECORD_CACHE_H264_STREAM_CB,
+								E_USER_EVENT_RECORD_CACHE_H265_STREAM_CB,
+								E_USER_EVENT_RECORD_STOP,
+								E_USER_EVENT_RECORD_H265_END,
+								E_USER_EVENT_RECORD_H264_0_END,
+								E_USER_EVENT_RECORD_H264_1_END,
+								E_USER_EVENT_RECORD_AUDIO_0_END,
+								E_USER_EVENT_RECORD_AUDIO_1_END,
+								E_USER_EVENT_FD_START,
+								E_USER_EVENT_FD_STOP,
+								E_USER_EVENT_PD_START,
+								E_USER_EVENT_PD_STOP,
+								E_USER_EVENT_PLAY_IMAGE_NO,
+								E_USER_EVENT_PLAY_VIDEO,
+								E_USER_EVENT_PLAY_PAUSE,
+								E_USER_EVENT_PLAY_STOP,
+								E_USER_EVENT_PLAY_FAST_FORWARD,
+								E_USER_EVENT_PLAY_FAST_REWIND,
+								E_USER_EVENT_PLAY_FRAME_BY_FRAME,
+								E_USER_EVENT_PLAY_SPEC_TIME,
+								E_USER_EVENT_PLAY_THUMBNAIL_START,
+								E_USER_EVENT_PLAY_THUMBNAIL_KEY_UP,
+								E_USER_EVENT_PLAY_THUMBNAIL_KEY_DOWN,
+								E_USER_EVENT_PLAY_THUMBNAIL_KEY_LEFT,
+								E_USER_EVENT_PLAY_THUMBNAIL_KEY_RIGHT,
+								E_USER_EVENT_PLAY_THUMBNAIL_KEY_ENTER,
+								E_USER_EVENT_PLAY_THUMBNAIL_END,
+								E_USER_EVENT_PLAY_VIDEO_DECODE,
+								E_USER_EVENT_PLAY_AUDIO_DECODE,
+								E_USER_EVENT_IPCU_STREAMING_START_STOP,
+								E_USER_EVENT_MAX,
+							} E_USER_EVENT;
+			改为：
+						typedef enum {
+							HostfwUser_EVENT_NONE = 0,
+							HostfwUser_EVENT_STANDBY,
+							HostfwUser_EVENT_VIEW_START,
+							HostfwUser_EVENT_SIMPLE_VIEW_START,
+							HostfwUser_EVENT_YUV_IN_VIEW_START,
+							HostfwUser_EVENT_CAPTURE_START,
+							HostfwUser_EVENT_CAPTURE_START_JPG_RAW_YUV,
+							HostfwUser_EVENT_PLAY_START,
+							HostfwUser_EVENT_STREAMING,
+							HostfwUser_EVENT_STREAM_DEC_START,
+							HostfwUser_EVENT_STREAM_DEC_STOP,
+							HostfwUser_EVENT_SYSTEM_MODE_END,
+							HostfwUser_EVENT_VD,
+							HostfwUser_EVENT_QVIEW,
+							HostfwUser_EVENT_YUV,
+							HostfwUser_EVENT_AEAWB_STAT,
+							HostfwUser_EVENT_AF_STAT,
+							HostfwUser_EVENT_AF_MODE_CHG,
+							HostfwUser_EVENT_AF_CTRL_CHG,
+							HostfwUser_EVENT_AF_RANGE_CHG,
+							HostfwUser_EVENT_AF_RELEASE,
+							HostfwUser_EVENT_SAVE_RAW,
+							HostfwUser_EVENT_SAVE_RAW_END,
+							HostfwUser_EVENT_SAVE_JPG,
+							HostfwUser_EVENT_SAVE_YUV,
+							HostfwUser_EVENT_SAVE_YUV_END,
+							HostfwUser_EVENT_JPG_ENC_END,
+							HostfwUser_EVENT_JPG_SAVE_END,
+							HostfwUser_EVENT_JPG_REQ_NUM_END,
+							HostfwUser_EVENT_RAWYUV_SAVE_END,
+							HostfwUser_EVENT_RECORD_START,
+							HostfwUser_EVENT_RECORD_START_AGAIN,
+							HostfwUser_EVENT_RECORD_CACHE_START,
+							HostfwUser_EVENT_RECORD_CACHE_START_AGAIN,
+							HostfwUser_EVENT_RECORD_CACHE_H264_STREAM_CB,
+							HostfwUser_EVENT_RECORD_CACHE_H265_STREAM_CB,
+							HostfwUser_EVENT_RECORD_STOP,
+							HostfwUser_EVENT_RECORD_H265_END,
+							HostfwUser_EVENT_RECORD_H264_0_END,
+							HostfwUser_EVENT_RECORD_H264_1_END,
+							HostfwUser_EVENT_RECORD_AUDIO_0_END,
+							HostfwUser_EVENT_RECORD_AUDIO_1_END,
+							HostfwUser_EVENT_FD_START,
+							HostfwUser_EVENT_FD_STOP,
+							HostfwUser_EVENT_PD_START,
+							HostfwUser_EVENT_PD_STOP,
+							HostfwUser_EVENT_PLAY_IMAGE_NO,
+							HostfwUser_EVENT_PLAY_VIDEO,
+							HostfwUser_EVENT_PLAY_PAUSE,
+							HostfwUser_EVENT_PLAY_STOP,
+							HostfwUser_EVENT_PLAY_FAST_FORWARD,
+							HostfwUser_EVENT_PLAY_FAST_REWIND,
+							HostfwUser_EVENT_PLAY_FRAME_BY_FRAME,
+							HostfwUser_EVENT_PLAY_SPEC_TIME,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_START,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_KEY_UP,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_KEY_DOWN,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_KEY_LEFT,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_KEY_RIGHT,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_KEY_ENTER,
+							HostfwUser_EVENT_PLAY_THUMBNAIL_END,
+							HostfwUser_EVENT_PLAY_VIDEO_DECODE,
+							HostfwUser_EVENT_PLAY_AUDIO_DECODE,
+							HostfwUser_EVENT_IPCU_STREAMING_START_STOP,
+							HostfwUser_EVENT_MAX,
+						} EUserEvent;
+						
+				2.		typedef enum {
+							E_USER_SYNC_EVENT_NONE = 0,
+							E_USER_SYNC_EVENT_VIEW_START,
+							E_USER_SYNC_EVENT_CAP_START,
+							E_USER_SYNC_EVENT_SAVE_RAW,
+							E_USER_SYNC_EVENT_ENC_THUMB,
+							E_USER_SYNC_EVENT_SAVE_JPG,
+							E_USER_SYNC_EVENT_SAVE_YUV,
+							E_USER_SYNC_EVENT_SAVE_RAW_YUV,
+							E_USER_SYNC_EVENT_JPG_ENC_END,
+							E_USER_SYNC_EVENT_JPG_SAVE_END,
+							E_USER_SYNC_EVENT_LINUX_END_RAW,
+							E_USER_SYNC_EVENT_LINUX_END_JPG,
+							E_USER_SYNC_EVENT_LINUX_END_YUV,
+							E_USER_SYNC_EVENT_RECORD_START,
+							E_USER_SYNC_EVENT_RECORD_START_AGAIN,
+							E_USER_SYNC_EVENT_RECORD_CACHE_START,
+							E_USER_SYNC_EVENT_RECORD_CACHE_START_AGAIN,
+							E_USER_SYNC_EVENT_RECORD_CACHE_H264_STREAM_CB,
+							E_USER_SYNC_EVENT_RECORD_CACHE_H265_STREAM_CB,
+							E_USER_SYNC_EVENT_RECORD_STOP,
+							E_USER_SYNC_EVENT_FACE_DETECTION,
+							E_USER_SYNC_EVENT_PERSON_DETECTION,
+							E_USER_SYNC_EVENT_SAVE_FILE,
+							E_USER_SYNC_EVENT_FEED_STREAM,
+							E_USER_SYNC_EVENT_MAX,
+						} E_USER_SYNC_EVENT;
+					改名为：
+					typedef enum {
+						HostfwUser_SYNC_EVENT_NONE = 0,
+						HostfwUser_SYNC_EVENT_VIEW_START,
+						HostfwUser_SYNC_EVENT_CAP_START,
+						HostfwUser_SYNC_EVENT_SAVE_RAW,
+						HostfwUser_SYNC_EVENT_ENC_THUMB,
+						HostfwUser_SYNC_EVENT_SAVE_JPG,
+						HostfwUser_SYNC_EVENT_SAVE_YUV,
+						HostfwUser_SYNC_EVENT_SAVE_RAW_YUV,
+						HostfwUser_SYNC_EVENT_JPG_ENC_END,
+						HostfwUser_SYNC_EVENT_JPG_SAVE_END,
+						HostfwUser_SYNC_EVENT_LINUX_END_RAW,
+						HostfwUser_SYNC_EVENT_LINUX_END_JPG,
+						HostfwUser_SYNC_EVENT_LINUX_END_YUV,
+						HostfwUser_SYNC_EVENT_RECORD_START,
+						HostfwUser_SYNC_EVENT_RECORD_START_AGAIN,
+						HostfwUser_SYNC_EVENT_RECORD_CACHE_START,
+						HostfwUser_SYNC_EVENT_RECORD_CACHE_START_AGAIN,
+						HostfwUser_SYNC_EVENT_RECORD_CACHE_H264_STREAM_CB,
+						HostfwUser_SYNC_EVENT_RECORD_CACHE_H265_STREAM_CB,
+						HostfwUser_SYNC_EVENT_RECORD_STOP,
+						HostfwUser_SYNC_EVENT_FACE_DETECTION,
+						HostfwUser_SYNC_EVENT_PERSON_DETECTION,
+						HostfwUser_SYNC_EVENT_SAVE_FILE,
+						HostfwUser_SYNC_EVENT_FEED_STREAM,
+						HostfwUser_SYNC_EVENT_MAX,
+					} EUserSyncEvent;
+			
+			３．typedef enum {
+						E_USER_RECORD_EVENT_NONE = 0,
+						E_USER_RECORD_EVENT_RECORD_H264_FREE_INDEX_0,
+						E_USER_RECORD_EVENT_RECORD_H264_FREE_INDEX_1,
+						E_USER_RECORD_EVENT_RECORD_H265_FREE_INDEX_0,
+						E_USER_RECORD_EVENT_MAX,
+					} E_USER_RECORD_EVENT;
+			改名为：
+				typedef enum {
+						HostfwUser_RECORD_EVENT_NONE = 0,
+						HostfwUser_RECORD_EVENT_RECORD_H264_FREE_INDEX_0,
+						HostfwUser_RECORD_EVENT_RECORD_H264_FREE_INDEX_1,
+						HostfwUser_RECORD_EVENT_RECORD_H265_FREE_INDEX_0,
+						HostfwUser_RECORD_EVENT_MAX,
+					} EUserRecordEvent;
+					
+			４．typedef enum {
+						E_USER_STATE_IDLE = 0,
+						E_USER_STATE_BUSY,
+						E_USER_STATE_RUN,
+						E_USER_STATE_MAX,
+					} E_USER_STATE;
+			改名为：
+				
+			５．typedef enum {
+						E_USER_OP_NONE = 0,
+						E_USER_OP_CAP_JPEG_ONE_FRAME,
+						E_USER_OP_CAP_JPEG_DONE,
+						E_USER_OP_CAP_JPEG_RAW_YUV_ONE_FRAME,
+						E_USER_OP_CAP_JPEG_RAW_YUV_DONE,
+						E_USER_OP_CAP_CALIB_DONE,
+						E_USER_OP_REC_RUN,
+						E_USER_OP_REC_CACHE_RUN,
+						E_USER_OP_REC_STOP,
+						E_USER_OP_SAVE_YUV_DONE,
+						E_USER_OP_SAVE_RAW_DONE,
+						E_USER_OP_FD_START_DONE,
+						E_USER_OP_FD_STOP_DONE,
+						E_USER_OP_PD_START_DONE,
+						E_USER_OP_PD_STOP_DONE,
+						E_USER_OP_PLAY_START_DONE,
+						E_USER_OP_PLAY_IMAGE_NO_DONE,
+						E_USER_OP_PLAY_VIDEO_DONE,
+						E_USER_OP_PLAY_PAUSE_DONE,
+						E_USER_OP_PLAY_STOP_DONE,
+						E_USER_OP_PLAY_FAST_FORWARD_DONE,
+						E_USER_OP_PLAY_FAST_REWIND_DONE,
+						E_USER_OP_PLAY_FRAME_BY_FRAME_DONE,
+						E_USER_OP_PLAY_SPEC_TIME_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_START_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_KEY_UP_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_KEY_DOWN_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_KEY_LEFT_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_KEY_RIGHT_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_KEY_ENTER_DONE,
+						E_USER_OP_PLAY_THUMBNAIL_END_DONE,
+						E_USER_OP_STR_SETUP_DONE,
+						E_USER_OP_STR_DEC_RUN,
+						E_USER_OP_STR_DEC_IDLE,
+						E_USER_OP_MAX,
+					} E_USER_OP_STATE;	
+			改名为：
+					typedef enum {
+						HostfwUser_OP_NONE = 0,
+						HostfwUser_OP_CAP_JPEG_ONE_FRAME,
+						HostfwUser_OP_CAP_JPEG_DONE,
+						HostfwUser_OP_CAP_JPEG_RAW_YUV_ONE_FRAME,
+						HostfwUser_OP_CAP_JPEG_RAW_YUV_DONE,
+						HostfwUser_OP_CAP_CALIB_DONE,
+						HostfwUser_OP_REC_RUN,
+						HostfwUser_OP_REC_CACHE_RUN,
+						HostfwUser_OP_REC_STOP,
+						HostfwUser_OP_SAVE_YUV_DONE,
+						HostfwUser_OP_SAVE_RAW_DONE,
+						HostfwUser_OP_FD_START_DONE,
+						HostfwUser_OP_FD_STOP_DONE,
+						HostfwUser_OP_PD_START_DONE,
+						HostfwUser_OP_PD_STOP_DONE,
+						HostfwUser_OP_PLAY_START_DONE,
+						HostfwUser_OP_PLAY_IMAGE_NO_DONE,
+						HostfwUser_OP_PLAY_VIDEO_DONE,
+						HostfwUser_OP_PLAY_PAUSE_DONE,
+						HostfwUser_OP_PLAY_STOP_DONE,
+						HostfwUser_OP_PLAY_FAST_FORWARD_DONE,
+						HostfwUser_OP_PLAY_FAST_REWIND_DONE,
+						HostfwUser_OP_PLAY_FRAME_BY_FRAME_DONE,
+						HostfwUser_OP_PLAY_SPEC_TIME_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_START_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_KEY_UP_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_KEY_DOWN_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_KEY_LEFT_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_KEY_RIGHT_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_KEY_ENTER_DONE,
+						HostfwUser_OP_PLAY_THUMBNAIL_END_DONE,
+						HostfwUser_OP_STR_SETUP_DONE,
+						HostfwUser_OP_STR_DEC_RUN,
+						HostfwUser_OP_STR_DEC_IDLE,
+						HostfwUser_OP_MAX,
+					} EUserOpState;
+					
+７．hostfwuser.h中的结构体：
+				typedef struct {
+					ULONG*	BOOTUP_HDMI_addr;
+					ULONG	BOOTUP_HDMI_size;
+					ULONG*	BOOTUP_addr;
+					ULONG	BOOTUP_size;
+					ULONG*	IQ_BIN_addr[9];
+					ULONG	IQ_BIN_size[9];
+					ULONG*	EVP_MAP_addr;
+					ULONG	EVP_MAP_size;
+					ULONG*	FSHD_BIN_addr[9];
+					ULONG	FSHD_BIN_size[9];
+					ULONG*	RGB_BIN_addr;
+					ULONG	RGB_BIN_size;
+					ULONG*	LDC_BIN_addr;
+					ULONG	LDC_BIN_size;
+					ULONG*	WARP_L_BIN_addr;
+					ULONG	WARP_L_BIN_size;
+					ULONG*	WARP_R_BIN_addr;
+					ULONG	WARP_R_BIN_size;
+					ULONG*	CAM_CAL_BIN_addr[2];
+					ULONG	CAM_CAL_BIN_size[2];
+					ULONG*	BADPIX_addr[4];
+					ULONG	BADPIX_size[4];
+					ULONG*	GAMFL_addr[8];
+					ULONG	GAMFL_size[8];
+					ULONG*	GAMDF_addr[8];
+					ULONG	GAMDF_size[8];
+				} T_RESOURCE;
+		改名为：
+				typedef struct {
+					ULONG*	bootupHdmiAddr;
+					ULONG	bootupHdmiSize;
+					ULONG*	bootupAddr;
+					ULONG	bootupSize;
+					ULONG*	iqBinAddr[9];
+					ULONG	iqBinSize[9];
+					ULONG*	evpMapAddr;
+					ULONG	evpMapSize;
+					ULONG*	fshdBinAddr[9];
+					ULONG	fshdBinSize[9];
+					ULONG*	rgbBinAddr;
+					ULONG	rgbBinSize;
+					ULONG*	ldcBinAddr;
+					ULONG	ldcBinSize;
+					ULONG*	warpLBinAddr;
+					ULONG	warpLBinSize;
+					ULONG*	warpRBinAddr;
+					ULONG	warpRBinSize;
+					ULONG*	camCalBinAddr[2];
+					ULONG	camCalBinSize[2];
+					ULONG*	badpixAddr[4];
+					ULONG	badpixSize[4];
+					ULONG*	gamflAddr[8];
+					ULONG	gamflSize[8];
+					ULONG*	gamdfAddr[8];
+					ULONG	gamdfSize[8];
+				} TResource;
+８．usersynctask.h中枚举：
+			typedef enum {
+				E_NORMAL_JPEG,
+				E_NORMAL_JPEG_WITHOUT_THUMB,
+				E_STITCH_CALIB_JPEG,
+			} E_JPEG_PROCESS;
+		改为：
+			typedef enum {
+				UserSyncTask_NORMAL_JPEG,
+				UserSyncTask_NORMAL_JPEG_WITHOUT_THUMB,
+				UserSyncTask_STITCH_CALIB_JPEG,
+			} EJpegProcess;
+９．usersynctask.h中结构体：
+		１．	typedef struct {
+				E_USER_SYNC_EVENT	event;
+				ULLONG				frame_no;
+				ULONG				param;
+				ULONG				param1;
+			} T_USER_SYNC_MSG;
+	　改名为：
+			typedef struct {
+			EUserSyncEvent event;
+			ULLONG frameNo;
+			ULONG param;
+			ULONG param1;
+		} TUserSyncMsg;
+		
+		２．typedef struct {
+				OS_USER_VP	_os_reserve[2];	// OS reserve
+				OS_USER_VP	blf_addr;		// blf address
+				OS_USER_VB	msg[116];		// message // message mailbox size(0x80) - _os_reserve[2] (2x4bytes) - blf_addr (4bytes)
+			} T_USER_SYNC_MBOX;
+	改名为：
+				typedef struct {
+				// OS reserve
+				OS_USER_VP osReserve[2];
+				// blf address
+				OS_USER_VP blfAddr;
+				// message // message mailbox size(0x80) - osReserve[2] (2x4bytes) - blfAddr (4bytes)
+				OS_USER_VB msg[116];
+			} TUserSyncMbox;
+１０．usersynctask.h中公有方法声明：
+		INT32 Snd_Msg_To_User_Sync(const T_USER_SYNC_MSG* msg);
+		ULONG User_Sync_HSCap_Get_Jpeg_Bank_Num(void);
+		INT32 User_Sync_Set_Frame_Num( ULONG frame_num );
+		INT32 User_Sync_Create_Ring(const ULONG size, const ULONG yuv_size_byte, const UCHAR ratio);
+		INT32 User_Sync_Destroy_Ring(void);
+		BOOL User_Sync_Is_Ring_Created(void);
+		改为：
+		INT32 user_sync_task_msg_to_user_sync(UserSyncTask* self,const TUserSyncMsg* msg);
+		ULONG user_sync_task_hscap_get_jpeg_bank_num(UserSyncTask* self);
+		INT32 user_sync_task_set_frame_num(UserSyncTask* self, ULONG frameNum );
+		INT32 user_sync_task_create_ring(UserSyncTask* self,const ULONG size, const ULONG yuvSizeByte, const UCHAR ratio);
+		INT32 user_sync_task_destroy_ring(UserSyncTask* self);
+		BOOL user_sync_task_is_ring_created(UserSyncTask* self);
+		
+11.user_record_task.h,user_record_task.c改名为　userrecordtask.h，userrecordtask.c
+	该文件的结构体更改如下：
+				typedef struct {
+				E_USER_RECORD_EVENT	event;
+				ULLONG				frame_no;
+				ULONG				param;
+				ULONG				param1;
+			} T_USER_RECORD_MSG;
+		改为：
+					typedef struct {
+				EUserRecordEvent event;
+				ULLONG frameNo;
+				ULONG param;
+				ULONG param1;
+			} TUserRecordMsg;		
+			
+			typedef struct {
+				OS_USER_VP	_os_reserve[2];	// OS reserve
+				OS_USER_VP	blf_addr;		// blf address
+				OS_USER_VB	msg[116];		// message // message mailbox size(0x80) - _os_reserve[2] (2x4bytes) - blf_addr (4bytes)
+			} T_USER_SYNC_MBOX;
+	　改为：
+			typedef struct {
+			// OS reserve
+			OS_USER_VP osReserve[2];
+			// blf address
+			OS_USER_VP blfAddr;
+			// message // message mailbox size(0x80) - osReserve[2] (2x4bytes) - blfAddr (4bytes)
+			OS_USER_VB msg[116];
+		} TUserRecordMbox;
+	公有方法改为：
+	INT32 			user_record_task_snd_msg_to_user_record(UserRecordTask* self, const TUserRecordMsg* msg);
+		
+12.user_streaming.h,user_streaming.c改名为userstreaming.h，userstreaming.c
+        该文件对应的宏定义：
+        #define D_DECODE_REQUEST_FRAME_NUM 1
+        改为：
+        #define UserStreaming_DECODE_REQUEST_FRAME_NUM 1
+        公有函数声明改为：
+        EUserState user_streaming_streaming( EUserEvent event, ULLONG frameNo );
+		EUserOpState user_streaming_get_op_stat(UserStreaming *self);
+		VOID user_streaming_clear_op_stat(UserStreaming *self);
+		BOOL user_streaming_is_process(UserStreaming *self);
+		BOOL user_streaming_is_h265_main_stream(UserStreaming *self);
+		BOOL user_streaming_is_dual_stream(UserStreaming *self);
+		int user_streaming_stop(UserStreaming *self, E_FJ_VIDEO_DEC_ENUM codec);
+		#if defined(D_STREAMING_FROM_FILE)
+		int user_streaming_get_frame_a_sync(UserStreaming *self, E_FJ_VIDEO_DEC_ENUM codec, unsigned char numFrame);
+		int user_streaming_get_frame_sync(UserStreaming *self, E_FJ_VIDEO_DEC_ENUM codec, unsigned char numFrame);
+		#endif
+		INT32 user_streaming_decode_one_frame_done_cb(UserStreaming *self,  E_FJ_VIDEO_DEC_ENUM codec, E_FJ_MOVIE_PLAY_DECODER_STATUS status, ULLONG pts, BOOL err );
+		INT32 user_streaming_first_frame_display_cb(UserStreaming *self,  E_FJ_MOVIE_PLAY_DECODER_STATUS decoderStatus, ULLONG displayPts, BOOL error );
+		INT32 user_streaming_send_stream_to_receiver(UserStreaming *self, T_CPUCMD_VIDEO_DEC_STREAM strInfo);
+		const T_SHARE_STREAM_INFO* user_streaming_user_get_stream_type(UserStreaming *self);
+		
+13.user_boot.c改名为userboot.c,相应的公有函数声明从user.h移到了userboot.h并改为：
+			gpointer 			user_boot_boot(UserBoot* self);
+			const TResource* 	user_boot_get_resource(UserBoot* self);
+			BOOL 				user_boot_is_emmcboot_mode(UserBoot* self);
+			gpointer 			user_boot_bootup_image_display_lcd(UserBoot* self);
+			gpointer 			user_boot_bootup_image_display(UserBoot* self);
+			
+14.user_capture.c改名为usercapture.c,相应的公有函数声明从user.h移到了usercapture.h并改为：
+			//回调
+			EUserState user_capture_capture(EUserEvent event, ULLONG frameNo );
+			EUserState user_capture_get_stat(UserCapture* self);
+			EUserOpState user_capture_get_op_stat(UserCapture* self);
+			
+15.user_task.c改名为usertask.c,相应的公有函数声明从user.h移到了usertask.h并改为：
+			INT32 user_task_snd_event_to_user(UserTask* self, EUserEvent event, ULLONG frameNo );
+			BOOL user_task_is_standby_mode(UserTask* self);
+			
+16.user_play.c改名为userplay.c,相应的公有函数声明从user.h移到了userplay.h并改为：
+			EUserState 		user_play_play(EUserEvent event, ULLONG frameNo);
+			BOOL 			user_play_is_busy(UserPlay* self);
+			EUserOpState 	user_play_get_op_stat(UserPlay* self);
+			VOID 			user_play_clear_op_stat(UserPlay* self);
+			
+17.ceva_cv_smartframe_host.c改名为cevacvsmartframehost.c
+18.ceva_cv_smartframe_user.c改名为cevacvsmartframehost.c
+19.rs_dsp.c改名为rsdsp.c
+20.load.c改名为dspload.c
+21.shd_bin.c改名为shdbin.c
+		相应结构体T_SHD_BIN_TBL_INFO_IN改为TShdBinTblInfoIn
+							T_SHD_BIN_TBL_INFO_OUT改为TShdBinTblInfoOut
+							T_FSHD_TBL_HEADER_COMMON改为TFshdTblHeaderCommon
+							T_FSHD_TBL_HEADER_V104改为TFshdTblHeaderV104
+							T_FSHD_TBL_HEADER改为TFshdTblHeader
+			公有方法改为：
+							INT32 shd_bin_make_tbl(ShdBin* self, const TShdBinTblInfoIn* in, TShdBinTblInfoOut* out );
+							INT32 shd_bin_cshd_make_tbl(ShdBin* self, UCHAR sensorId, UCHAR sensorMode, ULONG centerH ,ULONG centerV, T_SHARE_CSHD_PARAM* out );
+								shd_bin_cshd_make_tbl 中self后的参数提到了CshdMakeTbl结构体中
+22.os_if.c/.h改名为osif.c/.h
+		对应的宏定义：
+					#define D_CPU_IF_MCODE_COMMAND_REQ			(0x5555AAAA)
+			#define D_CPU_IF_MCODE_COOMNAD_ACK			(0x6666BBBB)
+			#define D_CPU_IF_MCODE_EVENT_NOTIFY			(0x7777CCCC)
+			#define D_CPU_IF_MCODE_INFO_NOTIFY			(0x8888DDDD)
+			#define D_CPU_IF_MCODE_STREAM_SEND			(0x9999EEEE)
+			#define D_CPU_IF_MCODE_STREAM_RELESE		(0xAAAAFFFF)
+			#define D_CPU_IF_MCODE_GET_FROM_BF			(0xBBBB0000)
+			//Format version
+			 #define D_CPU_IF_COM_FORMAT_VERSION					(0x00000001)
+			 //Event Parameter Value
+			#define D_STATUS_REMOVED		(0x00000001)
+			#define D_STATUS_INSERTED		(0x00000000)		
+		改为：
+				#define OsIf_CPU_IF_MCODE_COMMAND_REQ			(0x5555AAAA)
+				#define OsIf_CPU_IF_MCODE_COOMNAD_ACK			(0x6666BBBB)
+				#define OsIf_CPU_IF_MCODE_EVENT_NOTIFY			(0x7777CCCC)
+				#define OsIf_CPU_IF_MCODE_INFO_NOTIFY			(0x8888DDDD)
+				#define OsIf_CPU_IF_MCODE_STREAM_SEND			(0x9999EEEE)
+				#define OsIf_CPU_IF_MCODE_STREAM_RELESE		(0xAAAAFFFF)
+				#define OsIf_CPU_IF_MCODE_GET_FROM_BF			(0xBBBB0000)
+				//Format version
+				 #define OsIf_CPU_IF_COM_FORMAT_VERSION					(0x00000001)
+				 //Event Parameter Value
+				#define OsIf_STATUS_REMOVED		(0x00000001)
+				#define OsIf_STATUS_INSERTED		(0x00000000)		
+　　对应的枚举：
+				E_IPCU_CH67_SWITCH改为　EIpcuCh67Switch
+				IPCU_DATA_FMT改为　IpcuDataFmt
+				E_CPU_IF_COMMAND_STREAM改为　ECpuIfCommandStream
+				E_CPU_IF_VSTRM_TYPE改为　ECpuIfVstrmType
+				E_CPU_IF_VSTRM_FROMAT改为　ECpuIfVstrmFromat
+				E_CPU_IF_ASTRM_FROMAT改为　ECpuIfAstrmFromat
+				E_CPU_IF_COMMAND_SET_STREAM　ECpuIfCommandSetStream
+				E_CPU_IF_YUV_TYPE　ECpuIfYuvType
+				E_CPU_IF_YSTRM_FORMAT　　ECpuIfYstrmFormat
+				E_CPU_IF_ASTRM_TYPE　　ECpuIfAstrmType
+				E_CPU_IF_COMMAND_SET_NOTIFY_EVENT　ECpuIfCommandSetNotifyEve
+				E_CPU_IF_COMMAND_NOTIFY_EVENT　ECpuIfCommandNotifyEve
+		对应的结构体：
+		　　T_CPUCMD_HEADER　TCpucmdHeader
+				T_CPUCMD_SENSOR_TIMESTAMP　TCpucmdSensorTimestamp
+				T_CPUCMD_VIDEO_STREAM　TCpucmdVideoStream
+				T_CPUCMD_VIDEO_DEC_STREAM　TCpucmdVideoDecStream
+				T_CPUCMD_AUDIO_STREAM　TCpucmdAudioStream
+				T_CPUCMD_VRAW_STREAM　TCpucmdVrawStream
+				T_CPUCMD_YUV_STREAM　TCpucmdYuvStream
+				T_CPUCMD_MOV_STREAM　TCpucmdMovStream
+				T_CPUCMD_JPG_STREAM　TCpucmdJpgStream
+				T_CPUCMD_SPVIDEO_STREAM　TCpucmdSpvideoStream
+				T_CPUCMD_SPAUDIO_STREAM　TCpucmdSpaudioStream
+				T_CPUCMD_META_STREAM　TCpucmdMetaStream
+				T_CPUCMD_STREAM　TCpucmdStream
+				T_CPUCMD_NOTIFY_EVENT　TCpucmdNotifyEvent
+				T_CPUCMD_NOTIFY_INFO　TCpucmdNotifyInfo
+		对应公有函数声明改为：
+		void os_if_init(OsIf* self);
+		void os_if_rtos_event_notify(OsIf* self,const ULONG cmd_set, const ULONG cmd, const ULONG param[4]);
+		void os_if_rtos_linux_cmd(OsIf* self, char * str, int size);
+		void os_if_rtos_mjpeg_stream_send(OsIf* self, FW_USHORT width, FW_USHORT lines, const ULLONG frameNo );
+		void os_if_rtos_h264_stream_send(OsIf* self, T_FJ_MOVIE_H264_STREAM_PARAM* streamInfo, UCHAR videoEncId, const ULLONG frameNo );
+		void os_if_rtos_h265_stream_send(OsIf* self, T_FJ_MOVIE_H265_STREAM_PARAM* streamInfo, UCHAR videoEncId, const ULLONG frameNo );
+		void os_if_rtos_yuv_stream_send(OsIf* self, ULONG addr, ULONG size, USHORT width, USHORT lines, const ULLONG frameNo );
+		void os_if_rtos_raw_stream_send(OsIf* self, ULONG addr, ULONG size, USHORT width, USHORT lines, const ULLONG frameNo );
+		void os_if_rtos_audio_stream_send_aac(OsIf* self, UCHAR aid, T_FJ_AUDIO_AAC_STREAM_PARAM* cbInf, const BOOL uacEn);
+		void os_if_rtos_audio_stream_send_pcm(OsIf* self, UCHAR aid, T_FJ_AUDIO_PCM_STREAM_PARAM* cbInf, const BOOL uacEn);
+		void os_if_rtos_stream_ack(OsIf* self,ECpuIfCommandStream sub, ULONG stype);
+		void os_if_rtos_ipcu_ch67_switch(OsIf* self,EIpcuCh67Switch sw);
+		os_if_rtos_yuv_stream_send,os_if_rtos_raw_stream_send中的后五个参数搬到了结构体RtosYuvStreamSend
+23.user_kernel_index.h改名为userkernelindex.h
+24.frame_buf.h改名为framebuf.h
+25.ceva_cv_smartframe_cmd_param改名为cevacvsmartframeparam.h
+26.CEVA_CV_SmartFrame_common.h改名为cevacvsmartframecommon.h
+27.procID_DSP.h改名为　prociddsp.h
+28.procID_CPU.h改名为　procidcpu.h
+29.linked_list.h改名为linkedlist.h
+		llt－－－－－－＞LlT
+30.user_simple_view.c改名为usersimpleview.c
+31.dsp_peri.h改名为dspperi.h
+32.dsp_peri_ipcu.h改名为dspperiipcu.h
+33.OS_IF_Task改名为osIfTask_cb
+34.motor_calc_0_task改名爲　motorCalc0Task_cb
+35.motor_calc_1_task改名爲　motorCalc1Task_cb
+36.detect_task改名爲　detectTask_cb

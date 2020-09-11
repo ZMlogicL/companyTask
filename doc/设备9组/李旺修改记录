@@ -1,0 +1,505 @@
+fjiipresource类下的公有函数
+fj_iip_res_config_lock_host 修改为 fj_iip_resource_config_lock_host1
+fj_iip_res_config_free_host 修改为 fj_iip_resource_config_free_host1
+
+对fjiipresource下的所有公有函数添加了self参数
+
+====================================================================
+====================================================================
+fjformatter类的公有函数
+FJ_Formatter_Convert_Initialize
+FJ_Formatter_Convert_Set_Stream
+FJ_Formatter_Convert_Set_Program
+FJ_Formatter_Convert_PES_Send0
+FJ_Formatter_Convert_PES_Send1
+FJ_Formatter_Convert_TS_Recv0
+FJ_Formatter_Convert_TS_Recv1
+FJ_Formatter_Convert_Finalize 全部进行小写替换并在后面添加1
+对fjformatter下的所有公有函数添加了self参数
+
+====================================================================
+====================================================================
+fjdebug类的公有函数
+FJ_Debug_Print_Dbg
+FJ_Debug_Print_Info
+FJ_Debug_Print_Wrn
+FJ_Debug_Print_Err  全部进行小写替换并在后面添加1
+
+除了fj_debug_print_dbg之外全都加上了self参数
+
+====================================================================
+====================================================================
+fjaf类的公有函数
+FJ_AFSetWindow
+FJ_AFSetGlobalWindow
+FJ_AFSetLuminanceCalc
+FJ_AFSetVerticalWindow
+FJ_AFSetHorizontalCalc
+FJ_AFSetPowerEnable
+FJ_AFGetLuminanceData
+FJ_AFGetLuminanceBrightCount
+FJ_AFGetLuminanceDarkCount
+FJ_AFGetHorizontalData0
+FJ_AFGetHorizontalData1
+FJ_AFGetHorizontalData2
+FJ_AFGetVerticalData
+FJ_AFGetLuminanceDataMaxValue
+FJ_AFGetLuminanceDataMinValue
+FJ_AFGetDataMaxValue
+FJ_AFGetDataMinValue
+FJ_AFGetHorizontalLineAccumMaxData0
+FJ_AFGetHorizontalLineAccumMaxData1
+FJ_AFGetHorizontalLineAccumMaxData2
+FJ_AFSetCalcDataReady
+一一对应按照规范替换成
+fj_af_set_window							
+fj_af_set_global_window							
+fj_af_set_luminance_calc							
+fj_af_set_vertical_window							
+fj_af_set_horizontal_calc							
+fj_af_set_power_enable								
+fj_af_get_luminance_data							
+fj_af_get_luminance_bright_count									
+fj_af_get_luminance_dark_count							
+fj_af_get_horizontal_data0							
+fj_af_get_horizontal_data1							
+fj_af_get_horizontal_data2									
+fj_af_get_vertical_data								
+fj_af_get_luminance_data_max_value									
+fj_af_get_luminance_data_min_value							
+fj_af_get_data_max_value								
+fj_af_get_data_min_value										
+fj_af_get_horizontal_line_accum_max_data0										
+fj_af_get_horizontal_line_accum_max_data1							
+fj_af_get_horizontal_line_accum_max_data2										
+fj_af_set_calc_data_ready
+
+====================================================================
+====================================================================
+fjmedia类的公有函数
+
+将所有的公有函数变成小写并在前面加上fj_media_,并在后面添加1
+									fj_media_fj_set_mediadetect
+									fj_media_fj_get_mediadetect									
+									fj_media_fj_sd_init										
+									fj_media_fj_sd_config									
+									fj_media_fj_sd_set_event_cb									
+									fj_media_fj_sd_card_init									
+									fj_media_fj_sd_getcardinfo									
+									fj_media_fj_sd_set_hold_clock									
+									fj_media_fj_sd_set_cardlockpassword									
+									fj_media_fj_sd_set_cardlock								
+									fj_media_fj_sd_set_card_power										
+									fj_media_fj_sd_set_uhs2_modeselect									
+									fj_media_fj_sd_get_uhs2_modeselect									
+									fj_media_fj_sd_set_uhs2_powersaving									
+									fj_media_fj_sd_set_uhs2_detecttime									
+									fj_media_fj_nf_init									
+									fj_media_fj_nf_config									
+									fj_media_fj_nf_device_init									
+									fj_media_fj_nf_get_mid_did									
+									fj_media_fj_nf_get_device_info									
+									fj_media_fj_nf_erase									
+									fj_media_fj_nf_write_physical_data							
+									fj_media_fj_nf_read_physical_data										
+									fj_media_fj_nf_write_logical_sector									
+									fj_media_fj_nf_read_logical_sector									
+									fj_media_fj_nf_write_logical_sector_pio									
+									fj_media_fj_nf_partition									
+									fj_media_fj_nf_partition_read									
+									fj_media_fj_nf_get_partition_info									
+									fj_media_fj_nf_get_badblock_num									
+									fj_media_fj_nf_get_paramblk_info									
+									fj_media_fj_nf_get_exceptionlog_info											
+									fj_media_fj_nf_set_retry_cnt												
+									fj_media_fj_nf_get_retry_cnt												
+									fj_media_fj_nf_set_timeout												
+									fj_media_fj_nf_get_timeout									
+									fj_media_fj_emmc_init									
+									fj_media_fj_emmc_config									
+									fj_media_fj_emmc_device_init									
+									fj_media_fj_emmc_get_device_info									
+									fj_media_fj_emmc_write_sector 												
+									fj_media_fj_emmc_read_sector									
+									fj_media_fj_emmc_partition									
+									fj_media_fj_emmc_partition_read 												
+									fj_media_fj_emmc_get_partition_info 												
+									fj_media_fj_emmc_get_paramblk_info 												
+									fj_media_fj_emmc_get_exceptionlog_info									
+									fj_media_fj_getwriteprotectstatus									
+									fj_media_fj_get_media_format_type
+对fjmedia下的所有公有函数添加了self参数
+
+====================================================================
+====================================================================
+fjpcierc类的公有函数
+
+由于每个公有函数都带有fj_pcle_rc的文件前缀，故将所有公有函数相关的文件全部替换成小写,并在后面添加1
+FJ_ERR_CODE 											fj_pcie_rc_open1( VOID );
+FJ_ERR_CODE 											fj_pcie_rc_close1( VOID );
+FJ_ERR_CODE 											fj_pcie_rc_init1( E_FJ_PCIE_BIFURCATION bifurcation );
+FJ_ERR_CODE 											fj_pcie_rc_deinit1( VOID );
+FJ_ERR_CODE		 									fj_pcie_rc_config_ctrl1( T_FJ_PCIE_RC_CTRL_CFG const* const pcieCtrlCfg );
+FJ_ERR_CODE 											fj_pcie_rc_config_read1( E_FJ_PCIE_CH ch, USHORT offset, UINT32* data );
+FJ_ERR_CODE 											fj_pcie_rc_config_write1( E_FJ_PCIE_CH ch, USHORT offset, UINT32 data );
+FJ_ERR_CODE 											fj_pcie_rc_dma_transfer1( T_FJ_PCIE_DMA_CTRL const* const dmaCtrl );
+FJ_ERR_CODE 											fj_pcie_rc_dma_stop1( E_FJ_PCIE_CH ch );
+FJ_ERR_CODE 											fj_pcie_rc_memory_ctrl1( T_FJ_PCIE_MEMORY_CTRL const* const memoryCtrl );
+FJ_ERR_CODE 											fj_pcie_rc_msi_ctrl1( T_FJ_PCIE_MSI_CTRL const* const msiCtrl );
+FJ_ERR_CODE 											fj_pcie_rc_intx_ctrl1( E_FJ_PCIE_CH ch, PCIE_CALLBACK intxCb );
+FJ_ERR_CODE 											fj_pcie_rc_aspm_on1( E_FJ_PCIE_CH ch );
+FJ_ERR_CODE 											fj_pcie_rc_aspm_off1( E_FJ_PCIE_CH ch );
+FJ_ERR_CODE 											fj_pcie_rc_transfer_speed_chg1(  E_FJ_PCIE_CH ch, E_FJ_PCIE_LINK_SPEED linkSpeed );
+E_FJ_PCIE_ST_DL_UP 								fj_pcie_rc_get_st_dl_up1( E_FJ_PCIE_CH ch );
+E_FJ_PCIE_ST_LTSSM 								fj_pcie_rc_get_st_ltssm1( E_FJ_PCIE_CH ch );
+E_FJ_PCIE_PMST 										fj_pcie_rc_get_pmst1( E_FJ_PCIE_CH ch );
+FJ_ERR_CODE 											fj_pcie_rc_get_current_link_speed1( E_FJ_PCIE_CH ch, E_FJ_PCIE_LINK_SPEED* linkSpeed );
+FJ_ERR_CODE 											fj_pcie_rc_get_st_aspm1( BOOL* pcie0Aspm, BOOL* pcie1Aspm );
+FJ_ERR_CODE 											fj_pcie_rc_set_mps1( E_FJ_PCIE_CH ch, E_FJ_PCIE_MPS mps );
+FJ_ERR_CODE 											fj_pcie_rc_get_mps1( E_FJ_PCIE_CH ch, E_FJ_PCIE_MPS* mps );
+FJ_ERR_CODE 											fj_pcie_rc_set_lu_cb1( E_FJ_PCIE_CH ch, PCIE_CALLBACK luCb );
+对fjpcierc下的所有公有函数添加了self参数
+
+====================================================================
+====================================================================
+fjdebug类的公有函数
+
+VOID 											FJ_Debug_Print_Dbg(const char* format, ...);
+VOID 											FJ_Debug_Print_Info(const char* format, ...);
+VOID 											FJ_Debug_Print_Wrn(const char* format, ...);
+VOID 											FJ_Debug_Print_Err(const char* format, ...);
+修改为
+VOID 											fj_debug_print_dbg1(const char* format, ...);
+VOID 											fj_debug_print_info1(const char* format, ...);
+VOID 											fj_debug_print_wrn1(const char* format, ...);
+VOID 											fj_debug_print_err1(const char* format, ...);
+
+.c文件对照修改
+对fjdebug下的所有公有函数添加了self参数
+
+====================================================================
+====================================================================
+fjfilesystem类的公有函数
+ULONG 											FJ_Fs_Open(CHAR* szName, INT32 dwFlags);
+VOID 												FJ_Fs_Close(ULONG ulFileId);
+FJ_ERR_CODE 									FJ_Fs_Read(ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize, ULONG* ulLength);
+FJ_ERR_CODE 									FJ_Fs_Write(ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize, ULONG* ulLength);
+FJ_ERR_CODE 									FJ_Fs_WriteAsync(FsEntryCB pCallback, ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize);
+FJ_ERR_CODE 									FJ_Fs_GetWriteLengthAs(ULONG* length);
+FJ_ERR_CODE 									FJ_Fs_Remove(CHAR* szName);
+FJ_ERR_CODE 									FJ_Fs_RemoveMulti(CHAR* szName, CHAR filenameList[][13], INT32 iFnum, FsDeleteMultiCB pcallback);
+FJ_ERR_CODE 									FJ_Fs_Mkdir(CHAR* szName);
+FJ_ERR_CODE 									FJ_Fs_Chdir(CHAR* szInputPath);
+FJ_ERR_CODE 									FJ_Fs_Rename(CHAR* szSrcName, CHAR* szDstName);
+FJ_ERR_CODE 									FJ_Fs_GetAttribute(CHAR* szName, UINT32* puiAttributes);
+FJ_ERR_CODE 									FJ_Fs_SetAttribute(CHAR* szName, UINT32 puiAttributes);
+FJ_ERR_CODE 									FJ_Fs_SetAttributeMulti(CHAR* szName, UINT32 puiAttributes, UINT32 ucAttrmode, CHAR filenameList[][13],
+														INT32 iFnum, FsAttributesSetMultiCB pcallback);
+FJ_ERR_CODE 									FJ_Fs_Stat(CHAR* szName, FJ_FS_STAT* pStat);
+FJ_ERR_CODE 									FJ_Fs_StatEx(CHAR* szName, FJ_FS_STAT_EX* pStatEx);
+FJ_ERR_CODE 									FJ_Fs_UtimeEx(CHAR* szName, USHORT timestampType, FJ_FS_TIME* ptime);
+FJ_ERR_CODE 									FJ_Fs_Lseek(ULONG ulFileId, ULONG ulOffset, USHORT whence, ULONG* pulLength);
+FJ_ERR_CODE 									FJ_Fs_Lseek64(ULONG ulFileId, INT64 iOffset, USHORT whence, INT64* piLength);
+FJ_ERR_CODE 									FJ_Fs_LseekWithLimit(ULONG ulFileId, ULONG ulOffset);
+FJ_ERR_CODE 									FJ_Fs_Fsync(ULONG ulFileId);
+FJ_ERR_CODE 									FJ_Fs_Sync(CHAR* szDrvName);
+FJ_ERR_CODE									FJ_Fs_FileSave(const char* szName, UINT32* addr, INT32 size);
+FJ_ERR_CODE 									FJ_Fs_ExistRootDirectoryCheck(FJ_MEDIA_ID bMediaId, UCHAR* pDcimExist, UCHAR* pMiscExist);
+FJ_ERR_CODE 									FJ_Fs_FileCopyToDrive(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									FJ_Fs_SetSearchEntry(CHAR* szEntryName);
+FJ_ERR_CODE 									FJ_Fs_DirectoryEntryGet(FJ_FS_ENTRY_MODE bEntryMode, CHAR*	szOutput, UINT32	uiOutputLen,
+														UINT32*	puiAttributes, ULONG*	pulSize);
+FJ_ERR_CODE 									FJ_Fs_RootEntriesCount(ULONG* count);
+FJ_ERR_CODE 									FJ_Fs_GetUserSettingData( UINT32 *pbyBuffer, ULONG ulRequestSize, ULONG ulOffset );
+FJ_ERR_CODE 									FJ_Fs_SetUserSettingData( UINT32 *pbyBuffer, ULONG ulRequestSize );
+FJ_ERR_CODE 									FJ_Mount(FJ_MEDIA_ID bMediaId, CHAR *szDrvName);
+FJ_ERR_CODE									FJ_UnMount(CHAR *szDrvName);
+FJ_ERR_CODE 									FJ_GetStorageMediaGeometryEx(FJ_MEDIA_ID bMediaId, FJ_FS_GEOMETRY* pGeometry);
+FJ_ERR_CODE 									FJ_FormatStorageMedia(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									FJ_FullFormatStorageMedia(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									FJ_GetFormatProgress(UINT32* progress);
+FJ_ERR_CODE 									FJ_SetVolLabel(CHAR *szDrvName, CHAR* szVolLabel);
+FJ_ERR_CODE									FJ_GetVolLabel(CHAR *szDrvName, CHAR* szVolLabel);
+FJ_ERR_CODE 									FJ_DriveToDriveCopy(CHAR* szSrcDrive, CHAR* szDstDrive);
+FJ_ERR_CODE 									FJ_Set_NF_Storage_ID(UCHAR id);
+FJ_ERR_CODE 									FJ_Set_EMMC_Storage_ID(UCHAR id);
+UCHAR 											FJ_Get_NF_Storage_ID(VOID);
+UCHAR 											FJ_Get_EMMC_Storage_ID(VOID);
+#ifdef CO_LINUX_VERSION_ON
+FJ_ERR_CODE 									FJ_Set_VFS_Write_Err_CB( ULONG ulFileId, FsWriteErrCB pCallback );
+#endif
+
+替换为
+ULONG 											fj_filesystem_open1(CHAR* szName, INT32 dwFlags);
+VOID 												fj_filesystem_close1(ULONG ulFileId);
+FJ_ERR_CODE 									fj_filesystem_read1(ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize, ULONG* ulLength);
+FJ_ERR_CODE 									fj_filesystem_write1(ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize, ULONG* ulLength);
+FJ_ERR_CODE 									fj_filesystem_write_async1(FsEntryCB pCallback, ULONG ulFileId, UINT32* pbyBuffer, ULONG ulRequestSize);
+FJ_ERR_CODE 									fj_filesystem_get_write_length_as1(ULONG* length);
+FJ_ERR_CODE 									fj_filesystem_remove1(CHAR* szName);
+FJ_ERR_CODE 									fj_filesystem_remove_multi1(CHAR* szName, CHAR filenameList[][13], INT32 iFnum, FsDeleteMultiCB pcallback);
+FJ_ERR_CODE 									fj_filesystem_mkdir1(CHAR* szName);
+FJ_ERR_CODE 									fj_filesystem_chdir1(CHAR* szInputPath);
+FJ_ERR_CODE 									fj_filesystem_rename1(CHAR* szSrcName, CHAR* szDstName);
+FJ_ERR_CODE 									fj_filesystem_get_attribute1(CHAR* szName, UINT32* puiAttributes);
+FJ_ERR_CODE 									fj_filesystem_set_attribute1(CHAR* szName, UINT32 puiAttributes);
+FJ_ERR_CODE 									fj_filesystem_set_attribute_multi1(CHAR* szName, UINT32 puiAttributes, UINT32 ucAttrmode, CHAR filenameList[][13],
+														INT32 iFnum, FsAttributesSetMultiCB pcallback);
+FJ_ERR_CODE 									fj_filesystem_stat1(CHAR* szName, FJ_FS_STAT* pStat);
+FJ_ERR_CODE 									fj_filesystem_stat_ex1(CHAR* szName, FJ_FS_STAT_EX* pStatEx);
+FJ_ERR_CODE 									fj_filesystem_utime_ex1(CHAR* szName, USHORT timestampType, FJ_FS_TIME* ptime);
+FJ_ERR_CODE 									fj_filesystem_lseek1(ULONG ulFileId, ULONG ulOffset, USHORT whence, ULONG* pulLength);
+FJ_ERR_CODE 									fj_filesystem_lseek641(ULONG ulFileId, INT64 iOffset, USHORT whence, INT64* piLength);
+FJ_ERR_CODE 									fj_filesystem_lseek_with_limit1(ULONG ulFileId, ULONG ulOffset);
+FJ_ERR_CODE 									fj_filesystem_fsync1(ULONG ulFileId);
+FJ_ERR_CODE 									fj_filesystem_sync1(CHAR* szDrvName);
+FJ_ERR_CODE									fj_filesystem_file_save1(const char* szName, UINT32* addr, INT32 size);
+FJ_ERR_CODE 									fj_filesystem_exist_root_directory_check1(FJ_MEDIA_ID bMediaId, UCHAR* pDcimExist, UCHAR* pMiscExist);
+FJ_ERR_CODE 									fj_filesystem_file_copy_to_drive1(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									fj_filesystem_set_search_entry(CHAR* szEntryName);
+FJ_ERR_CODE 									fj_filesystem_directory_entry_get1(FJ_FS_ENTRY_MODE bEntryMode, CHAR*	szOutput, UINT32	uiOutputLen,
+														UINT32*	puiAttributes, ULONG*	pulSize);
+FJ_ERR_CODE 									fj_filesystem_root_entries_count1(ULONG* count);
+FJ_ERR_CODE 									fj_filesystem_get_user_setting_data1( UINT32 *pbyBuffer, ULONG ulRequestSize, ULONG ulOffset );
+FJ_ERR_CODE 									fj_filesystem_set_user_setting_data1( UINT32 *pbyBuffer, ULONG ulRequestSize );
+FJ_ERR_CODE 									fj_filesystem_mount1(FJ_MEDIA_ID bMediaId, CHAR *szDrvName);
+FJ_ERR_CODE									fj_filesystem_un_mount1(CHAR *szDrvName);
+FJ_ERR_CODE 									fj_filesystem_get_storage_media_geometry_ex1(FJ_MEDIA_ID bMediaId, FJ_FS_GEOMETRY* pGeometry);
+FJ_ERR_CODE 									fj_filesystem_format_storage_media1(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									fj_filesystem_full_format_storage_media1(FJ_MEDIA_ID bMediaId);
+FJ_ERR_CODE 									fj_filesystem_get_format_progress1(UINT32* progress);
+FJ_ERR_CODE 									fj_filesystem_set_vol_label1(CHAR *szDrvName, CHAR* szVolLabel);
+FJ_ERR_CODE									fj_filesystem_get_vol_label1(CHAR *szDrvName, CHAR* szVolLabel);
+FJ_ERR_CODE 									fj_filesystem_drive_to_drive_copy1(CHAR* szSrcDrive, CHAR* szDstDrive);
+FJ_ERR_CODE 									fj_filesystem_set_nf_storage_id1(UCHAR id);
+FJ_ERR_CODE 									fj_filesystem_set_emmc_storage_id1(UCHAR id);
+UCHAR 											fj_filesystem_get_nf_storage_id1(VOID);
+UCHAR 											fj_filesystem_get_emmc_storage_id1(VOID);
+#ifdef CO_LINUX_VERSION_ON
+FJ_ERR_CODE 									fj_filesystem_set_vfs_write_err_cb1( ULONG ulFileId, FsWriteErrCB pCallback );
+#endif
+
+对fjfilesystem下的所有公有函数添加了self参数
+====================================================================
+====================================================================
+移动fj_af.h,fj_filesystem.h,fj_formatter.h,fj_iip_resource.h,fj_pcie_rc.h文件内容到
+fjaf.h,fjfilesystem.h,fjformatter.h,fjiipresource.h,fjpcierc.h中去,对common.mk的头文件引用作出修改
+修改内容为在64行FJ_CINCPATH     := -I$(ROOT_DIR)/cpu_tkernel/basefw/include的下面添加如下内容
+FJ_CINCPATH     += -I$(ROOT_DIR)/cpu_tkernel/basefw/fj/src.
+
+====================================================================
+====================================================================
+fjaf.h中的枚举和结构体修改
+typedef struct _AFWinRect AFWinRect;
+typedef struct _AFWinInfo AFWinInfo;
+typedef struct _AFLumiInfo _AFLumiInfo;
+typedef struct _AFVWinInfo AFVWinInfo;
+typedef struct _AFHGroup AFHGroup;
+typedef struct _AFHInfo AFHInfo;
+typedef struct _AFPowerState AFPowerState;
+typedef struct _FjAf		FjAf;
+
+enum 	FjAfDataType; //枚举的名称定义
+以及对结构体里面的所有变量按照规范进行修改
+
+====================================================================
+====================================================================
+fjfilesystem.h中的枚举和结构体修改
+typedef enum FJ_FS_ENTRY_MODE
+typedef enum FJ_MEDIA_ID
+typedef struct FJ_FS_STAT
+typedef struct FJ_FS_STAT_EX
+typedef struct FJ_FS_TIME
+typedef struct FJ_FS_GEOMETRY
+按照规范替换为
+typedef enum 				FjFilesystemFsEntryMode
+typedef enum 				FjFilesystemMediaId
+typedef struct 				_FjFsStat FjFsStat;
+typedef struct 				_FjFsStatEx FjFsStatEx;
+typedef struct 				_FjFsTime FjFsTime;
+typedef struct 				_FjFsGeometry FjFsGeometry;
+
+====================================================================
+====================================================================
+fjformatter.h中的枚举和结构体修改
+typedef struct  T_FJ_FORMATTER_PID
+typedef struct  T_FJ_FORMATTER_DATA
+按照规范替换为
+typedef struct 				_TFjFormatterPid TFjFormatterPid;
+typedef struct 				_TFjFormatterData TFjFormatterData;
+
+====================================================================
+====================================================================
+fjpcierc.h中的枚举和结构体修改
+typedef struct   T_FJ_PCIE_RC_CTRL_CFG
+typedef struct   T_FJ_PCIE_MSI_CTRL
+按照规范替换为
+
+====================================================================
+====================================================================
+fjmedia.h中的枚举和结构体修改
+typedef enum  FJ_MEDIA_WRITE_PROTECT
+typedef enum  FJ_MEDIA_SD_DRIVE
+typedef enum  FJ_MEDIA_SD_CLOCK
+typedef enum  FJ_MEDIA_SD_MODE
+typedef enum  FJ_MEDIA_SD_UHS2_MODE
+typedef enum  FJ_MEDIA_SD_UHS2_RANGE
+typedef enum  FJ_MEDIA_SD_UHS2_PWR
+typedef enum  FJ_MEDIA_SD_UHS2_PMODE
+typedef enum  FJ_MEDIA_SD_HOLD_CLOCK
+typedef enum  FJ_MEDIA_SD_LOCK_OPE
+typedef enum  FJ_MEDIA_SD_CB_EVENT
+typedef enum  FJ_MEDIA_NF_TIMEOUT
+typedef enum  FJ_MEDIA_NF_BB_SEARCH_AREA
+typedef enum  E_MEDIA_NF_ACCESS_CYC
+typedef enum  E_MEDIA_NF_DRIVABILITY
+typedef enum  E_MEDIA_NF_PARTITION_NAME
+typedef enum  E_MEDIA_EMMC_ACCESS_MODE
+typedef enum  E_MEDIA_EMMC_PARTITION_NAME
+typedef struct  FJ_NF_DEV_INFO
+typedef struct  FJ_NF_ATTRIBUTE
+typedef struct  FJ_NF_PARTITION
+typedef struct  FJ_EMMC_PARTITION
+按照规范替换为
+typedef enum FjMediaWriteProtect
+typedef enum FjMediaSdDrive
+typedef enum FjMediaSdClock
+typedef enum FjMediaSdMode
+typedef enum FjMediaSdUhs2Mode
+typedef enum FjMediaSdUhs2Range
+typedef enum FjMediaSdUhs2Pwr
+typedef enum FjMediaSdUhs2Pmode
+typedef enum FjMediaSdHoldClock
+typedef enum FjMediaSdLockOpe
+typedef enum FjMediaSdCbEvent
+typedef enum FjMediaNfTimeout
+typedef enum FjMediaNfBbSearchArea
+typedef enum FjMediaENfAccessCyc
+typedef enum FjMediaENfDrivability
+typedef enum FjMediaENfPartitionName
+typedef enum FjMediaEEmmcAccessMode
+typedef enum FjMediaEEmmcPartitionName
+typedef struct 	_FjNfDevInfo FjNfDevInfo;
+typedef struct 	_FjNfAttribute FjNfAttribute;
+typedef struct 	_FjNfPartition FjNfPartition;
+typedef struct 	_FjEmmcPartition FjEmmcPartition;
+====================================================================
+====================================================================
+fjmode.h中的枚举和结构体修改
+typedef enum FJ_MODE
+typedef enum FJ_STATUS_REGISTER
+按照规范替换为
+
+====================================================================
+====================================================================
+fjaf.h的宏替换
+D_AF_WINDOW_MAX          
+D_AF_LUMINANCE_INFO_MAX
+D_AF_HORIZONTAL_TAP_MAX
+替换为
+FjAf_WINDOW_MAX
+FjAf_LUMINANCE_INFO_MAX
+FjAf_HORIZONTAL_TAP_MAX
+
+====================================================================
+====================================================================
+fjfilesystem.h的宏替换
+#define FJ_FILE_TYPE_JPEG--------------->		FjFilesystem_TYPE_JPEG		
+#define FJ_FILE_TYPE_MP4--------------->			FjFilesystem_TYPE_MP4	
+#define FJ_FILE_TYPE_MOV--------------->	FjFilesystem_TYPE_MOV			
+#define FJ_FILE_TYPE_RAW--------------->		FjFilesystem_TYPE_RAW
+#define FJ_FILE_TYPE_WAV--------------->		FjFilesystem_TYPE_WAV	
+#define FJ_FILE_TYPE_THM--------------->	FjFilesystem_TYPE_THM				
+#define FJ_FILE_TYPE_AVI  --------------->		FjFilesystem_TYPE_AVI		
+#define FJ_FILE_TYPE_TIFF	--------------->		FjFilesystem_TYPE_TIFF	
+#define FJ_FILE_TYPE_ASF	--------------->		FjFilesystem_TYPE_ASF	
+#define FJ_FILE_TYPE_WMV--------------->	FjFilesystem_TYPE_WMV				
+#define FJ_FILE_TYPE_WMA--------------->	FjFilesystem_TYPE_WMA		
+#define FJ_FILE_TYPE_MPEG	--------------->	FjFilesystem_TYPE_MPEG
+#define FJ_FILE_TYPE_TXT	--------------->		FjFilesystem_TYPE_TXT			
+#define FJ_USED_MEDIA_UNKNOWN--------------->FjFilesystem_USED_MEDIA_UNKNOWN
+#define FJ_USED_MEDIA_NF--------------->		FjFilesystem_USED_MEDIA_NF		
+#define FJ_USED_MEDIA_SD	--------------->		FjFilesystem_USED_MEDIA_SD	
+#define FJ_USED_MEDIA_SDHC--------------->	FjFilesystem_USED_MEDIA_SDHC		
+#define FJ_USED_MEDIA_SDXC--------------->	FjFilesystem_USED_MEDIA_SDXC			
+#define FJ_USED_MEDIA_EMMC--------------->FjFilesystem_USED_MEDIA_EMMC			
+#define FJ_FS_OPEN_RDONLY--------------->	FjFilesystem_FS_OPEN_RDONLY			
+#define FJ_FS_OPEN_WRONLY--------------->	FjFilesystem_FS_OPEN_WRONLY				
+#define FJ_FS_OPEN_RDWR--------------->		FjFilesystem_FS_OPEN_RDWR			
+#define FJ_FS_OPEN_APPEND--------------->	FjFilesystem_FS_OPEN_APPEND				
+#define FJ_FS_OPEN_CREAT--------------->		FjFilesystem_FS_OPEN_CREAT			
+#define FJ_FS_OPEN_TRUNC--------------->		FjFilesystem_FS_OPEN_TRUNC			
+#define FJ_FS_ATTR_NORMAL--------------->	FjFilesystem_FS_ATTR_NORMAL			
+#define FJ_FS_ATTR_READONLY--------------->	FjFilesystem_FS_ATTR_READONLY		
+#define FJ_FS_ATTR_HIDDEN--------------->		FjFilesystem_FS_ATTR_HIDDEN	
+#define FJ_FS_ATTR_SYSTEM--------------->		FjFilesystem_FS_ATTR_SYSTEM		
+#define FJ_FS_ATTR_DIRECTORY--------------->FjFilesystem_FS_ATTR_DIRECTORY			
+#define FJ_FS_ATTR_ARCHIVE--------------->	FjFilesystem_FS_ATTR_ARCHIVE		
+#define FJ_FS_ATTR_MODE_SET--------------->	FjFilesystem_FS_ATTR_MODE_SET		
+#define FJ_FS_ATTR_MODE_ON	--------------->FjFilesystem_FS_ATTR_MODE_ON			
+#define FJ_FS_ATTR_MODE_OFF--------------->	FjFilesystem_FS_ATTR_MODE_OFF	
+#define FJ_FS_TYPE_UNKNOWN--------------->FjFilesystem_FS_TYPE_UNKNOWN			
+#define FJ_FS_TYPE_FAT12	--------------->FjFilesystem_FS_TYPE_FAT12			
+#define FJ_FS_TYPE_FAT16	--------------->	FjFilesystem_FS_TYPE_FAT16		
+#define FJ_FS_TYPE_FAT16E	--------------->FjFilesystem_FS_TYPE_FAT16E			
+#define FJ_FS_TYPE_EXFAT--------------->FjFilesystem_FS_TYPE_EXFAT			
+#define FJ_FS_TYPE_FAT32	--------------->FjFilesystem_FS_TYPE_FAT32		
+#define FJ_FS_TYPE_FAT32X	--------------->FjFilesystem_FS_TYPE_FAT32X			
+#define FJ_STATUS_DIR_NO_EXIST--------------->FjFilesystem_STATUS_DIR_NO_EXIST			
+#define FJ_STATUS_DIR_EXIST--------------->FjFilesystem_STATUS_DIR_EXIST			
+#define FJ_FS_TIMESTAMP_MODIFY--------------->FjFilesystem_FS_TIMESTAMP_MODIFY	
+#define FJ_FS_TIMESTAMP_CREATE--------------->FjFilesystem_FS_TIMESTAMP_CREATE	
+#define FJ_FS_TIMESTAMP_ACCESS--------------->FjFilesystem_FS_TIMESTAMP_ACCESS			
+#define FJ_FS_SEEK_SET--------------->FjFilesystem_FS_SEEK_SET				
+#define FJ_FS_SEEK_CUR--------------->FjFilesystem_FS_SEEK_CUR					
+#define FJ_FS_SEEK_END--------------->FjFilesystem_FS_SEEK_END		
+
+====================================================================
+====================================================================
+fjformatter.h的宏替换
+#define FJ_FORMATTER_MPTS_STRM--------------->FjFormatter_MPTS_STRM
+#define FJ_FORMATTER_MPTS_PG_0--------------->	FjFormatter_MPTS_PG_0
+#define FJ_FORMATTER_MPTS_PG_1--------------->FjFormatter_MPTS_PG_1		
+#define FJ_FORMATTER_MPTS_PG_2--------------->FjFormatter_MPTS_PG_2	
+#define FJ_FORMATTER_PAT--------------->FjFormatter_PAT		
+#define FJ_FORMATTER_PMT--------------->FjFormatter_PMT		
+#define FJ_FORMATTER_PCR--------------->FjFormatter_PCR				
+#define FJ_FORMATTER_VDO--------------->FjFormatter_VDO					
+#define FJ_FORMATTER_ADO--------------->	FjFormatter_ADO		
+#define FJ_FORMATTER_MTD--------------->	FjFormatter_MTD	
+#define FJ_FORMATTER_LTI_END--------------->FjFormatter_LTI_END		
+#define FJ_FORMATTER_LTI_CONTINUE--------------->FjFormatter_LTI_CONTINUE
+
+====================================================================
+====================================================================
+fjmode.h的宏替换
+#define FJ_SR1_NULL--------------->FjMode_SR1_NULL								
+#define FJ_SR1_SUCCESS--------------->FjMode_SR1_SUCCESS							
+#define FJ_SR1_FAILURE--------------->	FjMode_SR1_FAILURE							
+#define FJ_SR1_FILE_TRANS_BUSY--------------->FjMode_SR1_FILE_TRANS_BUSY			
+#define FJ_SR1_FILE_TRANS_DONE--------------->FjModeJ_SR1_FILE_TRANS_DONE				
+#define FJ_SR1_FILE_TRANS_FAILED--------------->FjMode_SR1_FILE_TRANS_FAILED			
+#define FJ_SR1_SLOW_MEDIA_WARNING--------------->FjMode_SR1_SLOW_MEDIA_WARNING
+#define FJ_SR1_RECORDING_AUDIO--------------->FjMode_SR1_RECORDING_AUDIO	
+#define FJ_SR1_PLAYING_AUDIO--------------->FjMode_SR1_PLAYING_AUDIO		
+#define FJ_SR1_I2C_TRANSACTION_SUCCESS--------------->FjMode_SR1_I2C_TRANSACTION_SUCCESS
+#define FJ_SR1_I2C_TRANSACTION_FAILED--------------->FjMode_SR1_I2C_TRANSACTION_FAILED	
+#define FJ_SR1_CUR_PATH_SUCCESS--------------->FjMode_SR1_CUR_PATH_SUCCESS
+#define FJ_SR1_CUR_PATH_FAILED--------------->FjMode_SR1_CUR_PATH_FAILED				
+#define FJ_SR1_MANUAL_STAMP_STARTED--------------->FjMode_SR1_MANUAL_STAMP_STARTED	
+#define FJ_SR2_DZOOM_COMPLETED--------------->FjMode_SR2_DZOOM_COMPLETED				
+#define FJ_SR2_NO_AUDIO_DRAM--------------->FjMode_SR2_NO_AUDIO_DRAM					
+#define FJ_SR2_OPE_COMPLETED--------------->FjMode_SR2_OPE_COMPLETED				
+#define FJ_SR2_NO_FALSHMEM--------------->FjMode_SR2_NO_FALSHMEM				
+#define FJ_SR2_NFP--------------->FjMode_SR2_NFP										
+#define FJ_SR2_PIP_EFF_COMPLETED--------------->FjMode_SR2_PIP_EFF_COMPLETED				
+#define FJ_SR2_FLASH_LIGHT_REQ--------------->FjMode_SR2_FLASH_LIGHT_REQ					
+#define FJ_SR2_AE_CONV--------------->FjMode_SR2_AE_CONV									 
+#define FJ_SR2_CARD_EXIST_IND--------------->FjMode_SR2_CARD_EXIST_IND					
+#define FJ_SR2_CARD_INS_REM_INT--------------->FjMode_SR2_CARD_INS_REM_INT			
+#define FJ_SR2_AWB_CONV--------------->FjMode_SR2_AWB_CONV				
+
+====================================================================
+====================================================================
+对所有类中的类型进行了typedef类型替换以符合相关规范
+				

@@ -1,0 +1,59 @@
+1、ct_dd_csio.c（类名：CtDdCsio、 CtDdCsioProcess、CtDdCsioMain）
+（1）公有函数：
+原公有函数： VOID Ct_Dd_CSIO_Main( int argc, char** argv); 	更改后：VOID ct_dd_csio_main_test(CtDdCsioMain* self, int argc, char** argv);
+原公有函数：extern VOID Ct_Dd_CSIO_PCSim_Test(VOID); 更改后：VOID ct_dd_csio_pcsim_test(CtDdCsio* self);
+
+2、ct_dd_exs.c （类名：CtDdExs、CtDdExsMain）
+（1）公有函数：
+原公有函数： extern VOID Ct_Dd_EXS_Main(int argc, char** argv); 更改后：VOID ct_dd_exs_main_test(CdTtExsMain *self, int argc, char** argv);
+
+3、ct_dd_gpv.c （类名：CtDdGpv、CtDdGpvMain）
+（1）公有函数：
+原公有函数： void Ct_Dd_GPV_Main(int argc, char** argv); 	更改后：void ct_dd_gpv_main_test(CtDdGpvMain* self, int argc, char** argv)；
+
+4、ct_dd_ipcu.c（类名：CtDdIpcu、CtDdIpcuMain）
+（1）公有函数：
+原公有函数： extern VOID Ct_Dd_IPCU_Main(int argc, char** argv); 更改后：extern VOID ct_dd_ipcu_main_test(CtDdIpcuMain* self, int argc, char** argv);
+
+5、ct_dd_pcie_rc.c （类名：CtDdPcieRc、CtDdPcieMain）
+（1）公有函数：
+原公有函数： VOID Ct_Dd_Pcie_Rc_Main(int argc, char** argv) 	更改后：VOID ct_dd_pcie_main_test(CtDdPcieMain* self, int argc, char** argv)；
+
+6、ct_dd_pwm.c （类名：CtDdPwm、CtDdPwmMain）
+（1）公有函数：
+原公有函数： void Ct_Dd_PWM_Main(int argc, char** argv) 	更改后：VOID ct_dd_pwm_main_test(CtDdPwmMain* self, int argc, char** argv)
+
+7、ct_dd_hdmac.c （类名：CtDdHdmac、CtDdHdmacMain）
+（1）公有函数：
+原公有函数： VOID Ct_Dd_HDMAC_Main(int argc, char** argv) 	更改后：VOID ct_dd_hdmac_main_test(CtDdHdmacMain* self, int argc, char** argv);
+（2）宏定义
+原宏：								更改后：
+D_HDMAC_AUTO_TEST_SIZE						CtDdHdmac_AUTO_TEST_SIZE  			
+D_HDMAC_SDRAM_BASE     						CtDdHdmac_SDRAM_BASE      
+D_HDMAC_AUTO_TEST_ADR_SRC   					CtDdHdmac_AUTO_TEST_ADR_SRC    
+D_HDMAC_AUTO_TEST_ADR_DST   					CtDdHdmac_AUTO_TEST_ADR_DST  
+D_HDMAC_CPU_TARGET						CtDdHdmac_CPU_TARGET
+       
+
+8、ct_dd_hdmac0.c （类名：CtDdHdmac0、CtDdHdmac0Main）
+（1）公有函数：
+原公有函数： VOID Ct_Dd_HDMAC0_Main(int argc, char** argv) 	更改后：VOID ct_dd_hdmac0_main_test(CtDdHdmac0Main* self, int argc, char** argv);
+（2）宏定义
+原宏：								更改后：
+D_HDMAC0_AUTO_TEST_SIZE						CtDdHdmac0_AUTO_TEST_SIZE  			
+D_HDMAC0_SDRAM_BASE     					CtDdHdmac0_SDRAM_BASE      
+D_HDMAC0_AUTO_TEST_ADR_SRC   					CtDdHdmac0_AUTO_TEST_ADR_SRC    
+D_HDMAC0_AUTO_TEST_ADR_DST   					CtDdHdmac0_AUTO_TEST_ADR_DST  
+D_HDMAC0_CPU_TARGET						CtDdHdmac0_CPU_TARGET
+
+9、ct_dd_hdmac1.c （类名：CtDdHdmac1、CtDdHdmac1Main）
+（1）公有函数：
+原公有函数： VOID Ct_Dd_HDMAC1_Main(int argc, char** argv) 	更改后：VOID ct_dd_hdmac1_main_test(CtDdHdmac1Main* self, int argc, char** argv);
+（2）宏定义
+原宏：								更改后：
+D_HDMAC1_AUTO_TEST_SIZE						CtDdHdmac1_AUTO_TEST_SIZE  			
+D_HDMAC1_SDRAM_BASE     					CtDdHdmac1_SDRAM_BASE      
+D_HDMAC1_AUTO_TEST_ADR_SRC   					CtDdHdmac1_AUTO_TEST_ADR_SRC    
+D_HDMAC1_AUTO_TEST_ADR_DST   					CtDdHdmac1_AUTO_TEST_ADR_DST  
+D_HDMAC1_CPU_TARGET						CtDdHdmac1_CPU_TARGET
+

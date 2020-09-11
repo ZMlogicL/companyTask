@@ -1,0 +1,50 @@
+AlAwbSetupProduct0.h -->alawbsetupproduct05.h
+AlAwbSetupProduct1.h -->alawbsetupproduct15.h
+AlAwbSetupProduct2.h -->alawbsetupproduct25.h
+AlAwbSetupProduct.h  -->alawbsetupproduct.h
+
+用到以下变量的，通过get函数获得，需要包对应的头文件
+gttAlAwbSetupProduct0 -->al_awb_setup_product05_get_product0()
+gttAlAwbSetupProduct1 -->al_awb_setup_product05_get_product1()
+gttAlAwbSetupProduct2 -->al_awb_setup_product05_get_product2()
+
+
+文件名修改
+bf_version.c  -->bfversion.c
+fj_get_ok_version()   -->  bf_version_get_ok_word_version()
+BF_Get_OK_MP_Version() --> 	bf_version_get_ok_mp_version()
+BF_Get_OK_Sub_Version()   -->bf_version_get_ok_sub_version()
+BF_Get_OK_Debug_Version()  -->bf_version_get_ok_debug_version()
+BF_Get_OK_FW_type()  -->bf_version_get_ok_fw_type()
+BF_Get_OK_Board_type()  -->bf_version_get_ok_board_type()
+BF_Get_OK_Memory_size_type()  -->bf_version_get_ok_memory_size_type()
+
+文件名修改
+bf_startup.c-->bfstartup.c 
+BF_Startup_Init_BaseFW()   -->  bf_startup_init_base_fw()
+BF_Initialize_Image_Master_Module()   -->  bf_startup_initialize_image_master_module()
+fj_bootmessageprint()   -->  bf_startup_boot_message_print()
+BF_Startup_Start_File_System()   -->  bf_startup_start_file_system()
+BF_Startup_Init_Display()   -->  bf_startup_init_display()
+BF_Startup_Boot_Sample()   -->  bf_startup_boot_sample()
+
+bf_startup.h根据函数所在位置分为bfstartup.h  	bfversion.h   ehost.h
+
+文件名修改
+boot.c -->eboot.c
+fj_getbootcond()  -->e_boot_task()
+fj_reboot_pre() -->e_boot_get_boot_cond()
+fj_reboot()-->e_boot_reboot_pre()
+fj_get_ok_version()-->e_boot_reboot()
+BF_Boot_Enable_MxicDecErr() -->e_boot_enable_mxic_decode_error()
+
+文件名修改
+host.c --> ehost.c
+BF_Host_Init_Message()   -->  e_host_init_message() 
+fj_hostgetmessage()   -->  e_host_block_message_check() 
+fj_hostpostmessage()   -->  e_host_get_message() 
+fj_confighostmessage()   -->  e_host_post_message() 
+BF_Block_Message_Check()   -->  e_host_config_host_message() 
+
+
+

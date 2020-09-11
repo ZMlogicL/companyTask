@@ -1,0 +1,505 @@
+0904
+CheckHeaderMain.c文件名改为checkheadermain.c
+checkheadermain.c中pro_test前5000行拆分为protest1.c到protest8.c 8个类文件，
+其中protest5 - protest8是申雨拆分。
+
+宏定义和枚举类型定义放到头文件internals.h
+
+删除checkheadermain.c，在前一个CheckHeaderMain.c中修改。
+
+删除组长移的
+nictest.c/h、pdmtest.c/h、ptimertest.c/h、relctest.c/h、scutest.c/h、sdramctest.c/h
+12个文件，组长重新分配，上传自己移的相同的文件
+
+将target/cpu_tkernel/basefw/MILB_API/MILB_Header/include/Exs/目录下
+_jmlexs.h/__jmlexs.h两个文件结构体定义和变量移到
+target/cpu_tkernel/basefw/MILB_API/MILB_Header/Project/Exs/src/jmlexs.h
+并按ETK命名规范命名结构体名和域的命名:
+
+struct io_gpv 		改为 	IoGpv
+IoGpv   		IO_GPV;		//全局变量 IO_GPV 改为 ioGpv  
+
+struct io_exstop		改为		IoExstop
+IoExstop 		IO_EXSTOP;	//全局变量	IO_EXSTOP改为ioExstop
+
+
+
+将target/cpu_tkernel/basefw/MILB_API/MILB_Header/include/Exs/目录下
+_pcie.h文件中结构体定义和变量移到
+target/cpu_tkernel/basefw/MILB_API/MILB_Header/Project/Exs/src/pcie.h
+并按ETK命名规范命名结构体名和域的命名：
+
+union io_dev_id_vend_id 修改为 IoDevIdVendId
+union io_status_command 修改为 IoStatusCommand
+union io_class_code_rev_id 修改为	IoClassCodeRevId
+union io_hdr_type_cache_line_size 修改为 IoHdrTypeCacheLineSize
+union io_sec_lat_timer_sub_bus_sec_bus_pri_bus 修改为	IoSecLatTimerSubBusSecBusPriBus
+union io_sec_stat_io_limit_io_base 修改为	IoSecStatIoLimitIoBase
+union io_mem_limit_mem_base 修改为	IoMemLimitMemBase
+union io_pref_mem_limit_pref_mem_base 修改为	IoPrefMemLimitPrefMemBase
+union io_pref_base_upper 修改为 IoPrefBaseUpper
+union io_pref_limit_upper 修改为 IoPrefLimitUpper
+union io_io_limit_upper_io_base_upper 修改为 	IoIoLimitUpperIoBaseUpper
+union io_cap_ptr 修改为	IoCapPtr
+union io_exp_rom_bar 修改为	IoExpRomBar
+union io_bridge_ctrl_int_pin_int_line 修改为	IoBridgeCtrlIntPinIntLine
+struct io_t1csh 修改为	IoT1csh
+union io_bar 修改为	IoBar
+union io_cardbus_cis_ptr 修改为	IoCardbusCisPtr
+union io_subsys_id_subsys_v_id 修改为 IoSubsysIdSubsysVId
+union io_int_pin_int_line 修改为	IoIntPinIntLine
+struct io_t0csh 修改为 IoT0csh
+union io_pmcr_pmc 修改为	IoPmcrPmc
+union io_pmcr_pmcs 修改为	IoPmcrPmcs
+struct io_pmcr 修改为	IoPmcr
+union io_msicr_mcinc 修改为	IoMsicrMcinc
+union io_msicr_mla 修改为 IoMsicrMla
+union io_msicr_mua 修改为	IoMsicrMua
+union	io_msicr_md 修改为 IoMsicrMd
+union io_msicr_mmb 修改为	IoMsicrMmb
+union io_msicr_mpb 修改为	IoMsicrMpb
+struct io_msicr 修改为 IoMsicr
+union io_pciecr_cr 修改为	IoPciecrCr
+union io_pciecr_dcr 修改为	IoPciecrDcr
+union io_pciecr_dcsr 修改为		IoPciecrDcsr
+union io_pciecr_lcr 修改为	IoPciecrLcr
+union io_pciecr_lcsr 修改为	IoPciecrLcsr
+union io_pciecr_scr 修改为	IoPciecrScr
+union io_pciecr_scsr 修改为	IoPciecrScsr
+union io_pciecr_rccr 修改为	IoPciecrRccr
+union io_pciecr_rsr 修改为	IoPciecrRsr
+union io_pciecr_dc2r 修改为	IoPciecrDc2r
+union io_pciecr_dc2sr 修改为	IoPciecrDc2sr
+union io_pciecr_lc2r 修改为	IoPciecrLc2r
+union io_pciecr_lc2sr 修改为	IoPciecrLc2sr
+struct io_pciecr 修改为	IoPciecr
+union io_aerc_aerech 修改为	IoAercAerech
+union io_aerc_uesr 修改为	IoAercUesr
+union io_aerc_uemr 修改为	IoAercUemr
+union io_aerc_uesvr 修改为	IoAercUesvr
+union io_aerc_cesr 修改为	IoAercCesr
+union io_aerc_cemr 修改为	IoAercCemr
+union io_aerc_aeccr 修改为	IoAercAeccr
+union io_aerc_hlr 修改为 	IoAercHlr
+union io_aerc_recr 修改为	IoAercRecr
+union io_aerc_resr 修改为	IoAercResr
+union io_aerc_esir 修改为		IoAercEsir
+union io_tlpplr 修改为	IoTlpplr
+struct io_aerc 修改为	IoAerc
+union io_ltrc_ltrech 修改为	IoLtrcLtrech
+union io_ltrc_msnslr 修改为	IoLtrcMsnslr
+struct io_ltrc 修改为	IoLtrc
+union io_l1pmsec_l1pmsech 修改为 	IoL1pmsecL1pmsech
+union io_l1pmsec_l1pmscr 修改为	IoL1pmsecL1pmscr
+union io_l1pmsec_l1pmsc1r 修改为	IoL1pmsecL1pmsc1r
+union io_l1pmsec_l1pmsc2r 修改为	IoL1pmsecL1pmsc2r
+struct io_l1pmsec 修改为	IoL1pmsec
+union io_ppl_alt 修改为	IoPplAlt
+union io_ppl_vsd 修改为	IoPplVsd
+union io_ppl_pf 修改为		IoPplPf
+union io_ppl_afac 修改为	IoPplAfac
+union io_ppl_plc 修改为	IoPplPlc
+union io_ppl_ls 修改为		IoPplLs
+union io_ppl_tcmfn  修改为	IoPplTcmfn
+union io_ppl_stf1 修改为		IoPplStf1
+union io_ppl_fm2 修改为		IoPplFm2
+union io_ppl_amodnsrc 修改为	IoPplAmodnsrc
+union io_ppl_pd0 修改为	IoPplPd0
+union io_ppl_pd1 修改为	IoPplPd1
+union io_ppl_tpfcs 修改为	IoPplTpfcs
+union io_ppl_tnfcs 修改为	IoPplTnfcs
+union io_ppl_tcfcs  修改为	IoPplTcfcs
+union io_ppl_qs 修改为			IoPplQs
+union io_ppl_vta1  修改为	IoPplVta1
+union io_ppl_vta2 修改为		IoPplVta2
+union io_ppl_vprqc 修改为	IoPplVprqc
+union io_ppl_vnrqc 修改为	IoPplVnrqc
+union io_ppl_vcrqc 修改为	IoPplVcrqc
+union io_ppl_gen2c 修改为	IoPplGen2c
+union io_ppl_phys 修改为		IoPplPhys
+union io_ppl_phyc 修改为	IoPplPhyc
+union io_ppl_mca 修改为		IoPplMca
+union io_ppl_mcua 修改为	IoPplMcua
+union io_ppl_mci0e  修改为	IoPplMci0e
+union io_ppl_mci0m 修改为	IoPplMci0m
+union io_ppl_mci0s 修改为	IoPplMci0s
+union io_ppl_mgi 修改为		IoPplMgi
+union io_ppl_pilc 修改为		IoPplPilc
+union io_ppl_mc1 修改为		IoPplMc1
+union io_ppl_mlc 修改为		IoPplMlc
+union io_ppl_phyic 修改为	IoPplPhyic
+union io_ppl_lfc 修改为		IoPplLfc
+union io_ppl_aerdr 修改为	IoPplAerdr
+union io_ppl_amlt  修改为	IoPplAmlt
+union io_ppl_aoc 修改为		IoPplAoc
+union io_ppl_cc1 修改为		IoPplCc1
+union io_ppl_cc2 修改为		IoPplCc2
+union io_ppl_cc3 修改为		IoPplCc3
+union io_ppl_ammal 修改为		IoPplAmmal
+union io_ppl_ammah 修改为	IoPplAmmah
+union io_ppl_iv 修改为			IoPplIv
+union io_ppl_irc1 修改为		IoPplIrc1
+union io_ppl_irc2o 修改为	IoPplIrc2o
+union io_ppl_irc2i 修改为		IoPplIrc2i
+union io_ppl_irc2 修改为		IoPplIrc2
+union io_ppl_ilba 修改为		IoPplIlba
+union io_ppl_iuba 修改为		IoPplIuba
+union io_ppl_ila 修改为		IoPplIla
+union io_ppl_iltao 修改为		IoPplIltao
+union io_ppl_iltai 修改为		IoPplIltai
+union io_ppl_ilta 修改为		IoPplIlta
+union io_ppl_iuta 修改为		IoPplIuta
+union io_ppl_dcdap 修改为	IoPplDcdap
+union io_ppl_dc 修改为		IoPplDc
+union io_ppl_dwee 修改为	IoPplDwee
+union io_ppl_dwd 修改为		IoPplDwd
+union io_ppl_dwcawl  修改为	IoPplDwcawl
+union io_ppl_dwcawh 修改为	IoPplDwcawh
+union io_ppl_dree 修改为			IoPplDree
+union io_ppl_drd 	修改为		IoPplDrd
+union io_ppl_drcawl 修改为		IoPplDrcawl
+union io_ppl_drcawh 修改为	IoPplDrcawh
+union io_ppl_dwis 修改为			IoPplDwis
+union io_ppl_dwim 修改为		IoPplDwim
+union io_ppl_dwic 修改为			IoPplDwic
+union io_ppl_dwes  修改为		IoPplDwes
+union io_ppl_dwdil 修改为		IoPplDwdil
+union io_ppl_dwdih 修改为		IoPplDwdih
+union io_ppl_dwail  修改为		IoPplDwail
+union io_ppl_dwaih 修改为		IoPplDwaih
+union io_ppl_dwc01id 修改为	IoPplDwc01id
+union io_ppl_dwc23id 修改为	IoPplDwc23id
+union io_ppl_dwc45id 修改为	IoPplDwc45id
+union io_ppl_dwch67id 修改为	IoPplDwch67id
+union io_ppl_dwllee 修改为			IoPplDwllee
+union io_ppl_dris 修改为		IoPplDris
+union io_ppl_drim 修改为	IoPplDrim
+union io_ppl_dric 修改为		IoPplDric
+union io_ppl_dresl 修改为	IoPplDresl
+union io_ppl_dresh 修改为	IoPplDresh
+union io_ppl_drllee 修改为	IoPplDrllee
+union io_ppl_drdil 修改为		IoPplDrdil
+union io_ppl_drdih 修改为	IoPplDrdih
+union io_ppl_drail 修改为		IoPplDrail
+union io_ppl_draih 修改为	IoPplDraih
+union io_ppl_drch01id 修改为	IoPplDrch01id
+union io_ppl_drch23id 修改为	IoPplDrch23id
+union io_ppl_drch45id  修改为 	IoPplDrch45id
+union io_ppl_drch67id 修改为		IoPplDrch67id
+union io_ppl_dvs 修改为	IoPplDvs
+union io_ppl_dcc1 修改为	IoPplDcc1
+union io_ppl_dts 修改为	IoPplDts
+union io_ppl_dsl 修改为	IoPplDsl
+union io_ppl_dsh 修改为	IoPplDsh
+union io_ppl_ddl 修改为	IoPplDdl
+union io_ppl_ddh 修改为	IoPplDdh
+union io_ppl_dll 修改为	IoPplDll
+union io_ppl_dlh 修改为	IoPplDlh
+union io_ppl_pll 修改为	IoPplPll
+union io_ppl_acf 修改为	IoPplAcf
+union io_ppl_l1s  修改为	IoPplL1s
+struct io_ppl 修改为			IoPpl
+struct io_pcie_core_rc 修改为	IoPcieCoreRc
+struct io_pcie_core_ep 修改为	IoPcieCoreEp
+union io_pcie_core 修改为		IoPcieCore				//有定义该类型全局变量IO_PCIE0_CORE，IO_PCIE1_CORE
+union io_pcie_core_control 修改为	IoPcieCoreControl
+union io_pcie_axi_clk_stop 修改为	IoPcieAxiClkStop
+union io_pcie_clock_control 	修改为		IoPcieClockControl
+union io_pcie_reset_control_1 修改为		IoPcieResetControl1
+union io_pcie_reset_control_2 修改为		IoPcieResetControl2
+union io_pcie_reset_select_1 修改为		IoPcieResetSelect1
+union io_pcie_reset_select_2 修改为		IoPcieResetSelect2
+union io_pcie_msi_request_1 修改为		IoPcieMsiRequest1
+union io_pcie_msi_request_2 修改为		IoPcieMsiRequest2
+union io_pcie_int_control_1 修改为			IoPcieIntControl1
+union io_pcie_int_control_2 修改为			IoPcieIntControl2
+union io_pcie_int_control_3 修改为			IoPcieIntControl3
+union io_pcie_em_control 修改为			IoPcieEmControl
+union io_pcie_em_select  修改为				IoPcieEmSelect
+union io_pcie_em_monitor 修改为			IoPcieEmMonitor
+union io_pcie_pm_unlock_req 修改为		IoPciePmUnlockReq
+union io_pcie_ltr_msg 修改为					IoPcieLtrMsg
+union io_pcie_ltr_monitor_1 修改为		IoPcieLtrMonitor1
+union io_pcie_ltr_monitor_2 修改为		IoPcieLtrMonitor2
+union io_pcie_pm_control_1 修改为		IoPciePmControl1
+union io_pcie_pm_control_2 修改为		IoPciePmControl2
+union io_pcie_pm_select_1 修改为			IoPciePmSelect1
+union io_pcie_pm_monitor_1 修改为		IoPciePmMonitor1
+union io_pcie_pm_monitor_2 修改为		IoPciePmMonitor2
+union io_pcie_config_com_1 修改为		IoPcieConfigCom1
+union io_pcie_config_com_2 修改为		IoPcieConfigCom2
+union io_pcie_config_com_3 修改为		IoPcieConfigCom3
+union io_pcie_config_com_4 修改为		IoPcieConfigCom4
+union io_pcie_config_com_5 修改为		IoPcieConfigCom5
+union io_pcie_config_com_6 修改为		IoPcieConfigCom6
+union io_pcie_cfg_monitor_1 修改为		IoPcieCfgMonitor1
+union io_pcie_cfg_monitor_2 修改为		IoPcieCfgMonitor2
+union io_pcie_cfg_monitor_3 修改为		IoPcieCfgMonitor3
+union io_pcie_cfg_monitor_4 修改为		IoPcieCfgMonitor4
+union io_pcie_cfg_monitor_5 修改为		IoPcieCfgMonitor5
+union io_pcie_debug_monitor_1 修改为	IoPcieDebugMonitor1
+union io_pcie_debug_monitor_2 修改为	IoPcieDebugMonitor2
+union io_pcie_debug_monitor_3 修改为	IoPcieDebugMonitor3
+struct io_pcie_debug_monitor_4 修改为	IoPcieDebugMonitor4
+union io_pcie_msg_monitor_1 修改为		IoPcieMsgMonitor1
+struct io_pcie_msg_monitor_3 修改为		IoPcieMsgMonitor3
+union io_pcie_link_monitor 修改为			IoPcieLinkMonitor
+union io_pcie_to_monitor_1 修改为			IoPcieToMonitor1
+union io_pcie_to_monitor_2 修改为			IoPcieToMonitor2
+union io_pcie_to_monitor_3 修改为			IoPcieToMonitor3
+union io_pcie_to_monitor_4 修改为			IoPcieToMonitor4
+union io_pcie_transmit_monitor 修改为	IoPcieTransmitMonitor
+union io_pcie_pipe_monitor 修改为		IoPciePipeMonitor
+union io_pcie_phy_monitor 修改为			IoPciePhyMonitor
+struct io_pcie_monitor_bar0_s 修改为		IoPcieMonitorBar0S
+struct io_pcie_monitor_bar0_l 修改为		IoPcieMonitorBar0L
+union io_pcie_monitor_bar1_s 修改为		IoPcieMonitorBar1S
+union io_pcie_monitor_bar1_l 修改为		IoPcieMonitorBar1L
+struct io_pcie_monitor_bar2_s 修改为		IoPcieMonitorBar2S
+struct io_pcie_monitor_bar2_l 修改为		IoPcieMonitorBar2L
+union io_pcie_monitor_bar3_s 修改为		IoPcieMonitorBar3S
+union io_pcie_monitor_bar3_l 修改为		IoPcieMonitorBar3L
+struct io_pcie_monitor_bar4_s 修改为		IoPcieMonitorBar4S
+struct io_pcie_monitor_bar4_l 修改为		IoPcieMonitorBar4L
+union io_pcie_monitor_bar5_s 修改为		IoPcieMonitorBar5S
+union io_pcie_monitor_bar5_l 修改为		IoPcieMonitorBar5L
+union io_pcie_monitor_erom_s 修改为	IoPcieMonitorEromS
+union io_pcie_monitor_erom_l 修改为	IoPcieMonitorEromL
+struct io_pcie 修改为			IoPcie	//有定义两个变量IO_PCIE0、IO_PCIE1
+
+
+IoPcieCore	IO_PCIE0_CORE;		//IO_PCIE0_CORE 改为		ioPcie0Core
+IoPcieCore	IO_PCIE1_CORE;		//IO_PCIE1_CORE	改为 	ioPcie1Core	
+
+IoPcie		IO_PCIE0;						//IO_PCIE0 改为 ioPcie0
+IoPcie		IO_PCIE1;						//IO_PCIE1 改为 ioPcie1
+
+
+将target/cpu_tkernel/basefw/MILB_API/MILB_Header/include/Exs/目录下
+_relc.h文件中结构体定义和变量移到
+target/cpu_tkernel/basefw/MILB_API/MILB_Header/Project/Exs/src/relc.h
+并按ETK命名规范命名结构体名和域的命名：
+struct io_relc 			更改为		IoRelc
+IoRelc	IO_RELC;    //全局变量IO_RELC更改为	ioRelc
+
+
+target/cpu_tkernel/basefw/MILB_API/MILB_Header/include/Image/文件夹下
+__fr2y6a.h/__jdsr2y_f2e_sram.h两个头文件
+
+im_r2y.h中也用到的
+
+		原类型													改为
+*********************************************
+union io_r2y_sram_tc							IoR2ySramTc
+union io_r2y_sram_gmrgbdf				IoR2ySramGmrgbdf
+union io_r2y_sram_gmrdf					IoR2ySramGmrdf
+union	io_r2y_sram_gmgdf					IoR2ySramGmgdf
+union	io_r2y_sram_gmbdf					IoR2ySramGmbdf
+union io_r2y_sram_gmybdf					IoR2ySramGmybdf
+union io_r2y_sram_gmrgbfl					IoR2ySramGmrgbfl
+union io_r2y_sram_gmrfl						IoR2ySramGmrfl
+union io_r2y_sram_gmgfl					IoR2ySramGmgfl
+union io_r2y_sram_gmbfl					IoR2ySramGmbfl
+union io_r2y_sram_gmybfl					IoR2ySramGmybfl
+union io_r2y_sram_eghwscl				IoR2ySramEghwscl	
+union  io_r2y_sram_eghwton				IoR2ySramEghwton
+union io_r2y_sram_egmwscl				IoR2ySramEgmwscl
+union io_r2y_sram_egmwton				IoR2ySramEgmwton
+union io_r2y_sram_eglwscl					IoR2ySramEglwscl
+union io_r2y_sram_eglwton				IoR2ySramEglwton
+union io_r2y_sram_egmpscl				IoR2ySramEgmpscl
+union io_r2y_sram_dkntbl					IoR2ySramDkntbl
+
+jdsr2y_f2e.c\im_r2y.c\CheckHeaderMain.c 中使用
+
+struct io_r2y_sram								IoR2ySram			
+
+
+修改结构体域的命名
+
+
+__fr2y6a.h  命名规范
+
+		原类型							修改为							用到的文件
+union io_r2y_ofst 			IoR2yOfst				im_r2y.c/im_r2y.h 
+union io_r2y_wblv			IoR2yWblv								im_r2y.h
+union io_r2y_cc0ctl		IoR2yCc0ctl							im_r2y.h
+union io_r2y_cc0k			IoR2yCc0k				im_r2y.c/im_r2y.h
+union io_r2y_cc0ybof	IoR2yCc0ybof							im_r2y.h
+union io_r2y_cc0ybga	IoR2yCc0ybga		im_r2y.c/im_r2y.h 
+union io_r2y_cc0ybbd	IoR2yCc0ybbd		im_r2y.h
+union io_r2y_ccyc			IoR2yCcyc				im_r2y.h
+union io_r2y_mcyc		IoR2yMcyc				im_r2y.c/im_r2y.h
+union io_r2y_mcb1ab	IoR2yMcb1ab		im_r2y.h
+union io_r2y_mcb1cd	IoR2yMcb1cd			im_r2y.h
+union io_r2y_mcb2ab	IoR2yMcb2ab		im_r2y.h
+union io_r2y_mcb2cd	IoR2yMcb2cd			im_r2y.h
+union io_r2y_mcb3ab	IoR2yMcb3ab		im_r2y.h
+union io_r2y_mcb3cd	IoR2yMcb3cd			im_r2y.h
+union io_r2y_mcb4ab	IoR2yMcb4ab		im_r2y.h
+union io_r2y_mcb4cd	IoR2yMcb4cd			im_r2y.h
+union io_r2y_mcid1		IoR2yMcid1			im_r2y.c/im_r2y.h
+union io_r2y_mcid2		IoR2yMcid2			im_r2y.c/im_r2y.h
+union io_r2y_mcid3		IoR2yMcid3			im_r2y.c/im_r2y.h
+union io_r2y_mcid4		IoR2yMcid4			im_r2y.c/im_r2y.h
+union io_r2y_mck_x		IoR2yMckX							im_r2y.c
+struct io_r2y_mck			IoR2yMck				im_r2y.h
+union io_r2y_mcl_x		IoR2yMclX				im_r2y.c
+struct io_r2y_mcl			IoR2yMcl				im_r2y.h
+union io_r2y_mcycbalp	IoR2yMcycbalp				im_r2y.h
+union io_r2y_mcycbga		IoR2yMcycbga			im_r2y.c/im_r2y.h
+union io_r2y_mcycbbd		IoR2yMcycbbd		im_r2y.h
+union io_r2y_mcbabalp	IoR2yMcbabalp			im_r2y.h
+union io_r2y_mcbabof		IoR2yMcbabof		im_r2y.h
+union io_r2y_mcbabga		IoR2yMcbabga						im_r2y.c/im_r2y.h
+union io_r2y_mcbabbd	IoR2yMcbabbd			im_r2y.h
+union io_r2y_tcof				IoR2yTcof					im_r2y.c/im_r2y.h
+union io_r2y_tctctl				IoR2yTctctl					im_r2y.h
+union io_r2y_tctsta			IoR2yTctsta			im_r2y.h
+union io_r2y_tctb				IoR2yTctb									im_r2y.h
+union io_r2y_tchsctl			IoR2yTchsctl			im_r2y.h
+union io_r2y_tchssta			IoR2yTchssta		im_r2y.h
+union io_r2y_tchssiz			IoR2yTchssiz		im_r2y.h
+union io_r2y_tchov			IoR2yTchov		im_r2y.h
+union io_r2y_tcctl				IoR2yTcctl							im_r2y.h
+union io_r2y_tcyc				IoR2yTcyc		im_r2y.h
+union io_r2y_tcep				IoR2yTcep		im_r2y.h
+union io_r2y_tcclpr			IoR2yTcclpr						im_r2y.h
+union io_r2y_tcclpg			IoR2yTcclpg		im_r2y.h
+union io_r2y_tcclpb			IoR2yTcclpb		im_r2y.h
+union io_r2y_gmctl			IoR2yGmctl		im_r2y.h
+union io_r2y_cc1ctl			IoR2yCc1ctl		im_r2y.h
+union io_r2y_cc1k				IoR2yCc1k			im_r2y.c/im_r2y.h
+union io_r2y_cc1clpr			IoR2yCc1clpr 	im_r2y.h
+union io_r2y_cc1clpg		IoR2yCc1clpg		im_r2y.h
+union io_r2y_cc1clpb		IoR2yCc1clpb		im_r2y.h
+union io_r2y_yc					IoR2yYc				im_r2y.h
+union io_r2y_yblend			IoR2yYblend			im_r2y.h
+union io_r2y_nrctl				IoR2yNrctl			im_r2y.h
+union io_r2y_nrof				IoR2yNrof			im_r2y.h
+union io_r2y_nrga				IoR2yNrga			im_r2y.c/im_r2y.h
+union io_r2y_nrbd				IoR2yNrbd		im_r2y.h
+union io_r2y_egsmctl		IoR2yEgsmctl		im_r2y.h
+union io_r2y_egsmtt			IoR2yEgsmtt			im_r2y.h
+union io_r2y_eghwctl		IoR2yEghwctl		im_r2y.h
+union io_r2y_eghwhpfk	IoR2yEghwhpfk				im_r2y.c/im_r2y.h
+union io_r2y_eghwcorpof		IoR2yEghwcorpof			im_r2y.h
+union io_r2y_eghwcorpga		IoR2yEghwcorpga			im_r2y.c/im_r2y.h
+union io_r2y_eghwcorpbd		IoR2yEghwcorpbd		im_r2y.h
+union io_r2y_eghwcormof		IoR2yEghwcormof		im_r2y.h
+union io_r2y_eghwcormga		IoR2yEghwcormga		im_r2y.c/im_r2y.h
+union io_r2y_eghwcormbd		IoR2yEghwcormbd		im_r2y.h
+union io_r2y_eghwsclsup			IoR2yEghwsclsup			im_r2y.h
+union io_r2y_eghwclppof			IoR2yEghwclppof			im_r2y.h
+union io_r2y_eghwclppga		IoR2yEghwclppga				im_r2y.c/im_r2y.h
+union io_r2y_eghwclppbd		IoR2yEghwclppbd				im_r2y.h
+union io_r2y_eghwclpmof		IoR2yEghwclpmof		im_r2y.h
+union io_r2y_eghwclpmga		IoR2yEghwclpmga		im_r2y.c/im_r2y.h
+union io_r2y_eghwclpmbd		IoR2yEghwclpmbd		im_r2y.h
+union io_r2y_egmwctl				IoR2yEgmwctl				im_r2y.h
+union io_r2y_egmwhpfk			IoR2yEgmwhpfk			im_r2y.c/im_r2y.h
+union io_r2y_egmwcorpof		IoR2yEgmwcorpof				im_r2y.h
+union io_r2y_egmwcorpga		IoR2yEgmwcorpga				im_r2y.c/im_r2y.h
+union io_r2y_egmwcorpbd		IoR2yEgmwcorpbd			im_r2y.h
+union io_r2y_egmwcormof		IoR2yEgmwcormof			im_r2y.h
+union io_r2y_egmwcormga		IoR2yEgmwcormga					im_r2y.c/im_r2y.h
+union io_r2y_egmwcormbd		IoR2yEgmwcormbd				im_r2y.h
+union io_r2y_egmwsclsup		IoR2yEgmwsclsup		im_r2y.h
+union io_r2y_egmwclppof		IoR2yEgmwclppof		im_r2y.h
+union io_r2y_egmwclppga		IoR2yEgmwclppga			im_r2y.c/im_r2y.h
+union io_r2y_egmwclppbd		IoR2yEgmwclppbd	im_r2y.h
+union io_r2y_egmwclpmof		IoR2yEgmwclpmof		im_r2y.h
+union io_r2y_egmwclpmga		IoR2yEgmwclpmga						im_r2y.c/im_r2y.h
+union io_r2y_egmwclpmbd		IoR2yEgmwclpmbd			im_r2y.h
+union io_r2y_eglwctl					IoR2yEglwctl					im_r2y.h
+union io_r2y_eglwhpfk				IoR2yEglwhpfk				im_r2y.c/im_r2y.h
+union io_r2y_eglwcorpof			IoR2yEglwcorpof		im_r2y.h
+union io_r2y_eglwcorpga			IoR2yEglwcorpga		im_r2y.c/im_r2y.h
+union io_r2y_eglwcorpbd		IoR2yEglwcorpbd				im_r2y.h
+union io_r2y_eglwcormof		IoR2yEglwcormof			im_r2y.h
+union io_r2y_eglwcormga		IoR2yEglwcormga							im_r2y.c/im_r2y.h
+union io_r2y_eglwcormbd		IoR2yEglwcormbd			im_r2y.h
+union io_r2y_eglwsclsup			IoR2yEglwsclsup		im_r2y.h
+union io_r2y_eglwclppof			IoR2yEglwclppof		im_r2y.h
+union io_r2y_eglwclppga			IoR2yEglwclppga			im_r2y.h
+union io_r2y_eglwclppbd			IoR2yEglwclppbd		im_r2y.h
+union io_r2y_eglwclpmof			IoR2yEglwclpmof		im_r2y.h
+union io_r2y_eglwclpmga		IoR2yEglwclpmga		im_r2y.c/im_r2y.h
+union io_r2y_eglwclpmbd		IoR2yEglwclpmbd				im_r2y.h
+union io_r2y_egdtctl					IoR2yEgdtctl		im_r2y.h
+union io_r2y_egdthwth			IoR2yEgdthwth							im_r2y.h
+union io_r2y_egdthwk				IoR2yEgdthwk				im_r2y.h
+union io_r2y_egdtmwth			IoR2yEgdtmwth			im_r2y.h
+union io_r2y_egdtmwk				IoR2yEgdtmwk			im_r2y.h
+union io_r2y_egcmpctl				IoR2yEgcmpctl			im_r2y.h
+union io_r2y_egcmpbd				IoR2yEgcmpbd			im_r2y.h
+union io_r2y_egcmpalpof		IoR2yEgcmpalpof		im_r2y.h
+union io_r2y_egcmpalpga		IoR2yEgcmpalpga		im_r2y.h
+union io_r2y_egcmpbtaof		IoR2yEgcmpbtaof		im_r2y.h
+union io_r2y_egcmpbtaga		IoR2yEgcmpbtaga		im_r2y.c/im_r2y.h
+union io_r2y_egcmpclp			IoR2yEgcmpclp			im_r2y.h
+union io_r2y_crvaf					IoR2yCrvaf					im_r2y.c/im_r2y.h
+union io_r2y_crvbf					IoR2yCrvbf					im_r2y.c/im_r2y.h
+union io_r2y_egcrvctl				IoR2yEgcrvctl				im_r2y.h
+union io_r2y_egcrvasclof			IoR2yEgcrvasclof			im_r2y.h
+union io_r2y_egcrvasclga		IoR2yEgcrvasclga			im_r2y.c/im_r2y.h
+union io_r2y_egcrvasclbd		IoR2yEgcrvasclbd			im_r2y.h
+union io_r2y_egcrvasclcp			IoR2yEgcrvasclcp			im_r2y.h
+union io_r2y_egyasclga			IoR2yEgyasclga				im_r2y.h
+union io_r2y_egyasclbd			IoR2yEgyasclbd				im_r2y.h
+union io_r2y_egyasclclp			IoR2yEgyasclclp					im_r2y.h
+union io_r2y_egcrvbsclof			IoR2yEgcrvbsclof				im_r2y.h
+union io_r2y_egcrvbsclga		IoR2yEgcrvbsclga					im_r2y.c/im_r2y.h
+union io_r2y_egcrvbsclbd		IoR2yEgcrvbsclbd					im_r2y.h
+union io_r2y_egcrvbsclcp			IoR2yEgcrvbsclcp				im_r2y.h
+union io_r2y_egybsclga			IoR2yEgybsclga				im_r2y.h
+union io_r2y_egybsclbd			IoR2yEgybsclbd				im_r2y.h
+union io_r2y_egybsclclp			IoR2yEgybsclclp				im_r2y.h
+union io_r2y_egcrvclp				IoR2yEgcrvclp				im_r2y.h
+union io_r2y_ybcrvctl				IoR2yYbcrvctl					im_r2y.h
+union io_r2y_ybcrvaalpof		IoR2yYbcrvaalpof					im_r2y.h
+union io_r2y_ybcrvaalpga		IoR2yYbcrvaalpga						im_r2y.c/im_r2y.h
+union io_r2y_ybcrvaalpbd		IoR2yYbcrvaalpbd					im_r2y.h
+union io_r2y_ybcrvaalpcp		IoR2yYbcrvaalpcp												im_r2y.h
+union io_r2y_ybyaalpga			IoR2yYbyaalpga											im_r2y.h
+union io_r2y_ybyaalpbd			IoR2yYbyaalpbd												im_r2y.h
+union io_r2y_ybyaalpclp			IoR2yYbyaalpclp											im_r2y.h
+union io_r2y_ybcrvbalpof		IoR2yYbcrvbalpof												im_r2y.h
+union io_r2y_ybcrvbalpga		IoR2yYbcrvbalpga						im_r2y.c/im_r2y.h
+union io_r2y_ybcrvbalpbd		IoR2yYbcrvbalpbd												im_r2y.h
+union io_r2y_ybcrvbalpcp		IoR2yYbcrvbalpcp												im_r2y.h
+union io_r2y_ybybalpga			IoR2yYbybalpga			im_r2y.h
+union io_r2y_ybybalpbd			IoR2yYbybalpbd			im_r2y.h
+union io_r2y_ybybalpclp			IoR2yYbybalpclp				im_r2y.h
+union io_r2y_clpfctl					IoR2yClpfctl						im_r2y.h
+union io_r2y_clpfk						IoR2yClpfk								im_r2y.c/im_r2y.h	
+union io_r2y_clpfof					IoR2yClpfof				im_r2y.h
+union io_r2y_clpfga					IoR2yClpfga				im_r2y.h
+union io_r2y_clpfbd					IoR2yClpfbd				im_r2y.h
+union io_r2y_csyctl					IoR2yCsyctl				im_r2y.h
+union io_r2y_csyof					IoR2yCsyof					im_r2y.h
+union io_r2y_csyga					IoR2yCsyga				im_r2y.h
+union io_r2y_csybd					IoR2yCsybd				im_r2y.h
+union io_r2y_ycrvfx					IoR2yYcrvfx				im_r2y.h	
+union io_r2y_cfix						IoR2yCfix					im_r2y.c/im_r2y.h	
+union io_r2y_ycof						IoR2yYcof					im_r2y.c/im_r2y.h	
+struct io_r2y_fr2y						IoR2yFr2y					_jdsr2y_f2e.h
+
+jmlexs.c/h、pcie.c/h、relc.c/h修改文件名与类名一致：
+snsjmlexs.c/h、snspcie.c/h、snsrelc.c/h
+
+__jdsr2y_f2e_sram.h 文件名改为 jdsr2yf2esram.h
+jdsr2yf2esram.h 文件中 变量按规范修改
+extern volatile IoR2ySram		IO_R2Y_TBL_P1;		//IO_R2Y_TBL_P1 改为	ioR2yTblP1
+extern volatile IoR2ySram		IO_R2Y_TBL_P2;		//IO_R2Y_TBL_P2 改为 ioR2yTblP2
+extern volatile IoR2ySram		IO_R2Y_TBL_P3;		//IO_R2Y_TBL_P3 改为	ioR2yTblP3 
+
+__fr2y6a.h文件名修改为 fr2y6a.h
+
+union _IoPplMc1中 DRWE 改为 drwe
+
+fr2y6a.h修改结构体域的命名
+
+scutest.c 中 struct io_scu 找中不到定义
+ptimertest.c 中 struct io_timer 找不到定义
+暂时不改

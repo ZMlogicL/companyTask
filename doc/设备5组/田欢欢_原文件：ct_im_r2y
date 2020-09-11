@@ -1,0 +1,198 @@
+
+	
+																置顶备注：源文件ct_im_r2y.c的后半部分方法在设备5组梁正明的修改记录中
+
+-----------------------------------------------------------------------------如有疑问请务必咨询田欢欢--------------------------------------------------------------------------------------
+
+原方法名																												现在方法名		
+																//ctimr2yclassa.c																					
+ct_im_r2y_b2r_int_handler		 																		ct_im_r2y_classa_b2r_int_handler
+ct_im_r2y_set_b2r  																							ct_im_r2y_classa_set_b2r
+ct_im_r2y_start_b2r  																						ct_im_r2y_classa_start_b2r
+ct_im_r2y_wait_b2r  																							ct_im_r2y_classa_wait_b2r
+ct_im_r2y_waitend_stop_b2r   																		ct_im_r2y_classa_waitend_stop_b2r
+ct_im_r2y_ltm_int_handler   																			ct_im_r2y_calssa_ltm_int_handler
+ct_im_r2y_set_ltm   																							ct_im_r2y_classa_set_ltm
+ct_im_r2y_start_ltm   																						ct_im_r2y_classa_start_ltm
+ct_im_r2y_wait_ltm   																						ct_im_r2y_classa_wait_ltm
+ct_im_r2y_waitend_stop_ltm   																		ct_im_r2y_classa_waitend_stop_ltm
+ct_im_r2y_set_wb_gain_rgb  																			ct_im_r2y_classa_set_wb_gain_rgb
+ct_im_r2y_print_r2y_common_reg   																ct_im_r2y_classa_print_r2y_common_reg
+ct_im_r2y_print_r2y_yyr_reg   																		ct_im_r2y_classa_print_r2y_yyr_reg
+ct_im_r2y_print_r2y_yyw_reg    																		ct_im_r2y_classa_print_r2y_yyw_reg
+ct_im_r2y_print_r2y_ctrl_reg    																		ct_im_r2y_classa_print_r2y_ctrl_reg
+ct_im_r2y_print_r2y_ctrl_modesdraminput_reg    										ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg
+ct_im_r2y_print_r2y_ctrl_modedirect_reg   													ct_im_r2y_classa_print_r2y_ctrl_modedirect_reg
+ct_im_r2y_print_resize_rect_reg   																	ct_im_r2y_classa_print_resize_rect_reg
+ct_im_r2y_print_trimming_reg   																		ct_im_r2y_classa_print_trimming_reg
+ct_im_r2y_print_color_extract_reg   																ct_im_r2y_classa_print_color_extract_reg
+ct_im_r2y_print_chroma_scale_reg   																ct_im_r2y_classa_print_chroma_scale_reg
+ct_im_r2y_print_hue_scale_reg   																	ct_im_r2y_classa_print_hue_scale_reg
+ct_im_r2y_print_hist_reg   																				ct_im_r2y_classa_print_hist_reg
+ct_im_r2y_print_post_resize_edge0_reg  														ct_im_r2y_classa_print_post_resize_edge0_reg
+ 																//ctimr2yclassb.c
+ct_im_r2y_print_post_resize_edge1_reg 														ct_im_r2y_classb_print_post_resize_edge1_reg
+ct_im_r2y_print_other_reg  																			ct_im_classb_r2y_print_other_reg
+ct_im_r2y_print_fr2y_ctrl_reg  																		ct_im_r2y_classb_print_fr2y_ctrl_reg
+ct_im_r2y_print_axi_reg  																					ct_im_r2y_classb_print_axi_reg
+CT_Im_R2y_PrintReg  																						ct_im_r2y_classb_printreg
+CT_Im_R2y_1_1  																								ct_im_r2y_classb_1_1
+CT_Im_R2y_1_2  																								ct_im_r2y_classb_1_2
+CT_Im_R2y_1_3  																								ct_im_r2y_classb_1_3
+CT_Im_R2y_1_4  																								ct_im_r2y_classb_1_4
+CT_Im_R2y_1_5 																									ct_im_r2y_classb_1_5
+CT_Im_R2y_1_6 																									ct_im_r2y_classb_1_6
+CT_Im_R2y_1_7 																									ct_im_r2y_classb_1_7
+CT_Im_R2y_1_8 																									ct_im_r2y_classb_1_8
+CT_Im_R2y_1_9 																									ct_im_r2y_classb_1_9
+CT_Im_R2y_1_10																								ct_im_r2y_classb_1_10
+CT_Im_R2y_1_11 																								ct_im_r2y_classb_1_11
+CT_Im_R2y_1_12 																								ct_im_r2y_classb_1_12
+CT_Im_R2y_1_13																								ct_im_r2y_classb_1_13
+CT_Im_R2y_1_14																								ct_im_r2y_classb_1_14
+																//ctimr2yclassc.c
+CT_Im_R2y_1_16																								ct_im_r2y_classc_1_16
+CT_Im_R2y_1_17																								ct_im_r2y_classc_1_17
+CT_Im_R2y_1_18																								ct_im_r2y_classc_1_18
+CT_Im_R2y_1_19																								ct_im_r2y_classc_1_19
+CT_Im_R2y_1_20																								ct_im_r2y_classc_1_20
+CT_Im_R2y_1_21																								ct_im_r2y_classc_1_21
+CT_Im_R2y_1_22																								ct_im_r2y_classc_1_22
+CT_Im_R2y_1_23																								ct_im_r2y_classc_1_23
+CT_Im_R2y_1_24																								ct_im_r2y_classc_1_24
+																//ctimr2yclassd.c
+CT_Im_R2y_1_15 																								ct_im_r2y_classd_1_15
+CT_Im_R2y_1_25																								ct_im_r2y_classd_1_25
+CT_Im_R2y_1_26																								ct_im_r2y_classd_1_26
+CT_Im_R2y_1_27																								ct_im_r2y_classd_1_27
+CT_Im_R2y_1_28																								ct_im_r2y_classd_1_28
+CT_Im_R2y_1_29																								ct_im_r2y_classd_1_29
+CT_Im_R2y_1_30																								ct_im_r2y_classd_1_30
+CT_Im_R2y_1_31																								ct_im_r2y_classd_1_31
+CT_Im_R2y_1_32																								ct_im_r2y_classd_1_32
+CT_Im_R2y_1_33																								ct_im_r2y_classd_1_33
+CT_Im_R2y_1_34																								ct_im_r2y_classd_1_34
+CT_Im_R2y_1_35																								ct_im_r2y_classd_1_35
+CT_Im_R2y_1_36																								ct_im_r2y_classd_1_36
+																//ctimr2yclasse.c
+CT_Im_R2y_1_37																								ct_im_r2y_classe_1_37
+CT_Im_R2y_1_38																								ct_im_r2y_classe_1_38
+CT_Im_R2y_1_39																								ct_im_r2y_classe_1_39
+CT_Im_R2y_1_40																								ct_im_r2y_classe_1_40
+CT_Im_R2y_1_41																								ct_im_r2y_classe_1_41
+CT_Im_R2y_1_42																								ct_im_r2y_classe_1_42
+CT_Im_R2y_1_43																								ct_im_r2y_classe_1_43
+CT_Im_R2y_1_44																								ct_im_r2y_classe_1_44
+CT_Im_R2y_1_45																								ct_im_r2y_classe_1_45
+																//ctimr2yclassf.c
+CT_Im_R2y_1_46																								ct_im_r2y_classf_1_46
+CT_Im_R2y_1_47																								ct_im_r2y_classf_1_47
+CT_Im_R2y_1_48																								ct_im_r2y_classf_1_48
+CT_Im_R2y_1_49																								ct_im_r2y_classf_1_49
+CT_Im_R2y_1_50																								ct_im_r2y_classf_1_50
+CT_Im_R2y_1_51																								ct_im_r2y_classf_1_51
+CT_Im_R2y_1_52																								ct_im_r2y_classf_1_52
+CT_Im_R2y_1_53																								ct_im_r2y_classf_1_53
+ 																//ctimr2yclassg.c
+CT_Im_R2y_1_54 																								ct_im_r2y_classg_1_54
+  																//ctimr2yclassh.c
+CT_Im_R2y_1_55 																								ct_im_r2y_classh_1_55
+CT_Im_R2y_1_56																								ct_im_r2y_classh_1_56
+CT_Im_R2y_1_57																								ct_im_r2y_classh_1_57
+CT_Im_R2y_1_58																								ct_im_r2y_classh_1_58
+CT_Im_R2y_1_59																								ct_im_r2y_classh_1_59
+CT_Im_R2y_1_60																								ct_im_r2y_classh_1_60
+CT_Im_R2y_1_61																								ct_im_r2y_classh_1_61
+CT_Im_R2y_1_62																								ct_im_r2y_classh_1_62
+CT_Im_R2y_1_63																								ct_im_r2y_classh_1_63
+CT_Im_R2y_1_64																								ct_im_r2y_classh_1_64
+CT_Im_R2y_1_65																								ct_im_r2y_classh_1_65
+CT_Im_R2y_1_66																								ct_im_r2y_classh_1_66
+CT_Im_R2y_1_67																								ct_im_r2y_classh_1_67
+CT_Im_R2y_1_68																								ct_im_r2y_classh_1_68
+CT_Im_R2y_1_69																								ct_im_r2y_classh_1_69
+  																//ctimr2yclassi.c
+CT_Im_R2y_1_70																								ct_im_r2y_classi_1_70
+CT_Im_R2y_1_71																								ct_im_r2y_classi_1_71
+CT_Im_R2y_1_72																								ct_im_r2y_classi_1_72
+CT_Im_R2y_1_73																								ct_im_r2y_classi_1_73
+  																//ctimr2yclassm.c
+CT_Im_R2y_1_54_temp1  																				ct_im_r2y_classm_1_54_temp1
+  	 															//ctimr2yclassn.c
+CT_Im_R2y_1_54_temp2  																				ct_im_r2y_classn_1_54_temp2
+      															//ctimr2yclasso.c
+CT_Im_R2y_1_54_temp3  																				ct_im_r2y_classo_1_54_temp3
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

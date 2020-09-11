@@ -1,0 +1,615 @@
+抄写代码路径：/cpu_tkernel/basefw/MILB_API/Project/DeviceDriver/Peripheral/src/dd_pwm.c～dd_udc.c/.h(15480行）
+
+
+1、20200902
+   （1）建立所抄代码类并复制对应.c及.h代码，删除原.c及.h文件，修改makefile文件；
+   （2）代码布局，删除公有方法前的extern；
+   （3）拆分ddpwm文件为：ddpwm、ddpwmbranch、ddpwmutility、ddpwmcolabo共计4个类；
+   
+   
+2、20200903
+    （1）规范ddpwm类局部变量；   
+    （2）ddpwm类公有方法名规范（第一个参数均为DdPwm* self）：
+    Dd_PWM_Init～dd_pwm_init、Dd_PWM_Open～dd_pwm_open、Dd_PWM_Close～dd_pwm_close；
+    Dd_PWM_Open_Timer_E～dd_pwm_open_timer_e、Dd_PWM_Close_Timer_E～dd_pwm_close_timer_e；
+    Dd_PWM_Ctrl_Common～dd_pwm_ctrl_common、Dd_PWM_Ctrl_Common2～dd_pwm_ctrl_common2；
+    Dd_PWM_Get_Ctrl_Common～dd_pwm_get_ctrl_common、Dd_PWM_Ctrl_Timer_ABCD～dd_pwm_ctrl_timer_abcd；
+    Dd_PWM_Ctrl_Timer_ABCD_2ch～dd_pwm_ctrl_timer_abcd_2ch、Dd_PWM_Ctrl_Timer_E～dd_pwm_ctrl_timer_e；
+    （3）规范ddpwmcolabo类局部变量；
+    （4）规范ddpwmcolabo类宏定义；
+    D_DD_PWM_STEP_FORCE_DISABLE～DdPwmColabo_D_DD_PWM_STEP_FORCE_DISABLE；
+    D_DD_PWM_STEP_FORCE_0～DdPwmColabo_D_DD_PWM_STEP_FORCE_0；
+    D_DD_PWM_STEP_FORCE_1～DdPwmColabo_D_DD_PWM_STEP_FORCE_1；
+    （5）规范ddpwmcolabo类中的T_DD_PWM_STEP结构体；
+    T_DD_PWM_STEP～TDdPwmStep；
+    （6）规范ddpwmcolabo类中的T_DD_PWM_STEP结构体内的元素变量；
+    clk_sel～clkSel、restart_trig～restartTrig、ch_assign～chAssign、step_data_num～stepDataNum；
+    undr_run_data_num～undrRunDataNum、step_data～stepData、under_run_data～underRunData、pCallBack～pCallback；
+    （7）ddpwmcolabo类公有方法名规范（第一个参数均为DdPwmColabo* self）：
+    Dd_PWM_Write_Step～dd_pwm_colabo_write_step、Dd_PWM_Write_Step_Only_Buf_Data_Window～dd_pwm_colabo_write_step_only_buf_data_window；
+    （8）规范ddpwmutility类局部变量；
+    （9）ddpwmutility类公有方法名规范（第一个参数均为DdPwmUtility* self）：
+    Dd_PWM_Calculate～dd_pwm_utility_calculate、Dd_PWM_Calculate_Cycle～dd_pwm_utility_calculate_cycle；
+    Dd_PWM_Write_Cycle_Duty～dd_pwm_utility_write_cycle_duty、Dd_PWM_Write_Cycle_Duty_Reverse～dd_pwm_utility_write_cycle_duty_reverse；
+    Dd_PWM_Write_Cycle_Duty_Queue～dd_pwm_utility_write_cycle_duty_queue、Dd_PWM_Write_Input_Trg～dd_pwm_utility_write_input_trg；
+    Dd_PWM_Write_Cycle_Duty_Switch～dd_pwm_utility_write_cycle_duty_switch、Dd_PWM_Write_Pcn～dd_pwm_utility_write_pcn；
+    Dd_PWM_Write_Oneshot～dd_pwm_utility_write_onshot；
+    （10）规范ddpwmbranch类局部变量；
+    （11）规范ddpwmbranch类宏定义：
+    ddpwmbranch中的宏前面全部加上“DdPwmBranch_”
+    （12）规范ddpwmbranch类的结构体及其元素：
+    VP_CALLBACK_PWM～VpCallbackPwm、T_DD_PWM_CTRL_CMN～DdPwmCtrlCmn、T_DD_PWM_CTRL_TIMER_ABCD～DdpwmCtrlTimerAbcd；
+    T_DD_PWM_CTRL_TIMER_ABCD_2ch～DdpwmCtrlTimerAbcd2ch、T_DD_PWM_TIMER_E_PULSE_LINK～CtrlTimerEpulseLink；
+    T_DD_PWM_TIMER_E_STEPS_DATA～PwmTimerEstepsData、T_DD_PWM_CTRL_TIMER_E～PwmCtrlTimerE；
+    T_DD_PWM_CTRL_MEMO～DdPwmCtrlMemo；
+    （13）ddpwm类公有方法名规范（第一个参数均为DdPwm* self）：
+    Dd_PWM_Start～dd_pwm_start、Dd_PWM_2ch_Start～dd_pwm_2ch_start、Dd_PWM_Stop～dd_pwm_stop；
+    Dd_PWM_Get_Timer～dd_pwm_get_timer、Dd_PWM_Get_Pulse_Num～dd_pwm_get_pulse_num；
+    Dd_PWM_Get_Interrupt_Flag～dd_pwm_get_interrupt_flag、Dd_PWM_Set_Interrupt_Flag～dd_pwm_set_interrupt_flag；
+    Dd_PWM_Get_Channel_Assign～dd_pwm_get_channel_assign、Dd_PWM_Set_Channel_Assign～dd_pwm_set_channel_assign；
+    Dd_PWM_Get_Int_Stat～dd_pwm_get_int_stat、Dd_PWM_Int_Handler～dd_pwm_int_handler；
+    Dd_PWM_Int_Handler_STP～dd_pwm_int_handler_stp、Dd_PWM_Set_Stopped_OutPut_Mask～dd_pwm_set_stopped_output_mask；
+    Dd_PWM_Get_Stopped_OutPut_Mask～dd_pwm_get_stopped_output_mask、Dd_PWM_Get_Clock_Sel_TimerE～dd_pwm_get_clock_sel_timer_e；
+    Dd_PWM_Get_Stopped_OutPut_Status～dd_pwm_get_stopped_output_status；
+    
+    
+3、20200904    
+     （1）规范ddslimbus类局部变量；
+     （2）规范ddslimbus类宏定义（宏名前面加上“DdSlimbus_”）；
+     （3）规范ddslimbus类枚举及其元素（元素名前加“DdSlimbus_”）；
+     E_DD_SLIMBUS_CH～EDdSlimbusCh、E_DD_SLIMBUS_FR_EN～DdSlimbusFrEn、E_DD_SLIMBUS_MANAGER_MODE～DdSlimbusManagerMode；
+     （4）规范ddslimbus类抽象回调函数、结构体及其元素；
+     VP_SLIMBUS_CALLBACK～VpSlimbusCallback；
+     T_DD_SLIMBUS_CTRL～TDdSlimbusCtrl；
+     manager_mode～managerMode、fr_en_frEn、src_thr～srcThr、sink_thr～sinkThr；
+     manager_int_cb～managerIntCb、data_port_int_cb～dataPortIntCb；
+     （5）ddslimbus类公有方法名规范（第一个参数均为DdSlimbus* self）：
+     Dd_Slimbus_Open～dd_slimbus_open、Dd_Slimbus_Close～dd_slimbus_close、Dd_Slimbus_Ctrl～dd_slimbus_ctrl；
+     Dd_Slimbus_Get_Ctrl～dd_slimbus_get_ctrl、Dd_Slimbus_Start～dd_slimbus_start、Dd_Slimbus_Stop～dd_slimbus_stop；
+     Dd_Slimbus_Int_Handler～dd_slimbus_int_handler、Dd_Slimbus_Write_Msg～dd_slimbus_write_msg、Dd_Slimbus_Read_Msg～dd_slimbus_read_msg；
+     Dd_Slimbus_Write_Data～dd_slimbus_write_data、Dd_Slimbus_Read_Data～dd_slimbus_read_data；
+     Dd_Slimbus_Get_Reg～dd_slimbus_get_reg、Dd_Slimbus_Set_Reg～dd_slimbus_set_reg；
+     （6）ddslimbus中的两个公有方法dd_slimbus_write_data和dd_slimbus_read_data改为结构体传参：dd_slimbus_write_data(DdSlimbus* self, WriteDataParam writeDataParam);
+     dd_slimbus_read_data(DdSlimbus* self, ReadDataParam readDataParam);
+     
+     （7）从ddspi类中拆分得到ddspicalculate类并规范：
+     Dd_SPI_Calculate～dd_spi_calculate_clock_divisor(DdSpiCalculate* self, ;
+     Dd_SPI_Set_Clock_Divisor~dd_spi_calculate_set_clock_divisor(DdSpiCalculate* self,；
+     Dd_SPI_Get_Clock_Divisor~dd_spi_calculate_get_clock_divisor(DdSpiCalculate* self,；
+     
+
+4、20200905
+     （1）从ddspi类中拆分得到ddspicolabo、ddspidrive、ddspidrivebranch类并规范：
+     （2）ddspi文件公有方法规范：
+     Dd_SPI_Int_Handler～dd_spi_int_handler；
+     
+     
+5、20200907     
+     （1）ddspidrive公有方法规范（第一个参数均为DdSpiDrive* self）：
+     Dd_SPI_Open～dd_spi_drive_open；Dd_SPI_Close～dd_spi_drive_close；Dd_SPI_Ctrl～dd_spi_drive_ctrl；
+     Dd_SPI_Get_Ctrl～dd_spi_drive_get_ctrl；Dd_SPI_Set_Send_Data～dd_spi_drive_set_send_data；Dd_SPI_Set_Recv_Data～dd_spi_drive_set_recv_data；
+     Dd_SPI_Stop～dd_spi_drive_stop；Dd_SPI_Set_Slave_Select～dd_spi_drive_set_slave_select；Dd_SPI_Get_Slave_Select～dd_spi_drive_get_slave_select；
+     Dd_SPI_Set_SPI_Enable～dd_spi_drive_set_spi_enable；Dd_SPI_Start_Full_Duplex～dd_spi_drive_start_full_duplex；Dd_SPI_Start_Recv～dd_spi_drive_start_recv；
+     Dd_SPI_Start_Send～dd_spi_drive_start_send；
+     （2）ddspicolabo公有方法规范（第一个参数均为DdSpiColabo* self, ）：
+     Dd_SPI_Start_Send_DMA～dd_spi_colabo_start_send_dma、Dd_SPI_Start_Recv_DMA～dd_spi_colabo_start_recv_dma；
+     Dd_SPI_Start_Full_Duplex_DMA～dd_spi_colabo_start_full_duplex_dma；
+     （3）ddspidrivebranch类局部变量规范；
+     （4）ddspidrivebranch类宏定义规范；
+     宏名前面加DdSpiDriveBranch_；
+     （5）ddspidrivebranch类枚举名及元素（元素名前加DdSpiDriveBranch_）规范；
+     E_DD_SPI_TYPE～EDdSpiType、E_DD_SPI_MODE～EDdSpiMode、E_DD_SPI_DIR～EDdSpiDir、E_DD_SPI_CONT_TRANS～DdSpiContTrans；
+     E_DD_SPI_BIT_LEN～DdSpiBitLen、E_DD_SPI_BIT_DIR～DdSpiBitDir、E_DD_SPI_ENABLE_SIG～DdSpiEnableSig；
+     （6）ddspidrivebranch类抽象函数规范；
+     VP_SPI_CALLBACK～VpSpiCallback、VP_SPI_SS_CALLBACK～VpSpiSsCallback；
+     （7）ddspidrivebranch类结构体规范；
+     T_DD_SPI_SS_INFO～DdSpiSsInfo、T_DD_SPI_CTRL～TDdSpiCtrl、T_DD_SPI_INFO～TDdSpiInfo；
+     T_DD_SPI_DMA_COUNT_INFO～SpiDmaCountInfo、T_DD_SPI_DMA_INFO～DdSpiDmaInfo；
+     （8）ddspidrivebranch类结构体元素规范；
+     cont_trans～contTrans、enable_sig～enableSig、bit_direction～bitDirection、bit_length～bitLength、clk_div～clkDiv；
+     delay_en～delayEn、delay_val～delayVal、rx_inhibit_en～rxInhibitEn、fifo_wmark_tx～fifoWmarkTx；
+     fifo_wmark_rx～fifoWmarkRx、dma_en～dmaEn、dma_recv_to～dmaRecvTo、ss_info～ssInfo、pcallback～pCallback；
+     pcallback_ss～pCallbackSs、send_addr8～sendAddr8、send_addr16～sendAddr16、send_addr32～sendAddr32；
+     recv_addr8～recvAddr8、 recv_addr16～recvAddr16、recv_addr32～recvAddr32、send_pos～sendPos、recv_pos～recvPos；
+     dummy_count～dummyCount、spi_mode～spiMode、dma_wait～dmaWait、force_stop_flg～forceStopFlg、trans_count～transCount；
+     dma_count～dmaCount、count_info～countInfo、hdmac1_ctrl～hdmac1Ctrl、dma_ch～dmaCh；
+
+
+6、20200908
+     （1）拆分ddtmr32文件为ddtmr32、ddtmr32interruption并规范；
+     Dd_TMR32_Int_Handler～dd_tmr32_interruption_int_handler；
+     （2）ddtmr类宏定义规范（宏名前面加“DdTmr32_”：
+     （3）ddtmr类结构体及元素规范：
+     U_DD_TMR32_CSR～UDdTmr32Csr、T_DD_TMR32_CTRL～TDdTmr32Ctrl；
+     trg_fixed0～trgFixed0、uf_fixed1～ufFixed1、soft_Counter～softCounter、pcallback～pCallback；
+     （4）ddtmr类公有方法规范（第一个参数为“DdTmr32* self”）：
+     Dd_TMR32_Open～dd_tmr32_open、Dd_TMR32_Close～dd_tmr32_close、Dd_TMR32_Ctrl～dd_tmr32_ctrl；
+     Dd_TMR32_Calculate～dd_tmr32_calculate、Dd_TMR32_Calculate_Pwm_Sync～dd_tmr32_calculate_pwm_sync；
+     Dd_TMR32_Start～dd_tmr32_start、Dd_TMR32_External_Start～dd_tmr32_external_start、Dd_TMR32_Stop～dd_tmr32_stop；
+     Dd_TMR32_Pause～dd_tmr32_pause、Dd_TMR32_Get_Counter～dd_tmr32_get_counter、Dd_TMR32_Get_Ctrl～dd_tmr32_get_ctrl；
+     Dd_TMR32_Set_Softcounter～dd_tmr32_set_soft_counter_value、Dd_TMR32_Get_Softcounter～dd_tmr32_get_soft_counter_vlaue；
+     Dd_TMR32_Set_Reload_Flg～dd_tmr32_set_reload_flg_value、Dd_TMR32_Get_Reload_Flg～dd_tmr32_get_reload_flg_value；
+     Dd_TMR32_SetTimer～dd_tmr32_set_timer、Dd_TMR32_SetTimer_pwm～dd_tmr32_set_timer_pwm、Dd_TMR32_StartReload～dd_tmr32_start_reload；
+     Dd_TMR32_StartOneshot～dd_tmr32_start_one_shot、Dd_TMR32_Set_Outlevel～dd_tmr32_set_out_level；
+     
+     （5）ddtmr64类局部变量规范；
+     （6）ddtmr64类宏定义规范（宏名前面加“DdTmr64_”）；
+     （7）ddtmr64类结构体及元素规范：
+     U_DD_TMR64_CSR1～UDdTmr64Csr1、U_DD_TMR64_CSR2～UDdTmr64Csr2、T_DD_TMR64_CTRL～TDdTmr64Ctrl；
+     （8）ddtmr64类公有方法规范（第一个参数为“ DdTmr64* self ”）：
+     Dd_TMR64_Open～dd_tmr64_open、Dd_TMR64_Close～dd_tmr64_close、Dd_TMR64_Ctrl～dd_tmr64_ctrl；
+     Dd_TMR64_Get_Ctrl～dd_tmr64_get_ctrl、Dd_TMR64_Start～dd_tmr64_start、Dd_TMR64_Stop～dd_tmr64_stop；
+     Dd_TMR64_Get_Gyro_TimeStamp～dd_tmr64_get_gyro_time_stamp、Dd_TMR64_Get_FrameStart_TimeStamp～dd_tmr64_get_frame_start_time_stamp；
+     Dd_TMR64_Get_FrameEnd_TimeStamp～dd_tmr64_get_frame_end_time_stamp、Dd_TMR64_Get_Counter～dd_tmr64_get_counter；
+     Dd_TMR64_Time_Stamp_Enable～dd_tmr64_time_stamp_enable；
+     
+     （9）拆分ddudc类为ddudc、ddudcutility、ddudcinterruption并规范；
+     （10）ddudcinterruption文件公有方法规范：
+     Dd_UDC_Int_Handler～dd_udc_interruption_int_handler；
+     
+     
+7、20200909
+    （1）ddudc抽象函数规范；
+     DD_UDC_CALLBACK～DdUdcCallback；
+     （2）ddudc宏定义规范；
+     宏名前面加“ DdUdc_ ”；
+     （3）ddudc结构体及元素规范：
+     T_DD_UDC_CTRL_CMN～DdUdcCtrlCmn；
+     count_mode～countMode、comp_clear～compClear、zin_mode～zinMode、zin_edge～zinEdge；
+     cmp_int～cmpInt、under_over～underOver、cnt_dir_int～cntDirInt、pCallBack～pCallback；
+     （4）ddutility类公有方法规范：
+     Dd_UDC_Write_Timer_Mode～dd_udc_utility_write_timer_mode(DdUdcUtility* self；
+     （5）ddudc类公有方法规范（第一个参数为“DdUdc* self”）：
+     Dd_UDC_Init～dd_udc_init、Dd_UDC_Open～dd_udc_open、Dd_UDC_Close～dd_udc_close；
+     Dd_UDC_Ctrl_Common～dd_udc_ctrl_common、Dd_UDC_Get_Ctrl_Common～dd_udc_get_ctrl_common；
+     Dd_UDC_Ctrl_Timer～dd_udc_ctrl_timer、Dd_UDC_Get_Ctrl_Timer～dd_udc_get_ctrl_timer、Dd_UDC_Ctrl_Up_Down～dd_udc_ctrl_up_down；
+     Dd_UDC_Get_Ctrl_Up_Down～dd_udc_get_ctrl_up_down、Dd_UDC_Start～dd_udc_start、Dd_UDC_Stop～dd_udc_stop；
+     Dd_UDC_Set_Count_Mode～dd_udc_set_count_mode、Dd_UDC_Set_CallBack～dd_udc_set_callback、Dd_UDC_Set_RCR_Counter～dd_udc_set_rcr_counter；
+     Dd_UDC_Get_UDCR_Counter～dd_udc_get_udcr_counter、Dd_UDC_Set_UDCR_Counter～dd_udc_set_udcr_counter；
+     Dd_UDC_Force_Clear_UDCR～dd_udc_force_clear_udcr、Dd_UDC_Get_Up_Down_Flg～dd_udc_get_up_down_flg；
+
+
+8、20200910
+     （1）dduart拆分出dduartinterrupt、dduartcolabo、dduartbranch，共计4个类：
+     （2）extern volatile kuchar gDD_USIO_State[D_DD_USIO_CH_NUM_MAX]、gDD_USIO_State私有化，对外提供set接口：
+     void dd_uart_set_usio_state(DdUart *self, kuchar ch, kuchar stateValue);
+     （3）dduart类宏定义规范：
+     宏名前面加“DdUart_”；
+     （4）dduart类枚举名规范：
+     E_DD_UART_BAUD_RATE～DdUartBaudRate、E_DD_UART_MODE～EDdUartMode、E_DD_UART_BIT_DIR～DdUartBitDir；
+     E_DD_UART_DATA_LENGTH～DdUartDataLength、E_DD_UART_PARITY_BIT～DdUartParityBit、E_DD_UART_STOP_BIT～DdUartStopBit；
+     E_DD_UART_AUTO_ECHO～DdUartAutoEcho、E_DD_UART_SAVE2BUFFER～DdUartSaveBuffer、E_DD_UART_MODE_MULTI_ACT～UartModeMultiAct；
+     （5）dduart类枚举元素规范：
+     元素名前面加“DdUart_”；
+     （6）dduart类结构体名规范：
+     T_DD_UART_FIFO_CTRL～DdUartFifoCtrl、T_DD_UART_MNG～DdUartMng、T_DD_UART_BUFFER_INFO～DdUartBufferInfo；
+     T_DD_UART_INFO～DdUartInfo、T_DD_UART_MNG_SIMPLE～DdUartMngSimple、T_DD_UART_SPIN_LOCK～DdUartSpinLock；
+     （7）dduart类结构体元素规范：
+     fbyte_recv～fbyteRecv、baud_rate～baudRate、psend_callback～psendCallback、preceive_callback～preceiveCallback；
+     receive_buff_addr～receiveBuffAddr、receive_buff_size～receiveBuffSize、send_buff_addr～sendBuffAddr；
+     send_buff_size～sendBuffSize、auto_echo～autoEcho、save_buff～saveBuff、bit_direction～bitDirection；
+     stop_bit_length～stopBitLength、parity_bit～parityBit、data_length～dataLength、ext_clk～extClk；
+     inv_nrz～invNrz、flow_enable～flowEnable、fifo_ctrl～fifoCtrl、send_dma_callback～sendDmaCallback；
+     recv_dma_callback～recvDmaCallback、r_read_pos～rReadPos、r_write_pos～rWritePos、r_size～rSize；
+     r_flag～rFlag、s_read_pos～sReadPos、s_write_pos～sWritePos、s_overlap_cnt～sOverlapCnt、s_size～sSize；
+     s_flag～sFlag、force_stop_flg～forceStopFlg、multi_active_flg～multiActiveFlg、multi_slave_addr～multiSlaveAddr；
+     send_addr8～sendAddr8、recv_addr8～recvAddr8、dma_wait～dmaWait；
+     （8）dduart类公有方法规范（第一个参数为DdUart *self）：
+     Dd_UART_Close～dd_uart_close、Dd_UART_Ctrl～dd_uart_ctrl、Dd_UART_Put_Char～dd_uart_put_char；
+     Dd_UART_Send_Target_Slave_Addr～dd_uart_send_target_slave_addr、Dd_UART_Put_Str_DMA～dd_uart_put_str_dma；
+     Dd_IQTOOL_ENABLE～dd_uart_iqtool_enable、Dd_IQTOOL_DISABLE～dd_uart_iqtool_disable；
+     Dd_GET_IQTOOL_STATUS～dd_uart_iqtool_status；
+     （9）dduartinterrupt类公有方法规范：
+     Dd_USIO_Int_Handler_Tx~dd_uart_interrupt_int_handler_tx、Dd_USIO_Int_Handler_Rx～dd_uart_interrupt_int_handler_rx；
+     （10）dduartcolabo类公有方法规范（第一个参数为DdUartColabo *self）：
+     Dd_UART_Stop～dd_uart_colabo_stop、Dd_UART_Int_Handler_Tx～dd_uart_colabo_int_handler_tx；
+     Dd_UART_Start_Send_DMA～dd_uart_colabo_start_send_dma、Dd_UART_Set_Recv_Data_DMA～dd_uart_colabo_set_recv_data_dma；
+     Dd_UART_Start_Recv_DMA～dd_uart_colabo_start_recv_dma、Dd_UART_Send_Recv_Disable～dd_uart_colabo_send_recv_disable；
+
+
+9、20200911
+     （1）dduartbranch类公有方法规范（第一个参数为DdUartBranch *self）：
+     Dd_UART_Open~dd_uart_branch_open、Dd_UART_Set_Baudrate～dd_uart_branch_set_baudrate；
+     Dd_UART_Get_Baudrate～dd_uart_branch_get_baudrate、Dd_UART_Save_Send_FIFO_Pointer～dd_uart_branch_save_send_fifo_pointer；
+     Dd_UART_Get_Reload_Status～dd_uart_branch_get_reload_status、Dd_UART_Reset_FIFO～dd_uart_branch_reset_fifo；
+     Dd_UART_Reset_Baudrate～dd_uart_branch_reset_baudrate、Dd_UART_Reload_Send_FIFO_Pointer～dd_uart_branch_reload_send_fifo_pointer；
+     Dd_UART_Start～dd_uart_branch_start、Dd_UART_Set_Str～dd_uart_branch_set_str、Dd_UART_Put_Str～dd_uart_branch_put_str；
+     Dd_UART_Get_Char～dd_uart_branch_get_char、Dd_UART_Clear_Overwrite～dd_uart_branch_clear_overwrite；
+     Dd_UART_Get_Send_Write_Pointer_Addr～dd_uart_branch_get_send_write_pointer_addr、Dd_UART_Get_Send_Overlap_Count～dd_uart_branch_get_send_overlap_count；
+     Dd_UART_Set_Slave_Addr～dd_uart_branch_set_slave_addr、Dd_UART_Int_Handler_Rx～dd_uart_branch_int_handler_rx；
+     Dd_UART_Get_Ctrl～dd_uart_branch_get_ctrl、Dd_UART_Initialize_Simple～dd_uart_branch_initialize_simple；
+     Dd_UART_Set_Send_Data_DMA～dd_uart_branch_set_send_data_dma；
+
+
+10、ddpwm文件拆分为ddpwm、ddpwmbranch、ddpwmcolabo、ddpwmutility四个类：
+         （1）ddpwmbranch宏规范：
+         D_DD_PWM_INPUT_PARAM_ERROR～DdPwmBranch_INPUT_PARAM_ERROR
+         D_DD_PWM_SEM_TIMEOUT～DdPwmBranch_SEM_TIMEOUT
+         D_DD_PWM_SEM_NG～DdPwmBranch_SEM_NG
+         D_DD_PWM_OVERFLOW_ERROR～DdPwmBranch_OVERFLOW_ERROR
+         D_DD_PWM_OVERFLOW_OK～DdPwmBranch_OVERFLOW_OK
+         D_DD_PWM_INT_STATUS_TRG_INPUT～DdPwmBranch_INT_STATUS_TRG_INPUT
+         D_DD_PWM_INT_STATUS_CYCLE_MATCH～DdPwmBranch_INT_STATUS_CYCLE_MATCH
+         D_DD_PWM_INT_STATUS_DUTY_MATCH～DdPwmBranch_INT_STATUS_DUTY_MATCH
+         D_DD_PWM_INT_STATUS_CYC_DUTY_MATCH～DdPwmBranch_INT_STATUS_CYC_DUTY_MATCH
+         D_DD_PWM_INT_STATUS_UNDER_RUN～DdPwmBranch_INT_STATUS_UNDER_RUN
+         D_DD_PWM_INT_STATUS_FORCE_STOP～DdPwmBranch_INT_STATUS_FORCE_STOP
+         D_DD_PWM_INT_STATUS_AUTO_STOP～DdPwmBranch_INT_STATUS_AUTO_STOP
+         D_DD_PWM_CH_NUM_MAX～DdPwmBranch_CH_NUM_MAX
+         D_DD_PWM_BLOCK_NUM～DdPwmBranch_BLOCK_NUM
+         D_DD_PWM_CH_NUM_IN_BLOCK～DdPwmBranch_CH_NUM_IN_BLOCK
+         D_DD_PWM_TIMER_E_STEPS～DdPwmBranch_TIMER_E_STEPS
+         D_DD_PWM_TIMER_E_STEPS_UNDER_RUN～DdPwmBranch_TIMER_E_STEPS_UNDER_RUN
+         D_DD_PWM_PCNHL_CNTE_OFF～DdPwmBranch_PCNHL_CNTE_OFF
+         D_DD_PWM_PCNHL_CNTE_ON～DdPwmBranch_PCNHL_CNTE_ON
+         D_DD_PWM_PCNHL_MDSE_PWM～DdPwmBranch_PCNHL_MDSE_PWM
+         D_DD_PWM_PCNHL_MDSE_ONE～DdPwmBranch_PCNHL_MDSE_ONE
+         D_DD_PWM_PCNHL_RTRG_OFF～DdPwmBranch_PCNHL_RTRG_OFF
+         D_DD_PWM_PCNHL_RTRG_ON～DdPwmBranch_PCNHL_RTRG_ON
+         D_DD_PWM_PCNHL_CKS_DIV_0～DdPwmBranch_PCNHL_CKS_DIV_0
+         D_DD_PWM_PCNHL_CKS_DIV_4～DdPwmBranch_PCNHL_CKS_DIV_4
+         D_DD_PWM_PCNHL_CKS_DIV_16～DdPwmBranch_PCNHL_CKS_DIV_16
+         D_DD_PWM_PCNHL_CKS_DIV_64～DdPwmBranch_PCNHL_CKS_DIV_64
+         D_DD_PWM_PCNHL_PGMS_L～DdPwmBranch_PCNHL_PGMS_L
+         D_DD_PWM_PCNHL_PGMS_H～DdPwmBranch_PCNHL_PGMS_H
+         D_DD_PWM_PCNHL_EGS_NOT～DdPwmBranch_PCNHL_EGS_NOT
+         D_DD_PWM_PCNHL_EGS_RISE～DdPwmBranch_PCNHL_EGS_RISE
+         D_DD_PWM_PCNHL_EGS_FALL～DdPwmBranch_PCNHL_EGS_FALL
+         D_DD_PWM_PCNHL_EGS_BOTH～DdPwmBranch_PCNHL_EGS_BOTH
+         D_DD_PWM_PCNHL_IREN_OFF～DdPwmBranch_PCNHL_IREN_OFF
+         D_DD_PWM_PCNHL_IREN_ON～DdPwmBranch_PCNHL_IREN_ON
+         D_DD_PWM_PCNHL_IRS_TRG～DdPwmBranch_PCNHL_IRS_TRG
+         D_DD_PWM_PCNHL_IRS_CYCLE～DdPwmBranch_PCNHL_IRS_CYCLE
+         D_DD_PWM_PCNHL_IRS_DUTY～DdPwmBranch_PCNHL_IRS_DUTY
+         D_DD_PWM_PCNHL_IRS_CYC_DTY～DdPwmBranch_PCNHL_IRS_CYC_DTY
+         D_DD_PWM_PCNHL_OSEL_NORMAL～DdPwmBranch_PCNHL_OSEL_NORMAL
+         D_DD_PWM_PCNHL_OSEL_REVERSE～DdPwmBranch_PCNHL_OSEL_REVERSE
+         D_DD_PWM_GCN_TSEL_EM0～DdPwmBranch_GCN_TSEL_EM0
+         D_DD_PWM_GCN_TSEL_EM1～DdPwmBranch_GCN_TSEL_EM1
+         D_DD_PWM_GCN_TSEL_EM2～DdPwmBranch_GCN_TSEL_EM2
+         D_DD_PWM_GCN_TSEL_EM3～DdPwmBranch_GCN_TSEL_EM3
+         D_DD_PWM_GCN_TSEL_TIM0～DdPwmBranch_GCN_TSEL_TIM0
+         D_DD_PWM_GCN_TSEL_TIM1～DdPwmBranch_GCN_TSEL_TIM1
+         D_DD_PWM_GCN_TSEL_EXT0～DdPwmBranch_GCN_TSEL_EXT0
+         D_DD_PWM_GCN_TSEL_EXT1～DdPwmBranch_GCN_TSEL_EXT1
+         D_DD_PWM_GCN_TSEL_EXT2～DdPwmBranch_GCN_TSEL_EXT2
+         D_DD_PWM_GCN_TSEL_EXT3～DdPwmBranch_GCN_TSEL_EXT3
+         D_DD_PWM_GCN_TMEEN_OFF～DdPwmBranch_GCN_TMEEN_OFF
+         D_DD_PWM_GCN_TMEEN_ON～DdPwmBranch_GCN_TMEEN_ON
+         D_DD_PWM_GCN_CHAS_ABCD～DdPwmBranch_GCN_CHAS_ABCD
+         D_DD_PWM_GCN_CHAS_CBAD～DdPwmBranch_GCN_CHAS_CBAD
+         D_DD_PWM_TSEL_CPU～DdPwmBranch_TSEL_CPU
+         D_DD_PWM_TSEL_INT_CH0～DdPwmBranch_TSEL_INT_CH0
+         D_DD_PWM_TSEL_INT_CH1～DdPwmBranch_TSEL_INT_CH1
+         D_DD_PWM_TSEL_INT_CH2～DdPwmBranch_TSEL_INT_CH2
+         D_DD_PWM_PCHSET_RQTIM_2～DdPwmBranch_PCHSET_RQTIM_2
+         D_DD_PWM_PCHSET_RQTIM_4～DdPwmBranch_PCHSET_RQTIM_4
+         D_DD_PWM_PCHSET_RQTIM_6～DdPwmBranch_PCHSET_RQTIM_6
+         D_DD_PWM_PCHSET_UDEN_OFF～DdPwmBranch_PCHSET_UDEN_OFF
+         D_DD_PWM_PCHSET_UDEN_ON～DdPwmBranch_PCHSET_UDEN_ON
+         D_DD_PWM_PINTCT_UIE_OFF～DdPwmBranch_PINTCT_UIE_OFF
+         D_DD_PWM_PINTCT_UIE_ON～DdPwmBranch_PINTCT_UIE_ON
+         D_DD_PWM_PINTCT_FIE_OFF～DdPwmBranch_PINTCT_FIE_OFF
+         D_DD_PWM_PINTCT_FIE_ON～DdPwmBranch_PINTCT_FIE_ON
+         D_DD_PWM_PINTCT_AIE_OFF～DdPwmBranch_PINTCT_AIE_OFF
+         D_DD_PWM_PINTCT_AIE_ON～DdPwmBranch_PINTCT_AIE_ON
+         D_DD_PWM_PINTCT_DRQE_OFF～DdPwmBranch_PINTCT_DRQE_OFF
+         D_DD_PWM_PINTCT_DRQE_ON～DdPwmBranch_PINTCT_DRQE_ON
+         D_DD_PWM_PREV_OFF～DdPwmBranch_PREV_OFF
+         D_DD_PWM_PREV_ON～DdPwmBranch_PREV_ON
+         D_DD_PWM_TIMERE_DATA_MAX～DdPwmBranch_TIMERE_DATA_MAX
+         （2）ddpwmcolabo宏规范：
+         D_DD_PWM_STEP_FORCE_DISABLE~DdPwmColabo_STEP_FORCE_DISABLE
+         D_DD_PWM_STEP_FORCE_0~DdPwmColabo_STEP_FORCE_0
+         D_DD_PWM_STEP_FORCE_1~DdPwmColabo_STEP_FORCE_1
+         （3）ddslimbus宏规范：
+         D_DD_SLIMBUS_INPUT_PARAM_ERROR~DdSlimbus_INPUT_PARAM_ERROR
+         D_DD_SLIMBUS_OVERFLOW_ERR~DdSlimbus_OVERFLOW_ERR
+         D_DD_SLIMBUS_PROCESSING~DdSlimbus_PROCESSING
+         D_DD_SLIMBUS_SEM_NG~DdSlimbus_SEM_NG
+         D_DD_SLIMBUS_SEM_TIMEOUT~DdSlimbus_SEM_TIMEOUT
+         D_DD_SLIMBUS_STATUS_ABNORMAL~DdSlimbus_STATUS_ABNORMAL
+         D_DD_SLIMBUS_DMA_SS_ERROR~DdSlimbus_DMA_SS_ERROR
+         （4）ddslimbus枚举元素规范：
+         E_DD_SLIMBUS_CH0～DdSlimbus_CH0
+         E_DD_SLIMBUS_CH1～DdSlimbus_CH1
+         E_DD_SLIMBUS_CH2～DdSlimbus_CH2
+         E_DD_SLIMBUS_CH3～DdSlimbus_CH3
+         E_DD_SLIMBUS_MANAGER_MODE_DISABLE～DdSlimbus_MANAGER_MODE_DISABLE
+         E_DD_SLIMBUS_MANAGER_MODE_ENABLE～DdSlimbus_MANAGER_MODE_ENABLE
+         E_DD_SLIMBUS_FR_DISABLE～DdSlimbus_FR_DISABLE
+         E_DD_SLIMBUS_FR_ENABLE～DdSlimbus_FR_ENABLE
+         （5）ddspidrivebranch宏规范：
+         D_DD_SPI_INPUT_PARAM_ERROR～DdSpiDriveBranch_INPUT_PARAM_ERROR
+         D_DD_SPI_SEM_TIMEOUT～DdSpiDriveBranch_SEM_TIMEOUT
+         D_DD_SPI_SEM_NG～DdSpiDriveBranch_SEM_NG
+         D_DD_SPI_STATUS_ABNORMAL～DdSpiDriveBranch_STATUS_ABNORMAL
+         D_DD_SPI_RECV_OVERRUN_ERROR～DdSpiDriveBranch_RECV_OVERRUN_ERROR
+         D_DD_SPI_DMA_SS_ERROR～DdSpiDriveBranch_DMA_SS_ERROR
+         D_DD_SPI_FORCE_STOP～DdSpiDriveBranch_FORCE_STOP
+         D_DD_SPI_CH_MAX～DdSpiDriveBranch_CH_MAX
+         D_DD_SPI_SS_MAX～DdSpiDriveBranch_SS_MAX
+         D_DD_SPI_SEND～DdSpiDriveBranch_SEND
+         D_DD_SPI_RECV～DdSpiDriveBranch_RECV
+         D_DD_SPI_DMA_TC_MAX～DdSpiDriveBranch_DMA_TC_MAX
+         D_DD_SPI_INT_TXEMPTYPULSE_BIT～DdSpiDriveBranch_INT_TXEMPTYPULSE_BIT
+         D_DD_SPI_INT_TXWMARKPULSE_BIT～DdSpiDriveBranch_INT_TXWMARKPULSE_BIT
+         D_DD_SPI_INT_RXWMARKPULSE_BIT～DdSpiDriveBranch_INT_RXWMARKPULSE_BIT
+         D_DD_SPI_INT_RXFULLPULSE_BIT～DdSpiDriveBranch_INT_RXFULLPULSE_BIT
+         D_DD_SPI_INT_XFERDONEPULSE_BIT～DdSpiDriveBranch_INT_XFERDONEPULSE_BIT
+         D_DD_SPI_INT_RXFIFOOVERFLOW_BIT～DdSpiDriveBranch_INT_RXFIFOOVERFLOW_BIT
+         D_DD_SPI_INT_RXTIMEOUT_BIT～DdSpiDriveBranch_INT_RXTIMEOUT_BIT
+         D_DD_SPI_INT_ALL_BIT_SET～DdSpiDriveBranch_INT_ALL_BIT_SET
+         D_DD_SPI_INT_TX_CPU_BIT_SET～DdSpiDriveBranch_INT_TX_CPU_BIT_SET
+         D_DD_SPI_INT_TX_DMA_BIT_SET～DdSpiDriveBranch_INT_TX_DMA_BIT_SET
+         D_DD_SPI_INT_RX_CPU_BIT_SET～DdSpiDriveBranch_INT_RX_CPU_BIT_SET
+         D_DD_SPI_INT_RX_DMA_BIT_SET～DdSpiDriveBranch_INT_RX_DMA_BIT_SET
+         D_DD_SPI_INT_FULL_CPU_BIT_SET～DdSpiDriveBranch_INT_FULL_CPU_BIT_SET
+         D_DD_SPI_INT_FULL_DMA_BIT_SET～DdSpiDriveBranch_INT_FULL_DMA_BIT_SET
+         DD_SPI_DSB～DdSpiDriveBranch_DSB
+         （6）ddspidrivebranch枚举元素规范：
+         E_DD_SPI_TYPE_SLAVE～DdSpiDriveBranch_TYPE_SLAVE
+         E_DD_SPI_TYPE_MASTER～DdSpiDriveBranch_TYPE_MASTER
+         E_DD_SPI_MODE_0_CPOL0_CPHA0～DdSpiDriveBranch_MODE_0_CPOL0_CPHA0
+         E_DD_SPI_MODE_1_CPOL0_CPHA1～DdSpiDriveBranch_MODE_1_CPOL0_CPHA1
+         E_DD_SPI_MODE_2_CPOL1_CPHA0～DdSpiDriveBranch_MODE_2_CPOL1_CPHA0
+         E_DD_SPI_MODE_3_CPOL1_CPHA1～DdSpiDriveBranch_MODE_3_CPOL1_CPHA1
+         E_DD_SPI_ENABLE_SIG_CPU～DdSpiDriveBranch_ENABLE_SIG_CPU
+         E_DD_SPI_ENABLE_SIG_EXT_0～DdSpiDriveBranch_ENABLE_SIG_EXT_0
+         E_DD_SPI_ENABLE_SIG_EXT_1～DdSpiDriveBranch_ENABLE_SIG_EXT_1
+         E_DD_SPI_ENABLE_SIG_EXT_2～DdSpiDriveBranch_ENABLE_SIG_EXT_2
+         E_DD_SPI_BIT_DIR_LSB_FIRST～DdSpiDriveBranch_BIT_DIR_LSB_FIRST
+         E_DD_SPI_BIT_DIR_MSB_FIRST～DdSpiDriveBranch_BIT_DIR_MSB_FIRST
+         E_DD_SPI_BIT_LEN_4～DdSpiDriveBranch_BIT_LEN_4
+         E_DD_SPI_BIT_LEN_5～DdSpiDriveBranch_BIT_LEN_5
+         E_DD_SPI_BIT_LEN_6～DdSpiDriveBranch_BIT_LEN_6
+         E_DD_SPI_BIT_LEN_7～DdSpiDriveBranch_BIT_LEN_7
+         E_DD_SPI_BIT_LEN_8～DdSpiDriveBranch_BIT_LEN_8
+         E_DD_SPI_BIT_LEN_9～DdSpiDriveBranch_BIT_LEN_9
+         E_DD_SPI_BIT_LEN_10～DdSpiDriveBranch_BIT_LEN_10
+         E_DD_SPI_BIT_LEN_11～DdSpiDriveBranch_BIT_LEN_11
+         E_DD_SPI_BIT_LEN_12～DdSpiDriveBranch_BIT_LEN_12
+         E_DD_SPI_BIT_LEN_13～DdSpiDriveBranch_BIT_LEN_13
+         E_DD_SPI_BIT_LEN_14～DdSpiDriveBranch_BIT_LEN_14
+         E_DD_SPI_BIT_LEN_15～DdSpiDriveBranch_BIT_LEN_15
+         E_DD_SPI_BIT_LEN_16～DdSpiDriveBranch_BIT_LEN_16
+         E_DD_SPI_BIT_LEN_17～DdSpiDriveBranch_BIT_LEN_17
+         E_DD_SPI_BIT_LEN_18～DdSpiDriveBranch_BIT_LEN_18
+         E_DD_SPI_BIT_LEN_19～DdSpiDriveBranch_BIT_LEN_19
+         E_DD_SPI_BIT_LEN_20～DdSpiDriveBranch_BIT_LEN_20
+         E_DD_SPI_BIT_LEN_21～DdSpiDriveBranch_BIT_LEN_21
+         E_DD_SPI_BIT_LEN_22～DdSpiDriveBranch_BIT_LEN_22
+         E_DD_SPI_BIT_LEN_23～DdSpiDriveBranch_BIT_LEN_23
+         E_DD_SPI_BIT_LEN_24～DdSpiDriveBranch_BIT_LEN_24
+         E_DD_SPI_BIT_LEN_25～DdSpiDriveBranch_BIT_LEN_25
+         E_DD_SPI_BIT_LEN_26～DdSpiDriveBranch_BIT_LEN_26
+         E_DD_SPI_BIT_LEN_27～DdSpiDriveBranch_BIT_LEN_27
+         E_DD_SPI_BIT_LEN_28～DdSpiDriveBranch_BIT_LEN_28
+         E_DD_SPI_BIT_LEN_29～DdSpiDriveBranch_BIT_LEN_29
+         E_DD_SPI_BIT_LEN_30～DdSpiDriveBranch_BIT_LEN_30
+         E_DD_SPI_BIT_LEN_31～DdSpiDriveBranch_BIT_LEN_31
+         E_DD_SPI_BIT_LEN_32～DdSpiDriveBranch_BIT_LEN_32
+         E_DD_SPI_CONT_TRANS_INACT_BETWEEN～DdSpiDriveBranch_CONT_TRANS_INACT_BETWEEN
+         E_DD_SPI_CONT_TRANS_INACT_FIFO_EMPTY～DdSpiDriveBranch_CONT_TRANS_INACT_FIFO_EMPTY
+         E_DD_SPI_CONT_TRANS_ACT_FIFO_EMPTY～DdSpiDriveBranch_CONT_TRANS_ACT_FIFO_EMPTY
+         E_DD_SPI_DIR_SEND～DdSpiDriveBranch_DIR_SEND
+         E_DD_SPI_DIR_RECV～DdSpiDriveBranch_DIR_RECV
+         E_DD_SPI_DIR_FULL～DdSpiDriveBranch_DIR_FULL
+         （7）ddtmr32宏规范：
+         D_DD_TMR32_INPUT_PARAM_ERR～DdTmr32_INPUT_PARAM_ERR
+         D_DD_TMR32_SEM_TIMEOUT～DdTmr32_SEM_TIMEOUT
+         D_DD_TMR32_SEM_NG～DdTmr32_SEM_NG
+         D_DD_TMR32_CH_NUM_MAX～DdTmr32_CH_NUM_MAX
+         D_DD_TMR32_EXT_TRG_CH_NUM_MAX～DdTmr32_EXT_TRG_CH_NUM_MAX
+         （8）ddtmr64宏规范：
+         D_DD_TMR64_INPUT_PARAM_ERR～DdTmr64_INPUT_PARAM_ERR
+         D_DD_TMR64_SEM_TIMEOUT～DdTmr64_SEM_TIMEOUT
+         D_DD_TMR64_SEM_NG～DdTmr64_SEM_NG
+         D_DD_TMR64_STATUS_ABNORMAL～DdTmr64_STATUS_ABNORMAL
+         D_DD_TMR64_DMA_SS_ERROR～DdTmr64_DMA_SS_ERROR
+         （9）dduart类宏规范：
+         D_DD_UART_NORMAL_COMPLETE～DdUart_NORMAL_COMPLETE
+         D_DD_UART_SEM_TIMEOUT～DdUart_SEM_TIMEOUT
+         D_DD_UART_SEM_NG～DdUart_SEM_NG
+         D_DD_UART_INPUT_PARAM_ERROR～DdUart_INPUT_PARAM_ERROR
+         D_DD_UART_NO_RECEIVE～DdUart_NO_RECEIVE
+         D_DD_UART_OVERFLOW_ERROR～DdUart_OVERFLOW_ERROR
+         D_DD_UART_NO_SEND_DATA～DdUart_NO_SEND_DATA
+         D_DD_UART_PARITY_ERROR～DdUart_PARITY_ERROR
+         D_DD_UART_OVERRUN_ERROR～DdUart_OVERRUN_ERROR
+         D_DD_UART_FRAMING_ERROR～DdUart_FRAMING_ERROR
+         D_DD_UART_DATA_EXIST_ERROR～DdUart_DATA_EXIST_ERROR
+         D_DD_UART_OVERWRITE_ERROR～DdUart_OVERWRITE_ERROR
+         D_DD_UART_DMA_SS_ERROR～DdUart_DMA_SS_ERROR
+         D_DD_UART_RECV_ENTER～DdUart_RECV_ENTER
+         D_DD_UART_RECV_CHAR～DdUart_RECV_CHAR
+         D_DD_UART_RECV_SLAVE_ADDR～DdUart_RECV_SLAVE_ADDR
+         D_DD_UART_FORCE_STOP～DdUart_FORCE_STOP
+         D_DD_UART_MODE_UNMATCH～DdUart_MODE_UNMATCH
+         D_DD_UART_STOPPED～DdUart_STOPPED
+         D_DD_USIO_CH_NUM_MAX～DdUart_CH_NUM_MAX
+         D_DD_USIO_EXC_OFF～DdUart_EXC_OFF
+         D_DD_USIO_EXC_UART～DdUart_EXC_UART
+         D_DD_USIO_EXC_CSIO～DdUart_EXC_CSIO
+         D_DD_IQTOOL_IDLE～DdUart_IQTOOL_IDLE
+         D_DD_IQTOOL_START～DdUart_IQTOOL_START
+         D_DD_IQTOOL_STOP～DdUart_IQTOOL_STOP
+         D_DD_IQTOOL_UART_CH～DdUart_IQTOOL_UART_CH
+         D_DD_UART_SELECT_FIFO_1～DdUart_SELECT_FIFO_1
+         D_DD_UART_SELECT_FIFO_2～DdUart_SELECT_FIFO_2
+         D_DD_UART_SELECT_FIFO_BOTH～DdUart_SELECT_FIFO_BOTH
+         D_DD_UART_INT_STATUS_RECV_CHAR～DdUart_INT_STATUS_RECV_CHAR
+         D_DD_UART_INT_STATUS_RECV_ENTER～DdUart_INT_STATUS_RECV_ENTER
+         D_DD_UART_INT_STATUS_RECV_SLAVE_ADDR～DdUart_INT_STATUS_RECV_SLAVE_ADDR
+         D_DD_UART_INT_STATUS_OVERRUN_ERROR～DdUart_INT_STATUS_OVERRUN_ERROR
+         D_DD_UART_INT_STATUS_FRAMING_ERROR～DdUart_INT_STATUS_FRAMING_ERROR
+         D_DD_UART_INT_STATUS_PARITY_ERROR～DdUart_INT_STATUS_PARITY_ERROR
+         DD_UART_DSB～DdUart_DSB
+         D_DD_UART_SSR_REC_BIT～DdUart_SSR_REC_BIT
+         D_DD_UART_DR_D8_BIT～DdUart_DR_D8_BIT
+         D_DD_UART_SEND～DdUart_SEND
+         D_DD_UART_RECV～DdUart_RECV
+         D_DD_UART_DMA_TC_MAX～DdUart_DMA_TC_MAX
+         D_DD_UART_DMACA_IS_BASE～DdUart_DMACA_IS_BASE
+         （10）dduart类枚举元素规范：
+         E_DD_UART_BAUD_RATE_1200～DdUart_BAUD_RATE_1200
+         E_DD_UART_BAUD_RATE_2400~DdUart_BAUD_RATE_2400
+         E_DD_UART_BAUD_RATE_4800~DdUart_BAUD_RATE_4800
+         E_DD_UART_BAUD_RATE_9600~DdUart_BAUD_RATE_9600
+         E_DD_UART_BAUD_RATE_14400~DdUart_BAUD_RATE_14400
+         E_DD_UART_BAUD_RATE_19200~DdUart_BAUD_RATE_19200
+         E_DD_UART_BAUD_RATE_38400~DdUart_BAUD_RATE_38400
+         E_DD_UART_BAUD_RATE_57600~DdUart_BAUD_RATE_57600
+         E_DD_UART_BAUD_RATE_115200~DdUart_BAUD_RATE_115200
+         E_DD_UART_BAUD_RATE_230400~DdUart_BAUD_RATE_230400
+         E_DD_UART_BAUD_RATE_460800~DdUart_BAUD_RATE_460800
+         E_DD_UART_BAUD_RATE_921600~DdUart_BAUD_RATE_921600
+         E_DD_UART_BAUD_RATE_1000000~DdUart_BAUD_RATE_1000000
+         E_DD_UART_BAUD_RATE_2000000~DdUart_BAUD_RATE_2000000
+         E_DD_UART_BAUD_RATE_4000000~DdUart_BAUD_RATE_4000000
+         E_DD_UART_MODE_NORMAL~DdUart_MODE_NORMAL
+         E_DD_UART_MODE_MULTI~DdUart_MODE_MULTI
+         E_DD_UART_BIT_DIR_LSB_FIRST~DdUart_BIT_DIR_LSB_FIRST
+         E_DD_UART_BIT_DIR_MSB_FIRST~DdUart_BIT_DIR_MSB_FIRST
+         E_DD_UART_DATA_LENGTH_8~DdUart_DATA_LENGTH_8
+         E_DD_UART_DATA_LENGTH_5~DdUart_DATA_LENGTH_5
+         E_DD_UART_DATA_LENGTH_6~DdUart_DATA_LENGTH_6
+         E_DD_UART_DATA_LENGTH_7~DdUart_DATA_LENGTH_7
+         E_DD_UART_PARITY_BIT_NONE~DdUart_PARITY_BIT_NONE
+         E_DD_UART_PARITY_BIT_EVEN~DdUart_PARITY_BIT_EVEN
+         E_DD_UART_PARITY_BIT_ODD~DdUart_PARITY_BIT_ODD
+         E_DD_UART_STOP_BIT_1~DdUart_STOP_BIT_1
+         E_DD_UART_STOP_BIT_2~DdUart_STOP_BIT_2
+         E_DD_UART_AUTO_ECHO_ON~DdUart_AUTO_ECHO_ON
+         E_DD_UART_AUTO_ECHO_OFF~DdUart_AUTO_ECHO_OFF
+         E_DD_UART_SAVE2BUFFER_EN~DdUart_SAVE2BUFFER_EN
+         E_DD_UART_SAVE2BUFFER_DIS~DdUart_SAVE2BUFFER_DIS
+         E_DD_UART_MODE_MULTI_DIS~DdUart_MODE_MULTI_DIS
+         E_DD_UART_MODE_MULTI_MASTER~DdUart_MODE_MULTI_MASTER
+         E_DD_UART_MODE_MULTI_SLAVE~DdUart_MODE_MULTI_SLAVE
+         （11）ddudc类宏规范：
+         DdUdc_D_DD_UDC_INPUT_PARAM_ERROR～DdUdc_INPUT_PARAM_ERROR
+         DdUdc_D_DD_UDC_EXT_LOCK_NG～DdUdc_EXT_LOCK_NG
+         DdUdc_D_DD_UDC_ERROR_BUSY～DdUdc_ERROR_BUSY
+         DdUdc_D_DD_UDC_SEM_TIMEOUT～DdUdc_SEM_TIMEOUT
+         DdUdc_D_DD_UDC_SEM_NG～DdUdc_SEM_NG
+         DdUdc_D_DD_UDC_CMPF_OK～DdUdc_CMPF_OK
+         DdUdc_D_DD_UDC_OVER_FLOW～DdUdc_OVER_FLOW
+         DdUdc_D_DD_UDC_UNDER_FLOW～DdUdc_UNDER_FLOW
+         DdUdc_D_DD_UDC_COUNT_DIRECTION～DdUdc_COUNT_DIRECTION
+         DdUdc_D_DD_UDC_UNDETECTION～DdUdc_UNDETECTION
+         DdUdc_D_DD_UDC_CMS_TIMER～DdUdc_CMS_TIMER
+         DdUdc_D_DD_UDC_CMS_UP_DOWN～DdUdc_CMS_UP_DOWN
+         DdUdc_D_DD_UDC_CMS_PHASE_LAG_2～DdUdc_CMS_PHASE_LAG_2
+         DdUdc_D_DD_UDC_CMS_PHASE_LAG_4～DdUdc_CMS_PHASE_LAG_4
+         DdUdc_D_DD_UDC_UCRE_OFF～DdUdc_UCRE_OFF
+         DdUdc_D_DD_UDC_UCRE_ON～DdUdc_UCRE_ON
+         DdUdc_D_DD_UDC_RLDE_OFF～DdUdc_RLDE_OFF
+         DdUdc_D_DD_UDC_RLDE_ON～DdUdc_RLDE_ON
+         DdUdc_D_DD_UDC_CGSC_CLEAR～DdUdc_CGSC_CLEAR
+         DdUdc_D_DD_UDC_CGSC_GATE～DdUdc_CGSC_GATE
+         DdUdc_D_DD_UDC_CGE_NOT～DdUdc_CGE_NOT
+         DdUdc_D_DD_UDC_CGE_FALL_L～DdUdc_CGE_FALL_L
+         DdUdc_D_DD_UDC_CGE_RISE_H～DdUdc_CGE_RISE_H
+         DdUdc_D_DD_UDC_CLKS_2_CLOCK～DdUdc_CLKS_2_CLOCK
+         DdUdc_D_DD_UDC_CLKS_8_CLOCK～DdUdc_CLKS_8_CLOCK
+         DdUdc_D_DD_UDC_CES_NOT～DdUdc_CES_NOT
+         DdUdc_D_DD_UDC_CES_RISE～DdUdc_CES_RISE
+         DdUdc_D_DD_UDC_CES_FALL～DdUdc_CES_FALL
+         DdUdc_D_DD_UDC_CES_BOTH～DdUdc_CES_BOTH
+         DdUdc_D_DD_UDC_UDF_NON～DdUdc_UDF_NON
+         DdUdc_D_DD_UDC_UDF_DOWN～DdUdc_UDF_DOWN
+         DdUdc_D_DD_UDC_UDF_UP～DdUdc_UDF_UP
+         DdUdc_D_DD_UDC_UDF_BOTH～DdUdc_UDF_BOTH
+         DdUdc_D_DD_UDC_CITE_OFF～DdUdc_CITE_OFF
+         DdUdc_D_DD_UDC_CITE_ON～DdUdc_CITE_ON
+         DdUdc_D_DD_UDC_UDIE_OFF～DdUdc_UDIE_OFF
+         DdUdc_D_DD_UDC_UDIE_ON～DdUdc_UDIE_ON
+         DdUdc_D_DD_UDC_CFIE_OFF～DdUdc_CFIE_OFF
+         DdUdc_D_DD_UDC_CFIE_ON～DdUdc_CFIE_ON
+         DdUdc_D_DD_UDC_CH0～DdUdc_CH0
+         DdUdc_D_DD_UDC_CH1～DdUdc_CH1
+         DdUdc_D_DD_UDC_CH2～DdUdc_CH2
+         DdUdc_D_DD_UDC_CH3～DdUdc_CH3
+         DdUdc_D_DD_UDC_CH4～DdUdc_CH4
+         DdUdc_D_DD_UDC_CH5～DdUdc_CH5
+         DdUdc_D_DD_UDC_CH_COUNT～DdUdc_CH_COUNT
+         DdUdc_D_DD_UDC_CSR_BIT_CMPF～DdUdc_CSR_BIT_CMPF
+         DdUdc_D_DD_UDC_CSR_BIT_OVFF～DdUdc_CSR_BIT_OVFF
+         DdUdc_D_DD_UDC_CSR_BIT_UDFF～DdUdc_CSR_BIT_UDFF
+         DdUdc_D_DD_UDC_CCR_BIT_CDCF～DdUdc_CCR_BIT_CDCF
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+
+    
+    
+    
+    
+    
+    
+    
+    

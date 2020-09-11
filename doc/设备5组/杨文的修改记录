@@ -1,0 +1,189 @@
+-----------------------------------------------------------------------------------------------------------------------
+
+=========================================================================================================
+
+*****************************************
+*                                       
+*            文件名更改                  
+*                                       
+*****************************************
+
+一、一般命名
+ /target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest路径下
+1、ct_im_iip_blend.c----->ctimiipblend.c
+2、ct_im_iip_cfl.c------->ctimiipcfl.c
+3、ct_im_iip_csc.c------->ctimiipcsc.c
+
+/target/cpu_tkernel/basefw/ip路径下
+4、BacklightEvaluate.c-->backlightevaluates.c(单词小写并加s)
+5、MakeLutPoint.c------->makelutpoints.c(单词小写并加s)
+6、wdr.c---------------->ipwdr.c(加入路径名'ip')
+
+
+二、拆分命名
+ /target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest路径下
+1、ct_im_fpt.c---------->ctimfpt.c
+                         ctimfpt1.c
+                         ctimfpt2.c
+                         ctimfpt3.c
+
+2、ct_im_hdmi.c--------->ctimhdmi.c
+                         Ctimhdmi1.c
+                         Ctimhdmi2.c
+
+3、ct_im_iip_afn.c------>ctimiipafn.c
+                         ctimiipafn1.c
+
+/target/cpu_tkernel/basefw/ip路径下
+4、ip_mfnr.c------------>ipmfnr.c
+                         ipmfnr1.c
+                         ipmfnr2.c
+
+5、ip_shdr.c------------>ipshdr.c
+                         ipshdr1.c
+
+.h文件命名规则与.c文件名相同
+
+=========================================================================================================
+
+*****************************************
+*                                       
+*            公有宏名更改              
+*                                       
+*****************************************
+
+#define D_IP_SHDR_OK-------------->#define IpShdr_D_IP_SHDR_OK
+#define D_IP_SHDR_NG-------------->#define IpShdr_D_IP_SHDR_NG	
+
+
+=========================================================================================================
+
+*****************************************
+*                                       
+*            公有函数名更改              
+*                                       
+*****************************************
+
+/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest路径下
+CT_IM_FPT_1_1至CT_IM_FPT_4_14均按ETK-C代码规范修改（类名+方法名,每个单词用下划线分开,全部小写。）
+ct_im_fpt_run_1------------------->ct_im_fpt1_run_1
+ct_im_fpt_run_2------------------->ct_im_fpt2_run_2
+ct_im_fpt_run_3------------------->ct_im_fpt2_run_3
+ct_im_fpt_run_4------------------->ct_im_fpt3_run_4
+CT_Im_FPT_Run--------------------->ct_im_fpt_run
+CT_Im_FPT_Main-------------------->ct_im_fpt_main
+CT_Im_IIP_3_1_1------------------->ct_im_iip_afn1_3_1_1
+CT_Im_IIP_3_1_2------------------->ct_im_iip_afn1_3_1_2
+CT_Im_IIP_3_1_3------------------->ct_im_iip_afn1_3_1_3
+CT_Im_IIP_3_1_4------------------->ct_im_iip_afn1_3_1_4
+CT_Im_IIP_Run_3_1----------------->ct_im_iip_afn1_run_3_1
+ct_im_hdmi_pcsim_test------------->ct_im_hdmi1_pcsim_test
+CT_Im_IIP_6_1_1------------------->ct_im_iip_blend_6_1_1
+CT_Im_IIP_6_2_1------------------->ct_im_iip_blend_6_2_1		
+CT_Im_IIP_Run_6_1----------------->ct_im_iip_blend_run_6_1
+CT_Im_IIP_Run_6_2----------------->ct_im_iip_blend_run_6_2
+CT_Im_IIP_7_1_1------------------->ct_im_iip_csc_7_1_1
+CT_Im_IIP_7_1_2------------------->ct_im_iip_csc_7_1_2
+CT_Im_IIP_Run_7_1----------------->ct_im_iip_csc_run_7_1
+CT_Im_IIP_12_1_1------------------>ct_im_iip_cfl_12_1_1
+CT_Im_IIP_12_1_1------------------>ct_im_iip_cfl_12_1_2
+CT_Im_IIP_Run_12_1---------------->ct_im_iip_cfl_run_12_1
+
+
+/target/cpu_tkernel/basefw/ip路径下
+BacklightEvaluate----------------->backlight_evaluates
+MakeLutPoint---------------------->make_lut_points
+WDR_Monitor_Realtime_Wdr---------->ip_wdr_monitor_realtime_wdr
+WDR_Realtime_Wdr_LPF_Init--------->ip_wdr_realtime_wdr_lpf_init
+WDR_Default_TC_Backup------------->ip_wdr_default_tc_backup
+WDR_Get_TC_B2Y-------------------->ip_wdr_get_tc_b2y
+create_contrast_param------------->ip_wdr_create_contrast_param
+IP_SHDR_Open---------------------->ip_shdr1_open
+IP_SHDR_Init---------------------->ip_shdr1_init
+IP_SHDR_Set----------------------->ip_shdr1_set
+IP_SHDR_Start--------------------->ip_shdr1_start
+IP_SHDR_Close--------------------->ip_shdr1_close
+IP_SHDR_Get_Version--------------->ip_shdr1_get_version
+IP_MFNR_Open---------------------->ip_mfnr2_open
+IP_MFNR_Start--------------------->ip_mfnr2_start
+IP_MFNR_Close--------------------->ip_mfnr2_close
+IP_MFNR_Get_Version--------------->ip_mfnr2_get_version
+IP_MFNR_Get_Input_Prev_Frame_Info->ip_mfnr2_get_input_prev_frame_info
+IP_MFNR_Get_Count----------------->ip_mfnr2_get_count
+IP_MFNR_Conv_Rect2CornerPos------->ip_mfnr2_conv_rect2cornerpos
+IP_MFNR_Calc_CropCornerPos-------->ip_mfnr2_calc_cropcornerpos
+
+
+=========================================================================================================
+
+*****************************************
+*					
+*	    结构体名更改          		
+*                                       
+*****************************************
+
+
+typedef struct {                                          typedef struct {
+        UINT32                       heapAddr;                    UINT32                       heapAddr;
+        ULONG                        heapSize;                    ULONG                        heapSize;
+        FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm;                  FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm;			
+} IP_SHDR_INIT_PRM;-------------------------------------->} IpShdrInitPrm;
+
+
+
+typedef struct {                                          typedef struct {
+        VOID*                        rsv0;                        VOID*                        rsv0;
+} IP_SHDR_SET_PRM;-------------------------------------->} IP_SHDR_SET_PRM;	
+
+
+
+typedef struct {                                          typedef struct {
+        FJ_STILL_IP_IMAGE            imgSrcL[ 2 ];                FJ_STILL_IP_IMAGE            imgSrcL[ 2 ];
+        FJ_STILL_IP_IMAGE            imgSrcM[ 2 ];                FJ_STILL_IP_IMAGE            imgSrcM[ 2 ];
+        FJ_STILL_IP_IMAGE            imgSrcS[ 2 ];                FJ_STILL_IP_IMAGE            imgSrcS[ 2 ];
+        FJ_STILL_IP_IMAGE            imgDst;                      FJ_STILL_IP_IMAGE            imgDst;
+} IP_SHDR_START_PRM;------------------------------------>} IpShdrStartPrm;
+
+
+
+=========================================================================================================
+
+*****************************************
+*					
+*	        全局变量          		
+*                                       
+*****************************************
+
+get_reg---------------------->getReg
+
+=========================================================================================================
+
+*****************************************
+*					
+*	        其它          		
+*                                       
+*****************************************
+
+
+一、引用外部结构未改
+
+
+二、引用外部函数未改
+Im_FPT_Ctrl_Interrupt
+Im_FPT_Ctrl_LUTRAM
+Im_FPT_Start
+Im_FPT_WaitEnd
+Im_FPT_Stop
+
+
+
+三、引用外部变量未改
+
+
+四、引用外部宏未改
+Ddim_Print
+D_DDIM_OK
+D_DDIM_INPUT_PARAM_ERROR
+
+=========================================================================================================
+-----------------------------------------------------------------------------------------------------------------------

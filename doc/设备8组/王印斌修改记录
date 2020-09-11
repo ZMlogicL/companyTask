@@ -1,0 +1,61 @@
+1)ct_im_iip_sl.c
+建立对应类      ct_im_iip_sl  CtImIipSl
+
+被外部调用公有函数名字修改：
+INT32 CT_Im_IIP_10_1_1( VOID );     修改为: INT32 ct_im_iip_10_1_1( VOID );
+INT32 CT_Im_IIP_10_1_2( VOID ); 	修改为: INT32 ct_im_iip_10_1_2( VOID );
+INT32 CT_Im_IIP_Run_10_1( const UINT32 ct_no_3rd );  修改为: INT32 ct_im_iip_run_10_1( const UINT32 ctNo3rd );
+
+2)ct_im_me.c
+建立对应类      ct_im_me   CtImMe
+
+被外部调用公有函数名字修改：
+void Ct_Im_ME_Main(int argc, char** argv);  修改为  void ct_im_me_main(int argc, char** argv);
+
+全局变量修改
+gct_im_me_in_addr  	修改为
+						ct_im_me_set_in_addr()
+						ct_im_me_get_in_addr()
+
+gct_im_me_out_addr	修改为
+						cd_im_me_set_out_addr()
+						cd_im_me_get_out_addr()
+
+宏定义修改
+D_IM_ME_IMG_MEM_OUT_HEVC_ADDR_TOP     修改为 CtImMe_D_IM_ME_IMG_MEM_OUT_HEVC_ADDR_TOP
+D_IM_ME_IMG_MEM_IN_YCC_REF_ADDR_TOP   修改为 CtImMe_D_IM_ME_IMG_MEM_IN_YCC_REF_ADDR_TOP
+D_IM_ME_IMG_MEM_IN_YCC_STD_ADDR_TOP   修改为 CtImMe_D_IM_ME_IMG_MEM_IN_YCC_STD_ADDR_TOP
+D_IM_ME_IMG_MEM_4K2K_YCC_REF_U8_BYTES 修改为 CtImMe_D_IM_ME_IMG_MEM_4K2K_YCC_REF_U8_BYTES
+D_IM_ME_IMG_MEM_4K2K_YCC_STD_U8_BYTES 修改为 CtImMe_D_IM_ME_IMG_MEM_4K2K_YCC_STD_U8_BYTES
+D_IM_ME_IMG_MEM_HEVC_U8_BYTES         修改为 CtImMe_D_IM_ME_IMG_MEM_HEVC_U8_BYTES
+
+3)ct_im_cnr.c
+建立对应类   
+ct_im_cnr  	CtImCnr
+			CtImCnr1
+			CtImCnr2
+			CtImCnr3
+			CtImCnr4
+			CtImCnr5
+			CtImCnr6
+			CtImCnr7
+			CtImCnr8
+			CtImCnr9
+			CtImCnr10
+			CtImCnr11
+			CtImCnr12
+			CtImCnr13
+			CtImCnr14
+
+被外部调用公有函数名字修改：
+ CT_IM_CNR_Run  	修改为： ct_im_cnr_run
+ CT_IM_CNR_Main  	修改为： ct_im_cnr_main
+
+INT32 ct_im_cnr_set_im_r2y_set(UCHAR ch);  修改为：   INT32 ct_im_cnr_set_im_r2y_set(CtImCnr1 *self);
+INT32 ct_im_cnr_set_im_r2y_start(UCHAR ch);  修改为： INT32 ct_im_cnr_set_im_r2y_start(CtImCnr1 *self);
+INT32 ct_im_cnr_set_im_r2y_stop(UCHAR ch); 修改为：   INT32 ct_im_cnr_set_im_r2y_stop(CtImCnr1 *self);
+
+宏定义修改：
+D_IM_CNR_R2Y_MACRO_ENABLE  修改为 CtImMe_D_IM_CNR_R2Y_MACRO_ENABLE
+
+

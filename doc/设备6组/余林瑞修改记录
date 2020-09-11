@@ -1,0 +1,13 @@
+（1）：首先拆分文件：
+（2）：新建类并按规范修改代码
+
+1.将target/cpu_tkernel/basefw/MILB_API/include/dd_top.h移动到target/cpu_tkernel/basefw/MILB_API/Project/DeviceDriver/LSITop/src
+下面，将原目录.h删除。
+
+2.将类dd_top更名为ddtop,然后拆分成ddtop,ddtopone,ddtoptwo,ddtopthree,ddtopfour五个文件
+
+3.按照规范修改函数名，变量名，添加self参数，然后添加glib模板。按照ETK-C抄写
+
+4.将target/cpu_tkernel/basefw/MILB_API/include/目录中的im_disp.h文件移动到target/cpu_tkernel/basefw/MILB_API/Project/ImageMacro/src
+目录中，将原目录.h文件删除。
+

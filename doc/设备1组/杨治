@@ -1,0 +1,107 @@
+文件修改：
+
+/*-----------------------------------提示提示！！！！！！！！！！！！！所有函数名并没有改变，仅仅替换了前缀，非全匹配搜索后面函数名即可搜索到对应----------------------*/
+/*-----------------------------------提示提示！！！！！！！！！！！！！所有函数名并没有改变，仅仅替换了前缀，非全匹配搜索后面函数名即可搜索到对应----------------------*/
+/*-----------------------------------提示提示！！！！！！！！！！！！！所有函数名并没有改变，仅仅替换了前缀，非全匹配搜索后面函数名即可搜索到对应----------------------*/
+
+1.	formatter.h   ---------->netsecformatter.h
+		/*----------------公有方法更名---------------------*/
+	<1>fj_formatter_convert_initialize---------->netsec_formatter_convert_initialize
+	<2>fj_formatter_convert_set_stream---------->netsec_formatter_convert_set_stream
+	<3>fj_formatter_convert_set_program---------->netsec_formatter_convert_set_program
+	<4>fj_formatter_convert_pes_send0---------->netsec_formatter_convert_pes_send0
+	<5>fj_formatter_convert_pes_send1---------->netsec_formatter_convert_pes_send1
+	<6>fj_formatter_convert_ts_recv0---------->netsec_formatter_convert_ts_recv0
+	<7>fj_formatter_convert_ts_recv1---------->netsec_formatter_convert_ts_recv1
+	<8>fj_formatter_convert_finalize---------->netsec_formatter_convert_finalize
+
+2.netsec_debug.h---------->netsecdebug.h
+			/*----------------公有方法更名---------------------*/
+	<1>gBF_Netsec_cur_ogma_handle---------->netsec_debug_gbf_netsec_cur_ogma_handle
+	<2>dump_desc_ring_entry---------->netsec_debug_dump_desc_ring_entry
+	<3>print_str---------->netsec_debug_print_str
+	<4>print_udec---------->netsec_debug_print_udec
+	<5>print_0Xudec---------->netsec_debug_print_0xudec
+	<6>print_Xudec---------->netsec_debug_print_xudec
+	<7>print_dec---------->netsec_debug_print_dec
+	<8>print_hex---------->netsec_debug_print_hex
+	<9>print_0Xhex---------->netsec_debug_print_0xhex
+	<10>debug_write_reg---------->netsec_debug_write_reg
+	<11>debug_read_reg---------->netsec_debug_read_reg
+	<12>dump_sdb_item---------->netsec_debug_dump_sdb_item
+	<13>debug_set_exs_top_reg---------->netsec_debug_set_exs_top_reg
+	<14>debug_set_gic---------->netsec_debug_set_gic
+	<15>debug_dis_uart_gic---------->netsec_debug_dis_uart_gic
+
+3. pfdep.h---------->netsecpfdep.h
+	/*----------------公有方法更名---------------------*/
+
+pfdep_malloc	修改为			netsec_pfdep_malloc
+pfdep_free	修改为			netsec_pfdep_free
+pfdep_dma_malloc 	修改为			netsec_pfdep_dma_malloc
+pfdep_dma_free 	修改为			netsec_pfdep_dma_free
+pfdep_init_soft_lock 	修改为			netsec_pfdep_init_soft_lock
+pfdep_uninit_soft_lock 	修改为			netsec_pfdep_uninit_soft_lock
+pfdep_acquire_soft_lock 	修改为			netsec_pfdep_soft_lock
+pfdep_release_soft_lock 	修改为			netsec_pfdep_release_soft_lock
+pfdep_memcpy	修改为			netsec_pfdep_memcpy
+pfdep_memset	修改为			netsec_pfdep_memset
+pfdep_memcmp	修改为			netsec_pfdep_memcmp
+pfdep_msleep	修改为			netsec_pfdep_msleep
+pfdep_alloc_pkt_buf 	修改为			netsec_pfdep_alloc_pkt_buf
+pfdep_free_pkt_buf 	修改为			netsec_pfdep_free_pkt_buf
+pfdep_reset_mem_pool	修改为			netsec_pfdep_reset_mem_pool
+pfdep_invalidate_dcache_addr	修改为			netsec_pfdep_invalidate_dcache_addr
+pfdep_clean_invalidate_dcache_addr	修改为			netsec_pfdep_clean_invalidate_dcache_addr
+pfdep_invalidate_dcache_all	修改为			netsec_pfdep_invalidate_dcache_all
+pfdep_clean_invalidate_dcache_all	修改为			netsec_pfdep_clean_invalidate_dcache_all
+
+
+4. ogma_basic_access.h 更名为 ogmabasicaccess.h
+
+ogma_write_reg 	修改为			ogmaWriteReg
+ogma_read_reg 	修改为			ogmaReadReg
+ogma_set_session_db_item 	修改为			ogma_basic_access_set_session_db_item
+ogma_get_session_db_item 	修改为			ogma_basic_access_get_session_db_item
+ogma_set_mac_reg 	修改为			删除
+ogma_get_mac_reg 	修改为			删除
+
+5.ogma_desc_ring_access_internal.h 更名为 ogmadescringaccess.h
+
+声明下列公有函数，下列公有函数原在其他头文件声明，函数名并没有改变，仅仅替换了前缀，非全匹配搜索后面函数名即可搜索到对应。
+ogma_desc_ring_access_alloc
+ogma_desc_ring_access_free
+ogma_desc_ring_access_setup_rx
+ogma_desc_ring_access_uninit_pkt
+ogma_desc_ring_access_api_start
+ogma_desc_ring_access_api_stop
+ogma_desc_ring_access_api_get_drid
+ogma_desc_ring_access_api_get_new_rx_num
+ogma_desc_ring_access_api_get_tx_done_num
+ogma_desc_ring_access_api_get_tx_avail_num
+ogma_desc_ring_access_api_clean_tx_desc_ring
+ogma_desc_ring_access_api_get_strm_data_lpbr
+ogma_desc_ring_access_api_set_strm_data
+
+6，为omga_driver.c改名并新建ogmadriver.h
+
+将下列公有函数声明移动至ogmadriver.h
+ogma_driver_bf_netsec_init 
+ogma_driver_bf_netsec_terminate
+ogma_driver_bf_netsec_int_handler_cb
+
+
+ 7.ogmainternal.h
+
+
+ogma_alloc_desc_ring 
+ogma_free_desc_ring 
+ogma_setup_rx_desc_ring 
+ogma_uninit_pkt_desc_ring	
+
+上述个方法移送至ogmadescringaccess.h
+
+ogma_push_clk_req 
+ogma_pop_clk_req
+ogma_check_clk_supply 
+上述三个方法未使用。

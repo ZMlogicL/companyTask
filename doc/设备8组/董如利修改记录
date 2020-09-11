@@ -1,0 +1,2 @@
+1,ct_dd_top.c修改为类ctddtop.c
+1）Ct_Dd_Top_Main修改为ct_dd_top_main(CtDdTop* self,int argc, char** argv)

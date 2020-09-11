@@ -1,0 +1,187 @@
+Audio_aac_dec类:
+.C文件
+修改宏名：
+添加类名前缀AudioAacDec_
+LIMIT_MIN -> AudioAacDec_LIMIT_MIN
+LIMIT_MAX -> AudioAacDec_LIMIT_MAX
+LIMIT -> AudioAacDec_LIMIT
+
+修改静态变量名：
+所有小写改为大写，添加S_前缀
+gBF_AudioAAC_Dec_Context -> S_GBF_AUDIOAAC_DEC_CONTEXT
+gBF_AudioAAC_Dec_Endian -> S_GBF_AUDIOAAC_DEC_ENDIAN
+g_audio_aac_dec_context -> S_G_AUDIO_AAC_DEC_CONTEXT
+
+修改公有方法名：
+所有大写修改为小写，添加类名前缀audio_aac_dec_，添加AudioAacDec *self参数
+Bf_AudioAAC_Dec_Init -> audio_aac_dec_bf_audioaac_dec_init
+BF_AudioAAC_Dec_Process -> audio_aac_dec_bf_audioaac_dec_process
+BF_AudioAAC_Dec_GetVersion -> audio_aac_dec_bf_audioaac_dec_getversion
+
+new方法：audio_aac_dec_new()
+
+.h文件
+移动原audio_aac_dec.h文件代码至audioaacdec.h文件中，与audioaacdec.c在同一目录下
+
+修改结构体T_AUDIO_AAC_DEC_INIT -> TAudioAacDecInit
+规范其内变量名：
+audio_spec_cfg -> audioSpecCfg
+cfg_size -> cfgSize
+
+修改结构体T_AUDIO_AAC_DEC_PROC -> TAudioAacDecInit
+规范其内变量名：
+soft_gain -> softGain
+in_data_addr -> inDataAddr
+in_data_size -> inDataSize
+out_data_addr -> outDataAddr
+out_data_size -> outDataSize
+out_sampling_rate -> outSamplingRate
+out_bit_rate -> outBitRate
+out_channel -> outChannel
+
+audio_aac_enc类:
+.C文件
+修改宏名：
+所有小写改为大写，添加类名前缀AudioAacEnc_
+LIMIT_MIN -> AudioAacEnc_LIMIT_MIN
+LIMIT_MAX -> AudioAacEnc_LIMIT_MAX
+LIMIT -> AudioAacEnc_LIMIT
+
+修改静态变量名：
+所有小写改为大写，添加S_前缀
+gBF_AudioAAC_Enc_Channelstatus -> S_GBF_AUDIOAAC_ENC_CHANNELSTATUS
+gBF_AudioAAC_Enc_Endian -> S_GBF_AUDIOAAC_ENC_ENDIAN
+gBF_AudioAAC_Enc_Format -> S_GBF_AUDIOAAC_ENC_FORMAT
+gBF_AudioAAC_Enc_MemSize -> S_GBF_AUDIOAAC_ENC_MEMSIZE
+gBF_AudioAAC_Enc_MemAdrs -> S_GBF_AUDIOAAC_ENC_MEMADRS
+gBF_AudioAAC_Enc_Context -> S_GBF_AUDIOAAC_ENC_CONTEXT
+
+
+修改公有方法名：
+所有大写修改为小写，添加AudioAacEnc *self参数
+添加类名前缀audio_aac_dec_
+Bf_AudioAAC_Dec_Init -> audio_aac_dec_bf_audioaac_dec_init
+BF_AudioAAC_Enc_Process -> audio_aac_enc_bf_audioaac_enc_process
+BF_AudioAAC_Enc_GetVersion -> audio_aac_enc_bf_audioaac_enc_getversion
+
+new方法: audio_aac_enc_new()
+
+.h文件
+移动原audio_aac_enc.h文件代码至audioaacenc.h文件中，与audioaacenc.c在同一目录下
+
+修改宏名：
+所有小写改为大写，添加类名前缀AudioAacEnc_
+D_AUDIO_AAC_ENC_NUM -> AudioAacEnc_D_AUDIO_AAC_ENC_NUM
+D_AUDIO_AAC_ENC_ID_0 -> AudioAacEnc_D_AUDIO_AAC_ENC_ID_0
+D_AUDIO_AAC_ENC_ID_1 -> AudioAacEnc_D_AUDIO_AAC_ENC_ID_1
+
+
+修改结构体T_AUDIO_AAC_ENC_INIT -> TAudioAacEncInit
+规范其内变量名
+aac_id -> aacId
+smpl_rate -> smplRate
+bit_rate -> bitRate
+audio_spec_cfg -> audioSpecCfg
+
+修改结构体T_AUDIO_AAC_ENC_PROC -> TAudioAacEncProc
+规范其内变量名
+aac_id -> aacId
+soft_gain -> softGain
+in_data_addr -> inDataAddr
+in_data_size -> inDataSize
+out_data_addr -> outDataAddr
+out_data_size -> outDataSize
+
+audio_auif类:
+.C文件
+修改宏名：
+所有小写改为大写，添加类名前缀AudioAuif_
+D_AUDIO_AUIF_ON -> AudioAuif_D_AUDIO_AUIF_ON
+D_AUDIO_AUIF_OFF -> AudioAuif_D_AUDIO_AUIF_OFF
+D_AUDIO_AUIF_NUM_LR_CLOCK -> AudioAuif_D_AUDIO_AUIF_NUM_LR_CLOCK
+
+修改结构体T_AUDIO_AUIF_LR_CLOCK -> TAudioAuifLrClock
+规范其内变量名
+lr_clock -> lrClock
+
+修改静态变量名：
+所有小写改为大写，添加S_前缀
+gBF_Auif_InGain_Tbl -> S_GBF_AUIF_INGAIN_TBL
+gBF_Auif_OutGain_Tbl -> S_GBF_AUIF_OUTGAIN_TBL
+
+
+修改公有方法名：
+所有大写修改为小写，添加AudioAacEnc *self参数
+添加类名前缀audio_auif_
+BF_Audio_Auif_Init_AudioMacro -> audio_auif_bf_audio_auif_init_audiomacro
+BF_Audio_Auif_OpenInput -> audio_auif_bf_audio_auif_openinput
+BF_Audio_Auif_CloseInput -> audio_auif_bf_audio_auif_closeinput
+BF_Audio_Auif_OpenOutput -> audio_auif_bf_audio_auif_openoutput
+BF_Audio_Auif_CloseOutput -> audio_auif_bf_audio_auif_closeoutput
+BF_Audio_Auif_Set_I2sIn_Config -> audio_auif_bf_audio_auif_set_i2sin_config
+BF_Audio_Auif_Set_I2sOut_Config -> audio_auif_bf_audio_auif_set_i2sout_config
+BF_Audio_Auif_Set_Channel_Config -> audio_auif_bf_audio_auif_set_channel_config
+BF_Audio_Auif_Input_Ctrl -> audio_auif_bf_audio_auif_input_ctrl
+BF_Audio_Auif_Output_Ctrl -> audio_auif_bf_audio_auif_output_ctrl
+BF_Audio_Auif_Set_Dma_ModeIn -> audio_auif_bf_audio_auif_set_dma_modein
+BF_Audio_Auif_Set_Dma_ModeOut -> audio_auif_bf_audio_auif_set_dma_modeout
+BF_Audio_Auif_Get_Input_Trns_Smaple -> BF_Audio_Auif_Get_Input_Trns_Smaple  //未添加self参数
+BF_Audio_Auif_Get_Output_Trns_Smaple -> audio_auif_bf_audio_auif_get_output_trns_smaple
+BF_Audio_Auif_Get_Addr_Reg_AUIDLR -> audio_auif_bf_audio_auif_get_addr_reg_auidlr
+BF_Audio_Auif_Get_Addr_Reg_AUODLR -> audio_auif_bf_audio_auif_get_addr_reg_auodlr
+BF_Audio_Auif_Get_Addr_Reg_AUIDDMAPT -> audio_auif_bf_audio_auif_get_addr_reg_auiddmapt
+BF_Audio_Auif_Get_Addr_Reg_AUODDMAPT -> audio_auif_bf_audio_auif_get_addr_reg_auoddmapt
+BF_Audio_Auif_Input_Start -> audio_auif_bf_audio_auif_input_start
+BF_Audio_Auif_Input_Stop -> audio_auif_bf_audio_auif_input_stop
+BF_Audio_Auif_Output_Start -> audio_auif_bf_audio_auif_output_start
+BF_Audio_Auif_Output_Stop -> audio_auif_bf_audio_auif_output_stop
+BF_Audio_Auif_Int_Handler -> BF_Audio_Auif_Int_Handler  //未添加self参数
+BF_Audio_Auif_Set_Enable_OverFlow_Int -> audio_auif_bf_audio_auif_set_enable_overflow_int
+BF_Audio_Auif_Set_Disable_OverFlow_Int -> audio_auif_bf_audio_auif_set_disable_overflow_int
+BF_Audio_Auif_Set_Enable_UnderFlow_Int -> audio_auif_bf_audio_auif_set_enable_underflow_int
+BF_Audio_Auif_Set_Disable_UnderFlow_Int -> audio_auif_bf_audio_auif_set_disable_underflow_int
+BF_Audio_Auif_Over_Flow_Error_Ch0 -> audio_auif_bf_audio_auif_over_flow_error_ch0_cb //未添加self参数
+BF_Audio_Auif_Under_Flow_Error_Ch0 -> audio_auif_bf_audio_auif_under_flow_error_ch0_cb //未添加self参数
+BF_Audio_Auif_Over_Flow_Error_Ch1 -> audio_auif_bf_audio_auif_over_flow_error_ch1_cb //未添加self参数
+BF_Audio_Auif_Under_Flow_Error_Ch1 -> audio_auif_bf_audio_auif_under_flow_error_ch1_cb //未添加self参数
+BF_Audio_Auif_Over_Flow_Error_Ch2 -> audio_auif_bf_audio_auif_over_flow_error_ch2_cb //未添加self参数
+BF_Audio_Auif_Under_Flow_Error_Ch2 -> audio_auif_bf_audio_auif_under_flow_error_ch2_cb //未添加self参数
+BF_Audio_Auif_Under_Flow_Error_Ch3 -> audio_auif_bf_audio_auif_under_flow_error_ch3_cb //未添加self参数
+BF_Audio_Auif_Over_Flow_Error_Ch4 -> audio_auif_bf_audio_auif_over_flow_error_ch4_cb //未添加self参数
+BF_Audio_Auif_Over_Flow_Error_Ch5 -> audio_auif_bf_audio_auif_over_flow_error_ch5_cb //未添加self参数
+BF_Audio_Auif_Swap_InputData -> audio_auif_bf_audio_auif_swap_inputdata
+BF_Audio_Auif_Swap_OutputData -> audio_auif_bf_audio_auif_swap_outputdata
+BF_Audio_Auif_Set_InputGain -> audio_auif_bf_audio_auif_set_inputgain
+BF_Audio_Auif_Set_OutputGain -> audio_auif_bf_audio_auif_set_outputgain
+
+new方法: audio_auif_new()
+
+.h文件
+移动原audio_auif.h文件代码至audio_auif.h文件中，与audioauif.c在同一目录下
+
+修改宏名：
+所有小写改为大写，添加类名前缀AudioAuif_
+D_AUDIO_AUIF_CH0 -> AudioAuif_D_AUDIO_AUIF_CH0
+D_AUDIO_AUIF_CH1 -> AudioAuif_D_AUDIO_AUIF_CH1
+D_AUDIO_AUIF_CH2 -> AudioAuif_D_AUDIO_AUIF_CH2
+D_AUDIO_AUIF_CH3 -> AudioAuif_D_AUDIO_AUIF_CH3
+D_AUDIO_AUIF_CH4 -> AudioAuif_D_AUDIO_AUIF_CH4
+D_AUDIO_AUIF_CH5 -> AudioAuif_D_AUDIO_AUIF_CH5
+D_AUDIO_AUIF_CH0_CH1 -> AudioAuif_D_AUDIO_AUIF_CH0_CH1
+D_AUDIO_AUIF_CH4_CH5 -> AudioAuif_D_AUDIO_AUIF_CH4_CH5
+D_AUDIO_AUIF_CH_NUM -> AudioAuif_D_AUDIO_AUIF_CH_NUM
+D_AUDIO_AUIF_AHB_FORMAT_R -> AudioAuif_D_AUDIO_AUIF_AHB_FORMAT_R
+D_AUDIO_AUIF_AHB_FORMAT_L	 -> AudioAuif_D_AUDIO_AUIF_AHB_FORMAT_L
+D_AUDIO_AUIF_GAIN_0DB -> AudioAuif_D_AUDIO_AUIF_GAIN_0DB
+D_AUDIO_AUIF_GAIN_6DB -> AudioAuif_D_AUDIO_AUIF_GAIN_6DB
+D_AUDIO_AUIF_GAIN_12DB -> AudioAuif_D_AUDIO_AUIF_GAIN_12DB
+D_AUDIO_AUIF_GAIN_18DB -> AudioAuif_D_AUDIO_AUIF_GAIN_18DB
+
+
+修改枚举内部变量：
+E_AUDIO_DMA_MODE_IN_1CH -> AudioAuif_E_AUDIO_DMA_MODE_IN_1CH
+E_AUDIO_DMA_MODE_IN_2CH -> AudioAuif_E_AUDIO_DMA_MODE_IN_2CH
+E_AUDIO_DMA_MODE_OUT_1CH -> AudioAuif_E_AUDIO_DMA_MODE_OUT_1CH
+E_AUDIO_DMA_MODE_OUT_2CH -> AudioAuif_E_AUDIO_DMA_MODE_OUT_2CH
+
+修改枚举变量名：E_AUDIO_DMA_MODE -> EAudioDmaMode

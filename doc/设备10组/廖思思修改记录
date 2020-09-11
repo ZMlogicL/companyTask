@@ -1,0 +1,531 @@
+
+mdf_user_custom
+抄写代码路径：/cpu_tkernel/basefw/fj/file_mng/mdf/src
+1、新建类文件mdfusercustom，并复制对应的.c , .h源码，修改makefile文件，并删除源文件mdf_user_custom.c，FS_SystemDependence.h
+
+2、公有方法命名规范
+VOID FS_ipcu_callback_dummy(UCHAR id, UINT32 pdata, UINT32 length, UINT32 cont, UINT32 totalLength) 
+改为 VOID mdf_user_custom_ipcu_callback_dummy(MdfUserCustom* self, CallbackDummy callbackDummy);
+
+FS_VOID FS_localtime(tm *time)  
+改为 FS_VOID  mdf_user_custom_localtime(MdfUserCustom* self)
+
+FS_VOID FS_SD_getTaskID(FS_DWORD *Taskid) 
+改为 FS_VOID mdf_user_custom_sd_get_task_id(MdfUserCustom* self, FS_DWORD* Taskid);
+
+FS_VOID *FS_SD_malloc(FS_DWORD size)  
+改为 FS_VOID* mdf_user_custom_sd_malloc(MdfUserCustom* self, FS_DWORD size);
+
+FS_VOID FS_SD_free(FS_VOID *address)  
+改为 FS_VOID mdf_user_custom_sd_free(MdfUserCustom* self, FS_VOID* address);
+
+void *FS_memcpy(void *buf1, const void *buf2, SIZE_T n) 
+改为 kpointer mdf_user_custom_memcpy(MdfUserCustom* self, kpointer buf1, kconstpointer buf2, SIZE_T n);
+
+
+
+
+
+
+
+vfs
+抄写代码路径：/cpu_tkernel/basefw/fj/file_mng/vfs/src
+
+1、建立所抄代码类并复制对应.c及.h代码，删除原.c及.h文件（vfs.c , vfs.h），修改makefile文件；
+2、拆分文件为：vfsone、vfstwo、vfsthree、vfstool四个类
+
+3、公有方法命名规范：
+extern FW_INT32 BF_Vfs_Open(const FW_CHAR* fname, FW_USHORT mode, FW_USHORT amode);  
+修改为  FW_INT32 vfs_two_open(VfsTwo* self, const FW_CHAR* fname, FW_USHORT mode, FW_USHORT amode);
+
+extern FW_INT32 BF_Vfs_Close(FW_INT32 fileNo);  
+修改为  FW_INT32   vfs_two_close(VfsTwo* self, FW_INT32 fileNo);
+
+extern FW_INT32 BF_Vfs_Read(FW_INT32 fileNo, FW_VOID* addr, FW_ULONG count, FW_ULONG* length);  
+修改为  FW_INT32 vfs_two_read(VfsTwo* self, FW_INT32 fileNo, const FW_VOID* addr, FW_ULONG count, FW_ULONG* length);
+
+extern FW_INT32 BF_Vfs_Write(FW_INT32 fileNo, const  FW_VOID* addr, FW_ULONG count, FW_ULONG* length);  
+修改为  FW_INT32 vfs_two_write(VfsTwo* self, FW_INT32 fileNo, const  FW_VOID* addr, FW_ULONG count, FW_ULONG* length);
+
+extern FW_INT32 BF_Vfs_Lseek(FW_INT32 fileNo, FW_INT32 offset, FW_USHORT whence, FW_ULONG* length);  
+修改为  FW_INT32 vfs_two_lseek(VfsTwo* self, FW_INT32 fileNo, FW_INT32 offset, FW_USHORT whence, FW_ULONG* length);
+
+extern FW_INT32 BF_Vfs_Lseek64(FW_INT32 fileNo, FW_INT64 offset, FW_USHORT whence, FW_INT64* length);  
+修改为  FW_INT32 vfs_two_lseek64(VfsTwo* self, FW_INT32 fileNo, FW_INT64 offset, FW_USHORT whence, FW_INT64* length);
+
+extern FW_INT32 BF_Vfs_Start_MDF( FW_VOID );  
+修改为  FW_INT32 vfs_two_start_mdf(VfsTwo* self);
+
+extern FW_INT32 BF_Vfs_Init_Drv( FW_CHAR* drvname, FW_INT32 mediaid );  
+修改为  FW_INT32 vfs_two_init_drv(VfsTwo* self, FW_CHAR* drvname, FW_INT32 mediaid);
+
+extern FW_INT32 BF_Vfs_End_Drv( FW_CHAR* drvname );  
+修改为  FW_INT32 vfs_two_end_drv(VfsTwo* self, FW_CHAR* drvname);
+
+extern FW_INT32 BF_Vfs_Set_Write_Err_Cb( FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback );  
+修改为  FW_INT32 vfs_two_set_write_err_cb(VfsTwo* self, FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback);
+
+extern FW_INT32 BF_Vfs_Stat_VFS( FW_CHAR* drvname, T_BF_FS_IF_STATVFS* buf ); 
+修改为  FW_INT32 vfs_one_stat_vfs(VfsOne* self, const FW_CHAR* drvname, FsIfStatVfs* buf);
+
+extern FW_INT32 BF_Vfs_Get_Free_Space( FW_CHAR* drvname, FW_UINT32* blksize, FW_UINT32* blocks, FW_UINT32* bfree );  
+修改为 FW_INT32 vfs_one_get_free_space(VfsOne* self, const FW_CHAR* drvname,FW_UINT32* blksize, FW_UINT32* blocks, FW_UINT32* bfree);
+
+extern FW_INT32 BF_Vfs_Get_Cur_Drv( FW_CHAR* drvname ); 
+ 修改为  FW_INT32 vfs_one_get_cur_drv(VfsOne* self, FW_CHAR* drvname);
+ 
+extern FW_INT32 BF_Vfs_Set_Vol_Label( FW_CHAR* drvname, FW_CHAR* label );  
+修改为  FW_INT32 vfs_one_set_vol_label(VfsOne* self, const FW_CHAR* drvname, const FW_CHAR* label);
+
+extern FW_INT32 BF_Vfs_Get_Vol_Label( FW_CHAR* drvname, FW_CHAR* label );  
+修改为  FW_INT32 vfs_one_get_vol_label(VfsOne* self, FW_CHAR* drvname, FW_CHAR* label);
+
+extern FW_INT32 BF_Vfs_Fsync( FW_INT32 fileNo );  
+修改为  FW_INT32 vfs_one_fsync(VfsOne* self, FW_INT32 fileNo);
+
+extern FW_INT32 BF_Vfs_Sync( FW_CHAR* drvname );  
+修改为  FW_INT32 vfs_one_sync(VfsOne* self, const FW_CHAR* drvname);
+
+extern FW_INT32 BF_Vfs_Set_Protection_Mode( FW_CHAR* drvname, FW_UINT32 mode );  
+修改为  FW_INT32 vfs_one_set_protection_mode(VfsOne* self, const FW_CHAR* drvname, FW_UINT32 mode);
+
+extern FW_INT32 BF_Vfs_Rename( FW_CHAR* srcname, FW_CHAR* dstname );  
+修改为  FW_INT32 vfs_one_rename(VfsOne* self, const FW_CHAR* srcname, const FW_CHAR* dstname);
+
+extern FW_INT32 BF_Vfs_Stat( FW_CHAR* fname, T_BF_FS_IF_STAT* sbuf );  
+修改为  FW_INT32 vfs_one_stat(VfsOne* self, const FW_CHAR* fname, FsIfStat* sbuf);
+
+extern FW_INT32 BF_Vfs_Set_Attribute( FW_CHAR* fname, FW_INT32 attributes ); 
+修改为  FW_INT32 vfs_one_set_attribute(VfsOne* self, const FW_CHAR* fname, FW_INT32 attributes);
+
+extern FW_INT32 BF_Vfs_Set_Attribute_Multi( FW_CHAR* filename_list[][D_BF_FS_VFS_SETATTRIBUTE_MULTI_SHORTNAME_MAX], FW_UCHAR* attributes, FW_UCHAR* attr_mode, FW_INT32* fnum ); 
+ 修改为  FW_INT32 vfs_one_set_attribute_multi(VfsOne* self, const FW_CHAR* filenameList[][VfsOne_SETATTRIBUTE_MULTI_SHORTNAME_MAX], const FW_UCHAR* attributes, const FW_UCHAR* attrMode, const FW_INT32* fnum);
+
+extern FW_INT32 BF_Vfs_Get_Attribute( FW_CHAR* fname, FW_UCHAR* attributes );  
+修改为  FW_INT32 vfs_one_get_attribute(VfsOne* self, const FW_CHAR* fname, FW_UCHAR* attributes);
+
+extern FW_INT32 BF_Vfs_Utime( FW_CHAR* fname, T_BF_FS_utimbuf* times );  
+修改为  FW_INT32 vfs_one_utime(VfsOne* self, const FW_CHAR* fname, const FsUtimbuf* times);
+
+extern FW_INT32 BF_Vfs_Utime_Ex( FW_CHAR* fname, FW_UINT32 utime_mode, FsUtimbufEx* times );  
+修改为  FW_INT32 vfs_one_utime_ex(VfsOne* self, const FW_CHAR* fname, const FW_UINT32 utimeMode, const FsUtimbufEx* times);
+
+extern FW_INT32 BF_Vfs_Create(FW_CHAR* dirname, FW_INT32 amode);
+修改为  FW_INT32   vfs_one_create(VfsOne* self, const FW_CHAR* dirname, const FW_INT32 amode);
+
+extern FW_INT32 BF_Vfs_Copy(FW_CHAR* srcname, FW_CHAR* dstname);
+修改为FW_INT32   vfs_one_copy(VfsOne* self, const FW_CHAR* srcname, const FW_CHAR* dstname);
+
+extern FW_INT32 BF_Vfs_Remove(FW_CHAR* fname);
+修改为 FW_INT32   vfs_one_remove(VfsOne* self, const FW_CHAR* fname);
+
+extern FW_INT32 BF_Vfs_RemoveMulti(FW_CHAR* dirname, FW_CHAR filename_list[][13], FW_INT32 fnum);
+修改为 FW_INT32   vfs_one_removemulti(VfsOne* self, const FW_CHAR* dirname, FW_CHAR filenameList[][13], FW_INT32 fnum);
+
+extern FW_INT32 BF_Vfs_Fstat(FW_INT32 fileNo, T_BF_FS_IF_STAT* sbuf);
+修改为 FW_INT32   vfs_one_fstat(VfsOne* self, FW_INT32 fileNo, FsIfStat* sbuf);
+
+extern FW_INT32 BF_Vfs_Mkdir(FW_CHAR* dirname);
+修改为 FW_INT32   vfs_three_mkdir(VfsThree* self, const FW_CHAR* dirname);
+
+extern FW_INT32 BF_Vfs_Rmdir(FW_CHAR* dirname);
+修改为 FW_INT32   vfs_three_rmdir(VfsThree* self, const FW_CHAR* dirname);
+
+extern FW_INT32 BF_Vfs_Opendir(FW_CHAR* dirname, FW_INT32* dNo);
+修改为 FW_INT32   vfs_three_opendir(VfsThree* self, const FW_CHAR* dirname, FW_INT32* dNo);
+
+extern FW_INT32 BF_Vfs_Readdir(FW_INT32 dNo, T_BF_FS_IF_Dir_Info* fsdirent);
+修改为 FW_INT32   vfs_three_readdir(VfsThree* self, FW_INT32 dNo, FsIfDirInfo* fsdirent);
+
+extern FW_INT32 BF_Vfs_Closedir(FW_INT32 dNo);
+修改为 FW_INT32   vfs_three_closedir(VfsThree* self, FW_INT32 dNo);
+
+extern FW_INT32 BF_Vfs_Chdir(FW_CHAR* dirname);
+修改为 FW_INT32   vfs_three_chdir(VfsThree* self, const FW_CHAR* dirname);
+
+extern FW_INT32 BF_Vfs_Getcurdir(FW_CHAR* dname, FW_CHAR* curpath, FW_INT32 size);
+修改为 FW_INT32   vfs_three_getcurdir(VfsThree* self, const FW_CHAR* dname, FW_CHAR* curpath, FW_INT32 size);
+
+extern FW_INT32 BF_Vfs_Qformat(FW_INT32 media_id);
+修改为 FW_INT32   vfs_three_qformat(VfsThree* self, FW_INT32 mediaId);
+
+extern FW_INT32 BF_Vfs_Nformat(FW_INT32 media_id);
+修改为 FW_INT32   vfs_three_nformat(VfsThree* self, FW_INT32 mediaId);
+
+extern FW_INT32 BF_Vfs_Set_Write_Err_Cb( FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback );
+修改为 FW_INT32   vfs_two_set_write_err_cb(VfsTwo* self, FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback);
+
+extern FW_INT32 BF_Vfs_Set_User_Setting( const FW_VOID* addr, FW_ULONG count );
+修改为 FW_INT32   vfs_three_set_user_setting(VfsThree* self, const FW_VOID* addr, FW_ULONG count);
+
+FW_VOID VFS_sender(INT32 stacd)
+修改为 FW_VOID vfs_three_sender(VfsThree* self, INT32 stacd)
+
+FW_VOID VFS_receiver(INT32 stacd)
+修改为 FW_VOID vfs_three_receiver(VfsThree* self, INT32 stacd)
+
+4、结构体修改 
+T_FS_VFS_CTRL_TBL                                            改为 VfsCtrlTbl
+T_FS_VFS_FILE_USE                                             改为 VfsFileUse
+T_FS_VFS_INFO_TABLE_COMM                            改为 TableComm
+T_FS_VFS_INFO_TABLE_OPEN                              改为 TableOpen
+T_FS_VFS_INFO_TABLE_CLOSE                             改为 TableClose
+T_FS_VFS_INFO_TABLE_READ                               改为 TableRead
+T_FS_VFS_INFO_TABLE_WRITE                             改为 TableWrite
+T_FS_VFS_INFO_TABLE_LSEEK                              改为 TableLseek
+T_FS_VFS_INFO_TABLE_LSEEK64                          改为 TableLseek64
+T_FS_VFS_INFO_TABLE_START_MDF                     改为 TableStartMdf
+T_FS_VFS_INFO_TABLE_INIT_DRV                         改为 TableInitDrv
+T_FS_VFS_INFO_TABLE_END_DRV                         改为 TableEndDrv
+T_FS_VFS_INFO_TABLE_STAT_VFS                         改为 TableStatVfs
+T_FS_VFS_INFO_TABLE_GET_FREE_SPACE              改为 TableGetFreeSpace
+T_FS_VFS_INFO_TABLE_GET_CUR_DRV                  改为 TableGetCurDrv
+T_FS_VFS_INFO_TABLE_SET_VOL_LABEL               改为 TableSetVolLabel
+T_FS_VFS_INFO_TABLE_GET_VOL_LABEL               改为 TableGetVolLabel
+T_FS_VFS_INFO_TABLE_FSYNC                              改为 TableFsync
+T_FS_VFS_INFO_TABLE_SYNC                                改为 TableSync
+T_FS_VFS_INFO_TABLE_SET_PROTECTION_MODE  改为 TableSetProtectionMode
+T_FS_VFS_INFO_TABLE_RENAME                           改为 TableRename
+T_FS_VFS_INFO_TABLE_STAT                                 改为 TableStat
+T_FS_VFS_INFO_TABLE_SET_ATTRIBUTE                改为 TableSetAttribute
+T_FS_VFS_INFO_TABLE_SET_ATTRIBUTE_MULTI     改为 TableSetAttributeMulti
+T_FS_VFS_INFO_TABLE_GET_ATTRIBUTE                改为 TableGetAttribute
+T_FS_VFS_INFO_TABLE_UTIME                              改为 TableUtime
+T_FS_VFS_INFO_TABLE_UTIME_EX                         改为 TableUtimeEx
+T_FS_VFS_INFO_TABLE_CREATE                             改为 TableCreate
+T_FS_VFS_INFO_TABLE_COPY                                改为 TableCopy
+T_FS_VFS_INFO_TABLE_REMOVE                           改为 TableRemove
+T_FS_VFS_INFO_TABLE_REMOVEMULTI                 改为 TableRemovemulti
+T_FS_VFS_INFO_TABLE_FSTAT                               改为 TableFstat
+T_FS_VFS_INFO_TABLE_MKDIR                             改为 TableMkdir
+T_FS_VFS_INFO_TABLE_RMDIR                             改为 TableRmdir
+T_FS_VFS_INFO_TABLE_OPENDIR                         改为 TableOpendir
+T_FS_VFS_INFO_TABLE_READDIR                          改为 TableReaddir
+T_FS_VFS_INFO_TABLE_CLOSEDIR                        改为 TableClosedir
+T_FS_VFS_INFO_TABLE_CHDIR                              改为 TableChdir
+T_FS_VFS_INFO_TABLE_GETCURDIR                      改为 TableGetcurdir
+T_FS_VFS_INFO_TABLE_QFORMAT                        改为 TableQformat
+T_FS_VFS_INFO_TABLE_NFORMAT                        改为 TableNformat
+T_FS_VFS_INFO_TABLE_USERSET                          改为 TableUserset
+
+
+5、宏定义修改
+	
+#define FILE_CNT_MAX	                                     改为  VfsTool_FILE_CNT_MAX		
+#define REQ_CNT_MAX	                                     改为  VfsTool_REQ_CNT_MAX			
+#define COMM_BUFF_MAX_SIZE                        改为  VFS_COMM_BUFF_MAX_SIZE	
+#define BUFF_NUM_MAX		                             改为  VFS_BUFF_NUM_MAX
+
+#define FS_VFS_SHARE_MOVIE_DFS	                 改为  VFS_SHARE_MOVIE_DFS		
+#define FS_VFS_SHARE_MOVIE_DFS_END          改为  VFS_SHARE_MOVIE_DFS_END		
+#define FS_VFS_SHARE_STILL_DFS	                 改为  VFS_SHARE_STILL_DFS		
+#define FS_VFS_SHARE_STILL_DFS_END            改为  VFS_SHARE_STILL_DFS_END		
+#define FS_VFS_SHARE_MOVIE_MUX_H             改为  VFS_SHARE_MOVIE_MUX_H		
+#define FS_VFS_SHARE_MOVIE_MUX_H_END     改为  VFS_SHARE_MOVIE_MUX_H_END	
+#define	FS_VFS_SHARE_MOVIE_MUX_L               改为  VFS_SHARE_MOVIE_MUX_L
+#define	FS_VFS_SHARE_MOVIE_MUX_L_END       改为  VFS_SHARE_MOVIE_MUX_L_END	
+#define FS_VFS_SHARE_PB_DEMUX	                 改为  VFS_SHARE_PB_DEMUX	
+#define FS_VFS_SHARE_PB_DEMUX_END           改为  VFS_SHARE_PB_DEMUX_END	
+#define FS_VFS_SHARE_PB_THM	                     改为  VFS_SHARE_PB_THM		
+#define FS_VFS_SHARE_PB_THM_END	             改为  VFS_SHARE_PB_THM_END	
+#define FS_VFS_SHARE_PB_JPEG	                     改为  VFS_SHARE_PB_JPEG	
+#define FS_VFS_SHARE_PB_JPEG_END                改为  VFS_SHARE_PB_JPEG_END		
+#define FS_VFS_SEND_RETRY_MAX	                 改为  VFS_SEND_RETRY_MAX			
+#define FS_VFS_NO_VACANT	                         改为  VFS_NO_VACANT
+							
+#define VFS_SEND		                                     改为  VfsTool_SEND					
+#define	VFS_FINISH		                                     改为  VfsTool_FINISH				
+#define VFS_NOT_SEND		                             改为  VfsTool_NOT_SEND			
+#define VFS_DRV_NAME_MAX	                         改为  VfsTool_DRV_NAME_MAX			
+#define D_BF_FS_VFS_START_MDF	                 改为  VFS_START_MDF	
+#define D_BF_FS_VFS_INIT_DRV	                     改为  VFS_INIT_DRV
+#define D_BF_FS_VFS_END_DRV	                     改为  VFS_END_DRV			
+#define D_BF_FS_VFS_STATVFS	                         改为  VFS_STATVFS		
+#define D_BF_FS_VFS_GET_FREESPACE               改为  VFS_GET_FREESPACE		
+#define D_BF_FS_VFS_GET_CURDRV	                 改为  VFS_GET_CURDRV		
+#define D_BF_FS_VFS_SET_VOLLABEL                改为  VFS_SET_VOLLABEL	
+#define D_BF_FS_VFS_GET_VOLLABEL               改为  VFS_GET_VOLLABEL	
+#define D_BF_FS_VFS_FSYNC	                         改为  VFS_FSYNC	
+#define D_BF_FS_VFS_SYNC	                             改为  VFS_SYNC	 		
+#define D_BF_FS_VFS_SET_PROTECTION_MODE 改为  VFS_SET_PROTECTION_MODE
+#define D_BF_FS_VFS_RENAME	                         改为  VFS_RENAME		
+#define D_BF_FS_VFS_STAT	                             改为  VFS_STAT			
+#define D_BF_FS_VFS_SET_ATTRIBUTE               改为  VFS_SET_ATTRIBUTE		
+#define D_BF_FS_VFS_SET_ATTRIBUTE_MULTI    改为  VFS_SET_ATTRIBUTE_MULTI
+#define D_BF_FS_VFS_GET_ATTRIBUTE               改为  VFS_GET_ATTRIBUTE		
+#define D_BF_FS_VFS_UTIME	                         改为  VFS_UTIME			
+#define D_BF_FS_VFS_UTIME_EX	                     改为  VFS_UTIME_EX		
+#define D_BF_FS_VFS_OPEN	                             改为  VFS_OPEN		
+#define D_BF_FS_VFS_CLOSE	                         改为  VFS_CLOSE		
+#define D_BF_FS_VFS_READ	                             改为  VFS_READ		
+#define D_BF_FS_VFS_WRITE	                             改为  VFS_WRITE		
+#define D_BF_FS_VFS_LSEEK	                             改为  VFS_LSEEK			
+#define D_BF_FS_VFS_LSEEK64	                         改为  VFS_LSEEK64	  		
+#define D_BF_FS_VFS_CREATE	                         改为  VFS_CREATE			
+#define D_BF_FS_VFS_COPY	                             改为  VFS_COPY			
+#define D_BF_FS_VFS_REMOVE	                         改为  VFS_REMOVE			
+#define D_BF_FS_VFS_REMOVEMULTI	             改为  VFS_REMOVEMULTI		
+#define D_BF_FS_VFS_FSTAT	                             改为  VFS_FSTAT			
+#define D_BF_FS_VFS_MKDIR	                         改为  VFS_MKDIR			
+#define D_BF_FS_VFS_RMDIR	                         改为  VFS_RMDIR			
+#define D_BF_FS_VFS_OPENDIR	                     改为  VFS_OPENDIR			
+#define D_BF_FS_VFS_READDIR	                     改为  VFS_READDIR			
+#define D_BF_FS_VFS_CLOSEDIR	                     改为  VFS_CLOSEDIR		
+#define D_BF_FS_VFS_CHDIR	                         改为  VFS_CHDIR			
+#define D_BF_FS_VFS_GETCURDIR	                     改为  VFS_GETCURDIR		
+#define D_BF_FS_VFS_QFORMAT	                     改为  VFS_QFORMAT		
+#define D_BF_FS_VFS_NFORMAT	                     改为  VFS_NFORMAT			
+#define D_BF_FS_VFS_USERSET	                         改为  VFS_USERSET			
+#define D_BF_FS_VFS_INFO_DRV_NAME_MAX    改为 VfsTool_INFO_DRV_NAME_MAX
+#define D_BF_FS_VFS_FNAME_MAX	                 改为  VfsTool_FNAME_MAX  		
+#define D_BF_FS_VFS_BLK_SIZ_INF_TBL             改为  VfsTool_BLK_SIZ_INF_TBL		
+#define D_BF_FS_VFS_BLK_NUM_INF_TBL         改为  VFS_BLK_NUM_INF_TBL		
+#define D_BF_FS_VFS_ADR_INFO_AREA             改为  VfsTool_ADR_INFO_AREA		
+#define D_BF_FS_VFS_ADR_BUF_AREA               改为  VFS_ADR_BUF_AREA		
+#define D_BF_FS_VFS_FILE_LIST_FULL               改为  VFS_FILE_LIST_FULL		
+#define D_BF_FS_VFS_NO_MORE_OPEN             改为  VFS_NO_MORE_OPEN		
+#define D_BF_FS_VFS_NO_SPACE	                     改为  VFS_NO_SPACE	
+#define D_BF_FS_VFS_EOF	                             改为  VFS_EOF
+#define D_BF_FS_VFS_SETATTRIBUTE_MULTI_SHORTNAME_MAX 改为 VfsOne_SETATTRIBUTE_MULTI_SHORTNAME_MAX			
+
+
+
+FS_BPB.h  FS_code.h  FS_Endian.h  FS_errno.h  FS_extra.h  FS_lib.h  FS_PARTITION.H  写到 fslib.h 中
+抄写路径：/home/sns/workspace/snsrtos-zzz/target/cpu_tkernel/basefw/fj/file_mng/mdf/src
+
+1、宏定义名
+
+#define FS_BOOTFLG0                                改为 FsLib_BOOTFLG0
+#define FS_BOOTFLG1                                改为 FsLib_BOOTFLG1
+#define FS_BOOTFLG2                                改为 FsLib_BOOTFLG2 
+#define FS_BOOTFLG3                                改为 FsLib_BOOTFLG3
+#define FS_JUMP_SIZE                                 改为 FsLib_JUMP_SIZE
+#define FS_OEMID_SIZE                              改为 FsLib_OEMID_SIZE
+#define FS_VOLLABEL_SIZE                         改为 FsLib_VOLLABEL_SIZE
+#define FS_FSYSTYPE_SIZE                           改为 FsLib_FSYSTYPE_SIZE
+#define FS_BOOTCODE16                            改为 FsLib_BOOTCODE16
+#define FS_BOOTCODE32                            改为 FsLib_BOOTCODE32
+#define FS_RESERVED32                              改为 FsLib_RESERVED32
+#define FS_ROOT_CLUSTER_OFFSET_FAT32  改为 FsLib_ROOT_CLUSTER_OFFSET_FAT32
+#define FS_ROOT_CLUSTER_OFFSET_EXFAT  改为 FsLib_ROOT_CLUSTER_OFFSET_EXFAT
+#define FS_FSTYPE_FAT                                改为 FsLib_FSTYPE_FAT
+#define FS_FSTYPE_FAT12                            改为 FsLib_FSTYPE_FAT12
+#define FS_FSTYPE_FAT16                            改为 FsLib_FSTYPE_FAT16
+#define FS_FSTYPE_FAT32                            改为 FsLib_FSTYPE_FAT32   
+#define FS_FSTYPE_EXFAT                            改为 FsLib_FSTYPE_EXFAT
+#define FS_BTNOVOL                                  改为 FsLib_BTNOVOL
+#define FS_ASCII_MIN                                 改为 FsLib_ASCII_MIN
+#define FS_ASCII_SPC                                  改为 FsLib_ASCII_SPC
+#define FS_ASCII_PLUS                                改为 FsLib_ASCII_PLUS
+#define FS_ASCII_COMMA                           改为 FsLib_ASCII_COMMA
+#define FS_ASCII_DOT                                 改为 FsLib_ASCII_DOT
+#define FS_ASCII_0                                      改为 FsLib_ASCII_0
+#define FS_ASCII_9                                      改为 FsLib_ASCII_9
+#define FS_ASCII_SEMICOLON                     改为 FsLib_ASCII_SEMICOLON
+#define FS_ASCII_EQUAL                             改为 FsLib_ASCII_EQUAL
+#define FS_ASCII_A                                      改为 FsLib_ASCII_A
+#define FS_ASCII_Z                                      改为 FsLib_ASCII_Z
+#define FS_ASCII_LBRACKET                        改为 FsLib_ASCII_LBRACKET
+#define FS_ASCII_RBRACKET                        改为 FsLib_ASCII_RBRACKET
+#define FS_ASCII_a                                      改为 FsLib_ASCII_a
+#define FS_ASCII_z                                      改为 FsLib_ASCII_z
+#define FS_ASCII_TIL                                   改为 FsLib_ASCII_TIL
+#define FS_ASCII_MAX                                 改为 FsLib_ASCII_MAX
+#define FS_ASCII_CV                                    改为 FsLib_ASCII_CV 
+#define FS_UNICODE_NULL                         改为 FsLib_UNICODE_NULL
+#define FS_UNICODE_SPC                            改为 FsLib_UNICODE_SPC
+#define FS_GETAL2(adr2)                             改为 FsLib_GETAL2(adr2)
+#define FS_PUTAL2(adr2, num)                    改为 FsLib_PUTAL2(adr2, num)
+#define FS_GETAL4(adr4)                             改为 FsLib_GETAL4(adr4) 
+#define FS_PUTAL4(adr4, num)                    改为 FsLib_PUTAL4(adr4, num)
+#define FS_GETAL8(adr8)                             改为 FsLib_GETAL8(adr8)
+#define FS_PUTAL8(adr8, num)                    改为 FsLib_PUTAL8(adr8, num)
+#define FS_SWAP2(bignum)                         改为 FsLib_SWAP2(bignum) 
+#define FS_SWAP4(bignum)                         改为 FsLib_SWAP4(bignum) 
+#define FS_GETAL2(adr2)                             改为 FsLib_GETAL2(adr2)
+#define FS_PUTAL2(adr2, num)                    改为 FsLib_PUTAL2(adr2, num)
+#define FS_GETAL4(adr4)                             改为 FsLib_GETAL4(adr4) 
+#define FS_PUTAL4(adr4, num)                    改为 FsLib_PUTAL4(adr4, num) 
+#define FS_GETAL8(adr8)                             改为 FsLib_GETAL8(adr8)
+#define FS_PUTAL8(adr8, num)                    改为 FsLib_PUTAL8(adr8, num)
+#define FS_SWAP2(bignum)                         改为 FsLib_SWAP2(bignum) 
+#define FS_SWAP4(bignum)                         改为 FsLib_SWAP4(bignum)
+#define FS_GETNotAL2(adr2)                       改为 FsLib_GET_NOT_AL2(adr2)
+#define FS_GETNotAL4(adr4)                       改为 FsLib_GET_NOT_AL4(adr4) 
+#define FS_PUTNotAL2(adr2, num)              改为 FsLib_PUT_NOT_AL2(adr2, num)
+#define FS_PUTNotAL4(adr4, num)              改为 FsLib_PUT_NOT_AL4(adr4, num)
+#define FS_GETNOTAL2(adr2)                      改为 FsLib_GETNOTAL2(adr2)
+#define FS_PUTNOTAL2(adr2, num)             改为 FsLib_PUTNOTAL2(adr2, num)
+#define FS_GETNOTAL4(adr4)                      改为 FsLib_GETNOTAL4(adr4)
+#define FS_PUTNOTAL4(adr4, num)             改为 FsLib_PUTNOTAL4(adr4, num)
+#define FS_GETNOTAL8(adr8)                      改为 FsLib_GETNOTAL8(adr8)
+#define FS_PUTNOTAL8(adr8, num)             改为 FsLib_PUTNOTAL8(adr8, num)
+#define FS_ENT_LAST                                   改为 FsLib_ENT_LAST
+#define FS_ERR_NOENT                                改为 FsLib_ERR_NOENT
+#define FS_ERR_SRCH                                   改为 FsLib_ERR_SRCH
+#define FS_ERR_IO                                       改为 FsLib_ERR_IO  
+#define FS_ERR_NXIO                                   改为 FsLib_ERR_NXIO
+#define FS_ERR_BADF                                  改为 FsLib_ERR_BADF  
+#define FS_ERR_NOMEM                              改为 FsLib_ERR_NOMEM     
+#define FS_ERR_BUSY                                  改为 FsLib_ERR_BUSY
+#define FS_ERR_EXIST                                  改为 FsLib_ERR_EXIST
+#define FS_ERR_NODEV                               改为 FsLib_ERR_NODEV
+#define FS_ERR_NOTDIR                              改为 FsLib_ERR_NOTDIR     
+#define FS_ERR_ISDIR                                 改为 FsLib_ERR_ISDIR
+#define FS_ERR_INVAL                                改为 FsLib_ERR_INVAL 
+#define FS_ERR_MOPEN                              改为 FsLib_ERR_MOPEN    
+#define FS_ERR_FBIG                                  改为 FsLib_ERR_FBIG
+#define FS_ERR_NOSPC                               改为 FsLib_ERR_NOSPC
+#define FS_ERR_SPIPE                                 改为 FsLib_ERR_SPIPE
+#define FS_ERR_ROFS                                  改为 FsLib_ERR_ROFS
+#define FS_ERR_NOSYS                                改为 FsLib_ERR_NOSYS 
+#define FS_ERR_NOTEMPTY                         改为 FsLib_ERR_NOTEMPTY  
+#define FS_ERR_NAMETOOLONG                改为 FsLib_ERR_NAMETOOLONG
+#define FS_ERR_DELENT                              改为 FsLib_ERR_DELENT
+#define FS_ERR_EOF                                    改为 FsLib_ERR_EOF
+#define FS_ERR_EXCLUSIVE                          改为 FsLib_ERR_EXCLUSIVE 
+#define FS_ERR_RDONLY                              改为 FsLib_ERR_RDONLY
+#define FS_ERR_WRONLY                             改为 FsLib_ERR_WRONLY  
+#define FS_ERR_NAMEERR                           改为 FsLib_ERR_NAMEERR  
+#define FS_ERR_MDF                                   改为 FsLib_ERR_MDF
+#define FS_ERR_NOMDF                              改为 FsLib_ERR_NOMDF  
+#define FS_ERR_MDRV                                 改为 FsLib_ERR_MDRV
+#define FS_ERR_DEVENT                              改为 FsLib_ERR_DEVENT    
+#define FS_ERR_NODRV                               改为 FsLib_ERR_NODRV    
+#define FS_ERR_DRVUSE                              改为 FsLib_ERR_DRVUSE 
+#define FS_ERR_SYNC                                  改为 FsLib_ERR_SYNC
+#define FS_ERR_FORMAT                             改为 FsLib_ERR_FORMAT 
+#define FS_ERR_NOCONDRV                        改为 FsLib_ERR_NOCONDRV 
+#define FS_ERR_MTASK                                改为 FsLib_ERR_MTASK
+#define FS_ERR_NOTASK                              改为 FsLib_ERR_NOTASK   
+#define FS_ERR_NOSEM                               改为 FsLib_ERR_NOSEM  
+#define FS_ERR_CRESEM                              改为 FsLib_ERR_CRESEM
+#define FS_ERR_DELSEM                              改为 FsLib_ERR_DELSEM
+#define FS_ERR_ENQSEM                             改为 FsLib_ERR_ENQSEM 
+#define FS_ERR_ENQSEMTMOUT                  改为 FsLib_ERR_ENQSEMTMOUT
+#define FS_ERR_DEQSEM                              改为 FsLib_ERR_DEQSEM
+#define FS_ERR_UNCORRESPONDING          改为 FsLib_ERR_UNCORRESPONDING
+#define FS_ERR_NOROOT                             改为 FsLib_ERR_NOROOT    
+#define FS_ERR_INVOKE                               改为 FsLib_ERR_INVOKE
+#define FS_ERR_FAT_READ                            改为 FsLib_ERR_FAT_READ
+#define FS_ERR_FAT_WRITE                           改为 FsLib_ERR_FAT_WRITE
+#define FS_ERR_ROOT_READ                         改为 FsLib_ERR_ROOT_READ 
+#define FS_ERR_ROOT_WRITE                        改为 FsLib_ERR_ROOT_WRITE
+#define FS_ERR_BADREAD                             改为 FsLib_ERR_BADREAD
+#define FS_ERR_BADWRITE                            改为 FsLib_ERR_BADWRITE
+#define FS_ERR_FSNOADJ                              改为 FsLib_ERR_FSNOADJ 
+#define FS_ERR_DIRERR                                 改为 FsLib_ERR_DIRERR
+#define FS_ERR_CHAIN                                  改为 FsLib_ERR_CHAIN  
+#define FS_ERR_FSID                                     改为 FsLib_ERR_FSID
+#define FS_DRV_ERR_INVALID_DATA              改为 FsLib_DRV_ERR_INVALID_DAT
+#define FS_Type_FAT12                                  改为 FsLib_TYPE_FAT12
+#define FS_Type_FAT16                                  改为 FsLib_TYPE_FAT16
+#define FS_Type_FAT16E                                改为 FsLib_TYPE_FAT16E
+#define FS_Type_FAT16X                                改为 FsLib_TYPE_FAT16X
+#define FS_Type_HFAT16                               改为 FsLib_TYPE_HFAT16
+#define FS_Type_FAT32                                  改为 FsLib_TYPE_FAT32
+#define FS_Type_FAT32X                                改为 FsLib_TYPE_FAT32X
+#define FS_Type_HFAT32                               改为 FsLib_TYPE_HFAT32
+#define FS_Type_HFAT32X                             改为 FsLib_TYPE_HFAT32X
+#define FS_Type_NTFS                                   改为 FsLib_TYPE_NTFS
+#define FS_Type_EXFAT                                  改为 FsLib_TYPE_EXFAT
+#define O_RDONLY                                        改为 FsLib_O_RDONLY
+#define O_WRONLY                                       改为 FsLib_O_WRONLY
+#define O_RDWR                                           改为 FsLib_O_RDWR
+#define O_APPEND                                        改为 FsLib_O_APPEND
+#define O_CREAT                                           改为 FsLib_O_CREAT
+#define O_TRUNC                                          改为 FsLib_O_TRUNC
+#define O_CACHE                                          改为 FsLib_O_CACHE
+#define VALID_O_PARAM                              改为 FsLib_VALID_O_PARAM
+#define SEEK_CUR                                         改为 FsLib_SEEK_CUR
+#define SEEK_END                                         改为 FsLib_SEEK_END     
+#define SEEK_SET                                          改为 FsLib_SEEK_SET
+#define ATTR_NORMAL                                 改为 FsLib_ATTR_NORMAL 
+#define ATTR_READONLY                              改为 FsLib_ATTR_READONLY
+#define ATTR_HIDDEN                                  改为 FsLib_ATTR_HIDDEN
+#define ATTR_SYSTEM                                   改为 FsLib_ATTR_SYSTEM
+#define ATTR_VOLUME                                 改为 FsLib_ATTR_VOLUME
+#define ATTR_DIRECTORY                             改为 FsLib_ATTR_DIRECTORY
+#define ATTR_ARCHIVE                                 改为 FsLib_ATTR_ARCHIVE
+#define ATTR_LONGFILENAME                     改为 FsLib_ATTR_LONGFILENAME
+#define VALID_ATTR_PARAM                         改为 FsLib_VALID_ATTR_PARAM
+#define FS_TIMESTAMP_LAST_MODIFY         改为 FsLib_TIMESTAMP_LAST_MODIFY
+#define FS_TIMESTAMP_CREATE                   改为 FsLib_TIMESTAMP_CREATE
+#define FS_TIMESTAMP_LAST_ACCESS          改为 FsLib_TIMESTAMP_LAST_ACCESS
+#define FS_WRITE_UNPROTECT                     改为 FsLib_WRITE_UNPROTECT
+#define FS_WRITE_PROTECT                          改为 FsLib_WRITE_PROTECT
+#define FS_WRITEMODE_UNKNOWN_DATA   改为 FsLib_WRITEMODE_UNKNOWN_DATA
+#define FS_WRITEMODE_SYSTEM_DATA         改为 FsLib_WRITEMODE_SYSTEM_DATA
+#define FS_WRITEMODE_DIRECTORY_ENTRY  改为 FsLib_WRITEMODE_DIRECTORY_ENTRY
+#define FS_WRITEMODE_USER_DATA             改为 FsLib_WRITEMODE_USER_DATA
+#define FS_SETATTR_MODE_SET                     改为 FsLib_SETATTR_MODE_SET
+#define FS_SETATTR_MODE_ON                     改为 FsLib_SETATTR_MODE_ON
+#define FS_SETATTR_MODE_OFF                    改为 FsLib_SETATTR_MODE_OFF
+#define FS_REMOVE_MULTI_FNUM_MAX        改为 FsLib_REMOVE_MULTI_FNUM_MAX
+#define FS_SETATTRIBUTE_MULTI_FNUM_MAX           改为 FsLib_SETATTRIBUTE_MULTI_FNUM_MAX
+#define FS_REMOVE_MULTI_LONGNAME_MAX           改为 FsLib_REMOVE_MULTI_LONGNAME_MAX
+#define FS_REMOVE_MULTI_SHORTNAME_MAX          改为 FsLib_REMOVE_MULTI_SHORTNAME_MAX
+#define FS_SETATTRIBUTE_MULTI_LONGNAME_MAX   改为 FsLib_SETATTRIBUTE_MULTI_LONGNAME_MAX
+#define FS_SETATTRIBUTE_MULTI_SHORTNAME_MAX  改为 FsLib_SETATTRIBUTE_MULTI_SHORTNAME_MAX
+#define FS_LOCALE_CP932                             改为 FsLib_LOCALE_CP932
+#define FS_LOCALE_UTF8                               改为 FsLib_LOCALE_UTF8
+#define FS_Type_ExPARTITION                       改为 FsLib_TYPE_EXPARTITION
+#define PTBL_TOP                                          改为 FsLib_PTBL_TOP
+#define PTBL_ENT_SIZE                                  改为 FsLib_PTBL_ENT_SIZE
+#define PTBL0                                                改为 FsLib_PTBL0
+#define PTBL1                                                改为 FsLib_PTBL1 
+#define PTBL2                                                改为 FsLib_PTBL2
+#define PTBL3                                                改为 FsLib_PTBL3
+#define PT_FLG                                               改为 FsLib_PT_FLG
+#define PT_SCHS                                             改为 FsLib_PT_SCHS   
+#define PT_PID                                               改为 FsLib_PT_PID 
+#define PT_ECHS                                             改为 FsLib_PT_ECHS  
+#define PT_SLBA                                             改为 FsLib_PT_SLBA
+#define PT_NUMSEC                                        改为 FsLib_PT_NUMSEC   
+#define CHS_HEAD                                          改为 FsLib_CHS_HEAD  
+#define CHS_CYLSEC                                        改为 FsLib_CHS_CYLSEC
+#define CHS_CYL                                             改为 FsLib_CHS_CYL
+#define FS_MAX_PARTITION                            改为 FsLib_MAX_PARTITION
+#define FS_PARTITION_MAX_EBR                     改为 FsLib_PARTITION_MAX_EBR
+#define freeMem(addr)                                   改为 FsLib_FREEMEM(addr)
+#define FS_FSFILL1                                         改为 FsLib_FSFILL1
+#define FS_FSFILL2                                         改为 FsLib_FSFILL2
+
+
+2、结构体、联合体名
+
+FS_BIOSPARA_FAT                      改为  FsBiosparaFat
+FS_EXTBPARA_FAT                      改为  FsExtbparaFat
+FS_BS_FAT                                  改为  FsBsFat
+FS_BIOSPARA_FAT32                  改为  FsBiosparaFat32
+FS_EXTBPARA_FAT32                  改为  FsExtbparaFat32
+FS_BS_FAT32                              改为  FsBsFat32
+FS_FSINFO                                 改为  FsInfo
+FS_BS_EXFAT                              改为  FsBsExfat
+FS_EXTBS_EXFAT                         改为  FsExtbsExfat
+FS_GUID                                     改为  FsGuid
+FS_GENERIC_PARAM_EXFAT        改为  FsGenericParamExfat
+FS_FLASH_PARAM_EXFAT            改为  FsFlashParamExfat
+FS_OEM_PARAM_EXFAT               改为  FsOemParamExfat
+FS_STATVFS                                 改为  FsStatvfs
+FS_STAT                                       改为  FsStat
+FS_utimbuf                                  改为  FsUtimbuf
+FS_utimbufEx                              改为  FsUtimbufEx
+tm                                               改为  MdfUserCustom
+FS_FUNCNAME                            改为  FsFuncName
+FS_Chain                                      改为  FsChain
+FS_FREE_CLUSTER_LIST                改为  FsFreeClusterList
+FS_DRIVE_INIT_PARAM                改为  FsDriveInitParam
+FS_PARTITION_FUNCNAME_ABS 改为  FsPartitionFuncnameAbs
+FS_PARTITION_INFO                   改为  FsPartitionInfo
+FS_CHS                                        改为  FsChs
+FS_MBR                                       改为  FsMbr
+FS_MBR_CAPSULE                        改为  FsMbrCapsule
+FS_EBR_CAPSULE                         改为  FsEbrCapsule
+
+
+
+
+
+
+

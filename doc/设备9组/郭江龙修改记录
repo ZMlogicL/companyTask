@@ -1,0 +1,634 @@
+拆分部分：
+一. camera_sensor_imx383.c
+删除camera_sensor_imx383.c,新建camerasensorimx383.c和camerasensorimx383.h
+拆分camerasensorimx383.c到camerasensorimx3831.c中，新建camerasensorimx3831.h
+将camerasensorimx383.c以下内容搬至camerasensorimx3831.c：
+1.结构体变量U_REG
+2.结构体变量T_CAMERA_SENSOR_REG
+3.私有方法access_tbl
+4.公有方法 Sensor_IMX383_CancelStandby
+5.公有方法 Sensor_IMX383_Set_Exp
+将camerasensorimx383.c以下内容复制camerasensorimx3831.c：
+宏定义：D_TBL_END;  D_TBL_WAIT_MS;  ROUNDUP2
+camerasensorimx3831.c中的修改：
+access_tbl 改为 camera_sensor_imx3831_access_tbl ;
+
+
+二. camera_sensor_AR0430.c
+删除camera_sensor_AR0430.c,新建camerasensorar0430.c和camerasensorar0430.h
+拆分camerasensorar0430.c到camerasensorar04301.c中，新建camerasensorar04301.h
+将camerasensorar0430.c以下内容搬至camerasensorar04301.c：
+结构体变量 AR0430_MODE_FULL_2316x1746_RAW10_30FPS
+结构体变量 AR0430_MODE_FULL_2316x1746_RAW12_30FPS
+结构体变量 AR0430_BASIC
+结构体变量 AR0430_MODE
+将camerasensorar0430.c以下内容复制camerasensorar04301.c：
+宏定义：D_TBL_END; D_TBL_WAIT_MS; LINE_LENGTH_PCK_10BIT; 
+LINE_LENGTH_PCK_12BIT;  FRAME_LENGTH_LINES_10BIT;  FRAME_LENGTH_LINES_12BIT
+
+
+三. camera_sensor_imx477.c
+删除camera_sensor_imx477.c,新建camerasensorimx477.c和camerasensorimx477.h
+拆分camerasensorimx477.c到camerasensorimx4771.c中，新建camerasensorimx4771.c
+将camerasensorimx477.c以下内容搬至camerasensorimx4771.c：
+1.结构体变量
+IMX477_MODE_Full_4056x2288_RAW10_60fps    
+IMX477_MODE_Full_4056x3040_RAW12_40fps   
+IMX477_DOL_2frame_4056x2288_RAW10_30fps   
+IMX477_DOL_2frame_4056x3040_RAW10_15fps  
+IMX477_MODE_Full_4056x2288_RAW10_PD_60fps 
+IMX477_MODE_BINNING_2x2_2028x1128_RAW10_240fps  
+IMX477_BASIC       imx477Basic
+IMX477_MODE        imx477Mode
+将camerasensorimx477.c以下内容复制camerasensorimx4771.c：
+宏定义 D_TBL_END;  D_TBL_WAIT_MS;
+
+
+
+四. palladium_test_cnr.c
+删除palladium_test_cnr.c,新建palladiumtestcnr.c和palladiumtestcnr.h
+拆分palladiumtestcnr.c到palladiumtestcnr1.c和palladiumtestcnr2.c中;
+新建palladiumtestcnr1.h和palladiumtestcnr2.h
+将palladiumtestcnr.c以下内容搬至palladiumtestcnr1.c：
+1.私有方法 pt_im_cnr_otf_2_8
+2.私有方法 pt_im_cnr_ofl_2_9
+3.私有方法 pt_im_cnr_otf_2_9
+4.私有方法 pt_im_cnr_ofl_2_10
+5.私有方法 pt_im_cnr_otf_2_10
+6.私有方法 pt_im_cnr_ofl_2_11
+7.私有方法 pt_im_cnr_otf_2_11
+8.私有方法 pt_im_cnr_ofl_2_12
+9.私有方法 pt_im_cnr_otf_2_12
+10.私有方法 pt_im_cnr_ofl_2_13
+11.私有方法 pt_im_cnr_otf_2_13
+12.私有方法 pt_im_cnr_run_5
+13.私有方法 pt_im_cnr_run_6
+将palladiumtestcnr.c以下内容复制到palladiumtestcnr1.c：
+宏定义：
+D_IM_CNR_TEST_NO
+D_IM_CNR_TEST_NO "2_8"
+D_IM_CNR_TEST_NO "2_9"
+D_IM_CNR_TEST_NO "2_10"
+D_IM_CNR_TEST_NO "2_11"
+D_IM_CNR_TEST_NO "2_12"
+D_IM_CNR_TEST_NO "2_13"
+将palladiumtestcnr.c以下内容搬至palladiumtestcnr2.c：
+1.私有方法 pt_im_cnr_ofl_2_1
+2.私有方法 pt_im_cnr_otf_2_1
+3.私有方法 pt_im_cnr_ofl_2_2
+4.私有方法 pt_im_cnr_ofl_2_3
+5.私有方法 pt_im_cnr_ofl_2_4
+6.私有方法 pt_im_cnr_otf_2_4
+7.私有方法 pt_im_cnr_ofl_2_5
+8.私有方法 pt_im_cnr_otf_2_5
+9.私有方法 pt_im_cnr_ofl_2_6
+10.私有方法 pt_im_cnr_otf_2_6
+11.私有方法 pt_im_cnr_ofl_2_7
+12.私有方法 pt_im_cnr_otf_2_7
+13.私有方法 pt_im_cnr_ofl_2_8
+将palladiumtestcnr.c以下内容复制到palladiumtestcnr1.c：
+宏定义：
+D_IM_CNR_TEST_NO
+D_IM_CNR_TEST_NO "2_1"
+D_IM_CNR_TEST_NO "2_2"
+D_IM_CNR_TEST_NO "2_3"
+D_IM_CNR_TEST_NO "2_4"
+D_IM_CNR_TEST_NO "2_5"
+D_IM_CNR_TEST_NO "2_6"
+D_IM_CNR_TEST_NO "2_7"
+D_IM_CNR_TEST_NO "2_8"
+
+
+
+
+
+抄写部分：
+一.camera_sensor_pseudo.c
+删除camera_sensor_pseudo.c
+新建camerasensorpseudo.c和camerasensorpseudo.h
+1.camerasensorpseudo.c
+变量：
+PSEUDO_BASIC   ——>         pseudoBasic
+PSEUDO_MODE   ——>        pseudoMode
+sensor_id               ——>         sensorId
+va_info          ——>                   vaInfo
+out_reg         ——>                  outReg
+exp_sec         ——>                  expSec
+default_fps   ——>                 defaultFps
+req_fps          ——>                  reqFps
+私有方法名：
+dmp_get_fifo_length             ——>   dmpGetFifoLength
+dmp_reset_fifo                        ——>   dmpResetFifo
+dmp_read_fifo                         ——>   dmpReadFifo
+dmp_get_fifo_all                      ——>   dmpGetFifoAll
+get_packet_size_and_samplecnt   ——>   getPacketSizeAndSamplecnt
+check_fifo_decoded_headers         ——>   checkFifoDecodedHeaders
+extract_sample_cnt                           ——>   extractSampleCnt
+inv_decode_3_32bit_elements       ——>   invDecode332bitElements
+inv_decode_3_16bit_elements       ——>   invDecode316bitElements
+公有方法名：
+Sensor_PSEUDO_Clock_Gpio_Init    ——>   camera_sensor_pseudo_clock_gpio_init
+Sensor_PSEUDO_Standby                 ——>   camera_sensor_pseudo_standby
+Sensor_PSEUDO_Stream                   ——>   camera_sensor_pseudo_stream
+Sensor_PSEUDO_Calc_Exp                 ——>   camera_sensor_pseudo_calc_exp
+
+2.camerasensorpseudo.h
+枚举：
+E_SENSOR_PSEUDO_MODE_Full_3840x2160_RAW10_30fps   ——>   CameraSensorPseudo_MODE_FULL_3840x2160_RAW10_30FPX
+E_SENSOR_PSEUDO_MODE_MAX                    ——>   CameraSensorPseudo_MODE_MAX
+E_SENSOR_PSEUDO_MODE                              ——>   CameraSensorPseudoMode
+结构体变量：
+PSEUDO_BASIC   pseudoBasic
+PSEUDO_MODE    pseudoMode
+宏定义：
+D_TBL_END    CameraSensorPseudo_D_TBL_END
+D_TBL_WAIT_MS  CameraSensorPseudo_D_TBL_WAIT_MS
+
+
+
+
+
+二.cameraconfig 
+1.cameraconfig
+公有方法：
+Camera_Get_SensorType ——> camera_config_get_sensortype（括号内void改为CameraConfig*self）
+
+2.cameraconfig.h
+宏定义：
+SENSOR_IMX477	                 ——>            CameraConfig_SENSOR_IMX477
+SENSOR_IMX277	                 ——>            CameraConfig_SENSOR_IMX277
+SENSOR_IMX383	                 ——>            CameraConfig_SENSOR_IMX383
+SENSOR_IMX533	                 ——>            CameraConfig_SENSOR_IMX533
+SENSOR_IMX183                    ——>            CameraConfig_SENSOR_IMX183	
+SENSOR_IMX363	                 ——>            CameraConfig_SENSOR_IMX363
+SENSOR_IMX290                    ——>            CameraConfig_SENSOR_IMX290
+SENSOR_OS08A10                 ——>            CameraConfig_SENSOR_OS08A10
+SENSOR_AR0430	                 ——>            CameraConfig_SENSOR_AR0430
+SENSOR_IMX410	                 ——>            CameraConfig_SENSOR_IMX410
+SENSOR_IMX477_IMX183	 ——>            CameraConfig_SENSOR_IMX477_IMX183
+SENSOR_PSEUDO	                 ——>            CameraConfig_SENSOR_PSEUDO
+SENSOR_NONE		                 ——>            CameraConfig_SENSOR_NONE
+GYRO_ICM20948	                 ——>            CameraConfig_GYRO_ICM20948
+GYRO_MPU9250	                 ——>            CameraConfig_GYRO_MPU9250
+GYRO_NONE		                     ——>            CameraConfig_GYRO_NONE
+FOCUS_ZC525		                     ——>            CameraConfig_FOCUS_ZC525
+FOCUS_NONE		                     ——>            CameraConfig_FOCUS_NONE
+GYRO_X	(0+1)                           ——>            CameraConfig_GYRO_X
+GYRO_Y	(1+1)                           ——>            CameraConfig_GYRO_Y
+GYRO_Z	(2+1)                           ——>            CameraConfig_GYRO_Z
+TIMER64_START_FROM_BOOT    ——>  CameraConfig_TIMER64_START_FROM_BOOT
+变量：
+CAMERA                                    ——>            camera
+
+
+
+
+
+三.camerasensorimx363.c
+删除camera_sensor_imx363.c,新建camerasensorimx363.c和camerasensorimx363.h
+1.camerasensorimx363.c
+变量：
+IMX363_INIT    imx363Init
+IMX363_MODE4_Fullp30_4032x3024_pd_4032x756   ——>  imx363Mode4Fullp304032x3024Pd4032x756
+IMX363_MODE4_4kp60_4032x2272_pd_4032x568      ——>  imx363Mode44kp604032x2272Pd4032x568
+IMX363_MODE4_Fhdp90_2016x1136_pd_2016x284   ——>  imx363Mode4Fhdp902016x1136Pd2016x284
+IMX363_BASIC    ——>           imx363Basic
+IMX363_MODE   ——>            imx363Mode
+sensor_id              ——>            sensorId
+exp_sec                 ——>            expSec
+default_fps           ——>            defaultFps
+req_fps                  ——>            reqFps
+
+私有方法：
+access_tbl  ——>  accessTbl
+公有方法：
+Sensor_IMX363_Clock_Gpio_Init   ——>         camera_sensor_imx363_clock_gpio_init
+Sensor_IMX363_Standby                 ——>         camera_sensor_imx363_standby
+Sensor_IMX363_Stream                   ——>         camera_sensor_imx363_stream
+Sensor_IMX363_Init                          ——>          camera_sensor_imx363_init
+Sensor_IMX363_CancelStandby    ——>         camera_sensor_imx363_cancelstandby
+Sensor_IMX363_Mode                      ——>         camera_sensor_imx363_mode
+Sensor_IMX363_Pdaf_Mode           ——>         camera_sensor_imx363_padf_mode
+Sensor_IMX363_Calc_Exp                ——>         camera_sensor_imx363_clac_exp
+Sensor_IMX363_Set_Exp                  ——>         camera_sensor_imx363_set_exp
+2.camerasensorimx363.h
+枚举：
+E_SENSOR_IMX363_MODE            ——>  CameraSensorImx363Mode
+E_SENSOR_IMX363_MODE4_4kp60_4032x2272_pd_4032x568          ——>  CameraSensorImx363_MODE4_4KP60_4032x2272_PD_4032x568
+E_SENSOR_IMX363_MODE4_Fhdp90_2016x1136_pd_2016x284       ——>  CameraSensorImx363_MODE4_FHDP90_2016x1136_PD_2016x284
+E_SENSOR_IMX363_MODE4_Fullp30_4032x3024_pd_4032x756        ——>  CameraSensorImx363_MODE4_FULLP30_4032x3024_PD_4032x756
+E_SENSOR_IMX363_MODE_MAX  ——>  CameraSensorImx363_MODE_MAX
+宏定义：
+D_TBL_END             ——>          CameraSensorImx363_D_TBL_END
+D_TBL_WAIT_MS   ——>          CameraSensorImx363_D_TBL_WAIT_MS
+
+
+
+
+
+四.camerasensorimx383
+1camerasensorimx383.c
+变量：
+IMX383_MODE_H4_V3_NO_1        ——>   imx383ModeH4V3No1
+IMX383_MODE_H17_V9_NO_1      ——>   imx383ModeH17V9No1
+IMX383_BASIC    ——>    imx383Basic
+IMX383_MODE   ——>    imx383Mode
+g_backup_analog_gain_value        ——>  S_G_BACKUP_ANALOG_GAIN_VALUE
+sensor_id             ——>    sensorId
+out_reg                 ——>   outReg
+dif_vdocyc            ——>   difVdocyc
+req_vdocyc          ——>   reqVdocyc
+req_SHR                ——>   reqShr
+real_vdocyc          ——>   realVdocyc
+real_SHR                ——>   realShr
+again_dB               ——>   againDb
+sg_tbl                     ——>   sgTbl
+
+2. camerasensorimx383.h
+变量：
+sensor_id             ——>    sensorId
+out_reg                 ——>    outReg
+IMX383_BASIC   ——>    imx383Basic
+IMX383_MODE   ——>    imx383Mode 
+公有方法：
+Sensor_IMX383_Mode                        ——>  camera_sensor_imx383_mode
+Sensor_IMX383_Calc_Exp                   ——>  camera_sensor_imx383_clac_exp
+Sensor_IMX383_Clock_Gpio_Init      ——>  camera_sensor_imx383_clock_gpio_init
+Sensor_IMX383_Standby                   ——>  camera_sensor_imx383_standby
+Sensor_IMX383_SgVHD                       ——>  camera_sensor_imx383_sgvhd
+枚举：
+E_SENSOR_IMX383_MODE                                 ——>  CameraSensorImx383Mode
+E_SENSOR_IMX383_MODE_H17_V9_NO_1     ——>  CameraSensorImx383_MODE_H17_V9_NO_1
+E_SENSOR_IMX383_MODE_H4_V3_NO_1       ——>  CameraSensorImx383_MODE_H4_V3_NO_1
+E_SENSOR_IMX383_MODE_MAX                       ——>  CameraSensorImx383_MODE_MAX
+宏定义：
+D_TBL_END              ——>  CameraSensorImx383_D_TBL_END
+D_TBL_WAIT_MS    ——>  CameraSensorImx383_D_TBL_WAIT_MS
+ROUNDUP2             ——>  CameraSensorImx383_ROUNDUP2
+2.camerasensorimx3831.c
+变量：
+g_backup_analog_gain_value  ——>      S_G_BACKUP_ANALOG_GAIN_VALUE
+ IMX383_PLSTMG                        ——>     imx383Plstmg
+sensor_id                                        ——>     sensorId
+
+3.camerasensorimx3831.c
+结构体变量：
+CAMERA_SENSOR_IMX383_D_TBL_END            ——>     CameraSensorImx3831_D_TBL_END
+CAMERA_SENSOR_IMX383_D_TBL_WAIT_MS   ——>     CameraSensorImx3831_D_TBL_WAIT_MS
+4.camerasensorimx3831.h
+变量：
+sensor_id ——> sensorId
+公有方法：
+camera_sensor_imx3831_access_tbl   ——>   camera_sensor_imx3831_access_tbl（括号内加CameraSensorImx3831* self）
+Sensor_IMX383_CancelStandby           ——>  camera_sensor_imx3831_cancelstandby
+Sensor_IMX383_Set_Exp                          ——>  camera_sensor_imx3831_set_exp
+宏定义：
+D_TBL_END              ——>      CAMERA_SENSOR_IMX383_D_TBL_END
+D_TBL_WAIT_MS    ——>      CAMERA_SENSOR_IMX383_D_TBL_WAIT_MS
+ROUNDUP2             ——>      CAMERA_SENSOR_IMX383_ROUNDUP2
+结构体：
+U_REG  UReg
+
+
+
+
+五.camerasensorar0430
+1. camerasensorar0430.c
+变量：
+sensor_id            ——>       sensorId
+G_gain_value     ——>       S_G_GAIN_VALUE
+reg_buf                ——>       regBuf
+out_reg               ——>       outReg
+c_i_t                      ——>       cIT
+f_l_l                        ——>       fLL
+AR0430_MODE  ——>   ar0430Mode
+私有方法名：
+access_tbl            ——>   camera_sensor_ar0430_access_tbl
+宏定义：
+SET_VIRTUAL_CHANNEL    ——>   CameraSensorAr0430_SET_VIRTUAL_CHANNEL
+D_TBL_END                              ——>  CameraSensorAr0430_D_TBL_END
+D_TBL_WAIT_MS                     ——>  CameraSensorAr0430_D_TBL_WAIT_MS
+
+2. camerasensorar0430.h
+变量：
+sensor_id               ——>     sensorId
+out_reg                   ——>     outReg
+AR0430_BASIC      ——>    ar0430Basic
+AR0430_MODE     ——>    ar0430Mode
+公有方法：
+Sensor_AR0430_Init                         ——>   camera_sensor_ar0430_init
+Sensor_AR0430_Clock_Gpio_Init  ——>   camera_sensor_ar0430_clock_gpio_init
+Sensor_AR0430_Standby                ——>   camera_sensor_ar0430_standby
+Sensor_AR0430_Mode                     ——>   camera_sensor_ar0430_mode
+Sensor_AR0430_Stream                  ——>   camera_sensor_ar0430_stream
+Sensor_AR0430_Calc_Exp               ——>   camera_sensor_ar0430_clac_exp
+Sensor_AR0430_Set_Exp                 ——>   camera_sensor_ar0430_set_exp
+结构体变量：
+global_fine_A       globalFineA    
+Global_Coarse_A     globalCoarseA  
+Global_Digital      globalDigital      
+d_type     dType   
+枚举： 
+E_SENSOR_AR0430_MODE_FUll_2316x1746_RAW10_30FPS   ——>  CameraSensorAr0430_MODE_FUll_2316x1746_RAW10_30FPS
+E_SENSOR_AR0430_MODE_FUll_2316x1746_RAW12_30FPS   ——>  CameraSensorAr0430_MODE_FUll_2316x1746_RAW12_30FPS
+E_SENSOR_AR0430_MODE_MAX                          ——>  CAMERA_SENSOR_AR0430_MODE_MAX
+E_SENSOR_AR0430_MODE                                     ——>  CameraSensorAr0430Mode                    
+结构体：
+T_AR0430_GAIN   TAr0430Gain
+T_CAMERA_SENSOR_REG1  TCameraSensorReg1
+联合体：
+T_DATA    TData
+3. camerasensorar04301.c
+变量：
+AR0430_MODE_FULL_2316x1746_RAW10_30FPS   ——> ar0430ModeFull2316x1746Raw1030fpx
+AR0430_MODE_FULL_2316x1746_RAW12_30FPS   ——> ar0430ModeFull2316x1746Raw1230fpx
+AR0430_BASIC     ——>    ar0430Basic
+AR0430_MODE      ——>    ar0430Mode
+2. camerasensorar04301.h
+宏定义： 
+D_TBL_END                                         ——>               CameraSensorAr04301_D_TBL_END
+LINE_LENGTH_PCK_10BIT             ——>               CameraSensorAr04301_LINE_LENGTH_PCK_10BIT
+LINE_LENGTH_PCK_12BIT             ——>               CameraSensorAr04301_LINE_LENGTH_PCK_12BIT
+FRAME_LENGTH_LINES_10BIT     ——>               CameraSensorAr04301_FRAME_LENGTH_LINES_10BIT
+FRAME_LENGTH_LINES_12BIT     ——>               CameraSensorAr04301_FRAME_LENGTH_LINES_12BIT
+
+
+
+
+
+六.camerasensorimx477
+1.camerasensorimx477.c
+变量：
+IMX477_INIT
+gIs_Mode_Transition     ——>      S_GLS_MODE_TRANSITION
+sensor_id                           ——>     sensorId
+out_reg                               ——>     outReg
+exp_sec                              ——>     expSec
+default_fps                        ——>     defaultFps
+min_fps                              ——>     minFps
+req_fps                               ——>     reqFps
+sta_addr                             ——>     staAddr
+pd_num                             ——>     pdNum
+pd_info                               ——>     pdInfo
+pd_data                             ——>     pdData
+pdxxx_addr                      ——>     pdxxxAddr
+is_multi                              ——>     isMulti
+is_master                          ——>     isMaster
+mc_mode                         ——>     mcMode
+master_slave_sel            ——>      masterSlaveSel
+xvs_io_ctrl                         ——>      xvsIoCtrl
+extout_en                         ——>      extoutEn
+私有方法：
+access_tbl 改为 accessTbl；
+公有方法：
+Sensor_IMX477_Clock_Gpio_Init       ——>    camera_sensor_imx477_clock_gpio_init
+Sensor_IMX477_Init                               ——>    camera_sensor_imx477_init（括号内加CameraSensorImx477*self）
+Sensor_IMX477_CancelStandby        ——>    camera_sensor_imx477_cancelstandby
+Sensor_IMX477_Standby                     ——>    camera_sensor_imx477_standby
+Sensor_IMX477_Stream                       ——>    camera_sensor_imx477_stream
+Sensor_IMX477_Mode                          ——>    camera_sensor_imx477_mode
+Sensor_IMX477_Pdaf_Mode               ——>    camera_sensor_imx477_pdaf_mode （括号内加CameraSensorImx477*self）
+Sensor_IMX477_Multi                           ——>    camera_sensor_imx477_multi
+Sensor_IMX477_Calc_Exp                    ——>    camera_sensor_imx477_clac_exp
+Sensor_IMX477_Set_Exp                     ——>    camera_sensor_imx477_set_exp
+Sensor_IMX477_DOL_Calc_Exp         ——>    camera_sensor_imx477_dol_clac_exp
+Sensor_IMX477_DOL_Set_Exp           ——>    camera_sensor_imx477_dol_set_exp
+Sensor_IMX477_Get_PD_Info            ——>    camera_sensor_imx477_get_pd_info（括号内加CameraSensorImx477*self）
+宏定义：
+D_TBL_END                   ——>            CameraSensorImx477_D_TBL_END
+D_TBL_WAIT_MS         ——>            CameraSensorImx477_D_TBL_WAIT_MS
+D_DOL_L                        ——>            CameraSensorImx477_D_DOL_L
+D_DOL_S                        ——>            CameraSensorImx477_D_DOL_S
+D_DOL_C                        ——>            CameraSensorImx477_D_DOL_C
+2.camerasensorimx477.h
+枚举：
+E_SENSOR_IMX477_MODE_FULL_4056x2288_RAW10_60FPX           ——>   CameraSensorImx477_MODE_FULL_4056x2288_RAW10_60FPX
+E_SENSOR_IMX477_MODE_FULL_4056x3040_RAW12_40FPX           ——>   CameraSensorImx477_MODE_FULL_4056x3040_RAW12_40FPX 
+E_SENSOR_IMX477_MODE_BINNING_2x2_2028x1128_RAW10_240FPX      ——>   CameraSensorImx477_MODE_BINNING_2x2_2028x1128_RAW10_240FPX
+E_SENSOR_IMX477_MODE_MAX                                  ——>   CameraSensorImx477_MODE_MAX
+E_SENSOR_IMX477_MODE                                             ——>   CameraSensorImx477Mode  
+变量:
+IMX477_BASIC     ——>    imx477Basic
+IMX477_MODE    ——>   imx477Mode
+3. camerasensorimx4771.c
+变量：
+IMX477_MODE_Full_4056x2288_RAW10_60fps                         ——>   imx477ModeFull4056x2288Raw1060fps
+IMX477_MODE_Full_4056x3040_RAW12_40fps                         ——>   imx477ModeFull4056x3040Raw1240fps
+IMX477_DOL_2frame_4056x2288_RAW10_30fps                      ——>   imx477Dol2Frame4056x2288Raw1030fps
+IMX477_DOL_2frame_4056x3040_RAW10_15fps                      ——>   imx477Dol2frame4056x3040Raw1015fps
+IMX477_MODE_Full_4056x2288_RAW10_PD_60fps                  ——>   imx477ModeFull4056x2288Raw10Pd60fps
+IMX477_MODE_BINNING_2x2_2028x1128_RAW10_240fps   ——>   imx477ModeBinning2x22028x1128Raw10240fps
+宏定义：
+D_TBL_END    CameraSensorImx4771_D_TBL_END
+
+
+
+
+
+
+
+七.palladiumtestcnr.c
+1.palladiumtestcnr.c
+变量：
+im_ercd   ——>  imErcd
+gIM_CNR_Clk_Ctrl_Cnt1        ——>       S_GIM_CNR_CLK_CTRL_CNT1
+gIM_CNR_Clk_Ctrl_Cnt2        ——>       S_GIM_CNR_CLK_CTRL_CNT2
+gIM_CNR_Iclk_Ctrl_Cnt1       ——>       S_GIM_CNR_ICLK_CTRL_CNT1
+gIM_CNR_Iclk_Ctrl_Cnt2       ——>       S_GIM_CNR_ICLK_CTRL_CNT2
+私有方法： 
+pt_im_cnr_ofl_reg_rw_print                          ——>      ptImCnrOflRegRwPrint
+pt_im_cnr_otf_reg_rw_print                         ——>      ptImCnrOtfRegRwPrint
+pt_im_cnr_ofl_cspr_reg_print                      ——>      ptImCnrOflCsprRegPrint
+pt_im_cnr_otf_cspr_reg_print                      ——>      ptImCnrOtfCsprRegPrint
+pt_im_cnr_ofl_yspr_reg_print                      ——>      ptImCnrOflYsprRegPrint
+pt_im_cnr_ofl_yspr_tbl_reg_print               ——>      ptImCnrOflYsprTblRegPrint
+pt_im_cnr_ofl_cspr_mid_y_reg_print         ——>      ptImCnrOflCsprMidYRegPrint
+pt_im_cnr_otf_cspr_mid_y_reg_prin t       ——>      ptImCnrOtfCsprMidYRegPrint
+pt_im_cnr_ofl_cspr_mid_cc_y_reg_print   ——>      ptImCnrOflCsprMidCcYRegPrint
+pt_im_cnr_otf_cspr_mid_cc_y_reg_print  ——>      ptImCnrOtfCsprMidCcYRegPrint
+pt_im_cnr_ofl_cspr_mid_cc_c_reg_print   ——>      ptImCnrOflCsprMidCcCRegPrint
+pt_im_cnr_otf_cspr_mid_cc_c_reg_print  ——>      ptImCnrOtfCsprMidCcCRegPrint
+pt_im_cnr_ofl_cspr_low_y_reg_print         ——>      ptImCnrOflCsprLowYRegPrint
+pt_im_cnr_otf_cspr_low_y_reg_print        ——>      ptImCnrOtfCsprLowYRegPrint
+pt_im_cnr_ofl_cspr_low_cc_y_reg_print   ——>      ptImCnrOflCsprLowCcYRegPrint
+pt_im_cnr_otf_cspr_low_cc_y_reg_print  ——>      ptImCnrOtfCsprLowCcYRegPrint
+pt_im_cnr_ofl_cspr_low_cc_c_reg_print   ——>      ptImCnrOflCsprLowCcCCRegPrint
+pt_im_cnr_otf_cspr_low_cc_c_reg_print   ——>      ptImCnrOtfCsprLowCcCRegPrint
+pt_im_cnr_ofl_cspr_edge_reg_print           ——>     ptImCnrOflCsprEdgeRegPrint
+pt_im_cnr_otf_cspr_edge_reg_print           ——>    ptImCnrOtfCsprEdgeRegPrint
+pt_im_cnr_ofl_cspr_hue_reg_print             ——>     ptImCnrOflCsprHueRegPrint
+pt_im_cnr_otf_cspr_hue_reg_print             ——>     ptImCnrOtfCsprHueRegPrint
+pt_im_cnr_ofl_cspr_sprs_reg_print             ——>     ptImCnrOflCsprSprsRegPrint
+pt_im_cnr_otf_cspr_sprs_reg_print            ——>     ptImCnrOtfCsprSprsRegPrint
+pt_im_cnr_otf_cspr_sprd_reg_print           ——>     ptImCnrOtfCsprSprdRegPrint
+pt_im_cnr_ofl_1_1  ——>  ptImCnrOfl11
+pt_im_cnr_otf_1_1  ——>  ptImCnrOtf11
+pt_im_cnr_otf_1_2  ——>  ptImCnrOtf12
+pt_im_cnr_otf_1_3  ——>  ptImCnrOtf13
+公有方法名：
+Pt_Im_CNR_Main     ——>  palladium_test_cnr_im_main（括号内加PalladiumTestCnr1* self）
+宏定义：
+D_IM_CNR_TEST_IMG_SRC_Y_ADDR      ——>       PalladiumTestCnr_D_IM_IMG_SRC_Y_ADDR
+ D_IM_CNR_TEST_IMG_SRC_CB_ADDR  ——>	    PalladiumTestCnr_D_IM_IMG_SRC_CB_ADDR	
+ D_IM_CNR_TEST_IMG_SRC_CR_ADDR  ——>       PalladiumTestCnr_D_IM_IMG_SRC_CR_ADDR	
+ D_IM_CNR_TEST_IMG_SRC_BYTES	      ——>       PalladiumTestCnr_D_IM_IMG_SRC_BYTES		
+ D_IM_CNR_TEST_IMG_DST_ADDR         ——>       PalladiumTestCnr_D_IM_IMG_DST_ADDR	
+ D_IM_CNR_TEST_IMG_DST_Y_ADDR	  ——>       PalladiumTestCnr_D_IM_IMG_DST_Y_ADDR	
+ D_IM_CNR_TEST_IMG_DST_CB_ADDR  ——>  	    PalladiumTestCnr_D_IM_IMG_DST_CB_ADDR	
+ D_IM_CNR_TEST_IMG_DST_CR_ADDR  ——>	    PalladiumTestCnr_D_IM_IMG_DST_CR_ADDR
+ D_IM_CNR_TEST_IMG_DST_BYTES        ——>       PalladiumTestCnr_D_IM_IMG_DST_BYTES		
+ D_IM_CNR_TEST_IMG_TMP_ADDR        ——>      PalladiumTestCnr_D_IM_IMG_TMP_ADDR		
+ D_IM_CNR_TEST_IMG_TMP_BYTES	       ——>      PalladiumTestCnr_D_IM_IMG_TMP_BYTES		
+ IO_CNR	                                                       ——>      PalladiumTestCnr_IO_CNR	
+ D_IM_CNR_TEST_IMG_SRC_ADDR	       ——>      PalladiumTestCnr_D_IM_IMG_SRC_ADDR
+D_IM_CNR_TEST_H_PIXS                            ——>      PalladiumTestCnr_D_IM_CNR_TEST_H_PIXS
+D_IM_CNR_TEST_V_PIXS                            ——>       PalladiumTestCnr_D_IM_CNR_TEST_V_PIXS
+D_IM_CNR_TEST_NO                                   ——>       PalladiumTestCnr_D_IM_CNR_TEST_NO
+
+2.palladiumtestcnr1.c
+变量：
+rdma_ctrl    rdmaCtrl
+cnr_table    cnrTable
+rdma_low_cc_y_tbl        ——>    rdmaLowCcYTbl
+low_cc_y_tbl_addr          ——>    lowCcYTblAddr
+low_cc_y_tbl_addr          ——>    lowCcYTblAddr
+rdma_low_cc_c_tbl         ——>    rdmaLowCcCTbl
+low_cc_c_tbl_addr           ——>    lowCcCTblAddr
+rdma_edge_tbl                ——>    rdmaEdgeTbl
+edge_tbl_addr                 ——>    edgeTblAddr
+spr_cspr_hue                   ——>    sprCsprHue
+rdma_hue_tbl                  ——>    rdmaHueTbl
+hue_tbl_addr                   ——>    hueTblAddr
+cspr_sprs_cc                     ——>    csprSprsCc
+rdma_sprs_tbl                 ——>    rdmaSprsTbl
+sprs_tbl_addr                  ——>    sprsTblAddr
+cspr_sprd_cc                   ——>    csprSprdCc
+rdma_sprd_tbl               ——>    rdmaSprdTbl
+sprd_tbl_addr                 ——>    sprdTblAddr
+公有方法名： 
+所有前缀
+pt_im_cnr                        ——>    palladium_test_cnr_im
+宏定义：
+D_IM_CNR_TEST_NO           ——>         PalladiumTestCnr_D_IM_CNR_TEST_NO
+
+3.palladiumtestcnr2.c
+变量：
+rdma_ctrl                      ——>    rdmaCtrl
+spr_ctrl_c                       ——>    sprCtrlC
+rdma_low_cc_y_tbl     ——>    rdmaLowCcYTbl
+low_cc_y_tbl_addr      ——>    lowCcYTblAddr
+rdmaCtrl_c                   ——>    rdmactrlC
+cnr_ctrl_addr               ——>    cnrCtrlAddr
+spr_ctrl_y                      ——>    sprCtrlY
+rdmaCtrl_y                   ——>    rdmactrlY
+yspr_table                    ——>    ysprTable
+rdma_yspr_tbl             ——>    rdmaYsprTbl
+yspr_tbl_addr               ——>    ysprTblAddr
+rdma_mid_y_tbl           ——>    rdmaMidYTbl
+mid_y_tbl_addr             ——>    midYTblAddr
+rdma_mid_cc_y_tbl      ——>    rdmaMidCcYTbl
+mid_cc_y_tbl_addr       ——>    midCcYTblAddr
+rdma_mid_cc_c_tbl      ——>    rdmaMidCcCTbl
+mid_cc_c_tbl_addr       ——>    midCcCTblAddr
+rdma_low_y_tbl           ——>    rdmaLowYTbl
+low_y_tbl_addr            ——>    lowYTblAddr
+公有方法：
+所有前缀
+pt_im_cnr                             ——>    palladium_test_cnr2_im
+宏定义：
+D_IM_CNR_TEST_NO         ——>          PalladiumTestCnr_D_IM_CNR_TEST_NO
+
+
+
+
+
+八.icm20948mpufifocontrol.c
+删除Icm20948MPUFifoControl.c，
+新建icm20948mpufifocontrol.c和icm20948mpufifocontrol.h
+1.icm20948mpufifocontrol.c
+变量：
+int_read                      ——>    intRead
+int_status                   ——>    intStatus
+in_fifo                           ——>    inFifo
+sample_cnt_array    ——>    sampleCntArray
+header_bit_mask     ——>    headerBitMask
+header2_bit_mask   ——>    header2BitMask
+fifo_size                       ——>    fifoSize
+total_sample_cnt     ——>    totalSampleCnt
+fifo_idx                        ——>    fifoIdx
+fifo_sw_size                ——>    fifoSwSize
+user_header              ——>    userHeader
+user_header2            ——>    userHeader2
+need_sz                       ——>    needSz
+fifo_ptr                         ——>    fifoPtr
+left_in_fifo                   ——>    leftInFifo
+time_stamp                ——>    timeStamp
+out_data                      ——>    outData
+in_data                         ——>    inData
+odr_cntr                      ——>    odrCntr
+raw_gyro                     ——>    rawGyro
+gyro_bias                     ——>    gyroBias
+bac_state                     ——>    bacState
+bac_ts                            ——>    bacTs
+flip_pickup                    ——>    flipPickup
+raw_compass              ——>    rawCompass 
+私有方法：
+
+dmp_get_fifo_length                 ——>         dmpGetFifoLength
+dmp_reset_fifo                            ——>         dmpResetFifo
+dmp_read_fifo                             ——>         dmpReadFifo
+dmp_get_fifo_all                          ——>         dmpGetFifoAll
+get_packet_size_and_samplecnt   ——>         getPacketSizeAndSamplecnt
+check_fifo_decoded_headers         ——>         checkFifoDecodedHeaders
+extract_sample_cnt                           ——>         extractSampleCnt
+inv_decode_3_32bit_elements        ——>         invDecode332bitElements
+inv_decode_3_16bit_elements        ——>         invDecode316bitElements
+公有方法：
+inv_icm20948_identify_interrupt                        ——>   icm20948_mpu_fifo_control_ivn_identify_interrupt（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_process_fifo                         ——>   icm20948_mpu_fifo_control_ivn_dmp_process_fifo（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_accel                               ——>   icm20948_mpu_fifo_control_ivn_dmp_get_accel（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_raw_gyro                      ——>   icm20948_mpu_fifo_control_ivn_dmp_get_raw_gyro（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_gyro_bias                      ——>   icm20948_mpu_fifo_control_ivn_dmp_get_gyro_bias（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_calibrated_gyro          ——>   icm20948_mpu_fifo_control_ivn_dmp_get_calibrated_gyro（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_6quaternion                ——>   icm20948_mpu_fifo_control_ivn_dmp_get_6quaternion（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_9quaternion                ——>   icm20948_mpu_fifo_control_ivn_dmp_get_9quaternion（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_gmrvquaternion         ——>   icm20948_mpu_fifo_control_ivn_dmp_get_gmrvquaternion（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_raw_compass               ——>   icm20948_mpu_fifo_control_ivn_dmp_get_raw_compass  （括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_calibrated_compass   ——>   icm20948_mpu_fifo_control_ivn_dmp_get_calibrated_compass  （括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_inv_decode_one_ivory_fifo_packet   ——>   icm20948_mpu_fifo_control_ivn_decode_one_ivory_fifo_packet （括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_bac_state                       ——>   icm20948_mpu_fifo_control_ivn_dmp_get_bac_state  （括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_bac_ts                             ——>   icm20948_mpu_fifo_control_ivn_dmp_get_bac_ts（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_dmp_get_flip_pickup_state         ——>   icm20948_mpu_fifo_control_ivn_dmp_get_flip_pickup_state（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_get_accel_accuracy                        ——>   icm20948_mpu_fifo_control_ivn_get_accel_accuracy（括号内VOID改为Icm20948MpuFifoControl*self）
+inv_icm20948_get_gyro_accuracy                          ——>   icm20948_mpu_fifo_control_ivn_get_gyro_accuracy（括号内VOID改为Icm20948MpuFifoControl*self）
+inv_icm20948_get_mag_accuracy                          ——>   icm20948_mpu_fifo_control_ivn_get_mag_accuracy（括号内VOID改为Icm20948MpuFifoControl*self）
+inv_icm20948_get_gmrv_accuracy                         ——>   icm20948_mpu_fifo_control_ivn_get_gmrv_accuracy（括号内VOID改为Icm20948MpuFifoControl*self）
+inv_icm20948_get_rv_accuracy                               ——>   icm20948_mpu_fifo_control_ivn_get_rv_accuracy（括号内VOID改为Icm20948MpuFifoControl*self）
+inv_icm20948_mpu_set_FIFO_RST_Diamond    ——>   icm20948_mpu_fifo_control_ivn_set_rst_diamond（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_fifo_swmirror                                   ——>   icm20948_mpu_fifo_control_ivn_swmirror（括号内加Icm20948MpuFifoControl*self）
+inv_icm20948_fifo_pop                                             ——>   icm20948_mpu_fifo_control_ivn_pop （括号内加Icm20948MpuFifoControl*self）
+
+2.icm20948mpufifocontrol.h
+结构体：
+inv_fifo_decoded_t         ——>   InvFifoDecodedT
+变量：
+dmp_3e_6quat                ——>   dmp3e6quat
+dmp_3e_9quat                ——>   dmp3e9quat
+dmp_rv_accuracyQ29   ——>   dmpRvAccuracyq29
+dmp_3e_geomagquat  ——>   dmp3eGeomagquat
+dmp_geomag_accuracyQ29   ——>   dmpGeomagAccuracyq29
+accel_s                               ——>      accelS
+gyro_bias                          ——>       gyroBias
+gyro_calibr                       ——>       gyroCalibr
+cpass_calibr                     ——>       cpassCalibr
+ped_step_det_ts             ——>       pedStepDetTs
+cpass_raw_data              ——>       cpassRawData
+accel_accuracy                ——>       accelAccuracy
+gyro_accuracy                 ——>       gyroAccuracy
+cpass_accuracy               ——>       cpassAccuracy
+bac_ts                                ——>       bacTs
+bac_state                          ——>       bacState
+flip_pickup                        ——>       flipPickup
+cpass_calibr_12chars     ——>       cpassCalibr12chars
+cpass_calibr_6chars       ——>       cpassCalibr6chars
+new_data                          ——>       newData

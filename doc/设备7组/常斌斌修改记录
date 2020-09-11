@@ -1,0 +1,151 @@
+1.文件dcf_attr修改为dcfattr
+2.#include "dcf_attr.h"修改为#include "dcfattr.h"
+3.公有方法去掉BF_,全部小写
+4..h文件公有方法去掉extern
+5.static volatile T_BF_DCF_ATTR_DCFDB_ATTR 改为 TBfDcfAttrDcfdbAttr
+6.g_bf_dcf_attr_dcfdb改为S_G_BF_DCF_ATTR_DCFDB
+7.变量duplicate_operation改为duplicateOperation
+8.变量not_add_date_db改为notAddDateDb
+
+1.文件dcf_if_receiver改为dcfifreceiver
+2.#include "dcf_if_receiver.h"修改为#include "dcfifreceiver.h"
+3.公有方法去掉BF_,全部小写加_cb
+4.BF_Dcf_If_Receiver_Get_Fstat只有定义,无修改
+5.枚举E_BF_DCF_IF_RECIVER_ASYNC改为DcfIfReciverAsync;枚举成员E_BF_DCF_IF_RECIVER_ASYNC_CONTINUE改为DcfIfReciver_ASYNC_CONTINUE;枚举成员E_BF_DCF_IF_RECIVER_ASYNC_STOP改为DcfIfReciver_ASYNC_STOP;
+
+1.文件dcf_receiver改为dcfreceiver
+2.#include "dcf_receiver.h"改为#include "dcfreceiver.h"
+3.BF_Dcf_Receiver_Poll_Dcf_Event没有调用,避免是库里有调用不修改
+4.其他公有方法去掉BF_,全部小写
+
+
+1.文件名dcf_sender改为dcfsender
+2.#include "dcf_sender.h"修改为#include "dcfsender.h"
+3.公有方法去掉BF_,全部小写
+4.#define D_DCF_SENDER_HEAP_SIZE_MAX	改为#define DcfSender_HEAP_SIZE_MAX		
+5.结构体T_DCF_FUNC_PATCH改为TDcfFuncPatch
+6.结构体t_DCFIF_MSG改为TDcfifMsg
+7.结构体DCF_ENTRY改为DcfEntry
+8.结构体T_DCF_FUNC改为TDcfFunc
+9.结构体DCF_T_DCF_SENDER_MSG改为TDcfSenderMsg
+1.文件名dcf改为mediadcf
+2.#include "dcf.h"改为#include "mediadcf.h"
+3.fj_directdcfsetlockstatusallindirnumber未修改
+4.fj_directdcfdeleteallindirnumber未修改
+
+
+1.文件名dcf_controller改为dcfcontroller
+2.#include "dcf_controller.h"改为#include "dcfcontroller.h"
+3.包含#include "dcfcontrollerutils.h"工具类
+4."dcfcontrollerutils.h"工具类中放入
+FW_INT32  dcf_controller_utils_get_g_bf_dcf_controller_ret_err(void);
+void  dcf_controller_utils_set_g_bf_dcf_controller_ret_err(FW_INT32 value);替换静态变量static volatile FW_INT32 S_G_BF_DCF_CONTROLLER_RET_ERR;
+
+
+9.8
+dcf_controller_utils_get_g_bf_dcf_controller_select_list_index()--;
+改为dcf_controller_utils_set_g_bf_dcf_controller_select_list_index(dcf_controller_utils_get_g_bf_dcf_controller_select_list_index()-1);
+
+9.9
+原fs_controller.c需添加#include "dcfcontroller1.h"
+原dcfifreceiver.c需添加#include "dcfcontroller.h"
+原dcf_if.c需添加#include "dcfcontroller.h"
+#include "dcfcontroller2.h"
+ #include "dcfcontroller4.h"
+#include "dcfcontroller5.h"
+#include "dcfcontroller6.h"
+
+dcf_db.c需添加#include "dcfcontroller6.h"
+dcfreceiver.c需添加#include "dcfcontroller7.h"
+dcfcontroller3.c需添加#include "dcfcontroller7.h" #include "dcfcontroller6.h"
+dcfreceiver.c需添加
+
+BF_Dcf_Controller前缀都改为dcf_controller前缀
+BF_Dcf_Controller_Make_Latest_File_Path_Abs改为bf_dcf_controller_make_latest_file_path_abs
+BF_Dcf_Controller_Get_Duplicate_No改为dcf_controller_get_duplicate_no
+BF_Dcf_Controller_Get_Entry改为dcf_controller_get_entry
+BF_Dcf_Controller_Save_Bayer改为dcf_controller_save_bayer
+
+dcfifreceiver.c
+kint32 dcf_if_receiver_get_exif_info_cb(TDcfSenderMsg* req_msg)
+{
+	return BF_Dcf_Controller_Get_Exif_Info(
+			   (T_BF_DCF_IF_OPEN_FILE_DATA*)&req_msg->param,
+			   ((T_BF_DCF_CONTROLLER_RET_GET_EXIF_INFO_DAT*)req_msg->result_addr)->img_detail,
+			   ((T_BF_DCF_CONTROLLER_RET_GET_EXIF_INFO_DAT*)req_msg->result_addr)->load_image_data);
+}
+
+更改为
+{
+	DcfController2Params parames;
+	parames.imgDetail =((T_BF_DCF_CONTROLLER_RET_GET_EXIF_INFO_DAT*)req_msg->result_addr)->imgDetail;
+	parames.loadImageData=((T_BF_DCF_CONTROLLER_RET_GET_EXIF_INFO_DAT*)req_msg->result_addr)->loadImageData;
+	parames.openFileParam=(T_BF_DCF_IF_OPEN_FILE_DATA*)&req_msg->param;
+	return dcf_controller_get_exif_info(&parames);
+}
+
+9.10
+dcfdef.h中
+typedef enum {
+	E_BF_DCF_CONTROLLER_ALL_DELETE_FLAG_ON = 0x00,
+	E_BF_DCF_CONTROLLER_ALL_DELETE_FLAG_OFF = 0x01
+} E_BF_DCF_CONTROLLER_ALL_DELETE_FLAG;
+改为
+typedef enum {
+	DcfDef_DCF_CONTROLLER_ALL_DELETE_FLAG_ON = 0x00,
+	DcfDef_DCF_CONTROLLER_ALL_DELETE_FLAG_OFF = 0x01
+} DcfDefControllerAllDeleteFlag;
+结构体T_BF_DCF_CONTROLLER_前缀统一改为DcfDefController
+typedef struct {
+	kint32 ret_ercd;
+	kulong* length;
+} T_BF_DCF_CONTROLLER_RET_DIV_LOAD_RESULT_DAT;
+改为:
+typedef struct {
+	kint32 retErcd;
+	kulong* length;
+} DcfDefControllerRetDivLoadResultDat;
+
+
+*dcf.c跟dcf.h文件都改为mediadcf
+*公有方法去掉fj_,改为media_
+
+*建立dcfdef.h工具头文件,放入DCF_CONTROLLER相关结构体;结构体内成员按变量规范,结构体名*T_BF_DCF_CONTROLLER_改为DcfController前缀
+
+
+dcfcontroller6.c
+FW_INT32 BF_Dcf_Controller_Read_Obj_Inf(FW_LONG* index, T_BF_DCF_IF_DCFDB_OBJ_INFO* obj_info)
+该方法中的obj_info规范为objInfo;
+原objInfo改为objInfo2
+
+dcfcontrollerutils.h
+宏定义为常数的前缀加C_
+D_BF_DCF_CONTROLLER_RAW_INFO_SIZ改为DCF_CONTROLLER_UTILS_RAW_INFO_SIZ
+D_BF_DCF_CONTROLLER_E_FS_M_TIME_ID_DEFULT改为DCF_CONTROLLER_UTILS_E_FS_M_TIME_ID_DEFULT
+
+
+Mediadcf.c
+FJ_ERR_CODE media_dcf_dump_diriattr(MediaDcf* self,kshort dirIndex, kushort* count, kchar* dirName, kushort* date, kushort* time);
+改为
+FJ_ERR_CODE media_dcf_dump_diriattr(MediaDcf* self,MediaDcfParams* params)
+调用处用	添加MediaDcfParams params;  参数改为&params
+
+
+FJ_ERR_CODE media_dcf_dump_diriattrex(MediaDcf* self,kshort dirIndex, kushort* count, kchar* dirName, kushort* date, ULONG* time )
+改为
+FJ_ERR_CODE media_dcf_dump_diriattrex(MediaDcf* self,MediaDcfParams* params)
+调用处用	添加MediaDcfParams params;  参数改为&params
+
+media_dcf_get_dcf_info方法同上
+
+
+dcfcontroller9.h 中放入以下方法
+kint32 	dcf_controller9_start_div_load(DcfController9* self,
+									T_BF_DCF_IF_IMAGE_LOAD_DATA* imageLoadData, kulong* length);
+kint32 	dcf_controller9_set_one_obj_attr(DcfController9 *self,T_BF_DCF_IF_ATTR_DATA* attr_data);
+#if 0
+kint32 	BF_Dcf_Controller_Copy_Between_Media(T_BF_DCF_IF_COPY_DATA* copy_data);//TODO 没有调用,可能是在汇编里调用,不修改
+#endif
+kint32 	dcf_controller9_get_jpeg_quant_table(DcfController9* self,T_BF_DCF_IF_GET_QT_DATA* qtData);
+kint32 	dcf_controller9_make_index_file_path_ext_abs(DcfController9 *self,T_BF_DCF_IF_FILE_INDEX fileIndex, kchar* ext, kchar* fullFilePath);
+kint32	dcf_controller9_w_open_lseek_read(DcfController9 *self,T_BF_DCF_IF_FILE_INDEX fileIndex,kulong offset, kulong addr, kulong count, kulong* length);

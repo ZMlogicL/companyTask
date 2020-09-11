@@ -1,0 +1,105 @@
+文件拆分
+still_attr.c 删除,新建了stillattr.c
+still_iip.c 删除,新建了stilliip1.c,stilliip2.c,stilliip3.c,stilliip4.c,stilliip5.c,paramafnbase.c
+still_img_info.c删除,新建了stillimginfo.c
+still_proc_subr.c删除,新建了stillprocsubr.c
+still_utility.c删除,新建了stillutility1.c,stillutility2.c
+
+
+一. 从still_attr.h 搬到stillattr.h并改名的内容
+1. 公有方法
+BF_Still_Attr_Get_R2Y_Mirror_Enable  still_attr_bf_get_r2y_mirror_enable
+BF_Still_Attr_Get_R2Y_Flip_Enable    still_attr_bf_get_r2y_flip_enable
+BF_Still_Attr_Set_View_YUV_Manipulation_1st_Size  still_attr_bf_set_view_yuv_manipulation_1st_size
+BF_Still_Attr_Set_View_YUV_Manipulation_2nd_Size  still_attr_bf_set_view_yuv_manipulation_2nd_size
+BF_Still_Attr_Set_View_YUV_Manipulation_1st_Area  still_attr_bf_set_view_yuv_manipulation_1st_area
+BF_Still_Attr_Set_Capture_YUV_Manipulation_1st_Size   still_attr_bf_set_capture_yuv_manipulation_1st_size
+BF_Still_Attr_Set_Capture_YUV_Manipulation_2nd_Size   still_attr_bf_set_capture_yuv_manipulation_2nd_size
+BF_Still_Attr_Set_Capture_YUV_Manipulation_3rd_Size   still_attr_bf_set_capture_yuv_manipulation_3rd_size
+BF_Still_Attr_Set_Capture_YUV_Manipulation_4th_Size   still_attr_bf_set_capture_yuv_manipulation_4th_size
+BF_Still_Attr_Set_Capture_YUV_Manipulation_1st_Area   still_attr_bf_set_capture_yuv_manipulation_1st_area
+BF_Still_Attr_Set_Capture_YUV_Manipulation_2nd_Area   still_attr_bf_set_capture_yuv_manipulation_2nd_area
+BF_Still_Attr_Set_Capture_YUV_Manipulation_3rd_Area   still_attr_bf_set_capture_yuv_manipulation_3rd_area
+BF_Still_Attr_Set_Capture_YUV_Manipulation_4th_Area   still_attr_bf_set_capture_yuv_manipulation_4th_area
+BF_Still_Attr_Get_Shoot_Image_Format   still_attr_bf_get_shoot_image_format
+BF_Still_Attr_Get_Still_Count    still_attr_bf_get_still_count
+
+2. 枚举类型
+E_SHOOT_FORMAT  EShootFormat (其中的 E_SHOOT_FORMAT_JPEG 改名 StillAttr_E_SHOOT_FORMAT_JPEG)
+
+3. 结构体
+T_CAPTURE_ATTR_FIRST  TCaptureAttrFirst
+
+
+从still_iip.h 搬到stilliip2.h并改名的内容
+1. 宏定义
+D_BF_STILL_IIP_TBL_ALIGN    StillIip2_D_BF_STILL_IIP_TBL_ALIGN
+
+2. 公有方法
+BF_Still_Iip_Set_Config   still_iip2_bf_set_config
+
+3. 结构体
+T_BF_STILL_IIP_RESOURCE_SPLIT     StillIip2
+
+
+从still_iip.h 搬到stilliip3.h并改名的内容
+1.宏定义
+M_BF_STILL_ROUNDUP_IIP_ALIGN   
+
+2. 公有方法
+BF_Still_Iip_Dump_UnitParam    still_iip3_bf_dump_unitparam
+BF_Still_Iip_Open    still_iip3_bf_open
+BF_Still_Iip_Start     still_iip3_bf_start
+BF_Still_Iip_WaitEnd    still_iip3_bf_waitend
+BF_Still_Iip_Close    still_iip3_bf_close
+BF_Still_Iip_Conv_Pixid2UtilPixid		still_iip3_bf_conv_pixid2utilpixid
+BF_Still_Iip_Set_SrcCacheSel     still_iip3_bf_set_srccachesel
+BF_Still_Iip_Set_SrcMasterIf		still_iip3_bf_set_srcmasterif
+BF_Still_Iip_Set_DstMasterIf		still_iip3_bf_set_dstmasterif
+BF_Still_Iip_Set_ResizeRotate		still_iip3_bf_set_resizerotate
+
+3.结构体
+T_BF_STILL_IIP_RESOURCE  StillIip3
+T_BF_STILL_IIP_RESOURCE_RR  TBfStillIipResourceRr
+ T_BF_STILL_IIP_AFN_PARAM   TBfStillIipAfnParam
+
+
+从still_iip.h 搬到stilliip4.h并改名的内容
+1. 公有方法
+BF_Still_Iip_Set_Afn_CbCrOnly    still_iip4_bf_set_afn_cbcronly
+
+
+从still_iip.h 搬到stilliip5.h并改名的内容
+1.结构体
+T_BF_STILL_IIP_RESOURCE2   StillIip5
+
+
+从still_img_info.c搬到stillimginfo.c并改名的内容
+1.公有方法
+BF_Still_ImgInfo_Set_IipPixFmtTblRgb   still_img_info_bf_set_iippixfmttblrgb
+BF_Still_FjImgInfo_Calc_C_Lines		still_imginfo_fj_bf_calc_c_lines
+
+2. 宏定义
+M_BF_STILL_AFN_CONV_TBL_VAL		StillImgInfo_M_BF_STILL_AFN_CONV_TBL_VAL
+
+2.结构体
+T_BF_STILL_IMG    TBfStillImg
+
+
+从still_utility.c搬到了stillutility1.c并改名的内容
+1.公有方法
+fj_imagecrop		still_utility1_fj_imagecrop
+fj_imageconvert		still_utility1_fj_imageconvert
+BF_Still_Image_Convert_2_Execute	still_utility1_bf_still_image_convert_2_execute
+BF_Still_Image_Convert_2_Init		still_utility1_bf_still_image_convert_2_init
+BF_Still_Image_Convert_2_Close		still_utility1_bf_still_image_convert_2_close
+
+
+
+从still_utility.c搬到了stillutility2.c并改名的内容
+1. 公有方法
+BF_Still_Encode_Jpeg_Debug    still_utility2_bf_still_encode_jpeg_debug
+fj_imagejpegencode   	still_utility2_fj_imagejpegencode
+fj_configgyro		still_utility2_fj_configgyro
+fj_addgyrodata			still_utility2_fj_addgyrodata
+BF_Still_Utility_Get_Jpeg_Encode_Quality			still_utility2_bf_get_jpeg_encode_quality

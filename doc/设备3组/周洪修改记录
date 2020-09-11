@@ -1,0 +1,907 @@
+1.将dd_exs.h,dd_gpv.h,dd_hdmac.h,dd_pcie_ep,dd_pcie_rc.h,dd_relc.h,dd_xdmac.h移到basefw/MILB_API/Project/DeviceDriver/Exs/src中
+2.dd_exs.c修改为类ddexs.c
+(1)将ddexs.c类拆分为ddexs.c,ddexspart.c和ddexsbranch.c
+(2)将ddexs.h中的定义前面部分宏移到ddexsbranch.h(前20个定义在ddexsbranch.c中有用到其他的宏和定义均在别的类里用)
+(3)将ddexs.c中静态变量gDD_Exs_Spin_Lock更名为S_DD_EXS_SPIN_LOCK
+				ddexs.h中的定义更名:
+				注意:常量定义在在教程中要以C_开头,但是在规范3.0中没有明确要以C_开头?
+				D_DD_EXS_USB3ID_FIS_BIT更名为DdExsBranch_USB3ID_FIS_BIT	
+				D_DD_EXS_USB3ID_RIS_BIT更名为DdExsBranch_USB3ID_RIS_BIT
+				D_DD_EXS_USB3VBUS_FIS_BIT更名为DdExsBranch_USB3VBUS_FIS_BIT	
+				D_DD_EXS_USB3VBUS_RIS_BIT更名为DdExsBranch_USB3VBUS_RIS_BIT
+				D_DD_EXS_USB2ID_FIS_BIT更名为DdExsBranch_USB2ID_FIS_BIT	
+				D_DD_EXS_USB2ID_RIS_BIT更名为DdExsBranch_USB2ID_RIS_BIT		
+				D_DD_EXS_USB2VBUS_FIS_BIT更名为DdExsBranch_USB2VBUS_FIS_BIT	
+				D_DD_EXS_USB2VBUS_RIS_BIT更名为DdExsBranch_USB2VBUS_RIS_BIT	
+				D_DD_EXS_PCIe1_FIS_BIT更名为DdExsBranch_PCIE1_FIS_BIT		
+				D_DD_EXS_PCIe1_RIS_BIT更名为DdExsBranch_PCIE1_RIS_BIT		
+				D_DD_EXS_PCIe0_FIS_BIT更名为DdExsBranch_PCIE0_FIS_BIT		
+				D_DD_EXS_PCIe0_RIS_BIT更名为DdExsBranch_PCIE0_RIS_BIT		
+				D_DD_EXS_SD4_FIS_BIT更名为DdExsBranch_SD4_FIS_BIT	
+				D_DD_EXS_SD4_RIS_BIT更名为DdExsBranch_SD4_RIS_BIT	
+				D_DD_EXS_SD3_FIS_BIT更名为DdExsBranch_SD3_FIS_BIT	
+				D_DD_EXS_SD3_RIS_BIT更名为DdExsBranch_SD3_RIS_BIT
+				D_DD_EXS_SD2_FIS_BIT更名为DdExsBranch_SD2_FIS_BIT	
+				D_DD_EXS_SD2_RIS_BIT更名为DdExsBranch_SD2_RIS_BIT	
+				D_DD_EXS_USB3ID_FIM_BIT更名为DdExsBranch_USB3ID_FIM_BIT	
+				D_DD_EXS_USB3ID_RIM_BIT更名为DdExsBranch_USB3ID_RIM_BIT	
+				D_DD_EXS_USB3VBUS_FIM_BIT更名为DdExsBranch_USB3VBUS_FIM_BIT	
+				D_DD_EXS_USB3VBUS_RIM_BIT更名为DdExsBranch_USB3VBUS_RIM_BIT
+				D_DD_EXS_USB2ID_FIM_BIT更名为DdExsBranch_USB2ID_FIM_BIT		
+				D_DD_EXS_USB2ID_RIM_BIT更名为DdExsBranch_USB2ID_RIM_BIT	
+				D_DD_EXS_USB2VBUS_FIM_BIT更名为DdExsBranch_USB2VBUS_FIM_BIT
+				D_DD_EXS_USB2VBUS_RIM_BIT更名为DdExsBranch_USB2VBUS_RIM_BIT	
+				D_DD_EXS_PCIe1_FIM_BIT更名为DdExsBranch_PCIE1_FIM_BIT	
+				D_DD_EXS_PCIe1_RIM_BIT更名为DdExsBranch_PCIE1_RIM_BIT	
+				D_DD_EXS_PCIe0_FIM_BIT更名为DdExsBranch_PCIE0_FIM_BIT	
+				D_DD_EXS_PCIe0_RIM_BIT更名为DdExsBranch_PCIE0_RIM_BIT	
+				D_DD_EXS_SD4_FIM_BIT更名为DdExsBranch_SD4_FIM_BIT		
+				D_DD_EXS_SD4_RIM_BIT更名为DdExsBranch_SD4_RIM_BIT		
+				D_DD_EXS_SD3_FIM_BIT更名为DdExsBranch_SD3_FIM_BIT	
+				D_DD_EXS_SD3_RIM_BIT更名为DdExsBranch_SD3_RIM_BIT		
+				D_DD_EXS_INTMSK_01_BIT更名为DdExsBranch_INTMSK_01_BIT	
+				D_DD_EXS_INTMSK_00_BIT更名为DdExsBranch_INTMSK_00_BIT		
+				D_DD_EXS_USB3ID_SIGMON2_BIT更名为DdExsBranch_USB3ID_SIGMON2_BIT		
+				D_DD_EXS_USB3VBUS_SIGMON2_BIT更名为DdExsBranch_USB3VBUS_SIGMON2_BIT	
+				D_DD_EXS_USB2ID_SIGMON2_BIT更名为DdExsBranch_USB2ID_SIGMON2_BIT		
+				D_DD_EXS_USB2VBUS_SIGMON2_BIT更名为DdExsBranch_USB2VBUS_SIGMON2_BIT		
+				D_DD_EXS_PCIe1_SIGMON2_BIT更名为DdExsBranch_PCIE1_SIGMON2_BIT		
+				D_DD_EXS_PCIe0_SIGMON2_BIT更名为DdExsBranch_PCIE0_SIGMON2_BIT		
+				D_DD_EXS_SD4_SIGMON2_BIT更名为DdExsBranch_SD4_SIGMON2_BIT		
+				D_DD_EXS_SD3_SIGMON2_BIT更名为DdExsBranch_SD3_SIGMON2_BIT		
+				D_DD_EXS_SIGMON2_00_BIT更名为DdExsBranch_SIGMON2_00_BIT			
+				D_DD_EXS_USB3ID_SIGMON_BIT更名为DdExsBranch_USB3ID_SIGMON_BIT	
+				D_DD_EXS_USB3VBUS_SIGMON_BIT更名为DdExsBranch_USB3VBUS_SIGMON_BIT	
+				D_DD_EXS_USB2ID_SIGMON_BIT更名为DdExsBranch_USB2ID_SIGMON_BIT		
+				D_DD_EXS_USB2VBUS_SIGMON_BIT更名为DdExsBranch_USB2VBUS_SIGMON_BIT	
+				D_DD_EXS_PCIe1_SIGMON_BIT更名为DdExsBranch_PCIE1_SIGMON_BIT		
+				D_DD_EXS_PCIe0_SIGMON_BIT更名为DdExsBranch_PCIE0_SIGMON_BIT		
+				D_DD_EXS_SD4_SIGMON_BIT更名为DdExsBranch_SD4_SIGMON_BIT		
+				D_DD_EXS_SD3_SIGMON_BIT更名为DdExsBranch_SD3_SIGMON_BIT		
+				D_DD_EXS_SIGMON_00_BIT更名为DdExsBranch_SIGMON_00_BIT			
+				D_DD_EXS_SET_0更名为DdExsBranch_SET_0						
+				D_DD_EXS_SET_1更名为DdExsBranch_SET_1							
+				Dd_Exs_Get_XDMAC_LowPower_Ctl_CSYSREQ()更名为DdExsBranch_GET_XDMAC_LOWPOWER_CTL_CSYSREQ()		
+				Dd_Exs_Get_XDMAC_LowPower_Ctl_CSYSACK()更名为DdExsBranch_GET_XDMAC_LOWPOWER_CTL_CSYSACK()		
+																							DdExsBranch_GET_XDMAC_LOWPOWER_CTL_CACTIVE()		
+																							DdExsBranch_GET_NF_RST_N_SOFT_RESET()	
+																							DdExsBranch_GET_BCH_RST_N_SOFT_RESET()	
+								类似													DdExsBranch_GET_REG_RST_N_SOFT_RESET()	
+																							DdExsBranch_GET_NETSEC_SOFT_RESET()			
+																							DdExsBranch_GET_EMMC_SOFT_RESET()		
+																							DdExsBranch_GET_RELC_SOFT_RESET()			
+																							DdExsBranch_GET_SD3_CD_DEBOUNCE_SOFT_RESET()			
+																							DdExsBranch_GET_SD4_CD_DEBOUNCE_SOFT_RESET()			
+																							DdExsBranch_GET_PCIE0_CD_DEBOUNCE_SOFT_RESET()		
+																							DdExsBranch_GET_PCIE1_CD_DEBOUNCE_SOFT_RESET()		
+																							DdExsBranch_GET_USB2VBUS_CD_DEBOUNCE_SOFT_RESET()	
+																							DdExsBranch_GET_USB2ID_CD_DEBOUNCE_SOFT_RESET()			
+																							DdExsBranch_GET_USB3VBUS_CD_DEBOUNCE_SOFT_RESET()		
+																							DdExsBranch_GET_USB3ID_CD_DEBOUNCE_SOFT_RESET()			
+																							DdExsBranch_GET_INTMSK_SD3_RIM()		
+																							DdExsBranch_GET_INTMSK_SD3_FIM()			
+																							DdExsBranch_GET_INTMSK_SD4_RIM()			
+																							DdExsBranch_GET_INTMSK_SD4_FIM()			
+																							DdExsBranch_GET_INTMSK_PCIE0_RIM()		
+																							DdExsBranch_GET_INTMSK_PCIE0_FIM()		
+																							DdExsBranch_GET_INTMSK_PCIE1_RIM()		
+																							DdExsBranch_GET_INTMSK_PCIE1_FIM()		
+																							DdExsBranch_GET_INTMSK_USB2VBUS_RIM()	
+																							DdExsBranch_GET_INTMSK_USB2VBUS_FIM()	
+																							DdExsBranch_GET_INTMSK_USB2ID_RIM()			
+																							DdExsBranch_GET_INTMSK_USB2ID_FIM()			
+																							DdExsBranch_GET_INTMSK_USB3VBUS_RIM()	
+																							DdExsBranch_GET_INTMSK_USB3VBUS_FIM()	
+																							DdExsBranch_GET_INTMSK_USB3ID_RIM()			
+																							DdExsBranch_GET_INTMSK_USB3ID_FIM()			
+																							DdExsBranch_GET_SIGMON_SD3_CD()				
+																							DdExsBranch_GET_SIGMON_SD4_CD()			
+																							DdExsBranch_GET_SIGMON_PCIE0_CD()				
+																							DdExsBranch_GET_SIGMON_PCIE1_CD()				
+																							DdExsBranch_GET_SIGMON_USB2VBUS_CD()	
+																							DdExsBranch_GET_SIGMON_USB2ID_CD()			
+																							DdExsBranch_GET_SIGMON_USB3VBUS_CD()	
+																							DdExsBranch_GET_SIGMON_USB3ID_CD()			
+																							DdExsBranch_GET_SIGMON2_SD3_CD()				
+																							DdExsBranch_GET_SIGMON2_SD4_CD()			
+																							DdExsBranch_GET_SIGMON2_PCIE0_CD()		
+																							DdExsBranch_GET_SIGMON2_PCIE1_CD()				
+																							DdExsBranch_GET_SIGMON2_USB2VBUS_CD()		
+																							DdExsBranch_GET_SIGMON2_USB2ID_CD()		
+																							DdExsBranch_GET_SIGMON2_USB3VBUS_CD()	
+																							DdExsBranch_GET_SIGMON2_USB3ID_CD()		
+																							DdExsBranch_GET_DEBEN_SD3_EN()					
+																							DdExsBranch_GET_DEBEN_SD4_EN()			
+																							DdExsBranch_GET_DEBEN_PCIE0_EN()			
+																							DdExsBranch_GET_DEBEN_PCIE1_EN()			
+																							DdExsBranch_GET_DEBEN_USB2VBUS_EN()			
+																							DdExsBranch_GET_DEBEN_USB2ID_EN()				
+																							DdExsBranch_GET_DEBEN_USB3VBUS_EN()		
+																							DdExsBranch_GET_DEBEN_USB3ID_EN()				
+																							DdExsBranch_GET_DEBEN_SD3DETIM()			
+																							DdExsBranch_GET_DEBEN_SD4DETIM()				
+																							DdExsBranch_GET_DEBEN_PCIE0DETIM()			
+																							DdExsBranch_GET_DEBEN_PCIE1DETIM()				
+																							DdExsBranch_GET_DEBEN_USB2VBUSDETIM()	
+																							DdExsBranch_GET_DEBEN_USB2IDDETIM()		
+																							DdExsBranch_GET_DEBEN_USB3VBUSDETIM()	
+																							DdExsBranch_GET_DEBEN_USB3IDDETIM()		
+																							DdExsBranch_GET_CDINS_SD3_MOD()				
+																							DdExsBranch_GET_CDINS_SD4_MOD()		
+																							DdExsBranch_GET_CDINS_PCIE0_MOD()			
+																							DdExsBranch_GET_CDINS_PCIE1_MOD()		
+																							DdExsBranch_GET_CDINS_USB2VBUS_MOD()	
+				Dd_Exs_Get_CDINS_USB2ID_MOD()更名为DdExsBranch_GET_CDINS_USB2ID_MOD()		
+				Dd_Exs_Get_CDINS_USB3VBUS_MOD()更名为DdExsBranch_GET_CDINS_USB3VBUS_MOD()	
+				Dd_Exs_Get_CDINS_USB3ID_MOD()更名为DdExsBranch_GET_CDINS_USB3ID_MOD()		
+				Dd_Exs_Get_RELC_HPROT_Read()更名为DdExsBranch_GET_RELC_HPROT_Read()			
+				Dd_Exs_Get_RELC_HPROT_Write()更名为DdExsBranch_GET_RELC_HPROT_Write()			
+								
+				
+				Dd_Exs_Get_RAM_PD_Ctrl_SD2()更名为DdExs_GET_RAM_PD_CTRL_SD2()
+				Dd_Exs_Get_RAM_PD_Ctrl_SD3()更名为DdExs_GET_RAM_PD_CTRL_SD3()
+				Dd_Exs_Get_RAM_PD_Ctrl_SD4()更名为DdExs_GET_RAM_PD_CTRL_SD4()
+				Dd_Exs_Get_RAM_PD_Ctrl_NF()更名为DdExs_GET_RAM_PD_CTRL_NF()
+				Dd_Exs_Get_RAM_PD_Ctrl_RELC()更名为DdExs_GET_RAM_PD_CTRL_RELC()
+				Dd_Exs_Get_RAM_PD_Ctrl_NETSEC()更名为DdExs_GET_RAM_PD_CTRL_NETSEC()
+				Dd_Exs_Get_RAM_PD_Ctrl_USB2()更名为DdExs_GET_RAM_PD_CTRL_USB2()
+				Dd_Exs_Get_RAM_PD_Ctrl_USB3()更名为DdExs_GET_RAM_PD_CTRL_USB3()
+				Dd_Exs_Get_RAM_PD_Ctrl_PCIE0()更名为DdExs_GET_RAM_PD_CTRL_PCIE0()
+																						DdExs_GET_RAM_PD_CTRL_PCIE1()
+																						DdExs_GET_RAM_PD_CTRL_EMMC()
+																						DdExs_GET_NF_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_PCIE0_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_PCIE1_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_XDMAC_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_HDMAC_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_EMMC_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_SD2_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_SD3_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_SD4_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_NETSEC_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_RELC_BUS_CLOCK_STOP_CTRL()
+																						DdExs_GET_NETSEC_PTPCLK_STOP_CTRL_NETSEC_PTPSTP()
+																						DdExs_GET_EMMC_CKSTP_EMCLKSTP()
+																						DdExs_GET_EM_DRVSTR()
+																						DdExs_GET_EM_PV_DTIMEC()
+																						DdExs_GET_EM_PV_AMPBL()
+																						DdExs_GET_EM_CR_SLOTTYPE()
+																						DdExs_GET_EM_CR_BCLKFREQ()
+																						DdExs_GET_EM_CDDET_EMCD()
+																						DdExs_GET_EM_CDDET_EMPHYLK()
+																						DdExs_GET_USB2_CKCTL_HDC_HCLKEN()
+																						DdExs_GET_USB2_CKCTL_HO_HCLKEN()
+																						DdExs_GET_USB2_RCTL_HDC_SRST()
+																						DdExs_GET_USB2_RCTL_HO_SRST()
+																						DdExs_GET_USB2_ANPD_ANPD()
+																						DdExs_GET_USB2_HFSEL_HF_SEL()
+																						DdExs_GET_USB2_FSEL_FSEL()
+																						DdExs_GET_USB2_FSEL_PLLBTUNE()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_XFER_CNT_O()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_XFER_PRDC_O()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_EHCI_BUFACC_O()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_MCU_INC_FRDX_O()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_EOR_RUNSTOP_O()
+																						DdExs_GET_USB2_EHCI_SB_EHCI_EHCI_USBSTS_O()
+																						DdExs_GET_USB2_EHCI_STRAP_SS_FADJ_HOST_I()
+																						DdExs_GET_USB2_EHCI_STRAP_SS_FLADJ_VAL_I()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_CLKSEL_I()
+																						DdExs_GET_USB2_OHCI_IF_UTMI_SUSPEND_O_N()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_GSUSPEND_O()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_RWE_O()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_RMTWKP_O()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_DRWE_O()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_CCS_O()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_SOF_O_N()
+																						DdExs_GET_USB2_OHCI_IF_OHCI_BUFACC_O()
+																						DdExs_GET_USB2_AHB_SLVIF_REG_RDY_O()
+																						DdExs_GET_USB2_LMODSET_SS_ENA_INCR4_I()
+																						DdExs_GET_USB2_LMODSET_SS_ENA_INCR8_I()
+																						DdExs_GET_USB2_LMODSET_SS_ENA_INCR16_I()
+																						DdExs_GET_USB2_LMODSET_SS_ENA_INC_AL_I()
+																						DdExs_GET_USB2_LMODSET_SS_EHCI64B_EN_I()
+																						DdExs_GET_USB2_PMODSET_RPDPEN_I()
+																						DdExs_GET_USB2_PMODSET_RPDMEN_I()
+																						DdExs_GET_USB2_HPT_CTL_USB2_EHPT()
+																						DdExs_GET_USB2_HPT_CTL_USB2_OHPT()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_IDPU_VAL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_IDPU_SEL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_ID_SEL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_ID_VAL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_VB_SEL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_VB_VAL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_VBDET_SEL()
+																						DdExs_GET_USB2_IDVBUSCTL_USB2_VBDET_VAL()
+																						DdExs_GET_USB2_HDMAC1_HDMAC_BC1()
+																						DdExs_GET_USB2_HDMAC1_HDMAC_BT1()
+																						DdExs_GET_USB2_HDMAC1_HDMAC_MS1()
+																						DdExs_GET_USB2_HDMAC2_HDMAC_BC2()
+																						DdExs_GET_USB2_HDMAC2_HDMAC_BT2()
+																						DdExs_GET_USB2_HDMAC2_HDMAC_MS2()
+																						DdExs_GET_USB2_DMAFSM1_FSMRST1()
+																						DdExs_GET_USB2_DMAFSM1_DMA_TRANS_STATE1()
+																						DdExs_GET_USB2_DMAFSM2_FSMRST2()
+																						DdExs_GET_USB2_DMAFSM2_DMA_TRANS_STATE2()
+																						DdExs_GET_USB3_CKCTL_ACLKEN()
+																						DdExs_GET_USB3_RCTL_SFTRST()
+																						DdExs_GET_USB3_PHY_RESET_N()
+																						DdExs_GET_USB3_RCV_SNS_ACJT_LEVEL()
+																						DdExs_GET_USB3_FSEL_FSEL3()
+																						DdExs_GET_USB3_FSEL_MPLL_MULTIPLIER()
+																						DdExs_GET_USB3_FSEL_SSC_REF_CLK_SEL()
+																						DdExs_GET_USB3_FSEL_REF_CLKDIV2()
+																						DdExs_GET_USB3_RFC_CTL_REF_SSP_EN()
+																						DdExs_GET_USB3_RFC_CTL_REF_USE_PAD()
+																						DdExs_GET_USB3_HO_IF_PCI_IMPLEMENT()
+																						DdExs_GET_USB3_HO_IF_HOST_MSI_ENABLE()
+																						DdExs_GET_USB3_HO_IF_XHC_BME()
+																						DdExs_GET_USB3_HO_IF_XHC_AC64()
+																						DdExs_GET_USB3_HO_IF_HOST_SYSTEM_ERR()
+																						DdExs_GET_USB3_JT_ADJ_FLADJ_30MHZ_REG()
+																						DdExs_GET_USB3_JT_ADJ_USB3_OVRCUR_EN()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_IDPU_VAL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_ID_SEL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_ID_VAL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_VB_SEL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_VB_VAL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_VBDET_SEL()
+																						DdExs_GET_USB3_IDVBUSCTL_USB3_VBDET_VAL()
+																						DdExs_GET_NF_IP_CTL_DSCV_INHIBIT()
+																						DdExs_GET_NF_IP_CTL_DSCV_IGNR_CRC()
+																						DdExs_GET_NF_IP_CTL_BOOT_EN()
+																						DdExs_GET_NF_IP_CTL_IDDQ_EN()
+																						DdExs_GET_NF_BTSQ_STATE_INIT_FAIL()
+																						DdExs_GET_NF_BTSQ_STATE_BOOT_COMP()
+																						DdExs_GET_NF_BTSQ_STATE_BOOT_ERROR()
+																						DdExs_GET_NF_BTSQ_STATE_CTRL_BUSY()
+																						DdExs_GET_NF_RB_VALID_TM()
+																						DdExs_GET_NF_PHY_CTRL_REG()
+																						DdExs_GET_NF_PHY_DQ_TIMING()
+																						DdExs_GET_NF_PHY_DQS_TIMING()
+																						DdExs_GET_NF_PHY_GT_LPBK_CTL()
+																						DdExs_GET_NF_PHY_DLL_MCTL()
+																						DdExs_GET_NF_PHY_DLL_SCTL()
+																						DdExs_GET_NF_BOOT_ECC_CTL_SEC_SIZ()
+																						DdExs_GET_NF_BOOT_ECC_CTL_CORR_STR()
+																						DdExs_GET_NF_BOOT_ECC_CTL_EN()
+																						DdExs_GET_NF_NFWPX_CNT()
+																						DdExs_GET_INTSTAT_SD2_RIS()
+																						DdExs_GET_INTSTAT_SD2_FIS()
+																						DdExs_GET_INTSTAT_SD3_RIS()
+																						DdExs_GET_INTSTAT_SD3_FIS()
+																						DdExs_GET_INTSTAT_SD4_RIS()
+																						DdExs_GET_INTSTAT_SD4_FIS()
+																						DdExs_GET_INTSTAT_PCIe0_RIS()
+																						DdExs_GET_INTSTAT_PCIe0_FIS()
+																						DdExs_GET_INTSTAT_PCIe1_RIS()
+																						DdExs_GET_INTSTAT_PCIe1_FIS()
+																						DdExs_GET_INTSTAT_USB2VBUS_RIS()
+																						DdExs_GET_INTSTAT_USB2VBUS_FIS()
+																						DdExs_GET_INTSTAT_USB2ID_RIS()
+																						DdExs_GET_INTSTAT_USB2ID_FIS()
+																						DdExs_GET_INTSTAT_USB3VBUS_RIS()
+				Dd_Exs_Get_INTSTAT_USB3VBUS_FIS更名为DdExs_GET_INTSTAT_USB3VBUS_FIS()
+				Dd_Exs_Get_INTSTAT_USB3ID_RIS()更名为DdExs_GET_INTSTAT_USB3ID_RIS()
+				Dd_Exs_Get_INTSTAT_USB3ID_FIS()更名为DdExs_GET_INTSTAT_USB3ID_FIS()
+				
+			
+(4)将公有方法 Dd_Exs_Set_XDMAC_LowPower_Ctl_CSYSREQ 更名为dd_exs_set_xdmac_lowpower_ctl_csysreq
+			a.将dd_arm.h中定义Dd_ARM_Critical_Section_Start更名为DdArm_CRITICAL_SECTION_START又更名为DD_ARM_CRITICAL_SECTION_START
+			b.将dd_arm.h中定义Dd_ARM_Critical_Section_End更名为DdArm_CRITICAL_SECTION_END又更名为
+			c.jmlexs.c中定义的结构体变量IO_EXSTOP未改,便于后期查找
+			d.将ddexs.h中Dd_Exs_Get_RAM_PD_Ctrl_SD2()类型的宏定义全部更名为DdExs_GET_RAM_PD_CTRL_SD2()样式
+			e将ddexs.h中所有公有方法  更名为小写其他没变如:Dd_Exs_Set_XDMAC_LowPower_Ctl_CSYSREQ一样更名为dd_exs_set_xdmac_lowpower_ctl_csysreq
+			f.将ddexsbranch.h中形如D_DD_EXS_USB3ID_FIS_BIT()的定义更名为DdExsBranch_USB3ID_FIS_BIT()样式
+			g.将ddexsbranch.h中形如Dd_Exs_Get_XDMAC_LowPower_Ctl_CSYSREQ()的宏定义更名为DdExsBranch_GET_XDMAC_LOWPOWER_CTL_CSYSREQ()
+			h.将ddexsbranch.c中的所有公有方法更名为小写如:Dd_Exs_Set_NETSEC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_branch_set_netsec_bus_clock_stop_ctrl
+							注意:Dd_Exs_Set_USB2_DMAFSM1_FSMRST1方法在USBHDC_Dma_Dmac.c的HdcDev_AbortDmac方法中有作为指针传输需要在定义指针处加参数
+							注意:Dd_Exs_Set_USB2_DMAFSM2_FSMRST2方法在USBHDC_Dma_Dmac.c的HdcDev_AbortDmac方法中有作为指针传输需要在定义指针处加参数
+							Dd_Exs_Set_USB2_DMAFSM2_FSMRST2被更名为dd_exs_branch_set_usb2_dmafsm2_fsmrst2
+			j.将ddexsbranch.c中静态变量gDD_Exs_Spin_Lock更名为S_DD_EXS_SPIN_LOCK(注意和ddexs.c中是同一个)
+				
+				
+							Dd_Exs_Set_RAM_PD_Ctrl_PCIE1更名为dd_exs_part_set_ram_pd_ctrl_pcie1
+							Dd_Exs_Set_RAM_PD_Ctrl_EMMC更名为dd_exs_part_set_ram_pd_ctrl_emmc
+							Dd_Exs_Set_NF_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_nf_bus_clock_stop_ctrl
+							Dd_Exs_Set_PCIE0_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_pcie0_bus_clock_stop_ctrl
+							Dd_Exs_Set_PCIE1_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_pcie1_bus_clock_stop_ctrl
+							Dd_Exs_Set_XDMAC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_xdmac_bus_clock_stop_ctrl
+							Dd_Exs_Set_HDMAC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_hdmac_bus_clock_stop_ctrl
+							Dd_Exs_Set_EMMC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_emmc_bus_clock_stop_ctrl
+							Dd_Exs_Set_SD2_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_sd2_bus_clock_stop_ctrl
+							Dd_Exs_Set_SD3_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_sd3_bus_clock_stop_ctrl
+							Dd_Exs_Set_SD4_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_sd4_bus_clock_stop_ctrl
+							Dd_Exs_Set_NETSEC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_netsec_bus_clock_stop_ctrl
+							Dd_Exs_Set_RELC_BUS_CLOCK_Stop_Ctrl更名为dd_exs_part_set_relc_bus_clock_stop_ctrl
+							Dd_Exs_Set_NETSEC_PTPCLK_Stop_Ctrl_NETSEC_PTPSTP更名为dd_exs_part_set_netsec_ptpclk_stop_ctrl_netsec_ptpstp
+							Dd_Exs_Set_EMMC_CKSTP_EMCLKSTP更名为dd_exs_part_set_emmc_ckstp_emclkstp
+							Dd_Exs_Set_EM_PV_DTIMEC更名为dd_exs_part_set_em_pv_dtimec
+							Dd_Exs_Set_EM_PV_AMPBL更名为dd_exs_part_set_em_pv_ampbl
+							Dd_Exs_Set_EM_CR_SLOTTYPE更名为dd_exs_part_set_em_cr_slottype
+							Dd_Exs_Set_EM_CR_BCLKFREQ更名为dd_exs_part_set_em_cr_bclkfreq
+							Dd_Exs_Set_EM_CDDET_EMCD更名为dd_exs_part_set_em_cddet_emcd
+							Dd_Exs_Set_USB2_CKCTL_HDC_HCLKEN更名为dd_exs_part_set_usb2_ckctl_hdc_hclken
+							Dd_Exs_Set_USB2_CKCTL_HO_HCLKEN更名为dd_exs_part_set_usb2_ckctl_ho_hclken
+							Dd_Exs_Set_USB2_RCTL_HDC_SRST更名为dd_exs_part_set_usb2_rctl_hdc_srst
+							Dd_Exs_Set_USB2_RCTL_HO_SRST更名为dd_exs_part_set_usb2_rctl_ho_srst
+							Dd_Exs_Set_USB2_ANPD_ANPD更名为dd_exs_part_set_usb2_anpd_anpd
+							Dd_Exs_Set_USB2_HFSEL_HF_SEL更名为dd_exs_part_set_usb2_hfsel_hf_sel
+							Dd_Exs_Set_USB2_FSEL_FSEL更名为dd_exs_part_set_usb2_fsel_fsel
+							Dd_Exs_Set_USB2_FSEL_PLLBTUNE更名为dd_exs_part_set_usb2_fsel_pllbtune
+							Dd_Exs_Set_USB2_EHCI_STRAP_SS_FADJ_HOST_I更名为dd_exs_part_set_usb2_ehci_strap_ss_fadj_host_i
+							Dd_Exs_Set_USB2_EHCI_STRAP_SS_FLADJ_VAL_I更名为dd_exs_part_set_usb2_ehci_strap_ss_fladj_val_i
+							Dd_Exs_Set_USB2_OHCI_IF_OHCI_CLKSEL_I更名为dd_exs_part_set_usb2_ohci_if_ohci_clksel_i
+							Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR4_I更名为dd_exs_part_set_usb2_lmodset_ss_ena_incr4_i
+							Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR8_I更名为dd_exs_part_set_usb2_lmodset_ss_ena_incr8_i
+							Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR16_I更名为dd_exs_part_set_usb2_lmodset_ss_ena_incr16_i
+							Dd_Exs_Set_USB2_LMODSET_SS_ENA_INC_AL_I更名为dd_exs_part_set_usb2_lmodset_ss_ena_inc_al_i
+							Dd_Exs_Set_USB2_LMODSET_SS_EHCI64B_EN_I更名为dd_exs_part_set_usb2_lmodset_ss_ehci64b_en_i
+							Dd_Exs_Set_USB2_PMODSET_RPDPEN_I更名为dd_exs_part_set_usb2_pmodset_rpdpen_i
+							Dd_Exs_Set_USB2_PMODSET_RPDMEN_I更名为dd_exs_part_set_usb2_pmodset_rpdmen_i
+							Dd_Exs_Set_USB2_HPT_CTL_USB2_EHPT更名为dd_exs_part_set_usb2_hpt_ctl_usb2_ehpt
+							Dd_Exs_Set_USB2_HPT_CTL_USB2_OHPT更名为dd_exs_part_set_usb2_hpt_ctl_usb2_ohpt
+							Dd_Exs_Set_USB2_IDVBUSCTL_USB2_IDPU_VAL更名为dd_exs_part_set_usb2_idvbusctl_usb2_idpu_val
+									
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_IDPU_SEL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_idpu_sel
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_ID_SEL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_id_sel
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_ID_VAL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_id_val
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VB_SEL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_vb_sel
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VB_VAL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_vb_val
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VBDET_SEL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_vbdet_sel
+									Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VBDET_VAL更名为dd_exs_branch_set_usb2_idvbusctl_usb2_vbdet_val
+									Dd_Exs_Set_USB2_HDMAC1_HDMAC_BC1更名为dd_exs_branch_set_usb2_hdmac1_hdmac_bc1
+									Dd_Exs_Set_USB2_HDMAC1_HDMAC_BT1更名为dd_exs_branch_set_usb2_hdmac1_hdmac_bt1
+									Dd_Exs_Set_USB2_HDMAC1_HDMAC_MS1更名为dd_exs_branch_set_usb2_hdmac1_hdmac_ms1
+									Dd_Exs_Set_USB2_HDMAC2_HDMAC_BC2更名为dd_exs_branch_set_usb2_hdmac2_hdmac_bc2
+									Dd_Exs_Set_USB2_HDMAC2_HDMAC_BT2更名为dd_exs_branch_set_usb2_hdmac2_hdmac_bt2
+									Dd_Exs_Set_USB2_HDMAC2_HDMAC_MS2更名为dd_exs_branch_set_usb2_hdmac2_hdmac_ms2
+									Dd_Exs_Set_USB2_DMAFSM1_FSMRST1更名为dd_exs_branch_set_usb2_dmafsm1_fsmrst1
+									Dd_Exs_Set_USB2_DMAFSM2_FSMRST2更名为dd_exs_branch_set_usb2_dmafsm2_fsmrst2
+									dd_exs_branch_set_usb3_ckctl_aclken
+									dd_exs_branch_set_usb3_rctl_sftrst
+									dd_exs_branch_set_usb3_rctl_phy_reset_n
+									dd_exs_branch_set_usb3_rcv_sns_acjt_level
+									dd_exs_branch_set_usb3_fsel_fsel3
+									dd_exs_branch_set_usb3_fsel_mpll_multiplier
+									dd_exs_branch_set_usb3_fsel_ssc_ref_clk_sel
+									dd_exs_branch_set_usb3_fsel_ref_clkdiv2
+									dd_exs_branch_set_usb3_rfc_ctl_ref_ssp_en
+									dd_exs_branch_set_usb3_rfc_ctl_ref_use_pad
+									dd_exs_branch_set_usb3_ho_if_pci_implement
+									dd_exs_branch_set_usb3_ho_if_host_msi_enable
+									dd_exs_branch_set_usb3_ho_if_xhc_bme
+									dd_exs_branch_set_usb3_ho_if_xhc_ac64
+									dd_exs_branch_set_usb3_jt_adj_fladj_30mhz_reg
+									dd_exs_branch_set_usb3_jt_adj_usb3_ovrcur_en
+									dd_exs_branch_set_usb3_idvbusctl_usb3_idpu_val
+									dd_exs_branch_set_usb3_idvbusctl_usb3_id_sel
+									dd_exs_branch_set_usb3_idvbusctl_usb3_id_val
+									dd_exs_branch_set_usb3_idvbusctl_usb3_vb_sel
+									dd_exs_branch_set_usb3_idvbusctl_usb3_vb_val
+									dd_exs_branch_set_usb3_idvbusctl_usb3_vbdet_sel
+									dd_exs_branch_set_usb3_idvbusctl_usb3_vbdet_val
+									dd_exs_branch_set_nf_ip_ctl_dscv_inhibit
+									dd_exs_branch_set_nf_ip_ctl_dscv_ignr_crc
+									dd_exs_branch_set_nf_ip_ctl_boot_en
+									dd_exs_branch_set_nf_ip_ctl_iddq_en
+									dd_exs_branch_set_nf_rb_valid_tm
+									dd_exs_branch_set_nf_phy_ctrl_reg
+									dd_exs_branch_set_nf_phy_dq_timing
+									dd_exs_branch_set_nf_phy_dqs_timing
+									dd_exs_branch_set_nf_phy_gt_lpbk_ctl
+									dd_exs_branch_set_nf_phy_dll_mctl
+									dd_exs_branch_set_nf_phy_dll_sctl
+									dd_exs_branch_set_nf_boot_ecc_ctl_sec_siz
+									dd_exs_branch_set_nf_boot_ecc_ctl_corr_str
+									dd_exs_branch_set_nf_boot_ecc_ctl_en
+									dd_exs_branch_set_nf_nfwpx_cnt
+									dd_exs_branch_clear_intstat_sd2_ris
+									dd_exs_branch_clear_intstat_sd2_fis
+									dd_exs_branch_clear_intstat_sd3_ris
+									dd_exs_branch_clear_intstat_sd3_fis
+									dd_exs_branch_clear_intstat_sd4_ris
+									dd_exs_branch_clear_intstat_sd4_fis
+									dd_exs_branch_clear_intstat_pcie0_ris
+									dd_exs_branch_clear_intstat_pcie0_fis
+									dd_exs_branch_clear_intstat_pcie1_ris
+									dd_exs_branch_clear_intstat_pcie1_fis
+									dd_exs_branch_clear_intstat_usb2vbus_ris
+									dd_exs_branch_clear_intstat_usb2vbus_fis
+									dd_exs_branch_clear_intstat_usb2id_ris
+									dd_exs_branch_clear_intstat_usb2id_fis
+									dd_exs_branch_clear_intstat_usb3vbus_ris
+									dd_exs_branch_clear_intstat_usb3vbus_fis
+									dd_exs_branch_clear_intstat_usb3id_ris
+									dd_exs_branch_clear_intstat_usb3id_fis
+									dd_exs_branch_int_handler
+															
+		
+				
+
+3.dd_gpv.c修改为类ddgpv.c,ddgpvmaster.c,ddgpvslave.c和ddgpvib.c类
+		注意:dd_gpv.h中有3的结构体,分别将他们拆成3个类.
+		ddgpvmaster.c(对应结构体T_DD_GPV_CTRL_M),ddgpvslave.c(对应结构体T_DD_GPV_CTRL_S),ddgpvib.c(对应结构体T_DD_GPV_CTRL_IB)
+		注意:这3个类只在ct_dd_gpv.c中用,需要在ct_dd_gpv.c制new起来
+		
+(1).将T_DD_GPV_CTRL_IB移到ddgpvib.h类中,
+	并将结构体内的变量:FMIB更名为ibFMIB,
+										FM2更名为ibFM2
+										FML更名为ibFML
+										WT更名为ibWT
+										FM更名为ibFM
+							
+
+a.将ddgpvib.h中的公有方法更名如:
+		Dd_GPV_Get_IB8(T_DD_GPV_CTRL_M* const gpv_ctrl_m)更名为dd_gpv_ib_Get_IB8(DdGpvIb *const self);
+		注意:传的参数更为了self.
+				dd_gpv_ib_Set_M_NicBmAHB2_r_AC更名为dd_gpv_ib_set_m_nic_bm_ahb2_r_ac
+				dd_gpv_ib_Set_ToprX2P_ib_FM2更名为dd_gpv_ib_set_topr_x2p_ib_fm2
+				dd_gpv_ib_Set_S_Uhs1AHB_m_FMA更名为dd_gpv_ib_set_s_uhs1_ahb_m_fma
+				dd_gpv_ib_Set_S_RelcrAHB_m_FM更名为dd_gpv_ib_set_s_relcr_ahb_m_fm
+		
+(2).将dd_gpv.c中所有的定义放在ddgpv.h中,方法只留了前面两个
+		注意:这个类多处有调用,new方法改为get方法
+		a.将私有静态变量gRemap放在_DdGpvPrivate中.
+		b.将私有静态变量gDD_Gpv_Spin_Lock更名为S_DD_GPV_SPIN_LOCK
+		b.将公有方法Dd_GPV_Get_ARC_Remap更名为dd_gpv_get_arc_remap
+		c.将公有方法Dd_GPV_Set_ARC_Remap更名为dd_gpv_set_arc_remap
+		d.将dd_gpv.h中形如D_DD_GPV_INPUT_PARAM_ERR的定义更名为DdGpv_INPUT_PARAM_ERR
+		e.将dd_gpv.h中形如Dd_GPV_Get_M_Usb3_r_ib_FMIB的宏更名为DdGpv_GET_M_USB3_R_IB_FMIB
+		
+(3).将T_DD_GPV_CTRL_M结构体移到ddgpvmaster.h中
+		并将结构体内部的变量名:FMIB更名为masterFMIB,
+													FM2更名为masterFM2
+													FML更名为masterFML
+													WT更名为masterWT
+													AC更名为masterAC
+													FM更名为masterFM
+			注意ddgpvmaster.h类只在ct_dd_gpv.c中用,所以要用new方法
+	a.将ddgpvmaster.h公有方法名更名如:
+			Dd_GPV_Get_M_Usb3_r_ib(T_DD_GPV_CTRL_M* const gpv_ctrl_m)更名为dd_gpv_master_get_m_usb3_r_ib(DdGpvMaster *const self)
+			Dd_GPV_Set_S_Usb2AHB_ohci_FM更名为dd_gpv_master_set_s_usb2_ahb_ohci_fm
+			Dd_GPV_Set_S_BmNicAHB_m_FM更名为dd_gpv_master_set_s_bm_nic_ahb_m_fm
+			Dd_GPV_Set_S_RelcwAHB_m_FM更名为dd_gpv_master_set_s_relcw_ahb_m_fm
+			Dd_GPV_Set_ToprX2P_ib更名为dd_gpv_master_set_topr_x2p_ib
+			Dd_GPV_Set_NsecX2P_ib更名dd_gpv_master_set_nsec_x2p_ib
+			Dd_GPV_Set_M_NicPeriAHB_m_ib更名dd_gpv_master_set_m_nic_peri_ahb_m_ib
+			
+			
+(4).将T_DD_GPV_CTRL_S结构体移到ddgpvslave.h类中
+			并将结构体内部的变量名:FMA更名为slaveFMA,
+														FM更名为SlaveFM
+				注意:ddgpvslave.h类只在ct_dd_gpv.c中用,所以要用new方法
+				
+		a.将ddgpvslave.h中公有方法更名如:
+				Dd_GPV_Get_S_WifiAHB_m_ib(T_DD_GPV_CTRL_S* const gpv_ctrl_s)更名为dd_gpv_slave_get_s_wifiahb_m_ib(DdGpvSlave* const self)
+				Dd_GPV_Get_S_Uhs2AHB_m更名为dd_gpv_slave_get_s_uhs2_ahb_m
+				Dd_GPV_	Get_S_RelcrAHB_m更名为dd_gpv_slave_get_s_relcr_ahb_m
+				Dd_GPV_Get_S_BmNicAHB_m更名为dd_gpv_slave_get_s_bm_nic_ahb_m
+				Dd_GPV_	Set_M_NicPeriAHB_m_ib_FMIB更名为dd_gpv_slave_set_m_nic_peri_ahb_m_ib_fmib
+													
+
+
+4.将dd_pcie_ep.c更名为ddpcieep.c类
+		(1)将dd_pcie_ep.h中的枚举E_DD_PCIE_EP_MSI_NUM更名为EDdPcieEpMsiNum
+				a.将E_DD_PCIE_EP_MSI_NUM枚举中的变量更名:
+						E_DD_PCIE_EP_MSI_NUM_00更名为ddpcieep_00
+						......
+						E_DD_PCIE_EP_MSI_NUM_31更名为ddpcieep_31
+						
+		(2)将dd_pcie_ep.h中的结构体T_DD_PCIE_EP_INT_EP_CB更名为TDdPcieEpIntEpCb
+				a.将T_DD_PCIE_EP_INT_EP_CB结构体中的变量更名:
+						msg_unlock_cb更名为msgUnlockCb
+						pm_turnof_cb更名为pmTurnofCb
+				b.将定义在dd_pcie_comm.h中的函数指针
+						VP_CALLBACK_PCIE更名为VpPcieFunc   (后更名为vpCallbackPcieFunc)
+						
+		(3)将dd_pcie_ep.h中的结构体 T_DD_PCIE_EP_INT_OWN_CB更名为TDdPcieEpIntOwnCb
+				a.将结构体 T_DD_PCIE_EP_INT_OWN_CB的变量更名
+						lu_cb更名为luCb
+						ce_cb更名为ceCb
+						nfe_cb更名为nfeCb
+						fe_cb更名为feCb
+				
+		(4)将dd_pcie_comm.h中的枚举
+						a.E_DD_PCIE_MPS 更名为EDdPcieMps
+						b.E_DD_PCIE_LINK_SPEED 更名为EDdPcieLinkSpeed
+						c.E_DD_PCIE_ASPM_CONTROL更名为EDdPcieAspmControl
+									变量E_DD_PCIE_ASPM_CONTROL_DISABLE更名为DdPcieComm_DISABLE
+											E_DD_PCIE_ASPM_CONTROL_L0S_L1更名为DdPcieComm_L0S_L1
+											
+											
+						e.E_DD_PCIE_PMST更名为EDdPciePmst
+				
+		(5)将dd_pcie_comm.h中的结构体
+						a.T_DD_PCIE_INT_DMA_CB更名为TDdPcieIntDmaCb
+						b.E_DD_PCIE_RE_TYPE更名为EDdPcieReType
+									变量E_DD_PCIE_RE_TYPE_US更改为DdPcieComm_US
+						c.T_DD_PCIE_CTRL_DMA更名为TDdPcieCtrlDma
+									dma_ch更名为dmaCh
+									
+						d.T_DD_PCIE_CTRL_MEM更名为TDdPcieCtrlMem
+										变量low_target_adr更名为lowTargetAdr
+												upp_target_adr更名为uppTargetAdr
+												base_adr更名为baseAdr
+												limit_adr更名为limitAdr
+												
+						e.E_DD_PCIE_DMA_CH更名为EDdPcieDmaCh
+		
+		(6)将dd_pcie_ep.h中的公有方法更名如:
+					Dd_Pcie_Ep_Init更名为dd_pcie_ep_init
+		
+		(7)将dd_pcie_ep.c中的静态变量移到Private中
+					将变量名更改
+					 gDD_PCIE_EP_Int_Ep_Cb更名为gDdPcieEpIntEpCb
+					 gDD_PCIE_EP_Int_Own_Cb更名为gDdPcieEpIntOwnCb
+					 gDD_PCIE_EP_Int_Dma_Cb更名为gDdPcieEpIntDmaCb
+					 gDD_PCIE_EP_RE_TYPE更名为gDdPcieEpReType
+					 注意:用gDD_PCIE_EP_RE_TYPE时需要用dd_pcie_ep_get_gddpcieepretype方法来读取
+		
+		(8).将dd_pcie_ep.c中的定义更名
+					dd_pcie_debug_print(arg)更名为DD_PCIE_DEBUG_PRINT(arg)
+		
+					
+
+
+
+
+5.将dd_hdmac.c更名为ddhdmac.c类
+		(1)将ddhdmac.c类拆为ddhdmac.c和ddhdmacbranch.c
+		注意:ddhdmacbranch.c中的方法只在ct_dd_hdmac.c中用,所以可以在ct_dd_hdmac.c中new,
+		(2)将ddhdmac.h中的共有方法名更改如
+					Dd_HDMAC_Stop(UCHAR ch)更改为dd_hdmac_branch_stop(DdHdmacBranch *self, UCHAR ch)
+					Dd_HDMAC_Pause更改为dd_hdmac_branch_pause
+					Dd_HDMAC_Clear_Status更改为dd_hdmac_branch_clear_status
+					Dd_HDMAC_Get_Status更改为dd_hdmac_branch_get_status
+					Dd_HDMAC_Resume更改为dd_hdmac_branch_resume
+					Dd_HDMAC_Get_Src_Addr更改为dd_hdmac_branch_get_src_addr
+					Dd_HDMAC_Get_Dst_Addr更改为dd_hdmac_branch_get_dst_addr
+					Dd_HDMAC_Set_Source_Protect更改为dd_hdmac_branch_set_source_protect
+					Dd_HDMAC_Set_Destination_Protect更改为dd_hdmac_branch_set_destination_protect
+					Dd_HDMAC_Set_Arbitration更改为dd_hdmac_branch_set_arbitration
+					Dd_HDMAC_Get_Arbitration更改为dd_hdmac_branch_get_arbitration
+					Dd_HDMAC_Clear_Arbitration更改为dd_hdmac_branch_clear_arbitration
+					Dd_HDMAC_Stop_All_Ch更改为dd_hdmac_branch_stop_all_ch
+					Dd_HDMAC_Resume_All_Ch更改为dd_hdmac_branch_resume_all_ch
+					Dd_HDMAC_Get_Trns_Width更改为dd_hdmac_branch_get_trns_width
+					
+			(3)将ddhdmac.h中的定义更名
+					D_DD_HDMAC_FLG_CH0更改为DdHdmac_FLG_CH0
+					D_DD_HDMAC_FLG_CH1更改为DdHdmac_FLG_CH1
+					D_DD_HDMAC_FLG_CH2更改为DdHdmac_FLG_CH2
+					DdHdmac_FLG_CH3	更改为DdHdmac_FLG_CH3
+					D_DD_HDMAC_CH_NUM_MAX更改为DdHdmac_CH_NUM_MAX
+					D_DD_HDMAC_SYSTEM_ERR更改为DdHdmac_SYSTEM_ERR
+					
+					a.将结构体名更改:
+							(a).U_DD_HDMAC_DMACA更改为UDdHdmacDmaca
+							将U_DD_HDMAC_DMACA中的结构体bit更名为DmacaBit
+							注意:用的时候还是bit
+										将bit中的变量名更名:
+													tc更名为tC
+													bc更名为bC
+													bt更名为bT
+													is更名为iS
+										
+										
+							U_DD_HDMAC_DMACB更改为UDdHdmacDmacb
+							将U_DD_HDMAC_DMACB中的结构体bit更名为DmacbBit
+							注意:用的时候还是bit
+										将bit中的变量更名:
+													dp更名为dP
+													sp更名为sP
+													ss	更名为sS
+													ci更名为cI
+													ei更名为eI
+													rd更名为rD
+													rs更名为rS
+													rc更名为rC
+													fd更名为fD
+													fs更名为tW
+													tw更名为tW
+													ms更名为mS
+													tt更名为tT
+													
+													
+							
+							(b).T_DD_HDMAC_CTRL更改为TDdHdmacCtrl
+										T_DD_HDMAC_CTRL中的变量更改名:
+													config_a更改为configA
+													config_b更改为configB
+													src_addr更改为srcAddr
+													dst_addr更改为dstAddr
+													int_handler更改为intHandler
+													
+							(c).T_DD_HDMAC_TRNS_MODE更改为TDdHdmacTrnsMode
+										T_DD_HDMAC_TRNS_MODE中的变量更改名:
+													input_sel更改为inputSel
+													mode_sel更改为modeSel
+													src_fix更改为srcFix
+													dst_fix更改为dstFix
+													beat_type更改为beatType
+													
+							(d).T_DD_HDMAC_TRNS_SIZE更改为TDdHdmacTrnsSize
+										T_DD_HDMAC_TRNS_SIZE中的变量更改名:
+													trns_width更改为trnsWidth
+													trns_size更改为trnsSize
+													src_addr更改为srcAddr
+													dst_addr更改为dstAddr
+													
+										
+							(e).T_DD_HDMAC_CTRL_TRNS更改为TDdHdmacCtrlTrns
+										T_DD_HDMAC_CTRL_TRNS中的变量更改名:
+													int_handler更改为intHandler
+													将函数指针VP_CALLBACK更改为VpFunc(定义在ddim_typedef.h中)后又更名为VpCallback
+												
+													
+							(f).T_DD_HDMAC_RELOAD_MODE更改为TDdHdmacReloadMode
+										T_DD_HDMAC_RELOAD_MODE中的变量更改名:
+													reload_cnt更名为reloadCnt
+													reload_src更名为reloadSrc
+													reload_dst更名为reloadDst
+								注意:这个结构体没有别处调用
+			
+			
+			(4).将ddhdmac.h中的共有方法更名:
+						Dd_HDMAC_Open更名为dd_hdmac_open
+						Dd_HDMAC_Ctrl_Common更名为dd_hdmac_ctrl_common
+						Dd_HDMAC_Ctrl_Trns更名为dd_hdmac_ctrl_trns
+						Dd_HDMAC_Set_Trns_Size更名为dd_hdmac_set_trns_size
+						Dd_HDMAC_Start_Sync更名为dd_hdmac_start_sync
+						Dd_HDMAC_Start_Async更名为dd_hdmac_start_async
+						Dd_HDMAC_Set_Wait_Time更名为dd_hdmac_set_wait_time
+						Dd_HDMAC_Wait_End更名为dd_hdmac_wait_end
+						Dd_HDMAC_Close更名为dd_hdmac_close
+						Dd_HDMAC_Get_Trns_Size更名为dd_hdmac_get_trns_size
+						Dd_HDMAC_Get_Remain_Trns_Size更名为dd_hdmac_get_remain_trns_size
+						Dd_HDMAC_Get_Total_Trns_Size更名为dd_hdmac_get_total_trns_size
+						Dd_HDMAC_Set_Int_Handler更名为dd_hdmac_set_int_handler
+						Dd_HDMAC_Int_Handler更名为dd_hdmac_int_handler
+						Dd_HDMAC_Copy_SDRAM_Sync更名为dd_hdmac_copy_sdram_sync
+						Dd_HDMAC_Copy_SDRAM_Async更名为dd_hdmac_copy_sdram_async
+						更名为
+			(5).将ddhdmac.c中的私有方法更名:
+						dd_hdmac_start更名为ddHdmacStart
+						dd_hdmac_wait_end更名为ddHdmacWaitEnd
+						
+			(6).将ddhdmac.c中的静态变量移到Private里并更名:
+						gDD_HDMAC_Ctrl更名为gDdHdmacCtrl
+						gDD_HDMAC_TC_Second更名为gDdHdmacTcSecond
+						gDD_HDMAC_Stop_Status更名为gDdHdmacStopStatus
+						gDD_HDMAC_Wait_End_Time更名为gDdHdmacWaitEndTime
+						注意:这里的静态变量没有初始化,所以移到Private里后也没有初始化
+						
+			(7).给类添加2个成员变量用于满足传参少于5个
+						注意在调用到函数dd_hdmac_copy_sdram_sync和dd_hdmac_copy_sdram_async时要用
+						用到的地方要new一个类出来并给成员变量赋值
+						添加的属性有kulong 	srcAddr;
+												kulong 	dstAddr;
+											
+						
+
+5.将dd_xdmac.c更名为ddxdmac.c类并将其拆分为ddxdmac.c和ddxdmaccopysdram.c
+				注意:将dd_xdmac.c中最后两个关于拷贝的公有方法移到了ddxdmaccopysdram.c其余的均在ddxdmac.c中
+				(1).ddxdmaccopysdram.h中的共有方法更名:
+								Dd_XDMAC_Copy_SDRAM_Sync更名为dd_xdmac_copy_sdram_sync
+								Dd_XDMAC_Copy_SDRAM_Async更名为dd_xdmac_copy_sdram_async
+								注意:ddxdmaccopysdram.c类只在ct_dd_xdmac.c中用,所以可以用new方法
+				
+				(2)修改ddxdmac.h中定义名:
+								D_DD_XDMAC_FLG_CH0更名为DdXdmac_FLG_CH0
+								D_DD_XDMAC_FLG_CH1更名为DdXdmac_FLG_CH1
+								D_DD_XDMAC_FLG_CH2更名为DdXdmac_FLG_CH2
+								D_DD_XDMAC_FLG_CH3更名为DdXdmac_FLG_CH3
+								D_DD_XDMAC_CH_NUM_MAX更名为DdXdmac_CH_NUM_MAX
+								D_DD_XDMAC_SYSTEM_ERR更名为DdXdmac_CH_SYSTEM_ERR
+								D_DD_XDMAC_INPUT_PARAM_ERR更名为DdXdmac_INPUT_PARAM_ERR
+								D_DD_XDMAC_TIMEOUT_ERR更名为DdXdmac_TIMEOUT_ERR
+								D_DD_XDMAC_EXC_LOCK_NG更名为DdXdmac_EXC_LOCK_NG
+								D_DD_XDMAC_BUSY_ERR更名为DdXdmac_BUSY_ERR
+								D_DD_XDMAC_SEM_NG更名为DdXdmac_SEM_NG
+								D_DD_XDMAC_SEM_TIMEOUT更名为DdXdmac_SEM_TIMEOUT
+								D_DD_XDMAC_WAITMODE_CPU更名为DdXdmac_WAITMODE_CPU
+								D_DD_XDMAC_WAITMODE_EVENT更名为DdXdmac_WAITMODE_EVENT
+								........
+								
+					(3)修改ddxdmac.h中结构体名:
+								a.U_DD_XDMAC_COMMON更名为UDdXdmacCommon
+										将U_DD_XDMAC_COMMON中的bit结构体更名为CommonBit
+													bit中的变量名更改:
+																	CP更改为cP
+																	XE更改为xE
+								
+								b.T_DD_XDMAC_COMMON更名为TDdXdmacCommon
+											将T_DD_XDMAC_COMMON中的变量更名:
+														common_config更名为commonConfig
+														
+								c.U_DD_XDMAC_CTRL1更名为UDdXdmacCtrlOne
+											将U_DD_XDMAC_CTRL1中的bit结构体更名为CtrlOneBit
+														bit结构体中的变量更名:
+																		SRL更名为sRL
+																		SAF更名为sAF
+																		SBL更名为sBL
+																		SBS更名为sBS	
+																		DRL更名为dRL	
+																		DAF更名为dAF	
+																		DBL更名为dBL	
+																		DBS	更名为dBS
+																		TI更名为tI	
+																		EI	更名为eI	
+																		AT更名为aT
+																		BR更名为bR
+																		BT更名为bT	
+																		SA更名为sA	
+																		TF更名为tF
+																		SE更名为sE
+																		
+									d.U_DD_XDMAC_CTRL2更名为UDdXdmacCtrlTwo
+												U_DD_XDMAC_CTRL2中的bit结构体更名为CtrlTwoBit
+																将bit中的变量更名
+																		DCN更名为dCN
+																		DCA更名为dCA
+																		
+									e.T_DD_XDMAC_CTRL结构体更名为TDdXdmacCtrl
+												将T_DD_XDMAC_CTRL中的变量更名
+																config_1更名为configOne
+																config_2更名为configTwo
+																src_addr更名为srcAddr
+																dst_addr更名为dstAddr
+																trns_size更名为trnsSize
+																int_handler更名为intHandler
+																
+									f.T_DD_XDMAC_TRNS_SIZE结构体更名为TDdXdmacTrnsSize
+												将T_DD_XDMAC_TRNS_SIZE变量名更改
+																src_addr更名为srcAddr
+																dst_addr更名为dstAddr
+																trns_size更名为trnsSize
+																
+																
+									g.将公有方法名更改
+												Dd_XDMAC_Set_LowPower更名为dd_xdmac_set_low_power
+												Dd_XDMAC_Set_Destination_Protect更名为dd_xdmac_set_destination_protect
+												Dd_XDMAC_Stop_All_Ch更名为dd_xdmac_stop_all_ch
+												Dd_XDMAC_Set_Int_Handler更名为dd_xdmac_set_int_handler
+												Dd_XDMAC_Int_Handler更名为dd_xdmac_int_handler
+												Dd_XDMAC_Open更名为dd_xdmac_open
+												Dd_XDMAC_Ctrl_Common更名为dd_xdmac_open
+												Dd_XDMAC_Ctrl_Trns更名为dd_xdmac_ctrl_trns
+												Dd_XDMAC_Set_Trns_Size更名为dd_xdmac_set_trns_size
+												Dd_XDMAC_Start_Sync更名为dd_xdmac_start_sync
+												Dd_XDMAC_Start_Async更名为dd_xdmac_start_async
+												Dd_XDMAC_Stop更名为dd_xdmac_stop
+												Dd_XDMAC_Set_Wait_Time更名为dd_xdmac_set_wait_time
+												Dd_XDMAC_Wait_End更名为dd_xdmac_wait_end
+												Dd_XDMAC_Clear_Status更名为dd_xdmac_clear_status
+												Dd_XDMAC_Close更名为dd_xdmac_close
+												Dd_XDMAC_Get_Status更名为dd_xdmac_get_status
+												Dd_XDMAC_Get_Trns_Size更名为dd_xdmac_get_trns_size
+												Dd_XDMAC_Get_Src_Addr更名为dd_xdmac_get_src_addr
+												Dd_XDMAC_Get_Dst_Addr更名为dd_xdmac_get_dst_addr
+							
+						(4).ddxdmac.c中静态变量移到Private中并更名
+											gDd_Xdmac_Clk_Ctrl_Cnt更名为gDdXdmacClkCtrlCnt
+											gDD_XDMAC_Ctrl更名为gDdXdmacCtrl
+											gDD_XDMAC_Stop_Status更名为gDdXdmacStopStatus
+											gDD_XDMAC_Wait_End_Time更名为gDdXdmacWaitEndTime
+											
+
+
+引用别处的文件命名	
+		1.将driver_common.h中的定义更名:
+					CO_PARAM_CHECK更名为	DriverCommon_CO_PARAM_CHECK
+					D_DDIM_OK更名为DriverCommon_DDIM_OK
+					 Ddim_Assertion(arg)更名为DriverCommon_DDIM_ASSERTION
+					Ddim_Print(arg)更名为DriverCommon_DDIM_PRINT(arg)
+					D_DDIM_WAIT_END_TIME更名为DriverCommon_DDIM_WAIT_END_TIME
+					D_DDIM_WAIT_END_FOREVER更名为DriverCommon_DDIM_WAIT_END_FOREVER
+					
+					
+					
+		2.将dd_arm.h中的定义更名:
+					Dd_ARM_Dmb_Pou()更名为DdArm_DMB_POU()又更名为DD_ARM_DMB_POU()
+					Dd_ARM_Critical_Section_Start(s)更名为DdArm_CRITICAL_SECTION_START(s)
+					Dd_ARM_Dsb_Pou()更名为DdArm_DSB_POU()有更名为DD_ARM_DSB_POU()
+					Dd_ARM_Wait_ns更名为DdArm_WAIT_NS有更名为DD_ARM_WAIT_NS
+					
+			
+		3.将ddim_user_custom.c中的共有方法更名
+					DDIM_User_Twai_Flg更名为ddim_user_custom_twai_flg
+					DDIM_User_Clr_Flg更名为ddim_user_custom_clr_flg	
+					DDIM_User_Pol_Sem更名为ddim_user_custom_pol_sem	
+					DDIM_User_Twai_Sem更名为ddim_user_custom_twai_sem
+					DDIM_User_Sig_Sem更名为ddim_user_custom_sig_sem
+					DDIM_User_Set_Flg更名为ddim_user_custom_set_flg
+					DDIM_User_Dly_Tsk更名为ddim_user_custom_dly_tsk
+					DDIM_User_Printf更名为ddim_user_custom_printf
+					
+					
+			
+		4.将ddim_user_custom中的定义更名:			
+					D_DDIM_USER_E_TMOUT更名为DdimUserCustom_E_TMOUT
+					D_DDIM_USER_E_OK更名为DdimUserCustom_E_OK
+					D_DDIM_USER_SEM_WAIT_POL更名为DdimUserCustom_SEM_WAIT_POL
+					SID_DD_HDMAC更名为DdimUserCustom_SID_DD_HDMAC
+					FID_DD_HDMAC更名为DdimUserCustom_FID_DD_HDMAC
+					DDIM_USER_FLGPTN更名为DdimUserCustom_FLGPTN
+					
+					
+		
+		5.jmlexs.c中的IO_GPV和IO_EXSTOP应该写get和set方法来读写
+					将jmlexs.c中的IO_GPV更名为ioGpv,IO_EXSTOP更名为ioExstop
+					IO_EXSTOP更名为ioExstop
+
+		6.khdmac.c中的IO_HDMAC更名为ioHdmac
+					注意这里最好用get和set方法来读写
+					
+					(1).将khdmac.h中的io_hdmac结构体中的变量更名
+								DMACR更名为dmacr
+								DMAC更名为dmac
+								
+					(2).将io_hdmac_element结构体中的成员变量更名:
+								DMACA更名为dmaca
+								DMACB更名为dmacb
+								DMACSA更名为dmacsa
+								DMACDA更名为dmacda
+					(3).io_hdmac_dmaca结构体中的bit结构体变量名还未改
+							io_hdmac_dmacb结构体中的bit结构体变量名还未改
+								
+			7.将dd_pcie_comm.h中的定义更名:
+						D_DD_PCIE_INPUT_PARAM_ERROR更名为DdPcieComm_INPUT_PARAM_ERROR
+						D_DD_PCIE_ACCESS_ERR更名为DdPcieComm_ACCESS_ERR
+						D_DD_PCIE_TIMEOUT更名为DdPcieComm_TIMEOUT
+						D_DD_PCIE_SEM_TIMEOUT更名为DdPcieComm_SEM_TIMEOUT
+						D_DD_PCIE_SEM_NG更名为DdPcieComm_SEM_NG
+						
+						SID_DD_PCIE更名为DdimUserCustom_SID_DD_PDM(在ddim_user_custom.h中)
+						
+						D_DD_PCIE_COMM_ERROR更名为DdPcieComm_ERROR
+						D_DD_PCIE_0_EXS_ADR更名为DdPcieComm_0_EXS_ADR
+						D_DD_PCIE_0_DBI_ADR更名为DdPcieComm_0_DBI_ADR
+						注意:所有形如DdPcieComm_ERROR的都改成了形如C_PCIE_COMM_ERROR
+						
+						更名为DdPcieComm_
+						更名为DdPcieComm_
+						(1).将dd_pcie_comm.h中的枚举更名
+									E_DD_PCIE_DMA_DIR更名为EDdPcieDmaDir
+												变量E_DD_PCIE_DMA_DIR_STOD更名为DdPcieComm_STOD
+														E_DD_PCIE_DMA_DIR_DTOS更名为DdPcieComm__DTOS
+									
+									
+									E_DD_PCIE_ST_LTSSM更名为EDdPcieStLtssm
+												更名为
+												更名为
+												
+						
+		
+				(8).	pcie.c中的IO_PCIE0更名为ioPcie0
+											IO_PCIE0_CORE更名为ioPcie0Core
+				注意:里面的成员变量还没有更改(如:RESET_CONTROL_1等)
+				
+				
+				(9).这里的ddtopfour.c里的共有方法名命名好像不对
+				如:dd_topfour_get_gpio_function
+				Dd_Top_Get_Gpio_Function更改为dd_top_get_gpio_function
+				Dd_Top_Get_Gpio_Direction更改为dd_top_get_gpio_direction
+				将Dd_Top_Set_Gpio_Function更改为dd_top_set_gpio_function
+				Dd_Top_Set_Gpio_Direction更改为dd_top_set_gpio_direction
+				Dd_Top_Get_Gpio_Status更改为dd_top_get_gpio_status
+				更改为
+				更改为
+				更改为
+				更改为
+				更改为
+				
+				
+				
+				(10).更改dd_top.h中枚举E_DD_TOP_GPIO_PORT中的变量名
+								E_DD_TOP_GPIO_PY0更名为DdTop_GPIO_PY0
+					
+					
+9.将kxdmac.c中的结构体变量名IO_XDMAC更名为ioXdmac
+			结构体内部的变量还为改
+			(1).结构体io_xdmac_xdsac更名为IoXdmacXdsac
+			(2).结构体io_xdmac_xddac更名为IoXdmacXddac
+			(3).结构体io_xdmac_xddes更名为IoXdmacXddes
+
+
+

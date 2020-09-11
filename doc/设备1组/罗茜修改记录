@@ -1,0 +1,31 @@
+罗茜修改记录
+ Created on: 2020年9月2日
+     Author: sns
+1.把userutilitycalib类拆分出了userutilitycalibbadpix新的一个类。
+2.把category_parameter里面的结构体和VOID Cate_Get_Calib_Badpix_Param( T_CALIB_BADPIX_PARAM* const param )函数移到userutilitycalibbadpix类中去
+3.userutilitycalib中:
+ 枚举E_CALIB_TYPE  ->  CalibType;
+ 枚举E_CALIB_SHD_CT  ->  CalibShdCt;
+结构体T_CALIB_SET  ->  CalibSet;
+结构体T_CALIB_SHD_BLK_NUM  ->   CalibShdBlkNum;
+结构体T_CALIB_SHD_PARAM  ->   CalibShdParam;
+枚举函数里面的变量全部是UserUtilityCalib_变量原型;
+结构体里变量全部修改为首个单词首字母小写其余单词首字母大写。
+公有函数:
+void                   user_utility_calib_set(UserUtilityCalib* self, CalibSet setInfo, CalibShdParam param);
+void                   user_utility_calib_get(UserUtilityCalib* self, CalibSet* const calibSet);
+kint32               user_utility_calib_rgb(const ULONG rawAddr, const ULLONG frameNo, const kuchar sensorMode);
+kint32               user_utility_calib_shd(UserUtilityCalib* self, const ULONG rawAddr, const ULLONG frameNo, const kuchar sensorMode, CalibShdCt ct);
+4.userutilitycalibbadpix中:
+结构体改为:
+    TCate00, TCate01, TCate02, TCate03, TCate04, TCate05, TCate06, TCate07, TCate08, TCate09, TCate0A, TCate0B, TCate0C, TCate0D, TCate0E, TCate0F
+枚举改为:
+   同结构体一样，只不过开头的T换成E。
+   枚举函数里面的变量全部是UserUtilityCalib_变量原型;
+   结构体里变量全部修改为首个单词首字母小写其余单词首字母大写。
+公有函数:
+void user_utility_calib_badpix_change_config(TShareSystemConfig* config, TShareAeParam* aeParam);
+kint32 user_utility_calib_badpix_one(const kulong rawAddr, const ULLONG frameNo, const kuchar sensorMode);
+kint32 user_utility_calib_badpix_addr(kuchar sensorId, kuchar sensorMode, kulong* addr);
+void user_utility_calib_badpix_create_badpix_debug(kboolean mergeEn);
+void user_utility_calib_badpix_load_badpix_debug(kuchar divNum);

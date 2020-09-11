@@ -1,0 +1,656 @@
+waveencode.c waveencode.h
+添加结构体
+typedef struct _EnCodePrefixSEI EnCodePrefixSEI;
+struct _EnCodePrefixSEI
+{
+	T_H265_WAVE_SEI_ACTIVE_PARAMETER *sapInfo;
+	T_H265_WAVE_SEI_PIC_TIMING *sptInfo;
+	BOOL on_buffer_ctrl_flag;
+	T_H265_WAVE_SEI_BUFFERING_PERIOD *sbpInfo;
+	hrd_t *hrd;
+	UINT8 *pBuffer;
+};
+函数h265_wave_encodeprefixsei( gH265_Rec_Param.codec_param[streamCh].pictstruct_flag,
+					(T_H265_WAVE_SEI_ACTIVE_PARAMETER*)&gH265_Codec_Active_Parameter_Sei[streamCh],
+					(T_H265_WAVE_SEI_PIC_TIMING*)&gH265_Codec_Pic_Timing_Sei[streamCh],
+					bufCtrlParamFlag,
+					(T_H265_WAVE_SEI_BUFFERING_PERIOD*)&gH265_Codec_Buffering_Period_Sei[streamCh],
+					(hrd_t*)&gH265_Codec_HDR_Info[streamCh],
+					(UINT8*)tmpAddr );	-------->改为
+INT32 wave_encode_prefix_sei(WaveEncode *self,BOOL on_pictstruct_flag, EnCodePrefixSEI*enCodePrefixSEI);
+添加结构体
+typedef struct _HRDInVUI HRDInVUI;
+struct _HRDInVUI
+{
+	vui_t *vui;
+	UINT8 *pBuffer;
+	INT32 *pByteSize;
+	 INT32 *pBitSize;
+	 double dframeRate;
+};
+函数BOOL H265_Wave_EncodeHRDInVUI(hrd_t *hrd, vui_t *vui, UINT8 *pBuffer, INT32 *pByteSize, INT32 *pBitSize, double dframeRate);
+-------->改为BOOL wave_encode_hrdinvui(WaveEncode *self,hrd_t *hrd,HRDInVUI*  hRDInVUI);
+
+函数VOID H265_Wave_VmemSize_Calculation(UINT32 ch, EncHandle handle, EncInitialInfo* encInitInfo );
+改为VOID wave_encode_vmemsize_calculation( WaveEncode *self,UINT32 ch, EncHandle handle, EncInitialInfo* encInitInfo );
+结构体名T_H265_WAVE_SEI_PIC_TIMING改为tH265WaveSeiPicTiming
+结构体名T_H265_WAVE_SEI_BUFFERING_PERIOD改为tH265WaveSeiBufferingPeriod
+结构体名T_H265_WAVE_SEI_ACTIVE_PARAMETER改为tH265WaveSeiActiveParameter
+结构体名vui_t改为vuiT
+结构体名T_H265_WAVE_QUEUE改为
+变量vui_parameters_presesent_flag改为vuiParametersPresesentFlag
+变量aspect_ratio_info_present_flag改为aspectRatioInfoPresentFlag
+变量 UCHAR    video_signal_type_present_flag改为videoSignalTypePresentFlag 
+变量chroma_loc_info_present_flag改为chromaLocInfoPresentFlag
+变量vui_timing_info_present_flag改为vuiTimingInfoPresentFlag
+变量aspect_ratio_idc改为aspectRatioIdc
+变量sar_width改为sarWidth
+变量 sar_height 改为 sarHeight
+变量 video_format 改为 videoFormat
+变量 video_full_range_flag 改为 videoFullRangeFlag
+变量   colour_primaries改为 colourPrimaries
+变量 transfer_characteristics 改为 transferCharacteristics
+变量matrix_coeffs  改为 matrixCoeffs
+变量 chroma_sample_loc_type_top_field   改为 chromaSampleLocTypeTopField
+变量chroma_sample_loc_type_bottom_field  改为  chromaSampleLocTypeBottomField
+ 变量 vui_hrd_parameters_present_flag 改为 vuiHrdParametersPresentFlag
+ 变量 vui_num_units_in_tick 改为 vuiNumUnitsInTick
+ 变量 vui_time_scale    改为 vuiTimeScale  
+h265wave.c h265wave.h 
+添加结构体
+typedef struct _EncRegister EncRegister;
+struct _EncRegister
+{
+	EncHandle handle;
+	FrameBuffer* bufArray;
+	int num;
+	int stride;
+	int height;
+	int mapType;
+};
+函数INT32 H265_Wave_EncRegisterFrameBuffer( UINT32 ch, EncHandle handle, FrameBuffer* bufArray, int num, int stride, int height, int mapType )
+改为INT32 h265_wave_enc_register_frame_buffer(  H265Wave *self,UINT32 ch, EncRegister*encRegister );
+
+INT32 H265_Wave_SetDDRChannel( DDRChannelParam ddrCh );
+改为INT32 h265_wave_set_ddr_channel(H265Wave *self, DDRChannelParam ddrCh );
+
+INT32 H265_Wave_EncOpen( UINT32 ch, EncHandle* handle, EncOpenParam* encOpParam );
+改为INT32 h265_wave_enc_open( H265Wave *self, UINT32 ch, EncHandle* handle, EncOpenParam* encOpParam );
+
+INT32 H265_Wave_EncClose( UINT32 ch, EncHandle handle );
+改为INT32 h265_wave_enc_close( H265Wave *self, UINT32 ch, EncHandle handle );
+
+INT32 H265_Wave_EncGetInitialInfo( UINT32 ch, EncHandle handle, EncInitialInfo* encInitInfo );
+改为INT32 h265_wave_enc_get_initial_info( H265Wave *self,UINT32 ch, EncHandle handle, EncInitialInfo* encInitInfo );
+
+INT32 H265_Wave_EncRegisterFrameBuffer( UINT32 ch, EncRegister*encRegister );
+改为INT32 h265_wave_enc_register_frame_buffer(  H265Wave *self,UINT32 ch, EncRegister*encRegister );
+
+INT32 H265_Wave_EncAllocateFrameBuffer( UINT32 ch, EncHandle handle, FrameBufferAllocInfo info, FrameBuffer *frameBuffer );
+改为INT32 h265_wave_enc_allocate_frame_buffer(H265Wave *self, UINT32 ch, EncHandle handle, FrameBufferAllocInfo info, FrameBuffer *frameBuffer );
+
+INT32 H265_Wave_EncGiveCommand( UINT32 ch, EncHandle handle, CodecCommand cmd, void * parameter );
+改为INT32 h265_wave_enc_give_command( H265Wave *self, UINT32 ch, EncHandle handle, CodecCommand cmd, void * parameter );
+
+INT32 H265_Wave_EncStartOneFrame( UINT32 ch, EncHandle handle, EncParam * param );
+改为INT32 h265_wave_enc_start_one_frame(H265Wave *self, UINT32 ch, EncHandle handle, EncParam * param );
+
+INT32 H265_Wave_WaitInterrupt( UINT32 ch, Uint32 coreIdx, int timeout );
+改为INT32 h265_wave_wait_interrupt( H265Wave *self, UINT32 ch, Uint32 coreIdx, int timeout );
+
+VOID H265_Wave_ClearInterrupt( UINT32 ch, Uint32 coreIdx );
+改为VOID h265_wave_clear_interrupt( H265Wave *self, UINT32 ch, Uint32 coreIdx );
+
+INT32 H265_Wave_EncGetOutputInfo( UINT32 ch, EncHandle handle, EncOutputInfo * info );
+改为INT32 h265_wave_enc_getout_put_info( H265Wave *self, UINT32 ch, EncHandle handle, EncOutputInfo * info );
+
+
+typedef void* spp_enc_context;
+改为typedef void* h265_wave_spp_enc_context;
+
+spp_enc_context spp_enc_init(UINT8 *buffer, int buffer_size, int enableEPB);
+改为h265_wave_spp_enc_context spp_enc_init(UINT8 *buffer, int bufferSize, int enableEPB);
+
+void spp_enc_deinit(spp_enc_context context);
+改为void h265_wave_spp_enc_deinit( H265Wave *self,h265_wave_spp_enc_context context);
+
+void spp_enc_put_nal_byte(spp_enc_context context, UINT32 var, int n);
+void h265_wave_spp_enc_put_nal_byte(H265Wave *self,h265_wave_spp_enc_context context, UINT32 var, int n);
+
+void spp_enc_put_bits(spp_enc_context context, UINT32 var, int n);
+改为void h265_wave_spp_enc_put_bits(H265Wave *self,h265_wave_spp_enc_context context, UINT32 var, int n);
+
+ void spp_enc_flush(spp_enc_context context);
+改为void h265_wave_spp_enc_flush(H265Wave *self,h265_wave_spp_enc_context context);
+
+ void spp_enc_put_ue(spp_enc_context context, UINT32 var);
+改为void h265_wave_spp_enc_put_ue(H265Wave *self,h265_wave_spp_enc_context context, UINT32 var);
+
+ INT32 spp_enc_get_ue_bit_size(UINT32 var);
+改为INT32 h265_wave_spp_enc_get_ue_bit_size(H265Wave *self,UINT32 var);
+
+//static void spp_enc_put_se(spp_enc_context context, INT32 var);
+ void spp_enc_put_byte_align(spp_enc_context context, int has_stop_bit);
+改为//static void spp_enc_put_se(h265_wave_spp_enc_context context, INT32 var);
+void h265_wave_spp_enc_put_byte_align(H265Wave *self,h265_wave_spp_enc_context context, int hasStopBit);
+
+
+  UINT32 spp_enc_get_rbsp_bit(spp_enc_context context);
+改为UINT32 h265_wave_spp_enc_get_rbsp_bit(H265Wave *self,h265_wave_spp_enc_context context);
+
+
+UINT32 spp_enc_get_nal_cnt(spp_enc_context context);
+改为UINT32 h265_wave_spp_enc_get_nal_cnt(H265Wave *self,h265_wave_spp_enc_context context);
+
+将vdi_userfunc.h中的
+extern void  vdi_user_lock( void );
+extern void  vdi_user_unlock( void );
+extern void  vdi_user_vmem_lock( void );
+extern void  vdi_user_vmem_unlock( void );
+extern void  vdi_user_irq_flag_clear( void );
+extern void  vdi_user_irq_flag_set( int interrupt_reason );
+extern void  vdi_user_wait_flag( int *interrupt_reason, int timeout );
+
+extern void  vdi_user_clean_cache( unsigned int dst, unsigned int count );
+extern void  vdi_user_logprintf( char *fmt, ... );
+extern void *vdi_user_malloc( int size );
+extern void  vdi_user_free( void *p);
+提到h265wave.h中
+h265waves.h变量addr_ch0改为addrCh0
+		size_ch0改为sizeCh0		
+		addr_ch1改为addrCh1
+		size_ch1改为addrCh2
+
+h265waves.h结构体名T_H265_WAVE_CODE 改为H265WaveS
+
+
+h265waves.h函数INT32 H265_Wave_Initialize(UINT32 mode, UINT32 clock, H265WaveS code );
+改为INT32 h265_wave_initialize(H265WaveS *self, UINT32 mode, UINT32 clock, H265WaveS code );
+VOID  H265_Wave_Finalize(void );
+改为VOID  h265_wave_finalize( H265WaveS *self );
+
+waveclock.h
+函数VOID H265_Wave_Clock_Start( INT32 clock );
+改为VOID wave_clock_start(WaveClock *self, INT32 clock );
+
+VOID h265_wave_sdramc_clock_enable( E_H265_SDRAMC_CLOCK_EN enable );
+改为VOID wave_sdramc_clock_enable( WaveClock *self,E_H265_SDRAMC_CLOCK_EN enable );
+
+VOID H265_Wave_Clock_Stop( VOID );
+改为VOID wave_clock_stop( WaveClock *self );
+
+fjvideoplayback.h
+添加结构体struct _FjVideoPlayback
+{
+	KObject parent;
+	ULLONG reqPts;
+	kuint32 storeNum;
+	T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM* videoStreamParam;
+	T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO* decodeYuvInfo;
+};
+
+FJ_ERR_CODE fj_videoplayback_videoinit( FjVideoPlayback* self);
+改为FJ_ERR_CODE fj_videoplayback_videoinit( FjVideoPlayback* self);
+FJ_ERR_CODE	fj_videoplayback_setvideoconfig( T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM* video_config );
+改为FJ_ERR_CODE	fj_videoplayback_setvideoconfig(FjVideoPlayback* self, T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM* videoConfig );
+FJ_ERR_CODE	fj_videoplayback_setstartpts( ULLONG start_pts );
+改为FJ_ERR_CODE	fj_videoplayback_setstartpts(FjVideoPlayback* self, ULLONG startPts );
+FJ_ERR_CODE	fj_videoplayback_setspeeddirection( E_FJ_MOVIE_PLAY_SPEED speed, E_FJ_MOVIE_PLAY_DIRECTION direction, BOOL pause );
+改为FJ_ERR_CODE	fj_videoplayback_setspeeddirection(FjVideoPlayback* self, E_FJ_MOVIE_PLAY_SPEED speed, E_FJ_MOVIE_PLAY_DIRECTION direction, BOOL pause );
+FJ_ERR_CODE	fj_videoplayback_setvideostream( E_FJ_VIDEO_DEC_ENUM codec, UINT32 store_num, T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM* video_stream_param );
+改为FJ_ERR_CODE	fj_videoplayback_setvideostream( FjVideoPlayback* self, E_FJ_VIDEO_DEC_ENUM codec, kuint32 storeNum, T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM* videoStreamParam );
+FJ_ERR_CODE	fj_videoplayback_startvideodecode( E_FJ_VIDEO_DEC_ENUM codec );
+改为FJ_ERR_CODE	fj_videoplayback_startvideodecode(FjVideoPlayback* self,  E_FJ_VIDEO_DEC_ENUM codec );
+FJ_ERR_CODE	fj_videoplayback_stopvideodecode( E_FJ_VIDEO_DEC_ENUM codec, E_FJ_MOVIE_PLAY_LAST_PICTURE last_picture );
+改为FJ_ERR_CODE	fj_videoplayback_stopvideodecode( FjVideoPlayback* self,E_FJ_VIDEO_DEC_ENUM codec, E_FJ_MOVIE_PLAY_LAST_PICTURE lastPicture );
+FJ_ERR_CODE	fj_videoplayback_pausevideo( VOID );
+改为FJ_ERR_CODE	fj_videoplayback_pausevideo( FjVideoPlayback* self );
+FJ_ERR_CODE	fj_videoplayback_resumevideo( VOID );
+改为FJ_ERR_CODE	fj_videoplayback_resumevideo( FjVideoPlayback* self  );
+FJ_ERR_CODE	fj_videoplayback_getdisplayframe( T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO* display_yuv_info );
+改为FJ_ERR_CODE	fj_videoplayback_getdisplayframe( FjVideoPlayback* self ,T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO* displayYuvInfo );
+FJ_ERR_CODE	fj_videoplayback_startiframedecoding( BOOL display, ULLONG req_pts, UINT32 store_num, T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM* video_stream_param, T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO* decode_yuv_info);
+改为FJ_ERR_CODE	fj_videoplayback_startiframedecoding( FjVideoPlayback* self , BOOL display, FjVideoPlayback* framedeCoding);
+FJ_ERR_CODE	fj_videoplayback_memalloc( E_FJ_MOVIE_PLAY_BUFFER_TYPE buffer_type, UINT32* size, UINT32* address );
+改为FJ_ERR_CODE	fj_videoplayback_memalloc( FjVideoPlayback* self , E_FJ_MOVIE_PLAY_BUFFER_TYPE bufferType, kuint32* size, kuint32* address );
+
+
+类名ip_ahip 改为 ipahip 
+
+函数
+extern INT32 IP_AHIP_OpenPlayback( UCHAR demosaic_id );
+
+extern INT32 IP_AHIP_OpenPreview( UCHAR demosaic_id, const T_IP_AHIP_PREVIEW_CFG* const cfg );
+
+extern VOID IP_AHIP_Close( UCHAR demosaic_id );
+
+extern UINT32 IP_AHIP_Get_Frame_No( UCHAR demosaic_id );
+
+extern BOOL IP_AHIP_Get_Open_Status( UCHAR demosaic_id );
+
+extern VOID IP_AHIP_Int_Handler( UCHAR demosaic_id );
+
+extern VOID IP_AHIP_LockSem( UCHAR demosaic_id );
+
+extern VOID IP_AHIP_UnlockSem( UCHAR demosaic_id );
+
+extern ULONG AHIP_User_Get_Time_us( VOID );
+
+
+改为
+INT32 ip_ahip_open_playback(IpAhip *self, UCHAR demosaicId);
+
+INT32 ip_ahip_open_preview(IpAhip *self, UCHAR demosaicId, const TIpAhipPreviewCfg* const cfg);
+
+VOID ip_ahip_close(IpAhip *self, UCHAR demosaicId);
+
+UINT32 ip_ahip_get_frame_no(IpAhip *self, UCHAR demosaicId);
+
+BOOL ip_ahip_get_open_status(IpAhip *self, UCHAR demosaicId);
+
+VOID ip_int_handler(IpAhip *self, UCHAR demosaicId);
+
+VOID ip_ahip_lock_sem(IpAhip *self, UCHAR demosaicId);
+
+VOID ip_ahip_unlock_sem(IpAhip *self, UCHAR demosaicId);
+
+ULONG ip_ahip_user_get_time_us( IpAhip *self);
+
+类名ahip_dev改为 ahipdev
+
+jiegoT_AHIP_DEV_YUV_INFO
+extern VOID Ahip_Dev_Init_CB( const UCHAR demosaic_id, ULONG heap_addr, T_AHIP_DEV_YUV_INFO* yuv_info );
+extern VOID Ahip_Dev_Yuv_Output_CB( UCHAR demosaic_id, T_AHIP_DEV_YUV_INFO* yuv_info );
+
+extern VOID Ahip_Dev_Vis_Enabled( UCHAR demosaic_id, UCHAR enabled );
+extern VOID Ahip_Dev_Fd_Enabled( UCHAR demosaic_id, UCHAR enabled );
+extern VOID Ahip_Dev_Fd_AutoLog_Enabled( UCHAR demosaic_id, UCHAR enabled );
+extern DOUBLE Ahip_Dev_Get_Sensor_Exp_Time( UCHAR sro_id );
+extern ULONG Ahip_Dev_Get_Sensor_Readout_Time_us( UCHAR sro_id, ULLONG sensor_vd_no );
+extern ULONG Ahip_Dev_Get_Sensor_Sof_Timestamp( UCHAR sro_id, ULLONG sensor_vd_no );
+extern ULONG Ahip_Dev_Get_Time_us( VOID );
+改为
+DOUBLE ahip_dev_get_sensor_exp_time(AhipDev *self, kuchar sroId);
+kulong ahip_dev_get_sensor_readout_time_us(AhipDev *self, kuchar sroId, ULLONG sensorVdNo);
+kulong ahip_dev_get_sensor_sof_timestamp(AhipDev *self, kuchar sroId, ULLONG sensorVdNo);
+kulong ahip_dev_get_time_us(AhipDev *self);
+VOID ahip_dev_init_vis(AhipDev *self, kuchar demosaicId, TAhipDevYuvInfo* yuvInfo);
+VOID ahip_dev_init_fd(AhipDev *self, kuchar demosaicId, TAhipDevYuvInfo* yuvInfo);
+VOID ahip_dev_init_cb(AhipDev *self, const kuchar demosaic_id, kulong heapAddr, TAhipDevYuvInfo* yuvInfo);
+VOID ahip_dev_yuv_output_cb(AhipDev *self, kuchar demosaic_id, TAhipDevYuvInfo* yuvInfo);
+VOID ahip_dev_vis_enabled(AhipDev *self, kuchar demosaic_id, kuchar enabled);
+VOID ahip_dev_fd_enabled(AhipDev *self, kuchar demosaic_id, kuchar enabled);
+VOID ahip_dev_fd_autolog_enabled(AhipDev *self, kuchar demosaic_id, kuchar enabled);
+VOID ahip_dev_ip_Int_handler(AhipDev *self, kuchar demosaicId);
+void ahip_dev_cmd_help(AhipDev *self);
+VOID ahip_dev_cmd_init(AhipDev *self);
+void ahip_dev_cmd(AhipDev *self, int argc, char** argv);
+
+类名ip_fnc改为 ipfnc
+extern	INT32		IP_FNC_SetFlag( USHORT setflag );
+extern	INT32		IP_FNC_ResetFlag( USHORT resetflag );
+extern	USHORT		IP_FNC_GetFlag( VOID );
+extern	INT32		IP_FNC_Get_Version( CHAR **str );
+extern	VOID		IP_FNC_Ahip_Int_Handler( VOID );
+extern	VOID		IP_FNC_Ahip_Init( VOID );
+extern	INT32		IP_FNC_Ahip_Open( T_IP_AHIP_PREVIEW_CONF *cfg );
+extern	INT32		IP_FNC_Ahip_Close( VOID );
+
+INT32		ip_fnc_set_flag(IpFnc* self, USHORT setflag );
+INT32		ip_fnc_reset_flag(IpFnc* self, USHORT resetflag );
+USHORT		ip_fnc_get_flag(IpFnc* self);
+INT32		ip_fnc_get_version(IpFnc* self, CHAR **str );
+VOID		ip_fnc_ahip_int_handler(IpFnc* self);
+VOID		ip_fnc_ahip_init(IpFnc* self);
+INT32		ip_fnc_ahip_open(IpFnc* self, TIpAhipPreviewConf *cfg );
+INT32		ip_fnc_ahip_close(IpFnc* self);
+类名ahip_custom 改为 ahipcustom
+movievideo.h 
+宏D_BF_FLG_SETUP_COMPLETE_H264 改为MovieVideo_D_BF_FLG_SETUP_COMPLETE_H264
+宏D_BF_FLG_SETUP_COMPLETE_H265改为MovieVideo_D_BF_FLG_SETUP_COMPLETE_H265
+宏D_BF_FLG_DECODER_STATE_CHANGE改为MovieVideo_D_BF_FLG_DECODER_STATE_CHANGE
+
+wavequeue.h
+结构体tH265WaveQueue改为WaveQueue
+函数
+WaveQueue* H265_Wave_Queue_Create( kuint32 itemCount, kuint32 itemSize );
+VOID H265_Wave_Queue_Destroy( WaveQueue* queue );
+BOOL H265_Wave_Queue_Enqueue( WaveQueue* queue, kpointer  data );
+kpointer H265_Wave_Queue_Dequeue( WaveQueue* queue );
+kuint32 H265_Wave_Queue_Get_Cnt( WaveQueue* queue );
+类名ip_eis该为 ipeis
+extern	INT32	IP_EIS_Open(INT32 id, VOID *heapBuffer, T_IP_EIS_PARAM *param, BOOL gyroEnable);
+extern	INT32	IP_EIS_StartFrame(INT32 id, T_IP_EIS_IMAGE *image, T_IP_EIS_FRAMEINFO *frameinfo);
+extern	INT32	IP_EIS_AddGyroData(INT32 id, T_IP_EIS_GYRO_DATA *gyroData);
+extern	INT32	IP_EIS_Process( INT32 id );
+extern	INT32	IP_EIS_Close( INT32 id );
+extern	UINT32	IP_EIS_GetBufferSize(T_IP_EIS_PARAM *param);
+extern	INT32	IP_EIS_GetCorrectionGrid(INT32 id, UINT32 lineBegin, UINT32 lineEnd, T_IP_EIS_NODE *grid);
+extern	UINT32	IP_EIS_GetImageLines(INT32 id);
+extern	UINT32	IP_EIS_GetGridLines(INT32 id);
+extern	INT32	IP_EIS_GetDisplacementOffset(INT32 id, T_IP_EIS_MOTION *motion);
+extern	INT32	IP_EIS_GetStabilizedOffset(INT32 id, T_IP_EIS_MOTION *motion);
+extern	INT32	IP_EIS_GetDisplacementMatrix(INT32 id, FLOAT matrix[3][3]);
+extern	INT32	IP_EIS_GetStabilizedMatrix(INT32 id, FLOAT matrix[3][3]);
+extern	INT32	IP_EIS_StabilizeRectangle( INT32 id, const T_IP_EIS_RECT *in, T_IP_EIS_RECT *out, BOOL split_enabled);
+extern	INT32	IP_EIS_SetEnabled(INT32 id, BOOL enabled);
+extern	INT32	IP_EIS_GetEnabled(INT32 id);
+extern	BOOL	IP_EIS_GetLowLatencyModeEnabled(INT32 id);
+extern	VOID	IP_EIS_SetLowLatencyModeEnabled(INT32 id, BOOL onoff);
+extern	INT32	IP_EIS_SetFlag(INT32 id, UINT32 inFlag, UINT32 inValue);
+extern	INT32	IP_EIS_SetStrength(INT32 id, FLOAT minStrength, FLOAT maxStrength);
+extern	VOID	IP_EIS_SetPipeNum(INT32 id, UCHAR pipe_use_num);
+
+extern	VOID IP_EIS_Get_Version(CHAR** str);
+
+INT32 		ip_eis_convert_retcode(IpEis* self, INT32 status);
+INT32 		ip_eis_convert_format(IpEis* self, INT32 format);
+VOID 		ip_eis_get_version(IpEis* self, CHAR** str);
+INT32 		ip_eis_open(IpEis* self, INT32 id, VOID *heapBuffer, TIpEisParam *param, BOOL gyroEnable);
+INT32 		ip_eis_close(IpEis* self, INT32 id);
+UINT32  	ip_eis_get_buffer_size(IpEis* self, TIpEisParam *param);
+INT32 		ip_eis_start_frame(IpEis* self, INT32 id, TIpEisImage *image, TIpEisFrameinfo *frameinfo);
+INT32 		ip_eis_add_gyro_data(IpEis* self, INT32 id, TIpEisGyroData *gyroData);
+INT32 		ip_eis_process(IpEis* self, INT32 id);
+INT32 		ip_eis_get_correction_grid(IpEis* self, INT32 id, UINT32 lineBegin, UINT32 lineEnd, TIpEisNode *grid);
+INT32 		ip_eis_get_displacement_matrix(IpEis* self, INT32 id, FLOAT matrix[3][3]);
+UINT32  	ip_eis_get_image_lines(IpEis* self, INT32 id);
+UINT32 		ip_eis_get_grid_lines(IpEis* self, INT32 id);
+INT32 		ip_eis_get_displacement_offset(IpEis* self, INT32 id, TIpEisMotion *motion);
+INT32 		ip_eis_get_stabilized_offset(IpEis* self, INT32 id, TIpEisMotion *motion);
+INT32 		ip_eis_stabilize_rectangle(IpEis* self, INT32 id, const TIpEisRect *in, TIpEisRect *out, BOOL split_enabled);
+INT32 		ip_eis_set_enabled(IpEis* self, INT32 id, BOOL enabled);
+INT32 		ip_eis_get_enabled(IpEis* self, INT32 id);
+BOOL 		ip_eis_get_low_latency_mode_enabled(IpEis* self, INT32 id);
+VOID 		ip_eis_set_low_latency_mode_enabled(IpEis* self, INT32 id, BOOL onoff);
+INT32 		ip_eis_set_flag(IpEis* self, INT32 id, UINT32 inFlag, UINT32 inValue);
+INT32 		ip_eis_set_strength(IpEis* self, INT32 id, FLOAT minStrength, FLOAT maxStrength);
+VOID 		ip_eis_set_pipeNum(IpEis* self, INT32 id, UCHAR pipe_use_num);
+//INT32 		ip_eis_get_stabilized_matrix(IpEis* self, INT32 id, FLOAT matrix[3][3]);
+
+类名ip_fd 该为 ipfd
+extern	INT32	IP_FD_Open( UCHAR demosaic_id );
+extern	INT32	IP_FD_Close( UCHAR demosaic_id );
+extern	INT32	IP_FD_Init( UCHAR demosaic_id, T_IP_FD_DETECTOR_CFG	*cfg,  UINT32 mode );
+extern	INT32	IP_FD_Start( UCHAR demosaic_id );
+extern	INT32	IP_FD_Stop( UCHAR demosaic_id );
+extern	INT32	IP_FD_Detect( UCHAR demosaic_id, T_IP_FD_PLANE_DATA plane_data );
+extern	INT32	IP_FD_Get_Face( UCHAR demosaic_id, T_IP_FD_DATA *face, UINT32 *fn );
+extern	INT32	IP_FD_Get_Time( UINT32 *time );
+extern	INT32	IP_FD_Reset_Time( VOID );
+extern	INT32	IP_FD_Get_Version( char **str );
+
+extern	VOID IP_FD_Get_Face_List( UCHAR demosaic_id, USHORT* const width, USHORT* const height, UCHAR* const num_of_faces, T_IP_FD_DATA* const fd_data );
+extern	VOID IP_FD_Task_Detect_Start( UCHAR demosaic_id, T_IP_FD_PLANE_DATA plane_data );
+extern	VOID IP_FD_Task_Start( UCHAR demosaic_id );
+extern	VOID IP_FD_Task_End( UCHAR demosaic_id );
+
+改为
+INT32 ip_fd_open(IpFd* self, UCHAR demosaicId);
+INT32 ip_fd_close(IpFd* self, UCHAR demosaicId);
+INT32 ip_fd_init(IpFd* self, UCHAR demosaicId, TIpFdDetectorCfg *cfg, UINT32 mode);
+INT32 ip_fd_start(IpFd* self, UCHAR demosaicId);
+INT32 ip_fd_stop(IpFd* self, UCHAR demosaicId);
+INT32 ip_fd_detect(IpFd* self, UCHAR demosaicId, TIpFdPlaneData plane_data);
+INT32 ip_fd_get_face(IpFd* self, UCHAR demosaicId, TIpFdData *face, UINT32 *fn);
+INT32 ip_fd_get_time(IpFd* self, UINT32 *time);
+INT32 ip_fd_reset_time(IpFd* self);
+INT32 ip_fd_get_version(IpFd* self, char **str);
+VOID  ip_fd_get_face_list(IpFd* self, IpFdGetFaceList getFaceList);
+void  ip_fd_task_detect_start(IpFd* self, UCHAR demosaicId, TIpFdPlaneData plane_data);
+void  ip_fd_task_start(IpFd* self, UCHAR demosaicId);
+void  ip_fd_task_end(IpFd* self, UCHAR demosaicId);
+void  ip_fd_set_ip_ahip_object(IpFd* self, IpAhip *ipAhip);
+
+类名ip_gpu 改为 ipgpu
+VOID IP_GPU_SoftReset(VOID);
+
+INT32 IP_GPU_Open( VOID );
+
+VOID IP_GPU_rotateHDMI();
+
+VOID IP_GPU_rotateLCD();
+
+VOID IP_GPU_BufferSetLCD();
+
+VOID IP_GPU_BufferSetHDMI();
+
+VOID ip_gpu_soft_reset(IpGpu* self);
+
+INT32 ip_gpu_open(IpGpu* self);
+
+VOID ip_gpu_rotate_hdmi(IpGpu* self);
+
+VOID ip_gpu_rotate_cd(IpGpu* self);
+
+VOID ip_gpu_buffer_setL_cd(IpGpu* self);
+
+VOID ip_gpu_buffer_setL_hdmi(IpGpu* self);
+类名ip_pano 改为ipPano
+extern	INT32	IP_PANO_Open(VOID *heapBuffer, T_IP_PANO_CONFIG *cfg);
+extern	INT32	IP_PANO_ProcessGyro(T_IP_PANO_IMAGE *frame, UINT32 timeStamp, T_IP_PANO_GYRO_SAMPLE *sample, UINT32 isLast);
+//extern	INT32	IP_PANO_ProcessImage(T_IP_PANO_IMAGE *frame, T_IP_PANO_IMAGE *workImage, T_IP_PANO_VECTOR *motion, UINT32 isLast);
+extern	INT32	IP_PANO_ProcessImageStart(T_IP_PANO_IMAGE *frame, T_IP_PANO_IMAGE *workImage );
+extern	INT32	IP_PANO_ProcessImage(T_IP_PANO_IMAGE *frame, T_IP_PANO_IMAGE *workImage, UINT32 isLast);
+extern	INT32	IP_PANO_Stitch(T_IP_PANO_IMAGE* results);
+extern	INT32	IP_PANO_Close(VOID);
+extern	INT32	IP_PANO_GetBufferSize(T_IP_PANO_CONFIG *cfg);
+extern	INT32	IP_PANO_GetDirection(VOID);
+extern	INT32	IP_PANO_GetOffset(T_IP_PANO_SIZE *offset);
+extern	VOID	IP_PANO_Get_Version(CHAR** str);
+
+VOID  ip_pano_get_version(IpPano* self, CHAR** str);
+INT32 ip_pano_open(IpPano* self, VOID *heapBuffer, TIpPanoComfig *cfg);
+INT32 ip_pano_close(IpPano* self);
+INT32 ip_pano_get_buffer_size(IpPano* self, TIpPanoComfig *cfg);
+INT32 ip_pano_process_gyro(IpPano* self, TIpPanoImage *frame, UINT32 timeStamp, TIpPanoGyroSample *sample, UINT32 isLast);
+INT32 ip_pano_process_image_start(IpPano* self, TIpPanoImage *frame, TIpPanoImage *workImage);
+INT32 ip_pano_process_image(IpPano* self, TIpPanoImage *frame, TIpPanoImage *workImage, UINT32 isLast);
+INT32 ip_pano_stitch(IpPano* self, TIpPanoImage* results);
+INT32 ip_pano_get_direction(IpPano* self);
+INT32 ip_pano_get_offset(IpPano* self, TIpPanoSize *offset);
+类名ip_pd  ipPd
+extern	INT32	IP_PD_Open( VOID );
+extern	INT32	IP_PD_Close( VOID );
+extern	UINT32	IP_PD_GetLibHeapSize( T_IP_PD_DETECTOR_CFG *cfg );
+extern	INT32	IP_PD_Init( T_IP_PD_DETECTOR_CFG	*cfg );
+extern	INT32	IP_PD_Start( INT32 mode );
+extern	INT32	IP_PD_Stop( VOID );
+extern	INT32	IP_PD_Detect( VOID );
+extern	INT32	IP_PD_Get_Person( T_IP_PD_PERSON *person,UINT32 *np );
+extern	INT32	IP_PD_Get_Person_List( T_IP_PD_PERSON *person,UINT32 *np );
+extern	INT32	IP_PD_Get_Time( UINT32 *time );
+extern	INT32	IP_PD_Reset_Time( VOID );
+extern	INT32	IP_PD_Get_Version( CHAR **str );
+
+extern  INT32	IP_PD_Task_Detect_Start(T_IP_PD_PLANE_DATA plane_data);
+extern	INT32	IP_PD_Task_Start(VOID);
+extern	VOID 	IP_PD_Task_End();
+
+INT32 		ip_pd_open(IpPd* self);
+INT32 		ip_pd_close(IpPd* self);
+INT32 		ip_pd_get_lib_info(IpPd* self, AHOF_LIB_INFO *info);
+UINT32 		ip_pd_get_lib_heap_size(IpPd* self, TIpPdDetectorCfg *cfg);
+INT32 		ip_pd_init(IpPd* self, TIpPdDetectorCfg *cfg);
+INT32 		ip_pd_start(IpPd* self, INT32 mode);
+INT32 		ip_pd_stop(IpPd* self);
+INT32 		ip_pd_detect(IpPd* self);
+INT32 		ip_pd_get_person(IpPd* self, TIpPdPerson *person, UINT32 *np);
+INT32 		ip_pd_get_person_list(IpPd* self, TIpPdPerson *person, UINT32 *np);
+INT32 		ip_pd_get_time(IpPd* self, UINT32 *time);
+INT32 		ip_pd_reset_time(IpPd* self);
+INT32 		ip_pd_get_version(IpPd* self, CHAR **str);
+INT32		ip_pd_task_detect_start(IpPd* self, TIpPdPlaneData plane_data);
+INT32 		ip_pd_task_start(IpPd* self);
+VOID 		ip_pd_task_end(IpPd* self);
+void 		ip_pd_main(INT32 stacd);		//回调
+void 		ip_pd_data_callback(IpPd* self, const PreData *data);
+GTSTATUS 	pd_get_maps(IpPd* self, OUT PreData** maps);
+GTSTATUS 	pd_release_maps(IpPd* self, IN PreData* maps);		//这两个函数.a在调用
+类名ipc_ge改为ipcge
+extern	INT32	IP_GE_Open(T_IP_GE_CONFIG *config, VOID *buffer, INT32 size);
+extern	INT32	IP_GE_Close( VOID );
+extern	INT32	IP_GE_SetCorrectParameter( T_IP_GE_GGRID *global, UINT32 numLocal, T_IP_GE_LGRID *local, FLOAT xform[9]);
+extern	INT32	IP_GE_SetGridData( UINT32 num, T_IP_GE_GNODE *nodes );
+extern	INT32	IP_GE_Process( T_IP_GE_IMAGE *in, T_IP_GE_IMAGE *out1, T_IP_GE_IMAGE *out2, T_IP_GE_IMAGE *out3, INT32 wait );
+extern  INT32   IP_GE_Wait( VOID );
+extern	INT32	IP_GE_MIOProcess( T_IP_GE_IMAGE *in, T_IP_GE_IMAGE *out1, T_IP_GE_IMAGE *out2, T_IP_GE_IMAGE *out3 );
+extern	VOID	IP_GE_L1l2cache_Clean_Flush_Addr( UINT32 address, UINT32 size );
+
+extern	VOID	IP_GE_Get_Version(BYTE** str);
+
+VOID 		ip_ge_get_version(IpGe* self, BYTE** str);
+INT32 		ip_ge_open(IpGe* self, TIpGeConfig *config, VOID *buffer, INT32 size);
+INT32 		ip_ge_close(IpGe* self);
+INT32 		ip_ge_set_correct_parameter(IpGe* self, TIpGeGgrid *global, UINT32 numLocal, TIpGeLgrid *local, FLOAT xform[9]);
+INT32 		ip_ge_set_grid_data(IpGe* self, UINT32 num, TIpGeGnode *nodes);
+INT32 		ip_ge_process(IpGe* self,IpGeProcess *ipGeProcess);
+INT32 		ip_ge_wait(IpGe* self);
+INT32 		ip_ge_mio_process(IpGe* self, TIpGeImage *in, TIpGeImage *out1, TIpGeImage *out2, TIpGeImage *out3);
+ip_ge_user_custom 改为ipgeusercustom
+extern	UINT32	IP_GE_User_Get_PhysicalAddr( UINT32 addr );
+extern	VOID	IP_GE_User_CleanFlush_Dcache( UINT32 addr, UINT32 size );
+UINT32 			ip_ge_user_custom_get_physical_addr(IpGeUserCustom* self, UINT32 addr);
+VOID 			ip_ge_user_custom_clean_flush_dcache(IpGeUserCustom* self, UINT32 addr, UINT32 size);
+类名ip_shdr改为 ipShdr
+extern	INT32	IP_SHDR_Open( VOID *heapBuffer, T_IP_SHDR_CONFIG *config);
+extern	INT32	IP_SHDR_Close( VOID );
+extern	UINT32	IP_SHDR_GetBufferSize( T_IP_SHDR_CONFIG *config );
+extern	INT32	IP_SHDR_AnalyzeImage( T_IP_SHDR_IMAGE *image, UINT32 *results );
+extern	INT32	IP_SHDR_Process( T_IP_SHDR_IMAGE *imageDark, T_IP_SHDR_IMAGE *imageLight, T_IP_SHDR_OPTIONS *opt, T_IP_SHDR_IMAGE **imageResult );
+extern	VOID IP_SHDR_Get_Version(CHAR** str);
+
+VOID 		ip_shdr2_get_version(IpShdr2* self, CHAR **str);
+INT32 		ip_shdr2_open(IpShdr2* self, VOID *heapBuffer, IpShdr2Config *config);
+INT32 		ip_shdr2_close(IpShdr2* self);
+UINT32 		ip_shdr2_get_buffer_size(IpShdr2* self, IpShdr2Config *config);
+INT32 		ip_shdr2_analyze_image(IpShdr2* self, IpShdr2Image *image, UINT32 *results);
+INT32 		ip_shdr2_process(IpShdr2* self, IpShdr2Image *imageDark, IpShdr2Image *imageLight, IpShdr2Options *opt, IpShdr2Image **imageResult);
+类名ip_stc改为ipstc
+extern	VOID IP_STC_Init(
+	IPC_UINT mode
+);
+
+extern	VOID	IP_STC_Stitch(
+	T_IPC_IMAGE *img0,
+	T_IPC_IMAGE *img1,
+	T_IPC_IMAGE *img2,
+	IPC_INT offsetx,
+	IPC_INT offsetx2
+);
+
+extern	VOID IP_STC_MakeAlpha(
+	T_IPC_IMAGE* alphaImage0,
+	T_IPC_IMAGE* alphaImage1
+);
+
+extern	VOID IP_STC_MakeParameter(
+	IPC_INT	imgSizeX,
+	IPC_INT	imgSizeY,
+	IPC_INT	stitch0L,
+	IPC_INT	stitch1L,
+	IPC_INT	Foffset,
+	IPC_INT	*offset,
+	IPC_INT	*alphaRwidth,
+	IPC_INT	*alphaLwidth
+);
+
+extern	VOID	IP_STC_Backup(
+	T_IPC_IMAGE*	dstImage,
+	T_IPC_IMAGE*	srcImage,
+	IPC_INT			offset
+);
+
+VOID 		ip_stc_init(IpStc* self, IPC_UINT mode);
+VOID 		ip_stc_stitch(IpStc* self, IpStcStitch* stitch);
+VOID 		ip_stc_make_alpha(IpStc* self, T_IPC_IMAGE* alphaImage0, T_IPC_IMAGE* alphaImage1);
+VOID 		ip_stc_make_parameter(IpStc* self, IpStcMakeParameter* makeParameter);
+VOID 		ip_stc_backup(IpStc* self, T_IPC_IMAGE* dstImage, T_IPC_IMAGE* srcImage, IPC_INT offset);
+类名ip_warp_dzoom改为ipwarpdzoom
+函数extern INT32 IP_Warp_DZoom_Calc_Table( const FJ_WARP_CALC_PARAM* const calc_param, T_IP_WARP_GRID_INFO* const grid_info );
+改为INT32 			ip_warp_dzoom_calc_table(IpWarpDzoom* self, const FJ_WARP_CALC_PARAM* const calcParam, TIpWarpGridInfo* const gridInfo);
+类名ip_warp改为ipwarp
+extern INT32 IP_Warp_Notify_LoadingComplete( const E_IP_WARP_TBLIDX tbl_idx, const BYTE* addr, ULONG bytes );
+
+extern INT32 IP_Warp_Calc_Table( const UCHAR demosaic_id, const E_IP_WARP_TBLIDX tbl_idx, const FJ_WARP_CALC_PARAM* calc_param, const BOOL mirror_enable );
+
+extern INT32 IP_Warp_Disable_Table( const UCHAR demosaic_id );
+
+extern INT32 IP_Warp_Disable_Table_All( VOID );
+
+extern INT32 IP_Warp_Get_Table( const UCHAR demosaic_id, AHIP_GDC_LGRID* ge_tbl_info );
+
+extern VOID IP_Warp_Disable_GetTable( const BOOL onoff );
+
+extern BOOL IP_Warp_Table_Available( VOID );
+
+extern INT32 IP_Warp_Get_Table_Divided( const UCHAR demosaic_id, AHIP_GDC_LGRID* const ge_tbl_info, const UCHAR divided_id );
+
+extern BOOL IP_Warp_Need_To_Divide( const UCHAR demosaic_id );
+
+extern INT32 IP_Warp_Get_Divided_Img_Width( const UCHAR demosaic_id, UINT32* const div_img_width, const UCHAR divided_id );
+改为
+kint32 ip_warp_notify_loading_complete(IpWarp* self, const IpWarpTblidx tblIdx, const BYTE* addr, ULONG bytes);
+
+INT32 ip_warp_calc_table(IpWarp* self, const kuchar demosaicId, const IpWarpTblidx tblIdx, const FJ_WARP_CALC_PARAM* calcParam, const BOOL mirrorEnable);
+
+kint32 ip_warp_disable_table(IpWarp* self, const kuchar demosaicId);
+
+kint32 ip_warp_disable_table_all(IpWarp* self);
+
+kint32 ip_warp_get_table(IpWarp* self, const kuchar demosaicId, AHIP_GDC_LGRID* geTblInfo);
+
+VOID ip_warp_disable_gettable(IpWarp* self, const BOOL onoff);
+
+BOOL ip_warp_table_available(IpWarp* self);
+
+kint32 ip_warp_get_table_divided(IpWarp* self, const kuchar demosaicId, AHIP_GDC_LGRID* const geTblInfo, const kuchar dividedId);
+
+BOOL ip_warp_need_to_divide(IpWarp* self, const kuchar demosaicId);
+
+kint32 ip_warp_get_divided_img_width(IpWarp* self, const kuchar demosaicId, kuint32* const divImgWidth, const kuchar dividedId);
+类名ip_warp_mirror改为ipwarpmirror
+extern INT32 IP_Warp_Mirror_Calc_Table( T_IP_WARP_GRID_INFO* const grid_info );
+改为INT32 ip_warp_mirror_calc_table(IpWarpMirror* self, TIpWarpGridInfo* const gridInfo);
+类名ip_warp_tbl改为ipwarptbl
+extern UINT8 IP_Warp_Tbl_Conv_Logarithm( const UINT32 num );
+extern UINT32 IP_Warp_Tbl_Conv_Power( const UINT8 num );
+extern T_IP_WARP_GRID_INFO* IP_Warp_Tbl_Alloc( const UCHAR demosaic_id );
+extern VOID IP_Warp_Tbl_Free( const T_IP_WARP_GRID_INFO* grid_info, const UCHAR demosaic_id );
+extern VOID IP_Warp_Tbl_Dump_LgridTable( const AHIP_GDC_LGRID* const ge_tbl_info );
+extern VOID IP_Warp_Tbl_Dump2_LgridTable( const AHIP_GDC_LGRID* const ge_tbl_info );
+改为
+UINT8 				ip_warp_tbl_conv_logarithm(IpWarpTbl* self, const UINT32 num);
+UINT32 				ip_warp_tbl_conv_power(IpWarpTbl* self, const UINT8 num);
+TIpWarpGridInfo* 	        ip_warp_tbl_alloc(IpWarpTbl* self, const UCHAR demosaicId);
+VOID 				ip_warp_tbl_free(IpWarpTbl* self, const TIpWarpGridInfo* gridInfo, const UCHAR demosaicId);
+VOID 				ip_warp_tbl_dump_lgrid_table(IpWarpTbl* self, const AHIP_GDC_LGRID* const geTblInfo);
+VOID 				ip_warp_tbl_dump2_lgrid_table(IpWarpTbl* self, const AHIP_GDC_LGRID* const geTblInfo);
+类名ip_warp_tbl改为ipwarptbl
+extern VOID IP_Warp_Tbl_Mng_Disable( const UCHAR demosaic_id );
+extern VOID IP_Warp_Tbl_Mng_Change_Next( const UCHAR demosaic_id );
+extern T_IP_WARP_GRID_INFO* IP_Warp_Tbl_Mng_Get_Next( const UCHAR demosaic_id );
+extern T_IP_WARP_GRID_INFO* IP_Warp_Tbl_Mng_Get_Current( const UCHAR demosaic_id );
+改为
+VOID 				ip_warp_tbl_mng_disable(IpWarpTblMng* self, const UCHAR demosaicId);
+VOID 				ip_warp_tbl_mng_change_next(IpWarpTblMng* self, const UCHAR demosaicId);
+TIpWarpGridInfo* 	ip_warp_tbl_mng_get_next(IpWarpTblMng* self, const UCHAR demosaicId);
+TIpWarpGridInfo* 	ip_warp_tbl_mng_get_current(IpWarpTblMng* self, const UCHAR demosaicId);
+
+类名vdi改为vdii
+结构体名vpu_buffer_t改为VdIi_vpu_buffer_t
+结构体名改为TIpEisFrameinfo IpEis
+枚举名E_VIDEO_ENOCDE_ID改为MovieVideoEVideoEnocdeId
+枚举	E_VIDEO_ENOCDE_ID_H264_CH0 = 0,		/**< H264 CH0 */
+	E_VIDEO_ENOCDE_ID_H264_CH1,			/**< H264 CH1 */
+	E_VIDEO_ENOCDE_ID_H264_CH2,			/**< H264 CH2 */
+	E_VIDEO_ENOCDE_ID_H265_CH0,			/**< H265 CH0 */
+	E_VIDEO_ENOCDE_ID_H265_CH1,			/**< H265 CH1 */
+	E_VIDEO_ENOCDE_ID_MAX,
+	改为
+		MovieVideo_ENOCDE_ID_H264_CH0 = 0,		/**< H264 CH0 */
+	MovieVideo_ENOCDE_ID_H264_CH1,			/**< H264 CH1 */
+	MovieVideo_E_VIDEO_ENOCDE_ID_H264_CH2,			/**< H264 CH2 */
+	MovieVideo_E_VIDEO_ENOCDE_ID_H265_CH0,			/**< H265 CH0 */
+	MovieVideo_E_VIDEO_ENOCDE_ID_H265_CH1,			/**< H265 CH1 */
+	MovieVideo_E_VIDEO_ENOCDE_ID_MAX,

@@ -1,0 +1,638 @@
+拆分still.c为kstill1
+将static VOID bf_still_image_draw_face_frame_fill_line_cbcr移到still.c改为 VOID k_still1_bf_still_image_draw_face_frame_fill_line_cbcr
+将static INT32 bf_still_image_draw_one_face_frame_ycc移到still.c改为 k_still1_bf_still_image_draw_one_face_frame_ycc
+将static BOOL bf_still_is_mask_enable移到still.c改为k_still1_bf_still_is_mask_enable
+将VOID BF_Still_Resize_Image_CbCrOnly移到still.c
+=======================================================================================
+=======================================================================================
+在kstill.c加上still1.c头文件
+删除still.c创建kstill. kstill.h
+kstill.c
+公有修改
+将BF_Still_Calc_Target_Size改为k_still_bf_still_calc_target_size
+将BF_Still_Resize_Image改为k_still_bf_still_resize_image
+将BF_Still_Process_SPF改为k_still_bf_still_process_spf
+将BF_Still_Copy_Image改为k_still_bf_still_copy_image
+将BF_Still_Copy_YccImage改为k_still_bf_still_copy_yccimage
+将BF_Still_Image_Draw_Face_Frame_VideoFmt改为k_still_bf_still_image_draw_face_frame_videofmt
+将BF_Still_Image_Draw_Face_Frame_YCC改为k_still_bf_still_image_draw_face_frame_ycc
+将BF_Still_Image_Draw_Rect_YCC改为k_still_bf_still_image_draw_rect_ycc
+将BF_Still_mage_Draw_Rect_VideoFmt改为k_still_bf_still_mage_draw_rect_videofmt
+
+更改枚举
+原本                 		更改后
+ECAPMODE           		KStillCapMode
+E_CONVERT_MODE     		KStillConvertMode
+E_RESIZE_MODE      		KStillResizeMode
+BF_STILL_PRO_BLOCK_TYPE 	KStillProBlockType
+BF_STILL_PRO_UNIT_NUM           KStillProUnitNum
+BF_STILL_PRO_VHD_SEL 		KStillProVhdSel
+BF_STILL_PRO_STOP    		KStillProStop
+BF_PRO_PGAIN_DECI_POS		KStillProPgainDeciPos
+BF_STILL_PRO_BLOCK_COMBI	KStillProBlockCombi
+更改宏
+CO_STILL_DEBUG_ON 改为KStill_CO_STILL_DEBUG_ON
+D_BF_STILL_RESCONV_UNIT_PARAM_MASTER_IF改为KStill_D_BF_STILL_RESCONV_UNIT_PARAM_MASTER_IF 
+D_BF_STILL_IIP_CSC_MDSEL改为KStill_D_BF_STILL_IIP_CSC_MDSEL
+D_BF_STILL_IIP_CSCK_X1_0改为KStill_D_BF_STILL_IIP_CSCK_X1_0
+BF_Still_RoundUp_Bit_64改为KStill_BF_Still_RoundUp_Bit_64
+D_BF_STILL_IMAGE_DRAW_FACE_FRAME_VIDEOFMT_BLOCK改为KStill_D_BF_STILL_IMAGE_DRAW_FACE_FRAME_VIDEOFMT_BLOCK
+M_BF_STILL_CALC_IIP_CSCK改为KStill_M_BF_STILL_CALC_IIP_CSCK	
+
+
+MAX_OF_CONTINUOUS 改为KStill_MAX_OF_CONTINUOUS
+D_CAPTURE_QVIEW_WORK_Y_WIDTH改为KStill_D_CAPTURE_QVIEW_WORK_Y_WIDTH 
+D_CAPTURE_QVIEW_WORK_C_WIDTH改为KStill_D_CAPTURE_QVIEW_WORK_C_WIDTH
+D_CAPTURE_QVIEW_WORK_Y_LINES改为KStill_D_CAPTURE_QVIEW_WORK_Y_LINES
+D_CAPTURE_QVIEW_WORK_C_LINES改为KStill_D_CAPTURE_QVIEW_WORK_C_LINES
+D_CAPTURE_QVIEW_WORK_Y_SIZE改为KStill_D_CAPTURE_QVIEW_WORK_Y_SIZE
+D_CAPTURE_QVIEW_WORK_C_SIZE改为KStill_D_CAPTURE_QVIEW_WORK_C_SIZE
+D_CAPTURE_QVIEW_WORK_SIZE改为KStill_D_CAPTURE_QVIEW_WORK_SIZE
+D_BF_STILL_HIST_MAX改为KStill_D_BF_STILL_HIST_MAX
+D_BF_STILL_PRO_CTRL_SEN_RAW_OUT_PORT改为 KStill_D_BF_STILL_PRO_CTRL_SEN_RAW_OUT_PORT
+D_BF_STILL_PRO_CTRL_SRO_RAW_OUT_PORT改为KStill_D_BF_STILL_PRO_CTRL_SRO_RAW_OUT_PORT
+D_BF_STILL_PRO_CTRL_SRO_AFPB_OUT_PORT改为KStill_D_BF_STILL_PRO_CTRL_SRO_AFPB_OUT_PORT
+D_BF_STILL_PRO_CTRL_B2B_RAW_OUT_PORT改为KStill_D_BF_STILL_PRO_CTRL_B2B_RAW_OUT_PORT	
+更改结构体
+BF_STILL_ELA_OUTPUT             BfStillElaOutput
+T_EXIF_INFO_SET 		TExifInfoSet
+T_REC_CONVERT_INFO		TRecConvertInfo
+T_ADDR_YCC			TAddrYcc
+T_DZOOM_PARAM			TDzoomParam
+T_RESIZE_RECT			TResizeRec
+T_RESIZE_IMG
+BF_MASK_COLOR			BfMaskColor
+BF_MASK_RECT			bfMaskRect
+BF_MASK_INFO			BfMaskInfo
+BF_MASK_CTRL			BfMaskCtrl
+BF_PRO_RAW_INFO			BfProRawInfo
+BF_PRO_RAW_OUTPUT_INFO          BfProRawOutputInfo
+BF_PRO_SETUP_STATUS_TYPE	BfProSetupStatusType
+BF_PRO_SETUP_STATUS_IQ_DIVISION_POS BfProSetupStatusIqDivisionPos
+BF_PRO_SETUP_RAW_STATUS_TYPE	BfProSetupRawStatusType
+BF_PRO_SETUP_STATUS_TYPE_RAW_SCALER BfProSetupStatusTypeRawScaler
+BF_PRO_SETUP_STATUS_SEN		BfProSetupStatusSen
+BF_PRO_SETUP_STATUS_SRO 	BfProSetupStatusSro
+BF_PRO_SETUP_STATUS_B2B		BfProSetupStatusB2b
+BF_PRO_SETUP_STATUS_STAT	BfProSetupStatusStat
+BF_PRO_SETUP_STATUS_PAS		BfProSetupStatusPas
+BF_PRO_SETUP_STATUS		BfProSetupStatus
+BF_PRO_PGAIN_INFO		BfProSetupStatus
+BF_PRO_CONTROL_INFO		BfProControlInfo
+T_BF_STILL_PRO_CTRL_RAW_OUTPUT_INFO TBfStillProCtrlRawOutputInfo
+更改结构体内变量
+noise_data_mode 		noiseDataMode			
+noise_data_precision		noiseDataPrecision
+noise_data_compress_enable	noiseDataCompressEnable
+noise_top_addr			noiseTopAddr
+noise_total_hsize		noiseTotalHsize
+exif_info			exifInfo
+mask_color_y			maskColorY
+mask_color_cb			maskColorCb
+mask_color_cr			maskColorCr
+start_x				startX
+end_x				endX
+start_y				startY
+end_y				endY
+mask_rect			maskRect
+mask_color			maskColor
+mask_num			maskNum
+mask_info			maskInfo
+top_color			topColor
+raw_image_bytes			rawImageBytes
+frame_no			frameNo
+inst_id				instId
+unit_num			unitNum
+block_type			blockType
+output_port			outputPort
+bay_start_x			bayStartX
+bay_width_bytes			bayWidthBytes
+bay_width			bayWidth
+bay_addr			bayAddr
+stop_type			stopType
+col_idx				colIdx
+row_idx				rowIdx
+line_feed			lineFeed
+scaler_sel			scalerSel
+block_enabled			blockEnabled
+raw_input			rawInput
+raw_output			rawOutput
+
+=======================================================================================
+=======================================================================================
+kstill.h
+将extern volatile T_EXIF_INFO_SET gExif_Info_Set改为extern volatile T_EXIF_INFO_SET gExifInfoSet
+=======================================================================================
+=======================================================================================
+将still_basic.c删除建立stillbasic
+公有修改
+将BF_Still_PRO_Ctrl_Sg_Set改为still_basic_bf_still_pro_ctrl_sg_set
+将BF_Still_PRO_Ctrl_SG_Start改为still_basic_bf_still_pro_ctrl
+将BF_Still_PRO_Ctrl_SG_Stop改为still_basic_bf_still_pro_sg_stop
+将fj_set_sg改为still_basic_fj_set_sg
+将fj_sg_start改为still_basic_fj_sg_start
+将fj_sg_stop改为still_basic_fj_sg_stop
+将fj_sen_control_sensorclk改为still_basic_fj_sen_control_sensorclk
+将fj_getdemosaicflipmirrorenabled改为still_basic_fj_getdemosaicflipmirrorenabled
+将BF_Instance_Get_Demosaic改为still_basic_bf_instance_get_demosaic
+将BF_Instance_Get_StillEncode改为still_basic_get_stitch
+将BF_Instance_Get_Stitch改为still_basic_get_stitch
+将BF_Instance_Get_Sen_Id_Info改为still_bf_instance_get_sen_id_info
+将BF_Instance_Get_Sensor_Id_From_Sen改为still_basic_bf_instance_get_sensor_id_from_sen
+将BF_Still_Basic_Unlock_JpegBuffer改为still_bf_still_basic_unlock_jpegbuffer
+将fj_get_capture_stitch_status改为still_basic_fj_get_capture_stitch_status
+更改枚举
+T_BF_STILL_BASIC_DEMOSAIC_CONN_TYPE  StillBasicTBfStillBasicDemosaicConnType
+E_BF_R2Y_CTRL_BTC_HIST_TBL								StillBasicEBfR2yCtrlBtcHistTbl
+E_BF_R2Y_CTRL_TCHS_HIST_BIT_WIDTH			
+更改结构体
+T_BF_STILL_BASIC_JPEG_BUFFER							TBfStillBasicJpegBuffer
+T_BF_STILL_BASIC_PARAM_CHECK						TBfStillBasicParamCheck
+T_BF_R2Y_TCOF_PARAM											TBfR2yTcofParam
+T_BF_R2Y_TCT_CTRL_PARAM									TBfR2yTctCtrlParam
+更改宏
+D_BF_STILL_BASIC_JPEG_BUFFER_MAX 改为StillBasic_D_BF_STILL_BASIC_JPEG_BUFFER_MAX
+
+=======================================================================================
+=======================================================================================
+删除still_dcache.c建立stillscache
+修改公有
+将FJ_ERR_CODE BF_Still_Dcache_Clean改为still_dcache_bf_still_dcache_clean
+将FJ_ERR_CODE BF_Still_Dcache_CleanFlush改为still_dcache_bf_still_dcache_cleanflush
+将FJ_ERR_CODE BF_Still_Dcache_CleanFlush_FjImg改为still_dcache_bf_still_dcache_cleanflush_fjimg
+将FJ_ERR_CODE BF_Still_Dcache_CleanFlush_FjInfoConv改为still_dcache_bf_still_dcache_cleanflush_fjinfoconv
+=======================================================================================
+=======================================================================================
+删除呢still_movctrl.c建立stillmovctrl
+修改公有
+修改前                   		修改后
+BF_StillMovCtrl_Start    		still_mov_ctrl_bf_StillMovCtrl_start
+BF_StillMovCtrl_Stop_OnIdleMode		still_mov_ctrl_bf_stillmovctrl_stop_onidlemode
+更改枚举
+E_STILL_MOVIE_READY			StillMovCtrlMovieReady
+E_STILL_STREAM_TYPE			StillMovCtrlStreamType
+更改结构体
+T_STILL_MOV_READY_STAT	 TStillMovReadyStat
+更改宏
+D_BF_STILL_MOV_CTRL_FRAMENO_PRINTF_CONV 改为StillMovCtrl_D_BF_STILL_MOV_CTRL_FRAMENO_PRINTF_CONV
+D_BF_STILL_MOV_CTRL_FRAMENO_PRINTF_FMT改为StillMovCtrl_D_BF_STILL_MOV_CTRL_FRAMENO_PRINTF_FMT 
+====================================================================================	
+删除still_boot.c建立stillboot
+更改公有
+修改前  							修改后
+BF_Still_Attr_Get_Size_Cap_Width				still_boot_bf_still_attr_get_size_cap_width
+BF_Still_Attr_Get_Size_Cap_Lines				still_boot_bf_still_attr_get_size_cap_lines
+BF_Still_Attr_Set_Size_Screen_Vga_Width				still_boot_bf_still_attr_set_size_screen_vga_width
+BF_Still_Attr_Set_Size_Screen_Vga_Lines				still_boot_bf_still_attr_set_size_screen_vga_lines
+BF_Still_Attr_Set_Size_Screen_Hd_Width(USHORT width)		still_boot_bf_still_attr_set_size_screen_hd_width
+BF_Still_Attr_Set_Size_Screen_Hd_Lines(USHORT lines);		still_boot_bf_still_attr_set_size_screen_hd_lines
+BF_Still_Attr_Get_Comp_Main(VOID);				still_boot_bf_still_attr_get_comp_main
+BF_Still_Attr_Set_Comp_Screen_Vga(FJ_COMPRESSION_RATIO ratio);	still_boot_bf_still_attr_set_comp_screen_vga
+BF_Still_Attr_Set_jpeg_Threshold				still_boot_bf_still_attr_set_jpeg_threshold
+BF_Still_Attr_Get_Shoot_Image_Format(VOID);			still_boot_bf_still_attr_get_shoot_image_format	
+==============================================================================================	
+删除jpgepc_wrap.c建立jpgepcwrap
+更改结构体
+修改前                           修改后
+T_BF_JPGEPC_WRAP_TUNING_PARAM	TBfJpgepcWrapTuningParam
+更改公有
+Jpgepc_Wrap_Set_Tuning_Param	Jpgepc_Wrap_set_tuning_param
+Jpgepc_Wrap_Update_Qtable	jpgepc_wrap_update_qtable
+Jpgepc_Wrap_Print_Measure_Time	jpgepc_wrap_print_measure_time
+Jpgepc_Wrap_Start_Measure_Time	Jpgepc_wrap_start_measure_time
+Jpgepc_Wrap_Err_Printer		jpgepc_wrap_err_printer
+==================================================================================
+删除mba_log.c建立mbalog
+更改枚举
+E_OUTPUT_RING_STATUS		MbaLogOutputRingStatus	
+更改结构体
+T_MBA_LOG_RW_POINTER		TMbaLogRwPointer
+T_MBALOG_ID_LIST		TMbalogIdList
+-----------------------------------------------------------------------------------------------------
+删除mba_if.c建立mbaif
+更改全局变量
+修改前                          修改后
+gMBA_Log_Max			gmbaLogMax
+gMBA_Surface_Max		gmbaSurfaceMax
+gMBA_Write_Pointer		gmbaWritePointer
+gMBA_Write_Pointer_real		gmbaWritePointerReal
+gMBA_Overlap_Flg		gmbaOverlapFlg
+gMBA_Overlap_Flg_real		gmbaOverlapFlgReal
+gMBA_Log_Data			gmbaLogData
+gMBA_Log_Data			gmbaLogData
+gMBA_Kind			gmbaKind
+gMBA_Overwrite_Flag		gmbaOverwriteFlag
+gMBA_Outbuf_Size_Main		gmbaOutbufSizeMain
+gMBA_Outbuf_Size_Sub		gmbaOutbufSizeSub
+gMBA_Outbuf			gmbaOutbuf
+
+
+更改枚举
+E_MBALOG_OUT_TYPE		MbaIfMbalogOutType
+更改结构体.h
+T_MBA_LOG_DATA			TMbaLogData
+
+更改公有
+MBA_Log_Start			mba_log_start
+MBA_Log_End			mba_log_end
+MBA_Log_Printf			mba_log_printf
+MBA_Log_Printf_LineID		mba_log_printf_lineid
+MBA_Log_Output			mba_log_printf_lineid
+MBA_Log_Output_Select		mba_log_output_select
+MBA_Log_Output_All		mba_log_output_all
+MBA_Log_Clear			mba_log_clear
+MBA_Log_Remove			mba_log_remove
+MBA_Log_Update_Surface_No	mba_log_update_surface_no
+更改宏
+CO_MBA_TIME_UNIT_1US更改为MbaLog_CO_MBA_TIME_UNIT_1US
+MBA_IF_FSIF_OK更改为MbaLog_MBA_IF_FSIF_OK
+更改宏
+CO_MBA_TIMER_USED改为MbaLog_CO_MBA_TIMER_USED
+CO_MBA_TIME_UNIT_1US改为MbaLog_CO_MBA_TIME_UNIT_1US
+MBALOG_TASK_ID_MAX改为 MbaLog_TASK_ID_MAX
+MBALOG_TASK_ID_LINE_MAX改为MbaLog_TASK_ID_LINE_MAX
+MBALOG_TASK_ID_TASK_MAX改为MbaLog_TASK_ID_TASK_MAX
+MBALOG_FUNC_ID_MAX 改为 MbaLog_FUNC_ID_MAX
+MBALOG_TASK_ID_LENGTH改为 MbaLog_TASK_ID_LENGTH
+MBALOG_FUNC_ID_LENGTH改为MbaLog_FUNC_ID_LENGTH
+===================================================================================
+mbaif
+更改公有
+BF_MBA_IF_Start			mba_if_bf_mba_if_start
+BF_MBA_IF_End			mba_if_bf_mba_if_end
+BF_MBA_IF_Printf_TaskID		mba_if_bf_mba_if_printf_taskid
+BF_MBA_IF_Printf_LineID		mba_if_bf_mba_if_printf_lineid
+BF_MBA_IF_Output		mba_if_mba_if_bf_mba_if_output
+BF_MBA_IF_Output_Select		mba_if_bf_mba_if_output_select
+BF_MBA_IF_Output_All		mba_if_bf_mba_if_output_all
+BF_MBA_IF_Clear			mba_if_bf_mba_if_clear
+BF_MBA_IF_Remove		mba_if_bf_mba_if_remove
+BF_MBA_IF_Update_Surface_No	mba_if_bf_mba_if_update_surface_no
+fj_mbalog_printf		mba_if_fj_mbalog_printf
+fj_mbalog_output		mba_if_fj_mbalog_output
+fj_mbalog_output_binary		mba_if_fj_mbalog_output_binary
+fj_mbalog_clear			mba_if_fj_mbalog_clear
+fj_heap_log_printf		mba_if_fj_heap_log_printf
+MBA_IF_FSIF_Create		mba_if_fsif_create
+MBA_IF_FSIF_Close		mba_if_fsif_close
+MBA_IF_FSIF_Write		mba_if_fsif_write
+MBA_IF_FSIF_Remove		mba_if_fsif_remove
+MBA_IF_User_Get_CpuID		mba_if_user_get_cpuid
+MBA_IF_User_Sns_Ctx		mba_if_user_sns_ctx
+MBA_IF_User_Get_Tid		mba_if_user_get_tid
+MBA_IF_User_Get_MbaTidFromTid	mba_if_user_get_mbatidfromtid
+MBA_IF_User_Get_TidFromMbaTid	mba_if_user_get_tidfrommbatid
+MBA_IF_User_Get_TaskNameFromMbaTid	mba_if_user_get_tasknamefrommbatid
+MBA_IF_User_Get_TaskNameFromTid	mba_if_user_get_tasknamefromtid
+MBA_IF_User_EI			mba_if_user_ei
+MBA_IF_User_DI			mba_if_user_di
+MBA_IF_Get_Time_us		mba_if_get_time_us
+更改宏
+D_MBA_KIND_HOST
+D_MBA_KIND_BOOT
+D_MBA_KIND_CAPTURE
+D_MBA_KIND_PREVIEW
+D_MBA_KIND_HEAP
+D_MBA_KIND_MOVIE
+D_MBA_KIND_DEBUG
+D_MBA_KIND_HOST_DEBUG
+D_MBA_KIND_BOOT_DEBUG
+D_MBA_KIND_CAPTURE_DEBUG
+D_MBA_KIND_PREVIEW_DEBUG
+D_MBA_KIND_HEAP_DEBUG	
+D_MBA_KIND_DEFAULT
+D_MBA_TASK_NAME_MAX
+M_MBA_START
+M_MBA_START
+#define M_MBA_END
+#define M_MBA_PRINTF
+#define M_MBA_OUTPUT(type, file_name)								
+#define M_MBA_OUTPUT_ALL(type, file_name)						
+#define M_MBA_CLEAR
+#define M_MBA_REMOVE
+#define M_MBA_UPDATE_SURFACE_NO()								
+#define M_MBA_END()
+#define M_MBA_PRINTF(arg)
+#define M_MBA_OUTPUT(type, file_name)
+#define M_MBA_OUTPUT_SEL(type, sel, file_name)
+#define M_MBA_OUTPUT_ALL(type, file_name)
+#define M_MBA_CLEAR()
+#define M_MBA_REMOVE(file_name)
+#define M_MBA_UPDATE_SURFACE_NO()
+前面掉D和M加上MbaIf
+===============================================================================
+===============================================================================
+删除myheapctrl.c建立kmyheapctrl
+更改枚举
+INTEGER				kmyvprintfinteger
+更改公有
+__wrap_printf			k_myvprintf_wrap_printf_temp1
+__wrap_vprintf			k_myvprintf_wrap_vprintf_temp2
+myvprintf_a			k_myvprintf_a
+myputc				k_myvprintf_myputc
+myvprintf			k_myvprintf
+myprintf			k_myvprintf_myprintf
+myputc_to_s			k_myvprintf_myputc_to_s
+myvsprintf			k_myvprintf_myvsprintf
+mysprintf			k_myvprintf_mysprintf
+myputc_n_to_s			k_myvprintf_myputc_n_to_s
+myvnprintf_a			k_myvprintf_myvnprintf_a
+myvnsprintf			k_myvprintf_myvnsprintf
+mysnprintf			k_myvprintf_mysnprintf
+更改宏
+_isnumc改为KMyvprint_isnumc
+_ctoi改为KMyvprint_ctoi
+ZERO_PADDING改为 KMyvprint_ZERO_PADDING
+ALTERNATIVE 改为KMyvprint_ALTERNATIVE
+THOUSAND_GROUP改为KMyvprint_THOUSAND_GROUP
+CAPITAL_LETTER  改为KMyvprint_CAPITAL_LETTER
+LEFT_JUSTIFIED改为KMyvprint_LEFT_JUSTIFIED
+WITH_SIGN_CHAR改为KMyvprint_WITH_SIGN_CHAR
+===============================================================================
+删除exception建立kexception
+更改结构体
+T_EXCEPTION_REG			KExceptionReg
+更改全局变量
+gAbort_stack			gabortStack
+gException_Cnt			gexceptionCnt
+更改公有
+Exception_Handler
+更改宏
+ABORT_STACK_SIZE改为KException_ABORT_STACK_SIZE
+EXCEPTION_LOG_MAX_TSK改为 KException_EXCEPTION_LOG_MAX_TSK
+EXCEPTION_LOG_MAX_SEM改为 KException_EXCEPTION_LOG_MAX_SEM
+EXCEPTION_LOG_MAX_FLG改为 KException_EXCEPTION_LOG_MAX_FLG
+EXCEPTION_LOG_MAX_MBX改为 KException_EXCEPTION_LOG_MAX_MBX
+==================================================================================
+删除dynamic_scenario.c建立dynamicscenario
+更改公有
+BF_Dynamic_Scenario		dynamic_scenario_bf_dynamic_scenario
+BF_Dynamic_Scenario_Is_Enable	dynamic_scenario_bf_dynamic_scenario_is_enable
+BF_Dynamic_Scenario_Set_Status	dynamic_scenario_bf_dynamic_scenario_set_status
+更改宏
+D_BF_DYNAMIC_SCENARIO_KEY_FILEPATH改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_KEY_FILEPATH
+D_BF_DYNAMIC_SCENARIO_ACT_FILEPATH改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACT_FILEPATH
+D_BF_DYNAMIC_SCENARIO_ACTION_LIMIT改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACTION_LIMIT
+D_BF_DYNAMIC_SCENARIO_ACTION_01改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACTION_01
+D_BF_DYNAMIC_SCENARIO_ACTION_02改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACTION_02
+D_BF_DYNAMIC_SCENARIO_ACTION_03改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACTION_03
+D_BF_DYNAMIC_SCENARIO_ACTION_04改为DynamicScenario_D_BF_DYNAMIC_SCENARIO_ACTION_04
+D_BF_DYNAMIC_SCENARIO_ACTION_05改为ColorBar_D_BF_COLOR_BAR_DISP_SIZE_X
+D_BF_DYNAMIC_SCENARIO_ACTION_06改为ColorBar_D_BF_COLOR_BAR_DISP_SIZE_Y
+D_BF_DYNAMIC_SCENARIO_ACTION_07改为 KStill_D_BF_STILL_PRO_CTRL_SEN_RAW_OUT_PORT
+D_BF_DYNAMIC_SCENARIO_ACTION_08改为KStill_D_BF_STILL_PRO_CTRL_SRO_RAW_OUT_PORT
+D_BF_DYNAMIC_SCENARIO_ACTION_09改为KStill_D_BF_STILL_PRO_CTRL_SRO_AFPB_OUT_PORT
+D_BF_DYNAMIC_SCENARIO_ACTION_10改为KStill_D_BF_STILL_PRO_CTRL_B2B_RAW_OUT_PORT
+-----------------------------------
+D_BF_DYNAMIC_SCENARIO_ACTION_11
+D_BF_DYNAMIC_SCENARIO_ACTION_12
+D_BF_DYNAMIC_SCENARIO_ACTION_13
+D_BF_DYNAMIC_SCENARIO_ACTION_14
+D_BF_DYNAMIC_SCENARIO_ACTION_15
+D_BF_DYNAMIC_SCENARIO_ACTION_16
+D_BF_DYNAMIC_SCENARIO_ACTION_17
+D_BF_DYNAMIC_SCENARIO_ACTION_18
+D_BF_DYNAMIC_SCENARIO_ACTION_19
+D_BF_DYNAMIC_SCENARIO_ACTION_20
+D_BF_DYNAMIC_SCENARIO_ACTION_21
+D_BF_DYNAMIC_SCENARIO_ACTION_22
+D_BF_DYNAMIC_SCENARIO_ACTION_23
+D_BF_DYNAMIC_SCENARIO_ACTION_24
+D_BF_DYNAMIC_SCENARIO_ACTION_25
+D_BF_DYNAMIC_SCENARIO_ACTION_26
+D_BF_DYNAMIC_SCENARIO_ACTION_27
+D_BF_DYNAMIC_SCENARIO_ACTION_28
+D_BF_DYNAMIC_SCENARIO_ACTION_29
+D_BF_DYNAMIC_SCENARIO_ACTION_30
+D_BF_DYNAMIC_SCENARIO_ACTION_31
+D_BF_DYNAMIC_SCENARIO_ACTION_32
+D_BF_DYNAMIC_SCENARIO_ACTION_33
+D_BF_DYNAMIC_SCENARIO_ACTION_34
+D_BF_DYNAMIC_SCENARIO_ACTION_35
+D_BF_DYNAMIC_SCENARIO_ACTION_36
+D_BF_DYNAMIC_SCENARIO_ACTION_37
+D_BF_DYNAMIC_SCENARIO_ACTION_38
+D_BF_DYNAMIC_SCENARIO_ACTION_39
+D_BF_DYNAMIC_SCENARIO_ACTION_40
+D_BF_DYNAMIC_SCENARIO_ACTION_41
+D_BF_DYNAMIC_SCENARIO_ACTION_42
+D_BF_DYNAMIC_SCENARIO_ACTION_43
+D_BF_DYNAMIC_SCENARIO_ACTION_44
+D_BF_DYNAMIC_SCENARIO_ACTION_45
+D_BF_DYNAMIC_SCENARIO_ACTION_46
+D_BF_DYNAMIC_SCENARIO_ACTION_47
+D_BF_DYNAMIC_SCENARIO_ACTION_48
+D_BF_DYNAMIC_SCENARIO_ACTION_49
+D_BF_DYNAMIC_SCENARIO_ACTION_50
+D_BF_DYNAMIC_SCENARIO_ACTION_51
+D_BF_DYNAMIC_SCENARIO_ACTION_52
+D_BF_DYNAMIC_SCENARIO_ACTION_53
+D_BF_DYNAMIC_SCENARIO_ACTION_54
+D_BF_DYNAMIC_SCENARIO_ACTION_55
+D_BF_DYNAMIC_SCENARIO_ACTION_56
+D_BF_DYNAMIC_SCENARIO_ACTION_57
+D_BF_DYNAMIC_SCENARIO_ACTION_58
+D_BF_DYNAMIC_SCENARIO_ACTION_59
+D_BF_DYNAMIC_SCENARIO_ACTION_60
+D_BF_DYNAMIC_SCENARIO_ACTION_61
+D_BF_DYNAMIC_SCENARIO_ACTION_62
+D_BF_DYNAMIC_SCENARIO_ACTION_63
+D_BF_DYNAMIC_SCENARIO_ACTION_64
+D_BF_DYNAMIC_SCENARIO_ACTION_65
+D_BF_DYNAMIC_SCENARIO_ACTION_66
+D_BF_DYNAMIC_SCENARIO_ACTION_67
+D_BF_DYNAMIC_SCENARIO_ACTION_68
+D_BF_DYNAMIC_SCENARIO_ACTION_69
+D_BF_DYNAMIC_SCENARIO_ACTION_70
+D_BF_DYNAMIC_SCENARIO_ACTION_71
+D_BF_DYNAMIC_SCENARIO_ACTION_72
+D_BF_DYNAMIC_SCENARIO_ACTION_73
+D_BF_DYNAMIC_SCENARIO_ACTION_74
+D_BF_DYNAMIC_SCENARIO_ACTION_75
+#define D_BF_DYNAMIC_SCENARIO_ACTION_76 (76)	// DYNSNR76.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_77 (77)	// DYNSNR77.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_78 (78)	// DYNSNR78.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_79 (79)	// DYNSNR79.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_80 (80)	// DYNSNR80.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_81 (81)	// DYNSNR81.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_82 (82)	// DYNSNR82.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_83 (83)	// DYNSNR83.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_84 (84)	// DYNSNR84.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_85 (85)	// DYNSNR85.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_86 (86)	// DYNSNR86.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_87 (87)	// DYNSNR87.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_88 (88)	// DYNSNR88.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_89 (89)	// DYNSNR89.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_90 (90)	// DYNSNR90.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_91 (91)	// DYNSNR91.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_92 (92)	// DYNSNR92.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_93 (93)	// DYNSNR93.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_94 (94)	// DYNSNR94.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_95 (95)	// DYNSNR95.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_96 (96)	// DYNSNR96.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_97 (97)	// DYNSNR97.ACT
+#define D_BF_DYNAMIC_SCENARIO_ACTION_98 (98)	
+#define D_BF_DYNAMIC_SCENARIO_ACTION_99 (99)	
+前面加DynamicScenario
+===================================================================================================
+删除color_bar建立colorbar
+更改结构体
+T_BF_COLOR_BAR_RGB_VALUE	TBfColorBarRgbValue
+T_BF_COLOR_BAR_YUV_VALUE	TBfColorBarYuvValue
+更改枚举
+E_BF_COLOR_BAR_COLOR_INDEX	ColorBarColorIndex
+更改全局变量
+gRGB_ColorTbl			grgbColortbl
+更改公有
+BF_Color_Bar_Draw		color_bar_bf_color_bar_draw
+更改宏
+D_BF_COLOR_BAR_NUMBER_OF_GRAY改为ColorBar_D_BF_COLOR_BAR_NUMBER_OF_GRAY
+D_BF_COLOR_BAR_VALUE_MAX改为ColorBar_D_BF_COLOR_BAR_VALUE_MAX
+D_BF_COLOR_BAR_VALUE_MID改为ColorBar_D_BF_COLOR_BAR_VALUE_MID
+D_BF_COLOR_BAR_VALUE_MIN改为ColorBar_D_BF_COLOR_BAR_VALUE_MIN
+D_BF_COLOR_BAR_Y_OFFSET改为ColorBar_D_BF_COLOR_BAR_Y_OFFSET
+D_BF_COLOR_BAR_CB_OFFSET改为ColorBar_D_BF_COLOR_BAR_CB_OFFSET
+D_BF_COLOR_BAR_CR_OFFSET改为ColorBar_D_BF_COLOR_BAR_CR_OFFSET
+D_BF_COLOR_BAR_DISP_SIZE_X改为ColorBar_D_BF_COLOR_BAR_DISP_SIZE_X
+D_BF_COLOR_BAR_DISP_SIZE_Y改为ColorBar_D_BF_COLOR_BAR_DISP_SIZE_Y
+===================================================================================
+删除fj_emergency_log.c建立fjemergencylog
+更改公有
+FJ_EmergencyLog_Set_Log_Start_Sector	fj_emergencylog_set_log_start_sector
+FJ_EmergencyLog_Store_Memory		fj_emergencylog_store_memory
+FJ_EmergencyLog_Save			fj_emergencylog_save
+==================================================================================
+删除fj_memory.c建立fjmemory
+更改枚举
+FJ_SDRAM_MAP_MODE			FjMemorySdramMapMode
+FJ_MEMORY_LOCATION			FjMemoryLocation
+FJ_MEMORY_CACHE_LEVEL			FjMemoryCacheLevel
+FJ_MEMORY_CACHE_OPE			FjMemoryCacheOpe
+FJ_MEMORY_COPY_DMA_CH			FjMemoryCopyDmaCh
+更改联合体
+U_MEMORY_ATTRIBUTE			_UMemoryAttribute
+更改公有
+FJ_SetSDRAMMapMode			fj_memory_setsdrammapmode
+FJ_DirectPoolAlloc			fj_memory_directpoolalloc
+FJ_DirectPoolFree			fj_memory_directpoolfree
+FJ_GetMem				fj_memory_getmem
+FJ_ReleaseMem				fj_memory_releasemem
+FJ_ClearMem				fj_memory_clearmem
+FJ_MEMORY_Dcache_All			fj_memory_dcache_all
+FJ_MEMORY_Dcache_Addr			fj_memory_dcache_addr
+FJ_Get_Memory_Attribute			fj_memory_get_attribute
+FJ_MEMORY_DMB_POC			fj_memory_dmb_poc
+FJ_MEMORY_DSB_POC			fj_memory_dsb_poc
+FJ_MEMORY_DSB_POU			fj_memory_dsb_pou
+FJ_Get_MPF_FBLKCNT			fj_memory_get_mpf_fblkcnt
+FJ_Get_MPL_FMPLSZ			fj_memory_get_mpl_fmplsz
+FJ_Get_HEAP_SIZE			fj_memory_get_heap_size
+FJ_MEMORY_Copy_Sdram_Sync		fj_memory_copy_sdram_sync
+
+==================================================================================
+删除fj_message建立fjmessage
+更改公有
+FJ_HostGetMessage			fj_message_hostgetmessage
+FJ_HostPostMessage			fj_message_hostpostmessage
+FJ_ConfigHostMessage			fj_message_confighostmessage
+=====================================================================================================================
+kmyheapctrl
+更改枚举名：
+TQueue KMyheapctrlTQueue
+TVariableSizeMemoryControlBlock KMyheapctrlMemoryControlBlock
+TVariableSizeMemoryBlock KMyheapctrlTVariableSizeMemoryBlock
+更改公有方法名：
+InitializeVariableSizeMemory  k_myheapctrl_variable_size_memory
+ReleaseVariableSizeMemory k_myheapctrl_release_variable_size_memory
+RequestVariableSizeMemory k_myheapctrl_request_variable_size_memory
+myheap_init k_myheapctrl_myheap_init
+malloc k_myheapctrl_malloc 
+_malloc_r k_myheapctrl_malloc_r_temp1
+mdf_malloc k_myheapctrl_mdf_malloc
+free k_myheapctrl_free
+ _free_r k_myheapctrl_free_r_temp1
+mdf_free k_myheapctrl_mdf_free
+_calloc_r k_myheapctrl_calloc_r_temp1
+_realloc_r k_myheapctrl_realloc_r_temp1
+==================================================================================================================================
+kdebug
+更改枚举名：
+E_BF_DEBUG_PRINT_LEVEL  KDebugPrintLevel
+更改公有方法名：
+BF_Debug_TermOut k_debug_termout
+BF_Debug_Set_Print_Level k_debug_set_print_level
+BF_Debug_Set_Print_Level_Host  k_debug_set_print_level_host
+BF_Debug_Set_Print_Head_Enable k_debug_set_print_head_enable
+BF_Debug_Set_Print_Time_Enable k_debug_set_print_time_enable
+BF_Debug_Save_Mem_To_File k_debug_save_mem_to_file
+BF_Debug_Print_Dbg k_debug_print_dbg
+BF_Debug_Print_Info k_debug_print_info
+BF_Debug_Print_Wrn k_debug_print_wrn
+BF_Debug_Print_Err k_debug_print_err
+BF_Debug_Print_Aud k_debug_print_aud
+fj_debug_print_dbg k_debug_print_dbg1
+fj_debug_print_info k_debug_print_info1
+fj_debug_print_wrn k_debug_print_wrn1
+fj_debug_print_err k_debug_print_err1
+fj_debug_print_audio k_debug_print_audio
+更改宏：
+BF_Debug_Change_Term_Char_Color_To 
+BF_Debug_Change_Term_Char_Color_To_HIGHLIGHT
+BF_Debug_Change_Term_Char_Color_R_To 
+BF_Debug_Change_Term_Char_Init 
+BF_Debug_Change_Term_Char_Underline 
+BF_Debug_Change_Term_Clear 
+BF_Debug_Move_Line_To KDebug_Move_Line_To
+BF_Debug_Change_Term_Char_Color_To_Black
+BF_Debug_Change_Term_Char_Color_To_Red
+BF_Debug_Change_Term_Char_Color_To_Green
+BF_Debug_Change_Term_Char_Color_To_Yellow
+BF_Debug_Change_Term_Char_Color_To_Blue
+BF_Debug_Change_Term_Char_Color_To_Purple
+BF_Debug_Change_Term_Char_Color_To_Skyblue
+BF_Debug_Change_Term_Char_Color_To_White
+BF_Debug_Change_Term_Char_Color_R_To_Black
+BF_Debug_Change_Term_Char_Color_R_To_Red
+BF_Debug_Change_Term_Char_Color_R_To_Green
+BF_Debug_Change_Term_Char_Color_R_To_Yellow
+BF_Debug_Change_Term_Char_Color_R_To_Blue
+BF_Debug_Change_Term_Char_Color_R_To_Purple
+BF_Debug_Change_Term_Char_Color_R_To_Skyblue
+BF_Debug_Change_Term_Char_Color_R_To_White
+BF_Debug_Change_Term_Char_BK_Color_To_Black
+BF_Debug_Change_Term_Char_BK_Color_To_Red
+BF_Debug_Change_Term_Char_BK_Color_To_Green
+BF_Debug_Change_Term_Char_BK_Color_To_Yellow
+BF_Debug_Change_Term_Char_BK_Color_To_Blue
+BF_Debug_Change_Term_Char_BK_Color_To_Purple
+BF_Debug_Change_Term_Char_BK_Color_To_Skyblue
+BF_Debug_Change_Term_Char_BK_Color_To_White
+BF_Debug_Print_Debug
+BF_Debug_Print_Information
+BF_Debug_Print_Warning
+BF_Debug_Print_Error
+BF_Debug_Print_Audio
+把BF_Debug 改成KDebug
+
+FJ_DBG_PRMERR
+FJ_DBG_CRTERR
+FJ_DBG_WRTERR
+FJ_DEBUG_PRINT_AUDIO_ON
+把FJ_DBG和FJ_DEBUG 改成KDebug
+-------------------------------------------------------------------------------
+palladiumtesttmr32.c
+Pt_Dd_TMR32_Main 改为palladium_test_tmr32_pt_dd_tmr32_main
+删除palladium_test_common.c建立
+更改前                                                       更改后
+Palladium_Test_Cmd_Call_Main 		palladium_test_common_cmd_call_main
+Palladium_Test_Cmd_Dump_Reg  		palladium_test_common_cmd_dump_reg
+-------------------------------------------------------------------------------------------------
+删除palladium_test_fpt.c 建立palladiumtestfpt
+更改公有
+Pt_Im_FPT_Main改为palladium_test_fpt_pt_im_fpt_main
+宏
+宏前面加PalladiumTestFpt
+
+
+
+

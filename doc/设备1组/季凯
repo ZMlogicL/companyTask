@@ -1,0 +1,531 @@
+提交记录：
+1.拆分h264_ribery.c为h264ribery.c和h264riberydecode.c和h264riberydecodevdp.c和h264riberyencode.c
+2.拆分h264_user.c为h264user.c、h264userplay.c、h264usernotify.c、h264userrecord.c
+3.拆分h265_user.c为h265user.c、h265userplay.c、h265usernotify.c、h265userrecord.c
+4.补交h265头文件修改
+5.拆分movie_video_attr为movie_video_attr_change.c、movie_video_attr_get.c、movie_video_attr_set.c和movie_video_attr_set1.c
+6.新建h265if类，将h265_if类中的内容放到h265if。注：h265_if的头文件包含本文件一定放在第一位
+
+
+1.修改h264ribery的公有方法、私有方法，宏定义，变量,结构体等
+2.修改h264riberydecode.c的公有方法、私有方法，宏定义、变量、结构体等
+3.修改h264riberydecodevdp和h264riberyencode的公有方法、结构体，变量等
+
+
+1.修改h264user、h264userplay、h264usernotify、h264userrecord的方法名、变量、宏定义等
+2.修改h265user、h265userplay、h265usernotify、h265userrecord的方法名、变量、宏定义等
+
+
+movievideoatter：
+方法名修改：
+BF_Movie_Video_Attr_Set_H264_Decoder_Config　改为　　movie_video_attr_set_h264_decoder_config
+其他一样
+　**** 　　改为		movie_video_attr_set_enable_flg(E_VIDEO_ENOCDE_ID videoEncId, UCHAR enableFlag);
+　**** 　　改为		movie_video_attr_set_compression(E_VIDEO_ENOCDE_ID videoEncId, BOOL compression);
+　**** 　　改为		movie_video_attr_set_decoder_codec_type(UINT8 codecType);
+　**** 　　改为		movie_video_attr_set_h265_decoder_config(T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM* videoConfig);
+　**** 　　改为		movie_video_attr_set_decoder_play_start_pts(ULLONG startPts);
+　**** 　　改为		movie_video_attr_set_decoder_play_speed(E_FJ_MOVIE_PLAY_SPEED speed);
+　**** 　　改为		movie_video_attr_set_decoder_play_direction(E_FJ_MOVIE_PLAY_DIRECTION direction);
+　**** 　　改为		movie_video_attr_set_decoder_play_pause(BOOL pause);
+参数修改：去掉下划线
+
+
+movievideoatterchange:
+方法名修改：
+BF_Movie_Video_Attr_Change_EncodeID_to_StreamCH_H264	改为　	movie_video_attr_change_encode_id_to_stream_ch_h264
+	**** 																					改为		movie_video_attr_change_stream_ch_to_encode_id_h264
+	**** 																					改为		movie_video_attr_change_encode_id_to_stream_ch_h265
+	****																					改为		movie_video_attr_change_stream_ch_to_encode_id_h265
+参数：去掉下划线
+	
+movievideoatterget：
+方法名修改：
+BF_Movie_Video_Attr_Get_H264_Config		改为		movie_video_attr_get_h264_config
+其他一样
+
+**** 	改为		movie_video_attr_get_h265_config
+**** 	改为		movie_video_attr_get_enable_flg
+**** 	改为		movie_video_attr_get_frame_rate
+**** 	改为		movie_video_attr_get_frame_rate_value
+**** 	改为		movie_video_attr_get_timelapse_flag
+**** 	改为		movie_video_attr_get_decoder_codec_type
+**** 	改为		movie_video_attr_get_h264_decoder_config
+**** 	改为		movie_video_attr_get_h265_decoder_config
+**** 	改为		movie_video_attr_get_decoder_play_start_pts
+**** 	改为		movie_video_attr_get_decoder_play_speed
+**** 	改为		movie_video_attr_get_decoder_play_direction
+**** 	改为		movie_video_attr_get_decoder_play_pause
+参数修改：去掉下划线
+
+
+movievideoatterset:
+方法名修改：
+BF_Movie_video_Attr_Set_H264_Config     改为		movie_video_attr_set_h264_config
+参数：去掉下划线
+
+
+movievideoatterset1:
+方法名修改：
+BF_Movie_Video_Attr_Set_H265_Config     改为   movie_video_attr_set1_h265_config
+参数：去掉下划线
+
+h265if:结构体、枚举
+结构体名：
+T_H265_IF_PARAM_VUI	改为		H265IfParamVui
+其他类似
+
+枚举：
+E_H265_IF_ID_RECORD	改为		H265If_ID_RECORD
+其他类似
+
+方法名：
+H265_IF_CONTROLLER		改为		h265_if_controller
+Host_H265_Notify_Stop_Trigger		改为			h265_if_notify_stop_trigger
+其他类似
+
+参数：去掉下划线
+
+
+
+补交h264riberydecode.h中结构体
+	1.T_H264_RIBERY_DEC_PARAM	改为		H264RiberyDecodeParam;
+	2.T_H264_RIBERY_DEC_SPS		改为		H264RiberyDecodeSPS;
+
+	
+	
+补交：类私有属性结构声明从.c移至.h
+如：h264user.c中
+将typedef struct _H264UserPrivate 		H264UserPrivate;移至.h中。
+
+
+h264user的修改：
+h264user中宏定义重新修改，将H264user_改为H264User_。
+
+将h264usernotify.h中的宏定义函数改名注释掉（调用的地方直接包头文件h264usernotify.h而不用包h264if.h）：
+如下： 
+原来是：
+#define	h264_user_notify_stop_trigger			Host_H264_Notify_Stop_Trigger
+#define	h264_user_notify_stop_complete			Host_H264_Notify_Stop_Complete
+#define	h264_user_notify_state_change_complete	Host_H264_Notify_State_Change_Complete
+#define 	h264_user_notify_video_stream_request	Host_H264_Notify_Video_Stream_Request
+#define	h264_user_notify_first_frame_display_cb		Host_H264_Notify_FirstFrameDisplayCB
+#define	h264_user_notify_video_decode_cb			Host_H264_Notify_VideoDecodeCB
+#define	h264_user_notify_lcd_update				Host_H264_Notify_Lcd_Update
+#define	h264_user_notify_hdmi_update				Host_H264_Notify_Hdmi_Update
+#define	h264_user_notify_video_stream			Host_H264_Notify_Video_Stream
+#define	h264_user_notify_vector_info				Host_H264_Notify_Vector_Info
+#define	h264_user_notify_pre_encode				Host_H264_Notify_PreEncode
+#define	h264_user_notify_repeat_frame				Host_H264_Notify_RepeatFrame
+
+改为如下：
+
+//#define	h264_user_notify_stop_trigger			h264_user_notify_stop_trigger
+//#define	h264_user_notify_stop_complete			h264_user_notify_stop_complete
+//#define	h264_user_notify_state_change_complete	h264_user_notify_state_change_complete
+//#define 	h264_user_notify_video_stream_request	h264_user_notify_video_stream_request
+//#define	h264_user_notify_first_frame_display_cb		h264_user_notify_first_frame_display_cb
+//#define	h264_user_notify_video_decode_cb			h264_user_notify_video_decode_cb
+//#define	h264_user_notify_lcd_update				h264_user_notify_lcd_update
+//#define	h264_user_notify_hdmi_update				h264_user_notify_hdmi_update
+//#define	h264_user_notify_video_stream			h264_user_notify_video_stream
+//#define	h264_user_notify_vector_info				h264_user_notify_vector_info
+//#define	h264_user_notify_pre_encode				h264_user_notify_pre_encode
+//#define	h264_user_notify_repeat_frame				h264_user_notify_repeat_frame
+
+
+
+h265usernotify修改：
+将h265usernotify.h中的宏定义函数改名注释掉（调用的地方直接包头文件h265usernotify.h而不用包h265if.h）：
+如下： 
+原来是：
+
+#define	h265_user_notify_stop_trigger			h265_if_notify_stop_trigger
+#define	h265_user_notify_stop_complete			h265_if_notify_stop_complete
+#define	h265_user_notify_state_change_complete	h265_if_notify_state_change_complete
+#define 	h265_user_notify_video_stream_request	h265_if_notify_video_stream_request
+#define	h265_user_notify_first_frame_display_cb		h265_if_notify_first_frame_display_cb
+#define	h265_user_notify_video_decode_cb			h265_if_notify_video_decode_cb
+#define	h265_user_notify_lcd_update				h265_if_notify_lcd_update
+#define	h265_user_notify_hdmi_update				h265_if_notify_hdmi_update
+#define	h265_user_notify_video_stream			h265_if_notify_video_stream
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+#define	h265_user_notify_vector_info				h265_if_notify_vector_info
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE END ---
+#define	h265_user_notify_pre_encode				h265_if_notify_pre_encode
+#define	h265_user_notify_repeat_frame				h265_if_notify_repeat_frame
+
+改为如下：
+
+//#define	h265_user_notify_stop_trigger			h265_user_notify_stop_trigger
+//#define	h265_user_notify_stop_complete			h265_user_notify_stop_complete
+//#define	h265_user_notify_state_change_complete	h265_user_notify_state_change_complete
+//#define 	h265_user_notify_video_stream_request	h265_user_notify_video_stream_request
+//#define	h265_user_notify_first_frame_display_cb		h265_user_notify_first_frame_display_cb
+//#define	h265_user_notify_video_decode_cb			h265_user_notify_video_decode_cb
+//#define	h265_user_notify_lcd_update				h265_user_notify_lcd_update
+//#define	h265_user_notify_hdmi_update				h265_user_notify_hdmi_update
+//#define	h265_user_notify_video_stream			h265_user_notify_video_stream
+//// --- REMOVE_ES3_HARDWARE BEGIN ---
+//// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+//#ifdef CO_ES3_HARDWARE
+//// --- REMOVE_ES_COMPILE_OPT END ---
+//#define	h265_user_notify_vector_info				h265_user_notify_vector_info
+//// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+//#endif
+//// --- REMOVE_ES_COMPILE_OPT END ---
+//// --- REMOVE_ES3_HARDWARE END ---
+//#define	h265_user_notify_pre_encode				h265_user_notify_pre_encode
+//#define	h265_user_notify_repeat_frame				h265_user_notify_repeat_frame
+
+new方法：
+
+h264user.h:			添加H264User*sefl,		回调函数：h264_user_play_finalize_callback被作为参数，不能加H264User*sefl，
+INT32 			h264_user_play_get_display_setting(H264User* self, H264IfDisplayParam* lcdInfo,
+					H264IfDisplayParam* hdmiInfo, H264IfDecoderParam* decoderParam);
+VOID			h264_user_play_finalize_callback(int type, int param);
+INT32 			h264_user_resize_rotate(H264User* self, H264UserRealizeTbl* resizeTbl);
+
+
+h264usernotify.h：
+
+h264userplay.h:		添加H264UserPlay* self
+如下：
+INT32 	h264_user_play_init(H264UserPlay* self);
+INT32 	h264_user_play_set_video_stream(H264UserPlay* self, UINT32 storeNum, H264IfParamSetStream* videoStreamParam);
+INT32	h264_user_play_start(H264UserPlay* self);
+INT32 	h264_user_play_stop_func(H264UserPlay* self, BOOL lastPictureKeep);
+INT32 	h264_user_play_flush(H264UserPlay* self);
+INT32 	h264_user_play_top_func(H264UserPlay* self, BOOL display, ULLONG reqPts, UINT32 storeNum,
+			H264IfParamSetStream* videoStreamParam, H264IfVideoYuvInfo* decodeYuvInfo);
+INT32 	h264_user_play_get_display_frame(H264UserPlay* self, H264IfVideoYuvInfo* displayYuvInfo);
+INT32 	h264_user_play_pause(H264UserPlay* self);
+INT32 	h264_user_play_resume(H264UserPlay* self);
+BOOL 	h264_user_is_play_stop(H264UserPlay* self);
+
+
+按规范同步修改h264user、h264usernotify：
+E_H264_IF_STREAM_CH			H264IfStreamCh
+D_MBA_KIND_MOVIE				MbaIf_D_MBA_KIND_MOVIE			其他作相同修改
+
+变量：
+VBV_buffer					vbvBuffer				其他作相同修改
+
+补交h265if.h结构体修改：
+typedef struct _H265IfDispalyParam		H265IfDispalyParam;
+typedef struct _H265IfDispalyInfo			H265IfDispalyInfo;
+改为：
+typedef struct _H265IfDisplayParam		H265IfDisplayParam;
+typedef struct _H265IfDisplayInfo			H265IfDisplayInfo;
+
+
+h264userplay.h的公有方法
+BOOL 	h264_user_is_play_stop(H264UserPlay* self);
+改为
+BOOL 	h264_user_play_is_stop(H264UserPlay* self);
+
+
+
+h265user.h枚举名修改：
+H265User_IMAGE_FORMAT		改为		H265UserImageFormat
+H265User_SCAN_MODE			改为		H265UserScanMode
+H265User_ROTATE					改为		H265UserRotate
+H265User_RESIZE_MODE		改为		H265UserResizeMode
+
+
+h264usernotify.h:添加self
+如下：
+VOID 	h264_user_notify_stop_trigger(H264UserNotify* self, H264IfStopNotify param);
+VOID 	h264_user_notify_stop_complete(H264UserNotify* self);
+VOID 	h264_user_notify_state_change_complete(H264UserNotify* self, INT32 result);
+BOOL 	h264_user_notify_video_stream_request(H264UserNotify* self);
+BOOL 	h264_user_notify_first_frame_display_cb(H264UserNotify* self, H264IfPlayDecoderStatus decoderStatus,
+			ULLONG displayPts, BOOL error);
+BOOL 	h264_user_notify_video_decode_cb(H264UserNotify* self, H264IfPlayDecoderStatus decoderStatus,
+			ULLONG displayPts, BOOL error);
+VOID 	h264_user_notify_lcd_update(H264UserNotify* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+VOID 	h264_user_notify_hdmi_update(H264UserNotify* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+INT32 	h264_user_notify_video_stream(H264UserNotify* self, H264IfVideoStreamParam* vstreamInfo);
+INT32 	h264_user_notify_vector_info(H264UserNotify* self, H264IfVideoVectorParam* vectorInfo);
+INT32 	h264_user_notify_pre_encode(H264UserNotify* self, H264IfStreamCh streamCh);
+INT32 	h264_user_notify_repeat_frame(H264UserNotify* self, H264IfStreamCh streamCh);
+
+
+h264userrecord.h添加self
+如下：
+VOID	h264_user_record_start_err_notify(VOID);
+VOID	h264_user_record_initialize_callback(int type, int param);//不能加self;
+VOID	h264_user_record_start_video_callback(int type, int param);//不能加self;
+VOID	h264_user_record_stop_video_callback(int type, int param);//不能加self;
+INT32 	h264_user_record_ready_movie(H264UserRecord* self, MovieVideoEncodeId videoEncId);
+INT32 	h264_user_record_start_video(H264UserRecord* self, MovieVideoEncodeId videoEncId, ULLONG start_offset);
+INT32 	h264_user_record_stop_video(H264UserRecord* self, MovieVideoEncodeId videoEncId);
+INT32 	h264_user_record_set_dynamic_parameter(H264UserRecord* sel, MovieVideoEncodeId videoEncId,
+			H264DynamicConfigParam* dynamicConfig);
+INT32 	h264_user_record_get_sts(H264UserRecord* self);
+INT32 	h264_user_record_get_image_address(H264UserRecord* self, MovieVideoEncodeId videoEncId,
+			FjEncoderEMovieVideoSize size, ULLONG frameNo, MovieVideo* addrParam);
+VOID 	h264_user_record_decide_image_address(H264UserRecord* self, MovieVideoEncodeId videoEncId,
+			ULLONG frameNo, BOOL dummyFlg);
+VOID 	h264_user_record_frame_enabled(H264UserRecord* self, MovieVideoEncodeId videoEncId,
+			ULLONG frameNo, BOOL dummyFlg, BOOL enabled);
+INT32 	h264_user_record_free_video_index(H264UserRecord* self, MovieVideoEncodeId videoEncId,
+			UINT32 freeVstreamIndex, BOOL lastFreeFlg);
+VOID 	h264_user_record_valid_image_address(H264UserRecord* self, MovieVideoEncodeId videoEncId);
+
+
+h264userplay.h添加self
+如下：
+INT32 	h264_user_play_init(H264UserPlay* self);
+INT32 	h264_user_play_set_video_stream(H264UserPlay* self, UINT32 storeNum, H264IfParamSetStream* videoStreamParam);
+INT32	h264_user_play_start(H264UserPlay* self);
+INT32 	h264_user_play_stop_func(H264UserPlay* self, BOOL lastPictureKeep);
+INT32 	h264_user_play_flush(H264UserPlay* self);
+INT32 	h264_user_play_top_func(H264UserPlay* self, BOOL display, ULLONG reqPts, UINT32 storeNum,
+			H264IfParamSetStream* videoStreamParam, H264IfVideoYuvInfo* decodeYuvInfo);
+INT32 	h264_user_play_get_display_frame(H264UserPlay* self, H264IfVideoYuvInfo* displayYuvInfo);
+INT32 	h264_user_play_pause(H264UserPlay* self);
+INT32 	h264_user_play_resume(H264UserPlay* self);
+BOOL 	h264_user_play_is_stop(H264UserPlay* self);
+
+h265user.h添加self
+如下：
+
+VOID	h265_user_record_initialize_callback(int type, int param);//不能加self
+VOID	h265_user_record_start_video_callback(int type, int param);//不能加self
+VOID	h265_user_record_stop_video_callback(int type, int param);//不能加self
+INT32	h265_user_play_get_display_setting(H265User*self, H265IfDisplayParam* lcdInfo,
+						H265IfDisplayParam* hdmiInfo, H265IfDecoderParam* decoderParam);
+VOID	h265_user_play_finalize_callback(int type, int param);//不能加self
+INT32 	h265_user_resize_rotate(H265User*self, H265UserResizeTbl* resizeTbl);
+
+h265usernotify.h添加self
+如下：
+
+VOID 	h265_user_notify_stop_trigger(H265UserNotify* self, H265IfStopNotify param);
+VOID 	h265_user_notify_stop_complete(H265UserNotify* self);
+VOID 	h265_user_notify_state_change_complete(H265UserNotify* self, INT32 result);
+BOOL 	h265_user_notify_video_stream_request(H265UserNotify* self);
+BOOL 	h265_user_notify_first_frame_display_cb(H265UserNotify* self, H265IfPlayDecoderStatus decoderStatus, ULLONG displayPts, BOOL error);
+BOOL 	h265_user_notify_video_decode_cb(H265UserNotify* self, H265IfPlayDecoderStatus decoderStatus, ULLONG displayPts, BOOL error);
+VOID 	h265_user_notify_lcd_update(H265UserNotify* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+VOID 	h265_user_notify_hdmi_update(H265UserNotify* self, UINT32* yAddr, UINT32* cAddr, BOOL update);
+INT32 	h265_user_notify_video_stream(H265UserNotify* self, H265IfStreamCh streamCh, H265IfVideoStreamParam* vstreamInfo);
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+INT32	h265_user_notify_vector_info(H265UserNotify* self,  H265IfVideoVectorParam* vector_info);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE END ---
+INT32 	h265_user_notify_pre_encode(H265UserNotify* self, H265IfStreamCh streamCh, INT32 *vopCnt);
+INT32 	h265_user_notify_repeat_frame(H265UserNotify* self, H265IfStreamCh streamCh);
+
+
+h265userplay.h添加self
+如下：
+INT32 h265_user_play_init(H265UserPlay* self);
+INT32 h265_user_play_set_video_stream(H265UserPlay* self, UINT32 storeNum, H265IfParamSetStream* videoStreamParam);
+INT32 h265_user_play_start(H265UserPlay* self);
+INT32 h265_user_play_stop(H265UserPlay* self, BOOL lastPictureKeep);
+INT32 h265_user_play_flush(H265UserPlay* self);
+INT32 h265_user_play_top(H265UserPlay* self, BOOL display, ULLONG reqPts, UINT32 storeNum,
+			H265IfParamSetStream* videoStreamParam, H265IfVideoYuvInfo* decodeYuvInfo);
+INT32 h265_user_play_get_display_frame(H265UserPlay* self, H265IfVideoYuvInfo* displayYuvInfo);
+INT32 h265_user_play_pause(H265UserPlay* self);
+INT32 h265_user_play_resume(H265UserPlay* self);
+BOOL h265_user_play_is_stop(H265UserPlay* self);
+
+h265userrecord.h添加self
+如下：
+INT32 	h265_user_record_ready_movie(H265UserRecord* self, MovieVideoEncodeId videoEncId);
+INT32 	h265_user_record_start_video(H265UserRecord* self, MovieVideoEncodeId videoEncId, ULLONG startOffset);
+INT32	h265_user_record_stop_video(H265UserRecord* self, MovieVideoEncodeId videoEncId);
+INT32 	h265_user_record_set_dynamic_parameter(H265UserRecord* self, MovieVideoEncodeId videoEncId,
+			T_FJ_MOVIE_H265_DYNAMIC_CONFIG_PARAM* dynamicConfig);
+INT32 	h265_user_record_get_sts(H265UserRecord* self);
+INT32 	h265_user_record_get_image_address(H265UserRecord* self, MovieVideoEncodeId videoEncId,
+			FjEncoderEMovieVideoSize size, ULLONG frameNo, MovieVideo* addrParam);
+VOID 	h265_user_record_decide_image_address(H265UserRecord* self, MovieVideoEncodeId videoEncId, ULLONG frameNo, BOOL dummyFlg);
+VOID 	h265_user_record_frame_enabled(H265UserRecord* self, MovieVideoEncodeId videoEncId, ULLONG frameNo, BOOL dummyFlg, BOOL enabled);
+INT32 	h265_user_record_free_video_index(H265UserRecord* self, MovieVideoEncodeId videoEncId, UINT32 freeVstreamIndex, BOOL lastFreeFlg);
+VOID 	h265_user_record_valid_image_address(H265UserRecord* self, MovieVideoEncodeId videoEncId);
+
+
+movievideoattr.c添加self
+如下：
+FJ_ERR_CODE 	movie_video_attr_set_enable_flg(MovieVideoAttr* self, MovieVideoEncodeId videoEncId, UCHAR enableFlag);
+FJ_ERR_CODE 	movie_video_attr_set_compression(MovieVideoAttr* self,
+						MovieVideoEncodeId videoEncId, BOOL compression);
+FJ_ERR_CODE 	movie_video_attr_set_decoder_codec_type(MovieVideoAttr* self, UINT8 codecType);
+FJ_ERR_CODE 	movie_video_attr_set_h264_decoder_config(MovieVideoAttr* self,
+						FjDecoderPlayVideoConfigParam* videoConfig);
+FJ_ERR_CODE 	movie_video_attr_set_h265_decoder_config(MovieVideoAttr* self,
+						FjDecoderPlayVideoConfigParam* videoConfig);
+FJ_ERR_CODE 	movie_video_attr_set_decoder_play_start_pts(MovieVideoAttr* self, ULLONG startPts);
+FJ_ERR_CODE 	movie_video_attr_set_decoder_play_speed(MovieVideoAttr* self, FjDecoderMoviePlaySpeed speed);
+FJ_ERR_CODE 	movie_video_attr_set_decoder_play_direction(MovieVideoAttr* self,
+						FjDecoderMoviePlayDirection direction);
+FJ_ERR_CODE	movie_video_attr_set_decoder_play_pause(MovieVideoAttr* self, BOOL pause);
+
+
+movievideoattrchange.h添加self
+如下：
+FJ_ERR_CODE movie_video_attr_change_encode_id_to_stream_ch_h264(MovieVideoAttrChange* self,
+						MovieVideoEncodeId videoEncId,H264IfStreamCh* streamCh);
+FJ_ERR_CODE movie_video_attr_change_stream_ch_to_encode_id_h264(MovieVideoAttrChange* self,
+						H264IfStreamCh streamCh,MovieVideoEncodeId* videoEncId);
+FJ_ERR_CODE movie_video_attr_change_encode_id_to_stream_ch_h265(MovieVideoAttrChange* self,
+						MovieVideoEncodeId videoEncId,H265IfStreamCh* streamCh);
+FJ_ERR_CODE movie_video_attr_change_stream_ch_to_encode_id_h265(MovieVideoAttrChange* self,
+						H265IfStreamCh streamCh,MovieVideoEncodeId* videoEncId);
+						
+movievideoattrget.h添加self	
+如下：				
+FJ_ERR_CODE 	movie_video_attr_get_h264_config(MovieVideoAttrGet*self,
+						MovieVideoEncodeId videoEncId, H264IfParamRecord* cfgParam);
+FJ_ERR_CODE 	movie_video_attr_get_h265_config(MovieVideoAttrGet*self,
+						MovieVideoEncodeId videoEncId, H265IfParamRecord* cfgParam);
+UCHAR 			movie_video_attr_get_enable_flg(MovieVideoAttrGet*self, MovieVideoEncodeId videoEncId);
+INT32 				movie_video_attr_get_frame_rate(MovieVideoAttrGet*self, MovieVideoEncodeId videoEncId);
+INT32 				movie_video_attr_get_frame_rate_value(MovieVideoAttrGet*self, MovieVideoEncodeId videoEncId);
+UCHAR 			movie_video_attr_get_timelapse_flag(MovieVideoAttrGet*self, MovieVideoEncodeId videoEncId);
+FJ_ERR_CODE 	movie_video_attr_get_decoder_codec_type(MovieVideoAttrGet*self, UINT8* codecType);
+FJ_ERR_CODE 	movie_video_attr_get_h264_decoder_config(MovieVideoAttrGet*self, H264IfDecoderParam* videoConfig);
+FJ_ERR_CODE 	movie_video_attr_get_h265_decoder_config(MovieVideoAttrGet*self, H265IfDecoderParam* videoConfig);
+FJ_ERR_CODE 	movie_video_attr_get_decoder_play_start_pts(MovieVideoAttrGet*self, ULLONG* startPts);
+FJ_ERR_CODE 	movie_video_attr_get_decoder_play_speed(MovieVideoAttrGet*self, FjDecoderMoviePlaySpeed* speed);
+FJ_ERR_CODE 	movie_video_attr_get_decoder_play_direction(MovieVideoAttrGet*self,
+						FjDecoderMoviePlayDirection* direction);
+FJ_ERR_CODE 	movie_video_attr_get_decoder_play_pause(MovieVideoAttrGet*self, BOOL* pause);
+
+movievideoattrset.h添加self	
+如下：		
+FJ_ERR_CODE 	movie_video_attr_set_h264_config(MovieVideoAttrSet* self, 
+						MovieVideoEncodeId videoEncId,MovieH264ConfigParam* cfgParam);
+
+movievideoattrset1.h添加self	
+如下：		
+FJ_ERR_CODE 				movie_video_attr_set1_h265_config(MovieVideoAttrSet1* self,
+									MovieVideoEncodeId videoEncId, MovieH265ConfigParam* cfgParam);
+									
+									
+h265if.h添加self
+如下：
+VOID 	h265_if_controller(INT32 stacd);			//不能加self
+
+// [H265 Task Interface (MailBOX)]
+INT32 	h265_if_set_msg(H265If* self, H265IfMsg* msg, H265IfMsgWait wait);
+INT32	h265_if_get_msg(H265IfMsg* msg, H265IfMsgWait wait);
+INT32 	h265_if_cear_msg(H265If* self);			//被h265_if_controller调用，也不能加self
+/*  -Input YC Image setting Address get */
+INT32 	h265_if_get_record_image_address(H265If* self, H265IfStreamCh streamCh, H265IfImageSize size,
+			ULLONG frameNo, H265IfGetImageAddrParam* addrParam);
+VOID 	h265_if_decide_record_image_address(H265If* self, H265IfStreamCh streamCh, ULLONG frameNo, BOOL dummyFlg);
+VOID 	h265_if_record_frame_enabled(H265If* self, H265IfStreamCh streamCh,
+			ULLONG frameNo, BOOL dummyFlg, BOOL enabled);
+VOID 	h265_if_record_valid_image_address(H265If* self, H265IfStreamCh streamCh);
+VOID 	h265_if_record_danamic_param_set(H265If* self, H265IfStreamCh streamCh,
+			H265IfDynamicParamRecord* dynamicParam);
+/*  -Free video stream */
+INT32 	h265_if_record_free_video_index(H265If* self,
+			H265IfStreamCh streamCh, UINT32 freeVstreamIndex, BOOL lastFreeFlg);
+/*  -Intterupt Counter */
+VOID 	h265_if_record_sync_interrupt_counter_increment(H265If* self, H265IfStreamCh streamCh);
+
+/* (Play)  */
+/*  -Total Play Time get */
+INT32 	h265_if_play_set_video_stream(H265If* self, UINT32 storeNum, H265IfParamSetStream* videoStreamParam);
+/*  -Current Display Frame get */
+INT32 	h265_if_play_get_display_frame(H265If* self, H265IfVideoYuvInfo* displayYuvInfo);
+
+/*  -Top Image get */
+//INT32 	h265_if_get_play_topimage(H265If* self, H265IfMsg* msg);	// I: messange		
+
+
+h264ribery.h添加self
+如下：
+VOID 	h264_ribery_int_request(H264Ribery* self, USHORT request);
+VOID 	h264_ribery_int_request2(H264Ribery* self, USHORT request);
+INT32 	h264_ribery_initialize(H264Ribery* self, ULONG codec, ULONG coreMode,
+			H264Ribery_BRIDGE_COMMON* bridgeCommon, H264Ribery_BRIDGE_PORT* bridgePort);
+INT32 	h264_ribery_finalize(H264Ribery* self, ULONG codec);
+VOID 	h264_ribery_clock_start(H264Ribery* self);
+VOID 	h264_ribery_clock_stop(H264Ribery* self);
+INT32 	H264_Ribery_DI(VOID);//.a,不能改
+VOID 	H264_Ribery_EI(UINT32 status);//.a,不能改
+VOID 	H264_Ribery_DSB(VOID);//.a,不能改
+VOID 	H264_Ribery_Clean(ULONG addr, ULONG size);//.a,不能改
+VOID 	H264_Ribery_Flush(ULONG addr, ULONG size);//.a,不能改
+VOID 	H264_Ribery_AHclock_Set(UCHAR clk);		//.a,不能改
+INT32	h264_ribery_boot(H264Ribery* self);
+INT32	h264_ribery_boot2(H264Ribery* self);				
+
+结构体名：
+H264Ribery_BRIDGE_COMMON_CH			H264RiberyBridgeCommonCh
+H264Ribery_BRIDGE_COMMON_ADDR		H264RiberyBridgeCommonAddr
+H264Ribery_BRIDGE_COMMON					H264RiberyBridgeCommon
+H264Ribery_BRIDGE_MAP_YC_SIZE				H264RiberyBridgeMapYcSize
+H264Ribery_BRIDGE_MAP_YC_CH				H264RiberyBridgeMapYcCh
+H264Ribery_BRIDGE_MAP_YC_ADDR			H264RiberyBridgeMapYcAddr
+H264Ribery_BRIDGE_YC				H264RiberyBridgeYc
+H264Ribery_BRIDGE_PORT			H264RiberyBridgePort
+H264Ribery_ENC_VUI					H264RiberyEncVui
+H264Ribery_ENC_SCALINGLIST	H264RiberyEncScalinglist
+H264_RIBERY_ENC_V_Q_DFVLD	H264RiberyEncVQDfvld
+H264Ribery_ENC_PARAM			H264RiberyEncParam
+
+h264riberydecode.h添加self
+如下：
+void 		h264_ribery_decode_init_param_set(H264RiberyDecode* self,
+				H264RiberyDecodeParam* param, H264RiberyBridgeYc* bridgeYc); //decode decodeplay
+void 		h264_ribery_decode_init_param_set2(H264RiberyDecode* self,
+				H264RiberyDecodeParam* param, H264RiberyBridgeYc* bridgeYc); //none
+kint32 		h264_ribery_decode_start(H264RiberyDecode* self); //decode decodeplay
+kint32 		h264_ribery_decode_start2(H264RiberyDecode* self); //none
+void 		h264_ribery_decode_vtable_init(H264RiberyDecode* self); //decode decodeplay
+void 		h264_ribery_decode_vtable_init2(H264RiberyDecode* self); //none
+VOID 		h264_ribery_decode_sps_analyze(H264RiberyDecode* self, H264RiberyDecodeSPS* sps, ULONG spsAddr);
+VOID 		h264_ribery_decode_vcpb_empty_init(H264RiberyDecode* self);
+INT32 		h264_ribery_decode_vcpb_empty_fileld_get(H264RiberyDecode* self, UINT32* emptyIndex);
+INT32 		h264_ribery_decode_vcpb_set(H264RiberyDecode* self, UINT32 index, rbInfotableVcpb* vcpbInfo);
+INT32 		h264_ribery_decode_vcpb_set2(H264RiberyDecode* self, UINT32 index, rbInfotableVdpb* vdpbInfo);
+INT32 		h264_ribery_decode_vcpb_free(H264RiberyDecode* self, UINT32 *index);
+INT32 		h264_ribery_decode_vcpb_free2(H264RiberyDecode* self, UINT32 *index);
+
+
+h264riberydecodevdp.h添加self
+如下：
+INT32 			h264_ribery_decode_vdpb_get(H264RiberyDecodeVdp* self, UINT32* inIndex, rbInfotableVdpb* vdpbInfo);
+INT32 			h264_ribery_decode_vdpb_get2(H264RiberyDecodeVdp* self, UINT32* inIndex, rbInfotableVdpb* vdpbInfo);
+INT32 			h264_ribery_decode_vdpb_free(H264RiberyDecodeVdp* self, UINT32 index);
+INT32 			h264_ribery_decode_vdpb_free2(H264RiberyDecodeVdp* self, UINT32 index);
+
+
+h264riberyencode.h添加self
+如下：
+
+VOID 					h264_ribery_encode_init_param_set(H264RiberyEncode* self, UINT32 ch,
+							H264RiberyEncParam* param, H264RiberyBridgeYc* bridgeYc);
+INT32					h264_ribery_encode_start(H264RiberyEncode* self, UINT32 ch);
+VOID 					h264_ribery_encode_vtable_init(H264RiberyEncode* self);
+VOID 					h264_ribery_encode_vraw_empty_init(H264RiberyEncode* self, UINT32 ch, UINT32 tableOffset);
+INT32 					h264_ribery_encode_vraw_set(H264RiberyEncode* self, rbFifoIndex index,
+							rbInfotableVraw* vrawInfo);
+INT32 					h264_ribery_encode_vraw_req(H264RiberyEncode* self, UINT32 count, rbFifoIndex* index);
+INT32 					h264_ribery_encode_vraw_free(H264RiberyEncode* self, UINT32* freeCount,
+							rbFifoIndex* freeIndex, UINT32* freeBank);
+INT32 					h264_ribery_encode_vraw_empty_field_get(H264RiberyEncode* self, UINT32 ch,
+							UINT32* emptyIndex);
+INT32 					h264_ribery_encode_vstream_get(H264RiberyEncode* self, UINT32* count, rbFifoIndex* index,
+							rbInfotableVstrm* vstrmInfo);
+INT32 					h264_ribery_encode_vstream_free(H264RiberyEncode* self, UINT32 count, rbFifoIndex* index);
+INT32 					h264_ribery_encode_y_vec_get(H264RiberyEncode* self, UINT32* index, rbInfotableYVec* yVecInfo);

@@ -1,0 +1,524 @@
+(1)LCD_a027dn01.c 建立对应类LcdA027dn01
+公有函数改名:
+	lcd_set_hook -> 								lcd_a027dn01_set_hook
+	InitSequence -> 								lcd_a027dn01_initSequence
+	lcd_init     -> 									lcd_a027dn01_init
+	
+(2)Icm20948Setup.c 建立对应类Icm20948Setup
+更改枚举:inv_icm20948_sensor 			 InvIcm20948Sensor
+公有函数改名:
+inv_icm20948_sensor_android_2_sensor_type->					icm20948_setup_sensor_android_2_sensor_type
+inv_icm20948_get_whoami			->										icm20948_setup_get_whoami
+inv_icm20948_init_matrix				->										icm20948_setup_init_matrix
+inv_icm20948_init_structure			->										icm20948_setup_init_structure
+inv_icm20948_initialize					->										icm20948_setup_initialize
+inv_icm20948_init_scale					->										icm20948_setup_init_scale
+inv_icm20948_set_fsr->															icm20948_setup_set_fsr
+inv_icm20948_get_fsr->															icm20948_setup_get_fsr
+inv_icm20948_set_bias->														icm20948_setup_set_bias
+inv_icm20948_get_bias->														icm20948_setup_get_bias
+inv_icm20948_set_lowpower_or_highperformance->			icm20948_setup_set_lowpower_or_highperformance
+inv_icm20948_get_lowpower_or_highperformance->			icm20948_setup_get_lowpower_or_highperformance
+inv_icm20948_set_matrix->													icm20948_setup_set_matrix
+inv_icm20948_initialize_auxiliary->										icm20948_setup_initialize_auxiliary
+inv_icm20948_soft_reset->														icm20948_setup_soft_reset
+inv_icm20948_enable_sensor->												icm20948_setup_enable_sensor
+inv_icm20948_set_sensor_period->										icm20948_setup_set_sensor_period
+inv_icm20948_enable_batch_timeout->								icm20948_setup_enable_batch_timeout
+inv_icm20948_load->																icm20948_setup_load
+inv_icm20948_poll_sensor->													icm20948_setup_poll_sensor
+结构体名字更改:
+inv_icm20948 ->InvIcm20948
+
+(3)camera_sensor_imx533.c建立对应类CameraSensorImx533
+公有函数改名:
+Sensor_IMX533_Clock_Gpio_Init-> 							camera_sensor_imx533_clock_gpio_init
+Sensor_IMX533_Standby-> 										camera_sensor_imx533_standby
+Sensor_IMX533_CancelStandby ->							camera_sensor_imx533_cancelStandby
+Sensor_IMX533_Mode ->											camera_sensor_imx533_mode
+Sensor_IMX533_SgVHD-> 											camera_sensor_imx533_sgVHD
+Sensor_IMX533_Calc_Exp ->										camera_sensor_imx533_calc_exp
+Sensor_IMX533_Set_Exp ->										camera_sensor_imx533_set_exp
+
+(4)camera_focus_zc525.c建立对应类CameraFocusZc525
+更改宏：
+REG_0                                    CameraFocusZc525_REG_0
+D_DAC_POS								CameraFocusZc525_D_DAC_POS
+DoF_INF									CameraFocusZc525_DoF_INF
+公有函数改名:
+Focus_VCM_ZC525_Init   -> 										camera_focus_zc525_init
+Focus_VCM_ZC525_SetDAC -> 									camera_focus_zc525_setDAC
+Focus_VCM_ZC525_GetDAC -> 									camera_focus_zc525_getDAC
+Focus_VCM_ZC525_Move   -> 									camera_focus_zc525_move
+Focus_VCM_ZC525_CalcDAC-> 									camera_focus_zc525_calcDAC
+公有结构体变量改名:
+Z525_DOF    ->								z525DOF
+ZC525_BASIC ->								zC525BASIC
+联合体：
+U_REG    										CameraSensorImx533UReg
+枚举改名;
+E_SENSOR_IMX533_MODE			CameraSensorImx533Mode
+
+(5)fj_top.c建立对应类FiTop
+枚举名更改:
+FJ_TOP_CLOCK_NAME 			FjTopClockName
+FJ_TOP_EMMC_CLKSEL 			FjTopEmmcClksel
+FJ_TOP_NF_CLKSEL 				FjTopNfClksel
+FJ_TOP_SD2U2_CLKSEL 			FjTopSd2u2Clksel
+FJ_TOP_SD2U1_CLKSEL 			FjTopSd2u1Clksel
+FJ_TOP_SD3_CLKSEL 				FjTopSd3Clksel
+FJ_TOP_SD1_CLKSEL 				FjTopSd1Clksel
+FJ_TOP_RAW_CLKSEL 				FjTopRawClksel
+FJ_TOP_HIF_CLKSEL 				FjTopHifClksel
+FJ_TOP_MIF_CLKSEL 				FjTopMifClksel
+FJ_TOP_IPU_CLKSEL 				FjTopIpuClksel
+FJ_TOP_IPU_TME_CLKSEL 		FjTopIpuTmeClksel
+FJ_TOP_GPU_CLKSEL 				FjTopGpuClksel
+FJ_TOP_JPG_CLKSEL 				FjTopJpgClksel
+FJ_TOP_ELA_CLKSEL 				FjTopElaClksel
+FJ_TOP_PIPE_CLKSEL 				FjTopPipeClksel
+FJ_TOP_SEN_CLKSEL 				FjTopSenClksel
+FJ_TOP_SENMSK_CLKSEL 		FjTopSenmskClksel
+FJ_TOP_IIP_CLKSEL 				FjTopIipClksel
+ FJ_TOP_PAS_CLKSEL 				FjTopPasClksel
+FJ_TOP_IPP_CLKSEL 				FjTopIppClksel
+FJ_TOP_PXF_CLKSEL 				FjTopPxfClksel
+FJ_TOP_HEVENC_CLKSEL 		FjTopHevencClksel
+FJ_TOP_HEVSEL_CLKSEL 		FjTopHevselClksel
+FJ_TOP_VDF_CLKSEL 				FjTopVdfClksel
+FJ_TOP_SRO_CLKSEL 				FjTopSroClksel
+FJ_TOP_R2Y_CLKSEL 				FjTopR2yClksel
+FJ_TOP_LTM1_CLKSEL	 			FjTopLtm1Clksel
+FJ_TOP_B2R1_CLKSEL				FjTopB2r1Clksel
+FJ_TOP_B2R2_CLKSEL 			FjTopB2r2Clksel
+FJ_TOP_CNR2_CLKSEL 			FjTopCnr2Clksel
+FJ_TOP_B2B2_CLKSEL 			FjTopB2b2Clksel
+FJ_TOP_LTMRBK2_CLKSEL 		FjTopLtmrbk2Clksel
+ FJ_TOP_SNAPCLKO_CLKSEL  FjTopSnapclkoClksel
+FJ_TOP_APCLK_CLKSEL 			FjTopApclkClksel
+FJ_TOP_AU_CLKSEL 				FjTopAuClksel
+FJ_TOP_SPI_CLKSEL 				FjTopSpiClksel
+FJ_TOP_DSP_CLKSEL 				FjTopDspClksel
+FJ_TOP_AXI_CLKSEL 				FjTopAxiClksel
+FJ_TOP_EAXI_CLKSEL 				FjTopEaxiClksel
+FJ_TOP_BAHB_CLKSEL 			FjTopBahbClksel
+FJ_TOP_AHB_CLKSEL 				FjTopAhbClksel
+FJ_TOP_APB_CLKSEL 				FjTopApbClksel
+FJ_TOP_MXI400_CLKSEL 			FjTopMxi400Clksel
+FJ_TOP_MXI200_CLKSEL 			FjTopMxi200Clksel
+FJ_TOP_AXI400_CLKSEL 			FjTopAxi100Clksel
+FJ_TOP_CNR1_CLKSEL 			FjTopCnr1Clksel
+FJ_TOP_B2B1_CLKSEL 			FjTopB2b1Clksel
+FJ_TOP_LTMRBK1_CLKSEL 		FjTopLtmrbk1Clksel
+FJ_TOP_LTM2_CLKSEL 			FjTopLtm2Clksel
+FJ_TOP_RIB_CLKSEL 				FjTopRibClksel
+FJ_TOP_NFBCH_CLKSEL 			FjTopNfbchClksel
+FJ_TOP_ME_CLKSEL 				FjTopMeClksel
+FJ_TOP_FPT_CLKSEL 				FjTopFptClksel
+FJ_TOP_SHDR_CLKSEL 			FjTopShdrClksel
+FJ_TOP_GYRO_CLKSEL 			FjTopGyroClksel
+FJ_TOP_AXI300_CLKSEL 			FjTopAxi300Clksel
+FJ_TOP_IMAGE_CLOCK 			FjTopImageClksel
+
+枚举里的变量修改：
+FjTopImageClksel
+sro1_2 		sro12
+sro2_2 		sro22
+rib_core 	ribCore
+ipu_tme 	ipuTme
+
+修改公有名:
+FJ_Top_Start_Clock 					->					fj_top_start_clock1
+FJ_Top_Stop_Clock 										fj_top_stop_clock1
+FJ_Top_Set_Clock_Select_EMMC 				fj_top_set_clock_select_emmc1
+FJ_Top_Set_Clock_Select_NF 						fj_top_set_clock_select_nf1
+FJ_Top_Set_Clock_Select_SD2U2 				fj_top_set_clock_select_sd2u21
+FJ_Top_Set_Clock_Select_SD2U1 				fj_top_set_clock_select_sd2u11
+FJ_Top_Set_Clock_Select_SD3U1 				fj_top_set_clock_select_sd3u11
+FJ_Top_Set_Clock_Select_SD1IO 				fj_top_set_clock_select_sd1io1
+FJ_Top_Set_Clock_Select_RAW 					fj_top_set_clock_select_raw1
+ FJ_Top_Set_Clock_Select_HIF 					fj_top_set_clock_select_hif1
+FJ_Top_Set_Clock_Select_MIF 					fj_top_set_clock_select_mif1
+FJ_Top_Set_Clock_Select_IPU	 					fj_top_set_clock_select_ipu1
+FJ_Top_Set_Clock_Select_IPU_TME 			fj_top_set_clock_select_ipu_tme1
+FJ_Top_Set_Clock_Select_GPU 					fj_top_set_clock_select_gpu1
+FJ_Top_Set_Clock_Select_JPEG 					fj_top_set_clock_select_jpeg1
+FJ_Top_Set_Clock_Select_PIPE 					fj_top_set_clock_select_pipe1
+FJ_Top_Set_Clock_Select_ELA 					fj_top_set_clock_select_ela1
+FJ_Top_Set_Clock_Select_SEN 					fj_top_set_clock_select_sen1
+FJ_Top_Set_Clock_Select_SENMSK 			fj_top_set_clock_select_senmsk1
+FJ_Top_Set_Clock_Select_IIP 						fj_top_set_clock_select_iip1
+FJ_Top_Set_Clock_Select_PAS 					fj_top_set_clock_select_pas1
+FJ_Top_Set_Clock_Select_IPP 						fj_top_set_clock_select_ipp1
+FJ_Top_Set_Clock_Select_PXF 					fj_top_set_clock_select_pxf1
+FJ_Top_Set_Clock_Select_HEVENC 			fj_top_set_clock_select_hevenc1
+FJ_Top_Set_Clock_Select_HEVSEL  				fj_top_set_clock_select_hevsel1
+FJ_Top_Set_Clock_Select_VDF  					fj_top_set_clock_select_vdf1
+FJ_Top_Set_Clock_Select_SRO1_2 				fj_top_set_clock_select_sro1211
+FJ_Top_Set_Clock_Select_R2Y1 					fj_top_set_clock_select_r2y11
+FJ_Top_Set_Clock_Select_LTM1 					fj_top_set_clock_select_ltm11
+FJ_Top_Set_Clock_Select_B2R1 					fj_top_set_clock_select_b2r11
+FJ_Top_Set_Clock_Select_CNR1 					fj_top_set_clock_select_cnr11
+FJ_Top_Set_Clock_Select_SRO1 					fj_top_set_clock_select_sro11
+FJ_Top_Set_Clock_Select_B2B1  				fj_top_set_clock_select_b2b11
+FJ_Top_Set_Clock_Select_LTMRBK1 			fj_top_set_clock_select_ltmrbk11
+FJ_Top_Set_Clock_Select_SRO2_2 				fj_top_set_clock_select_sro221
+FJ_Top_Set_Clock_Select_R2Y2 					fj_top_set_clock_select_r2y21
+FJ_Top_Set_Clock_Select_LTM2 					fj_top_set_clock_select_ltm21
+FJ_Top_Set_Clock_Select_B2R2  					fj_top_set_clock_select_b2r21
+FJ_Top_Set_Clock_Select_CNR2 					fj_top_set_clock_select_cnr21
+FJ_Top_Set_Clock_Select_SRO2 					fj_top_set_clock_select_sro21
+FJ_Top_Set_Clock_Select_B2B2 					fj_top_set_clock_select_b2b21
+FJ_Top_Set_Clock_Select_LTMRBK2 			fj_top_set_clock_select_ltmrbk21
+FJ_Top_Set_Clock_Select_APCLK 				fj_top_set_clock_select_apclk1
+FJ_Top_Set_Clock_Select_AP3 					fj_top_set_clock_select_ap31
+FJ_Top_Set_Clock_Select_AP2 					fj_top_set_clock_select_ap21
+FJ_Top_Set_Clock_Select_AP1 					fj_top_set_clock_select_ap11
+FJ_Top_Set_Clock_Select_AP0 					fj_top_set_clock_select_ap01
+FJ_Top_Set_Clock_Select_NETAU 				fj_top_set_clock_select_netau1
+FJ_Top_Set_Clock_Select_SPI  					fj_top_set_clock_select_spi1
+FJ_Top_Set_Clock_Select_DSP  					fj_top_set_clock_select_dsp1
+FJ_Top_Set_Clock_Select_AXI  					fj_top_set_clock_select_axi1
+FJ_Top_Set_Clock_Select_EAXI 					fj_top_set_clock_select_eaxi1
+FJ_Top_Set_Clock_Select_BAHB 					fj_top_set_clock_select_bahb1
+FJ_Top_Set_Clock_Select_AHB  					fj_top_set_clock_select_ahb1
+FJ_Top_Set_Clock_Select_APB    				fj_top_set_clock_select_apb1
+FJ_Top_Set_Clock_Select_MXI400  				fj_top_set_clock_select_mxi4001
+FJ_Top_Set_Clock_Select_MXI200  				fj_top_set_clock_select_mxi2001
+FJ_Top_Set_Clock_Select_AXI400  				fj_top_set_clock_select_axi4001
+FJ_Top_Request_Clock_Select_DCHREQ 	fj_top_request_clock_select_dchreq1
+FJ_Top_Set_Clock_Select_RIB  					fj_top_set_clock_select_rib1
+FJ_Top_Set_Clock_Select_NFBCH 				fj_top_set_clock_select_nfbch1
+FJ_Top_Set_Clock_Select_ME 						fj_top_set_clock_select_me1
+FJ_Top_Set_Clock_Select_FPT1 					fj_top_set_clock_select_fpt11
+FJ_Top_Set_Clock_Select_FPT0 					fj_top_set_clock_select_fpt01
+FJ_Top_Set_Clock_Select_SHDR 					fj_top_set_clock_select_shdr1
+FJ_Top_Set_Clock_Select_GYRO 					fj_top_set_clock_select_gyro1
+FJ_Top_Set_Clock_Select_AXI300 				fj_top_set_clock_select_axi3001
+FJ_Top_Set_Image_Clock 							fj_top_set_image_clock1
+FJ_Top_Assert_Reset_DSP 							fj_top_assert_reset_dsp1
+FJ_Top_Negate_Reset_DSP  						fj_top_negate_reset_dsp1
+FJ_Top_Get_Reset_State_DSP 					fj_top_get_reset_state_dsp1
+FJ_Top_Get_Clock_Core_Peripheral 			fj_top_get_clock_core_peripheral1
+FJ_Top_Set_Clock_Stop_MICAX0 				fj_top_set_clock_stop_micax01
+
+(6)fj_decoder.c建立对应类FiDecoder
+宏定义改名：
+FJ_MOVIE_PLAY_OFF 																			FjDecoder_MOVIE_PLAY_OFF
+FJ_MOVIE_PLAY_ON 																			FjDecoder_MOVIE_PLAY_ON
+FJ_MOVIE_PLAY_CODEC_H264															FjDecoder_MOVIE_PLAY_CODEC_H264
+FJ_MOVIE_PLAY_CODEC_H265 															FjDecoder_MOVIE_PLAY_CODEC_H265
+FJ_MOVIE_PLAY_CODEC_AAC 															FjDecoder_MOVIE_PLAY_CODEC_AAC
+FJ_MOVIE_PLAY_VIDEO_SCAN_MODE_PROGRESSIVE 						FjDecoder_MOVIE_PLAY_VIDEO_SCAN_MODE_PROGRESSIVE
+FJ_MOVIE_PLAY_VIDEO_SCAN_MODE_INTERLACE 							FjDecoder_MOVIE_PLAY_VIDEO_SCAN_MODE_INTERLACE
+FJ_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_STOP								FjDecoder_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_STOP
+FJ_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP 				 				FjDecoder_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP
+
+更改枚举名;
+E_FJ_VIDEO_DEC_ENUM 							FjDecoderVidedDecEnum
+E_FJ_MOVIE_PLAY_VIDEO_SIZE 					FjDecoderMoviePlayVidedSize
+E_FJ_MOVIE_PLAY_SPEED 							FjDecoderMoviePlaySpeed
+E_FJ_MOVIE_PLAY_DIRECTION 					FjDecoderMoviePlayDirection
+E_FJ_MOVIE_PLAY_LAST_PICTURE 				FjDecoderMoviePlayLastPicture
+E_FJ_MOVIE_PLAY_BUFFER_TYPE 				FjDecoderMoviePlayBufferType
+E_FJ_MOVIE_PLAY_DECODER_STATUS 		FjDecoderMoviePlayDecoderStatus
+E_FJ_MOVIE_PLAY_YUV_FORMAT 				FjDecoderMoviePlayYuvFormat
+E_FJ_AUDIO_DEC_ENUM 							FjDecoderAudioDecEnum
+E_FJ_AUDIO_DEC_CODEC_TYPE 				FjDecoderAudioCodecType
+T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM 			FjDecoderPlayVideoConfigParam
+T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM	 		FjDecoderPlayVideoStreamParam
+T_FJ_MOVIE_PLAY_AUDIO_STREAM_PARAM 			FjDecoderPlayAudioStreamParam
+T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO 					FjDecoderAudioVideoYuvInfo
+T_FJ_AUDIO_DEC_CONFIG_PARAM 						FjDecoderAudioDecConfigParam
+枚举里的变量修改：
+FjDecoderPlayVideoConfigParam
+codec_type  				codecType
+image_size  				imageSize
+conceal_error  			concealError
+time_scale  					timeScale
+time_delta  					timeDelta
+compatibility_mode 	compatibilityMode
+
+FjDecoderPlayVideoStreamParam
+stream_end_flag 		streamEndFlag
+stream_size 				streamSize
+stream_address			streamAddress
+
+FjDecoderPlayAudioStreamParam
+stream_end_flag 		streamEndFlag
+stream_size 				streamSize
+stream_address 			streamAddress
+
+FjDecoderAudioVideoYuvInfo
+y_addr yAddr
+cbcr_addr 				cbcrAddr
+g_width 					gWidth
+g_lines 					gLines
+yuv_format 				yuvFormat
+ 
+FjDecoderAudioDecConfigParam
+codec_type 				codecType
+audio_ch  				audioCh
+sampling_rate 		samplingRate
+更改公有方法名:
+FJ_VideoDecoder_Open 							fj_decoder_open
+FJ_VideoDecoder_Close 								fj_decoder_close
+FJ_VideoDecoder_Connect 						fj_decoder_connect
+FJ_VideoDecoder_Disconnect					fj_decoder_disconnect
+FJ_VideoPlayback_VideoInit						fj_decoder_playback_videoinit
+FJ_VideoPlayback_AudioInit						fj_decoder_layback_audioinit
+FJ_VideoPlayback_SetVideoConfig			fj_decoder_playback_setvideoconfig
+FJ_VideoPlayback_SetStartPTS					fj_decoder_playback_setstartpts
+FJ_VideoPlayback_SetSpeedDirection		fj_decoder_playback_setspeeddirection
+FJ_VideoPlayback_SetVideoStream			fj_decoder_playback_setvideostream
+FJ_VideoPlayback_SetAudioStream			fj_decoder_playback_setaudiostream
+FJ_VideoPlayback_StartVideoDecode		fj_decoder_playback_startvideodecode
+FJ_VideoPlayback_StartAudioDecode		fj_decoder_playback_startaudiodecode
+FJ_VideoPlayback_StartAudioOutput			fj_decoder_playback_startaudiooutput
+FJ_VideoPlayback_StopAudioOutput			fj_decoder_playback_stopaudiooutput
+FJ_VideoPlayback_StopVideoDecode		fj_decoder_playback_stopvideodecode
+FJ_VideoPlayback_StopAudioDecode		fj_decoder_playback_stopaudiodecode
+FJ_VideoPlayback_PauseVideo					fj_decoder_playback_pausevideo
+FJ_VideoPlayback_ResumeVideo				fj_decoder_playback_resumevideo
+FJ_VideoPlayback_GetDisplayFrame			fj_decoder_playback_getdisplayframe
+FJ_VideoPlayback_StartIFrameDecoding	fj_decoder_playback_startiframedecoding
+FJ_VideoPlayback_MemAlloc						fj_decoder_playback_memalloc
+FJ_AudioDecoder_Open								fj_decoder_open1
+FJ_AudioDecoder_Close								fj_decoder_close1
+FJ_AudioDecoder_Connect							fj_decoder_connect1
+FJ_AudioDecoder_Disconnect					fj_decoder_disconnect1
+FJ_AudioDecoder_Config							fj_decoder_config1
+
+(7)fj_audio.c建立对应类FiAudio
+宏定义改名：
+FJ_COMPRESS_TYPE_PCM  					FjAudio_COMPRESS_TYPE_PCM
+FJ_COMPRESS_TYPE_ALAW 					FjAudio_COMPRESS_TYPE_ALAW
+FJ_COMPRESS_TYPE_ULAW 					FjAudio_COMPRESS_TYPE_ULAW
+FJ_COMPRESS_TYPE_AAC 						FjAudio_COMPRESS_TYPE_AAC
+FJ_AUDIO_NUM_CHANNEL_1 				FjAudio_NUM_CHANNEL_1
+FJ_AUDIO_NUM_CHANNEL_2 				FjAudio_NUM_CHANNEL_2
+FJ_AUDIO_NUM_CHANNEL_3 				FjAudio_NUM_CHANNEL_3
+FJ_AUDIO_NUM_CHANNEL_4 				FjAudio_NUM_CHANNEL_4
+FJ_AUDIO_IF_MASTER 							FjAudio_IF_MASTER
+FJ_AUDIO_IF_SLAVE 								FjAudio_IF_SLAVE
+FJ_AUDIO_ENABLE 									FjAudio_ENABLE
+FJ_AUDIO_DISABLE 								FjAudio_DISABLE
+FJ_AUDIO_INPUT_CH_0 							FjAudio_INPUT_CH_0
+FJ_AUDIO_INPUT_CH_1 							FjAudio_INPUT_CH_1
+FJ_AUDIO_INPUT_CH_2 							FjAudio_INPUT_CH_2
+FJ_AUDIO_CAP_ID_0 								FjAudio_CAP_ID_0
+FJ_AUDIO_CAP_ID_1 								FjAudio_CAP_ID_1
+FJ_AUDIO_ENC_ID_0 								FjAudio_ENC_ID_0
+FJ_AUDIO_ENC_ID_1 								FjAudio_ENC_ID_1
+FJ_AUDIO_OUT_ID_0 								FjAudio_OUT_ID_0
+FJ_AUDIO_OUT_ID_1 								FjAudio_OUT_ID_1
+FJ_AUDIO_DEC_ID_0 								FjAudio_DEC_ID_0
+FJ_AUDIO_AAC_CFG 								FjAudio_AAC_CFG
+FJ_AUDIO_CB_OUT_STOP 						FjAudio_CB_OUT_STOP
+FJ_AUDIO_CB_OUT_AUTO_STOP 			FjAudio_CB_OUT_AUTO_STOP
+
+公有方法改名:
+FJ_AudioSRC_Open 								fj_audio_src_open1
+FJ_AudioSRC_Close									fj_audio_src_close1
+FJ_AudioSRC_Connect							fj_audio_src_connect1
+FJ_AudioSRC_Disconnect						fj_audio_src_disconnect1
+FJ_AudioCapture_Open							fj_audio_capture_open1
+FJ_AudioCapture_Close							fj_audio_capture_close1
+FJ_AudioCapture_ConnectOut				fj_audio_capture_connectout1
+FJ_AudioCapture_DisconnectOut			fj_audio_capture_disconnectout1
+FJ_AudioCapture_ConnectEnc				fj_audio_capture_connectenc1
+FJ_AudioCapture_DisconnectEnc			fj_audio_capture_disconnectenc1
+FJ_AudioCapture_Config							fj_audio_capture_config1
+FJ_AudioCapture_SampleConfig			fj_audio_capture_sampleconfig1
+FJ_AudioCapture_Start							fj_audio_capture_start1
+FJ_AudioCapture_Stop							fj_audio_capture_stop1
+FJ_AudioCapture_EnablePlugIn1			fj_audio_capture_enableplugin11
+FJ_AudioCapture_CompletePlugIn1		fj_audio_capture_completeplugin11
+FJ_AudioOut_Open									fj_audio_out_open1
+FJ_AudioOut_Close									fj_audio_out_close1
+FJ_AudioOut_Config								fj_audio_out_config1
+FJ_AudioOut_DirectLoadWav					fj_audio_out_directloadwav1
+FJ_AudioOut_DirectUnloadWav				fj_audio_out_directunloadwav1
+FJ_AudioOut_DirectPlayWav					fj_audio_out_directplaywav1
+FJ_AudioOut_DirectStopWav					fj_audio_out_directstopwav1
+FJ_AudioOut_ControlWav						fj_audio_out_controlwav1
+枚举改名:
+E_FJ_AUDIO_SRC_ENUM 							FjAudioSrcEnum
+E_FJ_AUDIO_CAPTURE_ENUM 					FjAudioCaptureEnum
+E_FJ_AUDIO_OUT_ENUM  							FjAudioOutEnum
+E_FJ_AUDIO_IN_PORT_ENUM 					FjAudioInPortEnum
+E_FJ_AUDIO_OUT_PORT_ENUM					FjAudioOutPortEnum
+E_FJ_AUDIO_OUT_PORT_ENUM 				FjAudioOutPortEnum
+E_FJ_AUDIO_WAV_CTL 								FjAudioWavCtl
+E_FJ_AUDIO_I2S_DATA_FORMAT 				FjAudioL2sDataFormat
+T_FJ_AUDIO_I2S_CFG 									FjAudioL2sCfg
+T_FJ_AUDIO_CAPTURE_CFG 						FjAudioCaptureCfg
+T_FJ_AUDIO_OUT_CFG 								FjAudioOutCfg
+T_FJ_AUDIO_CAP_PLUGIN0_CB_PARAM 	FjAudioCapPlugin0CbParam
+T_FJ_AUDIO_CAP_PLUGIN1_CB_PARAM	FjAudioCapPlugin1CbParam
+T_FJ_AUDIO_OUT_PLUGIN_CB_PARAM 		FjAudioCapPluginCbParam
+T_FJ_AUDIO_CAP_SMPL_CFG 						FjAudioCapSmplCfg
+更改枚举里的变量：
+FjAudioL2sCfg
+master_slave  		masterSlave
+lr_clock				lrClock
+data_cycle			dataCycle
+i2s_format			i2sFormat
+bit_count				bitCount
+
+FjAudioCaptureCfg
+audio_in_port		audioInPort
+i2s_cfg					i2sCfg
+
+FjAudioOutCfg
+audio_out_port	audioOutPort
+i2s_cfg					i2sCfg
+
+FjAudioCapPlugin0CbParam
+in_addr  						inAddr
+in_size							inSize
+in_ch_type	 				inChType
+in_sampling_rate 		inSamplingRate
+out_addr 					outAddr
+out_size 						outSize
+out_ch_type 				outChType
+out_sampling_rate 		outSamplingRate
+
+FjAudioCapPlugin1CbParam
+area_index 					areaIndex
+ch_type 						chType
+sampling_rate 			samplingRate
+
+FjAudioCapPluginCbParam
+in_addr 						inAddr
+in_size 						inSize
+in_ch_type 					inChType
+in_sampling_rate 		inSamplingRate
+out_addr 					outAddr
+out_size 						outSize
+out_ch_type 				outChType
+out_sampling_rate 		outSamplingRate
+
+FjAudioCapSmplCfg 
+in_sampling_rate 		inSamplingRate
+in_ch_type					inChType
+out_sampling_rate 		outSamplingRate
+out_ch_type 				outChType
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

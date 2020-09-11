@@ -1,0 +1,167 @@
+抄写的文件都在/home/sns/workspace/snssocionext/target/cpu_tkernel/basefw/fj/movie/h265/src目录下
+拆分出来的头文件都用最开始的头文件包含，例h265decode.h包含了h265decodefunc.h、h265decodetask.h
+h265encode.h亦如此。
+
+h265_decode.c .h 拆分为h265decodetask.c .h、h265decodefunc.c .h、h265decode.c .h，并删掉原文件
+一、修改h265decode.h
+1、公有函数的修改：
+H265_Decode_DISP_Main改为h265_decode_disp_main
+H265_Decode_DISP_LCD_Main改为h265_decode_disp_lcd_main
+H265_Decode_DISP_HDMI_Main 改为 h265_decode_disp_hdmi_main
+H265_Decode_Main 改为 h265_decode_main
+
+2、结构体
+(1)结构体名修改
+T_H265_DEC_CTL 改为 H265DecodeTCtl
+T_H265_DEC_SAMPLE 改为 H265DecodeTSample
+T_H265_DEC_DMUX_CTL 改为 H265DecodeTDmuxCtl
+T_H265_DEC_DISP_INF 改为 H265DecodeTDispInf
+T_H265_DEC_DISP_REFER_INDEX 改为 H265DecodeTDispReferIndex
+T_H265_DEC_DISP_CTL 改为 H265DecodeTDispCtl
+ T_H265_DEC_TTR_CTL 改为  H265DecodeTTtrCtl
+ (2)结构体变量修改按照规范更名
+结构体H265DecodeTSample里的结构变量pts、dts和结构体H265DecodeTDispInf里的结构变量PTS、DTS只是大小写不一样，这里把后者改为pTS、dTS
+
+3、枚举类型修改：
+(1)枚举名：E_H265_DEC_PLAY_START_TRICK 改为 H265DecodePlayStartTrick
+枚举成员：
+E_H265_DEC_PLAY_START_TRICK_NORMAL 改为 H265Decode_PLAY_START_TRICK_NORMAL
+E_H265_DEC_PLAY_START_TRICK_FF 改为 H265Decode_PLAY_START_TRICK_FF
+E_H265_DEC_PLAY_START_TRICK_REW 改为 H265Decode_PLAY_START_TRICK_REW
+E_H265_DEC_PLAY_START_TRICK_SLOW_FWD 改为 H265Decode_PLAY_START_TRICK_SLOW_FWD
+E_H265_DEC_PLAY_START_TRICK_SLOW_RWD 改为 H265Decode_PLAY_START_TRICK_SLOW_RWD
+
+(2)枚举名： E_H265_DEC_FRAME_PLAY_MODE 改为 H265DecodeFramePlayMode
+枚举成员：
+E_H265_DEC_FRAME_PLAY_MODE_NONE 改为 H265Decode_FRAME_PLAY_MODE_NONE
+E_H265_DEC_FRAME_PLAY_MODE_NFRM 改为 H265Decode_FRAME_PLAY_MODE_NFRM
+E_H265_DEC_FRAME_PLAY_MODE_PFRM 改为 H265Decode_FRAME_PLAY_MODE_PFRM
+E_H265_DEC_FRAME_PLAY_MODE_NFRM_SYNC 改为  H265Decode_FRAME_PLAY_MODE_NFRM_SYNC
+E_H265_DEC_FRAME_PLAY_MODE_PFRM_SYNC 改为 H265Decode_FRAME_PLAY_MODE_PFRM_SYNC
+
+下面为h265decode.c文件搬到.h的枚举
+(3)枚举名：E_H265_DEC_PTS_SEARCH_MODE 改为 H265DecodePtsSearchMode
+枚举成员：
+E_H265_DEC_PTS_SEARCH_MODE_SAME  改为 H265Decode_PTS_SEARCH_MODE_SAME
+E_H265_DEC_PTS_SEARCH_MODE_SMALL 改为 H265Decode_PTS_SEARCH_MODE_SMALL
+E_H265_DEC_PTS_SEARCH_MODE_BIG  改为 H265Decode_PTS_SEARCH_MODE_BIG
+
+(4)枚举名：E_H265_DEC_DISPLAY_DEVICE 改为 H265DecodeDisplayDevice
+枚举成员：
+E_H265_DEC_DISPLAY_DEVICE_LCD 改为 H265Decode_DISPLAY_DEVICE_LCD
+E_H265_DEC_DISPLAY_DEVICE_HDMI 改为 H265Decode_DISPLAY_DEVICE_HDMI
+
+4、头文件公有宏：
+D_H265_DEC_SAVE_SAMPLE_MAX_NUM 改为 H265Decode_SAVE_SAMPLE_MAX_NUM
+D_H265_DEC_VOP_TOP_NUM 改为 H265Decode_VOP_TOP_NUM
+D_H265_DEC_VOP_MAX_NUM 改为 H265Decode_VOP_MAX_NUM
+D_H265_DEC_VOP_TRICK_NUM 改为 H265Decode_VOP_TRICK_NUM
+D_H265_DEC_REQ_NONE 改为 H265Decode_DEC_REQ_NONE
+D_H265_DEC_REQ_STOP 改为 H265Decode_REQ_STOP
+D_H265_DEC_REQ_FORCE_STOP 改为 H265Decode_REQ_FORCE_STOP
+D_H265_DEC_REQ_TTR_END_POINT 改为 H265Decode_REQ_TTR_END_POINT
+D_H265_DEC_SEMAPHORE_TIMEOUT 改为 H265Decode_SEMAPHORE_TIMEOUT
+D_H265_DEC_VDPB_MAX_NUM 改为 H265Decode_VDPB_MAX_NUM
+D_H265_DEC_VDPB_MIN_NUM 改为 H265Decode_VDPB_MIN_NUM
+下面为h265decode.c文件搬到.h的宏：
+D_H265_DEC_SDRAM_CH_CHECK 改为 H265Decode_SDRAM_CH_CHECK
+D_H265_DEC_TIMER_FFREW_2X_TIME_SCALE 改为 H265Decode_TIMER_FFREW_2X_TIME_SCALE
+D_H265_DEC_TIMER_FFREW_2X_TIME_DELTA 改为 H265Decode_TIMER_FFREW_2X_TIME_DELTA
+D_H265_DEC_TIMER_FFREW_4X_TIME_SCALE 改为 H265Decode_TIMER_FFREW_4X_TIME_SCALE
+D_H265_DEC_TIMER_FFREW_4X_TIME_DELTA 改为 H265Decode_TIMER_FFREW_4X_TIME_DELTA
+D_H265_DEC_TIMER_FFREW_8X_TIME_SCALE 改为 H265Decode_TIMER_FFREW_8X_TIME_SCALE
+D_H265_DEC_TIMER_FFREW_8X_TIME_DELTA 改为 H265Decode_TIMER_FFREW_8X_TIME_DELTA	
+D_H265_DEC_SPECIAL_TRICK_VDPB_COEFFICIENT 改为 H265Decode_SPECIAL_TRICK_VDPB_COEFFICIENT
+D_H265_DEC_MAX_PTS 改为 	H265Decode_MAX_PTS							
+D_H265_DEC_NOT_SET_PTS	 改为 	H265Decode_NOT_SET_PTS			
+D_H265_DEC_FIRST_BUFFERING_COEFFICIENT 改为 H265Decode_FIRST_BUFFERING_COEFFICIENT		
+
+
+二、修改h265decodefunc.h
+1、公有函数的修改：
+h265_decode_init_param(VOID) 改为 h265_decode_func_init_param(VOID)
+H265_Decode_CC_Main(VOID) 改为 h265_decode_func_cc_main(VOID)
+H265_Decode_Play_Start(ULLONG start_pts, H265IfPlayDirection direction, H265IfPlaySpeed speed, BOOL pause) 改为 h265_decode_func_play_start(ULLONG startPts, H265IfPlayDirection direction, H265IfPlaySpeed speed, BOOL pause);
+H265_Decode_Play_Initialize(VOID) 改为 h265_decode_func_play_initialize(VOID)
+H265_Decode_Play_Release(VOID) 改为 h265_decode_func_play_release(VOID)
+H265_Decode_Play_Delete(UCHAR play_index) 改为 h265_decode_func_play_delete(UCHAR playIndex);
+H265_Decode_Top_Init(H265IfDecoderParam* decoder_param, T_H265_IF_DISPLAY_INFO* display_info); 改为 h265_decode_func_top_init(H265IfDecoderParam* decoderParam, T_H265_IF_DISPLAY_INFO* displayInfo);
+H265_Decode_Top_Main(ULLONG req_pts, T_H265_IF_VIDEO_YUV_INFO* decode_yuv_info)改为 h265_decode_func_top_main(ULLONG reqPts, T_H265_IF_VIDEO_YUV_INFO* decodeYuvInfo)
+H265_Decode_Video_Display_Frame_Get(T_H265_IF_VIDEO_YUV_INFO* display_yuv_info);  改为 h265_decode_func_video_display_frame_get(T_H265_IF_VIDEO_YUV_INFO* displayYuvInfo);
+H265_Decode_Stop_Request改为 h265_decode_func_stop_request
+H265_Decode_Flush_Request 改为 h265_decode_func_flush_request
+H265_IsLastPTSSet_Or_Error 改为  h265_decode_func_is_last_pts_set_or_error
+H265_IsLastPTSDisplay_or_error 改为 h265_decode_func_is_last_pts_display_or_error
+H265_GetLastPTS 改为   h265_decode_func_get_last_pts
+
+
+三、修改h265decodetask.h
+1、公有函数的修改：
+h265_decode_initialize 改为 h265_decode_task_initialize
+h265_decode_initialize_gdec_param  改为 h265_decode_task_initialize_gdec_param
+h265_decode_initialize_gdec_control  改为 h265_decode_task_initialize_gdec_control
+h265_decode_initialize_gdmux_control改为 h265_decode_task_initialize_gdmux_control
+h265_decode_initialize_gdisp_control改为 h265_decode_task_initialize_gdisp_control
+h265_decode_flush_execute改为 h265_decode_task_flush_execute
+h265_decode_display_image改为 h265_decode_task_display_image
+H265_Decode_ENT_Main改为 h265_decode_task_ent_main
+h265_decode_set_vcpb改为 h265_decode_task_set_vcpb
+h265_decode_next_video_sample_get改为 h265_decode_task_next_video_sample_get
+h265_decode_next_video_sample_request改为 h265_decode_task_next_video_sample_request
+h265_decode_get_vdpb改为 h265_decode_task_get_vdpb
+h265_decode_top_image_get改为 h265_decode_task_top_image_get
+H265_Decode_Video_Stream_Set改为 h265_decode_task_video_stream_set
+h265_decode_flush改为 h265_decode_task_flush
+h265_decode_play改为 h265_decode_task_play
+h265_decode_pause改为 h265_decode_task_pause
+h265_decode_resume改为 h265_decode_task_resume
+h265_decode_stop改为 h265_decode_task_stop
+h265_decode_end改为 h265_decode_task_end
+
+
+h265_encode.c .h拆分为h265encode.c .h, h265encodedisplay.c .h, h265encodefunc.c .h, h265encodemain.c .h, h265encodesetting.c .h, h265encodestream.c .h, h265encodevin.c .h
+一、修改h265encode.h
+1、公有函数的修改：
+H265_Encode_Sync_Interrupt_Count_Increment 改为 h265_encode_sync_interrupt_count_increment
+H265_Encode_Image_Address_Decide 改为 h265_encode_image_address_decide
+H265_Encode_Frame_Enabled 改为 h265_encode_frame_enabled
+H265_Encode_Dynamic_Parameter_Set 改为 h265_encode_dynamic_parameter_set
+
+二、修改h265encodedisplay.h
+1、公有函数的修改：
+H265_Encode_ENT_Main  改为 h265_encode_display_ent_main
+H265_Encode_Free_Video_Index 改为 h265_encode_display_free_video_index
+H265_Encode_Image_Address_Get 改为h265_encode_display_image_address_get
+
+三、修改h265encodefunc.h
+1、公有函数的修改：
+H265_Encode_ENT_INT_Main 改为 h265_encode_func_ent_int_main
+H265_Encode_CC_2_Main 改为 h265_encode_func_cc_2_main
+H265_Encode_DISP_Main 改为 h265_encode_func_disp_main
+
+四、修改h265encodemain.h
+1、公有函数的修改：
+H265_Encode_CC_Main  改为 h265_encode_main_cc_main
+
+五、修改h265encodevin.h
+1、公有函数的修改：
+H265_Encode_Vin_Address_Valid 改为 h265_encode_vin_address_valid
+
+
+h265_if_play.c .h搬移h265ifplay.c .h
+1、公有函数的修改：
+H265_Play_Controller 改为h265_if_play_controller
+H265_If_Get_Play_Topimage在h265if.h中声明，已搬到h265ifplay .h中声明。
+改为 h265_If_play_get_play_topimage
+
+
+h265_if_play_api.c .h搬移h265ifplayapi.c .h
+规范修改h265ifplayapi.h
+1、公有函数的修改：
+H265_If_Play_Api_Get_Last_Picture_Keep  改为 h265_if_play_api_get_last_picture_keep
+H265_If_Play_Api_Check_Event  改为 h265_if_play_api_check_event
+
+h265_if_record.c .h搬移h265ifrecord.c .h
+1、公有函数的修改：
+H265_Record_Controller 改为  h265_if_record_controller
+

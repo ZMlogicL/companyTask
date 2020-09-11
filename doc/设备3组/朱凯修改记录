@@ -1,0 +1,605 @@
+创建类BfArm
+bf_arm.c改名为bfarm.c
+bf_arm.h改名为bfarm.h，并移到bfarm.c所在目录
+函数修改：
+UINT32 BF_Arm_Lock() 修改为 UINT32 bf_arm_lock()
+UINT32 BF_Arm_Lock_Pol() 修改为 UINT32 bf_arm_lock_pol()
+VOID BF_Arm_Unlock() 修改为 VOID bf_arm_unlock()
+UINT32 fj_critical_section_start() 修改为 UINT32 bf_arm_fj_critical_section_start()
+UINT32 fj_critical_section_pol_start() 修改为 UINT32 bf_arm_fj_critical_section_pol_start()
+VOID fj_critical_section_end() 修改为 VOID bf_arm_fj_critical_section_end()
+UINT64 fj_timestamp_get_counter() 修改为 UINT64 bf_arm_fj_timestamp_get_counter()
+
+
+创建类DeviceConfig
+device_config.c改名为deviceconfig.c
+device_config.h改名为deviceconfig.h,并移到deviceconfig.c所在目录
+将全局变量DUMMY_PORT放到类的私有结构体中，并改名为dummyPort,添加get，set函数
+函数修改：
+FJ_ERR_CODE	fj_gpio_set_function() 修改为 FJ_ERR_CODE device_config_fj_gpio_set_function()
+FJ_ERR_CODE	fj_gpio_set_direction() 修改为 FJ_ERR_CODE device_config_fj_gpio_set_direction()
+FJ_ERR_CODE	fj_gpio_get_status() 修改为 FJ_ERR_CODE	device_config_fj_gpio_get_status()
+FJ_ERR_CODE	fj_gpio_set_pull_up_down_enable() 修改为 FJ_ERR_CODE device_config_fj_gpio_set_pull_up_down_enable()
+FJ_ERR_CODE fj_gpio_set_pull_up_down_ctrl() 修改为 FJ_ERR_CODE device_config_fj_gpio_set_pull_up_down_ctrl()
+
+
+创建类SystemAttr
+system_attr.c改名为systemattr.c
+system_attr.h改名为systemattr.h,并移到systemattr.c所在目录
+函数修改：
+FJ_ERR_CODE fj_getparam() 修改为 FJ_ERR_CODE system_attr_fj_getparam()；
+FJ_ERR_CODE fj_setparam() 修改为 FJ_ERR_CODE system_attr_fj_setparam()
+FJ_ERR_CODE	fj_getparamlong() 修改为 FJ_ERR_CODE system_attr_fj_getparamlong()
+VOID fj_setbasedatetime() 修改为 VOID system_attr_fj_setbasedatetime()
+VOID fj_getbasedatetime() 修改为 VOID system_attr_fj_getbasedatetime()
+
+
+创建类SystemMode
+mode.c改名为systemmode.c
+mode.h改名为systemmode.h，并移到systemmode.c所在目录
+将结构T_MODE_ATTR所有属性放到private结构体中，并删除
+
+注意new方法的使用，不能多次使用
+宏定义修改：
+D_BF_MODE_SECOND_CODE 修改为 SystemMode_SECOND_CODE
+D_BF_MODE_THIRD_CODE 修改为 SystemMode_THIRD_CODE
+D_BF_MODE_FOURTH_CODE 修改为 SystemMode_FOURTH_CODE
+D_BF_MODE_BASE_CODE 修改为 SystemMode_BASE_CODE
+D_BF_MODE_VIEW_CODE 修改为 SystemMode_VIEW_CODE
+D_BF_MODE_PB_CODE 修改为 SystemMode_PB_CODE
+D_BF_MODE_OTHER_CODE 修改为 SystemMode_OTHER_CODE
+D_BF_MODE_CATEGORY_POWER_DOWN 修改为 SystemMode_CATEGORY_POWER_DOWN
+D_BF_MODE_CATEGORY_MENU 修改为 SystemMode_CATEGORY_MENU
+D_BF_MODE_CATEGORY_PB 修改为 SystemMode_CATEGORY_PB
+D_BF_MODE_CATEGORY_RESTORE 修改为 SystemMode_CATEGORY_RESTORE
+D_BF_MODE_CATEGORY_STORE_IMAGE 修改为 SystemMode_CATEGORY_STORE_IMAGE
+D_BF_MODE_CATEGORY_CAPTURE_AVI 修改为 SystemMode_CATEGORY_CAPTURE_AVI
+D_BF_MODE_CATEGORY_CAPTURE_SEQ 修改为 SystemMode_CATEGORY_CAPTURE_SEQ
+D_BF_MODE_CATEGORY_CAPTURE 修改为 SystemMode_CATEGORY_CAPTURE
+D_BF_MODE_CATEGORY_CALIBRATION 修改为 SystemMode_CATEGORY_CALIBRATION
+D_BF_MODE_CATEGORY_VIEW 修改为 SystemMode_CATEGORY_VIEW
+D_BF_MODE_CATEGORY_IDLE 修改为 SystemMode_CATEGORY_IDLE
+D_BF_MODE_CATEGORY_BOOT 修改为 SystemMode_CATEGORY_BOOT
+D_BF_MODE_CATEGORY_ALL 修改为 SystemMode_CATEGORY_ALL
+D_BF_MODE_WAIT_SYSTEM_MODE 修改为 SystemMode_WAIT_SYSTEM_MODE
+函数修改：
+FJ_MODE fj_get_act_sysmode() 修改为 FJ_MODE system_mode_get_act_sysmode()
+FJ_ERR_CODE	fj_querystatus() 修改为 FJ_ERR_CODE system_mode_querystatus()
+FJ_ERR_CODE	fj_getstatusregister() 修改为 FJ_ERR_CODE system_mode_getstatusregister()
+FJ_ERR_CODE	fj_setmode() 修改为 FJ_ERR_CODE system_mode_setmode()
+FJ_ERR_CODE	fj_waitmodecomp() 修改为 FJ_ERR_CODE system_mode_waitmodecomp()
+FJ_ERR_CODE	fj_startmode() 修改为 FJ_ERR_CODE system_mode_startmode()
+FJ_ERR_CODE	fj_stopmode() 修改为 FJ_ERR_CODE system_mode_stopmode()
+BOOL fj_is_modestatus_stop() 修改为 BOOL system_mode_is_modestatus_stop()
+FJ_MODE	BF_Mode_Get_Prev_Sysmode() 修改为 FJ_MODE system_mode_get_prev_sysmode()
+FJ_MODE	BF_Mode_Get_Next_Sysmode() 修改为 FJ_MODE system_mode_get_next_sysmode()
+VOID BF_Mode_Set_Next_Sysmode() 修改为 VOID system_mode_set_next_sysmode()
+VOID BF_Mode_Set_Request_Sysmode() 修改为 VOID system_mode_set_request_sysmode()
+VOID BF_Mode_Update_Sysmode_Change() 修改为 VOID system_mode_update_sysmode_change()
+VOID BF_Mode_Cancel_Sysmode_Change() 修改为 VOID system_mode_cancel_sysmode_change()
+FJ_ERR_CODE BF_Mode_Check() 修改为 FJ_ERR_CODE system_mode_check()
+VOID BF_Mode_Put_CheckPoint() 修改为 VOID system_mode_put_checkpoint()
+INT32 BF_Mode_Ref_Checkpoint() 修改为 INT32 system_mode_ref_checkpoint()
+VOID BF_Mode_Set_Sr1() 修改为 VOID ystem_mode_set_sr1()
+VOID BF_Mode_Set_Sr2() 修改为 VOID system_mode_set_sr2()
+
+
+创建类BusArb
+bus_arb.c改名为busarb.c
+bus_arb.h改名为busarb.h，并移到busarb.c所在目录
+从busarb.c重抽出sdramccmd
+将busarb.c中的函数：
+FJ_ERR_CODE fj_busarb_set_sdramc_cmd_arbitration_rate（）;
+FJ_ERR_CODE fj_busarb_set_sdramc_cmd_arbitration_priority();
+FJ_ERR_CODE	fj_busarb_set_sdramcbootdefault( VOID );
+移到sdramccmd.c和.h中
+函数修改：
+FJ_ERR_CODE	fj_busarb_set_mxicoutputportall() 修改为 FJ_ERR_CODE bus_arb_set_mxicoutputportall()
+FJ_ERR_CODE	fj_busarb_set_mxicmasterallarbiter() 修改为 FJ_ERR_CODE bus_arb_set_mxicmasterallarbiter(）
+FJ_ERR_CODE	fj_busarb_set_mxicslotpriorityallarbiter() 修改为 FJ_ERR_CODE bus_arb_set_mxicslotpriorityallarbiter()
+FJ_ERR_CODE	fj_busarb_set_mxicmastertransaction() 修改为 FJ_ERR_CODE bus_arb_set_mxicmastertransaction(）
+FJ_ERR_CODE	fj_busarb_set_mxicbootdefault() 修改为 FJ_ERR_CODE	bus_arb_set_mxicbootdefault(）
+
+FJ_ERR_CODE fj_busarb_set_sdramc_cmd_arbitration_rate() 修改为 FJ_ERR_CODE sdramc_cmd_set_arbitration_rate()
+FJ_ERR_CODE fj_busarb_set_sdramc_cmd_arbitration_priority() 修改为 FJ_ERR_CODE sdramc_cmd_set_arbitration_priority(）
+FJ_ERR_CODE	fj_busarb_set_sdramcbootdefault() 修改为 FJ_ERR_CODE sdramc_cmd_set_sdramcbootdefault(）
+
+
+创建类SystemTopBase
+从systemtopbase.c中抽出systemtopimage, systemtopimagemacro
+函数修改：
+
+FJ_ERR_CODE fj_top_start_clock() 修改为 FJ_ERR_CODE system_top_base_start_clock()
+FJ_ERR_CODE fj_top_stop_clock() 修改为 FJ_ERR_CODE system_top_base_stop_clock()
+FJ_ERR_CODE fj_top_set_clock_select_emmc() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_emmc()
+FJ_ERR_CODE fj_top_set_clock_select_nf() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_nf()
+FJ_ERR_CODE fj_top_set_clock_select_sd2u2() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_sd2u2()
+FJ_ERR_CODE fj_top_set_clock_select_sd2u1() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_sd2u1()
+FJ_ERR_CODE fj_top_set_clock_select_sd3u1() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_sd3u1()
+FJ_ERR_CODE fj_top_set_clock_select_sd1io() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_sd1io()
+FJ_ERR_CODE fj_top_set_clock_select_hif() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_hif()
+FJ_ERR_CODE fj_top_set_clock_select_mif() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_mif()
+FJ_ERR_CODE fj_top_set_clock_select_gpu() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_gpu()
+FJ_ERR_CODE fj_top_set_clock_select_pipe() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_pipe()
+FJ_ERR_CODE fj_top_set_clock_select_au0() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_au0()
+FJ_ERR_CODE fj_top_set_clock_select_au2() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_au2()
+FJ_ERR_CODE fj_top_set_clock_select_au3() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_au3()
+FJ_ERR_CODE fj_top_set_clock_select_netau() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_netau()
+FJ_ERR_CODE fj_top_set_clock_select_spi() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_spi()
+FJ_ERR_CODE fj_top_set_clock_select_dsp() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_dsp()
+FJ_ERR_CODE fj_top_set_clock_select_axi() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_axi()
+FJ_ERR_CODE fj_top_set_clock_select_eaxi() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_eaxi()
+FJ_ERR_CODE fj_top_set_clock_select_bahb() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_bahb()
+FJ_ERR_CODE fj_top_set_clock_select_ahb() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_ahb()
+FJ_ERR_CODE fj_top_set_clock_select_apb() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_apb()
+FJ_ERR_CODE fj_top_set_clock_select_mxi400() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_mxi400()
+FJ_ERR_CODE fj_top_set_clock_select_mxi200() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_mxi200()
+FJ_ERR_CODE fj_top_set_clock_select_axi400() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_axi400()
+FJ_ERR_CODE fj_top_request_clock_select_dchreq() 修改为 FJ_ERR_CODE system_top_base_request_clock_select_dchreq()
+FJ_ERR_CODE fj_top_set_clock_select_nfbch() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_nfbch()
+FJ_ERR_CODE fj_top_set_clock_select_gyro() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_gyro()
+FJ_ERR_CODE fj_top_set_clock_select_axi300() 修改为 FJ_ERR_CODE system_top_base_set_clock_select_axi300()
+VOID fj_top_assert_reset_dsp() 修改为 VOID system_top_base_assert_reset_dsp()
+VOID fj_top_negate_reset_dsp() 修改为 VOID system_top_base_negate_reset_dsp()
+kulong fj_top_get_reset_state_dsp() 修改为 kulong system_top_base_get_reset_state_dsp()
+kulong fj_top_get_clock_core_peripheral() 修改为 kulong system_top_base_get_clock_core_peripheral()
+FJ_ERR_CODE fj_top_set_clock_stop_micax0() 修改为 FJ_ERR_CODE system_top_base_set_clock_stop_micax0()
+
+FJ_ERR_CODE fj_top_set_clock_select_jpeg() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_jpeg()
+FJ_ERR_CODE fj_top_set_clock_select_fpt1() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_fpt1()
+FJ_ERR_CODE fj_top_set_clock_select_fpt0() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_fpt0()
+FJ_ERR_CODE fj_top_set_clock_select_pxf() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_pxf()
+FJ_ERR_CODE fj_top_set_clock_select_hevenc() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_hevenc()
+FJ_ERR_CODE fj_top_set_clock_select_hevsel() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_hevsel()
+FJ_ERR_CODE fj_top_set_clock_select_sen() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_sen()
+FJ_ERR_CODE fj_top_set_clock_select_senmsk() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_senmsk()
+FJ_ERR_CODE fj_top_set_clock_select_sro1() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_sro1()
+FJ_ERR_CODE fj_top_set_clock_select_iip() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_iip()
+FJ_ERR_CODE fj_top_set_clock_select_pas() 修改为 FJ_ERR_CODE system_top_image_set_clock_select_pas()
+FJ_ERR_CODE fj_top_set_image_clock() 修改为 FJ_ERR_CODE system_top_image_set_image_clock()
+
+FJ_ERR_CODE fj_top_set_clock_select_raw() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_raw()
+FJ_ERR_CODE fj_top_set_clock_select_ela() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ela()
+FJ_ERR_CODE fj_top_set_clock_select_sro1_2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_sro1_2()
+FJ_ERR_CODE fj_top_set_clock_select_b2b1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_b2b1()
+FJ_ERR_CODE fj_top_set_clock_select_b2r1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_b2r1()
+FJ_ERR_CODE fj_top_set_clock_select_ltm1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ltm1()
+FJ_ERR_CODE fj_top_set_clock_select_ltmrbk1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ltmrbk1()
+FJ_ERR_CODE fj_top_set_clock_select_r2y1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_r2y1()
+FJ_ERR_CODE fj_top_set_clock_select_cnr1() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_cnr1()
+FJ_ERR_CODE fj_top_set_clock_select_sro2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_sro2()
+FJ_ERR_CODE fj_top_set_clock_select_sro2_2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_sro2_2()
+FJ_ERR_CODE fj_top_set_clock_select_b2b2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_b2b2()
+FJ_ERR_CODE fj_top_set_clock_select_b2r2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_b2r2()
+FJ_ERR_CODE fj_top_set_clock_select_ltm2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ltm2()
+FJ_ERR_CODE fj_top_set_clock_select_ltmrbk2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ltmrbk2()
+FJ_ERR_CODE fj_top_set_clock_select_r2y2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_r2y2()
+FJ_ERR_CODE fj_top_set_clock_select_cnr2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_cnr2()
+FJ_ERR_CODE fj_top_set_clock_select_apclk() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_apclk()
+FJ_ERR_CODE fj_top_set_clock_select_ap3() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ap3()
+FJ_ERR_CODE fj_top_set_clock_select_ap2() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ap2()
+FJ_ERR_CODE fj_top_set_clock_select_ap1(l) 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ap1()
+FJ_ERR_CODE fj_top_set_clock_select_ap0() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ap0()
+FJ_ERR_CODE fj_top_set_clock_select_ipp() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ipp()
+FJ_ERR_CODE fj_top_set_clock_select_vdf() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_vdf()
+FJ_ERR_CODE fj_top_set_clock_select_rib() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_rib()
+FJ_ERR_CODE fj_top_set_clock_select_me() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_me()
+FJ_ERR_CODE fj_top_set_clock_select_shdr() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_shdr()
+FJ_ERR_CODE fj_top_set_clock_select_ipu() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ipu()
+FJ_ERR_CODE fj_top_set_clock_select_ipu_tme() 修改为 FJ_ERR_CODE system_top_image_macro_set_clock_select_ipu_tme()
+
+从memory.c中抽出类systemmemory， systemmemorymanage
+删除memory.c和memory.h
+宏定义修改：
+FJ_PARAM_ARRAY_NUM 修改为 SystemMemory_PARAM_ARRAY_NUM
+FJ_PARAM_ARRAY_SIZE 修改为 SystemMemory_PARAM_ARRAY_SIZE
+FJ_FPARAMS_NUM 修改为 SystemMemory_FPARAMS_NUM
+FJ_FPARAMS_SIZE 修改为 SystemMemory_FPARAMS_SIZE
+FJ_TEXT_OUT_SIZE 修改为 SystemMemory_TEXT_OUT_SIZE
+FJ_DRAW_TEXT_SIZE 修改为 SystemMemory_DRAW_TEXT_SIZE
+FJ_ICON_LOAD_SIZE 修改为 SystemMemory_ICON_LOAD_SIZE
+FJ_DPOF_GET_JOB_PARAM_STR_NUM 修改为 SystemMemory_DPOF_GET_JOB_PARAM_STR_NUM
+FJ_DPOF_GET_JOB_PARAM_STR_SIZE 修改为 SystemMemory_DPOF_GET_JOB_PARAM_STR_SIZE
+FJ_OSD_DRAW_BUFFER_VGR_EX_WIDTH 修改为 SystemMemory_OSD_DRAW_BUFFER_VGR_EX_WIDTH
+FJ_OSD_DRAW_BUFFER_VGR_EX_LINES 修改为 SystemMemory_OSD_DRAW_BUFFER_VGR_EX_LINES
+FJ_OSD_DRAW_BUFFER_VGR_EX_HWIDTH 修改为 SystemMemory_OSD_DRAW_BUFFER_VGR_EX_HWIDTH
+FJ_OSD_DRAW_BUFFER_VGR_EX_HLINES 修改为 SystemMemory_OSD_DRAW_BUFFER_VGR_EX_HLINES
+函数修改：
+VOID fj_memory_dmb_poc() 修改为 void system_memory_dmb_poc()
+VOID fj_memory_dsb_poc() 修改为 void system_memory_dsb_poc()
+VOID fj_memory_dsb_pou() 修改为 void system_memory_dsb_pou()
+VOID fj_memory_dcache_all() 修改为 void system_memory_dcache_all()
+VOID fj_memory_dcache_addr() 修改为 void system_memory_dcache_addr()
+VOID fj_get_memory_attribute() 修改为 void system_memory_get_memory_attribute()
+INT32 fj_get_mpf_fblkcnt() 修改为 kint32 system_memory_get_mpf_fblkcnt()
+INT32 fj_get_mpl_fmplsz() 修改为 kint32 system_memory_get_mpl_fmplsz()
+INT32 fj_get_heap_size() 修改为 kint32 system_memory_get_heap_size()
+FJ_ERR_CODE	fj_memory_copy_sdram_sync() 修改为 FJ_ERR_CODE	system_memory_copy_sdram_sync()
+
+FJ_ERR_CODE fj_setsdrammapmode() 修改为 FJ_ERR_CODE system_memory_manage_setsdrammapmode()
+UINT32 fj_directpoolalloc() 修改为 kuint32 system_memory_manage_directpoolalloc()
+BOOL fj_directpoolfree() 修改为 kboolean system_memory_manage_directpoolfree()
+FJ_ERR_CODE	fj_getmem() 修改为 FJ_ERR_CODE	system_memory_manage_getmem()
+FJ_ERR_CODE	fj_releasemem() 修改为 FJ_ERR_CODE	system_memory_manage_releasemem()
+FJ_ERR_CODE	fj_clearmem() 修改为 FJ_ERR_CODE system_memory_manage_clearmem()
+
+
+将updater.c拆分成systemupdater.c, systemupdatercore.c, systemupdateremmc.c, systemupdaternand.c
+
+函数修改：
+FJ_ERR_CODE fj_updater() 修改为 FJ_ERR_CODE system_updater()
+FJ_ERR_CODE fj_updater_memory() 修改为 FJ_ERR_CODE system_updater_memory()
+FJ_ERR_CODE fj_updater_selector() 修改为 FJ_ERR_CODE system_updater_selector()
+FJ_ERR_CODE fj_updater_memory_all() 修改为 FJ_ERR_CODE system_updater_memory_all()
+
+
+
+创建类SystemInterrupt
+interrupt.c改名为systeminterrupt.c
+interrupt.h改名为systeminterrupt.h,并移到systeminterrupt.c所在目录
+从systeminterrupt.c中抽出systeminterruptinit
+并将所有形如..._Int(void)移动至systeminterruptinit.h中
+枚举E_EINT改名为EEint
+E_EINT16 -> SystemInterruptInit_E_EINT16
+E_EINT_MIN -> SystemInterruptInit_E_EINT_MIN
+E_EINT17 -> SystemInterruptInit_E_EINT17
+E_EINT18 -> SystemInterruptInit_E_EINT18
+E_EINT19 -> SystemInterruptInit_E_EINT19
+E_EINT20 -> SystemInterruptInit_E_EINT20
+E_EINT21 -> SystemInterruptInit_E_EINT21
+E_EINT22 -> SystemInterruptInit_E_EINT22
+E_EINT23 -> SystemInterruptInit_E_EINT23
+E_EINT24 -> SystemInterruptInit_E_EINT24
+E_EINT25 -> SystemInterruptInit_E_EINT25
+E_EINT26 -> SystemInterruptInit_E_EINT26
+E_EINT27 -> SystemInterruptInit_E_EINT27
+E_EINT28 -> SystemInterruptInit_E_EINT28
+E_EINT29 -> SystemInterruptInit_E_EINT29
+E_EINT30 -> SystemInterruptInit_E_EINT30
+E_EINT31 -> SystemInterruptInit_E_EINT31
+E_EINT32 -> SystemInterruptInit_E_EINT32
+E_EINT_MAX -> SystemInterruptInit_E_EINT_MAX
+
+函数修改：
+FJ_ERR_CODE fj_ext_interrupt_set_config() 修改为 FJ_ERR_CODE system_interrupt_ext_interrupt_set_config()
+FJ_ERR_CODE fj_ext_interrupt_set_enable() 修改为 FJ_ERR_CODE system_interrupt_ext_interrupt_set_enable()
+FJ_ERR_CODE fj_ext_interrupt_set_level() 修改为 FJ_ERR_CODE system_interrupt_ext_interrupt_set_level()
+FJ_ERR_CODE fj_ext_interrupt_get_level() 修改为 FJ_ERR_CODE system_interrupt_ext_interrupt_get_level()
+FJ_ERR_CODE fj_ext_interrupt_clear_req() 修改为 FJ_ERR_CODE system_interrupt_ext_interrupt_clear_req()
+FJ_ERR_CODE fj_gic_ctrl() 修改为 FJ_ERR_CODE system_interrupt_fj_gic_ctrl()
+FJ_ERR_CODE fj_gic_clear_pending() 修改为 FJ_ERR_CODE system_interrupt_fj_gic_clear_pending()
+
+VOID BF_Sgi_Interrupt0() 修改为 VOID system_interrupt_init_bf_sgi_interrupt0()
+VOID BF_Sgi_Interrupt1() 修改为 VOID system_interrupt_init_bf_sgi_interrupt1()
+VOID BF_Sgi_Interrupt2() 修改为 VOID system_interrupt_init_bf_sgi_interrupt2()
+VOID BF_Sgi_Interrupt3() 修改为 VOID system_interrupt_init_bf_sgi_interrupt3()
+VOID BF_Sgi_Interrupt4() 修改为 VOID system_interrupt_init_bf_sgi_interrupt4()
+VOID BF_Sgi_Interrupt5() 修改为 VOID system_interrupt_init_bf_sgi_interrupt5()
+VOID BF_Sgi_Interrupt6() 修改为 VOID system_interrupt_init_bf_sgi_interrupt6()
+VOID BF_Sgi_Interrupt7() 修改为 VOID system_interrupt_init_bf_sgi_interrupt7()
+VOID BF_Sgi_Interrupt8() 修改为 VOID system_interrupt_init_bf_sgi_interrupt8()
+VOID BF_Sgi_Interrupt9() 修改为 VOID system_interrupt_init_bf_sgi_interrupt9()
+VOID BF_Sgi_Interrupt10() 修改为 VOID system_interrupt_init_bf_sgi_interrupt10()
+VOID BF_Sgi_Interrupt11() 修改为 VOID system_interrupt_init_bf_sgi_interrupt11()
+VOID BF_Sgi_Interrupt12() 修改为 VOID system_interrupt_init_bf_sgi_interrupt12()
+VOID BF_Sgi_Interrupt13() 修改为 VOID system_interrupt_init_bf_sgi_interrupt13()
+VOID BF_Sgi_Interrupt14() 修改为 VOID system_interrupt_init_bf_sgi_interrupt14()
+VOID BF_Sgi_Interrupt15() 修改为 VOID system_interrupt_init_bf_sgi_interrupt15()
+VOID BF_Ppi_Interrupt0() 修改为 VOID system_interrupt_init_bf_ppi_interrupt0()
+VOID BF_Ppi_Interrupt1() 修改为 VOID system_interrupt_init_bf_ppi_interrupt1()
+VOID BF_Ppi_Interrupt2() 修改为 VOID system_interrupt_init_bf_ppi_interrupt2()
+VOID BF_Ppi_Interrupt3() 修改为 VOID system_interrupt_init_bf_ppi_interrupt3()
+VOID BF_Ppi_Interrupt4() 修改为 VOID system_interrupt_init_bf_ppi_interrupt4()
+VOID BF_Ppi_Interrupt5() 修改为 VOID system_interrupt_init_bf_ppi_interrupt5()
+VOID BF_Ppi_Interrupt6() 修改为 VOID system_interrupt_init_bf_ppi_interrupt6()
+VOID BF_Ppi_Interrupt7() 修改为 VOID system_interrupt_init_bf_ppi_interrupt7()
+VOID BF_Ppi_Interrupt8() 修改为 VOID system_interrupt_init_bf_ppi_interrupt8()
+VOID BF_Ppi_Interrupt9() 修改为 VOID system_interrupt_init_bf_ppi_interrupt9()
+VOID BF_Ppi_Interrupt10() 修改为 VOID system_interrupt_init_bf_ppi_interrupt10()
+VOID BF_Ppi_Interrupt11() 修改为 VOID system_interrupt_init_bf_ppi_interrupt11()
+VOID BF_Ppi_Interrupt12() 修改为 VOID system_interrupt_init_bf_ppi_interrupt12()
+VOID BF_Ppi_Interrupt13() 修改为 VOID system_interrupt_init_bf_ppi_interrupt13()
+VOID BF_Ppi_Interrupt14() 修改为 VOID system_interrupt_init_bf_ppi_interrupt14()
+VOID BF_Ppi_Interrupt15() 修改为 VOID system_interrupt_init_bf_ppi_interrupt15()
+
+VOID BF_CortexA7_Cpu0_Communication_Ch_Receive_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu0_communication_ch_receive()
+VOID BF_CortexA7_Cpu0_Communication_Ch_Trnsmit_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu0_communication_ch_trnsmit()
+VOID BF_CortexA7_Cpu1_Communication_Ch_Receive_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu1_communication_ch_receive()
+VOID BF_CortexA7_Cpu1_Communication_Ch_Trnsmit_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu1_communication_ch_trnsmit()
+VOID BF_CortexA7_Cpu2_Communication_Ch_Receive_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu2_communication_ch_receive()
+VOID BF_CortexA7_Cpu2_Communication_Ch_Trnsmit_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu2_communication_ch_trnsmit()
+VOID BF_CortexA7_Cpu3_Communication_Ch_Receive_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu3_communication_ch_receive()
+VOID BF_CortexA7_Cpu3_Communication_Ch_Trnsmit_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu3_communication_ch_trnsmit()
+VOID BF_CortexA7_Cpu0_Crosstrigger_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu0_crosstrigger()
+VOID BF_CortexA7_Cpu1_Crosstrigger_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu1_crosstrigger()
+VOID BF_CortexA7_Cpu2_Crosstrigger_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu2_crosstrigger()
+VOID BF_CortexA7_Cpu3_Crosstrigger_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu3_crosstrigger()
+VOID BF_CortexA7_Cpu0_System_Metrics_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu0_system_metrics()
+VOID BF_CortexA7_Cpu1_System_Metrics_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu1_system_metrics()
+VOID BF_CortexA7_Cpu2_System_Metrics_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu2_system_metrics()
+VOID BF_CortexA7_Cpu3_System_Metrics_Int() 修改为 VOID system_interrupt_init_bf_cortexa7_cpu3_system_metrics()
+
+其余函数改法同上，函数开头添加system_interrupt_init，去掉末尾_Int,全用小写
+VOID BF_Axi_Transaction_Error_Int(VOID);
+VOID BF_Snap_Peri_Xdmac_Ch0_Int(VOID);
+VOID BF_Snap_Peri_Xdmac_Ch1_Int(VOID);
+VOID BF_Snap_Peri_Xdmac_Ch2_Int(VOID);
+VOID BF_Snap_Peri_Xdmac_Ch3_Int(VOID);
+VOID BF_Watchdog_Timer_Int(VOID);
+VOID BF_Ipcu0_Ch0_Int(VOID);
+VOID BF_Ipcu0_Ch1_Int(VOID);
+VOID BF_Ipcu0_Ch2_Int(VOID);
+VOID BF_Ipcu0_Ch3_Int(VOID);
+VOID BF_Ipcu0_Ch4_Int(VOID);
+VOID BF_Ipcu0_Ch5_Int(VOID);
+VOID BF_Ipcu0_Ch6_Int(VOID);
+VOID BF_Ipcu0_Ch7_Int(VOID);
+VOID BF_Ipcu0_Ch8_Int(VOID);
+VOID BF_Ipcu0_Ch9_Int(VOID);
+VOID BF_Ipcu0_Ch10_Int(VOID);
+VOID BF_Ipcu0_Ch11_Int(VOID);
+VOID BF_Ipcu0_Ch12_Int(VOID);
+VOID BF_Ipcu0_Ch13_Int(VOID);
+VOID BF_Ipcu0_Ch14_Int(VOID);
+VOID BF_Ipcu0_Ch15_Int(VOID);
+VOID BF_Ipcu1_Ch0_Int(VOID);
+VOID BF_Ipcu1_Ch1_Int(VOID);
+VOID BF_Ipcu1_Ch2_Int(VOID);
+VOID BF_Ipcu1_Ch3_Int(VOID);
+VOID BF_Ipcu1_Ch4_Int(VOID);
+VOID BF_Ipcu1_Ch5_Int(VOID);
+VOID BF_Ipcu1_Ch6_Int(VOID);
+VOID BF_Ipcu1_Ch7_Int(VOID);
+VOID BF_Ipcu1_Ch8_Int(VOID);
+VOID BF_Ipcu1_Ch9_Int(VOID);
+VOID BF_Ipcu1_Ch10_Int(VOID);
+VOID BF_Ipcu1_Ch11_Int(VOID);
+VOID BF_Ipcu1_Ch12_Int(VOID);
+VOID BF_Ipcu1_Ch13_Int(VOID);
+VOID BF_Ipcu1_Ch14_Int(VOID);
+VOID BF_Ipcu1_Ch15_Int(VOID);
+VOID BF_External_Ch16_Int(VOID);
+VOID BF_External_Ch17_Int(VOID);
+VOID BF_External_Ch18_Int(VOID);
+VOID BF_External_Ch19_Int(VOID);
+VOID BF_External_Ch20_Int(VOID);
+VOID BF_External_Ch21_Int(VOID);
+VOID BF_External_Ch22_Int(VOID);
+VOID BF_External_Ch23_Int(VOID);
+VOID BF_External_Ch24_Int(VOID);
+VOID BF_External_Ch25_Int(VOID);
+VOID BF_External_Ch26_Int(VOID);
+VOID BF_External_Ch27_Int(VOID);
+VOID BF_External_Ch28_Int(VOID);
+VOID BF_External_Ch29_Int(VOID);
+VOID BF_External_Ch30_Int(VOID);
+VOID BF_External_Ch31_Int(VOID);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+VOID BF_External_Ch32_Int(VOID);
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID BF_Pmc_Dmac_Adc_Int(VOID);
+VOID BF_Pmc_Dmac_Receive_Int(VOID);
+VOID BF_Pmc_Dmac_Uart_Transmission_Data_Int(VOID);
+VOID BF_Pmc_Dmac_Qspi_Transmission_Int(VOID);
+VOID BF_Pmc_Dmac_Qspi_Receive_Int(VOID);
+VOID BF_Pmc_Uart_Receive_Relation_Int(VOID);
+VOID BF_Pmc_Uart_Transmission_Relation_Int(VOID);
+VOID BF_Pmc_Qspi_Int(VOID);
+VOID BF_Calendar_Alarm_Int(VOID);
+VOID BF_Pmc_32bit_Timer_Under_Flow_Int(VOID);
+VOID BF_Adc_Int(VOID);
+VOID BF_Pmc_I2c_Int(VOID);
+VOID BF_Pmc_Watchdog_Int(VOID);
+VOID BF_Temperature_Int(VOID);
+VOID BF_Pmu_Int(VOID);
+VOID BF_Pmc_Gpio_Int(VOID);
+VOID BF_Timer_Ch0_Int(VOID);
+VOID BF_Timer_Ch1_Int(VOID);
+VOID BF_Timer_Ch2_Int(VOID);
+VOID BF_Timer_Ch3_Int(VOID);
+VOID BF_Timer_Ch4_Int(VOID);
+VOID BF_Timer_Ch5_Int(VOID);
+VOID BF_Timer_Ch6_Int(VOID);
+VOID BF_Timer_Ch7_Int(VOID);
+VOID BF_Timer_Ch8_Int(VOID);
+VOID BF_Timer_Ch9_Int(VOID);
+VOID BF_Timer_Ch10_Int(VOID);
+VOID BF_Timer_Ch11_Int(VOID);
+VOID BF_Timer_Ch12_Int(VOID);
+VOID BF_Timer_Ch13_Int(VOID);
+VOID BF_I2c_Ch0_Int(VOID);
+VOID BF_I2c_Ch1_Int(VOID);
+VOID BF_I2c_Ch2_Int(VOID);
+VOID BF_Updown_Counter_Ch0_Int(VOID);
+VOID BF_Updown_Counter_Ch1_Int(VOID);
+VOID BF_Updown_Counter_Ch2_Int(VOID);
+VOID BF_Updown_Counter_Ch3_Int(VOID);
+VOID BF_Updown_Counter_Ch4_Int(VOID);
+VOID BF_Updown_Counter_Ch5_Int(VOID);
+VOID BF_Pwm_Ch0_Ch3_Int(VOID);
+VOID BF_Pwm_Ch4_Ch7_Int(VOID);
+VOID BF_Pwm_Ch8_Ch11_Int(VOID);
+VOID BF_Pwm_Ch12_Ch15_Int(VOID);
+VOID BF_Pwm_Ch0_Ch3_Stp_Int(VOID);
+VOID BF_Pwm_Ch4_Ch7_Stp_Int(VOID);
+VOID BF_Pwm_Ch8_Ch11_Stp_Int(VOID);
+VOID BF_Pwm_Ch12_Ch15_Stp_Int(VOID);
+VOID BF_Audio_If_Ch0_Int(VOID);
+VOID BF_Audio_If_Ch1_Int(VOID);
+VOID BF_Audio_If_Ch2_Int(VOID);
+VOID BF_Audio_If_Ch3_Int(VOID);
+VOID BF_Audio_If_Ch4_Int(VOID);
+VOID BF_Audio_If_Ch5_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch0_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch1_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch2_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch3_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch4_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch5_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch6_Int(VOID);
+VOID BF_Peri_Hdmac0_Ch7_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch0_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch1_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch2_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch3_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch4_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch5_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch6_Int(VOID);
+VOID BF_Peri_Hdmac1_Ch7_Int(VOID);
+VOID BF_Uart_Ch0_Reception_Int(VOID);
+VOID BF_Uart_Ch1_Reception_Int(VOID);
+VOID BF_Uart_Ch2_Reception_Int(VOID);
+VOID BF_Uart_Ch3_Reception_Int(VOID);
+VOID BF_Uart_Ch4_Reception_Int(VOID);
+VOID BF_Uart_Ch5_Reception_Int(VOID);
+VOID BF_Uart_Ch6_Reception_Int(VOID);
+VOID BF_Uart_Ch7_Reception_Int(VOID);
+VOID BF_Uart_Ch0_Transmission_Int(VOID);
+VOID BF_Uart_Ch1_Transmission_Int(VOID);
+VOID BF_Uart_Ch2_Transmission_Int(VOID);
+VOID BF_Uart_Ch3_Transmission_Int(VOID);
+VOID BF_Uart_Ch4_Transmission_Int(VOID);
+VOID BF_Uart_Ch5_Transmission_Int(VOID);
+VOID BF_Uart_Ch6_Transmission_Int(VOID);
+VOID BF_Uart_Ch7_Transmission_Int(VOID);
+VOID BF_Spi_Ch0_Int(VOID);
+VOID BF_Spi_Ch1_Int(VOID);
+VOID BF_Spi_Ch2_Int(VOID);
+VOID BF_Pdm_Ch0_Dma0_Int(VOID);
+VOID BF_Pdm_Ch0_Dma1_Int(VOID);
+VOID BF_Pdm_Ch0_Fifo_Overflow_Int(VOID);
+VOID BF_Pdm_Ch1_Dma0_Int(VOID);
+VOID BF_Pdm_Ch1_Dma1_Int(VOID);
+VOID BF_Pdm_Ch1_Fifo_Overflow_Int(VOID);
+VOID BF_Slimbus_Ch0_Int(VOID);
+VOID BF_Slimbus_Ch1_Int(VOID);
+VOID BF_Slimbus_Ch2_Int(VOID);
+VOID BF_Slimbus_Ch3_Int(VOID);
+VOID BF_Sdramc_Ch0_Int(VOID);
+VOID BF_Sdramc_Ch1_Int(VOID);
+VOID BF_Mxic_Unit0_Int(VOID);
+VOID BF_Mxic_Unit1_Int(VOID);
+VOID BF_Mxic_Unit2_Int(VOID);
+VOID BF_Mxic_Unit3_Int(VOID);
+VOID BF_Mxic_Unit4_Int(VOID);
+VOID BF_Mxic_Unit5_Int(VOID);
+VOID BF_Mxic_Unit6_Int(VOID);
+VOID BF_Sen_Int(VOID);
+VOID BF_Sen_Vd_Int(VOID);
+VOID BF_Sen_Hd_Int(VOID);
+VOID BF_Sensor_If_Macro0_Int(VOID);
+VOID BF_Sensor_If_Macro1_Int(VOID);
+VOID BF_Sensor_If_Macro2_Int(VOID);
+VOID BF_Sensor_If_Macro3_Int(VOID);
+VOID BF_Sro_Unit1_Int(VOID);
+VOID BF_Sro_Unit1_Vd_Int(VOID);
+VOID BF_Sro_Unit1_Hd_Int(VOID);
+VOID BF_Sro_Unit2_Int(VOID);
+VOID BF_Sro_Unit2_Vd_Int(VOID);
+VOID BF_Sro_Unit2_Hd_Int(VOID);
+VOID BF_B2b_Unit1_Int(VOID);
+VOID BF_B2b_Unit1_Vd_Int(VOID);
+VOID BF_B2b_Unit1_Hd_Int(VOID);
+VOID BF_B2b_Unit2_Int(VOID);
+VOID BF_B2b_Unit2_Vd_Int(VOID);
+VOID BF_B2b_Unit2_Hd_Int(VOID);
+VOID BF_Stat_Int(VOID);
+VOID BF_Pas_Int(VOID);
+VOID BF_Pas_Vd_Int(VOID);
+VOID BF_Pas_Hd_Int(VOID);
+VOID BF_B2r_Unit1_Int(VOID);
+VOID BF_B2r_Unit2_Int(VOID);
+VOID BF_Ltm_Unit1_Int(VOID);
+VOID BF_Ltm_Unit2_Int(VOID);
+VOID BF_R2y_Unit1_Int(VOID);
+VOID BF_R2y_Unit2_Int(VOID);
+VOID BF_Cnr_Unit1_Int(VOID);
+VOID BF_Cnr_Unit2_Int(VOID);
+VOID BF_Iip_Int(VOID);
+VOID BF_Shdr_Int(VOID);
+VOID BF_Shdr_Line_Int(VOID);
+VOID BF_Me_Int(VOID);
+VOID BF_Graphics_Int(VOID);
+VOID BF_Jpeg_Int(VOID);
+VOID BF_Raw_Int(VOID);
+VOID BF_Ipu_Int(VOID);
+VOID BF_Ela_Unit_Int(VOID);
+VOID BF_Xch_Int(VOID);
+VOID BF_Fpt_Unit0_Int(VOID);
+VOID BF_Fpt_Unit1_Int(VOID);
+VOID BF_Disp_Lcd_Int(VOID);
+VOID BF_Disp_Hdmi_Int(VOID);
+VOID BF_Disp_Mipi_Dsi_Int(VOID);
+VOID BF_Mipi_Dsi_Tx_Int(VOID);
+VOID BF_Disp_Dwch_Int(VOID);
+VOID BF_Rdma_Int(VOID);
+VOID BF_Hdmi_Master_Int(VOID);
+VOID BF_Hdmi_Cec_Int(VOID);
+VOID BF_BMH_Unit0_Int(VOID);
+VOID BF_BMH_Unit1_Int(VOID);
+VOID BF_Ribery_Rbr_Int(VOID);
+VOID BF_Ribery_Rwdt_Int(VOID);
+VOID BF_Interprocessor0_Int(VOID);
+VOID BF_Interprocessor1_Int(VOID);
+VOID BF_Interprocessor2_Int(VOID);
+VOID BF_Interprocessor3_Int(VOID);
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+VOID BF_Wave_Int(VOID);
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+VOID BF_Dsp_Peripheral_Unit_Ipcu0_Int(VOID);
+VOID BF_Dsp_Peripheral_Unit_Ipcu1_Int(VOID);
+VOID BF_Dsp_Peripheral_Unit_Ipcu2_Int(VOID);
+VOID BF_Dsp_Peripheral_Unit_Ipcu3_Int(VOID);
+VOID BF_Dsp_Debug_Int(VOID);
+VOID BF_Nand_Flash_Int(VOID);
+VOID BF_Pcie_Ch0_Msi_Int(VOID);
+VOID BF_Pcie_Ch0_System_Error_Int(VOID);
+VOID BF_Pcie_Ch0_Intx_Int(VOID);
+VOID BF_Pcie_Ch0_Core_Int(VOID);
+VOID BF_Pcie_Ch0_DMA_Int(VOID);
+VOID BF_Pcie_Ch1_Msi_Int(VOID);
+VOID BF_Pcie_Ch1_System_Error_Int(VOID);
+VOID BF_Pcie_Ch1_Intx_Int(VOID);
+VOID BF_Pcie_Ch1_Core_Int(VOID);
+VOID BF_Pcie_Ch1_DMA_Int(VOID);
+VOID BF_Exs_Xdmac_Ch0_Int(VOID);
+VOID BF_Exs_Xdmac_Ch1_Int(VOID);
+VOID BF_Exs_Xdmac_Ch2_Int(VOID);
+VOID BF_Exs_Xdmac_Ch3_Int(VOID);
+VOID BF_Exs_Hdmac_Ch0_Int(VOID);
+VOID BF_Exs_Hdmac_Ch1_Int(VOID);
+VOID BF_Exs_Hdmac_Ch2_Int(VOID);
+VOID BF_Exs_Hdmac_Ch3_Int(VOID);
+VOID BF_Usb20_Hdc_Int(VOID);
+VOID BF_Usb20_Host_Ehci_Int(VOID);
+VOID BF_Usb20_Host_Ohci_Int(VOID);
+VOID BF_Usb30_Int(VOID);
+VOID BF_Sd_Ch3_Int(VOID);
+VOID BF_Sd_Ch3_Sdio_Int(VOID);
+VOID BF_Sd_Ch3_Wakeup_Int(VOID);
+VOID BF_Sd_Ch2_Uhs1_Int(VOID);
+VOID BF_Sd_Ch2_Sdio_Int(VOID);
+VOID BF_Sd_Ch2_Uhs1_Wakeup_Int(VOID);
+VOID BF_Sd_Ch2_Uhs2_Int(VOID);
+VOID BF_Sd_Ch2_Uhs2_Wakeup_Int(VOID);
+VOID BF_Sd_Ch1_Int(VOID);
+VOID BF_Sd_Ch1_Sdio_Int(VOID);
+VOID BF_Sd_Ch1_Wakeup_Int(VOID);
+VOID BF_Emmc_Int(VOID);
+VOID BF_Emmc_Wakeup_Int(VOID);
+VOID BF_Relc_Int(VOID);
+VOID BF_Netsec_A_Int(VOID);
+VOID BF_Netsec_B_Int(VOID);
+VOID BF_Sd_Pcie_Detect_Int(VOID);

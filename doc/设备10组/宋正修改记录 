@@ -1,0 +1,109 @@
+file_mng里面的fs修改：
+类：fscontroller
+把所有的BF_Fs.....  所有函数去掉了前缀BF，公有函数名全部改为小写
+fs_controller拆分成三个：fscontroller、fscontrollermediacopytils、fscontrollertils三个类
+fscontrollertils是最基础的文件，源代码包含的公有结构体都在这里
+T_FS_CONTROLLER_RET_STATVFS_DAT                                 FsControllerRetStatvfsDat
+T_FS_CONTROLLER_RET_GET_CURDRV_DAT                       FsControllerRetGetCurdrvDat
+T_FS_CONTROLLER_RET_STAT_DAT                                        FsControllerRetStatDat  
+T_FS_CONTROLLER_RET_GET_ATTR_DAT                              FsControllerRetGetAttrDat
+T_FS_CONTROLLER_RET_TYPE_READ_DAT                           FsControllerRetTypeReadDat
+T_FS_CONTROLLER_RET_TYPE_WRITE_DAT                         FsControllerRetTypeWriteDat
+T_FS_CONTROLLER_RET_TYPE_WRITE_RESULT_DAT        FsControllerRetTypeWriteResultDat
+T_FS_CONTROLLER_RET_TYPE_LSEEK_DAT                          FsControllerRetTypeLseekDat
+T_FS_CONTROLLER_RET_TYPE_LSEEK64_DAT                     FsControllerRetTypeLseek64Dat
+T_FS_CONTROLLER_RET_TYPE_FSTAT_DAT                          FsControllerRetTypeFstatDat
+T_FS_CONTROLLER_RET_TYPE_OPENDIR_DAT                  FsControllerRetTypeOpendirDat
+T_FS_CONTROLLER_RET_TYPE_READDIR_DAT                    FsControllerRetTypeReaddirDat
+T_FS_CONTROLLER_RET_TYPE_GET_CURDIR_DAT            FsControllerRetTypeGetCurdirDat
+T_FS_CONTROLLER_RET_GET_FREESIZE_DAT                     FsControllerRetGetFreesizeDat
+T_FS_CONTROLLER_RET_TYPE_TO_UNI_DAT                      FsControllerRetTypeToUniDat
+T_FS_CONTROLLER_MEDIA_STATUS                                     FsControllerMediaStatus
+T_FS_CONTROLLER_RET_SET_TIME_DAT                             FsControllerRetSetTimeDat
+T_FS_CONTROLLER_RET_GET_VOL_LABEL                          FsControllerRetGetVolLabel
+T_FS_CONTROLLER_RET_GET_MEDIA_FORMAT_DAT      FsControllerRetGetMediaFormatDat  (fsifcommon.h)
+T_FS_CONTROLLER_RET_ENTRY                                            FsControllerRetEntry           (fsifcommon.h)
+
+static volatile FW_INT32 g_bf_fs_controller_ret_err;
+static volatile FW_ULONG g_bf_fs_controller_ret_length;
+以上两个变量放在了fscontroller 私有属性中，公有函数都加了FsController*self
+私有函数首字母小写后单词首字母大写也都声明，公有变量volatile   gBF_Fs_Controller_Media_Status改名位置不变
+fscontrollermediacopytils、fscontrollertils两个类没有属性，函数都加了self
+
+
+fsifreceiver修改：
+fs_if_receiver 增加私有属性FsController
+fs_if拆分成fsiftils，fsifcommon和fsifreceivertils函数名都基于原来所在的类修改，fsifreceivertils依赖fsiftils
+fs_if的私有函数fs_if_request_execute 在被拆分后多次使用，放在了fsiftils中，这也是fsifreceivertils依赖的原因
+
+fssender类修改：
+fs_sender的结构体T_BF_FS_SENDER_MSG做为fssender的类属性放在self中，这个结构体广泛被作为容器使用
+
+mediastate类修改：
+mediastate把所有的enum按照格式修改
+E_BF_MEDIA_STATE_MEDIA_TYPE                                 MediaStateMediaType
+E_BF_MEDIA_STATE_MEDIA_STATE                               MediaStateMediaState
+E_BF_MEDIA_STATE_MEDIA_WP                                    MediaStateMediaWp
+E_BF_MEDIA_STATE_BOOT_TYPE                                   MediaStateBootType
+T_BF_MEDIA_STATE_MEDIA_INFO                               MediaStateMediaInfo
+源代码的static volatile放在私有属性并进行了改名
+static volatile E_BF_MEDIA_STATE_MEDIA_TYPE g_bf_media_state_used_media = E_BF_MEDIA_STATE_MEDIA_TYPE_NOTHING;
+static volatile T_BF_MEDIA_STATE_MEDIA_INFO g_bf_media_state_media_info = { E_BF_MEDIA_STATE_MEDIA_WP_UNPROTECT,
+                                                                   E_BF_MEDIA_STATE_MEDIA_WP_UNPROTECT,
+                                                                   E_BF_MEDIA_STATE_MEDIA_WP_UNPROTECT};
+static volatile unsigned char g_bf_media_state_interval[D_BF_MEDIA_SD_MAX] = {D_BF_MEDIA_STATE_CHECK_INTERVAL};
+static volatile unsigned char g_bf_media_state_cnt[D_BF_MEDIA_SD_MAX] ={ D_BF_MEDIA_STATE_CHECK_COUNT};
+static FJ_MEDIA_ID g_bf_nf_storage_id = FJ_MEDIA_NF_STORAGE0;
+static FJ_MEDIA_ID g_bf_emmc_storage_id = FJ_MEDIA_EMMC_STORAGE0;
+变成了下面的格式并在constructor中进行了初始化
+struct _MediaStatePrivate
+{
+        volatile MediaStateMediaType gBfMediaStateUsedMedia;
+        volatile MediaStateMediaInfo gBfMediaStateMediaInfo ;
+        volatile unsigned char gBfMediaStateInterval[MEDIA_SD_MAX];
+        volatile unsigned char gBfMediaStateCnt[MEDIA_SD_MAX] ;
+        FjMediaId gBfNfStorageId;
+        FjMediaId gBfEmmcStorageId;
+};
+私有方法全部改名，公有方法去掉了BF_前缀，所有小写，并在参数中加了self
+BF_Media_State_Set_Used_Media       -> media_state_set_used_media
+BF_Media_State_Get_Used_Media     ->media_state_get_used_media
+BF_Media_State_Exchage_Type_To_Drive_Name ->media_state_exchage_type_to_drive_name
+BF_Media_State_Set_Media_Check_Param->        media_state_set_media_check_param
+BF_Media_State_Get_Media_State->                       media_state_get_media_state
+BF_Media_State_Get_Media_State_By_Poll->       media_state_get_media_state_by_poll
+BF_Media_State_Check_Media_State->                  media_state_check_media_state
+后续未写的全部都是去前缀按照规范小写，并按照需要添加的self
+
+
+ipcufs修改：
+宏定义去前缀，后面不变，如下
+D_BF_IPCUFS_IFSA_START                  IPCUFS_IFSA_START  
+#define D_BF_IPCUFS_IFSA_END      IPCUFS_IFSA_END
+#define D_BF_IPCUFS_IFSA_LOOKUP     IPCUFS_IFSA_LOOKUP
+结构体按照命名规范修改，去掉了前缀T_FS_
+T_IPCUFS_INFO_TABLE_COMM                       IpcufsInfotableComm
+T_FS_IPCUFS_INFO_TABLE_START                   IpcufsInfoTableStart
+T_FS_IPCUFS_INFO_TABLE_LOOKUP               IpcufsInfoTableLookup
+所有变量都按照规范默认修改
+
+以下变量放在了私有属性中，源代码初始化的值和方法写在constructor中
+static volatile UCHAR* g_bf_ipcufs_info_table;
+static volatile UINT32 g_bf_ipcufs_info_length;
+static volatile UCHAR  g_bf_ipcufs_umount_req_flag = 0;
+static volatile CHAR   g_drv_name[8][D_BF_FS_IF_DRVNAME_MAX];
+/* NF partition table */
+static volatile T_NF_PARTITION g_NF_hibdrv_partition_table;
+改成如下
+struct _IpCufsPrivate
+{
+        volatile  UCHAR* gBfIpcufsInfoTable;
+        volatile UINT32 gBfIpcufsInfoLength;
+        volatile UCHAR  gBfIpcufsUmountReqFlag;
+        volatile CHAR     gDrvName[8][FS_IF_DRVNAME_MAX];
+        /* NF partition table */
+        volatile T_NF_PARTITION gNfHibdrvPartitionTable;
+        FsIf *                  fsIf;
+};
+
+

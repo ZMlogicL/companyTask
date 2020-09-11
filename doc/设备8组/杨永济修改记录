@@ -1,0 +1,177 @@
+=======================1)ct_im_disp.c替换为类ctimdisp
+	a.ct_im_disp.c替换为ctimdisp.c；
+	b.ct_im_disp.h替换为ctimdisp.h文件;
+	c.makefile编译ctimdisp文件
+	d.修改变量命名符合规范。
+	svn version:r5348
+
+=======================2)第一次拆分ct_im_disp为9个类
+	a.新增文件ctimdisp1 ctimdisp1a ctimdisp1b ctimdisp1c ctimdisp1d 
+		ctimdisp2 ctimdisp3 ctimdisp4共计8个文件
+		makefile修改：target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/Makefile
+CSRC += ctimdisp.c \
+	ctimdisp1.c ctimdisp1a.c ctimdisp1b.c ctimdisp1c.c ctimdisp1d.c\
+	ctimdisp2.c ctimdisp3.c ctimdisp4.c #
+			
+	b.接口
+void Ct_Im_DISP_PcTest_Main(void)
+修改为
+void ct_im_disp_pctest_main(void)
+	
+	c.接口
+void Ct_Im_DISP_Main(INT32 argc, CHAR** argv);
+修改为
+void ct_im_disp_main(INT32 argc, CHAR** argv);
+
+	d.枚举
+typedef enum {
+	E_CT_IM_DISP_SET_GAMMA_R_FULL =					0x001,	/**< Set r_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_G_FULL =					0x002,	/**< Set g_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_B_FULL =					0x004,	/**< Set b_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL_FULL =				0x007,	/**< Set all full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_R_DELTA_FULL =			0x008,	/**< Set r_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_G_DELTA_FULL =			0x010,	/**< Set g_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_B_DELTA_FULL =			0x020,	/**< Set b_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL_DELTA_FULL =			0x038,	/**< Set all delta Gamma*/
+
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_R_FULL =			0x040,	/**< Set reverse r_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_G_FULL =			0x080,	/**< Set reverse g_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_B_FULL =			0x100,	/**< Set reverse b_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_ALL_FULL =		0x1C0,	/**< Set reverse all full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_R_DELTA_FULL =	0x200,	/**< Set reverse r_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_G_DELTA_FULL =	0x400,	/**< Set reverse g_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_B_DELTA_FULL =	0x800,	/**< Set reverse b_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_ALL_DELTA_FULL =	0xE00,	/**< Set reverse all delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL =					0xFFF,	/**< Set all */
+}E_CT_IM_DISP_SET_GAMMA;
+修改为
+typedef enum {
+	CtImDisp_SET_GAMMA_R_FULL =					0x001,	/**< Set r_full Gamma*/
+	CtImDisp_SET_GAMMA_G_FULL =					0x002,	/**< Set g_full Gamma*/
+	CtImDisp_SET_GAMMA_B_FULL =					0x004,	/**< Set b_full Gamma*/
+	CtImDisp_SET_GAMMA_ALL_FULL =				0x007,	/**< Set all full Gamma*/
+	CtImDisp_SET_GAMMA_R_DELTA_FULL =			0x008,	/**< Set r_delta Gamma*/
+	CtImDisp_SET_GAMMA_G_DELTA_FULL =			0x010,	/**< Set g_delta Gamma*/
+	CtImDisp_SET_GAMMA_B_DELTA_FULL =			0x020,	/**< Set b_delta Gamma*/
+	CtImDisp_SET_GAMMA_ALL_DELTA_FULL =			0x038,	/**< Set all delta Gamma*/
+
+	CtImDisp_SET_GAMMA_REVERSE_R_FULL =			0x040,	/**< Set reverse r_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_G_FULL =			0x080,	/**< Set reverse g_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_B_FULL =			0x100,	/**< Set reverse b_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_ALL_FULL =		0x1C0,	/**< Set reverse all full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_R_DELTA_FULL =	0x200,	/**< Set reverse r_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_G_DELTA_FULL =	0x400,	/**< Set reverse g_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_B_DELTA_FULL =	0x800,	/**< Set reverse b_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_ALL_DELTA_FULL =	0xE00,	/**< Set reverse all delta Gamma*/
+	CtImDisp_SET_GAMMA_ALL =					0xFFF,	/**< Set all */
+}CtImDispSetGamma;
+	提交之前svn version:r5638
+	
+=======================3)ct_im_disp_main接口修改为15个类，总计23个类
+	a.ctimdisp.h
+	接口修改
+	void ct_im_disp_pctest_main(void);接口修改为
+void ct_im_disp_pctest_main(CtImDisp *self); //5个类（1 1a-1d）
+	void ct_im_disp_main(INT32 argc, CHAR** argv);接口修改为
+void ct_im_disp_main(CtImDisp *self, INT32 argc, CHAR** argv); //15个类(2 2a-2n)
+
+	b.新增14个类 ctimdisp2a.c ctimdisp2b.c ctimdisp2c.c ctimdisp2d.c \
+			ctimdisp2e.c ctimdisp2f.c ctimdisp2g.c ctimdisp2h.c ctimdisp2i.c \
+			ctimdisp2j.c ctimdisp2k.c ctimdisp2l.c ctimdisp2m.c ctimdisp2n.c
+ctimdisp2  提供公有接口 ct_im_disp2a_do_main
+ctimdisp2a 提供公有接口 ct_im_disp2b_do_main
+ctimdisp2b 提供公有接口 ct_im_disp2c_do_main
+ctimdisp2c 提供公有接口 ct_im_disp2d_do_main
+ctimdisp2d 提供公有接口 ct_im_disp2e_do_main
+ctimdisp2e 提供公有接口 ct_im_disp2f_do_main
+ctimdisp2f 提供公有接口 ct_im_disp2g_do_main
+ctimdisp2g 提供公有接口 ct_im_disp2h_do_main
+ctimdisp2h 提供公有接口 ct_im_disp2i_do_main
+ctimdisp2i 提供公有接口 ct_im_disp2j_do_main
+ctimdisp2j 提供公有接口 ct_im_disp2k_do_main
+ctimdisp2k 提供公有接口 ct_im_disp2l_do_main
+ctimdisp2l 提供公有接口 ct_im_disp2m_do_main
+ctimdisp2m 提供公有接口 ct_im_disp2n_do_main
+ctimdisp2n 提供公有接口 ct_im_disp2_do_main
+
+	提交之前 svn version：5738
+	
+=======================4)ct_im_disp_main修改为ct_im_disp_main_cb
+提供cb方法，od方法，继承
+ctimdisp的宏修改；
+
+	提交之前 svn version：6869
+
+=======================5)给全局变量提供get方法（for palladium_test_disp.c）
+volatile UCHAR gIM_DISP_PCLK_Counter;
+volatile UCHAR gIM_DISP_HCLK_Counter;
+kuchar *			ct_im_disp_get_pclk_counter(CtImDisp *self);
+kuchar *			ct_im_disp_get_hclk_counter(CtImDisp *self);
+	
+	提交之前 svn version：7425
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+------------------------这是分割线！！！-----------------------------------
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+=======================对外修改：
+===========头文件（palladium_test_disp.c）
+ct_im_disp.h
+替换为
+ctimdisp.h
+===========接口（palladium_test_disp.c）
+void Ct_Im_DISP_PcTest_Main(void)修改为void ct_im_disp_pctest_main(CtImDisp *self);（|||）
+void Ct_Im_DISP_Main(INT32 argc, CHAR** argv);修改为ct_im_disp_main_cb(CtImDisp *self, kint32 argc, char **argv);
+
+===========宏(im_disp.h,im_disp.c)
+CO_DEBUG_DISP修改为CtImDisp_CO_DEBUG_DISP
+CO_DEBUG_PRINT_BEFORE_SETTING修改为CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
+
+===========全局变量（for palladium_test_disp.c）
+&gIM_DISP_PCLK_Counter 通过 ct_im_disp_get_pclk_counter(CtImDisp *self)访问
+&gIM_DISP_HCLK_Counter 通过 ct_im_disp_get_hclk_counter(CtImDisp *self)访问
+
+===========枚举（|||）
+typedef enum {
+	E_CT_IM_DISP_SET_GAMMA_R_FULL = 0x001, /**< Set r_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_G_FULL = 0x002, /**< Set g_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_B_FULL = 0x004, /**< Set b_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL_FULL = 0x007, /**< Set all full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_R_DELTA_FULL = 0x008, /**< Set r_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_G_DELTA_FULL = 0x010, /**< Set g_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_B_DELTA_FULL = 0x020, /**< Set b_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL_DELTA_FULL = 0x038, /**< Set all delta Gamma*/
+
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_R_FULL = 0x040, /**< Set reverse r_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_G_FULL = 0x080, /**< Set reverse g_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_B_FULL = 0x100, /**< Set reverse b_full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_ALL_FULL = 0x1C0, /**< Set reverse all full Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_R_DELTA_FULL = 0x200, /**< Set reverse r_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_G_DELTA_FULL = 0x400, /**< Set reverse g_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_B_DELTA_FULL = 0x800, /**< Set reverse b_delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_REVERSE_ALL_DELTA_FULL = 0xE00, /**< Set reverse all delta Gamma*/
+	E_CT_IM_DISP_SET_GAMMA_ALL = 0xFFF, /**< Set all */
+}E_CT_IM_DISP_SET_GAMMA;
+修改为
+typedef enum
+{
+	CtImDisp_SET_GAMMA_R_FULL = 0x001, /**< Set r_full Gamma*/
+	CtImDisp_SET_GAMMA_G_FULL = 0x002, /**< Set g_full Gamma*/
+	CtImDisp_SET_GAMMA_B_FULL = 0x004, /**< Set b_full Gamma*/
+	CtImDisp_SET_GAMMA_ALL_FULL = 0x007, /**< Set all full Gamma*/
+	CtImDisp_SET_GAMMA_R_DELTA_FULL = 0x008, /**< Set r_delta Gamma*/
+	CtImDisp_SET_GAMMA_G_DELTA_FULL = 0x010, /**< Set g_delta Gamma*/
+	CtImDisp_SET_GAMMA_B_DELTA_FULL = 0x020, /**< Set b_delta Gamma*/
+	CtImDisp_SET_GAMMA_ALL_DELTA_FULL = 0x038, /**< Set all delta Gamma*/
+
+	CtImDisp_SET_GAMMA_REVERSE_R_FULL = 0x040, /**< Set reverse r_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_G_FULL = 0x080, /**< Set reverse g_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_B_FULL = 0x100, /**< Set reverse b_full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_ALL_FULL = 0x1C0, /**< Set reverse all full Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_R_DELTA_FULL = 0x200, /**< Set reverse r_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_G_DELTA_FULL = 0x400, /**< Set reverse g_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_B_DELTA_FULL = 0x800, /**< Set reverse b_delta Gamma*/
+	CtImDisp_SET_GAMMA_REVERSE_ALL_DELTA_FULL = 0xE00, /**< Set reverse all delta Gamma*/
+	CtImDisp_SET_GAMMA_ALL = 0xFFF, /**< Set all */
+} CtImDispSetGamma;

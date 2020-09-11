@@ -1,0 +1,534 @@
+										2020-9-3
+一。按类名命名规范封装分配的文件，新建/camera目录下的类文件
+二。cameracommon.c   .cameracommon.h文件下修改：
+	1.搬移头文件/snsrtos-zzz/target/cpu_tkernel/board/camera/include/camera_common.h 		到 /	snsrtos-zzz/target/cpu_tkernel/board/camera/src/下
+	2.cameracommon.c下修改公有方法，大写字母变为小写字母：
+		Camera_Common_SPI_Write
+		Camera_Common_SPI_Read
+		Camera_Common_I2C_Write
+		Camera_Common_I2C_Read
+		Camera_Common_I2C_Write_2
+		Camera_Common_I2C_Read_2
+	3.修改宏定义，前加类名 ：#define 	CameraCommon_D_SENSOR_XCE_GPIO	(E_DD_TOP_GPIO_PD3)
+	4.枚举型修改：	
+					E_CAMERA_ID    E_CAMERA_ACCESS     E_CAMERA_SENSOR_INCLK   E_CAMERA_SENSOR_IF   E_CAMERA_SENSOR_UPDATE_TIMING
+					E_CAMERA_SENSOR_REG     E_CAMERA_GYRO_BUF_SIZE   E_CAMERA_LVDS_SNCLK_SEL   E_CAMERA_LVDS_SNDATA_SEL  E_CAMERA_SENSOR_SHUTTER
+					E_CAMERA_FOCUS_IF      E_CAMERA_FOCUS_MOVE_DIR      E_CAMERA_FOCUS_DOF_DISTANCE
+		将E_CAMERA 修改前缀为类名
+	5.头文件结构体修改，按规范修改名字：
+					T_CAMERA_SENSOR_REG   					T_CAMERA_SENSOR_SYNC_CODE    
+					T_CAMERA_SENSOR_SYNC_MASK  		 	T_CAMERA_ACCESS_I2C  
+					  T_CAMERA_SENSOR_BASIC   
+					T_CAMERA_SENSOR_MODE   				  T_CAMERA_CALC_EXP_IN     
+					T_CAMERA_EXP   							 T_CAMERA_EXP_REG    T_CAMERA_PD_DATA  
+					 T_CAMERA_GYRO_MPU_DATA    			 T_CAMERA_FOCUS_PARAM  T_CAMERA
+					T_CAMERA_FOCUS_DOF     				 T_CAMERA_FOCUS_BASIC  
+		将结构体内变量按规范修改，出第一个字母外以后每个单词首字母大写
+
+三。cameragyroicm20948.c下修改：
+	1.将cameragyroicm20948.c拆分成cameragyroicm20948read.c和cameragyroicm20948dmmp.两个类
+	2.修改cameragyroicm20948.c的 UCHAR全局变量
+	3.修改D_GYROCTRL_DATA_NUM为CameraGyroIcm20948_D_GYROCTRL_DATA_NUM
+
+四。
+	1.修改cameragyroicm20948dmp.c的公有方法：
+	int gyro_write_reg( void * context, uint8_t reg, const uint8_t * wbuffer, uint32_t wlen );
+	int gyro_read_reg( void * context, uint8_t reg, uint8_t * rbuffer, uint32_t rlen );
+	ECameraErrCode Gyro_Sleep_DMP( VOID );
+	ECameraErrCode Gyro_Resume_DMP( VOID );
+	ECameraErrCode Gyro_Get_Data_DMP(INT32 read_cnt, TCameraGyroMpuData* data );
+	ECameraErrCode Gyro_Init_DMP( VOID );
+	VOID Gyro_Main_DMP( INT32 stacd );
+	ECameraErrCode Gyro_Calc_Bias( ULONG time_ms, TCameraGyroMpuData* bias );
+	ECameraErrCode Gyro_Sleep( VOID );
+	ECameraErrCode Gyro_Init( VOID );
+	CameraGyroIcm20948Dmp* camera_gyro_icm20948_dmp_new(void);
+
+
+										2020-9-4
+一。修改cameragyroicm20948dmp.c下的内容：
+	1.修改宏定义，前加类名
+	2.修改公有方法：
+		 gyro_write_reg( void * context, uint8_t reg, const uint8_t * wbuffer, uint32_t wlen );
+		 gyro_read_reg( void * context, uint8_t reg, uint8_t * rbuffer, uint32_t rlen );
+		 Gyro_Sleep_DMP( VOID );
+		 Gyro_Resume_DMP( VOID );
+		 Gyro_Get_Data_DMP(INT32 read_cnt, TCameraGyroMpuData* data );
+		 Gyro_Init_DMP( VOID );
+		 Gyro_Main_DMP( INT32 stacd );
+		 Gyro_Calc_Bias( ULONG time_ms, TCameraGyroMpuData* bias );
+		 Gyro_Sleep( VOID );
+		 Gyro_Init( VOID );
+		修改后：
+			camera_gyro_icm20948_dmp_write_reg( void * context, uint8_t reg, const uint8_t * wbuffer, uint32_t wlen );
+ 			camera_gyro_icm20948_dmp_read_reg( void * context, uint8_t reg, uint8_t * rbuffer, uint32_t rlen );
+ 			camera_gyro_icm20948_dmp_sleep_dmp( VOID );
+ 			camera_gyro_icm20948_dmp_resume_dmp( VOID );
+ 			camera_gyro_icm20948_dmp_get_data_dmp(INT32 read_cnt, TCameraGyroMpuData* data );
+ 			camera_gyro_icm20948_dmp_init_dmp( VOID );
+ 			camera_gyro_icm20948_dmp_main_dmp( INT32 stacd );
+ 			camera_gyro_icm20948_dmp_calc_bias( ULONG time_ms, TCameraGyroMpuData* bias );
+ 			camera_gyro_icm20948_dmp_sleep( VOID );
+ 			camera_gyro_icm20948_dmp_init( VOID );
+
+二。修改cameragyroicm20948read.c下的内容：
+	1.修改宏定义：将D_BF_GYROIF 前缀换成类名CameraGyroIcm20948Read
+	2.将静态变量修改公有变量
+
+三。camerasensorimx183.c下的内容
+	1.搬移camer/include/目录下的camera_sensor_imx183.h到src下，删除源文件
+	2.修改宏定义，将D_SENSOR换成类名CameraSensorImx183
+	3.修改枚举型名字E_SENSOR_IMX183_MODE为 CameraSensorImx183，枚举内部变量前加类名
+	4.修改公有方法：
+		Sensor_IMX183_Clock_Gpio_Init
+		Sensor_IMX183_Standby
+		Sensor_IMX183_CancelStandby
+		Sensor_IMX183_GlobalShutter
+		Sensor_IMX183_Mode
+		Sensor_IMX183_SgVHD
+		Sensor_IMX183_Calc_Exp
+		Sensor_IMX183_Set_Exp
+		修改为：
+
+		camera_sensor_imx183_clock_gpio_Init
+		camera_sensor_imx183_standby
+		camera_sensor_imx183_cancel_standby
+		camera_sensor_imx183_global_shutter
+		camera_sensor_imx183_mode
+		camera_sensor_imx183_sg_vhd
+		camera_sensor_imx183_calc_exp
+		camera_sensor_imx183_set_exp
+四。修改camerasensorimx277.c下的内容
+	1.将/include/camera_sensor_imx277.h搬到src下，并删除原文件
+	2.修改枚举型名称和内部变量名，将E_SENSOR_IMX277_MODE 修改为ESensorImx277Mode
+		E_SENSOR_IMX277_MODE_MAX 修改为CameraSensorImx277_MODE_H4_V3_NO_1
+		E_SENSOR_IMX277_MODE_MAX 修改为CameraSensorImx277_MODE_MAX
+	3.camera_config.c和.h的T_CAMERA_ID为 TCameraId
+	4.修改公有方法:
+		 Sensor_IMX277_Clock_Gpio_Init	
+ 		Sensor_IMX277_Standby	
+ 		Sensor_IMX277_CancelStandby	
+ 		Sensor_IMX277_Mode	
+ 		Sensor_IMX277_SgVHD	
+ 		Sensor_IMX277_Calc_Exp	
+	 	Sensor_IMX277_Set_Exp	
+		修改为：
+			 camera_sensor_imx277_clock_gpio_Init	
+			 camera_sensor_imx277_standby	
+			 camera_sensor_imx277_cancel_standby	
+			 camera_sensor_imx277_mode	
+			 camera_sensor_imx277_sg_vhd	
+			 camera_sensor_imx277_calc_exp	
+			 camera_sensor_imx277_set_exp	
+五。修改camerasensorimx290.c下的内容：
+	1.将/include/camera_sensor_imx290.h搬到src下，并删除原文件
+	2.修改枚举型名称和内部变量名，将E_SENS_REG_ADDR 修改为 ESensorRegAddr
+		前缀E_SENSOR_IMX290_修改为CameraSensorImx290_
+	3.修改E_SENS_REG_ 为CameraSensorImx290_
+	4.修改公有方法：
+		Sensor_IMX290_Clock_Gpio_Init	
+ 		Sensor_IMX290_Standby	
+ 		Sensor_IMX290_CancelStandby	
+ 		Sensor_IMX290_Mode	
+ 		Sensor_IMX290_SgVHD	
+ 		Sensor_IMX290_Calc_Exp	
+	 	Sensor_IMX290_Set_Exp	
+		修改为：
+			 camera_sensor_imx290_clock_gpio_Init	
+			 camera_sensor_imx290_standby	
+			 camera_sensor_imx290_cancel_standby	
+			 camera_sensor_imx290_mode	
+			 camera_sensor_imx290_sg_vhd	
+			 camera_sensor_imx290_calc_exp	
+			 camera_sensor_imx290_set_exp	
+
+六。修改camerasensorimx410.c下的内容：
+	1.将/include/camera_sensor_imx410.h搬到src下，并删除原文件
+	2.修改宏定义，前缀加类名
+	3.修改枚举项，前缀加类名
+	4.修改公有方法：
+		Sensor_IMX410_Clock_Gpio_Init	
+ 		Sensor_IMX410_Standby	
+ 		Sensor_IMX410_CancelStandby	
+ 		Sensor_IMX410_Mode	
+ 		Sensor_IMX410_SgVHD	
+ 		Sensor_IMX410_Calc_Exp	
+	 	Sensor_IMX410_Set_Exp	
+		修改为：
+			 camera_sensor_imx410_clock_gpio_Init	
+			 camera_sensor_imx410_standby	
+			 camera_sensor_imx410_cancel_standby	
+			 camera_sensor_imx410_mode	
+			 camera_sensor_imx410_sg_vhd	
+			 camera_sensor_imx410_calc_exp	
+			 camera_sensor_imx410_set_exp	
+七。修改camerasensorimx410val.c下的内容：
+	1.宏定义D_TBL_END D_TBL_WAIT_MS 修改为加 类名CameraSensorImx410Val
+	2.按规范修改变量名:
+	IMX410_SLVS_EC[];
+	IMX410_STANDBY_RELEASE[];
+	IMX410_STANDBY[];
+	IMX410_MODE_DEF[];
+	IMX410_MODE0[];
+	IMX410_MODE1[];
+	IMX410_MODE3[];
+	IMX410_MODE4[];
+
+
+									2020-9-5
+一。修改camerasensorimx477imx183.c下的内容
+	1.修改宏定义，将D_ 换成CameraSensorImx477Imx183_
+	2.修改变量IMX477_IMX183_1_BASIC 和IMX477_IMX183_0_BASIC 为imx477Imx1831Basic  imx477Imx1830Basic
+	3.修改公有方法名Sensor_IMX477_IMX183_Clock_Gpio_Init 为camerasensor_imx477_imx183_vlock_gpio_init
+	4.搬移/include/下的camera_sensor_imx477_imx183.h到src目录下
+	5.修改公有方法：
+		Sensor_IMX410_Clock_Gpio_Init	
+ 		Sensor_IMX410_Standby	
+ 		Sensor_IMX410_CancelStandby	
+ 		Sensor_IMX410_Mode	
+ 		Sensor_IMX410_SgVHD	
+ 		Sensor_IMX410_Calc_Exp	
+	 	Sensor_IMX410_Set_Exp	
+		修改为：
+			 camera_sensor_imx477_Imx183_clock_gpio_Init	
+			 camera_sensor_imx477_Imx183_standby	
+			 camera_sensor_imx477_Imx183_cancel_standby	
+			 camera_sensor_imx477_Imx183_mode	
+			 camera_sensor_imx477_Imx183_sg_vhd	
+			 camera_sensor_imx477_Imx183_calc_exp	
+			 camera_sensor_imx477_Imx183_set_exp	
+
+二。camerasensoros08a10.c下的内容
+	1.按规范修改变量OS08A10_BASIC     OS08A10_MODE 的名字
+	2.修改头文件中联合体的名字E_SENSOR_OS08A10_MODE为 ESensorOs08A10Mode
+	3.修改宏定义D_TBL_END  D_TBL_WAIT_MS   为CameraSensorOs08A10_TBL_END  CameraSensorOs08A10_TBL_WAIT_MS
+	4.修改camerasensoros08a10.h枚举项名字，E_SENSOR_OS08A10_MODE_FUll_3840x2160_RAW12_30FPS,
+		E_SENSOR_OS08A10_MODE_FUll_3840x2160_RAW10_60FPS,
+		E_SENSOR_OS08A10_MODE_MAX
+		前缀去掉E_SENSOR_     加类名CameraSensorOs08A10
+	5.修改公有方法：
+			Sensor_OS08A10_Clock_Gpio_Init
+			Sensor_OS08A10_Standby
+			Sensor_OS08A10_CancelStandby
+			Sensor_OS08A10_Mode
+			Sensor_OS08A10_Stream
+			Sensor_OS08A10_SgVHD
+			Sensor_OS08A10_Calc_Exp
+			Sensor_OS08A10_Set_Exp
+		修改为：
+				ECameraErrCode 	camera_sensor_os08_a10_clock_gpio_init(VOID);
+				ECameraErrCode 	camera_sensor_os08_a10_standby(ECameraId sensorId);
+				ECameraErrCode 	camera_sensor_os08_a10_cancel_standby(ECameraId sensorId);
+				ECameraErrCode 	camera_sensor_os08_a10_mode(ECameraId sensorId, UINT32 mode, BOOL dol);
+				ECameraErrCode 	camera_sensor_os08_a10_stream(ECameraId sensorId);
+				ECameraErrCode 	camera_sensor_os08_a10_sg_vhd(ECameraId sensorId, ULONG vdocyc, ULONG hdocyc);
+				ECameraErrCode 	camera_sensor_os08_a10_calc_exp(ECameraId sensorId, UINT32 mode, const TCameraCalcExpIn* in,
+									TCameraExp* out, TCameraExpReg* outReg);
+				ECameraErrCode 	camera_sensor_os08_a10_set_exp(ECameraId sensorId, UINT32 mode, const TCameraExpReg* in);
+	6.将/include/camerasensoros08a10.h搬到src下，并删除原文件
+
+三。新建类palladiumtestsdramc.c修改，将palladium_test_sdramc.c搬到palladiumtestsdramc.c中
+	1.修改公有方法Pt_Im_SDRAMC_Main 为palladium_test_sdramc_im_sdramc_main
+	2.修改宏定义D_PT_SDRAMC_CMD_LEN为 PalladiumTestSdramc_PT_SDRAMC_CMD_LEN	
+
+四。新建类palladiumtestpwm.c类，将palladium_test_pwm.c搬到palladiumtestpwm.c中
+	1.修改宏定义D_PT_DD_PWM_CMD_LEN为PalladiumTestPwm_PT_DD_PWM_CMD_LEN
+五。新建类PalladiumTestExs类，将palladium_test_exs.c搬到palladiumtestexs.c中
+	1.修改宏定义 D_PT_DD_EXS_CMD_LEN为PalladiumTestExs_PT_DD_EXS_CMD_LEN
+	2.将VOID Pt_Dd_EXS_Main( VOID )中一部分搬到拆分类中
+六。新建类PalladiumTestExs的拆分类palladium_test_main_exs.c
+七。新建类PalladiumTestExs的拆分类palladium_test_main2_exs.c
+八。修改cameracommon.h内宏定义：
+	原文件：
+             #define D_IMX_SENSOR_SLAVE7BIT			0x1A
+             #define D_IMX_SENSOR_SLAVE7BIT2			0x10
+             #define D_OV_SENSOR_SLAVE7BIT				0x36
+             #define D_OV_SENSOR_SLAVE7BIT2			0x10
+             #define D_ONSEMI_SENSOR_SLAVE7BIT	0x36
+             #define D_ONSEMI_SENSOR_SLAVE7BIT2	0x10
+             #define D_CAMEARA_ACCESS_SIZE_MAX	16
+             #define D_CAMERA_ACCESS_I2C_WRITE	0
+             #define D_CAMERA_ACCESS_I2C_READ		1
+
+	// AV
+             #define D_CAMERA_AV_F180						0x0001B22C		// F1.8 (AV1.696)
+             #define D_CAMERA_AV_F194						0x0001E980		// F1.94(AV1.912)
+             #define D_CAMERA_AV_F200						0x00020000		// F2.0 (AV2.000)
+             #define D_CAMERA_AV_F220						0x00023333		// F2.2 (AV2.200)
+             #define D_CAMERA_AV_F240						0x000286AC		// F2.4 (AV2.526)
+             #define D_CAMERA_AV_F260						0x0002C1CC		// F2.6 (AV2.757)
+             #define D_CAMERA_AV_F280						0x0002F889		// F2.8 (AV2.970)
+             #define D_CAMERA_AV_F360						0x0003B22C		// F3.6 (AV3.696)
+             #define D_CAMERA_AV_F449						0x0004555B		// F4.49(AV4.333)
+             #define D_CAMERA_AV_F547						0x0004E730		// F5.47(AV4.903)
+
+		// FPS
+             #define D_CAMERA_FPS_AUTO					(0.0)
+             #define D_FOCUS_DAC2LENS						0
+             #define D_FOCUS_LENS2DAC						1
+
+             #define CAMERA_PRINT_ERROR(ercd)		do { if( ercd )printf( "(x_x) %s, %d, ercd=0x%x\n", __FUNCTION__, __LINE__, ercd );}while(0);
+	替换后：
+
+                 #define CameraCommon_IMX_SENSOR_SLAVE7BIT			0x1A
+                 #define CameraCommon_IMX_SENSOR_SLAVE7BIT2			0x10
+                 #define CameraCommon_OV_SENSOR_SLAVE7BIT				0x36
+                 #define CameraCommon_OV_SENSOR_SLAVE7BIT2			0x10
+                 #define CameraCommon_ONSEMI_SENSOR_SLAVE7BIT	0x36
+                 #define CameraCommon_ONSEMI_SENSOR_SLAVE7BIT2	0x10
+                 #define CameraCommon_ACCESS_SIZE_MAX						16
+                 #define CameraCommon_ACCESS_I2C_WRITE						0
+                 #define CameraCommon_ACCESS_I2C_READ						1
+
+		// AV
+                 #define CameraCommon_AV_F180										0x0001B22C		// F1.8 (AV1.696)
+                 #define CameraCommon_AV_F194										0x0001E980		// F1.94(AV1.912)
+                 #define CameraCommon_AV_F200										0x00020000		// F2.0 (AV2.000)
+                 #define CameraCommon_AV_F220										0x00023333		// F2.2 (AV2.200)
+                 #define CameraCommon_AV_F240										0x000286AC		// F2.4 (AV2.526)
+                 #define CameraCommon_AV_F260										0x0002C1CC		// F2.6 (AV2.757)
+                 #define CameraCommon_AV_F280										0x0002F889		// F2.8 (AV2.970)
+                 #define CameraCommon_AV_F360										0x0003B22C		// F3.6 (AV3.696)
+                 #define CameraCommon_AV_F449										0x0004555B		// F4.49(AV4.333)
+                 #define CameraCommon_AV_F547										0x0004E730		// F5.47(AV4.903)
+
+		// FPS
+                 #define CameraCommon_FPS_AUTO										(0.0)
+                 #define CameraCommon_DAC2LENS										0
+                 #define CameraCommon_LENS2DAC										1
+
+                 #define CameraCommon_CAMERA_PRINT_ERROR(ercd)	do \
+			{ if( ercd )printf( "(x_x) %s, %d, ercd=0x%x\n", __FUNCTION__, __LINE__, ercd );}while(0);
+
+十。将/board/camera/include/camera_gyro_icm20948.h搬到/board/camera/src下
+	1.修改:
+		#define D_GYRO_SPI_READ_OP			( 1 << 7 )
+                #define DLPFCFG(v)					((v) << 3)
+                #define FLG_GYRO_DMP_INT		(0x00000001)
+                #define FLG_GYRO_DMP_STOP_REQ	(0x00000002)
+		修改后：
+		#define CameraGyroIcm20948_GYRO_SPI_READ_OP					( 1 << 7 )
+                 #define CameraGyroIcm20948_DLPFCFG(v)									((v) << 3)
+                 #define CameraGyroIcm20948_FLG_GYRO_DMP_INT					(0x00000001)
+                 #define CameraGyroIcm20948_FLG_GYRO_DMP_STOP_REQ		(0x00000002)
+	2.修改枚举名字：将E_GYRO_REG_ADDR     E_GYRO_REG_DATA  修改为  EGyroRegAddr     EGyroRegData
+	3.修改枚举项内容：前加类名
+		修改前：
+
+typedef enum {
+	/* User Bank 0 */
+	WHO_AM_I			= 0x00,
+	USER_CTRL			= 0x03,
+	LP_CONFIG			= 0x05,
+	PWR_MGMT_1			= 0x06,
+	PWR_MGMT_2			= 0x07,
+	INT_PIN_CFG 		= 0x0F,//0x10,
+	INT_ENABLE			= 0x10,
+	INT_ENABLE_1		= 0x11,
+	ACCEL_OUT			= 0x2D,
+	GYRO_OUT			= 0x33,
+	TEMP_OUT			= 0x39,
+	FIFO_EN_2			= 0x67,
+	FIFO_MODE			= 0x69,
+	FIFO_CFG			= 0x76,
+	/* User Bank 2 */
+	GYRO_SMPLRT_DIV		= 0x00,
+	GYRO_CONFIG_1		= 0x01,
+	ACCEL_SMPLRT_DIV_1	= 0x10,
+	ACCEL_SMPLRT_DIV_2	= 0x11,
+	ACCEL_INTEL_CTRL	= 0x12,
+	ACCEL_WOM_THR		= 0x13,
+	ACCEL_CONFIG		= 0x14,
+	FSYNC_CONFIG		= 0x52,
+	/* User Bank Select */
+	REG_BNK_SEL			= 0x7F,
+} EGyroRegAddr;
+
+/**
+ * Definition of Register Data
+ */
+typedef enum {
+	// USER_CTRL register
+	I2C_IF_DIS			= (1 << 4),
+	FIFO_EN				= (1 << 6),
+	// LP_CONFIG register
+	GYRO_CYCLE			= (1 << 4),
+	ACCEL_CYCLE 		= (1 << 5),
+	// INT_PIN_CFG register
+	FSYNC_INT_MODE_EN	= (1 << 2), // FSYNC causes the interrupt
+	ACTL_FSYNC_LOW		= (1 << 3), // FSYNC is active low
+	ACTL_FSYNC_HIGH		= (0 << 3), // FSYNC is active high
+	INT_ANYRD_2CLEAR	= (1 << 4), // any read clears interrupt status
+	LATCH_INT_EN_LATCH	= (1 << 5), // level is held until interrupt status is cleared
+	LATCH_INT_EN_PULSE	= (0 << 5), // interrupt is a 50us pulse
+	OPEN				= (1 << 6), // INT pin is open drain
+	OPEN_PUSH_PULL		= (0 << 6), // INT pin is push-pull
+	ACTL_LOW 			= (1 << 7), // INT pin is active low
+	ACTL_HIGH			= (0 << 7), // INT pin is active high
+	// INT_ENABLE registers
+	PLL_RDY_EN			= (1 << 2),
+	WOM_INT_EN			= (1 << 3),
+	REG_WOF_EN			= (1 << 7),
+	// INT_ENABLE1 registers
+	RAW_DATA_0_RDY_EN	= (1 << 0),
+	// FIFO_EN_2 register
+	TEMP_FIFO_EN		= (1 << 0),
+	GYRO_X_FIFO_EN 		= (1 << 1),
+	GYRO_Y_FIFO_EN 		= (1 << 2),
+	GYRO_Z_FIFO_EN 		= (1 << 3),
+	GYRO_FIFO_EN		= (GYRO_X_FIFO_EN | GYRO_Y_FIFO_EN | GYRO_Z_FIFO_EN),
+	ACCEL_FIFO_EN		= (1 << 4),
+	// FIFO_MODE register
+	FIFO_MODE_STREAM	= (0 << 0),
+	FIFO_MODE_SNAPSHOT	= (1 << 0),
+	// FIFO_CFG register
+	FIFO_CFG_INT_EN 	= (1 << 0),
+	// PWR_MGMT_1 register
+	CLKSEL1				= (1 << 0),		// CLKSEL=1 : Auto selects the best available clock source.
+	SLEEP				= (1 << 6),
+	DEVICE_RESET		= (1 << 7),
+	// GYRO_CONFIG_1 register
+	GYRO_FCHOICE		= (1 << 0),
+	GYRO_FS_250			= (0 << 1),
+	GYRO_FS_500			= (1 << 1),
+	GYRO_FS_1000		= (2 << 1),
+	GYRO_FS_2000		= (3 << 1),
+	// ACCEL_INTEL_CTRL register
+	ACCEL_INTEL_MODE_INT= (1 << 0),
+	ACCEL_INTEL_EN		= (1 << 1),
+	// ACCEL_CONFIG register
+	ACCEL_FCHOICE		= (1 << 0),
+	ACCEL_FS_2G			= (0 << 1),
+	ACCEL_FS_4G			= (1 << 1),
+	ACCEL_FS_8G			= (2 << 1),
+	ACCEL_FS_16G		= (3 << 1),
+	// FSYNC_CONFIG register
+	FSYNC_TEMP			= (1 << 0),
+	FSYNC_GYRO_X		= (2 << 0),
+	FSYNC_GYRO_Y		= (3 << 0),
+	FSYNC_GYRO_Z		= (4 << 0),
+	FSYNC_ACCEL_X		= (5 << 0),
+	FSYNC_ACCEL_Y		= (6 << 0),
+	FSYNC_ACCEL_Z		= (7 << 0),
+	// REG_BANK_SEL register
+	USER_BANK_0			= (0 << 4),
+	USER_BANK_1 		= (1 << 4),
+	USER_BANK_2			= (2 << 4),
+	USER_BANK_3			= (3 << 4),
+	} EGyroRegData;
+	修改后：
+	typedef enum {
+	/* User Bank 0 */
+	CameraGyroIcm20948_WHO_AM_I			= 0x00,
+	CameraGyroIcm20948_USER_CTRL			= 0x03,
+	CameraGyroIcm20948_LP_CONFIG			= 0x05,
+	CameraGyroIcm20948_PWR_MGMT_1			= 0x06,
+	CameraGyroIcm20948_PWR_MGMT_2			= 0x07,
+	CameraGyroIcm20948_INT_PIN_CFG 		= 0x0F,//0x10,
+	CameraGyroIcm20948_INT_ENABLE			= 0x10,
+	CameraGyroIcm20948_INT_ENABLE_1		= 0x11,
+	CameraGyroIcm20948_ACCEL_OUT			= 0x2D,
+	CameraGyroIcm20948_GYRO_OUT			= 0x33,
+	CameraGyroIcm20948_TEMP_OUT			= 0x39,
+	CameraGyroIcm20948_FIFO_EN_2			= 0x67,
+	CameraGyroIcm20948_FIFO_MODE			= 0x69,
+	CameraGyroIcm20948_FIFO_CFG			= 0x76,
+	/* User Bank 2 */
+	CameraGyroIcm20948_GYRO_SMPLRT_DIV		= 0x00,
+	CameraGyroIcm20948_GYRO_CONFIG_1		= 0x01,
+	CameraGyroIcm20948_ACCEL_SMPLRT_DIV_1	= 0x10,
+	CameraGyroIcm20948_ACCEL_SMPLRT_DIV_2	= 0x11,
+	CameraGyroIcm20948_ACCEL_INTEL_CTRL	= 0x12,
+	CameraGyroIcm20948_ACCEL_WOM_THR		= 0x13,
+	CameraGyroIcm20948_ACCEL_CONFIG		= 0x14,
+	CameraGyroIcm20948_FSYNC_CONFIG		= 0x52,
+	/* User Bank Select */
+	CameraGyroIcm20948_REG_BNK_SEL			= 0x7F,
+} EGyroRegAddr;
+
+/**
+ * Definition of Register Data
+ */
+typedef enum {
+	// USER_CTRL register
+	CameraGyroIcm20948_I2C_IF_DIS			= (1 << 4),
+	CameraGyroIcm20948_FIFO_EN				= (1 << 6),
+	// LP_CONFIG register
+	CameraGyroIcm20948_GYRO_CYCLE			= (1 << 4),
+	CameraGyroIcm20948_ACCEL_CYCLE 		= (1 << 5),
+	// INT_PIN_CFG register
+	CameraGyroIcm20948_FSYNC_INT_MODE_EN	= (1 << 2), // FSYNC causes the interrupt
+	CameraGyroIcm20948_ACTL_FSYNC_LOW		= (1 << 3), // FSYNC is active low
+	CameraGyroIcm20948_ACTL_FSYNC_HIGH		= (0 << 3), // FSYNC is active high
+	CameraGyroIcm20948_INT_ANYRD_2CLEAR	= (1 << 4), // any read clears interrupt status
+	CameraGyroIcm20948_LATCH_INT_EN_LATCH	= (1 << 5), // level is held until interrupt status is cleared
+	CameraGyroIcm20948_LATCH_INT_EN_PULSE	= (0 << 5), // interrupt is a 50us pulse
+	CameraGyroIcm20948_OPEN				= (1 << 6), // INT pin is open drain
+	CameraGyroIcm20948_OPEN_PUSH_PULL		= (0 << 6), // INT pin is push-pull
+	CameraGyroIcm20948_ACTL_LOW 			= (1 << 7), // INT pin is active low
+	CameraGyroIcm20948_ACTL_HIGH			= (0 << 7), // INT pin is active high
+	// INT_ENABLE registers
+	CameraGyroIcm20948_PLL_RDY_EN			= (1 << 2),
+	CameraGyroIcm20948_WOM_INT_EN			= (1 << 3),
+	CameraGyroIcm20948_REG_WOF_EN			= (1 << 7),
+	// INT_ENABLE1 registers
+	CameraGyroIcm20948_RAW_DATA_0_RDY_EN	= (1 << 0),
+	// FIFO_EN_2 register
+	CameraGyroIcm20948_TEMP_FIFO_EN		= (1 << 0),
+	CameraGyroIcm20948_GYRO_X_FIFO_EN 		= (1 << 1),
+	CameraGyroIcm20948_GYRO_Y_FIFO_EN 		= (1 << 2),
+	CameraGyroIcm20948_GYRO_Z_FIFO_EN 		= (1 << 3),
+	CameraGyroIcm20948_GYRO_FIFO_EN		= (GYRO_X_FIFO_EN | GYRO_Y_FIFO_EN | GYRO_Z_FIFO_EN),
+	ACCEL_FIFO_EN		= (1 << 4),
+	// FIFO_MODE register
+	CameraGyroIcm20948_FIFO_MODE_STREAM	= (0 << 0),
+	CameraGyroIcm20948_FIFO_MODE_SNAPSHOT	= (1 << 0),
+	// FIFO_CFG register
+	CameraGyroIcm20948_FIFO_CFG_INT_EN 	= (1 << 0),
+	// PWR_MGMT_1 register
+	CameraGyroIcm20948_CLKSEL1				= (1 << 0),		// CLKSEL=1 : Auto selects the best available clock source.
+	CameraGyroIcm20948_SLEEP				= (1 << 6),
+	CameraGyroIcm20948_DEVICE_RESET		= (1 << 7),
+	// GYRO_CONFIG_1 register
+	CameraGyroIcm20948_GYRO_FCHOICE		= (1 << 0),
+	CameraGyroIcm20948_GYRO_FS_250			= (0 << 1),
+	CameraGyroIcm20948_GYRO_FS_500			= (1 << 1),
+	CameraGyroIcm20948_GYRO_FS_1000		= (2 << 1),
+	CameraGyroIcm20948_GYRO_FS_2000		= (3 << 1),
+	// ACCEL_INTEL_CTRL register
+	CameraGyroIcm20948_ACCEL_INTEL_MODE_INT= (1 << 0),
+	CameraGyroIcm20948_ACCEL_INTEL_EN		= (1 << 1),
+	// ACCEL_CONFIG register
+	CameraGyroIcm20948_ACCEL_FCHOICE		= (1 << 0),
+	CameraGyroIcm20948_ACCEL_FS_2G			= (0 << 1),
+	CameraGyroIcm20948_ACCEL_FS_4G			= (1 << 1),
+	CameraGyroIcm20948_ACCEL_FS_8G			= (2 << 1),
+	ACCEL_FS_16G		= (3 << 1),
+	// FSYNC_CONFIG register
+	CameraGyroIcm20948_FSYNC_TEMP			= (1 << 0),
+	CameraGyroIcm20948_FSYNC_GYRO_X		= (2 << 0),
+	CameraGyroIcm20948_FSYNC_GYRO_Y		= (3 << 0),
+	CameraGyroIcm20948_FSYNC_GYRO_Z		= (4 << 0),
+	CameraGyroIcm20948_FSYNC_ACCEL_X		= (5 << 0),
+	CameraGyroIcm20948_FSYNC_ACCEL_Y		= (6 << 0),
+	CameraGyroIcm20948_FSYNC_ACCEL_Z		= (7 << 0),
+	// REG_BANK_SEL register
+	CameraGyroIcm20948_USER_BANK_0			= (0 << 4),
+	CameraGyroIcm20948_USER_BANK_1 		= (1 << 4),
+	CameraGyroIcm20948_USER_BANK_2			= (2 << 4),
+	CameraGyroIcm20948_USER_BANK_3			= (3 << 4),
+	} EGyroRegData;
+
+
+
+	
+
+
+
+	
+
+
+
+
+
+		
