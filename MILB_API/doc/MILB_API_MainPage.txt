@@ -1,0 +1,20 @@
+﻿/**
+@mainpage Milbeaut API(Driver) Specification
+@image html fig_sni_logo.png
+<div align="center" style="font-size: 16">- $(MILB_MODEL_NUMBER) -</div>
+<div align="center" style="font-size: 10">This document version is @ref spec_V01L08 "V01L08"</div>
+
+@section section_intro Introduction
+This specification describes construction of driver library that uses Milbeaut LSI.
+Please refer to each macro specifications of Milbeaut about detail of Milbeaut.
+
+@section section_modules What's Modules?
+Described details of architecture, sequence, API, definition and so on for usage of Milbeaut LSI Driver APIs.
+Please refer from <a href="modules.html">here</a> or click "Modules" tab.
+
+@section section_history History
+Refer to @ref history "here".
+
+@section section_remarks Remarks
+This document is changed without a previous notice.
+*/

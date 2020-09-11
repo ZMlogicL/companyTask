@@ -1,0 +1,204 @@
+/*
+*@Copyright (C) 2010-2015 上海网用软件有限公司
+*@date                :2020-09-3
+*@author              :hubing
+*@brief               :snsos
+*@rely                :klib
+*@function
+*采用ETK-C语言抄写代码
+*设计的主要功能:
+*@version
+*1.0.0 2020年06月开始开发
+*/
+
+#ifndef __PALLADIUM_TEST_INTERRUPT_A_H_
+#define __PALLADIUM_TEST_INTERRUPT_A_H_
+/**
+ * 以下开始include语句
+ */
+#include "ddim_typedef.h"
+#include <klib.h>
+/**
+ * 以下开始宏定义
+ */
+#define PALLADIUM_TYPE_TEST_INTERRUPT_A	(palladium_test_interrupt_a_get_type())
+#define PALLADIUM_TEST_INTERRUPT_AER(obj) 	K_TYPE_CHECK_INSTANCE_CAST(obj, PalladiumTestInterruptA)
+#define PALLADIUM_IS_TEST_INTERRUPT_A(obj) 	K_TYPE_CHECK_INSTANCE_TYPE(obj, PALLADIUM_TYPE_TEST_INTERRUPT_A)
+/**
+ * 以下开始类结构体声明
+ */
+typedef struct _PalladiumTestInterruptA  PalladiumTestInterruptA;
+typedef struct _PalladiumTestInterruptAPrivate		PalladiumTestInterruptAPrivate;
+
+struct _PalladiumTestInterruptA
+{
+	KObject parent;
+};
+
+KConstType 		palladium_test_interrupt_a_get_type(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**
+ * 此为公有函数第一个。
+ * @arg1	-- 此参数没有意义
+ * @str		-- 字符串参数
+ * @obj		-- 内部会进行ref操作,外部可以释放
+ * @usrData	-- 内部不进行任何修改和复制，要保证在执行过程中访问合法
+ * @return:
+ * 		TRUE表示成功；否则为失败。
+ */
+VOID palladium_test_interrupt_a_pt_sgi_interrupt0(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt1(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt2(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt3(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt4(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt5(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt6(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt7(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt8(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt9(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt10(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt11(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt12(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt13(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt14(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_sgi_interrupt15(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt0(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt1(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt2(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt3(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt4(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt5(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt6(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt7(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt8(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt9(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt10(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt11(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt12(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt13(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt14(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ppi_interrupt15(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu0_communication_ch_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu0_communication_ch_trnsmit_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu1_communication_ch_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu1_communication_ch_trnsmit_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu2_communication_ch_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu2_communication_ch_trnsmit_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu3_communication_ch_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_Pt_cortexa7_cpu3_communication_ch_trnsmit_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu0_crosstrigger_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu1_crosstrigger_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu2_crosstrigger_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu3_crosstrigger_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu0_system_metrics_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu1_system_metrics_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu2_system_metrics_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_cortexa7_cpu3_system_metrics_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_axi_transaction_error_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_snap_peri_xdmac_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_snap_peri_xdmac_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_snap_peri_xdmac_ch2_Int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_snap_peri_xdmac_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_watchdog_timer_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch2_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch4_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch5_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch6_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch7_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch8_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch9_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch10_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch11_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch12_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch13_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch14_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu0_ch15_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch2_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch4_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch5_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch6_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch7_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch8_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch9_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch10_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch11_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch12_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch13_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch14_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_ipcu1_ch15_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch16_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch17_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch18_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch19_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch20_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch21_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch22_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch23_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch24_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch25_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch26_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch27_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch28_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch29_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch30_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_external_ch31_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_dmac_adc_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_dmac_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_uart_transmission_data_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_dmac_qspi_transmission_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_dmac_qspi_receive_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_uart_receive_relation_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_uart_transmission_relation_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_qspi_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_calendar_alarm_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_32bit_timer_under_flow_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_adc_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_i2c_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_watchdog_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_temperature_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmu_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pmc_gpio_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch2_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch4_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch5_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch6_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch7_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch8_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch9_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch10_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch11_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch12_Int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_timer_ch13_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_i2c_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_i2c_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_i2c_ch2_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch0_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch1_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch2_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch4_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_updown_counter_ch5_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pwm_ch0_ch3_int(PalladiumTestInterruptA* self);
+VOID palladium_test_interrupt_a_pt_pwm_ch4_ch7_int(PalladiumTestInterruptA* self);
+#ifdef __cplusplus
+}
+#endif
+/**
+ * New方法创建对象，应该放在声明的最后
+ * @return:
+ * 		新创建的对象，极少概率返回NULL(失败)
+ */
+PalladiumTestInterruptA* 	palladium_test_interrupt_a_new(void);
+#endif /* __PALLADIUM_TEST_INTERRUPT_A_H_ */
+

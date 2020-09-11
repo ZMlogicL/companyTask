@@ -1,0 +1,12 @@
+﻿/** @addtogroup history History
+@{
+	@section spec_V02L02 2016.12.16 ... Related MILB Driver version: V02L02
+	[<b>AUDIO IF</b>(dd_audio.h)]
+    - Add Define.<br>
+		- @ref D_DD_AUDIO_IF_CH4_CH5
+	
+	@section spec_V02L01 - 2016.12.02 ... Related BaseFW version: V02L01
+
+	@section spec_V02L00 - 2016.11.18 ... Related BaseFW version: V02L00
+	- 1st release for MILB Driver.<br>
+@} */ 

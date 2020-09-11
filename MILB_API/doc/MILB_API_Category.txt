@@ -1,0 +1,117 @@
+﻿/**
+@defgroup common Common definitions
+@defgroup user_custom User definitions
+@defgroup lsi_top LSI top
+*/
+
+/** @defgroup arm ARM
+@{*/
+	/**
+	@defgroup dd_arm Cortex-A7 MPcore(Quad)
+	@defgroup dd_cache CACHE
+	@defgroup dd_exiu EXIU
+	@defgroup dd_gic GIC
+	@defgroup dd_mcc MCC
+	@defgroup dd_nic NIC400
+	@defgroup dd_timestamp TIMESTAMP
+	@defgroup dd_wdog Watchdog Timer
+	@defgroup dd_xdmasnap XDMA SNAP
+	@defgroup dd_ipcu IPCU
+	*/
+/*@}*/
+
+/** @defgroup lsi_peri LSI peripheral
+@{*/
+	/**
+	@defgroup dd_tmr32 32bit Reload Timer
+	@defgroup dd_tmr64 64bit Timer
+	@defgroup dd_audio AUDIO IF
+	@defgroup dd_csio CSIO
+	@defgroup dd_hdmac0 HDMAC0
+	@defgroup dd_hdmac1 HDMAC1
+	@defgroup dd_i2c I2C
+	@defgroup dd_pdm PDM
+	@defgroup dd_pwm PWM
+	@defgroup dd_spi SPI
+	@defgroup dd_uart UART
+	@defgroup dd_udc UDC
+	@defgroup dd_slimbus SLIMBus
+	*/
+/*@}*/
+
+/** @defgroup pmu Power Management
+@{*/
+	/**
+	@defgroup dd_pmu Power Management
+	*/
+/*@}*/
+
+/** @defgroup image Image macros
+@{*/
+	/**
+	@defgroup im_b2r B2R
+	@defgroup im_bmh BMH
+	@defgroup im_cnr CNR
+	@defgroup im_disp DISP
+	@defgroup im_ela ELA
+	@defgroup im_fpt FPT
+	@defgroup im_iip IIP
+	@defgroup im_img JMILIMG
+	@defgroup im_jpeg JPEG
+	@defgroup im_ltm LTM
+	@defgroup im_mxic MXIC
+	@defgroup im_pro PRO
+	@defgroup im_r2y R2Y
+	@defgroup im_sdramc SDRAMC
+	@defgroup im_xch Xch
+	@defgroup im_shdr SHDR
+	@defgroup im_raw RAW
+	@defgroup im_rdma RDMA
+	*/
+/*@}*/
+
+/** @weakgroup im_pro
+@{*/
+	/**
+	@defgroup im_pro_overview	overview
+	@defgroup im_pro_basic_seq	Basic operation sequence
+	@defgroup im_pro_sen		SEN unit
+	@defgroup im_pro_sro		SRO unit
+	@defgroup im_pro_b2b		B2B unit
+	@defgroup im_pro_stat		STAT unit
+	@defgroup im_pro_pas		PAS unit
+	@defgroup im_pro_common		Common unit
+	@defgroup im_pro_handler	Interrupt Handler
+	*/
+/*@}*/
+
+/** @weakgroup im_disp
+@{*/
+	/**
+	@defgroup im_hdmi HDMI
+	@defgroup im_mipi MIPI
+	*/
+/*@}*/
+
+/** @defgroup ex_strage External Storage
+@{*/
+	/**
+	@defgroup dd_exs EXS
+	@defgroup dd_gpv GPV
+	@defgroup dd_hdmac HDMAC
+// REMOVE_RELEASE BEGIN
+	@defgroup dd_relc RELC
+// REMOVE_RELEASE END
+	@defgroup dd_xdmac XDMAC
+	@defgroup dd_pcie PCIe
+	*/
+/*@}*/
+
+/** @defgroup dd_pcie PCIe
+@{*/
+	/**
+	@defgroup dd_pcie_comm PCIe_COMMON
+	@defgroup dd_pcie_rc PCIe_RootComplex
+	@defgroup dd_pcie_ep PCIe_Endpoint
+	*/
+/*@}*/

@@ -1,0 +1,8 @@
+﻿<hr>
+<address style="text-align: right;">
+<small>Generated in $date</small><BR>
+<small>Copyright 2016 SOCIONEXT INC.&nbsp;
+<img src="fig_sni_logo.png" align="middle" border="0">
+</small>
+</address>
+</body></html>

@@ -1,0 +1,696 @@
+﻿/** @addtogroup history History
+@{
+	@section spec_V01L08 2016.12.16 ... Related MILB Driver version: V01L08
+	[<b>AUDIO IF</b>(dd_audio.h)]
+    - Add Define.<br>
+		- @ref D_DD_AUDIO_IF_CH4_CH5
+	
+	@section spec_V01L075 2016.12.02 ... Related MILB Driver version: V01L075
+
+	@section spec_V01L07 2016.11.25 ... Related MILB Driver version: V01L07
+	[<b>PDM</b>(im_pro.h)]
+	- Modify API argument.<br>
+		- Dd_Pdm_Set_CallbackDma0Intr()<br>
+		- Dd_Pdm_Set_CallbackDma1Intr()<br>
+		- Dd_Pdm_Set_CallbackOverFlowIntr()<br>
+    - Add APIs.<br>
+		- Dd_Pdm_Set_EnableDma0Intr()<br>
+		- Dd_Pdm_Set_EnableDma1Intr()<br>
+		- Dd_Pdm_Set_EnableOverFlowIntr()<br>
+
+	@section spec_V01L06 2016.11.11 ... Related MILB Driver version: V01L06
+	[<b>PRO</b>(im_pro.h)]
+	- Add Define.<br>
+		- @ref D_IM_PRO_FSHDL_FFSHHWPH_MAX<br>
+		- @ref D_IM_PRO_FSHDL_FFSHHWPH_MIN<br>
+    - Delete enumeration.<br>
+		- E_IM_PRO_M2P_DEKNEE_EN_10BIT_TO_12BIT<br>
+
+	@section spec_V01L01 2016.08.26 ... Related MILB Driver version: V01L01
+
+	@section spec_V01L00 2016.08.12 ... Related MILB Driver version: V01L00
+	[<b>HDMAC1</b>(dd_hdmac1.h)]
+	- Delete APIs.<br>
+		- Dd_HDMAC1_Start_Continuous()<br>
+
+	[<b>I2C</b>(dd_i2c.h)]
+	- Delete APIs.<br>
+		- Dd_I2C_Force_Stop_Master()<br>
+
+	[<b>ARM</b>(dd_arm.h)]
+	- Add APIs.<br>
+		- Dd_ARM_Spin_Lock_Ret()<br>
+
+	[<b>GIC</b>(dd_gic.h)]
+	- Modify Define value.<br>
+		- @ref D_DD_GIC_INTID_SPI_MAX<br>
+
+	@section spec_V00L05 2016.07.26 ... Related MILB Driver version: V00L05
+	[<b>IPCU</b>(dd_ipcu.h)]
+	- Modify Define value.<br>
+		- @ref D_DD_IPCU_MB_TOTAL_NUM<br>
+
+	@section spec_V00L04 2016.07.12 ... Related MILB Driver version: V00L04
+	[<b>SLIMBUS</b>(dd_slimbus.h)]
+	- Add APIs.<br>
+		- Dd_Slimbus_Open()<br>
+		- Dd_Slimbus_Close()<br>
+		- Dd_Slimbus_Ctrl()<br>
+		- Dd_Slimbus_Get_Ctrl()<br>
+		- Dd_Slimbus_Start()<br>
+		- Dd_Slimbus_Stop()<br>
+		- Dd_Slimbus_Int_Handler()<br>
+		- Dd_Slimbus_Write_Msg()<br>
+		- Dd_Slimbus_Read_Msg()<br>
+		- Dd_Slimbus_Write_Data()<br>
+		- Dd_Slimbus_Read_Data()<br>
+		- Dd_Slimbus_Get_Reg()<br>
+		- Dd_Slimbus_Set_Reg()<br>
+
+	[<b>HDMI</b>(im_hdmi.h)]
+    - Delete API's argument.<br>
+        - Im_HDMI_Init() pll_config.<br>
+
+    - Add APIs.<br>
+        - Im_HDMI_Configure_VGA_DVI_Video_Mode()<br>
+
+	- Delete APIs.<br>
+        - Im_HDMI_Set_Clock()<br>
+        - Im_HDMI_Get_Clock()<br>
+        - Im_HDMI_Set_Tx_Term()<br>
+        - Im_HDMI_Get_Tx_Term()<br>
+        - Im_HDMI_Set_Transmitter_Control()<br>
+        - Im_HDMI_Get_Transmitter_Control()<br>
+        - Im_HDMI_Set_Voltage_Level()<br>
+        - Im_HDMI_Get_Voltage_Level()<br>
+
+	- Add define.<br>
+		- @ref D_IM_HDMI_PHY_REG_NUM<br>
+
+    - Delete enumeration.<br>
+		- E_IM_HDMI_REF_CNTRL<br>
+		- E_IM_HDMI_FBDIV1_CNTRL<br>
+		- E_IM_HDMI_FBDIV2_CNTRL<br>
+		- E_IM_HDMI_OP_MODE<br>
+		- E_IM_HDMI_PRE_PDIV<br>
+		- E_IM_HDMI_SLOPE_BOOSTING<br>
+		- E_IM_HDMI_SUP_LVL<br>
+		- E_IM_HDMI_TXTERM<br>
+
+	- Delete structure.<br>
+		- U_IM_HDMI_OPMODE_PLLCFG<br>
+		- U_IM_HDMI_CKSYMTXCTRL<br>
+		- U_IM_HDMI_VLEVCTRL<br>
+		- U_IM_HDMI_PLLCURRCTRL<br>
+
+	- Modify structure member.<br>
+		- @ref T_IM_HDMI_PLL_CONFIG<br>
+
+	- Add structure member.<br>
+		- @ref T_IM_HDMI_I2CM_CONFIG<br>
+
+	[<b>EXS</b>(dd_exs.h)]
+   	 - Add APIs.<br>
+		- Dd_Exs_Get_USB2_CKCTL_HDC_HCLKEN()<br>
+		- Dd_Exs_Get_USB2_CKCTL_HO_HCLKEN()<br>
+		- Dd_Exs_Get_USB2_RCTL_HDC_SRST()<br>
+		- Dd_Exs_Get_USB2_CKCTL_HDC_HCLKEN()<br>
+		- Dd_Exs_Get_USB2_CKCTL_HO_HCLKEN()<br>
+		- Dd_Exs_Get_USB2_RCTL_HDC_SRST()<br>
+		- Dd_Exs_Get_USB2_RCTL_HO_SRST()<br>
+		- Dd_Exs_Get_USB2_ANPD_ANPD()<br>	
+		- Dd_Exs_Get_USB2_HFSEL_HF_SEL()<br>
+		- Dd_Exs_Get_USB2_FSEL_FSEL()<br>	
+		- Dd_Exs_Get_USB2_FSEL_PLLBTUNE()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_XFER_CNT_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_XFER_PRDC_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_EHCI_BUFACC_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_MCU_INC_FRDX_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_EOR_RUNSTOP_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_SB_EHCI_EHCI_USBSTS_O()<br>
+		- Dd_Exs_Get_USB2_EHCI_STRAP_SS_FADJ_HOST_I()<br>	
+		- Dd_Exs_Get_USB2_EHCI_STRAP_SS_FLADJ_VAL_I()<br>	
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_CLKSEL_I()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_UTMI_SUSPEND_O_N()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_GSUSPEND_O()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_RWE_O()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_RMTWKP_O()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_DRWE_O()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_CCS_O()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_SOF_O_N()<br>
+		- Dd_Exs_Get_USB2_OHCI_IF_OHCI_BUFACC_O()<br>
+		- Dd_Exs_Get_USB2_AHB_SLVIF_REG_RDY_O()<br>
+		- Dd_Exs_Get_USB2_LMODSET_SS_ENA_INCR4_I()<br>
+		- Dd_Exs_Get_USB2_LMODSET_SS_ENA_INCR8_I()<br>
+		- Dd_Exs_Get_USB2_LMODSET_SS_ENA_INCR16_I()<br>
+		- Dd_Exs_Get_USB2_LMODSET_SS_ENA_INC_AL_I()<br>
+		- Dd_Exs_Get_USB2_LMODSET_SS_EHCI64B_EN_I()<br>
+		- Dd_Exs_Get_USB2_PMODSET_RPDPEN_I()<br>
+		- Dd_Exs_Get_USB2_PMODSET_RPDMEN_I()<br>	
+		- Dd_Exs_Get_USB2_HPT_CTL_USB2_EHPT()<br>
+		- Dd_Exs_Get_USB2_HPT_CTL_USB2_OHPT()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_IDPU_VAL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_IDPU_SEL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_ID_SEL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_ID_VAL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_VB_SEL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_VB_VAL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_VBDET_SEL()<br>
+		- Dd_Exs_Get_USB2_IDVBUSCTL_USB2_VBDET_VAL()<br>
+		- Dd_Exs_Get_USB2_HDMAC1_HDMAC_BC1()<br>
+		- Dd_Exs_Get_USB2_HDMAC1_HDMAC_BT1()<br>
+		- Dd_Exs_Get_USB2_HDMAC1_HDMAC_MS1()<br>
+		- Dd_Exs_Get_USB2_HDMAC2_HDMAC_BC2()<br>
+		- Dd_Exs_Get_USB2_HDMAC2_HDMAC_BT2()<br>
+		- Dd_Exs_Get_USB2_HDMAC2_HDMAC_MS2()<br>
+		- Dd_Exs_Get_USB2_DMAFSM1_FSMRST1()<br>
+		- Dd_Exs_Get_USB2_DMAFSM1_DMA_TRANS_STATE1()<br>
+		- Dd_Exs_Get_USB2_DMAFSM2_FSMRST2()<br>
+		- Dd_Exs_Get_USB2_DMAFSM2_DMA_TRANS_STATE2()<br>
+		- Dd_Exs_Get_USB3_CKCTL_ACLKEN()<br>
+		- Dd_Exs_Get_USB3_RCTL_SFTRST()<br>
+		- Dd_Exs_Get_USB3_PHY_RESET_N()<br>
+		- Dd_Exs_Get_USB3_RCV_SNS_ACJT_LEVEL()<br>
+		- Dd_Exs_Get_USB3_FSEL_FSEL3()<br>
+		- Dd_Exs_Get_USB3_FSEL_MPLL_MULTIPLIER()<br>
+		- Dd_Exs_Get_USB3_FSEL_SSC_REF_CLK_SEL()<br>
+		- Dd_Exs_Get_USB3_FSEL_REF_CLKDIV2()<br>
+		- Dd_Exs_Get_USB3_RFC_CTL_REF_SSP_EN()<br>
+		- Dd_Exs_Get_USB3_RFC_CTL_REF_USE_PAD()<br>
+		- Dd_Exs_Get_USB3_HO_IF_PCI_IMPLEMENT()<br>
+		- Dd_Exs_Get_USB3_HO_IF_HOST_MSI_ENABLE()<br>
+		- Dd_Exs_Get_USB3_HO_IF_XHC_BME()<br>
+		- Dd_Exs_Get_USB3_HO_IF_XHC_AC64()<br>
+		- Dd_Exs_Get_USB3_HO_IF_HOST_SYSTEM_ERR()<br>
+		- Dd_Exs_Get_USB3_JT_ADJ_FLADJ_30MHZ_REG()<br>
+		- Dd_Exs_Get_USB3_JT_ADJ_USB3_OVRCUR_EN()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_IDPU_VAL()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_ID_SEL()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_ID_VAL()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_VB_SEL()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_VB_VAL()<br>
+		- Dd_Exs_Get_USB3_IDVBUSCTL_USB3_VBDET_VAL()<br>	
+		- Dd_Exs_Set_USB2_CKCTL_HDC_HCLKEN()<br>
+		- Dd_Exs_Set_USB2_CKCTL_HO_HCLKEN()<br>
+		- Dd_Exs_Set_USB2_RCTL_HDC_SRST()<br>
+		- Dd_Exs_Set_USB2_RCTL_HO_SRST()<br>
+		- Dd_Exs_Set_USB2_ANPD_ANPD()<br>
+		- Dd_Exs_Set_USB2_HFSEL_HF_SEL()<br>
+		- Dd_Exs_Set_USB2_FSEL_FSEL()<br>
+		- Dd_Exs_Set_USB2_FSEL_PLLBTUNE()<br>
+		- Dd_Exs_Set_USB2_EHCI_STRAP_SS_FADJ_HOST_I()<br>
+		- Dd_Exs_Set_USB2_EHCI_STRAP_SS_FLADJ_VAL_I()<br>
+		- Dd_Exs_Set_USB2_OHCI_IF_OHCI_CLKSEL_I()<br>
+		- Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR4_I()<br>
+		- Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR8_I()<br>
+		- Dd_Exs_Set_USB2_LMODSET_SS_ENA_INCR16_I()<br>
+		- Dd_Exs_Set_USB2_LMODSET_SS_ENA_INC_AL_I()<br>
+		- Dd_Exs_Set_USB2_LMODSET_SS_EHCI64B_EN_I()<br>
+		- Dd_Exs_Set_USB2_PMODSET_RPDPEN_I()<br>
+		- Dd_Exs_Set_USB2_PMODSET_RPDMEN_I()<br>
+		- Dd_Exs_Set_USB2_HPT_CTL_USB2_EHPT()<br>
+		- Dd_Exs_Set_USB2_HPT_CTL_USB2_OHPT()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_IDPU_VAL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_IDPU_SEL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_ID_SEL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_ID_VAL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VB_SEL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VB_VAL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VBDET_SEL()<br>
+		- Dd_Exs_Set_USB2_IDVBUSCTL_USB2_VBDET_VAL()<br>
+		- Dd_Exs_Set_USB2_HDMAC1_HDMAC_BC1()<br>
+		- Dd_Exs_Set_USB2_HDMAC1_HDMAC_BT1()<br>
+		- Dd_Exs_Set_USB2_HDMAC1_HDMAC_MS1()<br>
+		- Dd_Exs_Set_USB2_HDMAC2_HDMAC_BC2()<br>
+		- Dd_Exs_Set_USB2_HDMAC2_HDMAC_BT2()<br>
+		- Dd_Exs_Set_USB2_HDMAC2_HDMAC_MS2()<br>
+		- Dd_Exs_Set_USB2_DMAFSM1_FSMRST1()<br>
+		- Dd_Exs_Set_USB2_DMAFSM2_FSMRST2()<br>
+		- Dd_Exs_Set_USB3_CKCTL_ACLKEN()<br>
+		- Dd_Exs_Set_USB3_RCTL_SFTRST()<br>
+		- Dd_Exs_Set_USB3_RCTL_PHY_RESET_N()<br>
+		- Dd_Exs_Set_USB3_RCV_SNS_ACJT_LEVEL()<br>
+		- Dd_Exs_Set_USB3_FSEL_FSEL3()<br>
+		- Dd_Exs_Set_USB3_FSEL_MPLL_MULTIPLIER()<br>
+		- Dd_Exs_Set_USB3_FSEL_SSC_REF_CLK_SEL()<br>
+		- Dd_Exs_Set_USB3_FSEL_REF_CLKDIV2()<br>
+		- Dd_Exs_Set_USB3_RFC_CTL_REF_SSP_EN()<br>
+		- Dd_Exs_Set_USB3_RFC_CTL_REF_USE_PAD()<br>
+		- Dd_Exs_Set_USB3_HO_IF_PCI_IMPLEMENT()<br>
+		- Dd_Exs_Set_USB3_HO_IF_HOST_MSI_ENABLE()<br>
+		- Dd_Exs_Set_USB3_HO_IF_XHC_BME()<br>
+		- Dd_Exs_Set_USB3_HO_IF_XHC_AC64()<br>
+		- Dd_Exs_Set_USB3_JT_ADJ_FLADJ_30MHZ_REG()<br>
+		- Dd_Exs_Set_USB3_JT_ADJ_USB3_OVRCUR_EN()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_IDPU_VAL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_ID_SEL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_ID_VAL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_VB_SEL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_VB_VAL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_VBDET_SEL()<br>
+		- Dd_Exs_Set_USB3_IDVBUSCTL_USB3_VBDET_VAL()<br>
+
+	@section spec_V00L03 2016.06.28 ... Related MILB Driver version: V00L03
+	- Nothing spaecial.
+	
+	@section spec_V00L025 2016.06.14 ... Related MILB Driver version: V00L025
+	[<b>SDRAMC</b>(im_fpt.h)]
+	- Add enumeration.<br>
+		- @ref E_IM_SDRAMC_BURST_LIMIT<br>
+	- Add APIs.<br>
+		- Im_SDRAMC_Set_AcceptanceCapability()<br>
+		- Im_SDRAMC_Get_AcceptanceCapability()<br>
+		- Im_SDRAMC_Set_BurstLimit()<br>
+		- Im_SDRAMC_Get_BurstLimit()<br>
+
+	[<b>SPI</b>(dd_spi.h)]
+	- Modify structure.<br>
+		- T_DD_SPI_CTRL()<br>
+
+	@section spec_V00L02 2016.05.27 ... Related MILB Driver version: V00L02
+	[<b>FPT</b>(im_fpt.h)]
+	- Add enumeration menber.<br>
+		- @ref E_IM_FPT_LUTCFG_BASE_1__TARGET_0<br>
+
+	[<b>LTM</b>(im_ltm.h)]
+	- Add define.<br>
+		- @ref D_IM_LTM_MASK_WRITE_ENABLE<br>
+		- @ref D_IM_LTM_MASK_WRITE_DISABLE<br>
+
+	[<b>HDMAC0</b>(dd_hdmac0.h)]
+	- Delete APIs.<br>
+		- Dd_HDMAC0_Set_Src_Addr()<br>
+		- Dd_HDMAC0_Set_Dst_Addr()<br>
+		- Dd_HDMAC0_Set_Trans_Count()<br>
+
+	[<b>HDMAC1</b>(dd_hdmac0.h)]
+	- Delete APIs.<br>
+		- Dd_HDMAC1_Set_Src_Addr()<br>
+		- Dd_HDMAC1_Set_Dst_Addr()<br>
+		- Dd_HDMAC1_Set_Trans_Count()<br>
+
+	- Add APIs.<br>
+		- Dd_HDMAC1_Start_Continuous()<br>
+		- @ref Dd_HDMAC1_Get_Trans_Count()<br>
+
+	[<b>SPI</b>(dd_spi.h)]
+	- Delete define.<br>
+		- D_DD_SPI_NORMAL_COMPLETE()<br>
+		- VP_SPI_GYRO_CALLBACK()<br>
+
+	- Modify define.<br>
+		- @ref VP_SPI_CALLBACK()<br>
+
+	- Delete structure.<br>
+		- T_DD_SPI_GYRO_INFO()<br>
+
+	- Delete API.<br>
+		- Dd_SPI_Start_Gyro_Data_Read()<br>
+
+	[<b>TMR64</b>(dd_tmr64.h)]
+	- Delete define.<br>
+		- VP_TMR64_GYRO_CALLBACK()<br>
+
+	- Delete structure.<br>
+		- T_DD_TMR64_GYRO_INFO()<br>
+
+	- Delete API.<br>
+		- Dd_TMR64_Start_Gyro_TimeStamp_Transfer()<br>
+		- Dd_TMR64_Stop_Gyro_TimeStamp_Transfer()<br>
+
+	@section spec_V00L01A 2016.04.28 ... Related MILB Driver version: V00L01R01
+	[<b>ARM</b>(dd_arm.h)]
+	- Add define.<br>
+		- @ref D_DD_ARM_NUM_OF_CORES<br>
+
+	[<b>JPEG</b>(im_jpeg.h)]
+	- Delete API.(Deleted hardware function "Color space conversion".)
+		- Im_JPEG_Set_Dec_Csc_Coef()<br>
+
+	[<b>B2R</b>(im_b2r.h)]
+	- Modify structure member.<br>
+		- @ref T_IM_B2R_CTRL<br>
+
+	[<b>CNR</b>(im_cnr.h)]
+	- Modify structure member.<br>
+		- @ref T_IM_CNR_OTF_CTRL<br>
+
+	- Add API.<br>
+		- @ref Im_CNR_OTF_Set_OutAddr_Info()<br>
+
+	- Add structure.<br>
+		- @ref T_IM_CNR_OTF_OUTADDR_INFO<br>
+
+	[<b>LTM</b>(im_ltm.h)]
+	- Modify structure member.<br>
+		- @ref T_IM_LTM_RBK_CTRL_COMMON<br>
+		- @ref T_IM_LTM_MAP_CTRL_COMMON<br>
+		- @ref T_IM_LTM_LTM_CTRL_COMMON<br>
+
+	[<b>R2Y</b>(im_r2y.h)]
+	- Add APIs.<br>
+		- @ref Im_R2Y_Ctrl_BeforeTone_Offset()<br>
+		- @ref Im_R2Y_Ctrl_BeforeTone_Tct()<br>
+		- @ref Im_R2Y_Ctrl_BeforeTone_Tchs()<br>
+
+	- Modify structure member.<br>
+		- @ref T_IM_R2Y_CTRL<br>
+
+	- Rename APIs.<br>
+		- from Im_R2Y_Ctrl_Histgram() to Im_R2Y_Ctrl_Histogram().<br>
+		- from Im_R2Y_Get_Histgram() to Im_R2Y_Get_Histogram().<br>
+		- from Im_R2Y_Set_HistgramAccessEnable() to Im_R2Y_Set_HistogramAccessEnable().<br>
+		- from Im_R2Y_Set_BTC_HistgramTblAccessEnable() to Im_R2Y_Set_BTC_HistogramTblAccessEnable().<br>
+		- from Im_R2Y_Get_Histgram_BeforeTone() to Im_R2Y_Get_Histogram_BeforeTone().<br>
+
+	- Rename defines.<br>
+		- from D_IM_R2Y_TABLE_MAX_BTC_HISTGRAM_Y to @ref D_IM_R2Y_TABLE_MAX_BTC_HISTOGRAM_Y.<br>
+		- from D_IM_R2Y_TABLE_MAX_BTC_HISTGRAM_RGB to @ref D_IM_R2Y_TABLE_MAX_BTC_HISTOGRAM_RGB.<br>
+		- from D_IM_R2Y_TABLE_MAX_HISTGRAM to @ref D_IM_R2Y_TABLE_MAX_HISTOGRAM.<br>
+
+	- Rename structures.<br>
+		- from T_IM_R2Y_CTRL_HISTGRAM to @ref T_IM_R2Y_CTRL_HISTOGRAM.<br>
+		- from T_IM_R2Y_HISTGRAM_ADDR to @ref T_IM_R2Y_HISTOGRAM_ADDR.<br>
+		- from T_IM_R2Y_HISTGRAM_STAT to @ref T_IM_R2Y_HISTOGRAM_STAT.<br>
+
+	- Rename structure member.<br>
+		- @ref T_IM_R2Y_CTRL_HISTOGRAM.<br>
+		- @ref T_IM_R2Y_TCHS.<br>
+
+	- Remove APIs.<br>
+		- Im_R2Y_Ctrl_BeforeTone().<br>
+
+	- Remove structure.<br>
+		- T_IM_R2Y_CTRL_BTC.<br>
+
+	[<b>PRO</b>(im_pro.h)]
+	- Add APIs.<br>
+		- Im_PRO_On_Pclk()<br>
+		- Im_PRO_On_Hclk()<br>
+		- Im_PRO_Off_Pclk()<br>
+		- Im_PRO_Off_Hclk()<br>
+	- Add Define.<br>
+		- @ref D_IM_PRO_SEN_OBT_CNT<br>
+		- @ref D_IM_PRO_SEN_OBD_CNT<br>
+		- @ref D_IM_PRO_SEN_SLVS_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_LVDS_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_LDIV_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_DMIPI_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_CMIPI_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_MONI_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_LNR_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_PWCH_CH_NUM<br>
+		- @ref D_IM_PRO_SEN_P2M_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_P2M_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_PWCH_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_M2P_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_PRCH_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_SDC_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_AFPB_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_FSHDL_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_FFSH_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_FF_CH_NUM<br>
+		- @ref D_IM_PRO_SRO_PZSFT_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_P2M_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_PWCH_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_M2P_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_PRCH_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_PZSFT_CH_NUM<br>
+		- @ref D_IM_PRO_B2B_PGAIN_CH_NUM<br>
+		- @ref D_IM_PRO_STAT_PWCH_CH_NUM<br>
+	- Rename Define.<br>
+		- from D_IM_PRO_SENTOP_SENCORE_NUM to @ref D_IM_PRO_SEN_SENCORE_NUM<br>
+		- from D_IM_PRO_SENTOP_BS_NUM to @ref D_IM_PRO_SEN_BS_NUM<br>
+		- from D_IM_PRO_SENTOP_SG_NUM to @ref D_IM_PRO_SEN_SG_NUM<br>
+		- from D_IM_PRO_SENTOP_LDIV_NUM to @ref D_IM_PRO_SEN_LDIV_NUM<br>
+		- from D_IM_PRO_STATTOP_AF_CH_NUM to @ref D_IM_PRO_STAT_AF_CH_NUM<br>
+		- from D_IM_PRO_STATTOP_AEAWB_CH_NUM to @ref D_IM_PRO_STAT_AEAWB_CH_NUM<br>
+		- from D_IM_PRO_STATTOP_HIST_CH_NUM to @ref D_IM_PRO_STAT_HIST_CH_NUM<br>
+		- from D_IM_PRO_STATTOP_FLCK_CH_NUM to @ref D_IM_PRO_STAT_FLCK_CH_NUM<br>
+	- Add structure member.<br>
+		- @ref T_IM_PRO_MONI_RESULT<br>
+			intra_frame_blank_cycle.<br>
+		- @ref T_IM_PRO_RDMA_ELF_ADDR<br>
+			ZALNG3<br>
+			ZALNG4<br>
+			ZALNG5<br>
+			ZALNG6<br>
+	- Delete structure member.(Unused)<br>
+		- @ref T_IM_PRO_MONI_CTRL intra_frame_blank_cycle.<br>
+	- Add API's argument.<br>
+		- @ref Im_PRO_LVDS_Set_Int_Handler() out_mode.<br>
+		- @ref Im_PRO_LVDS_Set_Int_Handler() category.<br>
+	- Rename API.<br>
+		- from Im_PRO_SEN_Set_SG_Int_Handler() to @ref Im_PRO_SEN_Set_SG_VD_Int_Handler()<br>
+		- from Im_PRO_SENTOP_SVLS_Ctrl() to @ref Im_PRO_SENTOP_SLVS_Ctrl()<br>
+	- Add API.<br>
+		- @ref Im_PRO_SEN_Set_SG_HD_Int_Handler()<br>
+		- @ref Im_PRO_SENTOP_CPHY_Clk_Ctrl()<br>
+		- @ref Im_PRO_SENTOP_CPHY_Bias_Ctrl()<br>
+		- @ref Im_PRO_SENTOP_CPHY_Slvs_Mode_Ctrl()<br>
+		- @ref Im_PRO_SENTOP_CPHY_DMIPI_Mode_Ctrl()<br>
+		- @ref Im_PRO_SENTOP_CPHY_CMIPI_Mode_Ctrl()<br>
+		- @ref Im_PRO_SENTOP_CPHY_Ext_Signal_Ctrl()<br>
+	- Add structure.<br>
+		- @ref T_IM_PRO_SENTOP_CPHY_COMMON_MODE_CTRL<br>
+		- @ref T_IM_PRO_SENTOP_CPHY_SLVS_MODE_CTRL<br>
+		- @ref T_IM_PRO_SENTOP_CPHY_DMIPI_MODE_CTRL<br>
+		- @ref T_IM_PRO_SENTOP_CPHY_CMIPI_MODE_CTRL<br>
+		- @ref T_IM_PRO_SENTOP_CPHY_IF_EXT_SIGNAL_CTRL<br>
+
+	[<b>HDMAC0</b>(dd_hdmac0.h)]
+	- Add APIs.<br>
+		- Dd_HDMAC0_Set_Src_Addr()<br>
+		- Dd_HDMAC0_Set_Dst_Addr()<br>
+		- Dd_HDMAC0_Set_Trans_Count()<br>
+
+	[<b>HDMAC1</b>(dd_hdmac0.h)]
+	- Add APIs.<br>
+		- Dd_HDMAC1_Set_Src_Addr()<br>
+		- Dd_HDMAC1_Set_Dst_Addr()<br>
+		- Dd_HDMAC1_Set_Trans_Count()<br>
+
+	[<b>SPI</b>(dd_spi.h)]
+	- Add SPI Driver APIs.<br>
+
+	[<b>TMR64</b>(dd_tmr64.h)]
+	- Overall Modified.<br>
+
+	[<b>UART</b>(dd_uart.h)]
+	- Add APIs.<br>
+		- Dd_UART_Clear_Overwrite()<br>
+		- Dd_UART_Set_Send_Data_DMA()<br>
+		- Dd_UART_Start_Send_DMA()<br>
+		- Dd_UART_Set_Recv_Data_DMA()<br>
+		- Dd_UART_Start_Recv_DMA()<br>
+		- Dd_UART_Send_Recv_Disable()<br>
+
+	[<b>I2C</b>(dd_i2c.h)]
+	- Add APIs.<br>
+		- Dd_I2C_Force_Stop_Master()<br>
+
+	[<b>PCIe(RC)</b>(dd_pcie_rc.h)]
+	- Add APIs.<br>
+		- Dd_Pcie_Rc_Ch0_Int_Exs_Handler()<br>
+		- Dd_Pcie_Rc_Ch1_Int_Exs_Handler()<br>
+		- Dd_Pcie_Rc_Set_Wr_Acc_To_Ro_Reg()<br>
+		- Dd_Pcie_Rc_Get_Exs_Reg()<br>
+		- Dd_Pcie_Rc_Set_Exs_Reg()<br>
+		- Dd_Pcie_Rc_Get_Dbi_Reg()<br>
+		- Dd_Pcie_Rc_Set_Dbi_Reg()<br>
+	- Modify API argument.<br>
+		- Dd_Pcie_Rc_Set_Int_Ep_Func()<br>
+		- Dd_Pcie_Rc_Ctrl_Hp_Detect_Card()<br>
+	- Modify API name.<br>
+		- Dd_Pcie_Rc_Set_Int_Trs_Ics_Msi_Func()<br>
+	- Delete API.(Unused)<br>
+		- Dd_Pcie_Rc_Ctrl_IO()<br>
+		- Dd_Pcie_Rc_Ctrl_Ltr()<br>
+	- Modify structure member.<br>
+		- @ref T_DD_PCIE_RC_CTRL_CFG<br>
+		- @ref T_DD_PCIE_RC_CTRL_MSI<br>
+		- @ref T_DD_PCIE_RC_INT_SYS_ERR_CB<br>
+		- @ref T_DD_PCIE_RC_INT_OWN_CB<br>
+	- Add structure.<br>
+		- @ref T_DD_PCIE_RC_INT_TRS_ICS_MSI_CB<br>
+		- @ref T_DD_PCIE_RC_INT_EP_CB<br>
+	- Delete structure.<br>
+		- T_DD_PCIE_RC_CTRL_IO<br>
+
+	[<b>PCIe(EP)</b>(dd_pcie_ep.h)]
+	- Add APIs.<br>
+		- Dd_Pcie_Ep_Set_Wr_Acc_To_Ro_Reg()<br>
+	- Modify API type.<br>
+		- Dd_Pcie_Ep_Init()<br>
+	- Delete API.(Unused)<br>
+		- Dd_Pcie_Ep_Set_Message_Data()<br>
+
+	[<b>HDMI</b>(im_hdmi.h)]
+	- Add APIs.<br>
+		- Im_HDMI_Power_On()<br>
+		- Im_HDMI_Set_Frame_Composer_Spd()<br>
+		- Im_HDMI_Get_Frame_Composer_Spd()<br>
+		- Im_HDMI_Set_Frame_Composer_Vsd()<br>
+		- Im_HDMI_Get_Frame_Composer_Vsd()<br>
+	- Modify API type.<br>
+		- Im_HDMI_Set_Int_Callback()<br>
+	- Add Define.<br>
+		- @ref D_IM_HDMI_FC_SPD_VENDER_NAME_NUM<br>
+		- @ref D_IM_HDMI_FC_SPD_PRO_NAME_NUM<br>
+		- @ref D_IM_HDMI_FC_VSD_IEEE_DATA_NUM<br>
+		- @ref D_IM_HDMI_FC_VSD_PAYLOAD_NUM<br>
+	- Add structure.<br>
+		- @ref T_IM_HDMI_FC_SPD<br>
+		- @ref T_IM_HDMI_FC_VSD<br>
+
+	@section spec_V00L01A 2016.03.25 ... Related MILB Driver version: V00L01R01
+	[<b>BMH</b>(im_bmh.h)]
+	- Delete API.(Unused)<br>
+		- Im_BMH_Reset()<br>
+
+	[<b>CNR</b>(im_cnr.h)]
+	- Modify structure member.<br>
+		- @ref T_IM_CNR_HUE_SPEC_TABLE<br>
+	- Delete API.(Unused)<br>
+		- Im_CNR_OFL_0_Int_Handler()<br>
+		- Im_CNR_OFL_1_Int_Handler()<br>
+		- Im_CNR_OTF_0_Int_Handler()<br>
+		- Im_CNR_OTF_1_Int_Handler()<br>
+	- Add API.<br>
+		- Im_CNR0_Int_Handler()<br>
+		- Im_CNR1_Int_Handler()<br>
+
+	[<b>FPT</b>(im_fpt.h)]
+	- Add new module "FPT".
+
+	[<b>LTM</b>(im_ltm.h)]
+	- Add new module "LTM".
+
+	[<b>PRO</b>(im_pro.h)]
+	- Modify API name.<br>
+		- Im_PRO_AF_Get_Horizontal1_Line_Accum_Max_Value()<br>
+		- Im_PRO_AF_Get_Horizontal0_Line_Accum_Max_LastData()<br>
+		- Im_PRO_AF_Get_Horizontal1_Line_Accum_Max_LastData()<br>
+		- Im_PRO_AF_Get_Horizontal2_Line_Accum_Max_LastData()<br>
+	- Delete API argument.(Unused)<br>
+		- Im_PRO_SENTOP_Set_Gyro_Int_Delay()<br>
+			- UCHAR ch<br>
+	- Delete API.(Unused)<br>
+		- Im_PRO_FLCK_Get_FLYK()<br>
+		- Im_PRO_AF_Get_Global_Area()<br>
+		- Im_PRO_B2BTOP_Pipe_Set_Int_Handler()<br>
+		- Im_PRO_PASTOP_Set_Int_Handler()<br>
+	- Add enumeration menber.<br>
+		- @ref E_IM_PRO_SENTOP_INPUT_TO_BLOB_FROM_LDIV0_3<br>
+		- @ref E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV0_2_PRE_BLOB<br>
+		- @ref E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV0_2_POST_BLOB<br>
+		- @ref E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV0_3_PRE_BLOB<br>
+		- @ref E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV0_3_POST_BLOB<br>
+	- Delete enumeration menber.(Unused)<br>
+		- E_IM_PRO_SROTOP_CAG_TARGET_BLOCK_MAX<br>
+		- E_IM_PRO_SROTOP_PATH_SEL_B2B_CONN_MAX<br>
+		- E_IM_PRO_SROTOP_PATH_SEL_LTM_CONN_MAX<br>
+		- E_IM_PRO_SROTOP_INPUT_MODE_MAX<br>
+		- E_IM_PRO_WEITGEN_CH_MAX<br>
+		- E_IM_PRO_DPC_MODE_MAX<br>
+		- E_IM_PRO_DPC_THRE_CONV_MAX<br>
+		- E_IM_PRO_DPC_DD_GRGB_MAX<br>
+		- E_IM_PRO_DPC_DD_MODE_G_MAX<br>
+		- E_IM_PRO_DPC_DD_MODE_RB_MAX<br>
+		- E_IM_PRO_DPC_DD_USE_MDD_MAX<br>
+		- E_IM_PRO_DPC_DD_MDD_2CONSECUTIVE_DEFECT_MAX<br>
+		- E_IM_PRO_DPC_MDC_USE_OCD_MAX<br>
+		- E_IM_PRO_DPC_ESD_MODE_MAX<br>
+		- E_IM_PRO_DPC_ESD_USE_RB_JUDGE_MAX<br>
+		- E_IM_PRO_DPC_ESD_USE_OCD_MAX<br>
+		- E_IM_PRO_AF_MIN_MAX_DETECT_SEL_MAX<br>
+		- E_IM_PRO_HIST_MODE_MAX<br>
+		- E_IM_PRO_HIST_CYCLE_MAX<br>
+		- E_IM_PRO_HIST_SHIFT_VAL_MAX<br>
+		- E_IM_PRO_B2BTOP_CLK_TYPE_MAX<br>
+		- E_IM_PRO_STATTOP_CLK_TYPE_MAX<br>
+		- E_IM_PRO_PASTOP_CLK_TYPE_MAX<br>
+		- E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV2_1_PRE_BLOB<br>
+		- E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV2_1_POST_BLOB<br>
+		- E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV3_1_PRE_BLOB<br>
+		- E_IM_PRO_SENTOP_SDRAM_OUTPUT_TYPE_LDIV3_1_POST_BLOB<br>
+	- Modify structure member.<br>
+		- @ref T_IM_PRO_FFSH_CTRL<br>
+		- @ref T_IM_PRO_FSHDL_COMMON_CTRL<br>
+		- @ref T_IM_PRO_FFC_CTRL<br>
+		- @ref T_IM_PRO_FLCK_CTRL<br>
+		- @ref T_IM_PRO_RDMA_SDC_ADDR<br>
+		- @ref T_IM_PRO_ELF_f9_FILTER<br>
+		- @ref T_IM_PRO_FSHD_COMMON_CTRL<br>
+		- @ref T_IM_PRO_RDMA_ELF_ADDR<br>
+		- @ref T_CALLBACK_ID<br>
+		- T_IM_PRO_SENTOP_CPHY_IF_CTRL<br>
+	- Add Define.<br>
+		- @ref D_IM_PRO_SROTOP_GENV_MIN<br>
+		- @ref D_IM_PRO_SROTOP_GENV_MAX<br>
+		- @ref D_IM_PRO_SROTOP_GENH_MIN<br>
+		- @ref D_IM_PRO_SROTOP_GENH_MAX<br>
+	- Modify Define name.<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE7_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE6_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE5_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE4_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE3_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE2_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE1_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE0_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE7_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE6_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE5_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE4_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE3_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE2_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE1_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_RDE_LANE0_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE7_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE6_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE5_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE4_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE3_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE2_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE1_BIT<br>
+		- @ref D_IM_PRO_SLVS_COMMON_PEINTEN_IPC_LANE0_BIT<br>
+	- Modify Define value.<br>
+		- @ref D_IM_PRO_ELF_ELFGHW_MIN<br>
+		- @ref D_IM_PRO_ELF_ELFH_MIN<br>
+		- @ref D_IM_PRO_ELF_ELFH_MAX<br>
+		- @ref D_IM_PRO_ELF_ELFHW_MIN<br>
+		- @ref D_IM_PRO_ELF_ELFHW_MAX<br>
+	- Modify Doxygen description.<br>
+		- @ref T_IM_PRO_DPC_AREA<br>
+		- @ref T_IM_PRO_SROTOP_WEITGEN_CTRL<br>
+		- @ref Im_PRO_SENTOP_Control_Clock<br>
+		- @ref Im_PRO_SROTOP_Control_Clock<br>
+		- @ref Im_PRO_B2BTOP_Control_Clock<br>
+		- @ref Im_PRO_STATTOP_Control_Clock<br>
+		- @ref Im_PRO_PASTOP_Control_Clock<br>
+		- @ref Im_PRO_AF_Set_Global_Area<br>
+		- @ref T_IM_PRO_ELF_AREA<br>
+		- @ref T_IM_PRO_DPC_MDD_CTRL<br>
+			- p_mdd_effect2<br>
+			- m_mdd_effect2<br>
+		- @ref T_IM_PRO_ELF_f9_FILTER<br>
+			- e_focus_coord<br>
+		- @ref T_IM_PRO_ELF_f9_SAMPLING<br>
+			- yc_conv_matrix<br>
+		- @ref T_IM_PRO_AEAWB_CW<br>
+		- @ref T_IM_PRO_M2P_CTRL<br>
+			- lower_limit_clip_value<br>
+		- @ref T_IM_PRO_AF_VERTICAL_CTRL<br>
+			- start_addr<br>
+			- horizon_size<br>
+
+	[<b>Watchdog Timer</b>(dd_wdog.h)]
+	- Add APIs.<br>
+		- Dd_WDOG_Reload()<br>
+	- Modify API name.<br>
+		- Dd_WDOG_Get_Status()<br>
+
+	@section spec_V00L01 2016.02.26 ... Related MILB Driver version: V00L01
+	- 1st release for MILB Driver.<br>
+@} */ 
