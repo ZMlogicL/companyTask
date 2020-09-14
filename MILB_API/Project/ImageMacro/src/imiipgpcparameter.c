@@ -14,8 +14,8 @@
 #include "imiipgpcparameter.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipGpcParameter, im_iip_gpc_parameter);
-#define IM_IIP_GPC_PARAMETER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipGpcParameterPrivate, IM_TYPE_IIP_GPC_PARAMETER))
+G_DEFINE_TYPE(ImIipGpcParameter, im_iip_gpc_parameter, G_TYPE_OBJECT);
+#define IM_IIP_GPC_PARAMETER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_GPC_PARAMETER, ImIipGpcParameterPrivate));
 
 
 struct _ImIipGpcParameterPrivate
@@ -23,23 +23,45 @@ struct _ImIipGpcParameterPrivate
 
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_gpc_parameter_constructor(ImIipGpcParameter *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_gpc_parameter_class_init(ImIipGpcParameterClass *klass)
 {
-//	ImIipGpcParameterPrivate *priv = IM_IIP_GPC_PARAMETER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipGpcParameterPrivate));
 }
 
-static void im_iip_gpc_parameter_destructor(ImIipGpcParameter *self)
+static void 		im_iip_gpc_parameter_init(ImIipGpcParameter *self)
 {
-//	ImIipGpcParameterPrivate *priv = IM_IIP_GPC_PARAMETER_GET_PRIVATE(self);
+	ImIipGpcParameterPrivate *priv = IM_IIP_GPC_PARAMETER_GET_PRIVATE(self);
 }
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipGpcParameterPrivate *priv = IM_IIP_GPC_PARAMETER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_gpc_parameter_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipGpcParameterPrivate *priv = IM_IIP_GPC_PARAMETER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_gpc_parameter_parent_class) -> dispose(object);
+}
+
 /**
  * PUBLIC
  */
-ImIipGpcParameter* im_iip_gpc_parameter_new(void)
+ImIipGpcParameter* 		im_iip_gpc_parameter_new(void)
 {
-	ImIipGpcParameter *self = k_object_new_with_private(IM_TYPE_IIP_GPC_PARAMETER, sizeof(ImIipGpcParameterPrivate));
+	ImIipGpcParameter *self = g_object_new(IM_TYPE_IIP_GPC_PARAMETER, NULL);
 	return self;
 }
+
 

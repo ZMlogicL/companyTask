@@ -1,19 +1,19 @@
 /*
-*@Copyright (C) 2010-2020 上海网用软件有限公司
-*@date              :2020-09-05
-*@author            :陈倩
-*@brief             :jdsb2rf2e
-*@rely              :klib
-*@function
-*设计的主要功能:
-*1、
-*2、
-*3、
-*4、
-*5、
-*@version
-*
-*/
+ *@Copyright (C) 2010-2020 上海网用软件有限公司
+ *@date              :2020-09-05
+ *@author            :陈倩
+ *@brief             :jdsb2rf2e
+ *@rely              :klib
+ *@function
+ *设计的主要功能:
+ *1、
+ *2、
+ *3、
+ *4、
+ *5、
+ *@version
+ *
+ */
 
 
 #ifndef __JDSB2R_F2E_H__
@@ -25,525 +25,608 @@
 #include "__jdsb2r_f2e_sram.h"
 
 
-#define JDSB2R_TYPE_F2E	(jdsb2r_f2e_get_type())
-#define JDSB2R_F2E(obj)	(K_TYPE_CHECK_INSTANCE_CAST((obj), Jdsb2rF2e))
-#define JDSB2R_IS_F2E(obj)	(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSB2R_TYPE_F2E))
+#define JDSB2R_TYPE_F2E				(jdsb2r_f2e_get_type())
+#define JDSB2R_F2E(obj)					(K_TYPE_CHECK_INSTANCE_CAST((obj), Jdsb2rF2e))
+#define JDSB2R_IS_F2E(obj)				(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSB2R_TYPE_F2E))
 
 
-typedef struct _Jdsb2rF2e	Jdsb2rF2e;
-typedef struct _Jdsb2rF2ePrivate	Jdsb2rF2ePrivate;
+typedef struct _Jdsb2rF2e 				Jdsb2rF2e;
+typedef struct _Jdsb2rF2ePrivate 	Jdsb2rF2ePrivate;
 
-struct  _Jdsb2rF2e
+
+struct _Jdsb2rF2e
 {
 	KObject parent;
 };
 
 
-/*	structure of YBRAXCTL	(2841_2200h)	*/
-union io_b2r_ybraxctl{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRCACHE	:4;
-		unsigned long	YBRPROT		:3;
-		unsigned long				:25;
-	}bit;
-};
+/*	structure of ybraxctl	(2841_2200h)	*/
+typedef union _IoB2rYbraxctl
+{
+	kulong word;
+	struct
+	{
+		kulong ybrcache :4;
+		kulong ybrprot :3;
+		kulong :25;
+	} bit;
+} IoB2rYbraxctl;
 
-/*	structure of YBWAXCTL	(2841_2204h)	*/
-union io_b2r_ybwaxctl{
-	unsigned long		word;
-	struct {
-		unsigned long	YBWCACHE_0	:4;
-		unsigned long	YBWPROT_0	:3;
-		unsigned long				:1;
-		unsigned long	YBWCACHE_1	:4;
-		unsigned long	YBWPROT_1	:3;
-		unsigned long				:1;
-		unsigned long	YBWCACHE_2	:4;
-		unsigned long	YBWPROT_2	:3;
-		unsigned long				:9;
-	}bit;
-};
+/*	structure of ybwaxctl	(2841_2204h)	*/
+typedef union _IoB2rYbwaxctl
+{
+	kulong word;
+	struct
+	{
+		kulong ybwcache0 :4;
+		kulong ybwprot0 :3;
+		kulong :1;
+		kulong ybwcache1 :4;
+		kulong ybwprot1 :3;
+		kulong :1;
+		kulong ybwcache2 :4;
+		kulong ybwprot2 :3;
+		kulong :9;
+	} bit;
+} IoB2rYbwaxctl;
 
-/*	structure of YBRAXSTS	(2841_2208h)	*/
-union io_b2r_ybraxsts{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRRESP	:2;
-		unsigned long			:30;
-	}bit;
-};
+/*	structure of ybraxsts	(2841_2208h)	*/
+typedef union _IoB2rYbraxsts
+{
+	kulong word;
+	struct
+	{
+		kulong ybrresp :2;
+		kulong :30;
+	} bit;
+} IoB2rYbraxsts;
 
-/*	structure of YBWAXSTS	(2841_220Ch)	*/
-union io_b2r_ybwaxsts{
-	unsigned long		word;
-	struct {
-		unsigned long	YBBRESP_0	:2;
-		unsigned long				:6;
-		unsigned long	YBBRESP_1	:2;
-		unsigned long				:6;
-		unsigned long	YBBRESP_2	:2;
-		unsigned long				:14;
-	}bit;
-};
+/*	structure of ybwaxsts	(2841_220Ch)	*/
+typedef union _IoB2rYbwaxsts
+{
+	kulong word;
+	struct
+	{
+		kulong ybbresp0 :2;
+		kulong :6;
+		kulong ybbresp1 :2;
+		kulong :6;
+		kulong ybbresp2 :2;
+		kulong :14;
+	} bit;
+} IoB2rYbwaxsts;
 
-/*	structure of YBRAXMD	(2841_2210h)	*/
-union io_b2r_ybraxmd{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRBL	:2;
-		unsigned long			:30;
-	}bit;
-};
+/*	structure of ybraxmd	(2841_2210h)	*/
+typedef union _IoB2rYbraxmd
+{
+	kulong word;
+	struct
+	{
+		kulong ybrbl :2;
+		kulong :30;
+	} bit;
+} IoB2rYbraxmd;
 
-/*	structure of YBWAXMD	(2841_2214h)	*/
-union io_b2r_ybwaxmd{
-	unsigned long		word;
-	struct {
-		unsigned long	YBWBL	:2;
-		unsigned long			:6;
-		unsigned long	YBWDOS	:1;
-		unsigned long			:23;
-	}bit;
-};
+/*	structure of ybwaxmd	(2841_2214h)	*/
+typedef union _IoB2rYbwaxmd
+{
+	kulong word;
+	struct
+	{
+		kulong ybwbl :2;
+		kulong :6;
+		kulong ybwdos :1;
+		kulong :23;
+	} bit;
+} IoB2rYbwaxmd;
 
-/*	structure of YBRREQMSK	(2841_2218h)	*/
-union io_b2r_ybrreqmsk{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRREQMSK	:12;
-		unsigned long				:20;
-	}bit;
-};
+/*	structure of ybrreqmsk	(2841_2218h)	*/
+typedef union _IoB2rYbrreqmsk
+{
+	kulong word;
+	struct
+	{
+		kulong ybrreqmsk :12;
+		kulong :20;
+	} bit;
+} IoB2rYbrreqmsk;
 
-/*	structure of YBWREQMSK	(2841_2220h)	*/
-union io_b2r_ybwreqmsk{
-	unsigned long		word[2];
-	struct {
-		unsigned long	YBWREQMSK_0	:12;
-		unsigned long				:4;
-		unsigned long	YBWREQMSK_1	:12;
-		unsigned long				:4;
-		unsigned long	YBWREQMSK_2	:12;
-		unsigned long				:20;
-	}bit;
-};
+/*	structure of ybwreqmsk	(2841_2220h)	*/
+typedef union _IoB2rYbwreqmsk
+{
+	kulong word[2];
+	struct
+	{
+		kulong ybwreqmsk0 :12;
+		kulong :4;
+		kulong ybwreqmsk1 :12;
+		kulong :4;
+		kulong ybwreqmsk2 :12;
+		kulong :20;
+	} bit;
+} IoB2rYbwreqmsk;
 
-/*	structure of YBINTE	(2841_2240h)	*/
-union io_b2r_ybinte{
-	unsigned long		word;
-	struct {
-		unsigned long	YBREE	:1;
-		unsigned long	YBWEE	:1;
-		unsigned long			:2;
-		unsigned long	FB2REE	:1;
-		unsigned long	ELNEE	:1;
-		unsigned long			:2;
-		unsigned long	YBRERE	:1;
-		unsigned long	YBWERE	:1;
-		unsigned long			:2;
-		unsigned long	AXRERE	:1;
-		unsigned long	AXWERE	:1;
-		unsigned long			:18;
-	}bit;
-};
+/*	structure of ybinte	(2841_2240h)	*/
+typedef union _IoB2rYbinte
+{
+	kulong word;
+	struct
+	{
+		kulong ybree :1;
+		kulong ybwee :1;
+		kulong :2;
+		kulong fb2ree :1;
+		kulong elnee :1;
+		kulong :2;
+		kulong ybrere :1;
+		kulong ybwere :1;
+		kulong :2;
+		kulong axrere :1;
+		kulong axwere :1;
+		kulong :18;
+	} bit;
+} IoB2rYbinte;
 
-/*	structure of YBINTF	(2841_2244h)	*/
-union io_b2r_ybintf{
-	unsigned long		word;
-	struct {
-		unsigned long	__YBREF		:1;
-		unsigned long	__YBWEF		:1;
-		unsigned long				:2;
-		unsigned long	__FB2REF	:1;
-		unsigned long	__ELNEF		:1;
-		unsigned long				:2;
-		unsigned long	__YBRERF	:1;
-		unsigned long	__YBWERF	:1;
-		unsigned long				:2;
-		unsigned long	__AXRERF	:1;
-		unsigned long	__AXWERF	:1;
-		unsigned long				:18;
-	}bit;
-};
+/*	structure of ybintf	(2841_2244h)	*/
+typedef union _IoB2rYbintf
+{
+	kulong word;
+	struct
+	{
+		kulong __ybref :1;
+		kulong __ybwef :1;
+		kulong :2;
+		kulong __fb2ref :1;
+		kulong __elnef :1;
+		kulong :2;
+		kulong __ybrerf :1;
+		kulong __ybwerf :1;
+		kulong :2;
+		kulong __axrerf :1;
+		kulong __axwerf :1;
+		kulong :18;
+	} bit;
+} IoB2rYbintf;
 
-/*	structure of DINSEL	(2841_2248h)	*/
-union io_b2r_dinsel{
-	unsigned long		word;
-	struct {
-		unsigned long	B2BDIN	:1;
-		unsigned long			:3;
-		unsigned long	EXTOEN	:1;
-		unsigned long			:27;
-	}bit;
-};
+/*	structure of dinsel	(2841_2248h)	*/
+typedef union _IoB2rDinsel
+{
+	kulong word;
+	struct
+	{
+		kulong b2bdin :1;
+		kulong :3;
+		kulong extoen :1;
+		kulong :27;
+	} bit;
+} IoB2rDinsel;
 
-/*	structure of B2RMODE	(2841_224Ch)	*/
-union io_b2r_b2rmode{
-	unsigned long		word;
-	struct {
-		unsigned long	CIABYP	:1;
-		unsigned long	CIAPDD	:1;
-		unsigned long			:30;
-	}bit;
-};
+/*	structure of b2rmode	(2841_224Ch)	*/
+typedef union _IoB2rB2rmode
+{
+	kulong word;
+	struct
+	{
+		kulong ciabyp :1;
+		kulong ciapdd :1;
+		kulong :30;
+	} bit;
+} IoB2rB2rmode;
 
-/*	structure of ELNLV	(2841_2250h)	*/
-union io_b2r_elnlv{
-	unsigned long		word;
-	struct {
-		unsigned long	ELNLV	:14;
-		unsigned long			:18;
-	}bit;
-};
+/*	structure of elnlv	(2841_2250h)	*/
+typedef union _IoB2rElnlv
+{
+	kulong word;
+	struct
+	{
+		kulong elnlv :14;
+		kulong :18;
+	} bit;
+} IoB2rElnlv;
 
-/*	structure of RAMAEN	(2841_2254h)	*/
-union io_b2r_ramaen{
-	unsigned long		word;
-	struct {
-		unsigned long	RAMAEN_BAY_DEKNEE	:1;
-		unsigned long	RAMAEN_YBR			:1;
-		unsigned long	RAMAEN_RGB_KNEE		:1;
-		unsigned long	RAMAEN_YBW			:1;
-		unsigned long						:28;
-	}bit;
-};
+/*	structure of ramaen	(2841_2254h)	*/
+typedef union _IoB2rRamaen
+{
+	kulong word;
+	struct
+	{
+		kulong ramaenBayDeknee :1;
+		kulong ramaenYbr :1;
+		kulong ramaenRgbKnee :1;
+		kulong ramaenYbw :1;
+		kulong :28;
+	} bit;
+} IoB2rRamaen;
 
-/*	structure of EXALMSL	(2841_2258h)	*/
-union io_b2r_exalmsl{
-	unsigned long		word;
-	struct {
-		unsigned long	EXALMSL				:2;
-		unsigned long						:30;
-	}bit;
-};
+/*	structure of exalmsl	(2841_2258h)	*/
+typedef union _IoB2rExalmsl
+{
+	kulong word;
+	struct
+	{
+		kulong exalmsl :2;
+		kulong :30;
+	} bit;
+} IoB2rExalmsl;
 
-/*	structure of YBRTRG	(2841_2280h)	*/
-union io_b2r_ybrtrg{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRTRG	:2;
-		unsigned long			:30;
-	}bit;
-};
+/*	structure of ybrtrg	(2841_2280h)	*/
+typedef union _IoB2rYbrtrg
+{
+	kulong word;
+	struct
+	{
+		kulong ybrtrg :2;
+		kulong :30;
+	} bit;
+} IoB2rYbrtrg;
 
-/*	structure of YBRCTL	(2841_2284h)	*/
-union io_b2r_ybrctl{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRDTYP	:2;
-		unsigned long			:2;
-		unsigned long	PIXEL	:2;
-		unsigned long			:2;
-		unsigned long	DKNEN	:1;
-		unsigned long			:23;
-	}bit;
-};
+/*	structure of ybrctl	(2841_2284h)	*/
+typedef union _IoB2rYbrctl
+{
+	kulong word;
+	struct
+	{
+		kulong ybrdtyp :2;
+		kulong :2;
+		kulong pixel :2;
+		kulong :2;
+		kulong dknen :1;
+		kulong :23;
+	} bit;
+} IoB2rYbrctl;
 
-/*	structure of YBRA	(2841_2288h)	*/
-union io_b2r_ybra{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRA	:32;
-	}bit;
-};
+/*	structure of ybra	(2841_2288h)	*/
+typedef union _IoB2rYbra
+{
+	kulong word;
+	struct
+	{
+		kulong ybra :32;
+	} bit;
+} IoB2rYbra;
 
-/*	structure of YBROFS	(2841_228Ch)	*/
-union io_b2r_ybrofs{
-	unsigned long		word;
-	struct {
-		unsigned long	YBROFS	:3;
-		unsigned long			:29;
-	}bit;
-};
+/*	structure of ybrofs	(2841_228Ch)	*/
+typedef union IoB2rYbrofs
+{
+	kulong word;
+	struct
+	{
+		kulong ybrofs :3;
+		kulong :29;
+	} bit;
+} IoB2rYbrofs;
 
-/*	structure of YBRDEF	(2841_2290h)	*/
-union io_b2r_ybrdef{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRDEF	:16;
-		unsigned long			:16;
-	}bit;
-};
+/*	structure of ybrdef	(2841_2290h)	*/
+typedef union _IoB2rYbrdef
+{
+	kulong word;
+	struct
+	{
+		kulong ybrdef :16;
+		kulong :16;
+	} bit;
+} IoB2rYbrdef;
 
-/*	structure of YBRHSIZ	(2841_2294h)	*/
-union io_b2r_ybrhsiz{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRHSIZ	:13;
-		unsigned long			:19;
-	}bit;
-};
+/*	structure of ybrhsiz	(2841_2294h)	*/
+typedef union _IoB2rYbrhsiz
+{
+	kulong word;
+	struct
+	{
+		kulong ybrhsiz :13;
+		kulong :19;
+	} bit;
+} IoB2rYbrhsiz;
 
-/*	structure of YBRVSIZ	(2841_2298h)	*/
-union io_b2r_ybrvsiz{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRVSIZ	:14;
-		unsigned long			:18;
-	}bit;
-};
+/*	structure of ybrvsiz	(2841_2298h)	*/
+typedef union _IoB2rYbrvsiz
+{
+	kulong word;
+	struct
+	{
+		kulong ybrvsiz :14;
+		kulong :18;
+	} bit;
+} IoB2rYbrvsiz;
 
-/*	structure of YBRHBLNK	(2841_229Ch)	*/
-union io_b2r_ybrhblnk{
-	unsigned long		word;
-	struct {
-		unsigned long	YBRHBLNK	:10;
-		unsigned long				:22;
-	}bit;
-};
+/*	structure of ybrhblnk	(2841_229Ch)	*/
+typedef union _IoB2rYbrhblnk
+{
+	kulong word;
+	struct
+	{
+		kulong ybrhblnk :10;
+		kulong :22;
+	} bit;
+} IoB2rYbrhblnk;
 
-/*	structure of DINCTL	(2841_22A0h)	*/
-union io_b2r_dinctl{
-	unsigned long		word;
-	struct {
-		unsigned long	FRMSTP	:1;
-		unsigned long			:31;
-	}bit;
-};
+/*	structure of dinctl	(2841_22A0h)	*/
+typedef union _IoB2rDinctl
+{
+	kulong word;
+	struct
+	{
+		kulong frmstp :1;
+		kulong :31;
+	} bit;
+} IoB2rDinctl;
 
-/*	structure of DINHSTA	(2841_22A4h)	*/
-union io_b2r_dinhsta{
-	unsigned long		word;
-	struct {
-		unsigned long	DINHSTA	:13;
-		unsigned long			:19;
-	}bit;
-};
+/*	structure of dinhsta	(2841_22A4h)	*/
+typedef union _IoB2rDinhsta
+{
+	kulong word;
+	struct
+	{
+		kulong dinhsta :13;
+		kulong :19;
+	} bit;
+} IoB2rDinhsta;
 
-/*	structure of DINVSTA	(2841_22A8h)	*/
-union io_b2r_dinvsta{
-	unsigned long		word;
-	struct {
-		unsigned long	DINVSTA	:14;
-		unsigned long			:18;
-	}bit;
-};
+/*	structure of dinvsta	(2841_22A8h)	*/
+typedef union _IoB2rDinvsta
+{
+	kulong word;
+	struct
+	{
+		kulong dinvsta :14;
+		kulong :18;
+	} bit;
+} IoB2rDinvsta;
 
-/*	structure of DINHSIZ	(2841_22ACh)	*/
-union io_b2r_dinhsiz{
-	unsigned long		word;
-	struct {
-		unsigned long	DINHSIZ	:13;
-		unsigned long			:19;
-	}bit;
-};
+/*	structure of dinhsiz	(2841_22ACh)	*/
+typedef union _IoB2rDinhsiz
+{
+	kulong word;
+	struct
+	{
+		kulong dinhsiz :13;
+		kulong :19;
+	} bit;
+} IoB2rDinhsiz;
 
-/*	structure of DINVSIZ	(2841_22B0h)	*/
-union io_b2r_dinvsiz{
-	unsigned long		word;
-	struct {
-		unsigned long	DINVSIZ	:14;
-		unsigned long			:18;
-	}bit;
-};
+/*	structure of dinvsiz	(2841_22B0h)	*/
+typedef union _IoB2rDinvsiz
+{
+	kulong word;
+	struct
+	{
+		kulong dinvsiz :14;
+		kulong :18;
+	} bit;
+} IoB2rDinvsiz;
 
-/*	structure of DINELS	(2841_22B4h)	*/
-union io_b2r_dinels{
-	unsigned long		word;
-	struct {
-		unsigned long	DINELS	:13;
-		unsigned long			:19;
-	}bit;
-};
+/*	structure of dinels	(2841_22B4h)	*/
+typedef union _IoB2rDinels
+{
+	kulong word;
+	struct
+	{
+		kulong dinels :13;
+		kulong :19;
+	} bit;
+} IoB2rDinels;
 
-/*	structure of DINERR	(2841_22BCh)	*/
-union io_b2r_dinerr{
-	unsigned long		word;
-	struct {
-		unsigned long	TRMER	:1;
-		unsigned long	HPDDER	:1;
-		unsigned long	WAITER	:1;
-		unsigned long			:29;
-	}bit;
-};
+/*	structure of dinerr	(2841_22BCh)	*/
+typedef union _IoB2rDinerr
+{
+	kulong word;
+	struct
+	{
+		kulong trmer :1;
+		kulong hpdder :1;
+		kulong waiter :1;
+		kulong :29;
+	} bit;
+} IoB2rDinerr;
 
-/*	structure of YBWTRG	(2841_2300h)	*/
-union io_b2r_ybwtrg{
-	unsigned long		word;
-	struct {
-		unsigned long	YBWTRG	:2;
-		unsigned long			:30;
-	}bit;
-};
+/*	structure of ybwtrg	(2841_2300h)	*/
+typedef union _IoB2rYbwtrg
+{
+	kulong word;
+	struct
+	{
+		kulong ybwtrg :2;
+		kulong :30;
+	} bit;
+} IoB2rYbwtrg;
 
-/*	structure of YBWCTL	(2841_2304h)	*/
-union io_b2r_ybwctl{
-	unsigned long		word;
-	struct {
-		unsigned long	YBWDTYP	:2;
-		unsigned long			:2;
-		unsigned long	YBWCSE	:1;
-		unsigned long			:3;
-		unsigned long	USEBANK	:2;
-		unsigned long			:22;
-	}bit;
-};
+/*	structure of ybwctl	(2841_2304h)	*/
+typedef union _IoB2rYbwctl
+{
+	kulong word;
+	struct
+	{
+		kulong ybwdtyp :2;
+		kulong :2;
+		kulong ybwcse :1;
+		kulong :3;
+		kulong usebank :2;
+		kulong :22;
+	} bit;
+} IoB2rYbwctl;
 
-/*	structure of YBWMD	(2841_2308h)	*/
-union io_b2r_ybwmd{
-	unsigned long		word;
-	struct {
-		unsigned long	TRMEN	:1;
-		unsigned long			:3;
-		unsigned long	KNEEN	:1;
-		unsigned long			:27;
-	}bit;
-};
+/*	structure of ybwmd	(2841_2308h)	*/
+typedef union _IoB2rYbwmd
+{
+	kulong word;
+	struct
+	{
+		kulong trmen :1;
+		kulong :3;
+		kulong kneen :1;
+		kulong :27;
+	} bit;
+} IoB2rYbwmd;
 
 /*	structure of YBWBANK	(2841_230Ch)	*/
-union io_b2r_ybwbank{
-	unsigned long		word;
-	struct {
-		unsigned long	BANKST	:1;
-		unsigned long			:3;
-		unsigned long	BANKPS	:2;
-		unsigned long			:2;
-		unsigned long	BANKSTS	:2;
-		unsigned long			:22;
-	}bit;
-};
+typedef union _IoB2rYbwbank
+{
+	kulong word;
+	struct
+	{
+		kulong bankst :1;
+		kulong :3;
+		kulong bankps :2;
+		kulong :2;
+		kulong banksts :2;
+		kulong :22;
+	} bit;
+} IoB2rYbwbank;
 
-/*	structure of YBWA	(2841_2340h)	*/
-union io_b2r_ybwa{
-	unsigned long		word[3][4];
-	struct {
-		unsigned long	YBWA_0_0	:32;
-		unsigned long	YBWA_0_1	:32;
-		unsigned long	YBWA_0_2	:32;
-		unsigned long	YBWA_0_3	:32;
-		unsigned long	YBWA_1_0	:32;
-		unsigned long	YBWA_1_1	:32;
-		unsigned long	YBWA_1_2	:32;
-		unsigned long	YBWA_1_3	:32;
-		unsigned long	YBWA_2_0	:32;
-		unsigned long	YBWA_2_1	:32;
-		unsigned long	YBWA_2_2	:32;
-		unsigned long	YBWA_2_3	:32;
-	}bit;
-};
+/*	structure of ybwa	(2841_2340h)	*/
+typedef union _IoB2rYbwa
+{
+	kulong word[3][4];
+	struct
+	{
+		kulong ybwa00 :32;
+		kulong ybwa01 :32;
+		kulong ybwa02 :32;
+		kulong ybwa03 :32;
+		kulong ybwa10 :32;
+		kulong ybwa11 :32;
+		kulong ybwa12 :32;
+		kulong ybwa13 :32;
+		kulong ybwa20 :32;
+		kulong ybwa21 :32;
+		kulong ybwa22 :32;
+		kulong ybwa23 :32;
+	} bit;
+} IoB2rYbwa;
 
-/*	structure of YBWDEF	(2841_2380h)	*/
-union io_b2r_ybwdef{
-	unsigned long		word;
-	struct {
-		long			YBWDEF	:17;
-		unsigned long			:15;
-	}bit;
-};
+/*	structure of ybwdef	(2841_2380h)	*/
+typedef union _IoB2rYbwdef
+{
+	kulong word;
+	struct
+	{
+		long ybwdef :17;
+		kulong :15;
+	} bit;
+} IoB2rYbwdef;
 
-/*	structure of YBWTRMH	(2841_2384h)	*/
-union io_b2r_ybwtrmh{
-	unsigned long		word;
-	struct {
-		unsigned long	TRMHSTA	:13;
-		unsigned long			:3;
-		unsigned long	TRMHSIZ	:13;
-		unsigned long			:3;
-	}bit;
-};
+/*	structure of ybwtrmh	(2841_2384h)	*/
+typedef union _IoB2rYbwtrmh
+{
+	kulong word;
+	struct
+	{
+		kulong trmhsta :13;
+		kulong :3;
+		kulong trmhsiz :13;
+		kulong :3;
+	} bit;
+} IoB2rYbwtrmh;
 
-/*	structure of YBWTRMV	(2841_2388h)	*/
-union io_b2r_ybwtrmv{
-	unsigned long		word;
-	struct {
-		unsigned long	TRMVSTA	:14;
-		unsigned long			:2;
-		unsigned long	TRMVSIZ	:14;
-		unsigned long			:2;
-	}bit;
-};
+/*	structure of ybwtrmv	(2841_2388h)	*/
+typedef union _IoB2rYbwtrmv
+{
+	kulong word;
+	struct
+	{
+		kulong trmvsta :14;
+		kulong :2;
+		kulong trmvsiz :14;
+		kulong :2;
+	} bit;
+} IoB2rYbwtrmv;
 
-/*	structure of YBCH area	2841_(2200 - 223Fh) */
-struct io_b2r_ybch {
-	union	io_b2r_ybraxctl		YBRAXCTL;			/* 2841_(2200 - 2203h) */
-	union	io_b2r_ybwaxctl		YBWAXCTL;			/* 2841_(2204 - 2207h) */
-	union	io_b2r_ybraxsts		YBRAXSTS;			/* 2841_(2208 - 220Bh) */
-	union	io_b2r_ybwaxsts		YBWAXSTS;			/* 2841_(220C - 220Fh) */
-	union	io_b2r_ybraxmd		YBRAXMD;			/* 2841_(2210 - 2213h) */
-	union	io_b2r_ybwaxmd		YBWAXMD;			/* 2841_(2214 - 2217h) */
-	union	io_b2r_ybrreqmsk	YBRREQMSK;			/* 2841_(2218 - 221Bh) */
+/*	structure of ybch area	2841_(2200 - 223Fh) */
+typedef struct _IoB2rYbch
+{
+	IoB2rYbraxctl ybraxctl; /* 2841_(2200 - 2203h) */
+	IoB2rYbwaxctl ybwaxctl; /* 2841_(2204 - 2207h) */
+	IoB2rYbraxsts ybraxsts; /* 2841_(2208 - 220Bh) */
+	IoB2rYbwaxsts ybwaxsts; /* 2841_(220C - 220Fh) */
+	IoB2rYbraxmd ybraxmd; /* 2841_(2210 - 2213h) */
+	IoB2rYbwaxmd ybwaxmd; /* 2841_(2214 - 2217h) */
+	IoB2rYbrreqmsk ybrreqmsk; /* 2841_(2218 - 221Bh) */
 
-	unsigned char dmy_221C_221F[0x2220-0x221C];		/* 2841_(221C - 221Fh) */
+	kuchar dmy221c221f[0x2220 - 0x221C]; /* 2841_(221C - 221Fh) */
 
-	union	io_b2r_ybwreqmsk	YBWREQMSK;			/* 2841_(2220 - 2227h) */
+	IoB2rYbwreqmsk ybwreqmsk; /* 2841_(2220 - 2227h) */
 
-	unsigned char dmy_2228_223F[0x2240-0x2228];		/* 2841_(2228 - 223Fh) */
-};
+	kuchar dmy2228223f[0x2240 - 0x2228]; /* 2841_(2228 - 223Fh) */
+} IoB2rYbch;
 
 /*	structure of B2R COMMON area	2841_(2240 - 227Fh) */
-struct io_b2r_cmn {
-	union	io_b2r_ybinte		YBINTE;				/* 2841_(2240 - 2243h) */
-	union	io_b2r_ybintf		YBINTF;				/* 2841_(2244 - 2247h) */
-	union	io_b2r_dinsel		DINSEL;				/* 2841_(2248 - 224Bh) */
-	union	io_b2r_b2rmode		B2RMODE;			/* 2841_(224C - 224Fh) */
-	union	io_b2r_elnlv		ELNLV;				/* 2841_(2250 - 2253h) */
-	union	io_b2r_ramaen		RAMAEN;				/* 2841_(2254 - 2257h) */
-	union	io_b2r_exalmsl		EXALMSL;			/* 2841_(2258 - 225Bh) */
+typedef struct _IoB2rCmn
+{
+	IoB2rYbinte ybinte; /* 2841_(2240 - 2243h) */
+	IoB2rYbintf ybintf; /* 2841_(2244 - 2247h) */
+	IoB2rDinsel dinsel; /* 2841_(2248 - 224Bh) */
+	IoB2rB2rmode b2rmode; /* 2841_(224C - 224Fh) */
+	IoB2rElnlv elnlv; /* 2841_(2250 - 2253h) */
+	IoB2rRamaen ramaen; /* 2841_(2254 - 2257h) */
+	IoB2rExalmsl exalmsl; /* 2841_(2258 - 225Bh) */
 
-	unsigned char dmy_225C_227F[0x2280-0x225C];		/* 2841_(225C - 227Fh) */
-};
+	kuchar dmy225c227f[0x2280 - 0x225C]; /* 2841_(225C - 227Fh) */
+} IoB2rCmn;
 
-/*	structure of YBR area	2841_(2280 - 22FFh) */
-struct io_b2r_ybr {
-	union	io_b2r_ybrtrg		YBRTRG;				/* 2841_(2280 - 2283h) */
-	union	io_b2r_ybrctl		YBRCTL;				/* 2841_(2284 - 2287h) */
-	union	io_b2r_ybra			YBRA;				/* 2841_(2288 - 228Bh) */
-	union	io_b2r_ybrofs		YBROFS;				/* 2841_(228C - 228Fh) */
-	union	io_b2r_ybrdef		YBRDEF;				/* 2841_(2290 - 2293h) */
-	union	io_b2r_ybrhsiz		YBRHSIZ;			/* 2841_(2294 - 2297h) */
-	union	io_b2r_ybrvsiz		YBRVSIZ;			/* 2841_(2298 - 229Bh) */
-	union	io_b2r_ybrhblnk		YBRHBLNK;			/* 2841_(229C - 229Fh) */
-	union	io_b2r_dinctl		DINCTL;				/* 2841_(22A0 - 22A3h) */
-	union	io_b2r_dinhsta		DINHSTA;			/* 2841_(22A4 - 22A7h) */
-	union	io_b2r_dinvsta		DINVSTA;			/* 2841_(22A8 - 22ABh) */
-	union	io_b2r_dinhsiz		DINHSIZ;			/* 2841_(22AC - 22AFh) */
-	union	io_b2r_dinvsiz		DINVSIZ;			/* 2841_(22B0 - 22B3h) */
-	union	io_b2r_dinels		DINELS;				/* 2841_(22B4 - 22B7h) */
-	unsigned char dmy_22B8_22BB[0x22BC-0x22B8];		/* 2841_(22B8 - 22BBh) */
-	union	io_b2r_dinerr		DINERR;				/* 2841_(22BC - 22BFh) */
+/*	structure of ybr area	2841_(2280 - 22FFh) */
+typedef struct _IoB2rYbr
+{
+	IoB2rYbrtrg ybrtrg; /* 2841_(2280 - 2283h) */
+	IoB2rYbrctl ybrctl; /* 2841_(2284 - 2287h) */
+	IoB2rYbra ybra; /* 2841_(2288 - 228Bh) */
+	IoB2rYbrofs ybrofs; /* 2841_(228C - 228Fh) */
+	IoB2rYbrdef ybrdef; /* 2841_(2290 - 2293h) */
+	IoB2rYbrhsiz ybrhsiz; /* 2841_(2294 - 2297h) */
+	IoB2rYbrvsiz ybrvsiz; /* 2841_(2298 - 229Bh) */
+	IoB2rYbrhblnk ybrhblnk; /* 2841_(229C - 229Fh) */
+	IoB2rDinctl dinctl; /* 2841_(22A0 - 22A3h) */
+	IoB2rDinhsta dinhsta; /* 2841_(22A4 - 22A7h) */
+	IoB2rDinvsta dinvsta; /* 2841_(22A8 - 22ABh) */
+	IoB2rDinhsiz dinhsiz; /* 2841_(22AC - 22AFh) */
+	IoB2rDinvsiz dinvsiz; /* 2841_(22B0 - 22B3h) */
+	IoB2rDinels dinels; /* 2841_(22B4 - 22B7h) */
+	kuchar dmy22b822bb[0x22BC - 0x22B8]; /* 2841_(22B8 - 22BBh) */
+	IoB2rDinerr dinerr; /* 2841_(22BC - 22BFh) */
 
-	unsigned char dmy_22C0_22FF[0x2300-0x22C0];		/* 2841_(22C0 - 22FFh) */
-};
+	kuchar dmy22c022ff[0x2300 - 0x22C0]; /* 2841_(22C0 - 22FFh) */
+} IoB2rYbr;
 
-/*	structure of YBW area	2841_(2300 - 23FFh) */
-struct io_b2r_ybw {
-	union	io_b2r_ybwtrg		YBWTRG;				/* 2841_(2300 - 2303h) */
-	union	io_b2r_ybwctl		YBWCTL;				/* 2841_(2304 - 2307h) */
-	union	io_b2r_ybwmd		YBWMD;				/* 2841_(2308 - 230Bh) */
-	union	io_b2r_ybwbank		YBWBANK;			/* 2841_(230C - 230Fh) */
+/*	structure of ybw area	2841_(2300 - 23FFh) */
+typedef struct _IoB2rYbw
+{
+	IoB2rYbwtrg ybwtrg; /* 2841_(2300 - 2303h) */
+	IoB2rYbwctl ybwctl; /* 2841_(2304 - 2307h) */
+	IoB2rYbwmd ybwmd; /* 2841_(2308 - 230Bh) */
+	IoB2rYbwbank ybwbank; /* 2841_(230C - 230Fh) */
 
-	unsigned char dmy_2310_233F[0x2340-0x2310];		/* 2841_(2310 - 233Fh) */
+	kuchar dmy2310233f[0x2340 - 0x2310]; /* 2841_(2310 - 233Fh) */
 
-	union	io_b2r_ybwa			YBWA;				/* 2841_(2340 - 236Fh) */
+	IoB2rYbwa ybwa; /* 2841_(2340 - 236Fh) */
 
-	unsigned char dmy_2370_237F[0x2380-0x2370];		/* 2841_(2370 - 237Fh) */
+	kuchar dmy2370237f[0x2380 - 0x2370]; /* 2841_(2370 - 237Fh) */
 
-	union	io_b2r_ybwdef		YBWDEF;				/* 2841_(2380 - 2383h) */
-	union	io_b2r_ybwtrmh		YBWTRMH;			/* 2841_(2384 - 2387h) */
-	union	io_b2r_ybwtrmv		YBWTRMV;			/* 2841_(2388 - 238Bh) */
+	IoB2rYbwdef ybwdef; /* 2841_(2380 - 2383h) */
+	IoB2rYbwtrmh ybwtrmh; /* 2841_(2384 - 2387h) */
+	IoB2rYbwtrmv ybwtrmv; /* 2841_(2388 - 238Bh) */
 
-	unsigned char dmy_238C_23FF[0x2400-0x238C];		/* 2841_(238C - 23FFh) */
-};
+	kuchar dmy238c23ff[0x2400 - 0x238C]; /* 2841_(238C - 23FFh) */
+} IoB2rYbw;
 
 /* Define i/o mapping */
-struct io_b2r{
+typedef struct _IoB2r
+{
 	/* JDSB2R */
-	struct io_b2r_fb2r			F_B2R;				/* 2841_(2000 - 21FFh) */
-	struct io_b2r_ybch			YBCH;				/* 2841_(2200 - 223Fh) */
-	struct io_b2r_cmn			B2R_CMN;			/* 2841_(2240 - 227Fh) */
-	struct io_b2r_ybr			YBR;				/* 2841_(2280 - 22FFh) */
-	struct io_b2r_ybw			YBW;				/* 2841_(2300 - 23FFh) */
+	IoB2rFb2r fB2r; /* 2841_(2000 - 21FFh) */
+	IoB2rYbch ybch; /* 2841_(2200 - 223Fh) */
+	IoB2rCmn b2rCmn; /* 2841_(2240 - 227Fh) */
+	IoB2rYbr ybr; /* 2841_(2280 - 22FFh) */
+	IoB2rYbw ybw; /* 2841_(2300 - 23FFh) */
 
-};
-
-extern volatile struct io_b2r		IO_B2R_P1;
-extern volatile struct io_b2r		IO_B2R_P2;
-extern volatile struct io_b2r		IO_B2R_P3;
+} IoB2r;
 
 
-KConstType	jdsb2r_f2e_get_type(void);
-Jdsb2rF2e*	jdsb2r_f2e_new(void);
+extern volatile IoB2r ioB2rP1;
+extern volatile IoB2r ioB2rP2;
+extern volatile IoB2r ioB2rP3;
+
+
+KConstType jdsb2r_f2e_get_type(void);
+Jdsb2rF2e* jdsb2r_f2e_new(void);
 
 
 #endif/*__JDSB2R_F2E_H__*/

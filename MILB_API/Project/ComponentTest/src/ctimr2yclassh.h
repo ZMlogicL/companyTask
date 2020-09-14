@@ -25,26 +25,31 @@ typedef struct _CtImR2yClasshPrivate CtImR2yClasshPrivate;
 struct _CtImR2yClassh
 {
 	KObject parent;
+	ImR2yCtrl2*imR2yCtrl2;
+	ImR2yClk*imR2yClk;
+	ImR2yCtrl*imR2yCtrl;
+	ImR2yStat*imR2yStat;
+	ImR2yEdge*imR2yEdge;
 };
 
 KConstType ct_im_r2y_classh_get_type(void);
 CtImR2yClassh* ct_im_r2y_classh_new(void);
 CtImR2yClassh* ct_im_r2y_classh_get(void);
 
-INT32 ct_im_r2y_classh_1_55(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_56(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_57(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_58(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_59(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_60(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_61(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_62(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_63(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_64(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_65(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_66(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_67(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_68(UCHAR pipeNo);
-INT32 ct_im_r2y_classh_1_69(UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_55(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_56(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_57(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_58(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_59(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_60(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_61(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_62(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_63(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_64(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_65(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_66(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_67(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_68(CtImR2yClassh *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classh_1_69(CtImR2yClassh *self,UCHAR pipeNo);
 
 #endif /* __CT_IM_R2Y_CLASSH_H__ */

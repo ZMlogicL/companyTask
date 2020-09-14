@@ -3,7 +3,7 @@
 *@date                :2020-08-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -17,18 +17,26 @@
 #define __DD_TIMESTAMP_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
 #include "arm.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define DD_TYPE_TDDESTAMP			(dd_timestamp_get_type())
-#define DD_TDDESTAMP(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, DdTimestamp))
-#define DD_IS_TDDESTAMP(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, DD_TYPE_TDDESTAMP))
+
+#define DD_TYPE_TIMESTAMP							(dd_timestamp_get_type ())
+#define DD_TIMESTAMP(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), DD_TYPE_TIMESTAMP, DdTimestamp))
+#define DD_TIMESTAMP_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), DD_TYPE_TIMESTAMP, DdTimestampClass))
+#define DD_IS_TIMESTAMP(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), DD_TYPE_TIMESTAMP))
+#define DD_IS_TIMESTAMP_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), DD_TYPE_TIMESTAMP))
+#define DD_TIMESTAMP_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), DD_TYPE_TIMESTAMP, DdTimestampClass))
 
 /*----------------------------------------------------------------------*/
 /* Definition															*/
@@ -131,8 +139,9 @@ extern "C" {
 
 
 
-typedef struct _DdTimestamp 				DdTimestamp;
-typedef struct _DdTimestampPrivate 	DdTimestampPrivate;
+typedef struct _DdTimestamp						DdTimestamp;
+typedef struct _DdTimestampClass			DdTimestampClass;
+typedef struct _DdTimestampPrivate 		DdTimestampPrivate;
 
 
 /*----------------------------------------------------------------------*/
@@ -145,27 +154,33 @@ typedef struct _DdTimestampPrivate 	DdTimestampPrivate;
 /** Control value */
 struct _DdTimestamp
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustom * ddmiUserCustom;
 	/**< Halt on Debug of TIMESTAMP CNTCR register<br>
 	 <ul>
 	 <li>0:has no effect
 	 <li>1:halts the counter
 	 </ul> */
-	kulong hdbg;
+	gulong hdbg;
 	/**< Counter of TIMESTAMP CNTCVL and CNTCVU register<br>
 	 64bit counter value. */
 	kulonglong counter;
 	/**< Frequency of TIMESTAMP CNTFID0 register<br>
 	 Value range:0x00000001 to 0xEE6B2800(4GHz) */
-	kulong frequency;
+	gulong frequency;
+};
+
+struct _DdTimestampClass
+{
+	GObjectClass parentClass;
 };
 
 
 /*----------------------------------------------------------------------*/
 /* Function																*/
 /*----------------------------------------------------------------------*/
-KConstType 		    		dd_timestamp_get_type(void);
-DdTimestamp*		        dd_timestamp_new(void);
+GType						dd_timestamp_get_type(void)	G_GNUC_CONST;
+DdTimestamp*					dd_timestamp_new(void);
 
 /**
  Initialize all Timestamp Register.
@@ -190,7 +205,7 @@ extern void dd_timestamp_init (DdTimestamp*self);
  @remarks	This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
  This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
  */
-extern kint32 dd_timestamp_open (DdTimestamp*self, kint32 tmout);
+extern gint32 dd_timestamp_open (DdTimestamp*self, gint32 tmout);
 
 /**
  Setting of common control variable for Timestamp Counter.
@@ -198,7 +213,7 @@ extern kint32 dd_timestamp_open (DdTimestamp*self, kint32 tmout);
  @retval	D_DDIM_OK: Normal end
  @retval	DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR: Input Parameter Error
  */
-extern kint32 dd_timestamp_ctrl (DdTimestamp*self, DdTimestamp* timestampCtrl);
+extern gint32 dd_timestamp_ctrl (DdTimestamp*self);
 
 /**
  Timestamp is started.
@@ -216,7 +231,7 @@ extern void dd_timestamp_stop (DdTimestamp*self);
  @retval	DdTimestamp_D_DD_TIMESTAMP_SEM_NG: UnLock Error
  @remarks	This API uses DDIM_User_Sig_Sem().
  */
-extern kint32 dd_timestamp_close (DdTimestamp*self);
+extern gint32 dd_timestamp_close (DdTimestamp*self);
 
 /**
  Get value of TIMESTAMP CNTCVL and CNTCVU register.
@@ -224,7 +239,7 @@ extern kint32 dd_timestamp_close (DdTimestamp*self);
  @retval	D_DDIM_OK							: Normal end
  @retval	DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR	: Input Parameter Error
  */
-extern kint32 dd_timestamp_get_counter (DdTimestamp*self, kulonglong* timestampCounter);
+extern gint32 dd_timestamp_get_counter (DdTimestamp*self, kulonglong* timestampCounter);
 
 /**
  Get value of Timestamp Control value.
@@ -232,14 +247,14 @@ extern kint32 dd_timestamp_get_counter (DdTimestamp*self, kulonglong* timestampC
  @retval	D_DDIM_OK						: Noraml end
  @retval	DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR	: Input Parameter Error
  */
-extern kint32 dd_timestamp_get_control (DdTimestamp*self, DdTimestamp* timestampCtrl);
+extern gint32 dd_timestamp_get_control (DdTimestamp*self);
 
 /**
  Set value of TIMESTAMP CNTCVL and CNTCVU register.
  @param [in]		timestampCounter		: Timestamp Counter
  @retval	D_DDIM_OK								: Normal end
  */
-extern kint32 dd_timestamp_set_counter (DdTimestamp*self, kulonglong timestampCounter);
+extern gint32 dd_timestamp_set_counter (DdTimestamp*self, kulonglong timestampCounter);
 
 #ifdef CO_DDIM_UTILITY_USE
 //---------------------------- utility section ---------------------------
@@ -253,7 +268,8 @@ extern kint32 dd_timestamp_set_counter (DdTimestamp*self, kulonglong timestampCo
  @retval	D_DDIM_OK						: Noraml end
  @retval	DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR		: Input Parameter Error
  */
-extern kint32 dd_timestamp_set_timer (DdTimestamp*self, kulong usec, kulong frequency);
+extern gint32 dd_timestamp_set_timer (DdTimestamp*self, gulong usec, gulong frequency);
+DdTimestamp* dd_timestamp_get(void);
 
 /*@}*/
 #endif	// CO_DDIM_UTILITY_USE
@@ -273,7 +289,7 @@ extern kint32 dd_timestamp_set_timer (DdTimestamp*self, kulong usec, kulong freq
  <b>Please call these APIs from either of one of multiple cores.<br>
  These are not under exclusive control between the cores.</b>
  @code
- kint32	ret;									// Return value
+ gint32	ret;									// Return value
  DdTimestamp	timestampCtrl;
 
  timestampCtrl.hdbg = 0;						// has no effect
@@ -305,6 +321,8 @@ extern kint32 dd_timestamp_set_timer (DdTimestamp*self, kulong usec, kulong freq
  }
  @endcode
  @}*/
+
+G_END_DECLS
 
 
 #endif /* __DD_TIMESTAMP_H__ */

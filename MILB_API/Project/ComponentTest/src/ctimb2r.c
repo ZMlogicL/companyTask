@@ -12,16 +12,20 @@
 *
 */
 
-#include "ct_im_b2r.h"
+#include "ctimb2r.h"
 
-#include "im_b2r.h"
+// #include "im_b2r.h"
+#include "../../ImageMacro/src/imb2r.h"
 #include "im_pro.h"
-#include "im_pro_common.h"
+// #include "im_pro_common.h"
+#include "../../ImageMacro/src/improcommon.h"
 
 #include "driver_common.h"
-#include "ddim_user_custom.h"
+// #include "ddim_user_custom.h"
+#include "../../../../milb_api_usercustom/src/ddimusercustom.h"
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #endif
 
 #include "jdsb2r.h"
@@ -55,8 +59,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImB2r, ct_im_b2r);
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
-#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (D_IM_B2R_PIPE1+1))
-#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (D_IM_B2R_PIPE2+1))
+#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE1+1))
+#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE2+1))
 
 
 struct _CtImB2rPrivate
@@ -499,10 +503,10 @@ void ct_im_b2r_run(  CtImB2r *self )
 
 	Ddim_Print(( "ct_im_b2r_run( %u, %u, %u ) Begin\n", priv->ctIdx1st, priv->ctIdx2nd, priv->ctIdx3rd ));
 
-	gctImB2rInAddrRaw.raw.addr = (void*)D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
-	gctImB2rOutAddrRgb.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
-	gctImB2rOutAddrRgb.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
-	gctImB2rOutAddrRgb.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
+	gctImB2rInAddrRaw.raw.addr = (void*)CtImB2r_D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
+	gctImB2rOutAddrRgb.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
+	gctImB2rOutAddrRgb.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
+	gctImB2rOutAddrRgb.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
 
 
 	if( is_init == 0 ) {
@@ -516,7 +520,7 @@ void ct_im_b2r_run(  CtImB2r *self )
 #endif // CO_DEBUG_ON_PC
 		if( !((priv->ctIdx1st == 1) && (priv->ctIdx2nd == 1)) ) {
 			Ddim_Print(( "Im_B2R_Init() Begin\n" ));
-			Im_B2R_Init( D_IM_B2R_PIPE12 );
+			Im_B2R_Init( ImB2r_D_IM_B2R_PIPE12 );
 			Ddim_Print(( "Im_B2R_Init() End\n" ));
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
 #ifdef CO_DEBUG_ON_PC
@@ -536,9 +540,9 @@ void ct_im_b2r_run(  CtImB2r *self )
 
 	if(( priv->ctIdx1st == 1 ) || ( priv->ctIdx1st == 2 )){
 #ifdef CO_DEBUG_ON_PC
-		for( loop_cnt = D_IM_B2R_PIPE1; loop_cnt <= D_IM_B2R_PIPE2; loop_cnt++ ){
+		for( loop_cnt = ImB2r_D_IM_B2R_PIPE1; loop_cnt <= ImB2r_D_IM_B2R_PIPE2; loop_cnt++ ){
 #else // CO_DEBUG_ON_PC
-		for( loop_cnt = D_IM_B2R_PIPE1; loop_cnt <= D_IM_B2R_PIPE12; loop_cnt++ ){
+		for( loop_cnt = ImB2r_D_IM_B2R_PIPE1; loop_cnt <= ImB2r_D_IM_B2R_PIPE12; loop_cnt++ ){
 #endif // CO_DEBUG_ON_PC
 			self->pipeNo = loop_cnt;
 			switch( priv->ctIdx1st ) {

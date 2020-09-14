@@ -11,7 +11,7 @@ SUBDIRS      :=
 ### List of source files
 ### note: If current directory does not have C/ASM source files in "src" directory, CSRC/ASRC is empty.
 CSRC :=
-CSRC += dd_pmu.c
+CSRC += ddpmu.c
 
 ASRC :=
 ASRC +=

@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kjdsshdr.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KJdsshdr, k_jdsshdr);
+
 #define K_JDSSHDR_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KJdsshdrPrivate, K_TYPE_JDSSHDR))
+
 
 struct _KJdsshdrPrivate
 {
 
 };
+
 
 volatile IoJdsshdr ioShdr __attribute__((section(".SHDR")));
 volatile IoJdsshdrTbl ioShdrTbl __attribute__((section(".SHDR_TBL")));
@@ -44,4 +49,3 @@ KJdsshdr* k_jdsshdr_new(void)
     KJdsshdr* self = k_object_new_with_private(K_TYPE_JDSSHDR, sizeof(KJdsshdrPrivate));
     return self;
 }
-

@@ -41,161 +41,161 @@ struct  _KJdsiip4b1
 /*  structure of pixfmttbl0    (2888_0300h)    */
 typedef union _IoIipIpxfmttbl0
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long p :1;
-		unsigned long :3;
-		unsigned long ftype :3;
-		unsigned long :1;
-		unsigned long pfmt :4;
-		unsigned long alpha :1;
-		unsigned long :3;
-		unsigned long pdepth :3;
-		unsigned long :1;
-		unsigned long adepth :3;
-		unsigned long :1;
-		unsigned long chkyordr :8;
+		kulong p :1;
+		kulong :3;
+		kulong ftype :3;
+		kulong :1;
+		kulong pfmt :4;
+		kulong alpha :1;
+		kulong :3;
+		kulong pdepth :3;
+		kulong :1;
+		kulong adepth :3;
+		kulong :1;
+		kulong chkyordr :8;
 	} bit;
 } IoIipIpxfmttbl0;
 
 /*  structure of pixfmttbl1    (2888_0304h)    */
 typedef union _IoIipIpxfmttbl1
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long sgyg :1;
-		unsigned long sgb :1;
-		unsigned long sgr :1;
-		unsigned long sga :1;
-		unsigned long asubspl :2;
-		unsigned long :2;
-		unsigned long mtifyg :2;
-		unsigned long mtifb :2;
-		unsigned long mtifr :2;
-		unsigned long mtifa :2;
-		unsigned long oarbhv :1;
-		unsigned long :15;
+		kulong sgyg :1;
+		kulong sgb :1;
+		kulong sgr :1;
+		kulong sga :1;
+		kulong asubspl :2;
+		kulong :2;
+		kulong mtifyg :2;
+		kulong mtifb :2;
+		kulong mtifr :2;
+		kulong mtifa :2;
+		kulong oarbhv :1;
+		kulong :15;
 	} bit;
 } IoIipIpxfmttbl1;
 
 /*  structure of pixfmttbl2    (2888_0308h)    */
 typedef union _IoIipIpxfmttbl2
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long oarvalyg :16;
-		unsigned long oarvalb :16;
+		kulong oarvalyg :16;
+		kulong oarvalb :16;
 	} bit;
 } IoIipIpxfmttbl2;
 
 /*  structure of pixfmttbl3    (2888_030Ch)    */
 typedef union _IoIipIpxfmttbl3
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long oarvalr :16;
-		unsigned long oarvala :16;
+		kulong oarvalr :16;
+		kulong oarvala :16;
 	} bit;
 } IoIipIpxfmttbl3;
 
 /*  structure of pixfmttbl4    (2888_0310h)    */
 typedef union _IoIipIpxfmttbl4
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		long ghszyg :18;
-		unsigned long :14;
+		klong ghszyg :18;
+		kulong :14;
 	} bit;
 } IoIipIpxfmttbl4;
 
 /*  structure of pixfmttbl5    (2888_0314h)    */
 typedef union _IoIipIpxfmttbl5
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		long ghszb :18;
-		unsigned long :14;
+		klong ghszb :18;
+		kulong :14;
 	} bit;
 } IoIipIpxfmttbl5;
 
 /*  structure of pixfmttbl6    (2888_0318h)    */
 typedef union _IoIipIpxfmttbl6
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		long ghszr :18;
-		unsigned long :14;
+		klong ghszr :18;
+		kulong :14;
 	} bit;
 } IoIipIpxfmttbl6;
 
 /*  structure of pixfmttbl7    (2888_031Ch)    */
 typedef union _IoIipIpxfmttbl7
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		long ghsza :18;
-		unsigned long :14;
+		klong ghsza :18;
+		kulong :14;
 	} bit;
 } IoIipIpxfmttbl7;
 
 /*  structure of pixfmttbl8    (2888_0320h)    */
 typedef union _IoIipIpxfmttbl8
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long pichsz :15;
-		unsigned long :1;
-		unsigned long picvsz :14;
-		unsigned long :2;
+		kulong pichsz :15;
+		kulong :1;
+		kulong picvsz :14;
+		kulong :2;
 	} bit;
 } IoIipIpxfmttbl8;
 
 /*  structure of pixfmttbl9    (2888_0324h)    */
 typedef union _IoIipIpxfmttbl9
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long adrsyg :32;
+		kulong adrsyg :32;
 	} bit;
 } IoIipIpxfmttbl9;
 
 /*  structure of pixfmttbl10   (2888_0328h)    */
 typedef union _IoIipIpxfmttbl10
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long adrsb :32;
+		kulong adrsb :32;
 	} bit;
 } IoIipIpxfmttbl10;
 
 /*  structure of pixfmttbl11   (2888_032Ch)    */
 typedef union _IoIipIpxfmttbl11
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long adrsr :32;
+		kulong adrsr :32;
 	} bit;
 } IoIipIpxfmttbl11;
 
 /*  structure of pixfmttbl12   (2888_0330h)    */
 typedef union _IoIipIpxfmttbl12
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long adrsa :32;
+		kulong adrsa :32;
 	} bit;
 } IoIipIpxfmttbl12;
 
@@ -217,54 +217,54 @@ typedef struct _IoIipPixfmttbl
 	IoIipIpxfmttbl11 pixfmttbl11; /* 2888_(032C - 032Fh) */
 	IoIipIpxfmttbl12 pixfmttbl12; /* 2888_(0330 - 0333h) */
 
-	unsigned char dmy0334033f[0x0340 - 0x0334]; /* 2888_(0334 - 033Fh) */
+	kuchar dmy0334033f[0x0340 - 0x0334]; /* 2888_(0334 - 033Fh) */
 
 } IoIipPixfmttbl;
 
 /*  structure of unitinftbl0    (2888_0940h)    */
 typedef union _IoIipUinftbl0
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long swtrg :2;
-		unsigned long :2;
-		unsigned long hwen :1;
-		unsigned long :3;
-		unsigned long chain :1;
-		unsigned long :23;
+		kulong swtrg :2;
+		kulong :2;
+		kulong hwen :1;
+		kulong :3;
+		kulong chain :1;
+		kulong :23;
 	} bit;
 } IoIipUinftbl0;
 
 /*  structure of unitinftbl1    (2888_0948h)    */
 typedef union _IoIipUinftbl1
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct
 	{
-		unsigned long pldunitLo :32;
-		unsigned long pldunitHi :32;
+		kulong pldunitLo :32;
+		kulong pldunitHi :32;
 	} bit;
 } IoIipUinftbl1;
 
 /*  structure of unitinftbl2    (2888_0950h)    */
 typedef union _IoIipUinftbl2
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long padrs :32;
+		kulong padrs :32;
 	} bit;
 } IoIipUinftbl2;
 
 /*  structure of unitsr (2888_0954h)    */
 typedef union _IoIipUinftblUnitsr
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long unitsr :1;
-		unsigned long :31;
+		kulong unitsr :1;
+		kulong :31;
 	} bit;
 } IoIipUinftblUnitsr;
 
@@ -274,24 +274,24 @@ typedef struct _IoIipUinftbl
 	/* JDSIMG */
 	IoIipUinftbl0 unitinftbl0; /* 2888_(0940 - 0943h) */
 
-	unsigned char dmy09440947[0x0948 - 0x0944]; /* 2888_(0944 - 0947h) */
+	kuchar dmy09440947[0x0948 - 0x0944]; /* 2888_(0944 - 0947h) */
 
 	IoIipUinftbl1 unitinftbl1; /* 2888_(0948 - 094Fh) */
 	IoIipUinftbl2 unitinftbl2; /* 2888_(0950 - 0953h) */
 	IoIipUinftblUnitsr unitsr; /* 2888_(0954 - 0957h) */
 
-	unsigned char dmy0958095f[0x0960 - 0x0958]; /* 2888_(0958 - 095Fh) */
+	kuchar dmy0958095f[0x0960 - 0x0958]; /* 2888_(0958 - 095Fh) */
 
 } IoIipUinftbl;
 
 /*  structure of lutram (2982_0000h)    */
 typedef union _IoIipLutram
 {
-	unsigned long word[6][1024];
+	kulong word[6][1024];
 	struct
 	{
-		unsigned long lut :14;
-		unsigned long :18;
+		kulong lut :14;
+		kulong :18;
 	} bit[6][1024];
 } IoIipLutram;
 

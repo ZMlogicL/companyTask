@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -62,8 +62,8 @@ static volatile UCHAR S_G_IM_XCH_ICLK_CTRL_CNT = 0;
  */
 static VOID imXchOnIclk( VOID );
 static VOID imXchOffIclk( VOID );
-static VOID imXchInthandSub( E_IM_XCH_CH_SEL xch );
-static INT32 imXchStartProcess( E_IM_XCH_CH_SEL xch );
+static VOID imXchInthandSub( ImXchChSel xch );
+static INT32 imXchStartProcess( ImXchChSel xch );
 
 
 /*
@@ -84,14 +84,14 @@ static VOID imXchOffIclk( VOID )
 #endif	// CO_ACT_XCH_ICLOCK
 }
 
-static VOID imXchInthandSub( E_IM_XCH_CH_SEL xch )
+static VOID imXchInthandSub( ImXchChSel xch )
 {
 	DDIM_USER_ER	ercd;
 
 	ImXch* imXch = im_xch_get();
 
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		ercd = DDIM_User_Set_Flg( FID_IM_XCH, D_IM_XCH_FLG_0_WAIT_END );
 		if( ercd != D_DDIM_USER_E_OK ){
@@ -118,13 +118,13 @@ static VOID imXchInthandSub( E_IM_XCH_CH_SEL xch )
 
 	}
 
-	if( (im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == E_IM_XCH_SYNC_TYPE_ASYNC) && (im_xch_get_gIM_Xch_Mng_Save(imXch,xch).pCallBack) ){
+	if( (im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == ImXch_SYNC_TYPE_ASYNC) && (im_xch_get_gIM_Xch_Mng_Save(imXch,xch).pCallBack) ){
 		// Call Back function
 		((VOID (*)()) im_xch_get_gIM_Xch_Mng_Save(imXch,xch).pCallBack)();
 	}
 }
 
-static INT32 imXchStartProcess( E_IM_XCH_CH_SEL xch )
+static INT32 imXchStartProcess( ImXchChSel xch )
 {
 	DDIM_USER_ER ercd;
 	DDIM_USER_FLGPTN flg_ptn;
@@ -132,7 +132,7 @@ static INT32 imXchStartProcess( E_IM_XCH_CH_SEL xch )
 	ImXch* imXch = im_xch_get();
 
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		im_xch_on_pclk(NULL);	// PCLK on
 		Im_XCH_Dsb();
 
@@ -187,7 +187,7 @@ static INT32 imXchStartProcess( E_IM_XCH_CH_SEL xch )
 		im_xch_off_pclk(NULL);	// PCLK off
 		Im_XCH_Dsb();
 
-		if( im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == E_IM_XCH_SYNC_TYPE_SYNC ){
+		if( im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == ImXch_SYNC_TYPE_SYNC ){
 #ifdef CO_DEBUG_ON_PC
 //			Ddim_Print(("Call Im_Xch_Int_Handler() for PC route check.\n"));
 			IO_XCH.XCHICE.bit.XE0	= 1;
@@ -257,7 +257,7 @@ static INT32 imXchStartProcess( E_IM_XCH_CH_SEL xch )
 		im_xch_off_pclk(NULL);	// PCLK off
 		Im_XCH_Dsb();
 
-		if( im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == E_IM_XCH_SYNC_TYPE_SYNC ){
+		if( im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType == ImXch_SYNC_TYPE_SYNC ){
 #ifdef CO_DEBUG_ON_PC
 //			Ddim_Print(("Call Im_Xch_Int_Handler() for PC route check.\n"));
 			IO_XCH.XCHICE.bit.XE1	= 1;
@@ -336,7 +336,7 @@ INT32 im_xch_softreset( ImXch*self )
 	return D_IM_XCH_OK;
 }
 
-INT32 im_xch_open( ImXch*self,E_IM_XCH_CH_SEL xch, INT32 tmout )
+INT32 im_xch_open( ImXch*self,ImXchChSel xch, INT32 tmout )
 {
 	DDIM_USER_ER	ercd;
 
@@ -396,14 +396,14 @@ VOID im_xch_init( ImXch*self )
 	return;
 }
 
-INT32 im_xch_start_sync( ImXch*self,E_IM_XCH_CH_SEL xch )
+INT32 im_xch_start_sync( ImXch*self,ImXchChSel xch )
 {
 	INT32 ercd;
 
 	ImXch* imXch = im_xch_get();
 
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		//X0ch
 		im_xch_on_pclk(NULL);	// PCLK on
 		Im_XCH_Dsb();
@@ -448,7 +448,7 @@ INT32 im_xch_start_sync( ImXch*self,E_IM_XCH_CH_SEL xch )
 		Im_XCH_Dsb();
 	}
 
-	im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType = E_IM_XCH_SYNC_TYPE_SYNC;
+	im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType = ImXch_SYNC_TYPE_SYNC;
 
 	// Processing Start
 	ercd = imXchStartProcess( xch );
@@ -460,14 +460,14 @@ INT32 im_xch_start_sync( ImXch*self,E_IM_XCH_CH_SEL xch )
 	return D_IM_XCH_OK;
 }
 
-INT32 im_xch_start_async( ImXch*self,E_IM_XCH_CH_SEL xch )
+INT32 im_xch_start_async( ImXch*self,ImXchChSel xch )
 {
 	INT32 ercd;
 
 	ImXch* imXch = im_xch_get();
 
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		im_xch_on_pclk(NULL);	// PCLK on
 		Im_XCH_Dsb();
@@ -511,7 +511,7 @@ INT32 im_xch_start_async( ImXch*self,E_IM_XCH_CH_SEL xch )
 		Im_XCH_Dsb();
 	}
 
-	im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType = E_IM_XCH_SYNC_TYPE_ASYNC;
+	im_xch_get_gIM_Xch_Mng_Save(imXch,xch).syncType = ImXch_SYNC_TYPE_ASYNC;
 
 	ercd = imXchStartProcess( xch );
 	if( ercd != D_IM_XCH_OK ){
@@ -562,12 +562,12 @@ INT32 im_xch_get_histogram( ImXch*self,ULONG* histogram_buf )
 	return D_IM_XCH_OK;
 }
 
-INT32 im_xch_wait_end( ImXch*self,E_IM_XCH_CH_SEL xch )
+INT32 im_xch_wait_end( ImXch*self,ImXchChSel xch )
 {
 	DDIM_USER_FLGPTN flg_ptn;
 	DDIM_USER_ER ercd;
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		ercd = DDIM_User_Twai_Flg( FID_IM_XCH, D_IM_XCH_FLG_0_WAIT_END, D_DDIM_USER_TWF_ORW, &flg_ptn, D_DDIM_WAIT_END_TIME );
 		if( ercd != D_DDIM_USER_E_OK ){
@@ -586,7 +586,7 @@ INT32 im_xch_wait_end( ImXch*self,E_IM_XCH_CH_SEL xch )
 	return D_IM_XCH_OK;
 }
 
-INT32 im_xch_close( ImXch*self,E_IM_XCH_CH_SEL xch )
+INT32 im_xch_close( ImXch*self,ImXchChSel xch )
 {
 	DDIM_USER_ER ercd;
 
@@ -667,14 +667,14 @@ VOID im_xch_int_handler( VOID )
 			// X0ch
 			if( (IO_XCH.XCHICE.bit.XE0 == 1) && (IO_XCH.XCHICF.bit.__XF0 == 1) ){
 				IO_XCH.XCHICF.word &= D_IM_XCH_ICF_XF0_OFF;	// clear interrupt factor flag X0ch
-				imXchInthandSub( E_IM_XCH_CH_SEL_0 );
+				imXchInthandSub( ImXch_XCH_CH_SEL_0 );
 			}
 		}
 		if( IO_XCH.XCHICE.bit.XE1 == 1 ){
 			// X1ch
 			if( (IO_XCH.XCHICE.bit.XE1 == 1) && (IO_XCH.XCHICF.bit.__XF1 == 1) ){
 				IO_XCH.XCHICF.word &= D_IM_XCH_ICF_XF1_OFF;	// clear interrupt factor flag X1ch
-				imXchInthandSub( E_IM_XCH_CH_SEL_1 );
+				imXchInthandSub( ImXch_XCH_CH_SEL_1 );
 			}
 		}
 	}
@@ -683,13 +683,13 @@ VOID im_xch_int_handler( VOID )
 	Im_XCH_Dsb();
 }
 
-INT32 im_xch_fill( ImXch*self,E_IM_XCH_CH_SEL xch, UCHAR fill_data, USHORT gl_width, UINT32 dst_addr, USHORT width, USHORT lines )
+INT32 im_xch_fill( ImXch*self,ImXchChSel xch, UCHAR fill_data, USHORT gl_width, UINT32 dst_addr, USHORT width, USHORT lines )
 {
 	INT32 ret;
 	ImXchCtrlCmn	xch_ctrl_cmn;
 
 #ifdef CO_PARAM_CHECK
-	if( (xch != E_IM_XCH_CH_SEL_0) && (xch != E_IM_XCH_CH_SEL_1) ){
+	if( (xch != ImXch_XCH_CH_SEL_0) && (xch != ImXch_XCH_CH_SEL_1) ){
 		// Channel number error
 		Ddim_Assertion(("I:im_xch_fill: Channel number error. xch = %d\n", xch));
 		return D_IM_XCH_INPUT_PARAM_ERR;
@@ -713,19 +713,19 @@ INT32 im_xch_fill( ImXch*self,E_IM_XCH_CH_SEL xch, UCHAR fill_data, USHORT gl_wi
 		return ret;
 	}
 
-	ret = Im_Xch_Ctrl_Common( xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
 		im_xch_close(NULL, xch );
-		Ddim_Print(("I:im_xch_fill: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	ret = Im_Xch_Ctrl_Fill( xch, fill_data );
+	ret = im_xch1_ctrl_fill(NULL, xch, fill_data );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Fill error
 		im_xch_close(NULL, xch );
-		Ddim_Print(("I:im_xch_fill: Im_Xch_Ctrl_Fill error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill: im_xch1_ctrl_fill error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -766,7 +766,7 @@ INT32 im_xch_fill_ex_sync( ImXch*self,ImXchFillEx* fill_param )
 	xch_ctrl_cmn.pCallBack	= NULL;
 
 	// set common control structure
-	im_xch_conv_fill_param( fill_param, &xch_ctrl_cmn );
+	im_xch2_conv_fill_param( NULL,fill_param, &xch_ctrl_cmn );
 
 	// Xch open
 	ret = im_xch_open(NULL, fill_param->xch, D_DDIM_WAIT_END_TIME );
@@ -777,18 +777,18 @@ INT32 im_xch_fill_ex_sync( ImXch*self,ImXchFillEx* fill_param )
 	}
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( fill_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, fill_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
 		im_xch_close(NULL, fill_param->xch );
-		Ddim_Print(("I:im_xch_fill_ex_sync: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill_ex_sync: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
-	ret = Im_Xch_Ctrl_Fill( fill_param->xch, fill_param->fillDate );
+	ret = im_xch1_ctrl_fill(NULL, fill_param->xch, fill_param->fillDate );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Fill error
 		im_xch_close(NULL, fill_param->xch );
-		Ddim_Print(("I:im_xch_fill_ex_sync: Im_Xch_Ctrl_Fill error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill_ex_sync: im_xch1_ctrl_fill error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -832,19 +832,19 @@ INT32 im_xch_fill_ex_async( ImXch*self,ImXchFillEx* fill_param, VP_CALLBACK pCal
 	xch_ctrl_cmn.pCallBack	= pCallBack;
 
 	// set common control structure
-	im_xch_conv_fill_param( fill_param, &xch_ctrl_cmn );
+	im_xch2_conv_fill_param( NULL,fill_param, &xch_ctrl_cmn );
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( fill_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, fill_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
-		Ddim_Print(("I:im_xch_fill_ex_async: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill_ex_async: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
-	ret = Im_Xch_Ctrl_Fill( fill_param->xch, fill_param->fillDate );
+	ret = im_xch1_ctrl_fill(NULL, fill_param->xch, fill_param->fillDate );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Fill error
-		Ddim_Print(("I:im_xch_fill_ex_async: Im_Xch_Ctrl_Fill error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch_fill_ex_async: im_xch1_ctrl_fill error. ret = 0x%X\n", ret));
 		return ret;
 	}
 

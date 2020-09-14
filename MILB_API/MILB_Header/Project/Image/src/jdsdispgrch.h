@@ -3,7 +3,7 @@
  *@date                :2020-09-09
  *@author              :申雨
  *@brief               :sns 索喜rtos
- *@rely                :klib
+ *@rely                :glib
  *@function
  *sns 索喜rtos，采用ETK-C语言编写
  *设计的主要功能:
@@ -18,12 +18,8 @@
  #define __JDSDISP_GRCH_H__
 
 
- #include <klib.h>
-
-
- #define JDSDISP_TYPE_GRCH				(jdsdisp_grch_get_type())
- #define JDSDISP_GRCH(obj)				(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsdispGrch))
- #define JDSDISP_IS_GRCH(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSDISP_TYPE_GRCH))
+#include <stdio.h>
+#include <glib-object.h>
 
 
  typedef union 				_IoJdsgrchRegGrrst IoJdsgrchRegGrrst;
@@ -54,333 +50,331 @@
  typedef union 				_IoJdsgrchRegGry2r IoJdsgrchRegGry2r;
  typedef union 				_IoJdsgrchRegGralp IoJdsgrchRegGralp;
  typedef struct 				_IoJdsgrchReg IoJdsgrchReg;
- typedef struct 				_JdsdispGrch JdsdispGrch;
- typedef struct 				_JdsdispGrchPrivate	JdsdispGrchPrivate;
 
  union _IoJdsgrchRegGrrst{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   sr  :1;
-         kulong       :31;
+         gulong   sr  :1;
+         gulong       :31;
      }bit;
  };
 
  /*  structure of GRTRG  (2890_2100h)    */
  union _IoJdsgrchRegGrtrg{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   trg :2;
-         kulong       :30;
+         gulong   trg :2;
+         gulong       :30;
      }bit;
  };
 
  /*  structure of GRRPGCTL   (2890_2110h)    */
  union _IoJdsgrchRegGrrpgctl{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   rpgtmg  :1;
-         kulong           :31;
+         gulong   rpgtmg  :1;
+         gulong           :31;
      }bit;
  };
 
  /*  structure of GRIDT  (2890_2200h)    */
  union _IoJdsgrchRegGridt{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   ifmt    :3;
-         kulong           :1;
-         kulong   nbt     :2;
-         kulong           :2;
-         kulong           :8;
-         kulong   cache   :4;
-         kulong   prot    :3;
-         kulong           :1;
-         kulong   slvsl   :1;
-         kulong   aslvsl  :1;
-         kulong           :2;
-         kulong   ifbtmu  :1;
-         kulong           :3;
+         gulong   ifmt    :3;
+         gulong           :1;
+         gulong   nbt     :2;
+         gulong           :2;
+         gulong           :8;
+         gulong   cache   :4;
+         gulong   prot    :3;
+         gulong           :1;
+         gulong   slvsl   :1;
+         gulong   aslvsl  :1;
+         gulong           :2;
+         gulong   ifbtmu  :1;
+         gulong           :3;
      }bit;
  };
 
  /*  structure of GRTISIZE   (2890_2204h)    */
  union _IoJdsgrchRegGrtisize{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   tihsize :16;
-         kulong   tivsize :14;
-         kulong           :2;
+         gulong   tihsize :16;
+         gulong   tivsize :14;
+         gulong           :2;
      }bit;
  };
 
  /*  structure of GRTDSTA    (2890_2208h)    */
  union _IoJdsgrchRegGrtdsta{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   tdsh    :16;
-         kulong   tdsv    :14;
-         kulong           :2;
+         gulong   tdsh    :16;
+         gulong   tdsv    :14;
+         gulong           :2;
      }bit;
  };
 
  /*  structure of GRIPO  (2890_2210h)    */
  union _IoJdsgrchRegGripo{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   ipo1    :2;
-         kulong           :2;
-         kulong           :1;
-         kulong           :3;
-         kulong   ipo2    :2;
-         kulong           :2;
-         kulong           :1;
-         kulong           :3;
-         kulong   ipo3    :2;
-         kulong           :2;
-         kulong           :1;
-         kulong           :3;
-         kulong   ipo4    :2;
-         kulong           :6;
+         gulong   ipo1    :2;
+         gulong           :2;
+         gulong           :1;
+         gulong           :3;
+         gulong   ipo2    :2;
+         gulong           :2;
+         gulong           :1;
+         gulong           :3;
+         gulong   ipo3    :2;
+         gulong           :2;
+         gulong           :1;
+         gulong           :3;
+         gulong   ipo4    :2;
+         gulong           :6;
      }bit;
  };
 
  /*  structure of GRSCCTL    (2890_2214h)    */
  union _IoJdsgrchRegGrscctl{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   scen    :2;
-         kulong           :2;
-         kulong           :1;
-         kulong           :3;
-         kulong   idset   :2;
-         kulong           :2;
-         kulong           :1;
-         kulong           :3;
-         kulong   idm     :2;
-         kulong           :14;
+         gulong   scen    :2;
+         gulong           :2;
+         gulong           :1;
+         gulong           :3;
+         gulong   idset   :2;
+         gulong           :2;
+         gulong           :1;
+         gulong           :3;
+         gulong   idm     :2;
+         gulong           :14;
      }bit;
  };
 
  /*  structure of GRERCV (2890_2218h)    */
  union _IoJdsgrchRegGrercv{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   ercv    :1;
-         kulong           :31;
+         gulong   ercv    :1;
+         gulong           :31;
      }bit;
  };
 
  /*  structure of GRISIZE    (2890_2400h)    */
  union _IoJdsgrchRegGrisize{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   ihsize      :16;
-         kulong   ivsize      :14;
-         kulong               :2;
+         gulong   ihsize      :16;
+         gulong   ivsize      :14;
+         gulong               :2;
      }bit;
  };
 
  /*  structure of GRSA0  (2890_2440h)    */
  union _IoJdsgrchRegGrsa0{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   sa0   :32;
+         gulong   sa0   :32;
      }bit;
  };
 
  /*  structure of GRSA   (2890_2480h)    */
  union _IoJdsgrchRegGrsa{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   sa      :32;
+         gulong   sa      :32;
      }bit;
  };
 
  /*  structure of GRASA  (2890_24C0h)    */
  union _IoJdsgrchRegGrasa{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   asa     :32;
+         gulong   asa     :32;
      }bit;
  };
 
  /*  structure of GRHGA  (2890_2500h)    */
  union _IoJdsgrchRegGrhga{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   hga     :16;
-         kulong           :16;
+         gulong   hga     :16;
+         gulong           :16;
      }bit;
  };
 
  /*  structure of GRAHGA (2890_2540h)    */
  union _IoJdsgrchRegGrahga{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   ahga    :16;
-         kulong           :16;
+         gulong   ahga    :16;
+         gulong           :16;
      }bit;
  };
 
  /*  structure of GRDSTA (2890_2580h)    */
  union _IoJdsgrchRegGrdsta{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   dsh     :16;
-         kulong   dsv     :14;
-         kulong           :2;
+         gulong   dsh     :16;
+         gulong   dsv     :14;
+         gulong           :2;
      }bit;
  };
 
  /*  structure of GRAREN (2890_25C0h)    */
  union _IoJdsgrchRegGraren{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   aren    :10;
-         kulong           :22;
+         gulong   aren    :10;
+         gulong           :22;
      }bit;
  };
 
  /*  structure of GRBSL  (2890_25C4h)    */
  union _IoJdsgrchRegGrbsl{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   bsl :10;
-         kulong       :22;
+         gulong   bsl :10;
+         gulong       :22;
      }bit;
  };
 
  /*  structure of GRBLINK    (2890_25E0h)    */
  union _IoJdsgrchRegGrblink{
-     kulong       word[5];
+     gulong       word[5];
      struct {
-         kulong   btimh0 :6;
-         kulong           :2;
-         kulong   btiml0 :6;
-         kulong           :2;
-         kulong   btimh1 :6;
-         kulong           :2;
-         kulong   btiml1 :6;
-         kulong           :2;
-         kulong   btimh2 :6;
-         kulong           :2;
-         kulong   btiml2 :6;
-         kulong           :2;
-         kulong   btimh3 :6;
-         kulong           :2;
-         kulong   btiml3 :6;
-         kulong           :2;
-         kulong   btimh4 :6;
-         kulong           :2;
-         kulong   btiml4 :6;
-         kulong           :2;
-         kulong   btimh5 :6;
-         kulong           :2;
-         kulong   btiml5 :6;
-         kulong           :2;
-         kulong   btimh6 :6;
-         kulong           :2;
-         kulong   btiml6 :6;
-         kulong           :2;
-         kulong   btimh7 :6;
-         kulong           :2;
-         kulong   btiml7 :6;
-         kulong           :2;
-         kulong   btimh8 :6;
-         kulong           :2;
-         kulong   btiml8 :6;
-         kulong           :2;
-         kulong   btimh9 :6;
-         kulong           :2;
-         kulong   btiml9 :6;
-         kulong           :2;
+         gulong   btimh0 :6;
+         gulong           :2;
+         gulong   btiml0 :6;
+         gulong           :2;
+         gulong   btimh1 :6;
+         gulong           :2;
+         gulong   btiml1 :6;
+         gulong           :2;
+         gulong   btimh2 :6;
+         gulong           :2;
+         gulong   btiml2 :6;
+         gulong           :2;
+         gulong   btimh3 :6;
+         gulong           :2;
+         gulong   btiml3 :6;
+         gulong           :2;
+         gulong   btimh4 :6;
+         gulong           :2;
+         gulong   btiml4 :6;
+         gulong           :2;
+         gulong   btimh5 :6;
+         gulong           :2;
+         gulong   btiml5 :6;
+         gulong           :2;
+         gulong   btimh6 :6;
+         gulong           :2;
+         gulong   btiml6 :6;
+         gulong           :2;
+         gulong   btimh7 :6;
+         gulong           :2;
+         gulong   btiml7 :6;
+         gulong           :2;
+         gulong   btimh8 :6;
+         gulong           :2;
+         gulong   btiml8 :6;
+         gulong           :2;
+         gulong   btimh9 :6;
+         gulong           :2;
+         gulong   btiml9 :6;
+         gulong           :2;
      }bit;
  };
 
  /*  structure of GRBINIT    (2890_2600h)    */
  union _IoJdsgrchRegGrbinit{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   binit   :10;
-         kulong           :22;
+         gulong   binit   :10;
+         gulong           :22;
      }bit;
  };
 
  /*  structure of GRBITRG    (2890_2604h)    */
  union _IoJdsgrchRegGrbitrg{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   bitrg   :2;
-         kulong           :30;
+         gulong   bitrg   :2;
+         gulong           :30;
      }bit;
  };
 
  /*  structure of GRRSZ0 (2890_2810h)    */
  union _IoJdsgrchRegGrrsz0{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   rszsl   :1;
-         kulong           :31;
+         gulong   rszsl   :1;
+         gulong           :31;
      }bit;
  };
 
  /*  structure of GRRSZ1 (2890_2814h)    */
  union _IoJdsgrchRegGrrsz1{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   hrszm   :5;
-         kulong           :3;
-         kulong   hrszn   :5;
-         kulong           :3;
-         kulong           :7;
-         kulong           :1;
-         kulong   hrszof  :5;
-         kulong           :3;
+         gulong   hrszm   :5;
+         gulong           :3;
+         gulong   hrszn   :5;
+         gulong           :3;
+         gulong           :7;
+         gulong           :1;
+         gulong   hrszof  :5;
+         gulong           :3;
      }bit;
  };
 
  /*  structure of GRRSZ2 (2890_2818h)    */
  union _IoJdsgrchRegGrrsz2{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   vrszm   :5;
-         kulong           :3;
-         kulong   vrszn   :5;
-         kulong           :3;
-         kulong           :8;
-         kulong   vrszof  :5;
-         kulong           :3;
+         gulong   vrszm   :5;
+         gulong           :3;
+         gulong   vrszn   :5;
+         gulong           :3;
+         gulong           :8;
+         gulong   vrszof  :5;
+         gulong           :3;
      }bit;
  };
 
  /*  structure of GRRSZ3 (2890_281Ch)    */
  union _IoJdsgrchRegGrrsz3{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   hcsta   :6;
-         kulong           :2;
-         kulong   vcsta   :6;
-         kulong           :18;
+         gulong   hcsta   :6;
+         gulong           :2;
+         gulong   vcsta   :6;
+         gulong           :18;
      }bit;
  };
 
  /*  structure of GRY2R0 - GRY2R2 (2890_2840 h)    */
  union _IoJdsgrchRegGry2r{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   yr0     :8;
-         kulong   yr1     :8;
-         kulong   yr2     :8;
-         kulong           :8;
+         gulong   yr0     :8;
+         gulong   yr1     :8;
+         gulong   yr2     :8;
+         gulong           :8;
      }bit;
  };
 
  /*  structure of GRALP  (2890_2880h)    */
  union _IoJdsgrchRegGralp{
-     kulong       word;
+     gulong       word;
      struct {
-         kulong   alp :8;
-         kulong       :24;
+         gulong   alp :8;
+         gulong       :24;
      }bit;
  };
 
@@ -390,15 +384,15 @@
 	 /* 2890_(2000 - 2003h) */
 	 IoJdsgrchRegGrrst     grrst;
 	 /* 2890_(2004 - 20FFh) */
-     kuchar dmy200420ff[0x2100-0x2004];
+     guchar dmy200420ff[0x2100-0x2004];
      /* 2890_(2100 - 2103h) */
      IoJdsgrchRegGrtrg     grtrg;
      /* 2890_(2104 - 210Fh) */
-     kuchar dmy2104210f[0x2110-0x2104];
+     guchar dmy2104210f[0x2110-0x2104];
      /* 2890_(2110 - 2113h) */
      IoJdsgrchRegGrrpgctl  grrpgctl;
      /* 2890_(2114 - 21FFh) */
-     kuchar dmy211421ff[0x2200-0x2114];
+     guchar dmy211421ff[0x2200-0x2114];
      /* 2890_(2200 - 2203h) */
      IoJdsgrchRegGridt     gridt;
      /* 2890_(2204 - 2207h) */
@@ -406,7 +400,7 @@
      /* 2890_(2208 - 220Bh) */
      IoJdsgrchRegGrtdsta   grtdsta;
      /* 2890_(220C - 220Fh) */
-     kuchar dmy220c220f[0x2210-0x220C];
+     guchar dmy220c220f[0x2210-0x220C];
      /* 2890_(2210 - 2213h) */
      IoJdsgrchRegGripo     gripo;
      /* 2890_(2214 - 2217h) */
@@ -414,51 +408,51 @@
      /* 2890_(2218 - 221Bh) */
      IoJdsgrchRegGrercv    grercv;
      /* 2890_(221C - 23FFh) */
-     kuchar dmy221c23ff[0x2400-0x221C];
+     guchar dmy221c23ff[0x2400-0x221C];
      /* 2890_(2400 - 2427h) */
      IoJdsgrchRegGrisize   grisize[10];
      /* 2890_(2428 - 243Fh) */
-     kuchar dmy2428243f[0x2440-0x2428];
+     guchar dmy2428243f[0x2440-0x2428];
      /* 2890_(2440 - 244Fh) */
      IoJdsgrchRegGrsa0     grsa0[4];
      /* 2890_(2450 - 247Fh) */
-     kuchar dmy2450247f[0x2480-0x2450];
+     guchar dmy2450247f[0x2480-0x2450];
      /* 2890_(2480 - 24A3h) */
      IoJdsgrchRegGrsa      grsa[9];
      /* 2890_(24A4 - 24BFh) */
-     kuchar dmy24a424bf[0x24C0-0x24A4];
+     guchar dmy24a424bf[0x24C0-0x24A4];
      /* 2890_(24C0 - 24E7h) */
      IoJdsgrchRegGrasa     grasa[10];
      /* 2890_(24E8 - 24FFh) */
-     kuchar dmy24e824ff[0x2500-0x24E8];
+     guchar dmy24e824ff[0x2500-0x24E8];
      /* 2890_(2500 - 2527h) */
      IoJdsgrchRegGrhga     grhga[10];
      /* 2890_(2528 - 253Fh) */
-     kuchar dmy2528253f[0x2540-0x2528];
+     guchar dmy2528253f[0x2540-0x2528];
      /* 2890_(2540 - 2567h) */
      IoJdsgrchRegGrahga    grahga[10];
      /* 2890_(2568 - 257Fh) */
-     kuchar dmy2568257f[0x2580-0x2568];
+     guchar dmy2568257f[0x2580-0x2568];
      /* 2890_(2580 - 25A7h) */
      IoJdsgrchRegGrdsta    grdsta[10];
      /* 2890_(25A8 - 25BFh) */
-     kuchar dmy25a825bf[0x25C0-0x25A8];
+     guchar dmy25a825bf[0x25C0-0x25A8];
      /* 2890_(25C0 - 25C3h) */
      IoJdsgrchRegGraren    graren;
      /* 2890_(25C4 - 25C7h) */
      IoJdsgrchRegGrbsl     grbsl;
      /* 2890_(25C8 - 25DFh) */
-     kuchar dmy25c825df[0x25E0-0x25C8];
+     guchar dmy25c825df[0x25E0-0x25C8];
      /* 2890_(25E0 - 25F3h) */
      IoJdsgrchRegGrblink   grblink;
      /* 2890_(25F4 - 25FFh) */
-     kuchar dmy25f425ff[0x2600-0x25F4];
+     guchar dmy25f425ff[0x2600-0x25F4];
      /* 2890_(2600 - 2603h) */
      IoJdsgrchRegGrbinit   grbinit;
      /* 2890_(2604 - 2607h) */
      IoJdsgrchRegGrbitrg   grbitrg;
      /* 2890_(2608 - 280Fh) */
-     kuchar dmy2608280f[0x2810-0x2608];
+     guchar dmy2608280f[0x2810-0x2608];
      /* 2890_(2810 - 2813h) */
      IoJdsgrchRegGrrsz0    grrsz0;
      /* 2890_(2814 - 2817h) */
@@ -468,25 +462,16 @@
      /* 2890_(281C - 281Fh) */
      IoJdsgrchRegGrrsz3    grrsz3;
      /* 2890_(2820 - 283Fh) */
-     kuchar dmy2820283f[0x2840-0x2820];
+     guchar dmy2820283f[0x2840-0x2820];
      /* 2890_(2840 - 284Bh) */
      IoJdsgrchRegGry2r     gry2r[3];
      /* 2890_(284C - 287Fh) */
-     kuchar dmy284c287f[0x2880-0x284C];
+     guchar dmy284c287f[0x2880-0x284C];
      /* 2890_(2880 - 2883h) */
      IoJdsgrchRegGralp     gralp;
      /* 2890_(2884 - 2FFFh) */
-     kuchar dmy28842fff[0x3000-0x2884];
+     guchar dmy28842fff[0x3000-0x2884];
  };
-
- struct  _JdsdispGrch
- {
- 	KObject parent;
- };
-
-
- KConstType				jdsdisp_grch_get_type(void);
- JdsdispGrch*				jdsdisp_grch_new(void);
 
 
  #endif/*__JDSDISP_GRCH_H__*/

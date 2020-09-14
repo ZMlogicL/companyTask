@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kjdsxch.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KJdsxch, k_jdsxch);
+
 #define K_JDSXCH_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KJdsxchPrivate, K_TYPE_JDSXCH))
+
 
 struct _KJdsxchPrivate
 {
 
 };
+
 
 volatile IoJdsxch ioXch __attribute__((section(".Xch")));
 /**
@@ -43,4 +48,3 @@ KJdsxch* k_jdsxch_new(void)
     KJdsxch* self = k_object_new_with_private(K_TYPE_JDSXCH, sizeof(KJdsxchPrivate));
     return self;
 }
-

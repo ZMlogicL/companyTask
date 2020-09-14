@@ -38,18 +38,18 @@ iip_res_user_custom -> iipresusercustom
 1.device_driver/include 内所有头文件内容屏蔽(pmu.h除外)
     添加跳转路径
     以ipcu为例：
-    路径修改为 #include"../fj/device_driver/src/kipcu.h"
+    路径修改为 #include"kipcu.h"
     需手动将自己修改部分内的头文件替换成以上内容
 
 2.iip_lock/iip_resmng/include iip_resmng.h
-    路径修改为：#include "../fj/iip_lock/iip_resmng/src/iipresmng.h"
+    路径修改为：#include "iipresmng.h"
             
 3.iip_lock/include/bf_iip_resource.h及/iip_res_user_custom.h 
-    路径修改为：#include "../fj/iip_lock/src/bfiipresource.h"
-                 以及：#include "../fj/iip_lock/src/iipresusercustom.h"
+    路径修改为：#include "bfiipresource.h"
+                 以及：#include "iipresusercustom.h"
 
 
-三.全局变量及公有函数改名
+三.全局变量、枚举、结构体、宏、公有改名
 
 1.全局变量
 ==================================================================
@@ -59,51 +59,12 @@ iip_res_user_custom -> iipresusercustom
 gSpin_Lock----------------------------------------------------------gSpinLock
 gBF_IPCU_Res_Cmd_Data_CM0---------------------------gBfIpcuResCmdDataCm0
 gBF_IPCU_MB_Data---------------------------------------------gBfIpcuMbData
-E_BF_IPCU_CMD_CM0-----------------------------------------EBfIpcuCmdCm0
-E_BF_IPCU_CMD_CM0_xxx----------------------------------FjIpcu_E_BF_IPCU_CMD_CM0
 
-E_BF_L1L2CACHE_ALL-----------------------------------------KL1l2cache_ALL
-E_BF_L1L2CACHE_ADDR-------------------------------------KL1l2cache_ADDR
-E_BF_L1L2CACHE_FLUSH-------------------------------------KL1l2cache_FLUSH
-E_BF_L1L2CACHE_CLEAN------------------------------------KL1l2cache_CLEAN
-E_BF_L1L2CACHE_CLEAN_FLUSH------------------------KL1l2cache_CLEAN_FLUSH
-E_BF_L1L2CACHE_TYPE---------------------------------------KL1l2cacheType
-E_BF_L1L2CACHE_METHOD---------------------------------KL1l2cacheMethod
-T_L1L2CACHE_INFORMATION------------------------------KL1l2cacheInformation
-
-FLG_SLIMBUS_CONTROLLER_MANAGER_CH0------KSlimbus_CONTROLLER_MANAGER_CH0
-FLG_SLIMBUS_CONTROLLER_MANAGER_CH1	
-FLG_SLIMBUS_CONTROLLER_MANAGER_CH2
-FLG_SLIMBUS_CONTROLLER_MANAGER_CH3
-FLG_SLIMBUS_CONTROLLER_DATAPORT_CH1-----KSlimbus_CONTROLLER_DATAPORT_CH1
-FLG_SLIMBUS_CONTROLLER_DATAPORT_CH2	
-FLG_SLIMBUS_CONTROLLER_DATAPORT_CH3	
-FLG_SLIMBUS_CONTROLLER_DMA_CH0--------------KSlimbus_CONTROLLER_xxxx_xxxx_xxxx		
-FLG_SLIMBUS_CONTROLLER_DMA_CH1		
-FLG_SLIMBUS_CONTROLLER_DMA_CH2		
-FLG_SLIMBUS_CONTROLLER_DMA_CH3	
-FLG_SLIMBUS_CONTROLLER_PORT_INT			
-FLG_SLIMBUS_CONTROLLER_MCH_INT		
-FLG_SLIMBUS_CONTROLLER_RCFG_INT		
-FLG_SLIMBUS_CONTROLLER_SYNC_LOST	
-FLG_SLIMBUS_CONTROLLER_TX_ERR		
-FLG_SLIMBUS_CONTROLLER_TX_INT		
-FLG_SLIMBUS_CONTROLLER_RX_INT			
+T_L1L2CACHE_INFORMATION------------------------------ KL1l2cacheInformation
 
 gBF_UART_Debug_Send_Buf-------------------------------gBfUartDebugSendBuf
 gBF_Uart_Spin_Lock--------------------------------------------gBfUartSpinLock
 
-D_UART_DEBUG_SEND_BUFF_SIZE----------------------KUart_DEBUG_SEND_BUFF_SIZE
-BF_UART_Debug_Command_Enable--------------------KUart_DEBUG_COMMAND_ENABLE
-BF_UART_IQ_Command_Enable---------------------------KUart_IQ_COMMAND_ENABLE
-BF_UART_IQ_Command_Disable--------------------------KUart_IQ_COMMAND_DISABLE
-E_BF_UART_DEBUG_TASK_STATE_INIT-----------------KUart_DEBUG_TASK_STATE_INIT
-E_BF_UART_DEBUG_TASK_STATE_SLEEP------------- KUart_DEBUG_TASK_STATE_SLEEP
-E_BF_UART_DEBUG_TASK_STATE_ACTIVE----------- KUart_DEBUG_TASK_STATE_ACTIVE
-E_BF_UART_DEBUG_TASK_STATE------------------------ KUartDebugTaskState
-E_BF_UART_READ-----------------------------------------------KUart_READ
-E_BF_UART_WRITE----------------------------------------------KUart_WRITE
-E_BF_UART_RW---------------------------------------------------KUartRw
 
 afn_0-------------------------------------------------------------------afnZero
 afn_1-------------------------------------------------------------------afnOne
@@ -116,9 +77,6 @@ sl_master_if_0------------------------------------------------------slMasterIfZe
 sl_master_if_1------------------------------------------------------slMasterIfOne
 sl_master_if_2------------------------------------------------------slMasterIfTwo
 
- D_IIP_ERR_NG----------------------------------------------------IipResmng_ERR_NG		
- D_IIP_ERR_OK----------------------------------------------------IipResmng_ERR_OK		
- D_IIP_ERR_TMOUT---------------------------------------------IipResmng_ERR_TMOUT		
 
 D_FJ_IIP_ERR_OK------------------------------------------------BfIipResource_FJ_IIP_ERR_OK
 D_FJ_IIP_ERR_TMOUT-----------------------------------------BfIipResource_FJ_IIP_ERR_TMOUT
@@ -126,7 +84,90 @@ D_FJ_IIP_ERR_TMOUT-----------------------------------------BfIipResource_FJ_IIP_
 
 ==================================================================
 
-2.公有函数
+2.枚举
+==================================================================
+E_BF_IPCU_CMD_CM0-----------------------------------------FjIpcuCmdCm0
+E_BF_IPCU_CMD_CM0_GO               ---> FjIpcu_CMD_CM0_GO
+E_BF_IPCU_CMD_CM0_WRITE	       --->FjIpcu_CMD_CM0_WRITE
+E_BF_IPCU_CMD_CM0_READ	        --->FjIpcu_CMD_CM0_READ
+E_BF_IPCU_CMD_CM0_RMW		    --->FjIpcu_CMD_CM0_RMW
+E_BF_IPCU_CMD_CM0_SET		       --->FjIpcu_CMD_CM0_SET
+E_BF_IPCU_CMD_CM0_GET		       --->FjIpcu_CMD_CM0_GET
+E_BF_IPCU_CMD_CM0_START	        --->FjIpcu_CMD_CM0_START
+E_BF_IPCU_CMD_CM0_STOP		    --->FjIpcu_CMD_CM0_STOP
+E_BF_IPCU_CMD_CM0_CRYPTO	--->FjIpcu_CMD_CM0_CRYPTO
+E_BF_IPCU_CMD_CM0_DUMMY		--->FjIpcu_CMD_CM0_DUMMY
+E_BF_IPCU_CMD_CM0_STATE_AFTER_STANDBY      --->FjIpcu_CMD_CM0_STATE_AFTER_STANDBY
+E_BF_IPCU_CMD_CM0_DELAY		    --->FjIpcu_CMD_CM0_DELAY
+E_BF_IPCU_CMD_CM0_WAIT_LOOP		--->FjIpcu_CMD_CM0_WAIT_LOOP
+E_BF_IPCU_CMD_CM0_END           --->FjIpcu_CMD_CM0_END
+E_BF_IPCU_CMD_CM0_MAX           --->FjIpcu_CMD_CM0_MAX
+
+
+E_BF_L1L2CACHE_ALL----------------------------------------- KL1l2cache_ALL
+E_BF_L1L2CACHE_ADDR------------------------------------- KL1l2cache_ADDR
+E_BF_L1L2CACHE_FLUSH------------------------------------- KL1l2cache_FLUSH
+E_BF_L1L2CACHE_CLEAN------------------------------------ KL1l2cache_CLEAN
+E_BF_L1L2CACHE_CLEAN_FLUSH------------------------ KL1l2cache_CLEAN_FLUSH
+E_BF_L1L2CACHE_TYPE--------------------------------------- KL1l2cacheType
+E_BF_L1L2CACHE_METHOD--------------------------------- KL1l2cacheMethod
+
+E_BF_UART_DEBUG_TASK_STATE_INIT----------------- KUart_DEBUG_TASK_STATE_INIT
+E_BF_UART_DEBUG_TASK_STATE_SLEEP------------- KUart_DEBUG_TASK_STATE_SLEEP
+E_BF_UART_DEBUG_TASK_STATE_ACTIVE----------- KUart_DEBUG_TASK_STATE_ACTIVE
+E_BF_UART_DEBUG_TASK_STATE------------------------ KUartDebugTaskState
+E_BF_UART_READ----------------------------------------------- KUart_READ
+E_BF_UART_WRITE---------------------------------------------- KUart_WRITE
+E_BF_UART_RW--------------------------------------------------- KUartRw
+
+==================================================================
+
+3.结构体
+==================================================================
+
+
+
+==================================================================
+
+4.宏
+==================================================================
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH0------ KSlimbus_CONTROLLER_MANAGER_CH0
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH1------ KSlimbus_CONTROLLER_MANAGER_CH1	
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH2------ KSlimbus_CONTROLLER_MANAGER_CH2
+FLG_SLIMBUS_CONTROLLER_MANAGER_CH3------ KSlimbus_CONTROLLER_MANAGER_CH3
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH1------ KSlimbus_CONTROLLER_DATAPORT_CH1
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH2------ KSlimbus_CONTROLLER_DATAPORT_CH2	
+FLG_SLIMBUS_CONTROLLER_DATAPORT_CH3------ KSlimbus_CONTROLLER_DATAPORT_CH3	
+FLG_SLIMBUS_CONTROLLER_DMA_CH0-------------- KSlimbus_CONTROLLER_DMA_CH0		
+FLG_SLIMBUS_CONTROLLER_DMA_CH1-------------- KSlimbus_CONTROLLER_DMA_CH1		
+FLG_SLIMBUS_CONTROLLER_DMA_CH2-------------- KSlimbus_CONTROLLER_DMA_CH2		
+FLG_SLIMBUS_CONTROLLER_DMA_CH3-------------- KSlimbus_CONTROLLER_DMA_CH3	
+FLG_SLIMBUS_CONTROLLER_PORT_INT------------- KSlimbus_CONTROLLER_PORT_INT			
+FLG_SLIMBUS_CONTROLLER_MCH_INT-------------- KSlimbus_CONTROLLER_MCH_INT		
+FLG_SLIMBUS_CONTROLLER_RCFG_INT------------- KSlimbus_CONTROLLER_RCFG_INT		
+FLG_SLIMBUS_CONTROLLER_SYNC_LOST----------- KSlimbus_CONTROLLER_SYNC_LOST	
+FLG_SLIMBUS_CONTROLLER_TX_ERR-----------------	KSlimbus_CONTROLLER_TX_ERR	
+FLG_SLIMBUS_CONTROLLER_TX_INT-----------------	KSlimbus_CONTROLLER_TX_INT	
+FLG_SLIMBUS_CONTROLLER_RX_INT----------------	KSlimbus_CONTROLLER_RX_INT		
+
+D_UART_DEBUG_SEND_BUFF_SIZE---------------------- KUart_DEBUG_SEND_BUFF_SIZE
+D_UART_DEBUG_RECV_BUFF_SIZE----------------------- KUart_DEBUG_SEND_BUFF_SIZE
+BF_UART_Debug_Command_Enable-------------------- KUart_DEBUG_COMMAND_ENABLE
+BF_UART_Debug_Command_Disable------------------- KUart_DEBUG_COMMAND_DISABLE
+BF_UART_IQ_Command_Enable--------------------------- KUart_IQ_COMMAND_ENABLE
+BF_UART_IQ_Command_Disable-------------------------- KUart_IQ_COMMAND_DISABLE
+
+ D_IIP_ERR_NG----------------------------------------------------IipResmng_ERR_NG		
+ D_IIP_ERR_OK----------------------------------------------------IipResmng_ERR_OK		
+ D_IIP_ERR_TMOUT---------------------------------------------IipResmng_ERR_TMOUT		
+
+
+
+
+==================================================================
+
+
+5.公有函数
 ==================================================================
 bf_ipcu_req_cb----------------------------------------------------fj_ipcu_bf_req_cb
 fj_spin_lock---------------------------------------------------------fj_ipcu_spin_lock
@@ -301,56 +342,56 @@ fj_wdog_timer_get_load_value
 fj_wdog_timer_stop
 fj_wdog_timer_close
 
-fj_pcie_ep_open-------------------------------------------------pcie_ep_xxxx
-fj_pcie_ep_close
-fj_pcie_ep_init
-fj_pcie_ep_deinit
-fj_pcie_ep_dma_transfer
-fj_pcie_ep_dma_stop
-fj_pcie_ep_memory_ctrl
-fj_pcie_ep_req_int_ep
-fj_pcie_ep_transfer_msi
-fj_pcie_ep_aspm_on
-fj_pcie_ep_aspm_off
-fj_pcie_ep_transfer_speed_chg
-fj_pcie_ep_get_st_dl_up
-fj_pcie_ep_get_st_ltssm
-fj_pcie_ep_get_pmst
-fj_pcie_ep_get_current_link_speed
-fj_pcie_ep_get_st_aspm
-fj_pcie_ep_set_mps
-fj_pcie_ep_get_mps
-fj_pcie_ep_init_reg
-fj_pcie_ep_set_lu_cb
+fj_pcie_ep_open    ----------------------   pcie_ep_open
+fj_pcie_ep_close    ----------------------   pcie_ep_close
+fj_pcie_ep_init    ----------------------   pcie_ep_init
+fj_pcie_ep_deinit    ----------------------   pcie_ep_deinit
+fj_pcie_ep_dma_transfer    ----------------------   pcie_ep_dma_transfer
+fj_pcie_ep_dma_stop    ----------------------   pcie_ep_dma_stop
+fj_pcie_ep_memory_ctrl    ----------------------   pcie_ep_memory_ctrl
+fj_pcie_ep_req_int_ep    ----------------------   pcie_ep_req_int_ep
+fj_pcie_ep_transfer_msi    ----------------------   pcie_ep_transfer_msi
+fj_pcie_ep_aspm_on    ----------------------    pcie_ep_aspm_on
+fj_pcie_ep_aspm_off    ----------------------   pcie_ep_aspm_off
+fj_pcie_ep_transfer_speed_chg    ---------------------- pcie_ep_transfer_speed_chg  
+fj_pcie_ep_get_st_dl_up    ----------------------   pcie_ep_get_st_dl_up
+fj_pcie_ep_get_st_ltssm    ----------------------   pcie_ep_get_st_ltssm
+fj_pcie_ep_get_pmst    ----------------------   pcie_ep_get_pmst
+fj_pcie_ep_get_current_link_speed    ----------------------   pcie_ep_get_current_link_speed
+fj_pcie_ep_get_st_aspm    ----------------------   pcie_ep_get_st_aspm
+fj_pcie_ep_set_mps    ----------------------   pcie_ep_set_mps
+fj_pcie_ep_get_mps    ----------------------   pcie_ep_get_mps
+fj_pcie_ep_init_reg    ----------------------   pcie_ep_init_reg
+fj_pcie_ep_set_lu_cb    ----------------------   pcie_ep_set_lu_cb
 
-fj_pcie_rc_open--------------------------------------------------pcie_rc_xxxx
-fj_pcie_rc_close
-fj_pcie_rc_init
-fj_pcie_rc_deinit
-fj_pcie_rc_config_ctrl
-fj_pcie_rc_config_read
-fj_pcie_rc_config_write
-fj_pcie_rc_dma_transfer
-fj_pcie_rc_dma_stop
-fj_pcie_rc_memory_ctrl
-fj_pcie_rc_msi_ctrl
-fj_pcie_rc_intx_ctrl
-fj_pcie_rc_aspm_on
-fj_pcie_rc_aspm_off
-fj_pcie_rc_transfer_speed_chg
-fj_pcie_rc_get_st_dl_up
-fj_pcie_rc_get_st_ltssm
-fj_pcie_rc_get_pmst
-fj_pcie_rc_get_current_link_speed
-fj_pcie_rc_get_st_aspm
-fj_pcie_rc_set_mps
-fj_pcie_rc_get_mps
-fj_pcie_rc_set_lu_cb
+fj_pcie_rc_open    ----------------------   pcie_rc_open
+fj_pcie_rc_close    ----------------------   pcie_rc_close
+fj_pcie_rc_init    ----------------------   pcie_rc_init
+fj_pcie_rc_deinit    ----------------------   pcie_rc_deinit
+fj_pcie_rc_config_ctrl    ----------------------   pcie_rc_config_ctrl
+fj_pcie_rc_config_read    ----------------------   pcie_rc_config_read
+fj_pcie_rc_config_write    ----------------------   pcie_rc_config_write
+fj_pcie_rc_dma_transfer    ----------------------   pcie_rc_dma_transfer
+fj_pcie_rc_dma_stop    ----------------------   pcie_rc_dma_stop
+fj_pcie_rc_memory_ctrl    ----------------------   pcie_rc_memory_ctrl
+fj_pcie_rc_msi_ctrl    ----------------------   pcie_rc_msi_ctrl
+fj_pcie_rc_intx_ctrl    ----------------------   pcie_rc_intx_ctrl
+fj_pcie_rc_aspm_on    ----------------------   pcie_rc_aspm_on
+fj_pcie_rc_aspm_off    ----------------------   pcie_rc_aspm_off
+fj_pcie_rc_transfer_speed_chg    ----------------------   pcie_rc_transfer_speed_chg
+fj_pcie_rc_get_st_dl_up    ----------------------   pcie_rc_get_st_dl_up
+fj_pcie_rc_get_st_ltssm    ----------------------   pcie_rc_get_st_ltssm
+fj_pcie_rc_get_pmst    ----------------------   pcie_rc_get_pmst
+fj_pcie_rc_get_current_link_speed    ----------------------   pcie_rc_get_current_link_speed
+fj_pcie_rc_get_st_aspm    ----------------------   pcie_rc_get_st_aspm
+fj_pcie_rc_set_mps    ----------------------   pcie_rc_set_mps
+fj_pcie_rc_get_mps    ----------------------    pcie_rc_get_mps
+fj_pcie_rc_set_lu_cb    ----------------------   pcie_rc_set_lu_cb
 
-iip_res_lock_unit-----------------------------------------------iip_resmng_xxxx
-iip_res_lock_pixid
-iip_res_wai_flg
-iip_res_lock_other
+iip_res_lock_unit  ----------------------  iip_resmng_lock_unit
+iip_res_lock_pixid  ----------------------  iip_resmng_lock_pixid
+iip_res_wai_flg  ----------------------  iip_resmng_wai_flg
+iip_res_lock_other  ----------------------  iip_resmng_lock_other
 
 IIP_Res_Config_Lock-----------------------------------------iip_res_config_lock
 IIP_Res_Config_Free-----------------------------------------iip_res_config_free
@@ -370,3 +411,32 @@ IIP_Res_Custom_Get_Tim---------------------------------iip_res_user_custom_get_t
 IIP_Res_Custom_Twai_Flg--------------------------------iip_res_user_custom_twai_flg
 IIP_Res_Custom_Set_Flg----------------------------------iip_res_user_custom_set_flg
 IIP_Res_Custom_Clr_Flg-----------------------------------iip_res_user_custom_clr_flg
+
+
+四.等待他人修改及问题
+================================================================
+
+ 2.ddhdmac1.h 中
+ 	T_DD_HDMAC1_CTRL结构体名及成员
+ 3.ddi2cctrl.h 中
+ 	DdI2cCtrlMaster
+4.ddcacheasm.h 函数名还未规范
+    Dd_CACHE_L2_Flush_Dcache_All
+    Dd_CACHE_L2_Clean_Dcache_All
+    Dd_CACHE_L2_Clean_Flush_Dcache_All
+5.ddarm.h 函数名未规范
+    Dd_ARM_Get_CPU_ID
+6.ddcacheeasm.h 函数名未规范
+    Dd_CACHE_L2_Flush_Dcache_All
+    Dd_CACHE_L1_Flush_Dcache_All
+    Dd_CACHE_L2_Clean_Dcache_All
+    Dd_CACHE_L2_Clean_Flush_Dcache_All
+    Dd_CACHE_L1_Flush_Dcache_Addr
+    Dd_CACHE_L1_Clean_Dcache_Addr
+    Dd_CACHE_L1_Clean_Flush_Dcache_Addr
+    Dd_CACHE_L1_Clean_Flush_Dcache_All
+
+8.driver_common 还未修改
+	D_DDIM_OK
+	D_DDIM_WAIT_END_TIME
+9.fj_pcie.h 还未修改

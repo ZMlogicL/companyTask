@@ -14,31 +14,52 @@
 #include "imiipfltregister.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipFltRegister, im_iip_flt_register);
-#define IM_IIP_FLT_REGISTER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipFltRegisterPrivate, IM_TYPE_IIP_FLT_REGISTER))
+G_DEFINE_TYPE(ImIipFltRegister, im_iip_flt_register, G_TYPE_OBJECT);
+#define IM_IIP_FLT_REGISTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_FLT_REGISTER, ImIipFltRegisterPrivate));
 
 
 struct _ImIipFltRegisterPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_flt_register_constructor(ImIipFltRegister *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_flt_register_class_init(ImIipFltRegisterClass *klass)
 {
-//	ImIipFltRegisterPrivate *priv = IM_IIP_FLT_REGISTER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipFltRegisterPrivate));
 }
 
-static void im_iip_flt_register_destructor(ImIipFltRegister *self)
+static void 		im_iip_flt_register_init(ImIipFltRegister *self)
 {
-//	ImIipFltRegisterPrivate *priv = IM_IIP_FLT_REGISTER_GET_PRIVATE(self);
+	ImIipFltRegisterPrivate *priv = IM_IIP_FLT_REGISTER_GET_PRIVATE(self);
 }
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipFltRegisterPrivate *priv = IM_IIP_FLT_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_flt_register_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipFltRegisterPrivate *priv = IM_IIP_FLT_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_flt_register_parent_class) -> dispose(object);
+}
+
 /**
  * PUBLIC
  */
-ImIipFltRegister* im_iip_flt_register_new(void)
+ImIipFltRegister* 		im_iip_flt_register_new(void)
 {
-	ImIipFltRegister *self = k_object_new_with_private(IM_TYPE_IIP_FLT_REGISTER, sizeof(ImIipFltRegisterPrivate));
+	ImIipFltRegister *self = g_object_new(IM_TYPE_IIP_FLT_REGISTER, NULL);
 	return self;
 }

@@ -61,24 +61,29 @@ typedef union {
 	}bit;	/**< Bit field */
 }U_IM_DISP_DBGSL;
 
-extern INT32 Im_DISP_Set_Face_Frame(E_IM_DISP_SEL block, UINT32 frame_count, T_IM_DISP_FACE_FRAME const *const face);
+// OSD layer ID
+static volatile const INT32 osd_layer_id[] = {
+		E_IM_DISP_SEL_LAYER_OSD_0, E_IM_DISP_SEL_LAYER_OSD_1};
+
+
+ INT32 im_disp5_set_face_frame(ImDisp5 * self, ImDispEImDispSel block, UINT32 frame_count, T_IM_DISP_FACE_FRAME const *const face);
 
 /**
 Get face frame data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	face			Face frame data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Face_Frame(E_IM_DISP_SEL block, T_IM_DISP_FACE_FRAME *const face);
+ INT32 im_disp5_get_face_frame(ImDisp5 * self, ImDispEImDispSel block, T_IM_DISP_FACE_FRAME *const face);
 
 /**
 Set face frame display enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	ffden			Face frame display enable.<br>
 							bit d[0]:Face frame 0 ~ d[41]:Face frame 41<br>
 							value 0:disable, 1:enable<br>
@@ -88,13 +93,13 @@ Set face frame display enable.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 ffden, BYTE msff);
+ INT32 im_disp5_set_face_frame_enable(ImDisp5 * self, ImDispEImDispSel block, UINT64 ffden, BYTE msff);
 
 /**
 Get face frame display enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	ffden			Face frame display enable.<br>
 							bit d[0]:Face frame 0 ~ d[41]:Face frame 41<br>
 							value 0:disable, 1:enable<br>
@@ -104,47 +109,47 @@ Get face frame display enable.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 *ffden, BYTE *msff);
+ INT32 im_disp5_get_face_frame_enable(ImDisp5 * self, ImDispEImDispSel block, UINT64 *ffden, BYTE *msff);
 
 /**
 Set parameter reflect timing of a OSD layer.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_ALL</ul>
 @param[in]	timing			Register parameter reflect timing.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG timing);
+ INT32 im_disp5_set_osd_parameter_reflect_timing(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg timing);
 
 /**
 Get parameter reflect timing of a OSD layer.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
 @param[out]	timing			Register parameter reflect timing.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG *timing);
+ INT32 im_disp5_get_osd_parameter_reflect_timing(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg *timing);
 
 /**
 Set input data transfer of a OSD layer.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -153,16 +158,16 @@ Set input data transfer of a OSD layer.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks	It is necessary to fulfill the following conditions. <br>
-			<ul><li>GRIDT.IFMT <= @ref D_IM_DISP_GRIDT_IFMT_RGBA5551
+			<ul><li>GRIDT.ifmt <= @ref D_IM_DISP_GRIDT_IFMT_RGBA5551
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT gridt);
+ INT32 im_disp5_set_osd_input_data_transfer(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT gridt);
 
 /**
 Get input data transfer of a OSD layer.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -170,13 +175,13 @@ Get input data transfer of a OSD layer.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT *gridt);
+ INT32 im_disp5_get_osd_input_data_transfer(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT *gridt);
 
 /**
 Set OSD data territory size.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -187,19 +192,19 @@ Set OSD data territory size.<br>
 @remarks	It is necessary to fulfill the following conditions. <br>
 			<ul><li>GRTISIZE.TIHSIZE is a multiple of 2
 				<li>GRTISIZE.TIHSIZE >= 8
-				<li>GRDSTA.DSH + GRTISIZE.TIHSIZE * (GRRSZ1.HRSZM / GRRSZ1.HRSZN) <= OHSIZE
+				<li>GRDSTA.DSH + GRTISIZE.TIHSIZE * (GRRSZ1.hrszm / GRRSZ1.hrszn) <= OHSIZE
 				<li>GRTISIZE.TIVSIZE is a multiple of 2
 				<li>GRTISIZE.TIVSIZE >= 8
-				<li>GRDSTA.DSV + GRTISIZE.TIVSIZE * (GRRSZ2.VRSZM / GRRSZ2.VRSZN) <= OVSIZE
+				<li>GRDSTA.DSV + GRTISIZE.TIVSIZE * (GRRSZ2.vrszm / GRRSZ2.vrszn) <= OVSIZE
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE territory_size);
+ INT32 im_disp5_set_osd_territory_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE territory_size);
 
 /**
 Get OSD data territory size.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -207,13 +212,13 @@ Get OSD data territory size.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE *territory_size);
+ INT32 im_disp5_get_osd_territory_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE *territory_size);
 
 /**
 Set display position for OSD.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -226,13 +231,13 @@ Set display position for OSD.<br>
 				<li>GRTDSTA.DSV is a multiple of 2
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA position);
+ INT32 im_disp5_set_osd_territory_position(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA position);
 
 /**
 Get display position for OSD.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -240,68 +245,99 @@ Get display position for OSD.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA* position);
+ INT32 im_disp5_get_osd_territory_position(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA* position);
+
+ /**
+ Set input data's order.<br>
+ @param[in]	block			Common block selection.<br>
+ 							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+ 								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
+ @param[in]	layer			OSD layer selection.<br>
+ 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
+ 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
+ @param[in]	ipo				Input data order.
+ @retval	D_DDIM_OK						Success.
+ @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
+ @remarks	It is necessary to fulfill the following conditions. <br>
+ 			<ul><li>GRIPO.IPO1, GRIPO.IPO2, GRIPO.IPO3 and GRIPO.IPO4 do not overlap
+ 			</ul>
+ */
+  INT32 im_disp5_set_osd_ipo(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIPO ipo);
+
+ /**
+ Get input data's order.<br>
+ @param[in]	block			Common block selection.<br>
+ 							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+ 								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
+ @param[in]	layer			OSD layer selection.<br>
+ 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
+ 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
+ @param[out]	ipo		Input data order.
+ @retval	D_DDIM_OK						Success.
+ @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
+ */
+  INT32 im_disp5_get_osd_ipo(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIPO* ipo);
 
 /**
 Set input data area to access.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_ALL</ul>
 @param[in]	area			Input data area.<br>
-							<ul><li>@ref E_IM_DISP_INPUT_DATA_AREA_0
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_1
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_2
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_3</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_0
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_1
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_2
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_3</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA area);
+ INT32 im_disp5_set_osd_area0_switch(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea area);
 
 /**
 Get input data area to access.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
 @param[out]	area			Input data area.<br>
-							<ul><li>@ref E_IM_DISP_INPUT_DATA_AREA_0
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_1
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_2
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_3</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_0
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_1
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_2
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_3</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA *area);
+ INT32 im_disp5_get_osd_area0_switch(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea *area);
 
 /**
 Get input data area inder processing.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
 @param[out]	area			Input data area.<br>
-							<ul><li>@ref E_IM_DISP_INPUT_DATA_AREA_0
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_1
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_2
-								<li>@ref E_IM_DISP_INPUT_DATA_AREA_3</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_0
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_1
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_2
+								<li>@ref ImDisp_E_IM_DISP_INPUT_DATA_AREA_3</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area0_Monitor(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA *area);
+ INT32 im_disp5_get_osd_area0_monitor(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea *area);
 
 /**
 Set input data size of OSD.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -319,14 +355,14 @@ Set input data size of OSD.<br>
 				<li>GRDSTA.DSV + GRISIZE.IVSIZE <= GRTISIZE.TIVSIZE
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,
-								U_IM_DISP_SIZE input_size[D_IM_DISP_OSD_DISPLAY_AREA_COUNT],
+ INT32 im_disp5_set_osd_area_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer,
+								U_IM_DISP_SIZE input_size[ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT],
 								UINT32 input_size_count);
 /**
 Get input data size of OSD.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -334,13 +370,13 @@ Get input data size of OSD.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE input_size[D_IM_DISP_OSD_DISPLAY_AREA_COUNT]);
+ INT32 im_disp5_get_osd_area_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE input_size[ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT]);
 
 /**
 Connect OSD input data address with the bank index.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -367,13 +403,13 @@ Connect OSD input data address with the bank index.<br>
 				<li>GRSA is a multiple of 8
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG address);
+ INT32 im_disp5_set_osd_area_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG address);
 
 /**
 Get OSD input data address of the bank index specified.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -395,13 +431,13 @@ Get OSD input data address of the bank index specified.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG *address);
+ INT32 im_disp5_get_osd_area_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG *address);
 
 /**
 Connect OSD input data address (A data) with the bank index.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -415,13 +451,13 @@ Connect OSD input data address (A data) with the bank index.<br>
 				<li>GRSA is a multiple of 8
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG address);
+ INT32 im_disp5_set_osd_area_adata_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG address);
 
 /**
 Get OSD input data address (A data) of the bank index specified.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -430,13 +466,13 @@ Get OSD input data address (A data) of the bank index specified.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *address);
+ INT32 im_disp5_get_osd_area_adata_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *address);
 
 /**
 Set the horizontal global area width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -451,13 +487,13 @@ Set the horizontal global area width.<br>
 				<li>GRHGA is a multiple of 8
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width);
+ INT32 im_disp5_set_osd_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width);
 
 /**
 Get the horizontal global area width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -466,13 +502,13 @@ Get the horizontal global area width.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width);
+ INT32 im_disp5_get_osd_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width);
 
 /**
 Set the A data horizontal global area width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -487,13 +523,13 @@ Set the A data horizontal global area width.<br>
 				<li>GRHGA is a multiple of 8
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Adata_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width);
+ INT32 im_disp5_set_osd_adata_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width);
 
 /**
 Get the A data horizontal global area width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -502,13 +538,13 @@ Get the A data horizontal global area width.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Adata_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width);
+ INT32 im_disp5_get_osd_adata_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width);
 
 /**
 Set input start position.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1

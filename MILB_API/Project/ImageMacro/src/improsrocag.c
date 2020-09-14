@@ -45,7 +45,7 @@ struct _ImproSrocagPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const TimproRdmaCagAddr gIM_PRO_CAG_Addr[E_IM_PRO_UNIT_NUM_MAX] = {
+static const TimproRdmaCagAddr gIM_PRO_CAG_Addr[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	{
 		0x28409818,0x2840981C,0x28409820,0x28409824,
 		0x28409828,0x2840982C,0x28409830,0x28409834,
@@ -92,7 +92,7 @@ static const TimproRdmaCagAddr gIM_PRO_CAG_Addr[E_IM_PRO_UNIT_NUM_MAX] = {
 		0x286098D8
 	},
 };
-static const UINT32	gIM_PRO_CAG_Status_Tbl[E_IM_PRO_UNIT_NUM_MAX] = {
+static const UINT32	gIM_PRO_CAG_Status_Tbl[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	ImproSrocag_D_IM_SRO1_STATUS_CAG,	ImproSrocag_D_IM_SRO2_STATUS_CAG,	ImproSrocag_D_IM_SRO_STATUS_CAG_BOTH,
 };
 
@@ -130,10 +130,10 @@ Start CAG
 VOID impro_srocag_start( E_IM_PRO_UNIT_NUM unitNo )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
-	ioPro.imgPipe[unitNo].sro.cag.CAGTRG.bit.CAGTRG = D_IM_PRO_TRG_START;
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	ioPro.imgPipe[unitNo].sro.cag.cagtrg.bit.cagtrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(gIM_PRO_CAG_Status_Tbl[unitNo], 0);
 }
@@ -146,17 +146,17 @@ Stop CAG
 VOID impro_srocag_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
-		ioPro.imgPipe[unitNo].sro.cag.CAGTRG.bit.CAGTRG = D_IM_PRO_TRG_FRAME_STOP;
+		ioPro.imgPipe[unitNo].sro.cag.cagtrg.bit.cagtrg = D_IM_PRO_TRG_FRAME_STOP;
 	}
 	else {
 		// force stop
-		ioPro.imgPipe[unitNo].sro.cag.CAGTRG.bit.CAGTRG = D_IM_PRO_TRG_FORCE_STOP;
+		ioPro.imgPipe[unitNo].sro.cag.cagtrg.bit.cagtrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(gIM_PRO_CAG_Status_Tbl[unitNo], 0);
 }
@@ -172,12 +172,12 @@ INT32 impro_srocag_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproCagCtrl* cagCtrl )
 #ifdef CO_PARAM_CHECK
 	if (cagCtrl == NULL){
 		Ddim_Assertion(("I:impro_srocag_ctrl error. cagCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.cag.rbr.bit.rbrv			= cagCtrl->vBinningRatioReciprocalNum;
 	ioPro.imgPipe[unitNo].sro.cag.rbr.bit.rbrh			= cagCtrl->hBinningRatioReciprocalNum;
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.aboarh, union IoAboarh,
@@ -194,84 +194,84 @@ INT32 impro_srocag_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproCagCtrl* cagCtrl )
 			aboabv, cagCtrl->optCenterPosV[2] );
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abgar, union IoAbgar,
 			abgar,	 cagCtrl->gain[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABGAG, union IoAbgag,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abgag, union IoAbgag,
 			abgag,	 cagCtrl->gain[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABGAB, union IoAbgab,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abgab, union IoAbgab,
 			abgab,	 cagCtrl->gain[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLRH, union IoAblrh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablrh, union IoAblrh,
 			ablrhu,	 cagCtrl->transferULimitH[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLGH, union IoAblgh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablgh, union IoAblgh,
 			ablghu,	 cagCtrl->transferULimitH[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLBH, union IoAblbh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablbh, union IoAblbh,
 			ablbhu,	 cagCtrl->transferULimitH[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLRH, union IoAblrh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablrh, union IoAblrh,
 			ablrhl,	 cagCtrl->transferLLimitH[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLGH, union IoAblgh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablgh, union IoAblgh,
 			ablghl,	 cagCtrl->transferLLimitH[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLBH, union IoAblbh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablbh, union IoAblbh,
 			ablbhl,	 cagCtrl->transferLLimitH[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLRV, union IoAblrv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablrv, union IoAblrv,
 			ablrvu,	 cagCtrl->transferULimitV[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLGV, union IoAblgv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablgv, union IoAblgv,
 			ablgvu,	 cagCtrl->transferULimitV[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLBV, union IoAblbv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablbv, union IoAblbv,
 			ablbvu,	 cagCtrl->transferULimitV[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLRV, union IoAblrv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablrv, union IoAblrv,
 			ablrvl,	 cagCtrl->transferLLimitV[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLGV, union IoAblgv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablgv, union IoAblgv,
 			ablgvl,	 cagCtrl->transferLLimitV[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABLBV, union IoAblbv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ablbv, union IoAblbv,
 			ablbvl,	 cagCtrl->transferLLimitV[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSRH, union IoAbofsrh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsrh, union IoAbofsrh,
 			abofsrh, cagCtrl->transferOffsetH[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSGH, union IoAbofsgh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsgh, union IoAbofsgh,
 			abofsgh, cagCtrl->transferOffsetH[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSBH, union IoAbofsbh,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsbh, union IoAbofsbh,
 			abofsbh, cagCtrl->transferOffsetH[2] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSRV, union IoAbofsrv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsrv, union IoAbofsrv,
 			abofsrv, cagCtrl->transferOffsetV[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSGV, union IoAbofsgv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsgv, union IoAbofsgv,
 			abofsgv, cagCtrl->transferOffsetV[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABOFSBV, union IoAbofsbv,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abofsbv, union IoAbofsbv,
 			abofsbv, cagCtrl->transferOffsetV[2] );
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHR1.bit.ABNLTHR1	= cagCtrl->cornerThresh1[0];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHG1.bit.ABNLTHG1	= cagCtrl->cornerThresh1[1];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHB1.bit.ABNLTHB1	= cagCtrl->cornerThresh1[2];
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAR1, union IoAbnlgar1,
+	ioPro.imgPipe[unitNo].sro.cag.abnlthr1.bit.abnlthr1	= cagCtrl->cornerThresh1[0];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthg1.bit.abnlthg1	= cagCtrl->cornerThresh1[1];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthb1.bit.abnlthb1	= cagCtrl->cornerThresh1[2];
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgar1, union IoAbnlgar1,
 			abnlgar1, cagCtrl->cornerGain1[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAG1, union IoAbnlgag1,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgag1, union IoAbnlgag1,
 			abnlgag1, cagCtrl->cornerGain1[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAB1, union IoAbnlgab1,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgab1, union IoAbnlgab1,
 			abnlgab1, cagCtrl->cornerGain1[2] );
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHR2.bit.ABNLTHR2	= cagCtrl->cornerThresh2[0];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHG2.bit.ABNLTHG2	= cagCtrl->cornerThresh2[1];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHB2.bit.ABNLTHB2	= cagCtrl->cornerThresh2[2];
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAR2, union IoAbnlgar2,
+	ioPro.imgPipe[unitNo].sro.cag.abnlthr2.bit.abnlthr2	= cagCtrl->cornerThresh2[0];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthg2.bit.abnlthg2	= cagCtrl->cornerThresh2[1];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthb2.bit.abnlthb2	= cagCtrl->cornerThresh2[2];
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgar2, union IoAbnlgar2,
 			abnlgar2, cagCtrl->cornerGain2[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAG2, union IoAbnlgag2,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgag2, union IoAbnlgag2,
 			abnlgag2, cagCtrl->cornerGain2[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAB2, union IoAbnlgab2,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgab2, union IoAbnlgab2,
 			abnlgab2, cagCtrl->cornerGain2[2] );
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHR3.bit.ABNLTHR3	= cagCtrl->cornerThresh3[0];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHG3.bit.ABNLTHG3	= cagCtrl->cornerThresh3[1];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHB3.bit.ABNLTHB3	= cagCtrl->cornerThresh3[2];
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAR3, union IoAbnlgar3,
+	ioPro.imgPipe[unitNo].sro.cag.abnlthr3.bit.abnlthr3	= cagCtrl->cornerThresh3[0];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthg3.bit.abnlthg3	= cagCtrl->cornerThresh3[1];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthb3.bit.abnlthb3	= cagCtrl->cornerThresh3[2];
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgar3, union IoAbnlgar3,
 			abnlgar3, cagCtrl->cornerGain3[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAG3, union IoAbnlgag3,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgag3, union IoAbnlgag3,
 			abnlgag3, cagCtrl->cornerGain3[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAB3, union IoAbnlgab3,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgab3, union IoAbnlgab3,
 			abnlgab3, cagCtrl->cornerGain3[2] );
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHR4.bit.ABNLTHR4	= cagCtrl->cornerThresh4[0];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHG4.bit.ABNLTHG4	= cagCtrl->cornerThresh4[1];
-	ioPro.imgPipe[unitNo].sro.cag.ABNLTHB4.bit.ABNLTHB4	= cagCtrl->cornerThresh4[2];
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAR4, union IoAbnlgar4,
+	ioPro.imgPipe[unitNo].sro.cag.abnlthr4.bit.abnlthr4	= cagCtrl->cornerThresh4[0];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthg4.bit.abnlthg4	= cagCtrl->cornerThresh4[1];
+	ioPro.imgPipe[unitNo].sro.cag.abnlthb4.bit.abnlthb4	= cagCtrl->cornerThresh4[2];
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgar4, union IoAbnlgar4,
 			abnlgar4, cagCtrl->cornerGain4[0] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAG4, union IoAbnlgag4,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgag4, union IoAbnlgag4,
 			abnlgag4, cagCtrl->cornerGain4[1] );
-	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.ABNLGAB4, union IoAbnlgab4,
+	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.abnlgab4, union IoAbnlgab4,
 			abnlgab4, cagCtrl->cornerGain4[2] );
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -282,21 +282,21 @@ A setup of enable access to the built-in RAM of CAG.
 @param[in]	paenTrg :  control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srocag_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
-	if( ( paenTrg == 0 ) && ( ioPro.imgPipe[unitNo].sro.cag.CAGTRG.bit.CAGTRG != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
+	if( ( paenTrg == 0 ) && ( ioPro.imgPipe[unitNo].sro.cag.cagtrg.bit.cagtrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:Im_PRO_FSHD_Set_PAEN. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.cag.cagpaen.bit.cpaen = paenTrg;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -306,51 +306,51 @@ Set CAG area
 @param[in]	unitNo : Unit number.
 @param[in]	cagArea	: CAG area.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srocag_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproCagArea* cagArea )
 {
 #ifdef CO_PARAM_CHECK
 	if (cagArea == NULL){
 		Ddim_Assertion(("I:impro_srocag_set_area error. cagArea=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGGH_MIN, ImproSrocag_D_IM_PRO_CAG_CAGGH_MAX,
 			cagArea->gPosX, "impro_srocag_set_area : gPosX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGGV_MIN, ImproSrocag_D_IM_PRO_CAG_CAGGV_MAX,
 			cagArea->gPosY, "impro_srocag_set_area : gPosY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGGHW_MIN, ImproSrocag_D_IM_PRO_CAG_CAGGHW_MAX,
 			cagArea->gWidth, "impro_srocag_set_area : gWidth" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGGVW_MIN, ImproSrocag_D_IM_PRO_CAG_CAGGVW_MAX,
 			cagArea->gLines, "impro_srocag_set_area : gLines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGH_MIN, ImproSrocag_D_IM_PRO_CAG_CAGH_MAX,
 			cagArea->posX, "impro_srocag_set_area : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGV_MIN, ImproSrocag_D_IM_PRO_CAG_CAGV_MAX,
 			cagArea->posY, "impro_srocag_set_area : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGHW_MIN, ImproSrocag_D_IM_PRO_CAG_CAGHW_MAX,
 			cagArea->width, "impro_srocag_set_area : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrocag_D_IM_PRO_CAG_CAGVW_MIN, ImproSrocag_D_IM_PRO_CAG_CAGVW_MAX,
 			cagArea->lines, "impro_srocag_set_area : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.cag.caggwp.bit.caggh		= cagArea->gPosX;
 	ioPro.imgPipe[unitNo].sro.cag.caggwp.bit.caggv		= cagArea->gPosY;
 	ioPro.imgPipe[unitNo].sro.cag.caggws.bit.cagghw		= cagArea->gWidth;
@@ -360,7 +360,7 @@ INT32 impro_srocag_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproCagArea* cagArea )
 	ioPro.imgPipe[unitNo].sro.cag.cagws.bit.caghw		= cagArea->width;
 	ioPro.imgPipe[unitNo].sro.cag.cagws.bit.cagvw		= cagArea->lines;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -373,12 +373,12 @@ Set CAG optCenterPosH  control
 INT32 impro_srocag_opt_center_pos_h_ctrl( E_IM_PRO_UNIT_NUM unitNo, SHORT optCenterPosH [3] )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.aboarh, union IoAboarh, aboarh, optCenterPosH[0] );
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.aboagh, union IoAboagh, aboagh, optCenterPosH[1] );
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.cag.aboabh, union IoAboabh, aboabh, optCenterPosH[2] );
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -388,18 +388,18 @@ Set CAG G level difference information
 @param[in]	unitNo : Unit number.
 @param[in]	cagCtrlGlevelDiff	: CAG G level difference Information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srocag_ctrl_glv_diff( E_IM_PRO_UNIT_NUM unitNo, TimproCagCtrlGlevelDiff* cagCtrlGlevelDiff )
 {
 #ifdef CO_PARAM_CHECK
 	if (cagCtrlGlevelDiff == NULL){
 		Ddim_Assertion(("I:impro_srocag_ctrl_glv_diff error. cagCtrlGlevelDiff=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.cag.cagmd.bit.clpsel		= cagCtrlGlevelDiff->clipMode;
 	ioPro.imgPipe[unitNo].sro.cag.cagmd.bit.gcamd		= cagCtrlGlevelDiff->gGapCorMode;
 	ioPro.imgPipe[unitNo].sro.cag.cagmd.bit.cagpdd		= cagCtrlGlevelDiff->gGapPadMode;
@@ -409,7 +409,7 @@ INT32 impro_srocag_ctrl_glv_diff( E_IM_PRO_UNIT_NUM unitNo, TimproCagCtrlGlevelD
 	ioPro.imgPipe[unitNo].sro.cag.bfgth.bit.bfgtha		= cagCtrlGlevelDiff->gradientThreshold;
 	ioPro.imgPipe[unitNo].sro.cag.bfgth.bit.bfgthk		= cagCtrlGlevelDiff->gradientThresholdGain;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -426,7 +426,7 @@ INT32 impro_srocag_get_rdma_addr_cag_cntl( E_IM_PRO_UNIT_NUM unitNo, const Timpr
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_srocag_get_rdma_addr_cag_cntl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 

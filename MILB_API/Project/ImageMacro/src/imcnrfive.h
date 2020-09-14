@@ -230,49 +230,6 @@ extern	INT32 im_cnrfive_set_rdmavalue_otf_cspr_low_y_table(ImCnrfive *self, cons
 
 
 /**
-SPR Wait End for Off Line
-@param [in]	ch				channel[0 - 1]
-@param[out]	pWaitFactor	: Pointer of factor bitfield parameter which release wait process.<br>
-								  <ul>
-										 <li>@ref D_IM_CNR_FLG_0_OFL_SPR_END
-										 <li>@ref D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR
-								  </ul>
-@param[in]	wait_time			Wait time [msec]. The valid range is -1, 0, ... .
-							If this parameter is set to -1, driver waits permanently unless system-call sets event-flag.
-@retval		D_DDIM_OK						Success.
-@retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_AXI_ERR				Fail - AXI bus error.
-@retval		D_IM_CNR_TIMEOUT				Fail - Processing NG.(Time outed)
-@retval		D_IM_CNR_SEM_NG					Fail - Process NG. (Event flag error)
-@remarks	Wait for SPR function is ended.
-@remarks	This API uses DDIM_User_Clr_Flg().
-@remarks	This API uses DDIM_User_Twai_Flg().
-*/
-extern	INT32 im_cnrfive_ofl_wait_end(ImCnrtwo *self, UCHAR ch, UINT32* const pWaitFactor, const INT32 wait_time );
-
-/**
-SPR Wait End for On The Fly
-@param [in]	ch				channel[0 - 1]
-@param[out]	pWaitFactor	: Pointer of factor bitfield parameter which release wait process.<br>
-								  <ul>
-										 <li>@ref D_IM_CNR_FLG_0_OTF_SPR_END
-										 <li>@ref D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR
-								  </ul>
-@param[in]	wait_time			Wait time [msec]. The valid range is -1, 0, ... .
-							If this parameter is set to -1, driver waits permanently unless system-call sets event-flag.
-@retval		D_DDIM_OK						Success.
-@retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_AXI_ERR				Fail - AXI bus error.
-@retval		D_IM_CNR_TIMEOUT				Fail - Processing NG.(Time outed)
-@retval		D_IM_CNR_SEM_NG					Fail - Process NG. (Event flag error)
-@remarks	Wait for SPR function is ended.
-@remarks	This API uses DDIM_User_Clr_Flg().
-@remarks	This API uses DDIM_User_Twai_Flg().
-*/
-extern	INT32 im_cnrfive_otf_wait_end(ImCnrtwo *self, UCHAR ch, UINT32* const pWaitFactor, const INT32 wait_time );
-
-
-/**
 @weakgroup im_cnr
 @{
 
@@ -293,83 +250,83 @@ INT32 sample_cnr( VOID )
 		.width = 4000,								// width		SPR valid data width	@@HSIZE
 		.lines = 3000,								// lines		SPR valid data lines	@@VSIZE
 
-		.r_y_width = 4000,							// r_y_width	Y width for read	@@RYDEF
-		.r_y_addr = 0x42000000,						// r_y_addr		Y address for read	@@RYTA
+		.rYWidth = 4000,							// rYWidth	Y width for read	@@RYDEF
+		.rYAddr = 0x42000000,						// rYAddr		Y address for read	@@RYTA
 
-		.r_c_width = 4000 /2,						// r_c_width	CbCr width for read	@@RCDEF
-		.r_cb_addr = 0x43000000,					// r_cb_addr	Cb address for read	@@RCBTA
-		.r_cr_addr = 0x44000000,					// r_cr_addr	Cr address for read	@@RCRTA
+		.rCWidth = 4000 /2,						// rCWidth	CbCr width for read	@@RCDEF
+		.rCbAddr = 0x43000000,					// rCbAddr	Cb address for read	@@RCBTA
+		.rCrAddr = 0x44000000,					// rCrAddr	Cr address for read	@@RCRTA
 
-		.w_y_width = 4000,							// w_y_width	Y width for write	@@WYDEF
-		.w_y_addr = 0x45000000,						// w_y_addr		Y address for write	@@WYTA
+		.wYWidth = 4000,							// wYWidth	Y width for write	@@WYDEF
+		.wYAddr = 0x45000000,						// wYAddr		Y address for write	@@WYTA
 
-		.w_c_width = 4000 /2,						// w_c_width	CbCr width for write	@@WCDEF
-		.w_cb_addr = 0x46000000,					// w_cb_addr	Cb address for write	@@WCBTA
-		.w_cr_addr = 0x47000000,					// w_cr_addr	Cr address for write	@@WCRTA
+		.wCWidth = 4000 /2,						// wCWidth	CbCr width for write	@@WCDEF
+		.wCbAddr = 0x46000000,					// wCbAddr	Cb address for write	@@WCBTA
+		.wCrAddr = 0x47000000,					// wCrAddr	Cr address for write	@@WCRTA
 
-		.work_addr = 0x48000000,					// work_addr	Address fir work area	@@TMPTA
+		.workAddr = 0x48000000,					// workAddr	Address fir work area	@@TMPTA
 
-		.divide_top = ImCnr_VPROCESS_NORM,		// divide_top	Virtucal process devide	@@VDIVT
-		.divide_bot = ImCnr_VPROCESS_NORM,		// divide_bot	Virtucal process devide	@@VDIVB
+		.divideTop = ImCnr_VPROCESS_NORM,		// divideTop	Virtucal process devide	@@VDIVT
+		.divideBot = ImCnr_VPROCESS_NORM,		// divideBot	Virtucal process devide	@@VDIVB
 
 		.pCallBack = NULL,							// pCallBack	callback function
-		.user_param = 0,							// user_param	callback arg
+		.userParam = 0,							// userParam	callback arg
 	};
 	ImCnrCtrlC cnr_ctrl_c = {
 		.enable = ImCnr_ONOFF_ENABLE,					// enable				CbCr SPR enable @@CSPREN
-		.gradation_keep_en = ImCnr_ONOFF_ENABLE,			// enable				gradation keep enable @@CGDKEN
-		.mid_freq_nr = {									// Middle range frequency Color NR parmeter
+		.gradationKeepEn = ImCnr_ONOFF_ENABLE,			// enable				gradation keep enable @@CGDKEN
+		.midFreqNr = {									// Middle range frequency Color NR parmeter
 			.enable = ImCnr_ONOFF_ENABLE,				// Middle CbCr SPR enable @@MCEN
-			.h_y_threshold = {								// Middle SPR Y threshold for horizontal	@@MCYTHH
+			.hYThreshold = {								// Middle SPR Y threshold for horizontal	@@MCYTHH
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_y_threshold = {								// Middle SPR Y threshold for vertical		@@MCYTHV
+			.vYThreshold = {								// Middle SPR Y threshold for vertical		@@MCYTHV
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.h_c_threshold = {								// Middle SPR CbCr threshold for horizontal	@@MCCTHH
+			.hCThreshold = {								// Middle SPR CbCr threshold for horizontal	@@MCCTHH
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_c_threshold = {								// Middle SPR CbCr threshold for vertical	@@MCCTHV
+			.vCThreshold = {								// Middle SPR CbCr threshold for vertical	@@MCCTHV
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.y_threshold_cor = 0,							// Middle SPR Y threshold coring	@@MCYDYMYCR
-			.y_threshold_gain = 0,							// register default. Need tuning.
-			.y_threshold_dym_en = ImCnr_ONOFF_DISABLE,	// Middle Y threshold dynamic setting enable @@MCYDYM
-			.y_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Middle Y threshold scale enable @@MCYSCL
-			.c_y_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Middle CbCr threshold Y scale enable @@MCSSCL
-			.c_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Middle CbCr threshold scale enable @@MCCSCL
+			.yThresholdCor = 0,							// Middle SPR Y threshold coring	@@MCYDYMYCR
+			.yThresholdGain = 0,							// register default. Need tuning.
+			.yThresholdDymEn = ImCnr_ONOFF_DISABLE,	// Middle Y threshold dynamic setting enable @@MCYDYM
+			.yThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Middle Y threshold scale enable @@MCYSCL
+			.cYThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Middle CbCr threshold Y scale enable @@MCSSCL
+			.cThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Middle CbCr threshold scale enable @@MCCSCL
 		},
-		.low_freq_nr = {									// Low range frequency Color NR parmeters
+		.lowFreqNr = {									// Low range frequency Color NR parmeters
 			.enable = ImCnr_ONOFF_ENABLE,					// Low CbCr SPR enable @@LCEN
-			.h_y_threshold = {								// Low SPR Y threshold for horizontal		@@LCYTHH
+			.hYThreshold = {								// Low SPR Y threshold for horizontal		@@LCYTHH
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_y_threshold = {								// Low SPR Y threshold for vertical			@@LCYTHV
+			.vYThreshold = {								// Low SPR Y threshold for vertical			@@LCYTHV
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.h_c_threshold = {								// Low SPR CbCr threshold for horizontal	@@LCCTHH
+			.hCThreshold = {								// Low SPR CbCr threshold for horizontal	@@LCCTHH
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_c_threshold = {								// Low SPR CbCr threshold for vertical		@@LCCTHV
+			.vCThreshold = {								// Low SPR CbCr threshold for vertical		@@LCCTHV
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.y_threshold_cor = 0,							// Low SPR Y threshold coring	@@LCYDYMYCR
-			.y_threshold_gain = 0,							// register default. Need tuning.
-			.y_threshold_dym_en = ImCnr_ONOFF_DISABLE,	// Low Y threshold dynamic setting enable @@LCYDYM
-			.y_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Low Y threshold scale enable @@LCYSCL
-			.c_y_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Low CbCr threshold Y scale enable @@LCSSCL
-			.c_threshold_scl_en = ImCnr_ONOFF_DISABLE,	// Low CbCr threshold scale enable @@LCCSCL
+			.yThresholdCor = 0,							// Low SPR Y threshold coring	@@LCYDYMYCR
+			.yThresholdGain = 0,							// register default. Need tuning.
+			.yThresholdDymEn = ImCnr_ONOFF_DISABLE,	// Low Y threshold dynamic setting enable @@LCYDYM
+			.yThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Low Y threshold scale enable @@LCYSCL
+			.cYThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Low CbCr threshold Y scale enable @@LCSSCL
+			.cThresholdSclEn = ImCnr_ONOFF_DISABLE,	// Low CbCr threshold scale enable @@LCCSCL
 		},
 	};
 	ImCnrOflCtrlY cnr_ctrl_y = {
 		.enable = ImCnr_ONOFF_ENABLE,					// enable				Y SPR enable @@YSPREN
-		.threshold_type = ImCnr_THRES_REGISTER,			// threshold_type		threshold type for Y	@@YSPRMODE YSPRMD
+		.thresholdType = ImCnr_THRES_REGISTER,			// thresholdType		threshold type for Y	@@YSPRMODE YSPRMD
 		.level = ImCnr_LEVEL_LOW,						// level				filter level		@@YSPRMODE YSPRFE
-		.h_y_threshold = 0,									// h_y_threshold		SPR Y threshold for horizontal		@@YSPRFXEYH
-		.v_y_threshold = 0,									// v_y_threshold		SPR Y threshold for vertical		@@YSPRFXEYV
-		.h_c_threshold = 0,									// h_c_threshold		SPR CbCr threshold for horizontal	@@YSPRFXECH
-		.v_c_threshold = 0,									// v_c_threshold		SPR CbCr threshold for vertical		@@YSPRFXECV
-		.alpha_blend_ratio = 0,								// alpha_blend_ratio	Alpha blend ratio			@@YSPRALPBD
+		.hYThreshold = 0,									// hYThreshold		SPR Y threshold for horizontal		@@YSPRFXEYH
+		.vYThreshold = 0,									// vYThreshold		SPR Y threshold for vertical		@@YSPRFXEYV
+		.hCThreshold = 0,									// hCThreshold		SPR CbCr threshold for horizontal	@@YSPRFXECH
+		.vCThreshold = 0,									// vCThreshold		SPR CbCr threshold for vertical		@@YSPRFXECV
+		.alphaBlendRatio = 0,								// alphaBlendRatio	Alpha BLEND ratio			@@YSPRALPBD
 	};
 
 

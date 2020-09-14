@@ -1030,7 +1030,7 @@ void ct_im_pro1_1_8(CtImPro11* self, const kuint32 idx)
 		ioPro.sen.slvsec.common.sr.bit.updb = 0;
 		ioPro.sen.slvsec.common.sr.bit.initb = 1;
 #endif  // CO_DEBUG_ON_PC
-		streamType = E_IM_PRO_SLVS_STREAM_TYPE_A;
+		streamType = E_IM_PRO_SLVS_STREAM_TYPE_A;//TODO
 		self->priv->ercd = impro_senslvs_sr(self->priv->improSenslvs, streamType);
 		if (self->priv->ercd != DdimUserCustom_E_OK) {
 			Ddim_Print(

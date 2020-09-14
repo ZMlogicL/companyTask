@@ -670,7 +670,7 @@ INT32 dd_top_get_gpio_pull_up_down_ctrl(DdTop *self, DdTop_GPIO_PORT port, UCHAR
 Get Frequency of LTM pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_ltm2clk(VOID)
+ULONG dd_top_get_ltm2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -717,7 +717,7 @@ ULONG dd_top_get_ltm2clk(VOID)
 Get Frequency of B2R pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_b2r2clk(VOID)
+ULONG dd_top_get_b2r2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -760,7 +760,7 @@ ULONG dd_top_get_b2r2clk(VOID)
 Get Frequency of CNR pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_cnr2clk(VOID)
+ULONG dd_top_get_cnr2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -795,7 +795,7 @@ ULONG dd_top_get_cnr2clk(VOID)
 Get Frequency of SRO pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_sro2clk(VOID)
+ULONG dd_top_get_sro2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -813,7 +813,7 @@ ULONG dd_top_get_sro2clk(VOID)
 Get Frequency of B2B pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_b2b2clk(VOID)
+ULONG dd_top_get_b2b2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -852,7 +852,7 @@ ULONG dd_top_get_b2b2clk(VOID)
 Get Frequency of LTMRBK pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_ltmrbk2clk(VOID)
+ULONG dd_top_get_ltmrbk2clk(DdTop *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -891,7 +891,7 @@ ULONG dd_top_get_ltmrbk2clk(VOID)
 Get Frequency of APCLK clock
 @retval	Hz
 */
-ULONG dd_top_get_apclk(VOID)
+ULONG dd_top_get_apclk(DdTop *self)
 {
 	// 0: 74.25MHz(=1188MHz/16)
 	// 1: 54MHz(=1188MHz/22)
@@ -925,7 +925,7 @@ ULONG dd_top_get_apclk(VOID)
 Get Frequency of Audio clock
 @retval	Hz
 */
-ULONG dd_top_get_auclk(VOID) {
+ULONG dd_top_get_auclk(DdTop *self) {
 	// 0:36.864MHz (set to 96 PL10ADIV)
 	// 1:22.5792MHz (set to 98 PL10ADIV)
 	// 2:24.576MHz (set to 128 PL10ADIV)
@@ -942,7 +942,7 @@ ULONG dd_top_get_auclk(VOID) {
 Get Frequency of SPI clock
 @retval	Hz
 */
-ULONG dd_top_get_spiclk(VOID)
+ULONG dd_top_get_spiclk(DdTop *self)
 {
 	// 0:216MHz(=864MHz/4)
 	// 1:108MHz(=864MHz/8)

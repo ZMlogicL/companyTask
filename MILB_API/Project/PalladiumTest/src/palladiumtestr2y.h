@@ -32,10 +32,9 @@ struct _PalladiumTestR2y
 };
 
 
-KConstType palladium_test_r2y_get_type(void);
-PalladiumTestR2y* palladium_test_r2y_new(void);
-PalladiumTestR2y* palladium_test_r2y_get(void);
+KConstType 				palladium_test_r2y_get_type(void);
+PalladiumTestR2y* 	palladium_test_r2y_new(void);
 
-VOID Pt_Im_R2Y_Main( VOID );
+void 							palladium_test_r2y_main(PalladiumTestR2y* self);
 
 #endif /* __PALLADIUM_TEST_R2Y_H__ */

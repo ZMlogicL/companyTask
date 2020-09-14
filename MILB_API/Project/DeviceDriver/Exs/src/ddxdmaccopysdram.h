@@ -66,7 +66,7 @@ It waits until forwarding ends. (synchronization)
 			</ul>
 */
 extern	kint32	dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch,\
-		kulong src_addr, kulong dst_addr, kulong size, kuint32 waitMode);
+		kulong srcAddr, kulong dstAddr, kulong size, kuint32 waitMode);
 
 /**
 DMA forwarding between SDRAM-SDRAM.<br>
@@ -90,7 +90,7 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
 			</ul>
 */
 extern	kint32	dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch,\
-		kulong src_addr, kulong dst_addr, kulong size, VpCallback intHandler);
+		kulong srcAddr, kulong dstAddr, kulong size, VpCallback intHandler);
 /*@}*/
 #endif
 

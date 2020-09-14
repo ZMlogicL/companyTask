@@ -18,31 +18,55 @@
 #include "imhdmistruct.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImHdmiStruct, im_hdmi_struct);
-#define IM_HDMI_STRUCT_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImHdmiStructPrivate, IM_TYPE_HDMI_STRUCT	))
+G_DEFINE_TYPE(ImHdmiStruct, im_hdmi_struct, G_TYPE_OBJECT);
+#define IM_HDMI_STRUCT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_HDMI_STRUCT, ImHdmiStructPrivate));
 
 
 struct _ImHdmiStructPrivate
 {
-	kint a;
+	gint a;
 };
-
-
 /*----------------------------------------------------------------------	*/
 /* Global Data																*/
 /*----------------------------------------------------------------------	*/
 static volatile VP_HDMI_CALLBACK gIM_HDMI_INT_Callback = NULL;
 /**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
  * IMPL
  */
-static void im_hdmi_struct_constructor(ImHdmiStruct *self)
+static void 		im_hdmi_struct_class_init(ImHdmiStructClass *klass)
 {
-//	ImHdmiStructPrivate *priv = IM_HDMI_STRUCT_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImHdmiStructPrivate));
 }
 
-static void im_hdmi_struct_destructor(ImHdmiStruct *self)
+static void 		im_hdmi_struct_init(ImHdmiStruct *self)
 {
-//	ImHdmiStructPrivate *priv = IM_HDMI_STRUCT_GET_PRIVATE(self);
+	ImHdmiStructPrivate *priv = IM_HDMI_STRUCT_GET_PRIVATE(self);
+	self->imHdmi = im_hdmi_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImHdmiStructPrivate *priv = IM_HDMI_STRUCT_GET_PRIVATE(object);
+	ImHdmiStruct *self = im_hdmi_struct_new();
+	if(self->imHdmi){
+		g_object_unref(self->imHdmi);
+		self->imHdmi = NULL;
+	}
+	G_OBJECT_CLASS(im_hdmi_struct_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImHdmiStructPrivate *priv = IM_HDMI_STRUCT_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_hdmi_struct_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -50,18 +74,18 @@ static void im_hdmi_struct_destructor(ImHdmiStruct *self)
 /**
  * @brief	Set Color Space Converter.
  */
-kint32 im_hdmi_csc(ThdmiCscConfig const *const config, const ThdmiCscCoef
+gint32 im_hdmi_struct_csc(ImHdmiStruct *self, ThdmiCscConfig const *const config, const ThdmiCscCoef
 										matrix[ImHdmiStruct_D_IM_HDMI_CSC_CONF_COLUMN_NUM][ImHdmiStruct_D_IM_HDMI_CSC_CONF_ROW_NUM])
 {
-	kint32 loop1, loop2;
+	gint32 loop1, loop2;
 
 #ifdef CO_PARAM_CHECK
 	if ((config == NULL) || (matrix == NULL)) {
-		Ddim_Assertion(("im_hdmi_csc Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_csc Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Set cscCfg/cscScale.
 	ioDisp.hdmiTx.cscCfg.byte[0] = config->cscCfg.byte;
@@ -75,7 +99,7 @@ kint32 im_hdmi_csc(ThdmiCscConfig const *const config, const ThdmiCscCoef
 		}
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -83,33 +107,33 @@ kint32 im_hdmi_csc(ThdmiCscConfig const *const config, const ThdmiCscCoef
 /**
  * @brief	Set Video Sampler.
  */
-void im_hdmi_set_video_sampler(UhdmiTxInvid0 tx_invid0)
+void im_hdmi_struct_set_video_sampler(ImHdmiStruct *self, UhdmiTxInvid0 txInvid0)
 {
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
-	// Set tx_invid0.
-	ioDisp.hdmiTx.txInvid0.byte[0]	= tx_invid0.byte;
+	// Set txInvid0.
+	ioDisp.hdmiTx.txInvid0.byte[0]	= txInvid0.byte;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 }
 
 /**
  * @brief	Get Video Sampler.
  */
-kint32 im_hdmi_get_video_sampler(UhdmiTxInvid0* tx_invid0)
+gint32 im_hdmi_struct_get_video_sampler(ImHdmiStruct *self, UhdmiTxInvid0* txInvid0)
 {
 #ifdef CO_PARAM_CHECK
-	if (tx_invid0 == NULL) {
-		Ddim_Assertion(("im_hdmi_get_video_sampler Input_Param_Err status NULL\n"));
+	if (txInvid0 == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_get_video_sampler Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
-	// Get tx_invid0.
-	tx_invid0->byte = ioDisp.hdmiTx.txInvid0.byte[0];
+	// Get txInvid0.
+	txInvid0->byte = ioDisp.hdmiTx.txInvid0.byte[0];
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -117,22 +141,22 @@ kint32 im_hdmi_get_video_sampler(UhdmiTxInvid0* tx_invid0)
 /**
  * @brief	Set Video Packetizer.
  */
-kint32 im_hdmi_set_video_packetizer(ThdmiVideoPacketizer const *const video_packetizer)
+gint32 im_hdmi_struct_set_video_packetizer(ImHdmiStruct *self, ThdmiVideoPacketizer const *const videoPacketizer)
 {
 #ifdef CO_PARAM_CHECK
-	if (video_packetizer == NULL) {
-		Ddim_Assertion(("im_hdmi_set_video_packetizer Input_Param_Err status NULL\n"));
+	if (videoPacketizer == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_set_video_packetizer Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Set vpPrCd/vpRemap/vpConf.
-	ioDisp.hdmiTx.vpPrCd.byte[0] = video_packetizer->vpPrCd.byte;
-	ioDisp.hdmiTx.vpRemap.byte[0] = video_packetizer->vpRemap;
-	ioDisp.hdmiTx.vpConf.byte[0] = video_packetizer->vpConf.byte;
+	ioDisp.hdmiTx.vpPrCd.byte[0] = videoPacketizer->vpPrCd.byte;
+	ioDisp.hdmiTx.vpRemap.byte[0] = videoPacketizer->vpRemap;
+	ioDisp.hdmiTx.vpConf.byte[0] = videoPacketizer->vpConf.byte;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -140,22 +164,22 @@ kint32 im_hdmi_set_video_packetizer(ThdmiVideoPacketizer const *const video_pack
 /**
  * @brief	Get Video Packetizer.
  */
-kint32 im_hdmi_get_video_packetizer(ThdmiVideoPacketizer *const video_packetizer)
+gint32 im_hdmi_struct_get_video_packetizer(ImHdmiStruct *self, ThdmiVideoPacketizer *const videoPacketizer)
 {
 #ifdef CO_PARAM_CHECK
-	if (video_packetizer == NULL) {
-		Ddim_Assertion(("im_hdmi_get_video_packetizer Input_Param_Err status NULL\n"));
+	if (videoPacketizer == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_get_video_packetizer Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Get vpPrCd/vpRemap/vpConf.
-	video_packetizer->vpPrCd.byte = ioDisp.hdmiTx.vpPrCd.byte[0];
-	video_packetizer->vpRemap = (EhdmiVpRemap) ioDisp.hdmiTx.vpRemap.byte[0];
-	video_packetizer->vpConf.byte = ioDisp.hdmiTx.vpConf.byte[0];
+	videoPacketizer->vpPrCd.byte = ioDisp.hdmiTx.vpPrCd.byte[0];
+	videoPacketizer->vpRemap = (EhdmiVpRemap) ioDisp.hdmiTx.vpRemap.byte[0];
+	videoPacketizer->vpConf.byte = ioDisp.hdmiTx.vpConf.byte[0];
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -163,17 +187,17 @@ kint32 im_hdmi_get_video_packetizer(ThdmiVideoPacketizer *const video_packetizer
 /**
  * @brief	Set Frame Composer.
  */
-kint32 im_hdmi_set_frame_composer(ThdmiFrameComposer const *const frameComposer)
+gint32 im_hdmi_struct_set_frame_composer(ImHdmiStruct *self, ThdmiFrameComposer const *const frameComposer)
 {
 	unsigned char writeWork = 0;
 
 #ifdef CO_PARAM_CHECK
 	if (frameComposer == NULL) {
-		Ddim_Assertion(("im_hdmi_set_frame_composer Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_set_frame_composer Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Set fcInvidconf.
 	ioDisp.hdmiTx.fcInvidconf.byte[0] = frameComposer->fcInvidconf.byte;
@@ -219,7 +243,7 @@ kint32 im_hdmi_set_frame_composer(ThdmiFrameComposer const *const frameComposer)
 	// Set fcPrconf.
 	ioDisp.hdmiTx.fcPrconf.byte[0] = frameComposer->fcPrconf.byte;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -227,15 +251,15 @@ kint32 im_hdmi_set_frame_composer(ThdmiFrameComposer const *const frameComposer)
 /**
  * @brief	Get Frame Composer.
  */
-kint32 im_hdmi_get_frame_composer(ThdmiFrameComposer *const frameComposer)
+gint32 im_hdmi_struct_get_frame_composer(ImHdmiStruct *self, ThdmiFrameComposer *const frameComposer)
 {
 #ifdef CO_PARAM_CHECK
 	if (frameComposer == NULL) {
-		Ddim_Assertion(("im_hdmi_get_frame_composer Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_get_frame_composer Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Get fcInvidconf.
 	frameComposer->fcInvidconf.byte = ioDisp.hdmiTx.fcInvidconf.byte[0];
@@ -274,7 +298,7 @@ kint32 im_hdmi_get_frame_composer(ThdmiFrameComposer *const frameComposer)
 	// Get fcPrconf.
 	frameComposer->fcPrconf.byte = ioDisp.hdmiTx.fcPrconf.byte[0];
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -282,33 +306,33 @@ kint32 im_hdmi_get_frame_composer(ThdmiFrameComposer *const frameComposer)
 /**
  * @brief	Set Frame Composer (SPD Packet Data).
  */
-kint32 im_hdmi_set_frame_composer_spd(ThdmiFcSpd const *const fc_spd)
+gint32 im_hdmi_struct_set_frame_composer_spd(ImHdmiStruct *self, ThdmiFcSpd const *const fcSpd)
 {
-	kint32 loop;
+	gint32 loop;
 #ifdef CO_PARAM_CHECK
-	if (fc_spd == NULL) {
-		Ddim_Assertion(("im_hdmi_set_frame_composer_spd Input_Param_Err status NULL\n"));
+	if (fcSpd == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_set_frame_composer_spd Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Vendor Name.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_SPD_VENDER_NAME_NUM; loop++) {
-		ioDisp.hdmiTx.fcSpdvendorname[loop].byte[0] = fc_spd->fcSpdvendorname[loop];
+		ioDisp.hdmiTx.fcSpdvendorname[loop].byte[0] = fcSpd->fcSpdvendorname[loop];
 	}
 	// Product Name.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_SPD_PRO_NAME_NUM; loop++) {
-		ioDisp.hdmiTx.fcSpdproductname[loop].byte[0] = fc_spd->fcSpdproductname[loop];
+		ioDisp.hdmiTx.fcSpdproductname[loop].byte[0] = fcSpd->fcSpdproductname[loop];
 	}
 	// Source Product Descriptor.
-	ioDisp.hdmiTx.fcSpddeviceinf = fc_spd->fcSpddeviceinf;
+	ioDisp.hdmiTx.fcSpddeviceinf = fcSpd->fcSpddeviceinf;
 	// Enables SPD automatic packet scheduling
 	ioDisp.hdmiTx.fcDatauto0.bit.spdAuto = 1;
 	// auto_frame_packets
 	ioDisp.hdmiTx.fcDatauto2.bit.autoFramePackets = 1;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -316,29 +340,29 @@ kint32 im_hdmi_set_frame_composer_spd(ThdmiFcSpd const *const fc_spd)
 /**
  * @brief	Get Frame Composer (SPD Packet Data).
  */
-kint32 im_hdmi_get_frame_composer_spd(ThdmiFcSpd *const fc_spd)
+gint32 im_hdmi_struct_get_frame_composer_spd(ImHdmiStruct *self, ThdmiFcSpd *const fcSpd)
 {
-	kint32 loop;
+	gint32 loop;
 #ifdef CO_PARAM_CHECK
-	if (fc_spd == NULL) {
-		Ddim_Assertion(("im_hdmi_get_frame_composer_spd Input_Param_Err status NULL\n"));
+	if (fcSpd == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_get_frame_composer_spd Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Vendor Name.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_SPD_VENDER_NAME_NUM; loop++) {
-		fc_spd->fcSpdvendorname[loop] = ioDisp.hdmiTx.fcSpdvendorname[loop].byte[0];
+		fcSpd->fcSpdvendorname[loop] = ioDisp.hdmiTx.fcSpdvendorname[loop].byte[0];
 	}
 	// Product Name.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_SPD_PRO_NAME_NUM; loop++) {
-		fc_spd->fcSpdproductname[loop] = ioDisp.hdmiTx.fcSpdproductname[loop].byte[0];
+		fcSpd->fcSpdproductname[loop] = ioDisp.hdmiTx.fcSpdproductname[loop].byte[0];
 	}
 	// Source Product Descriptor.
-	fc_spd->fcSpddeviceinf = ioDisp.hdmiTx.fcSpddeviceinf;
+	fcSpd->fcSpddeviceinf = ioDisp.hdmiTx.fcSpddeviceinf;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -346,35 +370,35 @@ kint32 im_hdmi_get_frame_composer_spd(ThdmiFcSpd *const fc_spd)
 /**
  * @brief	Set Frame Composer (Vendor Specific).
  */
-kint32 im_hdmi_set_frame_composer_vsd(ThdmiFcVsd const *const fc_vsd)
+gint32 im_hdmi_struct_set_frame_composer_vsd(ImHdmiStruct *self, ThdmiFcVsd const *const fcVsd)
 {
-	kint32 loop;
+	gint32 loop;
 #ifdef CO_PARAM_CHECK
-	if (fc_vsd == NULL) {
-		Ddim_Assertion(("im_hdmi_set_frame_composer_vsd Input_Param_Err status NULL\n"));
+	if (fcVsd == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_set_frame_composer_vsd Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// IEEE registration identifier.
-	ioDisp.hdmiTx.fcVsdieeeid0 = fc_vsd->fcVsdieeeid[0];
-	ioDisp.hdmiTx.fcVsdieeeid1 = fc_vsd->fcVsdieeeid[1];
-	ioDisp.hdmiTx.fcVsdieeeid2 = fc_vsd->fcVsdieeeid[2];
+	ioDisp.hdmiTx.fcVsdieeeid0 = fcVsd->fcVsdieeeid[0];
+	ioDisp.hdmiTx.fcVsdieeeid1 = fcVsd->fcVsdieeeid[1];
+	ioDisp.hdmiTx.fcVsdieeeid2 = fcVsd->fcVsdieeeid[2];
 
 	// VSI Packet Data Size.
-	ioDisp.hdmiTx.fcVsdsize.bit.vsdsize = fc_vsd->fcVsdsize;
+	ioDisp.hdmiTx.fcVsdsize.bit.vsdsize = fcVsd->fcVsdsize;
 
 	// Payload Register Array.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_VSD_PAYLOAD_NUM; loop++) {
-		ioDisp.hdmiTx.fcVsdpayload[loop].byte[0] = fc_vsd->fcVsdpayload[loop];
+		ioDisp.hdmiTx.fcVsdpayload[loop].byte[0] = fcVsd->fcVsdpayload[loop];
 	}
 	// Enables VSD automatic packet scheduling
 	ioDisp.hdmiTx.fcDatauto0.bit.vsdAuto = 1;
 	// auto_frame_packets
 	ioDisp.hdmiTx.fcDatauto2.bit.autoFramePackets = 1;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -382,31 +406,31 @@ kint32 im_hdmi_set_frame_composer_vsd(ThdmiFcVsd const *const fc_vsd)
 /**
  * @brief	Get Frame Composer (Vendor Specific).
  */
-kint32 im_hdmi_get_frame_composer_vsd(ThdmiFcVsd *const fc_vsd)
+gint32 im_hdmi_struct_get_frame_composer_vsd(ImHdmiStruct *self, ThdmiFcVsd *const fcVsd)
 {
-	kint32 loop;
+	gint32 loop;
 #ifdef CO_PARAM_CHECK
-	if (fc_vsd == NULL) {
-		Ddim_Assertion(("im_hdmi_get_frame_composer_vsd Input_Param_Err status NULL\n"));
+	if (fcVsd == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_get_frame_composer_vsd Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// IEEE registration identifier.
-	fc_vsd->fcVsdieeeid[0] = ioDisp.hdmiTx.fcVsdieeeid0;
-	fc_vsd->fcVsdieeeid[1] = ioDisp.hdmiTx.fcVsdieeeid1;
-	fc_vsd->fcVsdieeeid[2] = ioDisp.hdmiTx.fcVsdieeeid2;
+	fcVsd->fcVsdieeeid[0] = ioDisp.hdmiTx.fcVsdieeeid0;
+	fcVsd->fcVsdieeeid[1] = ioDisp.hdmiTx.fcVsdieeeid1;
+	fcVsd->fcVsdieeeid[2] = ioDisp.hdmiTx.fcVsdieeeid2;
 
 	// VSI Packet Data Size.
-	fc_vsd->fcVsdsize = ioDisp.hdmiTx.fcVsdsize.byte[0];
+	fcVsd->fcVsdsize = ioDisp.hdmiTx.fcVsdsize.byte[0];
 
 	// Payload Register Array.
 	for (loop = 0; loop < ImHdmi_D_IM_HDMI_FC_VSD_PAYLOAD_NUM; loop++) {
-		fc_vsd->fcVsdpayload[loop] = ioDisp.hdmiTx.fcVsdpayload[loop].byte[0];
+		fcVsd->fcVsdpayload[loop] = ioDisp.hdmiTx.fcVsdpayload[loop].byte[0];
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -414,20 +438,20 @@ kint32 im_hdmi_get_frame_composer_vsd(ThdmiFcVsd *const fc_vsd)
 /**
  * @brief	Set Main Controller.
  */
-kint32 im_hdmi_set_main_controller(kuchar mc_flowctrl)
+gint32 im_hdmi_struct_set_main_controller(ImHdmiStruct *self, guchar mcFlowctrl)
 {
 #ifdef CO_PARAM_CHECK
-	if ((mc_flowctrl != ImHdmi_D_IM_HDMI_ENABLE_OFF) && (mc_flowctrl != ImHdmi_D_IM_HDMI_ENABLE_ON)) {
-		Ddim_Assertion(("im_hdmi_set_main_controller Input_Param_Err\n"));
+	if ((mcFlowctrl != ImHdmi_D_IM_HDMI_ENABLE_OFF) && (mcFlowctrl != ImHdmi_D_IM_HDMI_ENABLE_ON)) {
+		Ddim_Assertion(("im_hdmi_struct_set_main_controller Input_Param_Err\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
-	// Set mc_flowctrl.
-	ioDisp.hdmiTx.mcFlowctrl.byte[0] = mc_flowctrl;
+	// Set mcFlowctrl.
+	ioDisp.hdmiTx.mcFlowctrl.byte[0] = mcFlowctrl;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -435,20 +459,20 @@ kint32 im_hdmi_set_main_controller(kuchar mc_flowctrl)
 /**
  * @brief	Get Main Controller.
  */
-kint32 im_hdmi_get_main_controller(kuchar* mc_flowctrl)
+gint32 im_hdmi_struct_get_main_controller(ImHdmiStruct *self, guchar* mcFlowctrl)
 {
 #ifdef CO_PARAM_CHECK
-	if (mc_flowctrl == NULL) {
-		Ddim_Assertion(("im_hdmi_get_main_controller Input_Param_Err status NULL\n"));
+	if (mcFlowctrl == NULL) {
+		Ddim_Assertion(("im_hdmi_struct_get_main_controller Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
-	// Get mc_flowctrl.
-	*mc_flowctrl = ioDisp.hdmiTx.mcFlowctrl.byte[0];
+	// Get mcFlowctrl.
+	*mcFlowctrl = ioDisp.hdmiTx.mcFlowctrl.byte[0];
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -456,15 +480,15 @@ kint32 im_hdmi_get_main_controller(kuchar* mc_flowctrl)
 /**
  * @brief	Set Audio data.
  */
-kint32 im_hdmi_set_audio(ThdmiAudio const *const audio)
+gint32 im_hdmi_struct_set_audio(ImHdmiStruct *self, ThdmiAudio const *const audio)
 {
 #ifdef CO_PARAM_CHECK
 	if (audio == NULL) {
-		Ddim_Assertion(("im_hdmi_set_audio Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_set_audio Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Clock Domain Disable.
 	ioDisp.hdmiTx.mcClkdis.bit.audclkDisable = 1;
@@ -525,7 +549,7 @@ kint32 im_hdmi_set_audio(ThdmiAudio const *const audio)
 		ioDisp.hdmiTx.audN1 = audio->audN1;
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -533,15 +557,15 @@ kint32 im_hdmi_set_audio(ThdmiAudio const *const audio)
 /**
  * @brief	Get Audio data.
  */
-kint32 im_hdmi_get_audio(ThdmiAudio *const audio)
+gint32 im_hdmi_struct_get_audio(ImHdmiStruct *self, ThdmiAudio *const audio)
 {
 #ifdef CO_PARAM_CHECK
 	if (audio == NULL) {
-		Ddim_Assertion(("im_hdmi_get_audio Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_get_audio Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Get audInputclkfs.
 	audio->audInputclkfs = ioDisp.hdmiTx.audInputclkfs.byte[0];
@@ -581,7 +605,7 @@ kint32 im_hdmi_get_audio(ThdmiAudio *const audio)
 	// Get Frame Composer Audio Sample Channel Status Configuration Register 8(Word length configuration)
 	audio->oiecWordlength = ioDisp.hdmiTx.fcAudschnl8.bit.oiecWordlength;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -589,21 +613,21 @@ kint32 im_hdmi_get_audio(ThdmiAudio *const audio)
 /**
  * @brief	Set Interrupt callback function.
  */
-void im_hdmi_set_int_callback(VP_HDMI_CALLBACK vp_callback)
+void im_hdmi_struct_set_int_callback(ImHdmiStruct *self, VP_HDMI_CALLBACK vpCallback)
 {
 	// Set interrupt callback.
-	gIM_HDMI_INT_Callback = vp_callback;
+	gIM_HDMI_INT_Callback = vpCallback;
 }
 
 /**
  * @brief	Set Interrupt Mute.
  */
-void im_hdmi_set_int_mute(EhdmiIntReg interrupt_register, kuchar mute)
+void im_hdmi_struct_set_int_mute(ImHdmiStruct *self, EhdmiIntReg interruptRegister, guchar mute)
 {
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Check Interrupt type.
-	switch (interrupt_register) {
+	switch (interruptRegister) {
 		// ih_mute_fc_stat0 Register.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT0:
 			ioDisp.hdmiTx.ihMuteFcStat0.byte[0] = mute;
@@ -642,24 +666,24 @@ void im_hdmi_set_int_mute(EhdmiIntReg interrupt_register, kuchar mute)
 			break;
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 }
 
 /**
  * @brief	Get Interrupt Mute.
  */
-kint32 im_hdmi_get_int_mute(EhdmiIntReg interrupt_register, kuchar* mute)
+gint32 im_hdmi_struct_get_int_mute(ImHdmiStruct *self, EhdmiIntReg interruptRegister, guchar* mute)
 {
 #ifdef CO_PARAM_CHECK
 	if (mute == NULL) {
-		Ddim_Assertion(("im_hdmi_get_int_mute Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_get_int_mute Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Check Interrupt type.
-	switch (interrupt_register) {
+	switch (interruptRegister) {
 		// ih_mute_fc_stat0 Register.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT0:
 			*mute = ioDisp.hdmiTx.ihMuteFcStat0.byte[0];
@@ -698,7 +722,7 @@ kint32 im_hdmi_get_int_mute(EhdmiIntReg interrupt_register, kuchar* mute)
 			break;
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -706,50 +730,50 @@ kint32 im_hdmi_get_int_mute(EhdmiIntReg interrupt_register, kuchar* mute)
 /**
  * @brief	Get PHY status.
  */
-kint32 im_hdmi_get_phy_status(UhdmiPhyStat0 *status)
+gint32 im_hdmi_struct_get_phy_status(ImHdmiStruct *self, UhdmiPhyStat0 *status)
 {
 #ifdef CO_PARAM_CHECK
 	if (status == NULL) {
-		Ddim_Assertion(("im_hdmi_get_phy_status Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_struct_get_phy_status Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Get phy_stat0 Register.
 	status->byte = ioDisp.hdmiTx.phyStat0.byte[0];
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
 /**
  * @brief	HDMI Interrupt Handler.
  */
-void im_hdmi_int_handler(void)
+void im_hdmi_struct_int_handler(ImHdmiStruct *self)
 {
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// check ih_fc_stat0/ih_fc_stat1/ih_fc_stat2.
-	im_hdmi_check_interrupt_fc();
+	im_hdmi_check_interrupt_fc(self->imHdmi);
 	// check as_stat0.
-	im_hdmi_check_interrupt_as();
+	im_hdmi_check_interrupt_as(self->imHdmi);
 	// check ih_phy_stat0.
-	im_hdmi_check_interrupt_phy();
+	im_hdmi_check_interrupt_phy(self->imHdmi);
 	// check ih_i2cm_stat0.
-	im_hdmi_check_interrupt_i2cm();
+	im_hdmi_check_interrupt_i2cm(self->imHdmi);
 	// check ih_cec_stat0.
-	im_hdmi_check_interrupt_cec();
+	im_hdmi_check_interrupt_cec(self->imHdmi);
 	// check ih_vp_stat0.
-	im_hdmi_check_interrupt_vp();
+	im_hdmi_check_interrupt_vp(self->imHdmi);
 	// check ih_i2cmphy_stat0.
-	im_hdmi_check_interrupt_i2cmphy();
+	im_hdmi_check_interrupt_i2cmphy(self->imHdmi);
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 }
 
-ImHdmiStruct* im_hdmi_struct_new(void)
+ImHdmiStruct* 		im_hdmi_struct_new(void)
 {
-	ImHdmiStruct *self = k_object_new_with_private(IM_TYPE_HDMI_STRUCT, sizeof(ImHdmiStructPrivate));
+	ImHdmiStruct *self = g_object_new(IM_TYPE_HDMI_STRUCT, NULL);
 	return self;
 }

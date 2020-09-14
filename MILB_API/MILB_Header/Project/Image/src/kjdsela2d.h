@@ -23,9 +23,9 @@
 #include <klib.h>
 
 
-#define K_TYPE_JDSELA2D			(k_jdsela2d_get_type())
-#define K_JDSELA2D(obj)				(K_TYPE_CHECK_INSTANCE_CAST((obj), KJdsela2d))
-#define K_IS_JDSELA2D(obj)		(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSELA2D))
+#define K_TYPE_JDSELA2D				(k_jdsela2d_get_type())
+#define K_JDSELA2D(obj)					(K_TYPE_CHECK_INSTANCE_CAST((obj), KJdsela2d))
+#define K_IS_JDSELA2D(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSELA2D))
 
 
 typedef struct _KJdsela2d				KJdsela2d;
@@ -40,111 +40,111 @@ struct  _KJdsela2d
 /*  structure of earcache   (288B_0000h)    */
 typedef union _IoElaEarcache
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long earcache0 :4;
-		unsigned long :4;
-		unsigned long earcache1 :4;
-		unsigned long :4;
-		unsigned long earcache2 :4;
-		unsigned long :4;
-		unsigned long :8;
+		kulong earcache0 :4;
+		kulong :4;
+		kulong earcache1 :4;
+		kulong :4;
+		kulong earcache2 :4;
+		kulong :4;
+		kulong :8;
 	} bit;
 } IoElaEarcache;
 
 /*  structure of eawcache   (288B_0004h)    */
 typedef union _IoElaEawcache
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eawcache0 :4;
-		unsigned long :4;
-		unsigned long eawcache1 :4;
-		unsigned long :4;
-		unsigned long eawcache2 :4;
-		unsigned long :4;
-		unsigned long :8;
+		kulong eawcache0 :4;
+		kulong :4;
+		kulong eawcache1 :4;
+		kulong :4;
+		kulong eawcache2 :4;
+		kulong :4;
+		kulong :8;
 	} bit;
 } IoElaEawcache;
 
 /*  structure of earprot    (288B_0008h)    */
 typedef union _IoElaEarprot{
-    unsigned long       word;
+    kulong       word;
 	struct {
-		unsigned long earprot0 :3;
-		unsigned long :5;
-		unsigned long earprot1 :3;
-		unsigned long :5;
-		unsigned long earprot2 :3;
-		unsigned long :5;
-		unsigned long :8;
+		kulong earprot0 :3;
+		kulong :5;
+		kulong earprot1 :3;
+		kulong :5;
+		kulong earprot2 :3;
+		kulong :5;
+		kulong :8;
 	} bit;
 } IoElaEarprot;
 
 /*  structure of eawprot    (288B_000Ch)    */
 typedef union _IoElaEawprot
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eawprot0 :3;
-		unsigned long :5;
-		unsigned long eawprot1 :3;
-		unsigned long :5;
-		unsigned long eawprot2 :3;
-		unsigned long :5;
-		unsigned long :8;
+		kulong eawprot0 :3;
+		kulong :5;
+		kulong eawprot1 :3;
+		kulong :5;
+		kulong eawprot2 :3;
+		kulong :5;
+		kulong :8;
 	} bit;
 } IoElaEawprot;
 
 /*  structure of earaxsts   (288B_0010h)    */
 typedef union _IoElaEaraxsts
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long rresp0 :2;
-		unsigned long :6;
-		unsigned long rresp1 :2;
-		unsigned long :6;
-		unsigned long rresp2 :2;
-		unsigned long :6;
-		unsigned long :8;
+		kulong rresp0 :2;
+		kulong :6;
+		kulong rresp1 :2;
+		kulong :6;
+		kulong rresp2 :2;
+		kulong :6;
+		kulong :8;
 	} bit;
 } IoElaEaraxsts;
 
 /*  structure of eawaxsts   (288B_0014h)    */
 typedef union _IoElaEawaxsts
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long bresp0 :2;
-		unsigned long :6;
-		unsigned long bresp1 :2;
-		unsigned long :6;
-		unsigned long bresp2 :2;
-		unsigned long :6;
-		unsigned long :8;
+		kulong bresp0 :2;
+		kulong :6;
+		kulong bresp1 :2;
+		kulong :6;
+		kulong bresp2 :2;
+		kulong :6;
+		kulong :8;
 	} bit;
 } IoElaEawaxsts;
 
 /*  structure of earreqmsk  (288B_0020h)    */
 typedef union _IoElaEarreqmsk1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long earreqmsk00 :12;
-		unsigned long :4;
-		unsigned long earreqmsk11 :12;
-		unsigned long :4;
+		kulong earreqmsk00 :12;
+		kulong :4;
+		kulong earreqmsk11 :12;
+		kulong :4;
 	} bit;
 } IoElaEarreqmsk1;
 
 typedef union _IoElaEarreqmsk2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long earreqmsk22 :12;
-		unsigned long :4;
-		unsigned long :16;
+		kulong earreqmsk22 :12;
+		kulong :4;
+		kulong :16;
 	} bit;
 } IoElaEarreqmsk2;
 
@@ -157,22 +157,22 @@ typedef struct _IoElaEarreqmsk
 /*  structure of eawreqmsk  (288B_0028h)    */
 typedef union _ioElaEawreqmsk1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eawreqmsk0 :12;
-		unsigned long :4;
-		unsigned long eawreqmsk11 :12;
-		unsigned long :4;
+		kulong eawreqmsk0 :12;
+		kulong :4;
+		kulong eawreqmsk11 :12;
+		kulong :4;
 	} bit;
 } ioElaEawreqmsk1;
 
 typedef union _IoElaEawreqmsk2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eawreqmsk22 :12;
-		unsigned long :4;
-		unsigned long :16;
+		kulong eawreqmsk22 :12;
+		kulong :4;
+		kulong :16;
 	} bit;
 } IoElaEawreqmsk2;
 
@@ -185,123 +185,123 @@ typedef struct _IoElaEawreqmsk
 /*  structure of elainte    (288B_0100h)    */
 typedef union _IoElaElainte
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :1;
-		unsigned long enwe :1;
-		unsigned long :2;
-		unsigned long axrere :1;
-		unsigned long axwere :1;
-		unsigned long :26;
+		kulong :1;
+		kulong enwe :1;
+		kulong :2;
+		kulong axrere :1;
+		kulong axwere :1;
+		kulong :26;
 	} bit;
 } IoElaElainte;
 
 /*  structure of elaintf    (288B_0104h)    */
 typedef union _IoElaElaintf
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :1;
-		unsigned long __enwf :1;
-		unsigned long :2;
-		unsigned long __axrerf :1;
-		unsigned long __axwerf :1;
-		unsigned long :26;
+		kulong :1;
+		kulong __enwf :1;
+		kulong :2;
+		kulong __axrerf :1;
+		kulong __axwerf :1;
+		kulong :26;
 	} bit;
 } IoElaElaintf;
 
 /*  structure of sramact    (288B_0108h)    */
 typedef union _IoElaSramact
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long sramact :2;
-		unsigned long :30;
+		kulong sramact :2;
+		kulong :30;
 	} bit;
 } IoElaSramact;
 
 /*  structure of elatrg (288B_0110h)    */
 typedef union _IoElaElatrg
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long elatrg :2;
-		unsigned long :30;
+		kulong elatrg :2;
+		kulong :30;
 	} bit;
 } IoElaElatrg;
 
 /*  structure of elactl (288B_0114h)    */
 typedef union _IoElaElactl
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long elacnt :3;
-		unsigned long :1;
-		unsigned long elamd :2;
-		unsigned long :1;
-		unsigned long elaact :1;
-		unsigned long :24;
+		kulong elacnt :3;
+		kulong :1;
+		kulong elamd :2;
+		kulong :1;
+		kulong elaact :1;
+		kulong :24;
 	} bit;
 } IoElaElactl;
 
 /*  structure of elabyr (288B_0118h)    */
 typedef union _IoElaElabyr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eirtyp :2;
-		unsigned long :2;
-		unsigned long eirsft :2;
-		unsigned long :2;
-		unsigned long eiwsft :2;
-		unsigned long :2;
-		unsigned long eiwtyp :2;
-		unsigned long :2;
-		unsigned long eiwout :2;
-		unsigned long :2;
-		unsigned long dknen :1;
-		unsigned long eobaen :1;
-		unsigned long :2;
-		unsigned long :4;
-		unsigned long dknact :1;
-		unsigned long :3;
+		kulong eirtyp :2;
+		kulong :2;
+		kulong eirsft :2;
+		kulong :2;
+		kulong eiwsft :2;
+		kulong :2;
+		kulong eiwtyp :2;
+		kulong :2;
+		kulong eiwout :2;
+		kulong :2;
+		kulong dknen :1;
+		kulong eobaen :1;
+		kulong :2;
+		kulong :4;
+		kulong dknact :1;
+		kulong :3;
 	} bit;
 } IoElaElabyr;
 
 /*  structure of nslmd  (288B_011Ch)    */
 typedef union _IoElaNslmd
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long nslmd :1;
-		unsigned long :3;
-		unsigned long nslres :2;
-		unsigned long :2;
-		unsigned long nslkne :1;
-		unsigned long :23;
+		kulong nslmd :1;
+		kulong :3;
+		kulong nslres :2;
+		kulong :2;
+		kulong nslkne :1;
+		kulong :23;
 	} bit;
 } IoElaNslmd;
 
 /*  structure of obof   (288B_0120h)    */
 typedef union _IoElaObof1
 {
-	unsigned long word;
+	kulong word;
 	struct {
 		long eobrr :11;
-		unsigned long :5;
+		kulong :5;
 		long eobbb :11;
-		unsigned long :5;
+		kulong :5;
 	} bit;
 } IoElaObof1;
 
 typedef union _IoElaObof2
 {
-	unsigned long word;
+	kulong word;
 	struct {
 		long eobgr :11;
-		unsigned long :5;
+		kulong :5;
 		long eobgb :11;
-		unsigned long :5;
+		kulong :5;
 	} bit;
 } IoElaObof2;
 
@@ -314,221 +314,221 @@ typedef struct _IoElaObof
 /*  structure of ezsfta1    (288B_0128h)    */
 typedef union _IoElaEzsfta1
 {
-	unsigned long word;
+	kulong word;
 	struct {
 		long ezsfta1 :11;
-		unsigned long :21;
+		kulong :21;
 	} bit;
 } IoElaEzsfta1;
 
 /*  structure of nslnglmt   (288B_012Ch)    */
 typedef union _IoElaNslnglmt
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long nslnglmm :10;
-		unsigned long :6;
-		unsigned long nslnglmp :10;
-		unsigned long :6;
+		kulong nslnglmm :10;
+		kulong :6;
+		kulong nslnglmp :10;
+		kulong :6;
 	} bit;
 } IoElaNslnglmt;
 
 /*  structure of eira   (288B_0130h)    */
 typedef union _IoElaEira
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eira :32;
+		kulong eira :32;
 	} bit;
 } IoElaEira;
 
 /*  structure of eirofs (288B_0134h)    */
 typedef union _IoElaEirofs
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eirofs :3;
-		unsigned long :29;
+		kulong eirofs :3;
+		kulong :29;
 	} bit;
 } IoElaEirofs;
 
 /*  structure of eirdef (288B_0138h)    */
 typedef union _IoElaEirdef
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eirdef :15;
-		unsigned long :17;
+		kulong eirdef :15;
+		kulong :17;
 	} bit;
 } IoElaEirdef;
 
 /*  structure of eirhsiz    (288B_013Ch)    */
 typedef union _IoElaEirhsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eirhsiz :14;
-		unsigned long :18;
+		kulong eirhsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEirhsiz;
 
 /*  structure of eirvsiz    (288B_0140h)    */
 typedef union _IoElaEirvsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eirvsiz :14;
-		unsigned long :18;
+		kulong eirvsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEirvsiz;
 
 /*  structure of eiwa   (288B_0150h)    */
 typedef union _IoElaEiwa
 {
-	unsigned long word[4];
+	kulong word[4];
 	struct {
-		unsigned long eiwa :32;
+		kulong eiwa :32;
 	} bit[4];
 } IoElaEiwa;
 
 /*  structure of eiwdef (288B_0160h)    */
 typedef union _IoElaEiwdef{
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long eiwdef :14;
-		unsigned long :18;
+		kulong eiwdef :14;
+		kulong :18;
 	} bit;
 } IoElaEiwdef;
 
 /*  structure of enwa   (288B_0164h)    */
 typedef union _IoElaEnwa
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long enwa :32;
+		kulong enwa :32;
 	} bit;
 } IoElaEnwa;
 
 /*  structure of enwdef (288B_0168h)    */
 typedef union _IoElaEnwdef
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long enwdef :14;
-		unsigned long :18;
+		kulong enwdef :14;
+		kulong :18;
 	} bit;
 } IoElaEnwdef;
 
 /*  structure of enra   (288B_0180h)    */
 typedef union _IoElaEnra
 {
-	unsigned long word[16];
+	kulong word[16];
 	struct {
-		unsigned long enra :32;
+		kulong enra :32;
 	} bit[16];
 } IoElaEnra;
 
 /*  structure of enrhsiz    (288B_01C0h)    */
 typedef union _IoElaEnrhsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long enrhsiz :14;
-		unsigned long :18;
+		kulong enrhsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEnrhsiz;
 
 /*  structure of enrvsiz    (288B_01C4h)    */
 typedef union _IoElaEnrvsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long enrvsiz :14;
-		unsigned long :18;
+		kulong enrvsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEnrvsiz;
 
 /*  structure of ensa   (288B_01C8h)    */
 typedef union _IoElaEnsa
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ensa :32;
+		kulong ensa :32;
 	} bit;
 } IoElaEnsa;
 
 /*  structure of ensdef (288B_01CCh)    */
 typedef union _IoElaEnsdef
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ensdef :14;
-		unsigned long :18;
+		kulong ensdef :14;
+		kulong :18;
 	} bit;
 } IoElaEnsdef;
 
 /*  structure of enshsiz    (288B_01D0h)    */
 typedef union _IoElaEnshsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long enshsiz :14;
-		unsigned long :18;
+		kulong enshsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEnshsiz;
 
 /*  structure of ensvsiz    (288B_01D4h)    */
 typedef union _IoElaEnsvsiz
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ensvsiz :14;
-		unsigned long :18;
+		kulong ensvsiz :14;
+		kulong :18;
 	} bit;
 } IoElaEnsvsiz;
 
 /*  structure of byrtyp (288B_0200h)    */
 typedef union _IoElaByrtyp
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long org :2;
-		unsigned long :2;
-		unsigned long eladcmd :2;
-		unsigned long :26;
+		kulong org :2;
+		kulong :2;
+		kulong eladcmd :2;
+		kulong :26;
 	} bit;
 } IoElaByrtyp;
 
 /*  structure of elfzp  (288B_0204h)    */
 typedef union _IoElaElfzp
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long elfzp :12;
-		unsigned long :20;
+		kulong elfzp :12;
+		kulong :20;
 	} bit;
 } IoElaElfzp;
 
 /*  structure of elfl   (288B_0208h)    */
 typedef union _EoElaElfl1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long elfl11 :12;
-		unsigned long :4;
-		unsigned long elfl22 :12;
-		unsigned long :4;
+		kulong elfl11 :12;
+		kulong :4;
+		kulong elfl22 :12;
+		kulong :4;
 	} bit;
 } EoElaElfl1;
 
 typedef union _IoElaElfl2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long elfl33 :12;
-		unsigned long :4;
-		unsigned long elfl44 :12;
-		unsigned long :4;
+		kulong elfl33 :12;
+		kulong :4;
+		kulong elfl44 :12;
+		kulong :4;
 	} bit;
 } IoElaElfl2;
 
@@ -541,23 +541,23 @@ typedef struct _IoElaElfl
 /*  structure of anbor  (288B_0210h)    */
 typedef union _IoElaAnbor1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbor0 :12;
-		unsigned long :4;
-		unsigned long anbor11 :12;
-		unsigned long :4;
+		kulong anbor0 :12;
+		kulong :4;
+		kulong anbor11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbor1;
 
 typedef union _IoElaAnbor2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbor22 :12;
-		unsigned long :4;
-		unsigned long anbor3 :12;
-		unsigned long :4;
+		kulong anbor22 :12;
+		kulong :4;
+		kulong anbor3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbor2;
 
@@ -570,23 +570,23 @@ typedef struct _IoElaAnbor
 /*  structure of anbkr  (288B_0218h)    */
 typedef union _IoElaAnbkr1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkr0 :12;
-		unsigned long :4;
-		unsigned long anbkr11 :12;
-		unsigned long :4;
+		kulong anbkr0 :12;
+		kulong :4;
+		kulong anbkr11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkr1;
 
 typedef union _IoElaAnbkr2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkr22 :12;
-		unsigned long :4;
-		unsigned long anbkr3 :12;
-		unsigned long :4;
+		kulong anbkr22 :12;
+		kulong :4;
+		kulong anbkr3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkr2;
 
@@ -599,23 +599,23 @@ typedef struct _IoElaAnbkr
 /*  structure of anbdr  (288B_0220h)    */
 typedef struct _IoElaAnbdr1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdr0 :12;
-		unsigned long :4;
-		unsigned long anbdr11 :12;
-		unsigned long :4;
+		kulong anbdr0 :12;
+		kulong :4;
+		kulong anbdr11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdr1;
 
 typedef union _IoElaAnbdr2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdr22 :12;
-		unsigned long :4;
-		unsigned long anbdr3 :12;
-		unsigned long :4;
+		kulong anbdr22 :12;
+		kulong :4;
+		kulong anbdr3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdr2;
 
@@ -628,23 +628,23 @@ typedef struct _IoElaAnbdr
 /*  structure of anbog  (288B_0228h)    */
 typedef union _IoElaAnbog1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbog0 :12;
-		unsigned long :4;
-		unsigned long anbog11 :12;
-		unsigned long :4;
+		kulong anbog0 :12;
+		kulong :4;
+		kulong anbog11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbog1;
 
 typedef union _IoElaAnbog2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbog22 :12;
-		unsigned long :4;
-		unsigned long anbog3 :12;
-		unsigned long :4;
+		kulong anbog22 :12;
+		kulong :4;
+		kulong anbog3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbog2;
 
@@ -657,23 +657,23 @@ typedef struct _IoElaAnbog
 /*  structure of anbkg  (288B_0230h)    */
 typedef union _IoElaAnbkg1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkg0 :12;
-		unsigned long :4;
-		unsigned long anbkg11 :12;
-		unsigned long :4;
+		kulong anbkg0 :12;
+		kulong :4;
+		kulong anbkg11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkg1;
 
 typedef union _IoElaAnbkg2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkg22 :12;
-		unsigned long :4;
-		unsigned long anbkg3 :12;
-		unsigned long :4;
+		kulong anbkg22 :12;
+		kulong :4;
+		kulong anbkg3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkg2;
 
@@ -686,23 +686,23 @@ typedef struct _IoElaAnbkg
 /*  structure of anbdg  (288B_0238h)    */
 typedef union _IoElaAnbdg1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdg0 :12;
-		unsigned long :4;
-		unsigned long anbdg11 :12;
-		unsigned long :4;
+		kulong anbdg0 :12;
+		kulong :4;
+		kulong anbdg11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdg1;
 
 typedef union _IoElaAnbdg2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdg22 :12;
-		unsigned long :4;
-		unsigned long anbdg3 :12;
-		unsigned long :4;
+		kulong anbdg22 :12;
+		kulong :4;
+		kulong anbdg3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdg2;
 
@@ -715,23 +715,23 @@ typedef struct _IoElaAnbdg
 /*  structure of anbob  (288B_0240h)    */
 typedef union _IoElaAnbob1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbob0 :12;
-		unsigned long :4;
-		unsigned long anbob11 :12;
-		unsigned long :4;
+		kulong anbob0 :12;
+		kulong :4;
+		kulong anbob11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbob1;
 
 typedef union _IoElaAnbob2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbob22 :12;
-		unsigned long :4;
-		unsigned long anbob3 :12;
-		unsigned long :4;
+		kulong anbob22 :12;
+		kulong :4;
+		kulong anbob3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbob2;
 
@@ -744,23 +744,23 @@ typedef struct _IoElaAnbob
 /*  structure of anbkb  (288B_0248h)    */
 typedef union _IoElaAnbkb1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkb0 :12;
-		unsigned long :4;
-		unsigned long anbkb11 :12;
-		unsigned long :4;
+		kulong anbkb0 :12;
+		kulong :4;
+		kulong anbkb11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkb1;
 
 typedef union _IoElaAnbkb2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbkb22 :12;
-		unsigned long :4;
-		unsigned long anbkb3 :12;
-		unsigned long :4;
+		kulong anbkb22 :12;
+		kulong :4;
+		kulong anbkb3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbkb2;
 
@@ -773,23 +773,23 @@ typedef struct _IoElaAnbkb
 /*  structure of anbdb  (288B_0250h)    */
 typedef union _IoElaAnbdb1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdb0 :12;
-		unsigned long :4;
-		unsigned long anbdb11 :12;
-		unsigned long :4;
+		kulong anbdb0 :12;
+		kulong :4;
+		kulong anbdb11 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdb1;
 
 typedef union _IoElaAnbdb2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long anbdb22 :12;
-		unsigned long :4;
-		unsigned long anbdb3 :12;
-		unsigned long :4;
+		kulong anbdb22 :12;
+		kulong :4;
+		kulong anbdb3 :12;
+		kulong :4;
 	} bit;
 } IoElaAnbdb2;
 
@@ -802,21 +802,21 @@ typedef struct _IoElaAnbdb
 /*  structure of lgtw   (288B_0258h)    */
 typedef union _IoElaLgtw1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lgtwr :10;
-		unsigned long :6;
-		unsigned long lgtwg :10;
-		unsigned long :6;
+		kulong lgtwr :10;
+		kulong :6;
+		kulong lgtwg :10;
+		kulong :6;
 	} bit;
 } IoElaLgtw1;
 
 typedef union _IoElaLgtw2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lgtwb :10;
-		unsigned long :22;
+		kulong lgtwb :10;
+		kulong :22;
 	} bit;
 } IoElaLgtw2;
 
@@ -829,91 +829,91 @@ typedef struct _IoElaLgtw
 /*  structure of lgt    (288B_0260h)    */
 typedef union _IoElaLgt
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lgtr :5;
-		unsigned long :3;
-		unsigned long lgtg :5;
-		unsigned long :3;
-		unsigned long lgtb :5;
-		unsigned long :3;
-		unsigned long lgtc :5;
-		unsigned long :3;
+		kulong lgtr :5;
+		kulong :3;
+		kulong lgtg :5;
+		kulong :3;
+		kulong lgtb :5;
+		kulong :3;
+		kulong lgtc :5;
+		kulong :3;
 	} bit;
 } IoElaLgt;
 
 /*  structure of lgte   (288B_0264h)    */
 typedef union _IoElaLgte
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lgter :5;
-		unsigned long :3;
-		unsigned long lgteg :5;
-		unsigned long :3;
-		unsigned long lgteb :5;
-		unsigned long :11;
+		kulong lgter :5;
+		kulong :3;
+		kulong lgteg :5;
+		kulong :3;
+		kulong lgteb :5;
+		kulong :11;
 	} bit;
 } IoElaLgte;
 
 /*  structure of edg2anba   (288B_0268h)    */
 typedef union _IoElaEdg2anba
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long edg2anba :8;
-		unsigned long :24;
+		kulong edg2anba :8;
+		kulong :24;
 	} bit;
 } IoElaEdg2anba;
 
 /*  structure of edgscla    (288B_026Ch)    */
 typedef union _IoElaEdgscla
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long edgscla :10;
-		unsigned long :22;
+		kulong edgscla :10;
+		kulong :22;
 	} bit;
 } IoElaEdgscla;
 
 /*  structure of edg2anbb   (288B_0274h)    */
 typedef union _IoElaEdg2anbb
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long edg2anbb :10;
-		unsigned long :22;
+		kulong edg2anbb :10;
+		kulong :22;
 	} bit;
 } IoElaEdg2anbb;
 
 /*  structure of edgsclb    (288B_0278h)    */
 typedef union _IoElaEdgsclb
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long edgsclb :10;
-		unsigned long :22;
+		kulong edgsclb :10;
+		kulong :22;
 	} bit;
 } IoElaEdgsclb;
 
 /*  structure of alnge  (288B_0280h)    */
 typedef union _IoElaAlnge1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alnge11 :12;
-		unsigned long :4;
-		unsigned long alnge22 :12;
-		unsigned long :4;
+		kulong alnge11 :12;
+		kulong :4;
+		kulong alnge22 :12;
+		kulong :4;
 	} bit;
 } IoElaAlnge1;
 
 typedef union _IoElaAlnge2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alnge3 :12;
-		unsigned long :20;
+		kulong alnge3 :12;
+		kulong :20;
 	} bit;
 } IoElaAlnge2;
 
@@ -926,67 +926,67 @@ typedef struct _IoElaAlnge
 /*  structure of alng   (288B_02A0h)    */
 typedef union _IoElaAlng1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alngl1e1n :9;
-		unsigned long :7;
-		unsigned long alngl1e2n :9;
-		unsigned long :7;
+		kulong alngl1e1n :9;
+		kulong :7;
+		kulong alngl1e2n :9;
+		kulong :7;
 	} bit;
 } IoElaAlng1;
 
 typedef union _IoElaAlng2
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alngl1e3n :9;
-		unsigned long :7;
-		unsigned long alngl2e1n :9;
-		unsigned long :7;
+		kulong alngl1e3n :9;
+		kulong :7;
+		kulong alngl2e1n :9;
+		kulong :7;
 	} bit;
 } IoElaAlng2;
 
 typedef union _IoElaAlng3
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alngl2e2n :9;
-		unsigned long :7;
-		unsigned long alngl2e3n :9;
-		unsigned long :7;
+		kulong alngl2e2n :9;
+		kulong :7;
+		kulong alngl2e3n :9;
+		kulong :7;
 	} bit;
 } IoElaAlng3;
 
 typedef union _IoElaAlng4
 {
-    unsigned long       word;
+    kulong       word;
     struct {
-        unsigned long   alngl3e1n   :9;
-        unsigned long               :7;
-        unsigned long   alngl3e2n   :9;
-        unsigned long               :7;
+        kulong   alngl3e1n   :9;
+        kulong               :7;
+        kulong   alngl3e2n   :9;
+        kulong               :7;
     }bit;
 }IoElaAlng4;
 
 typedef union _IoElaAlng5
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alngl3e3n :9;
-		unsigned long :7;
-		unsigned long alngl4e1n :9;
-		unsigned long :7;
+		kulong alngl3e3n :9;
+		kulong :7;
+		kulong alngl4e1n :9;
+		kulong :7;
 	} bit;
 } IoElaAlng5;
 
 typedef union _IoElaAlng6
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long alngl4e2n :9;
-		unsigned long :7;
-		unsigned long alngl4e3n :9;
-		unsigned long :7;
+		kulong alngl4e2n :9;
+		kulong :7;
+		kulong alngl4e3n :9;
+		kulong :7;
 	} bit;
 } IoElaAlng6;
 
@@ -1003,46 +1003,46 @@ typedef struct _IoElaAlng
 /*  structure of lfth   (288B_02C0h)    */
 typedef union _IoElaLfth
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lfth :12;
-		unsigned long :20;
+		kulong lfth :12;
+		kulong :20;
 	} bit;
 } IoElaLfth;
 
 /*  structure of lcome  (288B_02C8h)    */
 typedef union _IoElaLcome
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lcome1 :12;
-		unsigned long :4;
-		unsigned long lcome2 :12;
-		unsigned long :4;
+		kulong lcome1 :12;
+		kulong :4;
+		kulong lcome2 :12;
+		kulong :4;
 	} bit;
 } IoElaLcome;
 
 /*  structure of lcomen (288B_02CCh)    */
 typedef union _IoElaLcomen
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lcome1n :9;
-		unsigned long :7;
-		unsigned long lcome2n :9;
-		unsigned long :7;
+		kulong lcome1n :9;
+		kulong :7;
+		kulong lcome2n :9;
+		kulong :7;
 	} bit;
 } IoElaLcomen;
 
 /*  structure of dkntbl (288B_0400h)    */
 typedef union _IoElaDkntbl
 {
-	unsigned long word[128];
+	kulong word[128];
 	struct {
-		unsigned long dkntbl0 :12;
-		unsigned long :4;
-		unsigned long dkntbl1 :12;
-		unsigned long :4;
+		kulong dkntbl0 :12;
+		kulong :4;
+		kulong dkntbl1 :12;
+		kulong :4;
 	} bit[128];
 } IoElaDkntbl;
 
@@ -1063,13 +1063,13 @@ typedef struct _IoEla
 	/* 288B_(0014 - 1017h) */
 	IoElaEawaxsts eawaxsts;
 	/* 288B_(0018 - 101Fh) */
-	unsigned char dmy1018101f[0x1020 - 0x1018];
+	kuchar dmy1018101f[0x1020 - 0x1018];
 	/* 288B_(0020 - 1027h) */
 	IoElaEarreqmsk earreqmsk;
 	/* 288B_(0028 - 102Fh) */
 	IoElaEawreqmsk eawreqmsk;
 	/* 288B_(0030 - 10FFh) */
-	unsigned char dmy103010ff[0x1100 - 0x1030];
+	kuchar dmy103010ff[0x1100 - 0x1030];
 	/* 288B_(0100 - 1103h) */
 	IoElaElainte elainte;
 	/* 288B_(0104 - 1107h) */
@@ -1077,7 +1077,7 @@ typedef struct _IoEla
 	/* 288B_(0108 - 110Bh) */
 	IoElaSramact sramact;
 	/* 288B_(010C - 110Fh) */
-	unsigned char dmy110c110f[0x1110 - 0x110C];
+	kuchar dmy110c110f[0x1110 - 0x110C];
 	/* 288B_(0110 - 1113h) */
 	IoElaElatrg elatrg;
 	/* 288B_(0114 - 1117h) */
@@ -1103,7 +1103,7 @@ typedef struct _IoEla
 	/* 288B_(0140 - 1143h) */
 	IoElaEirvsiz eirvsiz;
 	/* 288B_(0144 - 114Fh) */
-	unsigned char dmy1144114f[0x1150 - 0x1144];
+	kuchar dmy1144114f[0x1150 - 0x1144];
 	/* 288B_(0150 - 115Fh) */
 	IoElaEiwa eiwa;
 	/* 288B_(0160 - 1163h) */
@@ -1113,7 +1113,7 @@ typedef struct _IoEla
 	/* 288B_(0168 - 116Bh) */
 	IoElaEnwdef enwdef;
 	/* 288B_(016C - 117Fh) */
-	unsigned char dmy116c117f[0x1180 - 0x116C];
+	kuchar dmy116c117f[0x1180 - 0x116C];
 	/* 288B_(0180 - 11BFh) */
 	IoElaEnra enra;
 	/* 288B_(01C0 - 11C3h) */
@@ -1129,7 +1129,7 @@ typedef struct _IoEla
 	/* 288B_(01D4 - 11D7h) */
 	IoElaEnsvsiz ensvsiz;
 	/* 288B_(01D8 - 11FFh) */
-	unsigned char dmy11d811ff[0x1200 - 0x11D8];
+	kuchar dmy11d811ff[0x1200 - 0x11D8];
 	/* 288B_(0200 - 1203h) */
 	IoElaByrtyp byrtyp;
 	/* 288B_(0204 - 1207h) */
@@ -1165,35 +1165,35 @@ typedef struct _IoEla
 	/* 288B_(026C - 126Fh) */
 	IoElaEdgscla edgscla;
 	/* 288B_(0270 - 1273h) */
-	unsigned char dmy12701273[0x1274 - 0x1270];
+	kuchar dmy12701273[0x1274 - 0x1270];
 	/* 288B_(0274 - 1277h) */
 	IoElaEdg2anbb edg2anbb;
 	/* 288B_(0278 - 127Bh) */
 	IoElaEdgsclb edgsclb;
 	/* 288B_(027C - 127Fh) */
-	unsigned char dmy127c127f[0x1280 - 0x127C];
+	kuchar dmy127c127f[0x1280 - 0x127C];
 	/* 288B_(0280 - 1287h) */
 	IoElaAlnge alnge;
 	/* 288B_(0288 - 129Fh) */
-	unsigned char dmy1288129f[0x12A0 - 0x1288];
+	kuchar dmy1288129f[0x12A0 - 0x1288];
 	/* 288B_(02A0 - 12B7h) */
 	IoElaAlng alng;
 	/* 288B_(02B8 - 12BFh) */
-	unsigned char dmy12b812bf[0x12C0 - 0x12B8];
+	kuchar dmy12b812bf[0x12C0 - 0x12B8];
 	/* 288B_(02C0 - 12C3h) */
 	IoElaLfth lfth;
 	/* 288B_(02C4 - 12C7h) */
-	unsigned char dmy12c412c7[0x12C8 - 0x12C4];
+	kuchar dmy12c412c7[0x12C8 - 0x12C4];
 	/* 288B_(02C8 - 12CBh) */
 	IoElaLcome lcome;
 	/* 288B_(02CC - 12CFh) */
 	IoElaLcomen lcomen;
 	/* 288B_(02D0 - 13FFh) */
-	unsigned char dmy12d013ff[0x1400 - 0x12D0];
+	kuchar dmy12d013ff[0x1400 - 0x12D0];
 	/* 288B_(0400 - 15FFh) */
 	 IoElaDkntbl dkntbl;
 	 /* 288B_(0600 - 1FFFh) */
-	unsigned char dmy16001fff[0x2000 - 0x1600];
+	kuchar dmy16001fff[0x2000 - 0x1600];
 
 } IoEla;
 

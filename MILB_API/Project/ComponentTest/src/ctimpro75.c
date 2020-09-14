@@ -23,7 +23,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro75, ct_impro_7_5)
 
 struct _CtImpro75Private
 {
-
+        TImProCallbackCfg callbackIntCtrlMax;
+        T_IM_PRO_INT_CFG intCtrl;
 };
 
 
@@ -33,6 +34,11 @@ struct _CtImpro75Private
 static void ct_impro_7_5_constructor(CtImpro75 *self)
 {
 	CtImpro75Private *priv = CT_IMPRO_7_5_GET_PRIVATE(self);
+
+    priv->callbackIntCtrlMax.inthandler = im_pro_callback_sro_vd_int_cb;
+    priv->callbackIntCtrlMax.userParam = 0;
+    priv->intCtrl.interruptBit = 0;
+    priv->intCtrl.permissionFlg = 0;
 }
 
 static void ct_impro_7_5_destructor(CtImpro75 *self)
@@ -45,53 +51,47 @@ static void ct_impro_7_5_destructor(CtImpro75 *self)
  *PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_50(const kuint32 idx)
+void ct_im_pro_7_5_0(CtImpro75* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_51(const kuint32 idx)
+void ct_im_pro_7_5_1(CtImpro75* self,const kuint32 idx)
 {
+	CtImpro75Private *priv = CT_IMPRO_7_5_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_sro_vd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
             for(userParam = 0; userParam < 4; userParam++) {
-                intCtrlMax.userParam = userParam;
-                ercd = Im_PRO_SROTOP_Pipe_Set_VD_Int_Handler(unitNo, &intCtrlMax);
-                im_pro_7_51_Print(NULL,"", ercd, unitNo, &intCtrlMax);
+                priv->callbackIntCtrlMax.userParam = userParam;
+                ercd = Im_PRO_SROTOP_Pipe_Set_VD_Int_Handler(unitNo, &priv->callbackIntCtrlMax);
+                im_pro_7_print_51(im_pro_7_print_get(), "", ercd, unitNo, &priv->callbackIntCtrlMax);
             }
         }
     }
 }
 
-void ct_im_pro_7_52(const kuint32 idx)
+void ct_im_pro_7_5_2(CtImpro75* self,const kuint32 idx)
 {
+	CtImpro75Private *priv = CT_IMPRO_7_5_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_sro_hd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
             for(userParam = 0; userParam < 4; userParam++) {
-                intCtrlMax.userParam = userParam;
-                ercd = Im_PRO_SROTOP_Pipe_Set_HD_Int_Handler(unitNo, &intCtrlMax);
-                im_pro_7_52_Print(NULL,"", ercd, unitNo, &intCtrlMax);
+                priv->callbackIntCtrlMax.userParam = userParam;
+                ercd = Im_PRO_SROTOP_Pipe_Set_HD_Int_Handler(unitNo, &priv->callbackIntCtrlMax);
+                im_pro_7_print_52(im_pro_7_print_get(), "", ercd, unitNo, &priv->callbackIntCtrlMax);
             }
         }
     }
 }
 
-void ct_im_pro_7_53(const kuint32 idx)
+void ct_im_pro_7_5_3(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32  chLoopcnt;
@@ -131,7 +131,7 @@ void ct_im_pro_7_53(const kuint32 idx)
     im_pro_debug_sro_sdc_intflg_fill(im_pro_debug_get(),0, 0, sdcInte, sdcIntf);
     im_pro_debug_sro_sdc_intflg_fill(im_pro_debug_get(),0, 1, sdcInte, sdcIntf);
 
-    for(chLoopcnt = 0; chLoopcnt < E_IM_PRO_PWCH_MAX; chLoopcnt++) {
+    for(chLoopcnt = 0; chLoopcnt < ImProPwch_MAX; chLoopcnt++) {
         im_pro_debug_pwch_intflg_fill(im_pro_debug_get(),0, E_IM_PRO_BLOCK_TYPE_SRO, chLoopcnt, pwchInte, pwchIntf);
     }
 
@@ -142,7 +142,7 @@ void ct_im_pro_7_53(const kuint32 idx)
     Im_PRO_SROTOP_Pipe1_Int_Handler();
 }
 
-void ct_im_pro_7_54(const kuint32 idx)
+void ct_im_pro_7_5_4(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 vdInte = (D_IM_PRO_SROTOP_INT_VDE0 | D_IM_PRO_SROTOP_INT_VDE1);
@@ -153,7 +153,7 @@ void ct_im_pro_7_54(const kuint32 idx)
     Im_PRO_SROTOP_Pipe1_VD_Int_Handler();
 }
 
-void ct_im_pro_7_55(const kuint32 idx)
+void ct_im_pro_7_5_5(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 hdInte = (D_IM_PRO_SROTOP_INT_HDE0 | D_IM_PRO_SROTOP_INT_HDE1);
@@ -164,7 +164,7 @@ void ct_im_pro_7_55(const kuint32 idx)
     Im_PRO_SROTOP_Pipe1_HD_Int_Handler();
 }
 
-void ct_im_pro_7_56(const kuint32 idx)
+void ct_im_pro_7_5_6(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32  chLoopcnt;
@@ -204,7 +204,7 @@ void ct_im_pro_7_56(const kuint32 idx)
     im_pro_debug_sro_sdc_intflg_fill(im_pro_debug_get(),1, 0, sdcInte, sdcIntf);
     im_pro_debug_sro_sdc_intflg_fill(im_pro_debug_get(),1, 1, sdcInte, sdcIntf);
 
-    for(chLoopcnt = 0; chLoopcnt < E_IM_PRO_PWCH_MAX; chLoopcnt++) {
+    for(chLoopcnt = 0; chLoopcnt < ImProPwch_MAX; chLoopcnt++) {
         im_pro_debug_pwch_intflg_fill(im_pro_debug_get(),1, E_IM_PRO_BLOCK_TYPE_SRO, chLoopcnt, pwchInte, pwchIntf);
     }
 
@@ -215,7 +215,7 @@ void ct_im_pro_7_56(const kuint32 idx)
     Im_PRO_SROTOP_Pipe2_Int_Handler();
 }
 
-void ct_im_pro_7_57(const kuint32 idx)
+void ct_im_pro_7_5_7(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 vdInte = (D_IM_PRO_SROTOP_INT_VDE0 | D_IM_PRO_SROTOP_INT_VDE1);  
@@ -226,7 +226,7 @@ void ct_im_pro_7_57(const kuint32 idx)
     Im_PRO_SROTOP_Pipe2_VD_Int_Handler();
 }
 
-void ct_im_pro_7_58(const kuint32 idx)
+void ct_im_pro_7_5_8(CtImpro75* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 hdInte = (D_IM_PRO_SROTOP_INT_HDE0 | D_IM_PRO_SROTOP_INT_HDE1);
@@ -237,30 +237,27 @@ void ct_im_pro_7_58(const kuint32 idx)
     Im_PRO_SROTOP_Pipe2_HD_Int_Handler();
 }
 
-void ct_im_pro_7_59(const kuint32 idx)
+void ct_im_pro_7_5_9(CtImpro75* self,const kuint32 idx)
 {
+	CtImpro75Private *priv = CT_IMPRO_7_5_GET_PRIVATE(self);
     kint32 ercd;
     kuchar permissionFlg;
     E_IM_PRO_UNIT_NUM unitNo;
     kuchar ch;
-    T_IM_PRO_INT_CFG intCtrl = {
-        .interruptBit = 0,
-        .permissionFlg = 0,
-    };
 
     if(idx == 1) {
         for(unitNo = 0; unitNo < E_IM_PRO_BOTH_UNIT; unitNo++) {
             for(ch = 0; ch < D_IM_PRO_SRO_SDC_CH_NUM; ch++) {
                 for(permissionFlg = 0; permissionFlg < 2; permissionFlg++) {
-                    intCtrl.permissionFlg = permissionFlg;
+                    priv->intCtrl.permissionFlg = permissionFlg;
 
-                    intCtrl.interruptBit = D_IM_PRO_SDCINTENB_SDCE;
+                    priv->intCtrl.interruptBit = D_IM_PRO_SDCINTENB_SDCE;
 #ifdef CO_DEBUG_ON_PC
-                    ioPro.imgPipe[unitNo].sro.sdc[ch].sdcintflg.word = intCtrl.interruptBit;
+                    ioPro.imgPipe[unitNo].sro.sdc[ch].sdcintflg.word = priv->intCtrl.interruptBit;
 #endif  // CO_DEBUG_ON_PC
 
-                    ercd = Im_PRO_SDC_Set_Interrupt(unitNo, ch, &intCtrl);
-                    im_pro_7_59_Print(NULL,ercd, unitNo, ch, &intCtrl, permissionFlg);
+                    ercd = Im_PRO_SDC_Set_Interrupt(unitNo, ch, &priv->intCtrl);
+                    im_pro_7_print_59(im_pro_7_print_get(), ercd, unitNo, ch, &priv->intCtrl, permissionFlg);
                 }
             }
         }

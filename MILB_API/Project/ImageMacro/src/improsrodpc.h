@@ -602,7 +602,7 @@ ImproSrodpc*		impro_srodpc_new();
 Compensation mode start
 @param[in]	unitNo : Unit number.
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 extern	INT32			impro_srodpc_start( E_IM_PRO_UNIT_NUM unitNo );
 /**
@@ -610,7 +610,7 @@ Compensation mode stop
 @param[in]	unitNo : Unit number.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 extern	INT32			impro_srodpc_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
 /**
@@ -618,7 +618,7 @@ DPC control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcCtrl : DPC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcCtrl* dpcCtrl );
 /**
@@ -627,8 +627,8 @@ A setup of enable access to the built-in RAM of DPC.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srodpc_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 /**
@@ -636,7 +636,7 @@ DPC control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcArea : DPC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproDpcArea* dpcArea );
 /**
@@ -644,7 +644,7 @@ Alpha blend control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcAbCtrl : Alpha blend Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_alpha_blend_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcAbCtrl* dpcAbCtrl );
 /**
@@ -652,7 +652,7 @@ Defect Dynamic Detection control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcDddCtrl : Defect Dynamic Detection Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_dynamic_detect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcDddCtrl* dpcDddCtrl );
 /**
@@ -660,7 +660,7 @@ Calculation of mis-determination degree control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcMddCtrl : Calculation of mis-determination degree for correction Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_mis_determination_calc_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcMddCtrl* dpcMddCtrl );
 /**
@@ -668,7 +668,7 @@ Pixel value magnitude defect correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcMdcCtrl : Pixel value magnitude defect correction control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_magnitude_defect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcMdcCtrl* dpcMdcCtrl );
 /**
@@ -676,7 +676,7 @@ Edge storage defect correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcEsdcCtrl : Edge storage defect correction Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_edge_storage_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcEsdcCtrl* dpcEsdcCtrl );
 /**
@@ -684,7 +684,7 @@ Calculation of over-correction degree for correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcOcdCtrl : Calculation of over-correction degree for correction control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srodpc_over_correction_detect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcOcdCtrl* dpcOcdCtrl );
 /**

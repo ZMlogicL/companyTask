@@ -28,13 +28,14 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImElaCore, im_ela_core)
 struct _ImElaCorePrivate
 {
 	int a;
+	ULONG  gImElaAxiErr;
 };
 
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
-volatile ULONG									S_G_IM_ELA_AXI_ERR = ImEla_D_IM_ELA_NORMAL_END;
+static volatile ULONG									S_G_IM_ELA_AXI_ERR = ImEla_D_IM_ELA_NORMAL_END;
 
 #ifdef CO_ACT_ICLOCK
 // ELACLK setting task counter (0~255)
@@ -78,7 +79,9 @@ static VOID imElaCtrlRegPrint( VOID );
 
 static void im_ela_core_constructor(ImElaCore *self)
 {
-//	ImElaCorePrivate *priv = IM_ELA_CORE_GET_PRIVATE(self);
+	ImElaCorePrivate *priv = IM_ELA_CORE_GET_PRIVATE(self);
+
+	priv-> gImElaAxiErr = ImEla_D_IM_ELA_NORMAL_END;
 }
 
 static void im_ela_core_destructor(ImElaCore *self)
@@ -240,7 +243,7 @@ static INT32 imElaStartNext( VOID )
 			}
 			else{
 				/* Common register & EIIch register & ENIch/ENOch register setting */
-				im_ela_reg_ctrl_next_register(NULL);
+				im_ela_reg_ctrl_next_register(im_ela_reg_new());
 
 #ifdef CO_ELA_DEBUG_PRINT	// Debug
 				Ddim_Print(("imElaStartNext() : Start the next process\n"));
@@ -388,12 +391,12 @@ INT32 im_ela_core_start_core(ImElaCore*self, UINT32 sync )
 	DDIM_USER_ER ercd;
 	INT32 ret = D_DDIM_OK;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	if( IO_ELA.ELATRG.bit.ELATRG == 0x3 ){
 		Ddim_Print(("im_ela_core_start_core() macro busy.\n"));
 
-		im_ela_core_off_pclk(NULL);
+		im_ela_core_off_pclk(im_ela_core_new());
 
 		return ImEla_D_IM_ELA_MACRO_BUSY;
 	}
@@ -402,7 +405,7 @@ INT32 im_ela_core_start_core(ImElaCore*self, UINT32 sync )
 	if( ercd != D_DDIM_USER_E_OK ){
 		Ddim_Print(("im_ela_core_start_core() system error. ercd = %d\n", ercd));
 
-		im_ela_core_off_pclk(NULL);
+		im_ela_core_off_pclk(im_ela_core_new());
 
 		return ImEla_D_IM_ELA_NG;
 	}
@@ -453,12 +456,12 @@ INT32 im_ela_core_start_core(ImElaCore*self, UINT32 sync )
 		// Disable SRAM ACCESS
 		IO_ELA.SRAMACT.bit.SRAMACT = 0;
 
-		im_ela_core_off_pclk(NULL);
+		im_ela_core_off_pclk(im_ela_core_new());
 		imElaOffIclk();
 		imElaOffClk();
 	}
 	else{	// sync == ImElaReg_D_IM_ELA_ASYNC
-		im_ela_core_off_pclk(NULL);
+		im_ela_core_off_pclk(im_ela_core_new());
 	}
 
 	return ret;
@@ -501,12 +504,12 @@ VOID im_ela_core_off_pclk(ImElaCore*self)
  */
 UINT32 im_ela_core_ctrl_next(ImElaCore*self)
 {
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	/* Common register & EIIch register & ENIch/ENOch register setting */
-	im_ela_reg_ctrl_next_register(NULL);
+	im_ela_reg_ctrl_next_register(im_ela_reg_new());
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 	ImElaReg_IM_ELA_DSB();
 
 	return D_DDIM_OK;
@@ -525,7 +528,7 @@ VOID im_ela_core_init(ImElaCore*self )
 
 	S_G_IM_ELA_AXI_ERR = ImEla_D_IM_ELA_NORMAL_END;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	/* Interrupt setting */
 	IO_ELA.ELAINTE.bit.ENWE = 1;		// int enable
@@ -540,7 +543,7 @@ VOID im_ela_core_init(ImElaCore*self )
 
 	IO_ELA.ELAINTF.word = elaintf.word;
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 }
 
 /**
@@ -554,7 +557,7 @@ VOID im_ela_core_stop(ImElaCore*self )
 {
 	DDIM_USER_ER ercd;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	/* ELA stop */
 	if( IO_ELA.ELATRG.bit.ELATRG == 0x3 ){
@@ -565,13 +568,13 @@ VOID im_ela_core_stop(ImElaCore*self )
 	// Disable SRAM ACCESS
 	IO_ELA.SRAMACT.bit.SRAMACT = 0;
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 	imElaOffIclk();
 	imElaOffClk();
 
 	ercd = DDIM_User_Clr_Flg( FID_IM_ELA, ~ImElaReg_D_IM_ELA_FLG_ELA );
 	if( ercd != D_DDIM_USER_E_OK ){
-		Ddim_Print(("im_ela_core_stop(NULL) system error. ercd = %d\n", ercd));
+		Ddim_Print(("im_ela_core_stop(im_ela_core_new()) system error. ercd = %d\n", ercd));
 	}
 }
 
@@ -594,7 +597,7 @@ VOID im_ela_core_int_handler( VOID )
 
 	S_G_IM_ELA_AXI_ERR = ImEla_D_IM_ELA_NORMAL_END;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 	ImElaReg_IM_ELA_DSB();
 
 #ifdef CO_ELA_DEBUG_PRINT	// Debug
@@ -646,8 +649,14 @@ VOID im_ela_core_int_handler( VOID )
 		imEla->gImElaCallbackFunc( S_G_IM_ELA_AXI_ERR );
 	}
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 	ImElaReg_IM_ELA_DSB();
+}
+
+ULONG im_ela_core_get_axi_err(ImElaCore*self)
+{
+	ImElaCorePrivate *priv = IM_ELA_CORE_GET_PRIVATE(self);;
+	return priv->gImElaAxiErr;
 }
 
 ImElaCore *im_ela_core_new(void)

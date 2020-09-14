@@ -38,7 +38,7 @@ extern "C" {
 KConstType 			dd_audio_loopback_get_type(void);
 DdAudioLoopback* 	dd_audio_loopback_new(void);
 
-BOOL 				dd_audio_loopback_flag_get(DdAudioLoopback* self, UINT8 ch);
+kboolean 			dd_audio_loopback_flag_get(DdAudioLoopback* self, kuint8 ch);
 
 /**
 Start loopback operation<br>
@@ -51,7 +51,7 @@ Start loopback operation<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32				dd_audio_loopback_start(DdAudioLoopback* self, UINT8 ch);
+kint32				dd_audio_loopback_start(DdAudioLoopback* self, kuint8 ch);
 
 /**
 Stop loopBack operation<br>
@@ -64,7 +64,7 @@ Stop loopBack operation<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32				dd_audio_loopback_stop(DdAudioLoopback* self, UINT8 ch);
+kint32				dd_audio_loopback_stop(DdAudioLoopback* self, kuint8 ch);
 
 /**
 Get status of loopback operation<br>
@@ -76,7 +76,7 @@ Get status of loopback operation<br>
 @retval	TRUE:loopback operation is performed.
 @retval	FALSE:loopback operation is not performed.
 */
-BOOL				dd_audio_loopback_get_status(DdAudioLoopback* self, UCHAR ch);
+kboolean			dd_audio_loopback_get_status(DdAudioLoopback* self, kuchar ch);
 
 
 #ifdef __cplusplus

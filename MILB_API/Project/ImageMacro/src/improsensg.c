@@ -75,7 +75,7 @@ The SG operation(Trigger) started.
 */
 INT32 impro_sensg_start( EimproSgCh ch )
 {
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );	// Dd_Top_Start_Clock
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );	// Dd_Top_Start_Clock
 	switch( ch ) {
 		case ImproSensg_E_IM_PRO_SG_CH_0:
 			if ( ioPro.sen.sentop.clkstp.clkstp1.bit.pstp2 != 0 ) {
@@ -104,15 +104,15 @@ INT32 impro_sensg_start( EimproSgCh ch )
 		default:
 			// invalid ch value
 			Ddim_Assertion(("I:impro_sensg_start ch value error!! (%d)\n", ch));
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 
 	// start
 	ioPro.sen.sg[ch].sgtrg.bit.sgtrg = D_IM_PRO_TRG_START;
 
-	im_pro_sen_set_start_status(D_IM_SEN_STATUS_SG0, ch);
+	im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_SG0, ch);
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -125,7 +125,7 @@ The SG operation(Trigger) stopped(Frame).
 INT32 impro_sensg_stop( EimproSgCh ch, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if (force == 0){
 		// stop
 		ioPro.sen.sg[ch].sgtrg.bit.sgtrg = ImproSensg_D_IM_PRO_SG_TRG_FRAME_STOP;
@@ -135,9 +135,9 @@ INT32 impro_sensg_stop( EimproSgCh ch, UCHAR force )
 		ioPro.sen.sg[ch].sgtrg.bit.sgtrg = ImproSensg_D_IM_PRO_SG_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SG0, ch);
+	im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SG0, ch);
 	return D_DDIM_OK;
 }
 
@@ -146,61 +146,61 @@ The SG operation condition is set.
 @param[in]	ch : SG ch number
 @param[in]	sgCtrl : SG Control info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sensg_ctrl( EimproSgCh ch, TimproSgCtrl* sgCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (sgCtrl == NULL){
 		Ddim_Assertion(("I:impro_sensg_ctrl error. ch=%u sgCtrl=NULL\n", ch));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->vdocyc < ImproSensg_D_IM_PRO_SG_VDOCYC_MIN ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. vdocyc value error!! ch=%u (%lu)\n", ch, sgCtrl->vdocyc));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdocyc > ImproSensg_D_IM_PRO_SG_HDOCYC_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdocyc value error!! ch=%u (%u)\n", ch, sgCtrl->hdocyc));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdocyc2 > ImproSensg_D_IM_PRO_SG_HDOCYC_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdocyc2 value error!! ch=%u (%u)\n", ch, sgCtrl->hdocyc2));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdow > ImproSensg_D_IM_PRO_SG_HDOW_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdow value error!! ch=%u (%u)\n", ch, sgCtrl->hdow));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdow2 > ImproSensg_D_IM_PRO_SG_HDOW_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdow2 value error!! ch=%u (%u)\n", ch, sgCtrl->hdow2));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->vdow > ImproSensg_D_IM_PRO_SG_VDOW_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. vdow value error!! ch=%u (%u)\n", ch, sgCtrl->vdow));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->vdow >= ( sgCtrl->vdocyc - 1 ) ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. vdow value error!! ch=%u (%u)\n", ch, sgCtrl->vdow));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdow >= sgCtrl->hdocyc ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdow value error!! Please set as [hdow < hdocyc]."
 									"ch=%u (hdow(%u),hdocyc(%u)\n", ch, sgCtrl->hdow, sgCtrl->hdocyc));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->hdow2 >= sgCtrl->hdocyc2 ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. hdow2 value error!! Please set as [hdow2 < hdocyc2]."
 									" ch=%u (hdow2(%u),hdocyc2(%u)\n", ch, sgCtrl->hdow2, sgCtrl->hdocyc2));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( sgCtrl->vddly > ImproSensg_D_IM_PRO_SG_VDDLY_MAX ) {
 		Ddim_Assertion(("I:impro_sensg_ctrl. vddly value error!! ch=%u (%u)\n", ch, sgCtrl->vddly));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sg[ch].sgctl1.bit.vhdo		= sgCtrl->vhdo;
 	ioPro.sen.sg[ch].sgctl1.bit.vdot		= sgCtrl->vdot;
 	ioPro.sen.sg[ch].sgctl1.bit.vdinv		= sgCtrl->vdinv;
@@ -214,7 +214,7 @@ INT32 impro_sensg_ctrl( EimproSgCh ch, TimproSgCtrl* sgCtrl )
 	ioPro.sen.sg[ch].hdocyc2.bit.hdocyc2	= sgCtrl->hdocyc2;
 	ioPro.sen.sg[ch].hdow2.bit.hdow2		= sgCtrl->hdow2;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -224,19 +224,19 @@ The SG operation condition is get.
 @param[in]	ch : SG ch number
 @param[out]	sgCtrl : SG Control info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sensg_get_cycle( EimproSgCh ch, TimproSgCtrl* sgCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (sgCtrl == NULL){
 		Ddim_Assertion(("I:impro_sensg_get_cycle error. ch=%d sgCtrl=NULL\n", ch));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	sgCtrl->vhdo = 	ioPro.sen.sg[ch].sgctl1.bit.vhdo;
 	sgCtrl->vdot = 	ioPro.sen.sg[ch].sgctl1.bit.vdot;
 	sgCtrl->vdinv = 	ioPro.sen.sg[ch].sgctl1.bit.vdinv;
@@ -250,7 +250,7 @@ INT32 impro_sensg_get_cycle( EimproSgCh ch, TimproSgCtrl* sgCtrl )
 	sgCtrl->hdocyc2 = 	ioPro.sen.sg[ch].hdocyc2.bit.hdocyc2;
 	sgCtrl->hdow2 = 	ioPro.sen.sg[ch].hdow2.bit.hdow2;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -260,23 +260,23 @@ Get monitoring result of the input VD and HD signals.
 @param[in]	ch : SG ch number
 @param[out]	sgMoniInfo : SG monitor information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sensg_get_monitor_info( EimproSgCh ch, TimproSgMoniInfo* sgMoniInfo )
 {
 #ifdef CO_PARAM_CHECK
 	if (sgMoniInfo == NULL){
 		Ddim_Assertion(("I:impro_sensg_get_monitor_info error. ch=%d sgMoniInfo=NULL\n", ch));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	sgMoniInfo->inputVdSignal	= ioPro.sen.sg[ch].vdhdmon.bit.vdin;
 	sgMoniInfo->inputHdSignal	= ioPro.sen.sg[ch].vdhdmon.bit.hdin;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }

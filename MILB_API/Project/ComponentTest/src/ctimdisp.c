@@ -1,7 +1,7 @@
 /*
  *ctimdisp.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-02
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -18,6 +18,9 @@
  *
  * <B><I>ALL RIGHTS RESERVED, COPYRIGHT&copy; SOCIONEXT INCORPORATED 2015</I></B>
  */
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -31,27 +34,40 @@
 #include "imdisp2group.h"
 #include "ctimdisp.h"//already define CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp, ct_im_disp, K_TYPE_OBJECT)
-#define CT_IM_DISP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDispPrivate, CT_TYPE_IM_DISP))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp, ct_im_disp, G_TYPE_OBJECT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP, CtImDispPrivate))
 #define CtImDisp_IMDISP_MAIN_DO_MAX_CNT  (50)//
 
+//#define CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
+//#define CO_DEBUG_ON_PC
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDispPrivate
 {
 	ImDisp1Group *imDisp1Group;
 	ImDisp2Group *imDisp2Group;
-	KObject *mainObjectList[CtImDisp_IMDISP_MAIN_DO_MAX_CNT];
+	GObject *mainObjectList[CtImDisp_IMDISP_MAIN_DO_MAX_CNT];
 	// PCLK_Disp setting task counter (0~255)
-	volatile kuchar gImDispPclkCounter;
+	volatile guchar gImDispPclkCounter;
 	// HCLK_Disp setting task counter (0~255)
-	volatile kuchar gImDispHclkCounter;
+	volatile guchar gImDispHclkCounter;
 
 	CtImDisp3 *ctImDisp3;
 	CtImDisp3a *ctImDisp3a;
 };
 
-//#define CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
-//#define CO_DEBUG_ON_PC
+/*
+ * 文件级全局变量定义
+ * */
 
 static ImDisp2GroupDoMainType S_DISP2_MAIN_GROUP_TYPE[] =
 {
@@ -76,14 +92,24 @@ static ImDisp2GroupDoMainType S_DISP2_MAIN_GROUP_TYPE[] =
 /*
  * DECLS
  * */
-static kint addMainObjectList(CtImDisp *self, KObject *element);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
+static gint addMainObjectList(CtImDisp *self, GObject *element);
 static void initDispMain(CtImDisp *self);
-static void doAllDispMain(CtImDisp *self, kint32 argc, char **argv);
+static void doAllDispMain(CtImDisp *self, gint32 argc, char **argv);
 
 /*
  * IMPL
  * */
-static void ct_im_disp_constructor(CtImDisp *self)
+static void ct_im_disp_class_init(CtImDispClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDispPrivate));
+}
+
+static void ct_im_disp_init(CtImDisp *self)
 {
 	CtImDispPrivate *priv = CT_IM_DISP_GET_PRIVATE(self);
 	self->privCtImDisp = priv;
@@ -91,70 +117,88 @@ static void ct_im_disp_constructor(CtImDisp *self)
 	priv->imDisp1Group = NULL;
 	priv->imDisp2Group = NULL;
 
-	priv->ctImDisp3 = ct_im_disp3_new((kuchar *)&priv->gImDispPclkCounter, (kuchar *)&priv->gImDispPclkCounter);
-	priv->ctImDisp3a = ct_im_disp3a_new((kuchar *)&priv->gImDispPclkCounter, (kuchar *)&priv->gImDispPclkCounter);
+	priv->ctImDisp3 = ct_im_disp3_new((guchar *)&priv->gImDispPclkCounter,
+			(guchar *)&priv->gImDispPclkCounter);
+	priv->ctImDisp3a = ct_im_disp3a_new((guchar *)&priv->gImDispPclkCounter,
+			(guchar *)&priv->gImDispPclkCounter);
 }
 
-static void ct_im_disp_destructor(CtImDisp *self)
+static void dispose_od(GObject *object)
 {
+	CtImDisp *self = CT_IM_DISP(object);
 	CtImDispPrivate *priv = self->privCtImDisp;
-	kint index = 0;
+	gint index = 0;
 
 	if (priv->imDisp1Group)
 	{
-		k_object_unref(priv->imDisp1Group);
+		g_object_unref(priv->imDisp1Group);
 		priv->imDisp1Group = NULL;
 	}
 
 	if (priv->imDisp2Group)
 	{
-		k_object_unref(priv->imDisp2Group);
+		g_object_unref(priv->imDisp2Group);
 		priv->imDisp2Group = NULL;
 	}
 
 	for(index=0;index <CtImDisp_IMDISP_MAIN_DO_MAX_CNT; index++)
 	{
-		KObject *element = priv->mainObjectList[index];
+		GObject *element = priv->mainObjectList[index];
 		if(element )
 		{
-			k_object_unref(element);
+			g_object_unref(element);
 			priv->mainObjectList[index] = NULL;
 		}
 	}
+
+	G_OBJECT_CLASS (ct_im_disp_parent_class)->dispose(object);
 }
 
-static kboolean addMainObjectList(CtImDisp *self, KObject *element)
+static void finalize_od(GObject *object)
+{
+//	CtImDisp *self = CT_IM_DISP(object);
+//	CtImDispPrivate *priv = CT_IM_DISP_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp_parent_class)->finalize(object);
+}
+
+static gboolean addMainObjectList(CtImDisp *self, GObject *element)
 {
 	CtImDispPrivate *priv = self->privCtImDisp;
-	kint index = 0;
+	gint index = 0;
 	for(index=0;index <CtImDisp_IMDISP_MAIN_DO_MAX_CNT; index++)
 	{
 		if(NULL == priv->mainObjectList[index] )
 		{
 			priv->mainObjectList[index] = element;
-			return ktrue;
+			return gtrue;
 		}
 	}
-	return kfalse;
+	return gfalse;
 }
 
 static void initDispMain(CtImDisp *self)
 {
 	ImDisp2GroupDoMainType loopType = ImDisp2Group_DO_IM_DISP_TEST;
-	kint loopIndex = 0;
+	gint loopIndex = 0;
 
 	CtImDispPrivate *priv = self->privCtImDisp;
 	ImDisp2Group *imDisp2Group = im_disp2_group_new(
-			(kuchar *)&priv->gImDispPclkCounter, (kuchar *)&priv->gImDispPclkCounter);
+			(guchar *)&priv->gImDispPclkCounter, (guchar *)&priv->gImDispPclkCounter);
 
 	priv->imDisp2Group = imDisp2Group;
 	for (loopIndex = 0; loopIndex < CtImDisp_IMDISP_MAIN_DO_MAX_CNT; loopIndex++)
 	{
 		loopType = S_DISP2_MAIN_GROUP_TYPE[loopIndex];
-		ImDisp2Parent *imDisp2Parent = im_disp2_group_create_im_disp(imDisp2Group, loopType, (KData)self);
+		ImDisp2Parent *imDisp2Parent = im_disp2_group_create_im_disp(imDisp2Group, loopType, (GData)self);
 		if(imDisp2Parent)
 		{
-			if(ktrue == addMainObjectList(self, (KObject *)imDisp2Parent))
+			if(gtrue == addMainObjectList(self, (GObject *)imDisp2Parent))
 			{//
 				Ddim_Print(("------- Add Element  ok -------\n"));
 			}else{
@@ -168,17 +212,17 @@ static void initDispMain(CtImDisp *self)
 	}
 }
 
-static void doAllDispMain(CtImDisp *self, kint32 argc, char **argv)
+static void doAllDispMain(CtImDisp *self, gint32 argc, char **argv)
 {
 	CtImDispPrivate *priv = self->privCtImDisp;
-	kint index = 0;
+	gint index = 0;
 	for(index=0;index <CtImDisp_IMDISP_MAIN_DO_MAX_CNT; index++)
 	{
 		ImDisp2Parent *element = (ImDisp2Parent *)priv->mainObjectList[index] ;
 		im_disp2_parent_do_main(element, argc, argv);
 		if(NULL == priv->mainObjectList[index] )
 		{
-			priv->mainObjectList[index] = (KObject *)element;
+			priv->mainObjectList[index] = (GObject *)element;
 			return ;
 		}
 	}
@@ -192,21 +236,21 @@ void ct_im_disp_pctest_main(CtImDisp *self)
 #ifdef CtImDisp_CO_DEBUG_DISP
 	CtImDispPrivate *priv = self->privCtImDisp;
 	ImDisp1Group *imDisp1Group = im_disp1_group_new(
-			(kuchar *)&priv->gImDispPclkCounter, (kuchar *)&priv->gImDispPclkCounter);
+			(guchar *)&priv->gImDispPclkCounter, (guchar *)&priv->gImDispPclkCounter);
 	ImDisp1Parent *fistDisp1ParentInstance = im_disp1_group_get_pctest_instance(imDisp1Group);
-	kint32 seqNo = 1;
+	gint32 seqNo = 1;
 
-	im_disp1_parent_set_pctest_wrap_func(fistDisp1ParentInstance, ct_im_disp_main_cb, (KObject *)self);
+	im_disp1_parent_set_pctest_wrap_func(fistDisp1ParentInstance, ct_im_disp_main_cb, (GObject *)self);
 	priv->imDisp1Group = imDisp1Group;
 
-	if(kfalse == im_disp1_parent_do_pctest(fistDisp1ParentInstance, &seqNo))
+	if(gfalse == im_disp1_parent_do_pctest(fistDisp1ParentInstance, &seqNo))
 	{
 		Ddim_Print(("do pctest error\n"));
 	}
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 }
 
-void ct_im_disp_main_cb(CtImDisp *self, kint32 argc, char **argv)
+void ct_im_disp_main_cb(CtImDisp *self, gint32 argc, char **argv)
 {
 #ifdef CtImDisp_CO_DEBUG_DISP
 	if (argc > 1)
@@ -227,20 +271,20 @@ void ct_im_disp_main_cb(CtImDisp *self, kint32 argc, char **argv)
 #endif //CtImDisp_CO_DEBUG_DISP
 }
 
-kuchar *ct_im_disp_get_pclk_counter(CtImDisp *self)
+guchar *ct_im_disp_get_pclk_counter(CtImDisp *self)
 {
 	CtImDispPrivate *priv = self->privCtImDisp;
-	return (kuchar *)&priv->gImDispPclkCounter;
+	return (guchar *)&priv->gImDispPclkCounter;
 }
 
-kuchar *ct_im_disp_get_hclk_counter(CtImDisp *self)
+guchar *ct_im_disp_get_hclk_counter(CtImDisp *self)
 {
 	CtImDispPrivate *priv = self->privCtImDisp;
-	return (kuchar *)&priv->gImDispHclkCounter;
+	return (guchar *)&priv->gImDispHclkCounter;
 }
 
 CtImDisp *ct_im_disp_new(void)
 {
-	CtImDisp *self = (CtImDisp *) k_object_new_with_private(CT_TYPE_IM_DISP,sizeof(CtImDispPrivate));
+	CtImDisp *self = (CtImDisp *) g_object_new(CT_TYPE_IM_DISP, NULL);
 	return self;
 }

@@ -36,7 +36,7 @@ struct _MxicMonitorAccessPrivate
 {
     MxicUtlis* mxicUtlis;
 	// Running state of transfer/access monitor with limit.
-	volatile UCHAR gImMxicTransMonLimitEndState;
+	volatile kuchar gImMxicTransMonLimitEndState;
 	// Callback function pointer for transfer/access monitor end by limit.
 	volatile VP_CALLBACK gImMxicAcsTransMonLimitEndCallBack;
 };
@@ -46,10 +46,10 @@ struct _MxicMonitorAccessPrivate
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckMasterNumberForMonitor( UINT32 master );
+static kint32 imMxicCheckMasterNumberForMonitor( kuint32 master );
 #endif // CO_PARAM_CHECK
-static INT32 imMxicGetSlotStatusArray( ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
-									   SlotArrayArgs args, UCHAR* const slotStatus );
+static kint32 imMxicGetSlotStatusArray( ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+									   SlotArrayArgs args, kuchar* const slotStatus );
 
 
 /*----------------------------------------------------------------------*/
@@ -83,7 +83,7 @@ Check master number for monitor function.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckMasterNumberForMonitor( UINT32 master )
+static kint32 imMxicCheckMasterNumberForMonitor( kuint32 master )
 {
 	// Check whether the specified number is a port number or "no use" number.
 	if ( master == MxicUtlis_TARGET_NOTHING ) {
@@ -119,10 +119,10 @@ Get slot status of specified slot.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicGetSlotStatusArray( ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
-									   SlotArrayArgs args, UCHAR* const slotStatus )
+static kint32 imMxicGetSlotStatusArray( ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+									   SlotArrayArgs args, kuchar* const slotStatus )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -268,7 +268,7 @@ static INT32 imMxicGetSlotStatusArray( ImMxicUnit unit, volatile struct io_jdsmx
 "Service history monitor" and "Access count or amount of transfer monitor" 
 are started with this function.<br>
 */
-VOID mxic_monitor_access_start_monitor( MxicMonitorAccess *self )
+void mxic_monitor_access_start_monitor( MxicMonitorAccess *self )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -296,7 +296,7 @@ VOID mxic_monitor_access_start_monitor( MxicMonitorAccess *self )
 "Service history monitor" and "Access count or amount of transfer monitor" 
 are stoped with this function.<br>
 */
-VOID mxic_monitor_access_stop_monitor( MxicMonitorAccess *self )
+void mxic_monitor_access_stop_monitor( MxicMonitorAccess *self )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -321,7 +321,7 @@ Set whether to stop service history monitor operation in a THSTOP terminal input
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32 mxic_monitor_access_set_history_monitor_stop_enable( MxicMonitorAccess *self, UCHAR enable )
+kint32 mxic_monitor_access_set_history_monitor_stop_enable( MxicMonitorAccess *self, kuchar enable )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -353,7 +353,7 @@ Get whether to stop service history monitor operation in a THSTOP terminal input
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32 mxic_monitor_access_get_history_monitor_stop_enable( MxicMonitorAccess *self, UCHAR* const enable )
+kint32 mxic_monitor_access_get_history_monitor_stop_enable( MxicMonitorAccess *self, kuchar* const enable )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -389,7 +389,7 @@ param[in]		wrArbiter				Target write or read Arbiter.<br>
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the port for a monitor.</ul>
 */
-INT32 mxic_monitor_access_get_history_monitor( MxicMonitorAccess *self, ImMxicWrArbiter wrArbiter, 
+kint32 mxic_monitor_access_get_history_monitor( MxicMonitorAccess *self, ImMxicWrArbiter wrArbiter, 
 											   ImMxicSpecArbiter arbiter, ImMxicPort port, 
 											   ImMxicHistoryMonitor* const history )
 {
@@ -469,11 +469,11 @@ The service history monitor result of the all ports is acquired. <br>
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the port for a monitor.</ul>
 */
-INT32 mxic_monitor_access_get_history_monitor_all_port( MxicMonitorAccess *self, 
+kint32 mxic_monitor_access_get_history_monitor_all_port( MxicMonitorAccess *self, 
 														MxicAllHistoryMonitor* const allHistory )
 {
-	INT32 result;
-	INT32 i, j;
+	kint32 result;
+	kint32 i, j;
 	
 #ifdef CO_PARAM_CHECK
 	if ( allHistory == NULL ) {
@@ -533,14 +533,14 @@ The slot status monitor result of the specified write channel arbiter is acquire
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the arbiter for a monitor.</ul>
 */
-INT32 mxic_monitor_access_get_slot_status_monitor_w_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
+kint32 mxic_monitor_access_get_slot_status_monitor_w_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
 															 ImMxicWArbiter arbiter, 
 															 MxicWarbiterAssignPort* const status )
 {
-	INT32						result;
-	INT32						i, j, k;
+	kint32						result;
+	kint32						i, j, k;
 	ImMxicSlot				slot;
-	UCHAR						slotStatus[MxicUtlis_SLOT_SIZE_8];
+	kuchar						slotStatus[MxicUtlis_SLOT_SIZE_8];
 	volatile struct io_jdsmxic*	ioMxic;
 	SlotArrayArgs 				arrayArgs;
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
@@ -569,7 +569,7 @@ INT32 mxic_monitor_access_get_slot_status_monitor_w_arbiter( MxicMonitorAccess *
 		for ( i = 0; i < MxicUtlis_PORT_MAX; i++ ) {
 
 			for ( j = 0; j < MxicUtlis_SLOT_MAX; j++ ) {
-				// Convert value type. (INT32 to ImMxicSlot)
+				// Convert value type. (kint32 to ImMxicSlot)
 				slot = (ImMxicSlot)j;
 				arrayArgs.wrArbiter =MxicUtlis_WR_ARBITER_W; 
 				arrayArgs.arbiter = (ImMxicSpecArbiter)arbiter;
@@ -638,14 +638,14 @@ The slot status monitor result of the specified read channel arbiter is acquired
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the arbiter for a monitor.</ul>
 */
-INT32 mxic_monitor_access_get_slot_status_monitor_r_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
+kint32 mxic_monitor_access_get_slot_status_monitor_r_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
 															 ImMxicRArbiter arbiter, 
 															 MxicRarbiterAssignPort* const status )
 {
-	INT32						result;
-	INT32						i, j, k;
+	kint32						result;
+	kint32						i, j, k;
 	ImMxicSlot				slot;
-	UCHAR						slotStatus[MxicUtlis_SLOT_SIZE_8];
+	kuchar						slotStatus[MxicUtlis_SLOT_SIZE_8];
 	volatile struct io_jdsmxic*	ioMxic;
 	SlotArrayArgs 				arrayArgs;
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
@@ -674,7 +674,7 @@ INT32 mxic_monitor_access_get_slot_status_monitor_r_arbiter( MxicMonitorAccess *
 		for ( i = 0; i < MxicUtlis_PORT_MAX; i++ ) {
 
 			for ( j = 0; j < MxicUtlis_SLOT_MAX; j++ ) {
-				// Convert value type. (INT32 to ImMxicSlot)
+				// Convert value type. (kint32 to ImMxicSlot)
 				slot = (ImMxicSlot)j;
 				arrayArgs.wrArbiter =MxicUtlis_WR_ARBITER_R; 
 				arrayArgs.arbiter = (ImMxicSpecArbiter)arbiter;
@@ -741,7 +741,7 @@ The slot status monitor result of the specified write channel arbiter is acquire
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the arbiter for a monitor.</ul>
 */
-INT32	mxic_monitor_access_get_slot_status_monitor_w_arbiter_group( MxicMonitorAccess *self, 
+kint32	mxic_monitor_access_get_slot_status_monitor_w_arbiter_group( MxicMonitorAccess *self, 
 																	 MxicWArbiterGr arbiter, 
 																	 MxicWarbiterAssignGr* const status )
 {
@@ -789,7 +789,7 @@ The slot status monitor result of the specified read channel arbiter is acquired
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the arbiter for a monitor.</ul>
 */
-INT32	mxic_monitor_access_get_slot_status_monitor_r_arbiter_group( MxicMonitorAccess *self, 
+kint32	mxic_monitor_access_get_slot_status_monitor_r_arbiter_group( MxicMonitorAccess *self, 
 																	 MxicRArbiterGr arbiter, 
 																	 MxicRarbiterAssignGr* const status )
 {
@@ -837,11 +837,11 @@ The slot status monitor result of all arbiter is acquired. <br>
 				<ul><li>Under a monitor operation stop.
 					<li>The state which the transmission demand has not generated in the master currently assigned to the arbiter for a monitor.</ul>
 */
-INT32 mxic_monitor_access_get_slot_status_monitor_all_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
+kint32 mxic_monitor_access_get_slot_status_monitor_all_arbiter( MxicMonitorAccess *self, ImMxicUnit unit, 
 															   MxicAllSlotMonitor* const allStatus )
 {
-	INT32 result;
-	INT32 i;
+	kint32 result;
+	kint32 i;
 
 #ifdef CO_PARAM_CHECK
 	if ( allStatus == NULL ) {
@@ -922,12 +922,12 @@ The master status monitor result is acquired.<br>
 				JDSPRO I/F-0 Write master status = status.wMaster[MxicUtlis_W_PRO_IF_0]<br>
 				JDSDISP I/F-0 Read master status = status.rMaster[MxicUtlis_R_DISP_IF_0]<br>
 */
-INT32 mxic_monitor_access_get_master_status_monitor( MxicMonitorAccess *self, ImMxicUnit unit, 
+kint32 mxic_monitor_access_get_master_status_monitor( MxicMonitorAccess *self, ImMxicUnit unit, 
 													 MxicMasterStatusMonitor* const status )
 {
-	INT32						masterCounter;
-	INT32						regCounter;
-	INT32						result;
+	kint32						masterCounter;
+	kint32						regCounter;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -1055,11 +1055,11 @@ The master status monitor result is acquired.(group)<br>
 				JDSPRO I/F-0 Write master status = status.wMaster[MxicUtlis_W_PRO_IF_0]<br>
 				JDSDISP I/F-0 Read master status = status.rMaster[MxicUtlis_R_DISP_IF_0]<br>
 */
-INT32 mxic_monitor_access_get_master_status_monitor_group( MxicMonitorAccess *self, 
+kint32 mxic_monitor_access_get_master_status_monitor_group( MxicMonitorAccess *self, 
 														   MxicMasterStatusMonitor* const status )
 {
-	INT32 masterCounter;
-	INT32 regCounter;
+	kint32 masterCounter;
+	kint32 regCounter;
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1160,13 +1160,13 @@ This function set the parameter of access count or transfer amount monitor.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		Change of a parameter is reflected at the time of the monitor start by @ref mxic_monitor_access_start_monitor function. 
 */
-INT32 mxic_monitor_access_set_access_or_trans_monitor_parameter( MxicMonitorAccess *self, 
+kint32 mxic_monitor_access_set_access_or_trans_monitor_parameter( MxicMonitorAccess *self, 
 																 const ImMxicMonitorParameter* const param )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
-	INT32 i;
+	kint32 i;
 
 	if ( param == NULL ) {
 		// param parameter is NULL.
@@ -1246,7 +1246,7 @@ This function get the parameter of access count or transfer amount monitor.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_monitor_access_get_access_or_trans_monitor_parameter( MxicMonitorAccess *self, 
+kint32 mxic_monitor_access_get_access_or_trans_monitor_parameter( MxicMonitorAccess *self, 
 																 ImMxicMonitorParameter* const param )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
@@ -1300,7 +1300,7 @@ This function get access count or transfer amount monitor result of specified en
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_monitor_access_get_access_or_trans_monitor( MxicMonitorAccess *self, UCHAR entry, UINT32* const result )
+kint32 mxic_monitor_access_get_access_or_trans_monitor( MxicMonitorAccess *self, kuchar entry, kuint32* const result )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -1338,10 +1338,10 @@ This function get access count or transfer amount monitor result of all entry.<b
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_monitor_access_get_access_or_trans_monitor_all_entry( MxicMonitorAccess *self, 
+kint32 mxic_monitor_access_get_access_or_trans_monitor_all_entry( MxicMonitorAccess *self, 
 															AllAccessTransMonitor* const allResult )
 {
-	INT32 i;
+	kint32 i;
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1380,7 +1380,7 @@ Please use this function in only the following the monitor end condition.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_monitor_access_get_access_or_trans_monitor_limit_end_state( MxicMonitorAccess *self, UCHAR* monState )
+kint32 mxic_monitor_access_get_access_or_trans_monitor_limit_end_state( MxicMonitorAccess *self, kuchar* monState )
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 
@@ -1397,7 +1397,7 @@ INT32 mxic_monitor_access_get_access_or_trans_monitor_limit_end_state( MxicMonit
 	return D_DDIM_OK;
 }
 
-void mxic_monitor_access_set_trans_mon_limit_end_state(MxicMonitorAccess *self, UCHAR state)
+void mxic_monitor_access_set_trans_mon_limit_end_state(MxicMonitorAccess *self, kuchar state)
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 	priv->gImMxicTransMonLimitEndState = state;
@@ -1407,7 +1407,7 @@ void mxic_monitor_access_set_trans_mon_limit_end_callback(MxicMonitorAccess *sel
 {
 	MxicMonitorAccessPrivate *priv = MXIC_MONITOR_ACCESS_GET_PRIVATE(self);
 	if ( priv->gImMxicAcsTransMonLimitEndCallBack != NULL ) {
-		((VOID (*)()) priv->gImMxicAcsTransMonLimitEndCallBack)();
+		((void (*)()) priv->gImMxicAcsTransMonLimitEndCallBack)();
 	}
 }
 

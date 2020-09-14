@@ -149,10 +149,10 @@ struct _DdPdmCoreCfg {
 	UINT16				sincRate;								/**< SINC Decimation Rate<BR><BR>
 																			 value Range: [0x1-0x7F]<BR>
 																			 Default value : 0xd10 */
-	UINT8				adcHpd;								/**< High Pass Filter<BR><BR>
+	kuint8				adcHpd;								/**< High Pass Filter<BR><BR>
 																			 value Range: DdPdm_ENABLE / DdPdm_DISABLE<BR>
 																			 Default value : DdPdm_DISABLE */
-	UINT8				hpCutoff;								/**< High Pass Filter Coefficients<BR><BR>
+	kuint8				hpCutoff;								/**< High Pass Filter Coefficients<BR><BR>
 																			 Default value : 0xB */
 	PdmCoreSCycle		sCycle;								/**< Set number of PDM_CLK during gain-setting changes or soft mute<BR><BR>
 // --- REMOVE_ES1_HARDWARE BEGIN ---
@@ -162,14 +162,14 @@ struct _DdPdmCoreCfg {
 																			 Default value : DdPdm_CORE_S_CYCLE_1
 // --- REMOVE_ES3_HARDWARE END ---
 																			  */
-	UINT8				softMute;								/**< Soft Mute<BR><BR>
+	kuint8				softMute;								/**< Soft Mute<BR><BR>
 																			 value Range: DdPdm_ENABLE / DdPdm_DISABLE<BR>
 																			 Default value : DdPdm_DISABLE */
 };
 
 /** PDM DMAC Config */
 struct _DdPdmDmaCfg {
-	UINT8				dmickDly;								/**< Input Data Sampling with number of PDM clock cycle delay<BR><BR>
+	kuint8				dmickDly;								/**< Input Data Sampling with number of PDM clock cycle delay<BR><BR>
 																			 value Range: [0-3]<BR>
 																			 Default value : 0x0 */
 	PdmDmaBurstLen		dmaBurstlen;							/**< DMA Burst Length<BR><BR>
@@ -178,7 +178,7 @@ struct _DdPdmDmaCfg {
 																			 Default value : DdPdm_DMA_PCM_CH_LEFT */
 	PdmDmaPcmWd			pcmWdlen;								/**< PCM Data Word Length<BR><BR>
 																			 Default value : DdPdm_DMA_PCM_WD_16 */
-	UINT8				dmaEn;									/**< DMA Transfer<BR><BR>
+	kuint8				dmaEn;									/**< DMA Transfer<BR><BR>
 																			 value Range: DdPdm_ENABLE / DdPdm_DISABLE<BR>
 																			 Default value : DdPdm_DISABLE */
 };
@@ -188,7 +188,7 @@ struct _DdPdmDmaLen {
 	UINT16		ttsize;								/**< DMA total fransfer length in word<BR><BR>
 													value Range: [0x0001-0xFFFF]<BR>
 													 Default value : 0x78 */
-	UINT8		tsize;								/**< DMA block transfer length in word<BR><BR>
+	kuint8		tsize;								/**< DMA block transfer length in word<BR><BR>
 													 value Range: [0x01-0xFF]<BR>
 													 Default value : 0x18 */
 };
@@ -196,7 +196,7 @@ struct _DdPdmDmaLen {
 
 typedef struct _DdPdm 			DdPdm;
 typedef struct _DdPdmPrivate 	DdPdmPrivate;
-typedef VOID (*DdPdmFunc)(DdPdm *ddPdm);								/**< Callback function pointer	*/
+typedef void (*DdPdmFunc)(DdPdm *ddPdm);								/**< Callback function pointer	*/
 
 struct  _DdPdm {
 	KObject parent;
@@ -219,7 +219,7 @@ Initialize PDM macro<br>
 @retval D_DDIM_OK					OK
 *@retval DdPdm_SYSTEM_ERROR		System Error
 */
-INT32		dd_pdm_init(DdPdm *self);
+kint32		dd_pdm_init(DdPdm *self);
 
 /**
 Execute exclusive control for PDM macro<br>
@@ -228,8 +228,8 @@ Execute exclusive control for PDM macro<br>
 							<li>@ref DdPdm_CH1</ul>
 @param[in]	tmout	Time of timeout<br>
 						<ul><li>Positive Value(Time of timeout)
-							<li>@ref D_DDIM_USER_SEM_WAIT_POL
-							<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
+							<li>@ref DdimUserCustom_SEM_WAIT_POL
+							<li>@ref DdimUserCustom_SEM_WAIT_FEVR</ul>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERR	Input Parameter Error
 @retval DdPdm_SEM_NG				Semaphore acquisition NG
@@ -237,7 +237,7 @@ Execute exclusive control for PDM macro<br>
 @remarks This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
 		 This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
 */
-INT32		dd_pdm_open(DdPdm *self, UINT8 ch, INT32 tmout);
+kint32		dd_pdm_open(DdPdm *self, kuint8 ch, kint32 tmout);
 
 /**
 Cancel exclusive control for PDM macro<br>
@@ -248,7 +248,7 @@ Cancel exclusive control for PDM macro<br>
 @retval DdPdm_SEM_NG			Semaphore release NG 
 @remarks This API uses DDIM_User_Sig_Sem().
 */
-INT32		dd_pdm_close(DdPdm *self, UINT8 ch);
+kint32		dd_pdm_close(DdPdm *self, kuint8 ch);
 
 /**
 DMA0 Interrupt handler for PDM macro<br>
@@ -256,7 +256,7 @@ DMA0 Interrupt handler for PDM macro<br>
 						<ul><li>@ref DdPdm_CH0
 							<li>@ref DdPdm_CH1</ul>
 */
-VOID		dd_pdm_dma0_int_handler(DdPdm *self, UINT8 ch);
+void		dd_pdm_dma0_int_handler(DdPdm *self, kuint8 ch);
 
 /**
 DMA1 Interrupt handler for PDM macro<br>
@@ -264,7 +264,7 @@ DMA1 Interrupt handler for PDM macro<br>
 						<ul><li>@ref DdPdm_CH0
 							<li>@ref DdPdm_CH1</ul>
 */
-VOID		dd_pdm_dma1_int_handler(DdPdm *self, UINT8 ch);
+void		dd_pdm_dma1_int_handler(DdPdm *self, kuint8 ch);
 
 /**
 OverFlow Interrupt handler for PDM macro<br>
@@ -272,7 +272,7 @@ OverFlow Interrupt handler for PDM macro<br>
 						<ul><li>@ref DdPdm_CH0
 							<li>@ref DdPdm_CH1</ul>
 */
-VOID		dd_pdm_overflow_int_handler(DdPdm *self, UINT8 ch);
+void		dd_pdm_overflow_int_handler(DdPdm *self, kuint8 ch);
 
 /**
 Set pdm core control information<br>
@@ -283,7 +283,7 @@ Set pdm core control information<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32		dd_pdm_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* coreCfg);
+kint32		dd_pdm_ctrl_core(DdPdm *self, kuint8 ch, DdPdmCoreCfg* coreCfg);
 
 /**
 Get pcm core control information(Common Setting)<br>
@@ -294,7 +294,7 @@ Get pcm core control information(Common Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32 		dd_pdm_get_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* coreCfg);
+kint32 		dd_pdm_get_ctrl_core(DdPdm *self, kuint8 ch, DdPdmCoreCfg* coreCfg);
 
 /**
 Start Data Streaming<br>
@@ -304,7 +304,7 @@ Start Data Streaming<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32		dd_pdm_start_streaming(DdPdm *self, UINT8 ch);
+kint32		dd_pdm_start_streaming(DdPdm *self, kuint8 ch);
 
 /**
 Stop Data Streaming<br>
@@ -314,7 +314,7 @@ Stop Data Streaming<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_pdm_stop_streaming(DdPdm *self, UINT8 ch);
+kint32		dd_pdm_stop_streaming(DdPdm *self, kuint8 ch);
 
 /**
 Set pdm dma control information<br>
@@ -325,7 +325,7 @@ Set pdm dma control information<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32		dd_pdm_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dmaCfg);
+kint32		dd_pdm_ctrl_dma(DdPdm *self, kuint8 ch, DdPdmDmaCfg* dmaCfg);
 
 /**
 Get pcm core control information(Common Setting)<br>
@@ -336,7 +336,7 @@ Get pcm core control information(Common Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32 		dd_pdm_get_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dmaCfg);
+kint32 		dd_pdm_get_ctrl_dma(DdPdm *self, kuint8 ch, DdPdmDmaCfg* dmaCfg);
 
 /**
 Set callback function of Dma0 Interrupt<br>
@@ -347,7 +347,7 @@ Set callback function of Dma0 Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_callback_dma0_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback);
+kint32 		dd_pdm_set_callback_dma0_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback);
 
 /**
 Set enable Dma0 Interrupt<br>
@@ -358,7 +358,7 @@ Set enable Dma0 Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_enable_dma0_intr(DdPdm *self, UINT8 ch, UINT8 enable);
+kint32 		dd_pdm_set_enable_dma0_intr(DdPdm *self, kuint8 ch, kuint8 enable);
 
 /**
 Set callback function of Dma1 Interrupt<br>
@@ -369,7 +369,7 @@ Set callback function of Dma1 Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_callback_dma1_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback);
+kint32 		dd_pdm_set_callback_dma1_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback);
 
 /**
 Set callback function of Dma1 Interrupt<br>
@@ -380,7 +380,7 @@ Set callback function of Dma1 Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_enable_dma1_intr(DdPdm *self, UINT8 ch, UINT8 enable);
+kint32 		dd_pdm_set_enable_dma1_intr(DdPdm *self, kuint8 ch, kuint8 enable);
 
 /**
 Set callback function of OverFlow Interrupt<br>
@@ -391,7 +391,7 @@ Set callback function of OverFlow Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_callback_over_flow_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback);
+kint32 		dd_pdm_set_callback_over_flow_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback);
 
 /**
 Set callback function of OverFlow Interrupt<br>
@@ -402,7 +402,7 @@ Set callback function of OverFlow Interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_enable_over_flow_intr(DdPdm *self, UINT8 ch, UINT8 enable);
+kint32 		dd_pdm_set_enable_over_flow_intr(DdPdm *self, kuint8 ch, kuint8 enable);
 
 /**
 Set DMA0 distination address<br>
@@ -413,7 +413,7 @@ Set DMA0 distination address<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_pdm_set_dma0_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr);
+kint32		dd_pdm_set_dma0_dst_addr(DdPdm *self, kuint8 ch, kuint32 addr);
 
 /**
 Set DMA1 distination address<br>
@@ -424,7 +424,7 @@ Set DMA1 distination address<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_pdm_set_dma1_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr);
+kint32		dd_pdm_set_dma1_dst_addr(DdPdm *self, kuint8 ch, kuint32 addr);
 
 /**
 Set DMA Transfer Size<br>
@@ -435,7 +435,7 @@ Set DMA Transfer Size<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_set_dma_trans_length(DdPdm *self, UINT8 ch, DdPdmDmaLen* dmaLen);
+kint32 		dd_pdm_set_dma_trans_length(DdPdm *self, kuint8 ch, DdPdmDmaLen* dmaLen);
 
 /**
 DMA FIFO Flush<br>
@@ -445,7 +445,7 @@ DMA FIFO Flush<br>
 @retval D_DDIM_OK						OK
 @retval DdPdm_INPUT_PARAM_ERROR		Input Parameter Error
 */
-INT32		dd_pdm_flush_dma_fifo(DdPdm *self, UINT8 ch);
+kint32		dd_pdm_flush_dma_fifo(DdPdm *self, kuint8 ch);
 
 /**
 Get log of interrupt<br>
@@ -457,7 +457,7 @@ Get log of interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_get_status(DdPdm *self, UINT8 ch, DdPdmIntType type, UINT8* status);
+kint32 		dd_pdm_get_status(DdPdm *self, kuint8 ch, DdPdmIntType type, kuint8* status);
 
 /**
 Clear log of interrupt<br>
@@ -468,7 +468,7 @@ Clear log of interrupt<br>
 @retval D_DDIM_OK					OK
 @retval DdPdm_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 		dd_pdm_clear_status(DdPdm *self, UINT8 ch, DdPdmIntType type);
+kint32 		dd_pdm_clear_status(DdPdm *self, kuint8 ch, DdPdmIntType type);
 
 
 #ifdef __cplusplus

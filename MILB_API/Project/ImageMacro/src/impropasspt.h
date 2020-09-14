@@ -68,7 +68,7 @@ typedef struct {
 /** SPT Control information*/
 typedef struct {
 	/**< Select shading correction tabletarget registor	:@@sptTbl */
-	E_IM_PRO_SPT_TBL_SEL				tableSel;
+	EimproSptTblSel				tableSel;
 	/**< Correction of horizontal pixels per frame interpolationvalue
 	 * range:[2 - 255]target registor	:@@SPTBSH */
 	USHORT										horizontalPixel;
@@ -130,21 +130,21 @@ ImproPasspt*			impro_passpt_new();
 /**
 SPT macro start
 @retval		D_DDIM_OK				: Processing OK
-@retval		D_IM_PRO_MACRO_BUSY_NG	: PWCH not running NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG	: PWCH not running NG
 */
 extern	INT32			impro_passpt_start( VOID );
 /**
 SPT macro stop
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PWCH not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PWCH not stopped NG
 */
 extern	INT32			impro_passpt_stop( UCHAR force );
 /**
 Setup of SPT control parameter.
 @param[in]	sptCtrl : SPT Information @ref TimproSptCtrl
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_passpt_ctrl( TimproSptCtrl* sptCtrl );
 /**
@@ -152,8 +152,8 @@ A setup of enable access to the built-in RAM of SPT.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_passpt_set_paen( UCHAR paenTrg );
 /**
@@ -161,10 +161,10 @@ shading compensation table is registered.
 @param[in]	tblSel : table select.
 @param[in]	shdTbl		: Shading table info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 @note		None
 */
-extern	INT32			impro_passpt_set_table( E_IM_PRO_SPT_TBL_SEL tblSel, TimproSptTable* shdTbl );
+extern	INT32			impro_passpt_set_table( EimproSptTblSel tblSel, TimproSptTable* shdTbl );
 /**
 Get the top address of the address array of FSHD Concentric Circles Correction table.
 @param[in]		tblSel					: table select.
@@ -172,7 +172,7 @@ Get the top address of the address array of FSHD Concentric Circles Correction t
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-extern	INT32			impro_passpt_get_rdma_addr_spt_shd_tbl( E_IM_PRO_SPT_TBL_SEL tblSel, const TimproRdmaSptShdTblAddr** addr );
+extern	INT32			impro_passpt_get_rdma_addr_spt_shd_tbl( EimproSptTblSel tblSel, const TimproRdmaSptShdTblAddr** addr );
 
 
 #endif /* __IMPRO_PASSPT_H__ */

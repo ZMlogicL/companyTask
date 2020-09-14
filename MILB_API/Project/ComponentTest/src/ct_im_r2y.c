@@ -621,7 +621,7 @@ T_IM_R2Y_OUTBANK_INFO gct_im_r2y_out_addr_ycc422 = {
 };
 
 // T_IM_R2Y_OUTBANK_INFO table for YCC420 output
-T_IM_R2Y_OUTBANK_INFO gct_im_r2y_out_addr_ycc420 = {
+T_IM_R2Y_OUTBANK_INFO gctImR2yOutAddrYcc420 = {
 	.bank_initial_position = D_IM_R2Y_YYW_BANK_0,
 	.use_bank_num = D_IM_R2Y_YYW_BANK_0,
 	.output_addr[D_IM_R2Y_YYW_BANK_0] = {
@@ -21739,7 +21739,7 @@ INT32 CT_Im_R2y_3_34( UCHAR pipe_no )
 	r2y_ctrl_direct.frame_stop = 1;
 
 	memset( &r2y_addr_0, '\x00', sizeof(r2y_addr_0) );
-	r2y_addr_0 = gct_im_r2y_out_addr_ycc420;
+	r2y_addr_0 = gctImR2yOutAddrYcc420;
 
 	ct_im_r2y_set_b2r( pipe_no );
 
@@ -23942,7 +23942,7 @@ INT32 CT_Im_R2y_3_53( UCHAR pipe_no )
 	r2y_ctrl.yyw_enable[D_IM_R2Y_YYW_CH_2] = D_IM_R2Y_ENABLE_OFF;
 
 	memset( &r2y_addr_0, '\x00', sizeof(r2y_addr_0) );
-	r2y_addr_0 = gct_im_r2y_out_addr_ycc420;
+	r2y_addr_0 = gctImR2yOutAddrYcc420;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_R2Y_Ctrl( pipe_no, &r2y_ctrl );
@@ -24056,7 +24056,7 @@ INT32 CT_Im_R2y_3_54( UCHAR pipe_no )
 	r2y_ctrl.yyw_enable[D_IM_R2Y_YYW_CH_2] = D_IM_R2Y_ENABLE_OFF;
 
 	memset( &r2y_addr_0, '\x00', sizeof(r2y_addr_0) );
-	r2y_addr_0 = gct_im_r2y_out_addr_ycc420;
+	r2y_addr_0 = gctImR2yOutAddrYcc420;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_R2Y_Ctrl( pipe_no, &r2y_ctrl );
@@ -24170,7 +24170,7 @@ INT32 CT_Im_R2y_3_55( UCHAR pipe_no )
 	r2y_ctrl.yyw_enable[D_IM_R2Y_YYW_CH_2] = D_IM_R2Y_ENABLE_OFF;
 
 	memset( &r2y_addr_0, '\x00', sizeof(r2y_addr_0) );
-	r2y_addr_0 = gct_im_r2y_out_addr_ycc420;
+	r2y_addr_0 = gctImR2yOutAddrYcc420;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_R2Y_Ctrl( pipe_no, &r2y_ctrl );
@@ -26407,9 +26407,9 @@ VOID CT_Im_R2Y_Run( const UINT32 ct_idx_1st, const UINT32 ct_idx_2nd, const UINT
 	gct_im_r2y_out_addr_ycc444.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Y = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_Y_ADDR_TOP;
 	gct_im_r2y_out_addr_ycc444.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cb = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_CB_ADDR_TOP;
 	gct_im_r2y_out_addr_ycc444.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cr = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_CR_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Y = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_Y_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cb = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CB_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cr = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CR_P_ADDR_TOP;
+	gctImR2yOutAddrYcc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Y = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_Y_ADDR_TOP;
+	gctImR2yOutAddrYcc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cb = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CB_ADDR_TOP;
+	gctImR2yOutAddrYcc420.output_addr[D_IM_R2Y_YYW_BANK_0].ycc.addr_Cr = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CR_P_ADDR_TOP;
 
 
 	if( is_init == 0 ) {

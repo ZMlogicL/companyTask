@@ -3,7 +3,7 @@
 *@date                :2020-09-09
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JDSPRO_P2M_H__
 
 
-#include <klib.h>
-
-
-#define JDSPRO_TYPE_P2M				(jdspro_p2m_get_type())
-#define JDSPRO_P2M(obj)				(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsproP2m))
-#define JDSPRO_IS_P2M(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSPRO_TYPE_P2M))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoP2mtrg IoP2mtrg;
@@ -43,118 +39,116 @@ typedef union 				_IoPtrmxhen IoPtrmxhen;
 typedef union 				_IoP2mmir IoP2mmir;
 typedef union 				_IoP2m2pmd IoP2m2pmd;
 typedef struct 				_IoP2m IoP2m;
-typedef struct 				_JdsproP2m JdsproP2m;
-typedef struct 				_JdsproP2mPrivate	JdsproP2mPrivate;
 
 /*  structure of P2MTRG (2800_C000h)    */
 union _IoP2mtrg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   p2mtrg  :2;
-        kulong           :30;
+        gulong   p2mtrg  :2;
+        gulong           :30;
     }bit;
 };
 
 /*  structure of P2MPAEN    (2800_C004h)    */
 union _IoP2mpaen{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   paen    :1;
-        kulong           :31;
+        gulong   paen    :1;
+        gulong           :31;
     }bit;
 };
 
 /*  structure of P2MCTL (2800_C008h)    */
 union _IoP2mctl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pknemd  :2;
-        kulong           :2;
-        kulong   plpf    :2;
-        kulong           :2;
-        kulong   p2mtyp  :2;
-        kulong           :22;
+        gulong   pknemd  :2;
+        gulong           :2;
+        gulong   plpf    :2;
+        gulong           :2;
+        gulong   p2mtyp  :2;
+        gulong           :22;
     }bit;
 };
 
 /*  structure of P2MOFS (2800_C00Ch)    */
 union _IoP2mofs{
-    kulong       word;
+    gulong       word;
     struct {
         long            p2mofs  :15;
-        kulong           :17;
+        gulong           :17;
     }bit;
 };
 
 /*  structure of PBSFT  (2800_C010h)    */
 union _IoPbsft{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pbsft   :4;
-        kulong           :28;
+        gulong   pbsft   :4;
+        gulong           :28;
     }bit;
 };
 
 /*  structure of PCLPH  (2800_C014h)    */
 union _IoPclph{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pclph   :16;
-        kulong           :16;
+        gulong   pclph   :16;
+        gulong           :16;
     }bit;
 };
 
 /*  structure of PTRMV  (2800_C050h)    */
 union _IoPtrmv{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmv   :14;
-        kulong           :18;
+        gulong   ptrmv   :14;
+        gulong           :18;
     }bit;
 };
 
 /*  structure of PTRMH  (2800_C054h)    */
 union _IoPtrmh{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmh   :14;
-        kulong           :18;
+        gulong   ptrmh   :14;
+        gulong           :18;
     }bit;
 };
 
 /*  structure of PTRMVW (2800_C058h)    */
 union _IoPtrmvw{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmvw  :16;
-        kulong           :16;
+        gulong   ptrmvw  :16;
+        gulong           :16;
     }bit;
 };
 
 /*  structure of PTRMHW (2800_C05Ch)    */
 union _IoPtrmhw{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmhw  :24;
-        kulong           :8;
+        gulong   ptrmhw  :24;
+        gulong           :8;
     }bit;
 };
 
 /*  structure of PTRMXVCYC  (2800_C060h)    */
 union _IoPtrmxvcyc{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmxvcyc   :6;
-        kulong               :26;
+        gulong   ptrmxvcyc   :6;
+        gulong               :26;
     }bit;
 };
 
 /*  structure of PTRMXHCYC  (2800_C064h)    */
 union _IoPtrmxhcyc{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   ptrmxhcyc   :6;
-        kulong               :26;
+        gulong   ptrmxhcyc   :6;
+        gulong               :26;
     }bit;
 };
 
@@ -176,19 +170,19 @@ union _IoPtrmxhen{
 
 /*  structure of P2MMIR (2800_C078h)    */
 union _IoP2mmir{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   p2mmir  :1;
-        kulong           :31;
+        gulong   p2mmir  :1;
+        gulong           :31;
     }bit;
 };
 
 /*  structure of P2M2PMD    (2800_C080h)    */
 union _IoP2m2pmd{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   p2m2pmd :1;
-        kulong           :31;
+        gulong   p2m2pmd :1;
+        gulong           :31;
     }bit;
 };
 
@@ -208,7 +202,7 @@ struct _IoP2m{
 	/* 2800_(C014 - C017h) */
 	IoPclph      pclph;
 	/* 2800_(C018 - C04Fh) */
-    kuchar dmyC018C04f[0xC050-0xC018];
+    guchar dmyC018C04f[0xC050-0xC018];
     /* 2800_(C050 - C053h) */
     IoPtrmv      ptrmv;
     /* 2800_(C054 - C057h) */
@@ -228,21 +222,12 @@ struct _IoP2m{
     /* 2800_(C078 - C07Bh) */
     IoP2mmir     p2mmir;
     /* 2800_(C07C - C07Fh) */
-    kuchar dmyC07cC07f[0xC080-0xC07C];
+    guchar dmyC07cC07f[0xC080-0xC07C];
     /* 2800_(C080 - C083h) */
     IoP2m2pmd    p2m2pmd;
     /* 2800_(C084 - C0FFh) */
-    kuchar dmyC084C0ff[0xC100-0xC084];
+    guchar dmyC084C0ff[0xC100-0xC084];
 };
-
-struct  _JdsproP2m
-{
-	KObject parent;
-};
-
-
-KConstType				jdspro_p2m_get_type(void);
-JdsproP2m*			jdspro_p2m_new(void);
 
 
 #endif/*__JDSPRO_P2M_H__*/

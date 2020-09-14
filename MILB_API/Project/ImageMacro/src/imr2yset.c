@@ -39,15 +39,15 @@ struct _ImR2ySetPrivate
 //---------------------- colabo  section -------------------------------
 #ifdef CO_R2Y_RDMA_ON
 
-static VOID imR2ySetRdmaValGammmaDiffTable( UCHAR pipe_no, UCHAR tbl_index, const ULLONG* const src_diff_tbl );
-static VOID imR2ySetRdmaValGammmaFullTable( UCHAR pipe_no, UCHAR tbl_index, const USHORT* const src_full_tbl );
-static VOID imR2ySetRdmaValHedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValHedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValMedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValMedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValLedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValLedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num );
-static VOID imR2ySetRdmaValMapScaleTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num );
+static void imR2ySetRdmaValGammmaDiffTable( kuint16 pipeNo, kuint16 tbl_index, const ULLONG* const src_diff_tbl );
+static void imR2ySetRdmaValGammmaFullTable( kuint16 pipeNo, kuint16 tbl_index, const kuint16* const src_full_tbl );
+static void imR2ySetRdmaValHedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValHedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValMedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValMedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValLedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValLedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
+static void imR2ySetRdmaValMapScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num );
 
 #endif	// CO_R2Y_RDMA_ON
 #endif	// CO_DDIM_UTILITY_USE
@@ -72,7 +72,7 @@ static void im_r2y_set_destructor(ImR2ySet *self)
 //---------------------- colabo  section -------------------------------
 #ifdef CO_R2Y_RDMA_ON
 
-static VOID imR2ySetRdmaValGammmaDiffTable( UCHAR pipe_no, UCHAR tbl_index, const ULLONG* const src_diff_tbl )
+static void imR2ySetRdmaValGammmaDiffTable( kuint16 pipeNo, kuint16 tbl_index, const ULLONG* const src_diff_tbl )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
@@ -81,29 +81,29 @@ static VOID imR2ySetRdmaValGammmaDiffTable( UCHAR pipe_no, UCHAR tbl_index, cons
 
 	switch( tbl_index ){
 		case 1:		// R
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMRDF_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMRDF_Tbl_Addr[pipeNo]);
 			break;
 		case 2:		// G
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMGDF_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMGDF_Tbl_Addr[pipeNo]);
 			break;
 		case 3:		// B
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMBDF_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMBDF_Tbl_Addr[pipeNo]);
 			break;
 		case 4:		// Yb
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMYBDF_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMYBDF_Tbl_Addr[pipeNo]);
 			break;
 //		case 0:		// RGB common
 		default:
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMRGBDF_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMRGBDF_Tbl_Addr[pipeNo]);
 			break;
 	}
 
-	rdma_ctrl.transfer_byte = sizeof( U_IM_R2Y_CTRL_RDMA_GMDF_TBL_VAL );
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_diff_tbl;
+	rdma_ctrl.transfer_byte = sizeof( CtrlRdmaGmdfTblval );
+	rdma_ctrl.reg_data_top_addr = (kulong)src_diff_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValGammmaFullTable( UCHAR pipe_no, UCHAR tbl_index, const USHORT* const src_full_tbl )
+static void imR2ySetRdmaValGammmaFullTable( kuint16 pipeNo, kuint16 tbl_index, const kuint16* const src_full_tbl )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
@@ -112,116 +112,116 @@ static VOID imR2ySetRdmaValGammmaFullTable( UCHAR pipe_no, UCHAR tbl_index, cons
 
 	switch( tbl_index ){
 		case 1:		// R
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMRFL_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMRFL_Tbl_Addr[pipeNo]);
 			break;
 		case 2:		// G
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMGFL_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMGFL_Tbl_Addr[pipeNo]);
 			break;
 		case 3:		// B
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMBFL_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMBFL_Tbl_Addr[pipeNo]);
 			break;
 		case 4:		// Yb
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMYBFL_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMYBFL_Tbl_Addr[pipeNo]);
 			break;
 //		case 0:		// RGB common
 		default:
-			rdma_ctrl.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_GMRGBFL_Tbl_Addr[pipe_no]);
+			rdma_ctrl.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_GMRGBFL_Tbl_Addr[pipeNo]);
 			break;
 	}
 
-	rdma_ctrl.transfer_byte = sizeof( U_IM_R2Y_CTRL_RDMA_GMFL_TBL_VAL );
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_full_tbl;
+	rdma_ctrl.transfer_byte = sizeof( CtrlRdmaGmflTblval );
+	rdma_ctrl.reg_data_top_addr = (kulong)src_full_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValHedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValHedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGHWSCL_Tbl_Addr[pipe_no].EGWSCL[write_ofs_num / 4]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGHWSCL_Tbl_Addr[pipeNo].EGWSCL[write_ofs_num / 4]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 4;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValHedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValHedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGHWTON_Tbl_Addr[pipe_no].EGWTON[write_ofs_num / 2]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGHWTON_Tbl_Addr[pipeNo].EGWTON[write_ofs_num / 2]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 2;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValMedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValMedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGMWSCL_Tbl_Addr[pipe_no].EGWSCL[write_ofs_num / 4]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGMWSCL_Tbl_Addr[pipeNo].EGWSCL[write_ofs_num / 4]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 4;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValMedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValMedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGMWTON_Tbl_Addr[pipe_no].EGWTON[write_ofs_num / 2]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGMWTON_Tbl_Addr[pipeNo].EGWTON[write_ofs_num / 2]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 2;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValLedgeScaleTable( UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValLedgeScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGLWSCL_Tbl_Addr[pipe_no].EGWSCL[write_ofs_num / 4]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGLWSCL_Tbl_Addr[pipeNo].EGWSCL[write_ofs_num / 4]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 4;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValLedgeStepTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValLedgeStepTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGLWTON_Tbl_Addr[pipe_no].EGWTON[write_ofs_num / 2]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGLWTON_Tbl_Addr[pipeNo].EGWTON[write_ofs_num / 2]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 2;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
-static VOID imR2ySetRdmaValMapScaleTable( UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+static void imR2ySetRdmaValMapScaleTable( kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	T_IM_RDMA_CTRL rdma_ctrl = {
-		.reg_addr_tbl_addr = (ULONG)&(gIM_R2Y_EGMPSCL_Tbl_Addr[pipe_no].EGMPSCL[write_ofs_num / 2]),
+		.reg_addr_tbl_addr = (kulong)&(gIM_R2Y_EGMPSCL_Tbl_Addr[pipeNo].EGMPSCL[write_ofs_num / 2]),
 		.req_threshold = E_IM_RDMA_PRCH_CNT_NOLIMIT,
 		.pCallBack = NULL,
 	};
 
 	rdma_ctrl.transfer_byte = array_num / 2;
-	rdma_ctrl.reg_data_top_addr = (ULONG)src_tbl;
+	rdma_ctrl.reg_data_top_addr = (kulong)src_tbl;
 	im_r2y_utils_start_rdma(im_r2y_utils_get(), &rdma_ctrl );
 }
 
@@ -234,74 +234,74 @@ static VOID imR2ySetRdmaValMapScaleTable( UCHAR pipe_no, const USHORT* const src
  */
 /* Set Gamma Table
  */
-INT32 im_r2y_set_gamma_table(ImR2ySet *self, UCHAR pipe_no, UCHAR tbl_index, const USHORT* const src_full_tbl, const ULLONG* const src_diff_tbl )
+INT32 im_r2y_set_gamma_table(ImR2ySet *self, kuint16 pipeNo, kuint16 tbl_index, const kuint16* const src_full_tbl, const ULLONG* const src_diff_tbl )
 {
-	volatile USHORT* dst_full_table = NULL;
+	volatile kuint16* dst_full_table = NULL;
 	volatile ULLONG* dst_diff_table = NULL;
 	UINT32 loopcnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
 	INT32 ercd2;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 #ifdef CO_PARAM_CHECK
 	if(src_full_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_gamma_table error. src_full_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
 	if(src_diff_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_gamma_table error. src_diff_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
 	if( tbl_index > 4 ){
 		Ddim_Assertion(("im_r2y_set_gamma_table error. tbl_index > 4\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_gamma_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_gamma_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loopcnt = loop_sta; loopcnt <= loop_end; loopcnt++ ){
 		im_r2y_ctrl2_is_act_gamma(im_r2y_ctrl2_new(),  loopcnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
-	ercd = im_r2y_ctrl2_set_gamma_tbl_access_enable(im_r2y_ctrl2_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+	ercd = im_r2y_ctrl2_set_gamma_tbl_access_enable(im_r2y_ctrl2_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 	if( ercd != D_DDIM_OK ) {
 		return ercd;
 	}
 	while( 1 ) {
 		switch (tbl_index) {
 			case 0:	// RGB common
-				dst_full_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMRGBFL.hword;
-				dst_diff_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMRGBDF.dword;
+				dst_full_table = gImIoR2yTblPtr[pipeNo]->GMRGBFL.hword;
+				dst_diff_table = gImIoR2yTblPtr[pipeNo]->GMRGBDF.dword;
 				break;
 			case 1:	// R-Gamma
-				dst_full_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMRFL.hword;
-				dst_diff_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMRDF.dword;
+				dst_full_table = gImIoR2yTblPtr[pipeNo]->GMRFL.hword;
+				dst_diff_table = gImIoR2yTblPtr[pipeNo]->GMRDF.dword;
 				break;
 			case 2:	// G-Gamma
-				dst_full_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMGFL.hword;
-				dst_diff_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMGDF.dword;
+				dst_full_table = gImIoR2yTblPtr[pipeNo]->GMGFL.hword;
+				dst_diff_table = gImIoR2yTblPtr[pipeNo]->GMGDF.dword;
 				break;
 			case 3:	// B-Gamma
-				dst_full_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMBFL.hword;
-				dst_diff_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMBDF.dword;
+				dst_full_table = gImIoR2yTblPtr[pipeNo]->GMBFL.hword;
+				dst_diff_table = gImIoR2yTblPtr[pipeNo]->GMBDF.dword;
 				break;
 			case 4:	// Yb-Gamma
-				dst_full_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMYBFL.hword;
-				dst_diff_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->GMYBDF.dword;
+				dst_full_table = gImIoR2yTblPtr[pipeNo]->GMYBFL.hword;
+				dst_diff_table = gImIoR2yTblPtr[pipeNo]->GMYBDF.dword;
 				break;
 			default:
-				ercd = D_IM_R2Y_PARAM_ERROR;
+				ercd = ImR2yUtils_PARAM_ERROR;
 				break;
 		}
 		if( ercd != D_DDIM_OK ) {
@@ -313,31 +313,31 @@ INT32 im_r2y_set_gamma_table(ImR2ySet *self, UCHAR pipe_no, UCHAR tbl_index, con
 			break;
 		}
 
-		ercd = im_r2y_ctrl2_set_gamma_yb_tbl_access_enable(im_r2y_ctrl2_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_ctrl2_set_gamma_yb_tbl_access_enable(im_r2y_ctrl2_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValGammmaDiffTable( pipe_no, tbl_index, src_diff_tbl );
-		imR2ySetRdmaValGammmaFullTable( pipe_no, tbl_index, src_full_tbl );
+		imR2ySetRdmaValGammmaDiffTable( pipeNo, tbl_index, src_diff_tbl );
+		imR2ySetRdmaValGammmaFullTable( pipeNo, tbl_index, src_full_tbl );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
-		for( loopcnt = 0; loopcnt < D_IM_R2Y_TABLE_MAX_GAMMA; loopcnt++ ) {
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
+		for( loopcnt = 0; loopcnt < ImR2yCtrl_TABLE_MAX_GAMMA; loopcnt++ ) {
 			dst_full_table[loopcnt] = src_full_tbl[loopcnt];
 			dst_diff_table[loopcnt] = src_diff_tbl[loopcnt];
 		}
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_ctrl2_set_gamma_yb_tbl_access_enable(im_r2y_ctrl2_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_ctrl2_set_gamma_yb_tbl_access_enable(im_r2y_ctrl2_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 		break;
 	}
 
-	ercd2 = im_r2y_ctrl2_set_gamma_tbl_access_enable(im_r2y_ctrl2_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+	ercd2 = im_r2y_ctrl2_set_gamma_tbl_access_enable(im_r2y_ctrl2_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 	if( ercd2 != D_DDIM_OK ) {
 		return ercd2;
 	}
@@ -347,59 +347,59 @@ INT32 im_r2y_set_gamma_table(ImR2ySet *self, UCHAR pipe_no, UCHAR tbl_index, con
 
 /* Set High Edge emphasis scaling Table
  */
-INT32 im_r2y_set_high_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_high_edge_scale_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_high_edge_scale_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_SCALE_HI ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_SCALE_HI ) {
 		Ddim_Assertion(("im_r2y_set_high_edge_scale_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_high_edge_scale_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_high_edge_scale_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_high_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_high_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValHedgeScaleTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValHedgeScaleTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGHWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGHWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_high_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_high_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -413,59 +413,59 @@ INT32 im_r2y_set_high_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UCHA
 
 /* Set High Edge emphasis stepping Table
  */
-INT32 im_r2y_set_high_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_high_edge_step_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_high_edge_step_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_TC_HI ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_TC_HI ) {
 		Ddim_Assertion(("im_r2y_set_high_edge_step_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_high_edge_step_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_high_edge_step_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_high_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_high_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValHedgeStepTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValHedgeStepTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGHWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGHWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_high_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_high_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -479,59 +479,59 @@ INT32 im_r2y_set_high_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USHOR
 
 /* Set Medium Edge emphasis scaling Table
  */
-INT32 im_r2y_set_medium_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_medium_edge_scale_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_medium_edge_scale_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_SCALE_MEDIUM ) {
 		Ddim_Assertion(("im_r2y_set_medium_edge_scale_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_medium_edge_scale_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_medium_edge_scale_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValMedgeScaleTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValMedgeScaleTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGMWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGMWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -545,59 +545,59 @@ INT32 im_r2y_set_medium_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UC
 
 /* Set Medium Edge emphasis stepping Table
  */
-INT32 im_r2y_set_medium_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_medium_edge_step_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_medium_edge_step_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_TC_MEDIUM ) {
 		Ddim_Assertion(("im_r2y_set_medium_edge_step_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_medium_edge_step_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_medium_edge_step_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValMedgeStepTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValMedgeStepTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGMWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGMWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -611,59 +611,59 @@ INT32 im_r2y_set_medium_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USH
 
 /* Set Low Edge emphasis scaling Table
  */
-INT32 im_r2y_set_low_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UCHAR* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_low_edge_scale_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_low_edge_scale_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_SCALE_LO ) {
 		Ddim_Assertion(("im_r2y_set_low_edge_scale_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_low_edge_scale_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_low_edge_scale_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValLedgeScaleTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValLedgeScaleTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGLWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGLWSCL.byte[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -677,59 +677,59 @@ INT32 im_r2y_set_low_edge_scale_table(ImR2ySet *self, UCHAR pipe_no, const UCHAR
 
 /* Set Low Edge emphasis stepping Table
  */
-INT32 im_r2y_set_low_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_low_edge_step_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_low_edge_step_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_EDGE_TC_LO ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_EDGE_TC_LO ) {
 		Ddim_Assertion(("im_r2y_set_low_edge_step_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_low_edge_step_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_low_edge_step_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValLedgeStepTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValLedgeStepTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
-			gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGLWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
+			gImIoR2yTblPtr[pipeNo]->EGLWTON.hword[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(im_r2y_edge_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -743,65 +743,65 @@ INT32 im_r2y_set_low_edge_step_table(ImR2ySet *self, UCHAR pipe_no, const USHORT
 
 /* Set Map Scale Table
  */
-INT32 im_r2y_set_map_scl_table(ImR2ySet *self, UCHAR pipe_no, const USHORT* const src_tbl, USHORT write_ofs_num, USHORT array_num )
+INT32 im_r2y_set_map_scl_table(ImR2ySet *self, kuint16 pipeNo, const kuint16* const src_tbl, kuint16 write_ofs_num, kuint16 array_num )
 {
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y_sram** gIM_Io_R2y_Tbl_Ptr = im_r2y_utils_get_io_tbl(imR2yUtils);
+	volatile struct io_r2y_sram** gImIoR2yTblPtr = im_r2y_utils_get_io_tbl(imR2yUtils);
 
 #ifndef CO_R2Y_RDMA_ON
-	volatile USHORT* dst_table;
+	volatile kuint16* dst_table;
 #endif	// CO_R2Y_RDMA_ON
 	UINT32 loop_cnt;
-	UCHAR loop_sta, loop_end;
+	kuint16 loop_sta, loop_end;
 	INT32 ercd;
-	UCHAR act_status;
+	kuint16 act_status;
 
 	// Start status check in R2Y core part
 #ifdef CO_PARAM_CHECK
 	if(src_tbl == NULL) {
 		Ddim_Assertion(("im_r2y_set_map_scl_table error. src_tbl = NULL\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( (write_ofs_num + array_num) > D_IM_R2Y_TABLE_MAX_MAPSCL ) {
+	if( (write_ofs_num + array_num) > ImR2yCtrl_TABLE_MAX_MAPSCL ) {
 		Ddim_Assertion(("im_r2y_set_map_scl_table error. write_ofs_num + array_num > MAX\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_set_map_scl_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_set_map_scl_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	im_r2y_utils_get_loop_val(imR2yUtils, pipe_no, &loop_sta, &loop_end );
+	im_r2y_utils_get_loop_val(imR2yUtils, pipeNo, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_r2y_edge_is_act_post_filter(im_r2y_edge_new(),  loop_cnt, &act_status );
-		if( act_status != D_IM_R2Y_ENABLE_OFF ) {
-			return D_IM_R2Y_MACRO_BUSY;
+		if( act_status != ImR2yCtrl_ENABLE_OFF ) {
+			return ImR2yUtils_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {
-		ercd = im_r2y_ctrl3_set_map_scl_tbl_access_enable(im_r2y_ctrl3_new(),  pipe_no, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y_ctrl3_set_map_scl_tbl_access_enable(im_r2y_ctrl3_new(),  pipeNo, ImR2yCtrl_ENABLE_ON, ImR2yCtrl_WAIT_ON );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}
 
 #ifdef CO_R2Y_RDMA_ON
-		imR2ySetRdmaValMapScaleTable( pipe_no, src_tbl, write_ofs_num, array_num );
+		imR2ySetRdmaValMapScaleTable( pipeNo, src_tbl, write_ofs_num, array_num );
 #else	// CO_R2Y_RDMA_ON
-		dst_table = gIM_Io_R2y_Tbl_Ptr[pipe_no]->EGMPSCL.hword[0];
+		dst_table = gImIoR2yTblPtr[pipeNo]->EGMPSCL.hword[0];
 
-		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_on_hclk(im_r2y_clk_new(),  pipeNo );
 
 		for( loop_cnt = 0; loop_cnt < array_num; loop_cnt++ ) {
 			dst_table[write_ofs_num + loop_cnt] = src_tbl[loop_cnt];
 		}
 
-		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipe_no );
+		im_r2y_clk_off_hclk(im_r2y_clk_new(),  pipeNo );
 #endif	// CO_R2Y_RDMA_ON
 
-		ercd = im_r2y_ctrl3_set_map_scl_tbl_access_enable(im_r2y_ctrl3_new(),  pipe_no, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+		ercd = im_r2y_ctrl3_set_map_scl_tbl_access_enable(im_r2y_ctrl3_new(),  pipeNo, ImR2yCtrl_ENABLE_OFF, ImR2yCtrl_WAIT_OFF );
 		if( ercd != D_DDIM_OK ) {
 			break;
 		}

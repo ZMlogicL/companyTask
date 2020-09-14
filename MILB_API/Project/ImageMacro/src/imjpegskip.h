@@ -15,8 +15,12 @@
 #define __IM_JPEG_SKIP_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imjpegcommon.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,23 +28,34 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_JPEG_SKIP				(im_jpeg_skip_get_type())
-#define IM_JPEG_SKIP(obj)				(K_TYPE_CHECK_INSTANCE_CAST(obj, ImJpegSkip))
-#define IM_IS_JPEG_SKIP(obj)			(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_JPEG_SKIP))
+#define IM_TYPE_JPEG_SKIP							(im_jpeg_skip_struct_get_type ())
+#define IM_JPEG_SKIP(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_JPEG_SKIP, ImJpegSkip))
+#define IM_JPEG_SKIP_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_JPEG_SKIP, ImJpegSkipClass))
+#define IM_IS_JPEG_SKIP(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_JPEG_SKIP))
+#define IM_IS_JPEG_SKIP_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_JPEG_SKIP))
+#define IM_JPEG_SKIP_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_JPEG_SKIP, ImJpegSkipClass))
 
 
-typedef struct _ImJpegSkip 				ImJpegSkip;
-typedef struct _ImJpegSkipPrivate 	ImJpegSkipPrivate;
+typedef struct _ImJpegSkip			ImJpegSkip;
+typedef struct _ImJpegSkipClass		ImJpegSkipClass;
+typedef struct _ImJpegSkipPrivate 		ImJpegSkipPrivate;
 
 
 struct _ImJpegSkip
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustom *ddimUserCustom;
+};
+
+struct _ImJpegSkipClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    		im_jpeg_skip_get_type(void);
-ImJpegSkip*		       	 	im_jpeg_skip_new(void);
+GType								im_jpeg_skip_struct_get_type(void)	G_GNUC_CONST;
+ImJpegSkip*					im_jpeg_skip_struct_new(void);
+
 /**
  This function starts as asynchronous processing Jpeg decoded for Marker Skip.
  @retval		ImJpegCommon_D_IM_JPEG_OK									: Normal end.
@@ -51,7 +66,7 @@ ImJpegSkip*		       	 	im_jpeg_skip_new(void);
  If you want to synchronize, please call im_jpeg_wait_end_dec().<br>
  This API uses DDIM_User_Clr_Flg().
  */
-extern	kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self );
+extern	gint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self );
 
 /**
   This function wait end of Jpeg decode process.
@@ -65,7 +80,7 @@ extern	kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self );
   @retval		ImJpegCommon_D_IM_JPEG_DECODE_ERR		: Decode error
   @remarks		This API uses DDIM_User_Twai_Flg().
 */
-extern	kint32	im_jpeg_wait_end_dec(ImJpegSkip*self, TimgDecMng* pJpgDecMng, kint32 timeOut );
+extern	gint32	im_jpeg_wait_end_dec(ImJpegSkip*self, TimgDecMng* pJpgDecMng, gint32 timeOut );
 
 /**
   This function is restarted from the paused state of Jpeg macro.
@@ -76,7 +91,7 @@ extern	kint32	im_jpeg_wait_end_dec(ImJpegSkip*self, TimgDecMng* pJpgDecMng, kint
   @retval		ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR	: System call error.
   @remarks		This API uses DDIM_User_Clr_Flg().
 */
-extern	kint32	im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng );
+extern	gint32	im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng );
 
 /**
   This function forcibly stop Jpeg encode process.
@@ -96,19 +111,19 @@ extern	void	im_jpeg_int_handler( ImJpegSkip*self );
   @retval		ImJpegCommon_D_IM_JPEG_OK			: Normal end.
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
 */
-extern	kint32	im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState );
+extern	gint32	im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState );
 
 /**
   This function get processed image size (number of lines).
-  @retval		kushort 	: processed vertical image lines
+  @retval		gushort 	: processed vertical image lines
 */
-extern	kushort	im_jpeg_get_line_cnt( ImJpegSkip*self );
+extern	gushort	im_jpeg_get_line_cnt( ImJpegSkip*self );
 
 /**
   This function get processed image size (number of sector).
-  @retval		kulong 	: processed sector size (512 byte unit)
+  @retval		gulong 	: processed sector size (512 byte unit)
 */
-extern	kulong	im_jpeg_get_sect_cnt( ImJpegSkip*self );
+extern	gulong	im_jpeg_get_sect_cnt( ImJpegSkip*self );
 
 #ifdef CO_DDIM_UTILITY_USE
 /** @name Utility Functions
@@ -128,7 +143,7 @@ extern	kulong	im_jpeg_get_sect_cnt( ImJpegSkip*self );
   @retval		ImJpegCommon_D_IM_JPEG_DECODE_ERR		: Decode error
   @retval		ImJpegCommon_D_IM_JPEG_TIMEOUT			: Decode time out
 */
-extern	kint32 im_jpeg_decode_sync(ImJpegSkip*self,  TimgDecInput* inputParam, TimgDecOutput* outputParam );
+extern	gint32 im_jpeg_decode_sync(ImJpegSkip*self,  TimgDecInput* inputParam, TimgDecOutput* outputParam );
 
 //---------------------- colabo  section -------------------------------
 
@@ -139,6 +154,9 @@ extern	kint32 im_jpeg_decode_sync(ImJpegSkip*self,  TimgDecInput* inputParam, Ti
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_JPEG_SKIP_H__ */

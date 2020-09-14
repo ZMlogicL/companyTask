@@ -39,7 +39,7 @@ ImR2yCtrl5*		        im_r2y_ctrl5_new(void);
 //---------------------- colabo  section -------------------------------
 #ifdef CO_R2Y_RDMA_ON
 
-VOID im_r2y_ctrl5_set_rdma_val_multi_axis( UCHAR pipe_no, const T_IM_R2Y_CTRL_MULTI_AXIS* const r2y_ctrl_multi_axis );
+void im_r2y_ctrl5_set_rdma_val_multi_axis( kuint16 pipeNo, const CtrlMultiAxis* const r2y_ctrl_multi_axis );
 #endif	// CO_R2Y_RDMA_ON
 #endif	// CO_DDIM_UTILITY_USE
 

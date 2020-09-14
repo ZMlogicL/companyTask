@@ -44,9 +44,9 @@ struct _CtDdSpiJudge
 	kuchar clkDiv;
 	kchar* endstr;
 	kulong baudrate;
-	T_DD_SPI_CTRL spiCtrl;
-	T_DD_SPI_SS_INFO	ssInfo;
-	E_DD_SPI_ENABLE_SIG enableSig;
+	TDdSpiCtrl spiCtrl;
+	DdSpiSsInfo	ssInfo;
+	DdSpiEnableSig enableSig;
 	kboolean enable;
 	CtDdSpiJudgePrivate *priv;
 };

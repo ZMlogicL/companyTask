@@ -3,7 +3,7 @@
 *@date                :2020-09-07
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,14 +18,21 @@
 #define __K_CHIPTOP3_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "kchiptop2.h"
 #include "kchiptop1.h"
 
 
-#define K_TYPE_CHIPTOP3			(k_chiptop3_get_type())
-#define K_CHIPTOP3(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, KChiptop3))
-#define K_IS_CHIPTOP3(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, K_TYPE_CHIPTOP3))
+G_BEGIN_DECLS
+
+
+#define K_TYPE_CHIPTOP3									(k_chiptop3_get_type())
+#define K_CHIPTOP3(obj)									(G_TYPE_CHECK_INSTANCE_CAST(obj, K_TYPE_CHIPTOP3, KChiptop3))
+#define K_CHIPTOP3_CALSS(klass)              		(G_TYPE_CHECK_CLASS_CAST((klass), K_TYPE_CHIPTOP3, KChiptop3Class))
+#define K_IS_CHIPTOP3(obj)                        		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), K_TYPE_CHIPTOP3))
+#define K_IS_CHIPTOP3_CLASS(klass)         		(G_TYPE_CHECK_CLASS_TYPE ((klass), K_TYPE_CHIPTOP3))
+#define K_CHIPTOP3_GET_CLASS(obj)         		(G_TYPE_INSTANCE_GET_CLASS ((obj), K_TYPE_CHIPTOP3, KChiptop3Class))
 
 
 typedef union 				_IoChiptopPuder IoChiptopPuder;
@@ -45,320 +52,321 @@ typedef union 				_IoChiptopPllfreq1 IoChiptopPllfreq1;
 typedef union 				_IoChiptopOdivch0 IoChiptopOdivch0;
 typedef union 				_IoChiptopCmden IoChiptopCmden;
 typedef struct 				_IoChiptop IoChiptop;
-typedef struct 				_KChiptop3 KChiptop3;
-typedef struct 				_KChiptop3Private KChiptop3Private;
+typedef struct 				_KChiptop3  KChiptop3;
+typedef struct 				_KChiptop3Class  KChiptop3Class;
+typedef struct 				_KChiptop3Private  KChiptop3Private;
 
 /*	structure of PUDER	(0x1D02_230C) */
 union _IoChiptopPuder {
-	kulong		word[10];
+	gulong		word[10];
 	struct {
 	/* PUDER76 (1D02_230Ch) */
-		kulong				:32;
+		gulong				:32;
 	/* PUDER98 (1D02_2310h) */
-		kulong	p80			:1;
-		kulong	p81			:1;
-		kulong	p82			:1;
-		kulong	p83			:1;
-		kulong				:2;
-		kulong	p86			:1;
-		kulong	p87			:1;
-		kulong	p90			:1;
-		kulong	p91			:1;
-		kulong	p92			:1;
-		kulong	p93			:1;
-		kulong				:20;
+		gulong	p80			:1;
+		gulong	p81			:1;
+		gulong	p82			:1;
+		gulong	p83			:1;
+		gulong				:2;
+		gulong	p86			:1;
+		gulong	p87			:1;
+		gulong	p90			:1;
+		gulong	p91			:1;
+		gulong	p92			:1;
+		gulong	p93			:1;
+		gulong				:20;
 	/* PUDERBA (1D02_2314h) */
-		kulong	pa0			:1;
-		kulong	pa1			:1;
-		kulong	pa2			:1;
-		kulong	pa3			:1;
-		kulong	pa4			:1;
-		kulong	pa5			:1;
-		kulong	pa6			:1;
-		kulong	pa7			:1;
-		kulong	pb0			:1;
-		kulong	pb1			:1;
-		kulong	pb2			:1;
-		kulong	pb3			:1;
-		kulong	pb4			:1;
-		kulong				:19;
+		gulong	pa0			:1;
+		gulong	pa1			:1;
+		gulong	pa2			:1;
+		gulong	pa3			:1;
+		gulong	pa4			:1;
+		gulong	pa5			:1;
+		gulong	pa6			:1;
+		gulong	pa7			:1;
+		gulong	pb0			:1;
+		gulong	pb1			:1;
+		gulong	pb2			:1;
+		gulong	pb3			:1;
+		gulong	pb4			:1;
+		gulong				:19;
 	/* PUDERDC (1D02_2318h) */
-		kulong				:8;
-		kulong	pd0			:1;
-		kulong	pd1			:1;
-		kulong	pd2			:1;
-		kulong	pd3			:1;
-		kulong	pd4			:1;
-		kulong	pd5			:1;
-		kulong	pd6			:1;
-		kulong				:17;
+		gulong				:8;
+		gulong	pd0			:1;
+		gulong	pd1			:1;
+		gulong	pd2			:1;
+		gulong	pd3			:1;
+		gulong	pd4			:1;
+		gulong	pd5			:1;
+		gulong	pd6			:1;
+		gulong				:17;
 	/* PUDERFE (1D02_231Ch) */
-		kulong	pe0			:1;
-		kulong	pe1			:1;
-		kulong				:8;
-		kulong	pf2			:1;
-		kulong	pf3			:1;
-		kulong	pf4			:1;
-		kulong				:19;
+		gulong	pe0			:1;
+		gulong	pe1			:1;
+		gulong				:8;
+		gulong	pf2			:1;
+		gulong	pf3			:1;
+		gulong	pf4			:1;
+		gulong				:19;
 	/* PUDERHG (1D02_2320h) */
-		kulong	pg0			:1;
-		kulong	pg1			:1;
-		kulong	pg2			:1;
-		kulong	pg3			:1;
-		kulong	pg4			:1;
-		kulong	pg5			:1;
-		kulong	pg6			:1;
-		kulong	pg7			:1;
-		kulong	ph0			:1;
-		kulong	ph1			:1;
-		kulong	ph2			:1;
-		kulong	ph3			:1;
-		kulong				:20;
+		gulong	pg0			:1;
+		gulong	pg1			:1;
+		gulong	pg2			:1;
+		gulong	pg3			:1;
+		gulong	pg4			:1;
+		gulong	pg5			:1;
+		gulong	pg6			:1;
+		gulong	pg7			:1;
+		gulong	ph0			:1;
+		gulong	ph1			:1;
+		gulong	ph2			:1;
+		gulong	ph3			:1;
+		gulong				:20;
 	/* PUDERJW (1D02_2324h) */
-		kulong	pw0			:1;
-		kulong	pw1			:1;
-		kulong	pw2			:1;
-		kulong	pw3			:1;
-		kulong	pw4			:1;
-		kulong	pw5			:1;
-		kulong	pw6			:1;
-		kulong	pw7			:1;
-		kulong	pj0			:1;
-		kulong	pj1			:1;
-		kulong	pj2			:1;
-		kulong	pj3			:1;
-		kulong	pj4			:1;
-		kulong	pj5			:1;
-		kulong	pj6			:1;
-		kulong	pj7			:1;
-		kulong				:16;
+		gulong	pw0			:1;
+		gulong	pw1			:1;
+		gulong	pw2			:1;
+		gulong	pw3			:1;
+		gulong	pw4			:1;
+		gulong	pw5			:1;
+		gulong	pw6			:1;
+		gulong	pw7			:1;
+		gulong	pj0			:1;
+		gulong	pj1			:1;
+		gulong	pj2			:1;
+		gulong	pj3			:1;
+		gulong	pj4			:1;
+		gulong	pj5			:1;
+		gulong	pj6			:1;
+		gulong	pj7			:1;
+		gulong				:16;
 	/* PUDERLK (1D02_2328h) */
-		kulong	pk0			:1;
-		kulong	pk1			:1;
-		kulong	pk2			:1;
-		kulong	pk3			:1;
-		kulong	pk4			:1;
-		kulong	pk5			:1;
-		kulong	pk6			:1;
-		kulong	pk7			:1;
-		kulong	pl0			:1;
-		kulong	pl1			:1;
-		kulong	pl2			:1;
-		kulong	pl3			:1;
-		kulong	pl4			:1;
-		kulong	pl5			:1;
-		kulong				:18;
+		gulong	pk0			:1;
+		gulong	pk1			:1;
+		gulong	pk2			:1;
+		gulong	pk3			:1;
+		gulong	pk4			:1;
+		gulong	pk5			:1;
+		gulong	pk6			:1;
+		gulong	pk7			:1;
+		gulong	pl0			:1;
+		gulong	pl1			:1;
+		gulong	pl2			:1;
+		gulong	pl3			:1;
+		gulong	pl4			:1;
+		gulong	pl5			:1;
+		gulong				:18;
 	/* PUDERNM (1D02_232Ch) */
-		kulong	pm0			:1;
-		kulong	pm1			:1;
-		kulong				:1;
-		kulong	pm3			:1;
-		kulong	pm4			:1;
-		kulong				:3;
-		kulong	pn0			:1;
-		kulong	pn1			:1;
-		kulong				:1;
-		kulong	pn3			:1;
-		kulong	pn4			:1;
-		kulong				:19;
+		gulong	pm0			:1;
+		gulong	pm1			:1;
+		gulong				:1;
+		gulong	pm3			:1;
+		gulong	pm4			:1;
+		gulong				:3;
+		gulong	pn0			:1;
+		gulong	pn1			:1;
+		gulong				:1;
+		gulong	pn3			:1;
+		gulong	pn4			:1;
+		gulong				:19;
 	/* PUDERPY (1D02_2330h) */
-		kulong	py0			:1;
-		kulong	py1			:1;
-		kulong	py2			:1;
-		kulong	py3			:1;
-		kulong	py4			:1;
-		kulong	py5			:1;
-		kulong	py6			:1;
-		kulong	py7			:1;
-		kulong	pp0			:1;
-		kulong	pp1			:1;
-		kulong	pp2			:1;
-		kulong	pp3			:1;
-		kulong				:20;
+		gulong	py0			:1;
+		gulong	py1			:1;
+		gulong	py2			:1;
+		gulong	py3			:1;
+		gulong	py4			:1;
+		gulong	py5			:1;
+		gulong	py6			:1;
+		gulong	py7			:1;
+		gulong	pp0			:1;
+		gulong	pp1			:1;
+		gulong	pp2			:1;
+		gulong	pp3			:1;
+		gulong				:20;
 	}bit;
 };
 
 /*	structure of PUDCR	(0x1D02_2400) */
 union _IoChiptopPudcr {
-	kulong		word[10];
+	gulong		word[10];
 	struct {
 	/* PUDCR76 (1D02_240Ch) */
-		kulong				:32;
+		gulong				:32;
 	/* PUDCR98 (1D02_2410h) */
-		kulong	p80			:1;
-		kulong	p81			:1;
-		kulong	p82			:1;
-		kulong	p83			:1;
-		kulong				:2;
-		kulong	p86			:1;
-		kulong	p87			:1;
-		kulong	p90			:1;
-		kulong	p91			:1;
-		kulong	p92			:1;
-		kulong	p93			:1;
-		kulong				:20;
+		gulong	p80			:1;
+		gulong	p81			:1;
+		gulong	p82			:1;
+		gulong	p83			:1;
+		gulong				:2;
+		gulong	p86			:1;
+		gulong	p87			:1;
+		gulong	p90			:1;
+		gulong	p91			:1;
+		gulong	p92			:1;
+		gulong	p93			:1;
+		gulong				:20;
 	/* PUDCRBA (1D02_2414h) */
-		kulong	pa0			:1;
-		kulong	pa1			:1;
-		kulong	pa2			:1;
-		kulong	pa3			:1;
-		kulong	pa4			:1;
-		kulong	pa5			:1;
-		kulong	pa6			:1;
-		kulong	pa7			:1;
-		kulong	pb0			:1;
-		kulong	pb1			:1;
-		kulong	pb2			:1;
-		kulong	pb3			:1;
-		kulong	pb4			:1;
-		kulong				:19;
+		gulong	pa0			:1;
+		gulong	pa1			:1;
+		gulong	pa2			:1;
+		gulong	pa3			:1;
+		gulong	pa4			:1;
+		gulong	pa5			:1;
+		gulong	pa6			:1;
+		gulong	pa7			:1;
+		gulong	pb0			:1;
+		gulong	pb1			:1;
+		gulong	pb2			:1;
+		gulong	pb3			:1;
+		gulong	pb4			:1;
+		gulong				:19;
 	/* PUDCRDC (1D02_2418h) */
-		kulong				:8;
-		kulong	pd0			:1;
-		kulong	pd1			:1;
-		kulong	pd2			:1;
-		kulong	pd3			:1;
-		kulong	pd4			:1;
-		kulong	pd5			:1;
-		kulong	pd6			:1;
-		kulong				:17;
+		gulong				:8;
+		gulong	pd0			:1;
+		gulong	pd1			:1;
+		gulong	pd2			:1;
+		gulong	pd3			:1;
+		gulong	pd4			:1;
+		gulong	pd5			:1;
+		gulong	pd6			:1;
+		gulong				:17;
 	/* PUDCRFE (1D02_241Ch) */
-		kulong	pe0			:1;
-		kulong	pe1			:1;
-		kulong				:8;
-		kulong	pf2			:1;
-		kulong	pf3			:1;
-		kulong	pf4			:1;
-		kulong				:19;
+		gulong	pe0			:1;
+		gulong	pe1			:1;
+		gulong				:8;
+		gulong	pf2			:1;
+		gulong	pf3			:1;
+		gulong	pf4			:1;
+		gulong				:19;
 	/* PUDCRHG (1D02_2420h) */
-		kulong	pg0			:1;
-		kulong	pg1			:1;
-		kulong	pg2			:1;
-		kulong	pg3			:1;
-		kulong	pg4			:1;
-		kulong	pg5			:1;
-		kulong	pg6			:1;
-		kulong	pg7			:1;
-		kulong	ph0			:1;
-		kulong	ph1			:1;
-		kulong	ph2			:1;
-		kulong	ph3			:1;
-		kulong				:20;
+		gulong	pg0			:1;
+		gulong	pg1			:1;
+		gulong	pg2			:1;
+		gulong	pg3			:1;
+		gulong	pg4			:1;
+		gulong	pg5			:1;
+		gulong	pg6			:1;
+		gulong	pg7			:1;
+		gulong	ph0			:1;
+		gulong	ph1			:1;
+		gulong	ph2			:1;
+		gulong	ph3			:1;
+		gulong				:20;
 	/* PUDCRJW (1D02_2424h) */
-		kulong	pw0			:1;
-		kulong	pw1			:1;
-		kulong	pw2			:1;
-		kulong	pw3			:1;
-		kulong	pw4			:1;
-		kulong	pw5			:1;
-		kulong	pw6			:1;
-		kulong	pw7			:1;
-		kulong	pj0			:1;
-		kulong	pj1			:1;
-		kulong	pj2			:1;
-		kulong	pj3			:1;
-		kulong	pj4			:1;
-		kulong	pj5			:1;
-		kulong	pj6			:1;
-		kulong	pj7			:1;
-		kulong				:16;
+		gulong	pw0			:1;
+		gulong	pw1			:1;
+		gulong	pw2			:1;
+		gulong	pw3			:1;
+		gulong	pw4			:1;
+		gulong	pw5			:1;
+		gulong	pw6			:1;
+		gulong	pw7			:1;
+		gulong	pj0			:1;
+		gulong	pj1			:1;
+		gulong	pj2			:1;
+		gulong	pj3			:1;
+		gulong	pj4			:1;
+		gulong	pj5			:1;
+		gulong	pj6			:1;
+		gulong	pj7			:1;
+		gulong				:16;
 	/* PUDCRLK (1D02_2428h) */
-		kulong	pk0			:1;
-		kulong	pk1			:1;
-		kulong	pk2			:1;
-		kulong	pk3			:1;
-		kulong	pk4			:1;
-		kulong	pk5			:1;
-		kulong	pk6			:1;
-		kulong	pk7			:1;
-		kulong	pl0			:1;
-		kulong	pl1			:1;
-		kulong	pl2			:1;
-		kulong	pl3			:1;
-		kulong	pl4			:1;
-		kulong	pl5			:1;
-		kulong				:18;
+		gulong	pk0			:1;
+		gulong	pk1			:1;
+		gulong	pk2			:1;
+		gulong	pk3			:1;
+		gulong	pk4			:1;
+		gulong	pk5			:1;
+		gulong	pk6			:1;
+		gulong	pk7			:1;
+		gulong	pl0			:1;
+		gulong	pl1			:1;
+		gulong	pl2			:1;
+		gulong	pl3			:1;
+		gulong	pl4			:1;
+		gulong	pl5			:1;
+		gulong				:18;
 	/* PUDCRNM (1D02_242Ch) */
-		kulong	pm0			:1;
-		kulong	pm1			:1;
-		kulong				:1;
-		kulong	pm3			:1;
-		kulong	pm4			:1;
-		kulong				:3;
-		kulong	pn0			:1;
-		kulong	pn1			:1;
-		kulong				:1;
-		kulong	pn3			:1;
-		kulong	pn4			:1;
-		kulong				:19;
+		gulong	pm0			:1;
+		gulong	pm1			:1;
+		gulong				:1;
+		gulong	pm3			:1;
+		gulong	pm4			:1;
+		gulong				:3;
+		gulong	pn0			:1;
+		gulong	pn1			:1;
+		gulong				:1;
+		gulong	pn3			:1;
+		gulong	pn4			:1;
+		gulong				:19;
 	/* PUDCRPY (1D02_2430h) */
-		kulong	py0			:1;
-		kulong	py1			:1;
-		kulong	py2			:1;
-		kulong	py3			:1;
-		kulong	py4			:1;
-		kulong	py5			:1;
-		kulong	py6			:1;
-		kulong	py7			:1;
-		kulong	pp0			:1;
-		kulong	pp1			:1;
-		kulong	pp2			:1;
-		kulong	pp3			:1;
-		kulong				:20;
+		gulong	py0			:1;
+		gulong	py1			:1;
+		gulong	py2			:1;
+		gulong	py3			:1;
+		gulong	py4			:1;
+		gulong	py5			:1;
+		gulong	py6			:1;
+		gulong	py7			:1;
+		gulong	pp0			:1;
+		gulong	pp1			:1;
+		gulong	pp2			:1;
+		gulong	pp3			:1;
+		gulong				:20;
 	}bit;
 };
 
 /*	structure of PERSEL1 (1D02_0000h) */
 union _IoChiptopPersel1 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	i2c0cnt		:2;
-		kulong	sdanc0		:1;
-		kulong	sclnc0		:1;
-		kulong	i2c1cnt		:2;
-		kulong	sdanc1		:1;
-		kulong	sclnc1		:1;
-		kulong	i2c2cnt		:2;
-		kulong	sdanc2		:1;
-		kulong	sclnc2		:1;
-		kulong	dvwt2		:1;
-		kulong	dhwt3		:1;
-		kulong				:2;
-		kulong	au0do0c		:1;
-		kulong	au0do1c		:1;
-		kulong	au1doc		:1;
-		kulong	au0mcc		:1;
-		kulong	au1mcc		:1;
-		kulong	rlsel3		:1;
-		kulong	rlsel4		:1;
-		kulong	rlsel5		:1;
-		kulong	intvdsel	:3;
-		kulong				:5;
+		gulong	i2c0cnt		:2;
+		gulong	sdanc0		:1;
+		gulong	sclnc0		:1;
+		gulong	i2c1cnt		:2;
+		gulong	sdanc1		:1;
+		gulong	sclnc1		:1;
+		gulong	i2c2cnt		:2;
+		gulong	sdanc2		:1;
+		gulong	sclnc2		:1;
+		gulong	dvwt2		:1;
+		gulong	dhwt3		:1;
+		gulong				:2;
+		gulong	au0do0c		:1;
+		gulong	au0do1c		:1;
+		gulong	au1doc		:1;
+		gulong	au0mcc		:1;
+		gulong	au1mcc		:1;
+		gulong	rlsel3		:1;
+		gulong	rlsel4		:1;
+		gulong	rlsel5		:1;
+		gulong	intvdsel	:3;
+		gulong				:5;
 	} bit;
 };
 
 /*	structure of PERSEL2 (1D02_0004h) */
 union _IoChiptopPersel2 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	udctrg		:1;
-		kulong	udc0am		:1;
-		kulong	udc0bm		:1;
-		kulong	udc1am		:1;
-		kulong	udc1bm		:1;
-		kulong	udc2am		:1;
-		kulong	udc2bm		:1;
-		kulong	udc3am		:1;
-		kulong	udc3bm		:1;
-		kulong	udc4am		:1;
-		kulong	udc4bm		:1;
-		kulong	udc5am		:1;
-		kulong	udc5bm		:1;
+		gulong	udctrg		:1;
+		gulong	udc0am		:1;
+		gulong	udc0bm		:1;
+		gulong	udc1am		:1;
+		gulong	udc1bm		:1;
+		gulong	udc2am		:1;
+		gulong	udc2bm		:1;
+		gulong	udc3am		:1;
+		gulong	udc3bm		:1;
+		gulong	udc4am		:1;
+		gulong	udc4bm		:1;
+		gulong	udc5am		:1;
+		gulong	udc5bm		:1;
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-		kulong				:19;
+		gulong				:19;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -366,10 +374,10 @@ union _IoChiptopPersel2 {
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-		kulong	spimsen0	:1;
-		kulong	spimsen1	:1;
-		kulong	spimsen2	:1;
-		kulong				:16;
+		gulong	spimsen0	:1;
+		gulong	spimsen1	:1;
+		gulong	spimsen2	:1;
+		gulong				:16;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
@@ -379,212 +387,212 @@ union _IoChiptopPersel2 {
 
 /*	structure of PERSEL3 (1D02_0008h) */
 union _IoChiptopPersel3 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	au1wpps		:1;
-		kulong	au0wp11		:1;
-		kulong	snh2wp04	:1;
-		kulong	snv2wp05	:1;
-		kulong	sna2wp06	:1;
-		kulong	snh3wp07	:1;
-		kulong	snv3wp08	:1;
-		kulong	sna3wp09	:1;
-		kulong	u1vbsou5	:1;
-		kulong	u2vbsou6	:1;
-		kulong	u2idwp14	:1;
-		kulong	prt1sou3	:1;
-		kulong	pxw0wp12	:1;
-		kulong	pxw1sou7	:1;
-		kulong	pxc0sck7	:1;
-		kulong	pxc1wp15	:1;
-		kulong	sck4wp13	:1;
-		kulong	s3lsou5wp14	:2;
-		kulong	s3swp15		:1;
-		kulong	rts1sck2	:1;
-		kulong				:1;
-		kulong	u1idwp13	:1;
-		kulong	prt0sck3	:1;
-		kulong				:8;
+		gulong	au1wpps		:1;
+		gulong	au0wp11		:1;
+		gulong	snh2wp04	:1;
+		gulong	snv2wp05	:1;
+		gulong	sna2wp06	:1;
+		gulong	snh3wp07	:1;
+		gulong	snv3wp08	:1;
+		gulong	sna3wp09	:1;
+		gulong	u1vbsou5	:1;
+		gulong	u2vbsou6	:1;
+		gulong	u2idwp14	:1;
+		gulong	prt1sou3	:1;
+		gulong	pxw0wp12	:1;
+		gulong	pxw1sou7	:1;
+		gulong	pxc0sck7	:1;
+		gulong	pxc1wp15	:1;
+		gulong	sck4wp13	:1;
+		gulong	s3lsou5wp14	:2;
+		gulong	s3swp15		:1;
+		gulong	rts1sck2	:1;
+		gulong				:1;
+		gulong	u1idwp13	:1;
+		gulong	prt0sck3	:1;
+		gulong				:8;
 	} bit;
 };
 
 /*	structure of PERSEL4 (1D02_000Ch) */
 union _IoChiptopPersel4 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	ei22ud0a	:1;
-		kulong	ei23ud0b	:1;
-		kulong	ei24ud1a	:1;
-		kulong	ei25ud1b	:1;
-		kulong	ei26ud2a	:1;
-		kulong	ei27ud2b	:1;
-		kulong	ei28ud3a	:1;
-		kulong	ei29ud3b	:1;
-		kulong	ei30ud4a	:1;
-		kulong	ei31ud4b	:1;
-		kulong	sd3cdxs		:1;
-		kulong	sd3wps		:1;
-		kulong	u1ocdxs		:1;
-		kulong	u1iddigs	:1;
-		kulong	u2ocdxs		:1;
-		kulong	u2iddigs	:1;
-		kulong				:16;
+		gulong	ei22ud0a	:1;
+		gulong	ei23ud0b	:1;
+		gulong	ei24ud1a	:1;
+		gulong	ei25ud1b	:1;
+		gulong	ei26ud2a	:1;
+		gulong	ei27ud2b	:1;
+		gulong	ei28ud3a	:1;
+		gulong	ei29ud3b	:1;
+		gulong	ei30ud4a	:1;
+		gulong	ei31ud4b	:1;
+		gulong	sd3cdxs		:1;
+		gulong	sd3wps		:1;
+		gulong	u1ocdxs		:1;
+		gulong	u1iddigs	:1;
+		gulong	u2ocdxs		:1;
+		gulong	u2iddigs	:1;
+		gulong				:16;
 	} bit;
 };
 
 /*	structure of MSELC (1D02_0010h) */
 union _IoChiptopMselc {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	msel		:4;
-		kulong				:28;
+		gulong	msel		:4;
+		gulong				:28;
 	} bit;
 };
 
 /*	structure of DBCNT1 (1D02_0014h) */
 union _IoChiptopDbcnt1 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong				:14;
-		kulong	t07dc		:2;
-		kulong	t08dc		:2;
-		kulong	t09dc		:2;
-		kulong	t10dc		:2;
-		kulong	t11dc		:2;
-		kulong	t12dc		:2;
-		kulong	t13dc		:2;
-		kulong	t14dc		:2;
-		kulong	t15dc		:2;
+		gulong				:14;
+		gulong	t07dc		:2;
+		gulong	t08dc		:2;
+		gulong	t09dc		:2;
+		gulong	t10dc		:2;
+		gulong	t11dc		:2;
+		gulong	t12dc		:2;
+		gulong	t13dc		:2;
+		gulong	t14dc		:2;
+		gulong	t15dc		:2;
 	} bit;
 };
 
 /*	structure of DBCNT2 (1D02_0018h) */
 union _IoChiptopDbcnt2 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	t16dc		:2;
-		kulong	t17dc		:2;
-		kulong	t18dc		:2;
-		kulong	t19dc		:2;
-		kulong	t20dc		:2;
-		kulong	t21dc		:2;
-		kulong	t22dc		:2;
-		kulong	t23dc		:2;
-		kulong	t24dc		:2;
-		kulong	t25dc		:2;
-		kulong	t26dc		:2;
-		kulong	t27dc		:2;
-		kulong	t28dc		:2;
-		kulong	t29dc		:2;
-		kulong	t30dc		:2;
-		kulong	t31dc		:2;
+		gulong	t16dc		:2;
+		gulong	t17dc		:2;
+		gulong	t18dc		:2;
+		gulong	t19dc		:2;
+		gulong	t20dc		:2;
+		gulong	t21dc		:2;
+		gulong	t22dc		:2;
+		gulong	t23dc		:2;
+		gulong	t24dc		:2;
+		gulong	t25dc		:2;
+		gulong	t26dc		:2;
+		gulong	t27dc		:2;
+		gulong	t28dc		:2;
+		gulong	t29dc		:2;
+		gulong	t30dc		:2;
+		gulong	t31dc		:2;
 	} bit;
 };
 
 /*	structure of DBCNT3 (1D02_001Ch) */
 union _IoChiptopDbcnt3 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	t32dc		:2;
-		kulong	t33dc		:2;
-		kulong	t34dc		:2;
-		kulong	t35dc		:2;
-		kulong	t36dc		:2;
-		kulong	t37dc		:2;
-		kulong	t38dc		:2;
-		kulong	t39dc		:2;
-		kulong	t40dc		:2;
-		kulong	t41dc		:2;
-		kulong	t42dc		:2;
-		kulong	t43dc		:2;
-		kulong	t44dc		:2;
-		kulong	t45dc		:2;
-		kulong	t46dc		:2;
-		kulong	t47dc		:2;
+		gulong	t32dc		:2;
+		gulong	t33dc		:2;
+		gulong	t34dc		:2;
+		gulong	t35dc		:2;
+		gulong	t36dc		:2;
+		gulong	t37dc		:2;
+		gulong	t38dc		:2;
+		gulong	t39dc		:2;
+		gulong	t40dc		:2;
+		gulong	t41dc		:2;
+		gulong	t42dc		:2;
+		gulong	t43dc		:2;
+		gulong	t44dc		:2;
+		gulong	t45dc		:2;
+		gulong	t46dc		:2;
+		gulong	t47dc		:2;
 	} bit;
 };
 
 /*	structure of DBCNT4 (1D02_0020h) */
 union _IoChiptopDbcnt4 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	t48dc		:2;
-		kulong	t49dc		:2;
-		kulong	t50dc		:2;
-		kulong	t51dc		:2;
-		kulong	t52dc		:2;
-		kulong	t53dc		:2;
-		kulong	t54dc		:2;
-		kulong	t55dc		:2;
-		kulong	t56dc		:2;
-		kulong	t57dc		:2;
-		kulong	t58dc		:2;
-		kulong	t59dc		:2;
-		kulong	t60dc		:2;
-		kulong	t61dc		:2;
-		kulong	t62dc		:2;
-		kulong	t63dc		:2;
+		gulong	t48dc		:2;
+		gulong	t49dc		:2;
+		gulong	t50dc		:2;
+		gulong	t51dc		:2;
+		gulong	t52dc		:2;
+		gulong	t53dc		:2;
+		gulong	t54dc		:2;
+		gulong	t55dc		:2;
+		gulong	t56dc		:2;
+		gulong	t57dc		:2;
+		gulong	t58dc		:2;
+		gulong	t59dc		:2;
+		gulong	t60dc		:2;
+		gulong	t61dc		:2;
+		gulong	t62dc		:2;
+		gulong	t63dc		:2;
 	} bit;
 };
 
 /*	structure of DBCNT5 (1D02_0024h) */
 union _IoChiptopDbcnt5 {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	t64dc		:2;
-		kulong	t65dc		:2;
-		kulong	t66dc		:2;
-		kulong				:26;
+		gulong	t64dc		:2;
+		gulong	t65dc		:2;
+		gulong	t66dc		:2;
+		gulong				:26;
 	} bit;
 };
 
 /*	structure of PUDCNT (1D02_0028h) */
 union _IoChiptopPudcnt {
-	kulong word;
+	gulong word;
 	struct {
-		kulong	emmcnics	:2;
-		kulong	emdatpue	:1;
-		kulong	emcmdpue	:1;
-		kulong	emdspde		:1;
-		kulong	nfdatpue	:1;
-		kulong	nfrbxpue	:1;
-		kulong	nfdqspue	:1;
-		kulong	sp1misope	:1;
-		kulong	sp1mosipe	:1;
-		kulong	sp1sckpe	:1;
-		kulong	sp1cs0pe	:1;
-		kulong	sp1misoudc	:1;
-		kulong	sp1mosiudc	:1;
-		kulong	sp1sckudc	:1;
-		kulong	sp1cs0udc	:1;
-		kulong				:16;
+		gulong	emmcnics	:2;
+		gulong	emdatpue	:1;
+		gulong	emcmdpue	:1;
+		gulong	emdspde		:1;
+		gulong	nfdatpue	:1;
+		gulong	nfrbxpue	:1;
+		gulong	nfdqspue	:1;
+		gulong	sp1misope	:1;
+		gulong	sp1mosipe	:1;
+		gulong	sp1sckpe	:1;
+		gulong	sp1cs0pe	:1;
+		gulong	sp1misoudc	:1;
+		gulong	sp1mosiudc	:1;
+		gulong	sp1sckudc	:1;
+		gulong	sp1cs0udc	:1;
+		gulong				:16;
 	} bit;
 };
 
 /*	structure of PLLFREQ1	(1D02_3000h)	*/
 union _IoChiptopPllfreq1 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	pllidiv			:8;
-		kulong					:24;
+		gulong	pllidiv			:8;
+		gulong					:24;
 	}bit;
 };
 
 /*	structure of ODIVCH0	(1D02_3040h)	*/
 union _IoChiptopOdivch0 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	odivch0num		:8;
-		kulong					:24;
+		gulong	odivch0num		:8;
+		gulong					:24;
 	}bit;
 };
 
 /*	structure of CMDEN	(1D02_3080h)	*/
 union _IoChiptopCmden {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	cmden			:3;
-		kulong					:29;
+		gulong	cmden			:3;
+		gulong					:29;
 	}bit;
 };
 
@@ -613,7 +621,7 @@ struct _IoChiptop {
 	/* 1D02_(0028 - 002Bh) */
 	IoChiptopPudcnt			pudcnt;
 	/* 1D02_(002C - 0FFFh) */
-	kuchar dmy002c0fff[0x1000-0x002C];
+	guchar dmy002c0fff[0x1000-0x002C];
 	/* 1D02_(1000 - 1003h) */
 	IoChiptopClksel1		clksel1;
 	/* 1D02_(1004 - 1007h) */
@@ -691,60 +699,69 @@ struct _IoChiptop {
 	/* 1D02_(1094 - 1097h) */
 	IoChiprstCrrsm			crrsm;
 	/* 1D02_(1098 - 1FFFh) */
-	kuchar dmy10981fff[0x2000-0x1098];
+	guchar dmy10981fff[0x2000-0x1098];
 	/* 1D02_(2000 - 200Bh) */
-	kuchar dmy2000200b[0x200C-0x2000];
+	guchar dmy2000200b[0x200C-0x2000];
 	/* 1D02_(200C - 2033h) */
 	IoChiptopPdr			pdr;
 	/* 1D02_(2034 - 20FFh) */
-	kuchar dmy203420ff[0x2100-0x2034];
+	guchar dmy203420ff[0x2100-0x2034];
 	/* 1D02_(2100 - 210Bh) */
-	kuchar dmy2100210b[0x210C-0x2100];
+	guchar dmy2100210b[0x210C-0x2100];
 	/* 1D02_(210C - 2133h) */
 	IoChiptopDdr			ddr;
 	/* 1D02_(2134 - 21FFh) */
-	kuchar dmy213421ff[0x2200-0x2134];
+	guchar dmy213421ff[0x2200-0x2134];
 	/* 1D02_(2200 - 220Bh) */
-	kuchar dmy2200220b[0x220C-0x2200];
+	guchar dmy2200220b[0x220C-0x2200];
 	/* 1D02_(220C - 2233h) */
 	IoChiptopEpcr			epcr;
 	/* 1D02_(2234 - 22FFh) */
-	kuchar dmy223422ff[0x2300-0x2234];
+	guchar dmy223422ff[0x2300-0x2234];
 	/* 1D02_(2300 - 230Bh) */
-	kuchar dmy2300230b[0x230C-0x2300];
+	guchar dmy2300230b[0x230C-0x2300];
 	/* 1D02_(230C - 2333h) */
 	IoChiptopPuder			puder;
 	/* 1D02_(2334 - 23FFh) */
-	kuchar dmy233423ff[0x2400-0x2334];
+	guchar dmy233423ff[0x2400-0x2334];
 	/* 1D02_(2400 - 240Bh) */
-	kuchar dmy2400240b[0x240C-0x2400];
+	guchar dmy2400240b[0x240C-0x2400];
 	/* 1D02_(240C - 2433h) */
 	IoChiptopPudcr			pudcr;
 	/* 1D02_(2434 - 2FFFh) */
-	kuchar dmy24342fff[0x3000-0x2434];
+	guchar dmy24342fff[0x3000-0x2434];
 	/* 1D02_(3000 - 3003h) */
 	IoChiptopPllfreq1		pllfreq1;
 	/* 1D02_(3004 - 303Fh) */
-	kuchar dmy3004303f[0x3040-0x3004];
+	guchar dmy3004303f[0x3040-0x3004];
 	/* 1D02_(3040 - 3043h) */
 	IoChiptopOdivch0		odivch0;
 	/* 1D02_(3044 - 307Fh) */
-	kuchar dmy3044307f[0x3080-0x3044];
+	guchar dmy3044307f[0x3080-0x3044];
 	/* 1D02_(3080 - 3083h) */
 	IoChiptopCmden			cmden;
 	/* 1D02_(3084 - 3FFFh) */
-	kuchar dmy3084Ffff[0x4000-0x3084];
+	guchar dmy3084Ffff[0x4000-0x3084];
 };
 
-struct _KChiptop3 {
-	KObject parent;
+struct _KChiptop3
+{
+	GObject    parent;
+};
+
+struct _KChiptop3Class
+{
+	GObject    parentclass;
 };
 
 extern volatile IoChiptop ioChiptop;
 
 
-KConstType 	k_chiptop3_get_type(void);
-KChiptop3*		k_chiptop3_new(void);
+GType 							k_chiptop3_get_type(void) G_GNUC_CONST;
+KChiptop3 *         		k_chiptop3_new(void);
+
+
+G_END_DECLS
 
 
 #endif /* __K_CHIPTOP3_H__ */

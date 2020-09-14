@@ -3,7 +3,7 @@
 *@date                :2020-08-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -17,9 +17,13 @@
 #define __DD_RELC_COMMON_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
 #include "ddimtypedef.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -27,23 +31,33 @@ extern "C" {
 #endif
 
 
-#define DD_TYPE_RELC_COMMON				(dd_relc_common_get_type())
-#define DD_RELC_COMMON(obj)				(K_TYPE_CHECK_INSTANCE_CAST(obj, DdRelcCommon))
-#define DD_IS_RELC_COMMON(obj)			(K_TYPE_CHECK_INSTANCE_TYPE(obj, DD_TYPE_RELC_COMMON))
+#define DD_TYPE_RELC_COMMON			(dd_relc_common_get_type ())
+#define DD_RELC_COMMON(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), DD_TYPE_RELC_COMMON, DdRelcCommon))
+#define DD_RELC_COMMON_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), DD_TYPE_RELC_COMMON, DdRelcCommonClass))
+#define DD_IS_RELC_COMMON(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), DD_TYPE_RELC_COMMON))
+#define DD_IS_RELC_COMMON_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), DD_TYPE_RELC_COMMON))
+#define DD_RELC_COMMON_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), DD_TYPE_RELC_COMMON, DdRelcCommonClass))
 
 
-typedef struct _DdRelcCommon 					DdRelcCommon;
-typedef struct _DdRelcCommonPrivate 	DdRelcCommonPrivate;
+
+typedef struct _DdRelcCommon			DdRelcCommon;
+typedef struct _DdRelcCommonClass		DdRelcCommonClass;
+typedef struct _DdRelcCommonPrivate 		DdRelcCommonPrivate;
 
 
 struct _DdRelcCommon
 {
-	KObject parent;
+	GObject parent;
+	DdRelc *ddrelc;
 };
 
+struct _DdRelcCommonClass
+{
+	GObjectClass parentClass;
+};
 
-KConstType 		    			dd_relc_common_get_type(void);
-DdRelcCommon*		        dd_relc_common_new(void);
+GType										dd_relc_common_get_type(void)	G_GNUC_CONST;
+DdRelcCommon*					dd_relc_common_new(void);
 
 /**
  *RELC decode status is get.
@@ -54,7 +68,7 @@ DdRelcCommon*		        dd_relc_common_new(void);
  *			010b(SLEEP)<br>
  *			100b(FINISH)
  */
-extern	kint32 dd_relc_get_status( DdRelc*self );
+extern	gint32 dd_relc_common_get_status( DdRelcCommon*self );
 
 /**
  *RELC sleep reason is get.
@@ -64,7 +78,7 @@ extern	kint32 dd_relc_get_status( DdRelc*self );
  *			001b(Reaches the input end address)<br>
  *			010b(Reaches the output end address)
  */
-extern	kint32 dd_relc_get_sleep_reason( DdRelc*self );
+extern	gint32 dd_relc_common_get_sleep_reason( DdRelcCommon*self );
 
 
 /**
@@ -73,7 +87,7 @@ extern	kint32 dd_relc_get_sleep_reason( DdRelc*self );
  *			0b(No error)<br>
  *			1b(Error is occured)
  */
-extern	kint32 dd_relc_get_error_status( DdRelc*self );
+extern	gint32 dd_relc_common_get_error_status( DdRelcCommon*self );
 
 /**
  *RELC error number is get.
@@ -84,7 +98,7 @@ extern	kint32 dd_relc_get_error_status( DdRelc*self );
  *@retval DdRelc_D_DD_RELC_ERR_ADDR_MISMATCH_INPUT	Address mismatch error(input)
  *@retval DdRelc_D_DD_RELC_ERR_ADDR_MISMATCH_OUTPUT	Address mismatch error(output)
  */
-extern	kint32 dd_relc_get_error( DdRelc*self );
+extern	gint32 dd_relc_common_get_error( DdRelcCommon*self );
 
 /**
 RELC status is get.
@@ -97,7 +111,7 @@ RELC status is get.
 			Decode the total number of bytes to write<br>
 			Sequential run counter
 */
-extern	kint32 dd_relc_get_process_status(DdRelc*self, TDdRelcDecInfo* decInfo );
+extern	gint32 dd_relc_common_get_process_status(DdRelcCommon*self, TDdRelcDecInfo* decInfo );
 
 /**
 The input and reference data buffer size for RELC is get.
@@ -106,7 +120,7 @@ The input and reference data buffer size for RELC is get.
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_get_buf_size(DdRelc*self, kushort* inBufSize, kushort* refBufSize );
+extern	gint32 dd_relc_common_get_buf_size(DdRelcCommon*self, gushort* inBufSize, gushort* refBufSize );
 
 /**
 Set the data to the input data buffer(mirror erea).
@@ -115,7 +129,7 @@ Set the data to the input data buffer(mirror erea).
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_set_in_buf_data_mirror(DdRelc*self, kulong inDataAddr, kuint32 inDataSize );
+extern	gint32 dd_relc_common_set_in_buf_data_mirror(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize );
 
 /**
 Get the data to the input data buffer(mirror erea).
@@ -124,7 +138,7 @@ Get the data to the input data buffer(mirror erea).
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_get_in_buf_data_mirror(DdRelc*self, kulong inDataAddr, kuint32 inDataSize );
+extern	gint32 dd_relc_common_get_in_buf_data_mirror(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize );
 
 /**
 Set the data to the input data buffer.
@@ -133,7 +147,7 @@ Set the data to the input data buffer.
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_set_in_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSize );
+extern	gint32 dd_relc_common_set_in_buf_data(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize );
 
 /**
 Get the data to the input data buffer.
@@ -142,7 +156,7 @@ Get the data to the input data buffer.
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_get_in_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSize );
+extern	gint32 dd_relc_common_get_in_buf_data(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize );
 
 /**
 Set the data to the reference data buffer.
@@ -151,7 +165,7 @@ Set the data to the reference data buffer.
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_set_ref_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outDataSize );
+extern	gint32 dd_relc_common_set_ref_buf_data(DdRelcCommon*self, gulong outDataAddr, guint32 outDataSize );
 
 /**
 Get the data to the reference data buffer.
@@ -160,7 +174,7 @@ Get the data to the reference data buffer.
 @retval DdRelc_D_DD_RELC_OK				OK
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-extern	kint32 dd_relc_get_ref_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outDataSize );
+extern	gint32 dd_relc_common_get_ref_buf_data(DdRelcCommon*self, gulong outDataAddr, guint32 outDataSize );
 
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -177,7 +191,7 @@ Set and Start RELC normal mode
 			Output data size
 			Sequential Run Number of Times	: 0 or 1(normal)/2~(continuous number of executions)
 */
-extern kint32 dd_relc_utility_register(DdRelc*self, TDdRelcSetModNormal const* const relcSetModNormal );
+extern gint32 dd_relc_common_utility_register(DdRelcCommon*self, TDdRelcSetModNormal const* const relcSetModNormal );
 
 /**
 Set and Start RELC descriptor mode
@@ -188,9 +202,12 @@ Set and Start RELC descriptor mode
 			descriptor address
 			Sequential Run Number of Times	: 0 or 1(normal)/2~(continuous number of executions)
 */
-extern kint32 dd_relc_utility_descriptor(DdRelc*self, TDdRelcSetModDesc const* const relcSetModDesc );
+extern gint32 dd_relc_common_utility_descriptor(DdRelcCommon*self, TDdRelcSetModDesc const* const relcSetModDesc );
 
 #endif	/* CO_DDIM_UTILITY_USE */
+
+
+G_END_DECLS
 
 
 #ifdef __cplusplus

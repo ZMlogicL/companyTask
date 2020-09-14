@@ -28,6 +28,7 @@
 typedef struct _KIoTest     	KIoTest;
 typedef struct _KIoTestPrivate	KIoTestPrivate;
 
+
 struct  _KIoTest
 {
 	KObject parent;
@@ -40,5 +41,6 @@ void        k_io_test_pas_table_test(KDispTest *self, E_PRO_BLOCK_TYPE type, IoP
 void        k_io_test_iip_test(KIoTest *self);
 void        k_io_test_audio_test(KIoTest *self);
 void        k_io_test_hdmi_test(KIoTest *self);
+
 
 #endif/*__K_IO_TEST_H__*/

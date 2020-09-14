@@ -3,7 +3,7 @@
 *@date                :2020-09-03
 *@author              :zhaoxin
 *@brief               :CtDdAudioThree类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -44,8 +44,8 @@
 #include "ctddaudiothree.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioThree, ct_dd_audio_three);
-#define CT_DD_AUDIO_THREE_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdAudioThreePrivate,CT_TYPE_DD_AUDIO_THREE))
+G_DEFINE_TYPE(CtDdAudioThree, ct_dd_audio_three, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_THREE_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_THREE, CtDdAudioThreePrivate))
 
 #define CtDdAudioThree_CT_DD_AUDIO_PRINT(arg)      if(S_GCT_DD_AUDIO_DISPLAY_FLAG) {Ddim_Print(arg);}
 
@@ -59,19 +59,38 @@ static kint32 S_GCT_DD_AUDIO_DISPLAY_FLAG = 1;
 /*
  * DECLS
  */
-static void 	ct_dd_audio_three_constructor(CtDdAudioThree *self);
-static void 	ct_dd_audio_three_destructor(CtDdAudioThree *self);
+static void 	ct_dd_audio_three_class_init(CtDdAudioThreeClass *klass);
+static void 	ct_dd_audio_three_init(CtDdAudioThree *self);
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 static void 	ctDdAudioDmaIntHandler041_cb( void );
 
 /*
  * IMPL
  */
-static void ct_dd_audio_three_constructor(CtDdAudioThree *self) 
+static void ct_dd_audio_three_class_init(CtDdAudioThreeClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioThreePrivate));
 }
 
-static void ct_dd_audio_three_destructor(CtDdAudioThree *self) 
+static void ct_dd_audio_three_init(CtDdAudioThree *self)
 {
+	CtDdAudioThreePrivate *priv = CT_DD_AUDIO_THREE_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioThree *self = (CtDdAudioThree*)object;
+	CtDdAudioThreePrivate *priv = CT_DD_AUDIO_THREE_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioThree *self = (CtDdAudioThree*)object;
+	CtDdAudioThreePrivate *priv = CT_DD_AUDIO_THREE_GET_PRIVATE(self);
 }
 
 //回调方法:
@@ -891,7 +910,7 @@ void ct_dd_audio_three_041(CtDdAudioThree *self)
 
 CtDdAudioThree *ct_dd_audio_three_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioThree *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_THREE, sizeof(CtDdAudioThreePrivate));
+    CtDdAudioThree *self = g_object_new(CT_TYPE_DD_AUDIO_THREE, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

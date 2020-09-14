@@ -27,8 +27,8 @@ typedef struct 														_CtDdPdmTesttwoPrivate CtDdPdmTesttwoPrivate;
 struct _CtDdPdmTesttwo
 {
 	KObject parent;
-	T_DD_PDM_CORE_CFG pdmCfg;
-	T_DD_PDM_DMA_CFG pdmDmaCfg;
+	DdPdmCoreCfg pdmCfg;
+	DdPdmDmaCfg pdmDmaCfg;
 	CtDdPdmTesttwoPrivate *priv;
 };
 

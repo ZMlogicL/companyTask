@@ -42,7 +42,17 @@ static void ct_im_raw_varify_constructor(CtImRawVarify *self)
 
 static void ct_im_raw_varify_destructor(CtImRawVarify *self)
 {
-//	CtImRawVarifyPrivate *priv = CT_IM_RAW_VARIFY_GET_PRIVATE(self);
+	CtImRawVarifyPrivate *priv = CT_IM_RAW_VARIFY_GET_PRIVATE(self);
+
+	if (priv->imRaw) {
+		k_object_unref(priv->imRaw);
+		priv->imRaw = NULL;
+	}
+
+	if (priv->ddimUserCustom) {
+		k_object_unref(priv->ddimUserCustom);
+		priv->ddimUserCustom = NULL;
+	}
 }
 
 
@@ -109,7 +119,7 @@ void ct_im_raw_varify_dump_reg(CtImRawVarify* self)
 	volatile kuint32 *pLut = (volatile kuint32*)&ioRaw.lut.lut1.word;
 	volatile kuint32 temp;
 
-	Im_RAW_On_Pclk(priv->imRaw);
+	im_raw_on_pclk(priv->imRaw);
 
 	Ddim_Print(("rctl0 = 0x%8lx\n", ioRaw.rctl0.word));
 	Ddim_Print(("rctl1 = 0x%8lx\n", ioRaw.rctl1.word));
@@ -174,7 +184,7 @@ void ct_im_raw_varify_dump_reg(CtImRawVarify* self)
 					(kuchar)(temp >> 16), (kuchar)(temp >> 24)));
 	}
 
-	Im_RAW_Off_Pclk(priv->imRaw);
+	im_raw_off_pclk(priv->imRaw);
 }
 
 // print out enc
@@ -274,11 +284,11 @@ kint32 ct_im_raw_varify_test_init(CtImRawVarify* self)
 	Dd_Top_Set_CLKSTOP7_RAWAP(0);
 #endif
 
-	DDIM_User_Dly_Tsk(priv->ddimUserCustom, 1);
+	ddim_user_custom_dly_tsk(priv->ddimUserCustom, 1);
 
 	ioRaw.rctl0.word = 1;	// Reset
 
-	DDIM_User_Dly_Tsk(priv->ddimUserCustom, 1);
+	ddim_user_custom_dly_tsk(priv->ddimUserCustom, 1);
 
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_PCLOCK)
 	Dd_Top_Set_CLKSTOP7_RAWAP(1);//TODO
@@ -290,7 +300,7 @@ kint32 ct_im_raw_varify_test_init(CtImRawVarify* self)
 	ioRaw.rctl1.bit.rtrg = 2;
 #endif	//CO_DEBUG_ON_PC
 
-	retval = Im_RAW_Init(priv->imRaw);
+	retval = im_raw_init(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(self, retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		Ddim_Print(("Im_RAW_Init() Error !!!!!,  retval = 0x%x\n", retval));

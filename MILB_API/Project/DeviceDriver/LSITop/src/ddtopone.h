@@ -39,10 +39,8 @@ G_BEGIN_DECLS
 */
 #define	DdTopone_INPUT_PARAM_ERROR		(D_DD_TOP | D_DDIM_INPUT_PARAM_ERROR)	/**< Input parameter error. */
 #define	DdTopone_STATUS_ABNORMAL		(D_DD_TOP | D_DDIM_STATUS_ABNORMAL) 	/**< Abnormal status error. */
-
 // Base Clock
 #define DdTopone_UCLK40I			(40000000)	/**< Frequency of External Clock UCLK40I port */
-
 // PLL out
 #define DdTopone_2200_PLL_OUT		(DdTopone_UCLK40I * 55)					/**< 2200MHz : Frequency of PLL2200 */
 #define DdTopone_1600_PLL_OUT		(DdTopone_UCLK40I * 40)					/**< 1600MHz : Frequency of PLL1600 */
@@ -55,41 +53,6 @@ G_BEGIN_DECLS
 #define DdTopone_Audio_96_PLL_OUT	(DdTopone_864_PLL_OUT / 125 * 96)	/**< 663.552MHz : Frequency of Audio PLL */
 #define DdTopone_Audio_98_PLL_OUT	(DdTopone_864_PLL_OUT / 125 * 98)	/**< 677.376MHz : Frequency of Audio PLL */
 #define DdTopone_Audio_128_PLL_OUT	(DdTopone_864_PLL_OUT / 125 * 128)	/**< 884.736MHz : Frequency of Audio PLL */
-
-
-// CLKSTOP-1
-#define	DdTopone_DSPCK_BIT			(1<<0)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_DSPAX_BIT			(1<<2)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_SENCK_BIT			(1<<4)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_SENAX_BIT			(1<<6)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_SENAH_BIT			(1<<8)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_SENAP_BIT			(1<<10)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_GPIOAP_BIT			(1<<12)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_AU0CK_BIT			(1<<14)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_AU2CK_BIT			(1<<16)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_AU3CK_BIT			(1<<18)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_AU4CK_BIT			(1<<20)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_AU5CK_BIT			(1<<22)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_NETAUCK_BIT		(1<<24)		/**< Bit Location of * on CLKSTOP-1 */
-#define	DdTopone_TEMPCK_BIT		(1<<28)		/**< Bit Location of * on CLKSTOP-1 */
-
-// CLKSTOP-2
-#define	DdTopone_RCK_BIT					(1<<0)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_UHS1CK0_BIT			(1<<2)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_UHS1CK1_BIT			(1<<4)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_UHS1CK2_BIT			(1<<6)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_UHS2CK_BIT				(1<<8)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_NFCK_BIT					(1<<10)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_EMMCCK_BIT			(1<<12)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_NETSECCK_BIT			(1<<14)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_NETRCK_BIT				(1<<16)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_EXSAX_BIT				(1<<18)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_SPICK_BIT				(1<<20)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_SLIMB00CK_BIT		(1<<22)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_SLIMB01CK_BIT		(1<<24)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_SLIMB10CK_BIT		(1<<26)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_SLIMB11CK_BIT		(1<<28)		/**< Bit Location of * on CLKSTOP-2 */
-#define	DdTopone_PCISUPPCK_BIT		(1<<30)		/**< Bit Location of * on CLKSTOP-2 */
 
 // CLKSTOP-3
 #define	DdTopone_IIPCK_BIT				(1<<0)		/**< Bit Location of * on CLKSTOP-3 */
@@ -126,55 +89,6 @@ G_BEGIN_DECLS
 #define	DdTopone_APCK1_BIT			(1<<26)		/**< Bit Location of * on CLKSTOP-4 */
 #define	DdTopone_APCK2_BIT			(1<<28)		/**< Bit Location of * on CLKSTOP-4 */
 #define	DdTopone_APCK3_BIT			(1<<30)		/**< Bit Location of * on CLKSTOP-4 */
-
-// CLKSTOP-5
-#define	DdTopone_MICAX0_BIT			(1<<0)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX1_BIT			(1<<2)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX2_BIT			(1<<4)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX3_BIT			(1<<6)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX4_BIT			(1<<8)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX5_BIT			(1<<10)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAX6_BIT			(1<<12)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP0_BIT			(1<<14)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP1_BIT			(1<<16)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP2_BIT			(1<<18)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP3_BIT			(1<<20)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP4_BIT			(1<<22)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP5_BIT			(1<<24)		/**< Bit Location of * on CLKSTOP-5 */
-#define	DdTopone_MICAP6_BIT			(1<<26)		/**< Bit Location of * on CLKSTOP-5 */
-
-// CLKSTOP-6
-#define	DdTopone_MICAH1_BIT			(1<<0)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_MICAH2_BIT			(1<<2)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_MICAH3_BIT			(1<<4)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_IMGAX_BIT			(1<<6)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_IMGAH0_BIT			(1<<8)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_IMGAH1_BIT			(1<<10)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_IMGAH3_BIT			(1<<12)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_IMGAP3_BIT			(1<<14)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_REGAP_BIT			(1<<16)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_XCHAX_BIT			(1<<18)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_XCHAP_BIT			(1<<20)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_ELACK_BIT			(1<<22)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_ELAAX_BIT			(1<<24)		/**< Bit Location of * on CLKSTOP-6 */
-#define	DdTopone_ELAAP_BIT			(1<<26)		/**< Bit Location of * on CLKSTOP-6 */
-
-// CLKSTOP-7
-#define	DdTopone_IPUFDCK_BIT		(1<<0)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_IPUVISCK_BIT		(1<<2)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_IPUAX_BIT			(1<<4)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_IPUAH_BIT			(1<<6)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_RAWCK_BIT			(1<<8)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_RAWAX_BIT			(1<<10)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_RAWAP_BIT			(1<<12)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_SHDRCK_BIT			(1<<14)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_SHDRAX_BIT			(1<<16)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_SHDRAH_BIT			(1<<18)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_SHDRAP_BIT			(1<<20)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_M0CK_BIT			(1<<22)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_MECK_BIT			(1<<24)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_MEAX_BIT			(1<<26)		/**< Bit Location of * on CLKSTOP-7 */
-#define	DdTopone_MEAP_BIT			(1<<28)		/**< Bit Location of * on CLKSTOP-7 */
 
 // CLKSTOP-8
 #define	DdTopone_RIBCK_BIT			(1<<0)		/**< Bit Location of * on CLKSTOP-8 */
@@ -339,7 +253,6 @@ G_BEGIN_DECLS
 #define	DdTopone_GET_CLKSEL10()				(IO_CHIPTOP.CLKSEL10.word)													/**< Get Clock Select 10 */
 #define	DdTopone_GET_CLKSEL11()				(IO_CHIPTOP.CLKSEL11.word)													/**< Get Clock Select 11 */
 #define	DdTopone_GET_CLKSEL12()				(IO_CHIPTOP.CLKSEL12.word)													/**< Get Clock Select 12 */
-
 
 // CLKSEL1
 #define	DdTopone_GET_CLKSEL1_RCLK()			(IO_CHIPTOP.CLKSEL1.bit.RCLK&0x03)											/**< Get Peripheral Clock Select */
@@ -546,7 +459,6 @@ G_BEGIN_DECLS
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-
 
 // PLLCNT1
 #define	DdTopone_GET_PLLCNT1_PL00ST()			(IO_CHIPTOP.PLLCNT1.bit.PL00ST)												/**< Get DDR PLL 00 Stop */
@@ -846,6 +758,223 @@ struct _DdToponeClass{
 
 GType 								dd_topone_get_type(void) G_GNUC_CONST;
 DdTopone* 					dd_topone_new(void);
+
+/**
+Get Frequency of eMMC clock
+@retval	Hz
+*/
+ULONG dd_topone_get_emmcclk(DdTopone *self);
+
+/**
+Get Frequency of NAND Flash clock
+@retval	Hz
+*/
+ULONG dd_topone_get_nfclk(DdTopone *self);
+
+/**
+Get Frequency of UHS2 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_uhs2clk(DdTopone *self);
+
+/**
+Get Frequency of UHS1 ch2 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_uhs1clk2(DdTopone *self);
+
+/**
+Get Frequency of UHS1 ch1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_uhs1clk1(DdTopone *self);
+
+/**
+Get Frequency of UHS1 ch0 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_uhs1clk0(DdTopone *self);
+
+/**
+Get Frequency of Cortex-A7 MPCore Peri clock
+@retval	Hz
+*/
+ULONG dd_topone_get_rclk(DdTopone *self);
+
+/**
+Get Frequency of RAW clock
+@retval	Hz
+*/
+ULONG dd_topone_get_rawclk(DdTopone *self);
+
+/**
+Get Frequency of DISP HIF clock
+@retval	Hz
+*/
+ULONG dd_topone_get_hifclk(DdTopone *self);
+
+/**
+Get Frequency of DISP MIF clock
+@retval	Hz
+*/
+ULONG dd_topone_get_mifclk(DdTopone *self);
+
+/**
+Get Frequency of IPU system clock
+@retval	Hz
+*/
+ULONG dd_topone_get_ipuclk(DdTopone *self);
+
+/**
+Get Frequency of IPU TME clock
+@retval	Hz
+*/
+ULONG dd_topone_get_iputmeclk(DdTopone *self);
+
+/**
+Get Frequency of GPU clock
+@retval	Hz
+*/
+ULONG dd_topone_get_gpuclk(DdTopone *self);
+
+/**
+Get Frequency of JPEG clock
+@retval	Hz
+*/
+ULONG dd_topone_get_jpegclk(DdTopone *self);
+
+/**
+Get Frequency of ELA clock
+@retval	Hz
+*/
+ULONG dd_topone_get_elaclk(DdTopone *self);
+
+/**
+Get type of image pipe macro Select
+@retval	Select value
+*/
+ULONG dd_topone_get_pipesel(DdTopone *self);
+
+/**
+Get Frequency of SENSOR clock
+@retval	Hz
+*/
+ULONG dd_topone_get_senclk(DdTopone *self);
+
+/**
+Get Frequency of SENSOR clock
+@retval	Hz
+*/
+ULONG dd_topone_get_senmskclk(DdTopone *self);
+
+/**
+Get Frequency of IIP clock
+@retval	Hz
+*/
+ULONG dd_topone_get_iipclk(DdTopone *self);
+
+/**
+Get Frequency of STAT clock
+@retval	Hz
+*/
+ULONG dd_topone_get_pasclk(DdTopone *self);
+
+/**
+Get Frequency of HEVC IPP clock
+@retval	Hz
+*/
+ULONG dd_topone_get_ippclk(DdTopone *self);
+
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+/**
+Get Frequency of HEVC PXF clock
+@retval	Hz
+*/
+ULONG dd_topone_get_pxfclk(VOID);
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+/**
+Get Frequency of HEVC ENC clock
+@retval	Hz
+*/
+ULONG dd_topone_get_hevencclk(VOID);
+// --- REMOVE_ES3_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+
+/**
+Get Frequency of HEVC VDF clock
+@retval	Hz
+*/
+ULONG dd_topone_get_vdfclk(DdTopone *self);
+
+/**
+Get Frequency of SRO pipe1 input2 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_sro1clk_2(DdTopone *self);
+
+/**
+Get Frequency of R2Y pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_r2y1clk(DdTopone *self);
+
+/**
+Get Frequency of LTM pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_ltm1clk(DdTopone *self);
+
+/**
+Get Frequency of B2R pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_b2r1clk(DdTopone *self);
+
+/**
+Get Frequency of CNR pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_cnr1clk(DdTopone *self);
+
+/**
+Get Frequency of SRO pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_sro1clk(DdTopone *self);
+
+/**
+Get Frequency of B2B pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_b2b1clk(DdTopone *self);
+
+/**
+Get Frequency of LTMRBK pipe1 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_ltmrbk1clk(DdTopone *self);
+
+/**
+Get Frequency of SRO pipe2 input2 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_sro2clk_2(DdTopone *self);
+
+/**
+Get Frequency of R2Y pipe2 clock
+@retval	Hz
+*/
+ULONG dd_topone_get_r2y2clk(DdTopone *self);
 
 
 /*@}*/

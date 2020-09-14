@@ -65,25 +65,25 @@ static void im_iip_define_destructor(ImIipDefine *self)
 
 static VOID imIipGetMaxMinValue( UINT32* const max_val,
 									  UINT32* const min_val,
-									  const UINT32 pix_depth,
+									  const UINT32 pixDepth,
 									  const UCHAR sign )
 {
 	INT32 p;
 
-	switch ( pix_depth ) {
-		case D_IM_IIP_PDEPTH_8BITS:
+	switch ( pixDepth ) {
+		case ImIipDefine_D_IM_IIP_PDEPTH_8BITS:
 			p = 8;
 			break;
-		case D_IM_IIP_PDEPTH_12BITS:
+		case ImIipDefine_D_IM_IIP_PDEPTH_12BITS:
 			p = 12;
 			break;
-//		case D_IM_IIP_PDEPTH_16BITS:
+//		case ImIipDefine_D_IM_IIP_PDEPTH_16BITS:
 		default:
 			p = 14;
 			break;
 	}
 
-	if( D_IM_IIP_SIGNED_DATA == sign ) {
+	if( ImIipDefine_D_IM_IIP_SIGNED_DATA == sign ) {
 		*min_val = (UINT32)(-(1 << (p - 1)));
 		*max_val = (UINT32)((1 << (p - 1)) - 1);
 	}
@@ -94,94 +94,94 @@ static VOID imIipGetMaxMinValue( UINT32* const max_val,
 }
 
 static void imIipSetAfnStructFlip( T_IM_IIP_PARAM_AFN_OPCOL_0* const afn_struct_param,
-										 const T_IM_IIP_UTIL_IMG* const src,
-										 const E_IM_IIP_UTIL_ROTATE rotation,
-										 const E_IM_IIP_UTIL_FLIP flip)
+										 const TImIipUtilImg* const src,
+										 const EImIipUtilRotate rotation,
+										 const EImIipUtilFlip flip)
 {
 	U_IM_IIP_PARAM_AFN_STAXY	set_sta;
 	INT32						wok;
-	static const int sta_pos_tbl[E_IM_IIP_UTIL_ROTATE_MAX][E_IM_IIP_UTIL_FLIP_MAX] = {
+	static const int sta_pos_tbl[ImIipStruct_E_IM_IIP_UTIL_ROTATE_MAX][ImIipStruct_E_IM_IIP_UTIL_FLIP_MAX] = {
 		// off							mirror						reverse						mirror_reverse
-		{ D_IM_IIP_UTIL_ORIGIN,			D_IM_IIP_UTIL_TOPRIGHT,		D_IM_IIP_UTIL_BOTTOMLEFT,	D_IM_IIP_UTIL_BOTTOMRIGHT	},	// 0
-		{ D_IM_IIP_UTIL_BOTTOMLEFT,		D_IM_IIP_UTIL_ORIGIN,		D_IM_IIP_UTIL_BOTTOMRIGHT,	D_IM_IIP_UTIL_TOPRIGHT		},	// 90
-		{ D_IM_IIP_UTIL_BOTTOMRIGHT,	D_IM_IIP_UTIL_BOTTOMLEFT,	D_IM_IIP_UTIL_TOPRIGHT,		D_IM_IIP_UTIL_ORIGIN		},	// 180
-		{ D_IM_IIP_UTIL_TOPRIGHT,		D_IM_IIP_UTIL_BOTTOMRIGHT,	D_IM_IIP_UTIL_ORIGIN,		D_IM_IIP_UTIL_BOTTOMLEFT	},	// 270
+		{ ImIipDefine_D_IM_IIP_UTIL_ORIGIN,			ImIipDefine_D_IM_IIP_UTIL_TOPRIGHT,		ImIipDefine_D_IM_IIP_UTIL_BOTTOMLEFT,	ImIipDefine_D_IM_IIP_UTIL_BOTTOMRIGHT	},	// 0
+		{ ImIipDefine_D_IM_IIP_UTIL_BOTTOMLEFT,		ImIipDefine_D_IM_IIP_UTIL_ORIGIN,		ImIipDefine_D_IM_IIP_UTIL_BOTTOMRIGHT,	ImIipDefine_D_IM_IIP_UTIL_TOPRIGHT		},	// 90
+		{ ImIipDefine_D_IM_IIP_UTIL_BOTTOMRIGHT,	ImIipDefine_D_IM_IIP_UTIL_BOTTOMLEFT,	ImIipDefine_D_IM_IIP_UTIL_TOPRIGHT,		ImIipDefine_D_IM_IIP_UTIL_ORIGIN		},	// 180
+		{ ImIipDefine_D_IM_IIP_UTIL_TOPRIGHT,		ImIipDefine_D_IM_IIP_UTIL_BOTTOMRIGHT,	ImIipDefine_D_IM_IIP_UTIL_ORIGIN,		ImIipDefine_D_IM_IIP_UTIL_BOTTOMLEFT	},	// 270
 	};
 
 	switch (sta_pos_tbl[rotation][flip])
 	{
-	case D_IM_IIP_UTIL_TOPRIGHT:
-		set_sta.bit.STAX = im_iip_get_fixed_point(src->rect.left + src->rect.width - 1.0);
-		set_sta.bit.STAY = im_iip_get_fixed_point(src->rect.top);
+	case ImIipDefine_D_IM_IIP_UTIL_TOPRIGHT:
+		set_sta.bit.STAX = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.left + src->rect.width - 1.0);
+		set_sta.bit.STAY = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.top);
 		break;
-	case D_IM_IIP_UTIL_BOTTOMLEFT:
-		set_sta.bit.STAX = im_iip_get_fixed_point(src->rect.left);
-		set_sta.bit.STAY = im_iip_get_fixed_point(src->rect.top + src->rect.lines - 1.0);
+	case ImIipDefine_D_IM_IIP_UTIL_BOTTOMLEFT:
+		set_sta.bit.STAX = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.left);
+		set_sta.bit.STAY = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.top + src->rect.lines - 1.0);
 		break;
-	case D_IM_IIP_UTIL_BOTTOMRIGHT:
-		set_sta.bit.STAX = im_iip_get_fixed_point(src->rect.left + src->rect.width - 1.0);
-		set_sta.bit.STAY = im_iip_get_fixed_point(src->rect.top  + src->rect.lines - 1.0);
+	case ImIipDefine_D_IM_IIP_UTIL_BOTTOMRIGHT:
+		set_sta.bit.STAX = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.left + src->rect.width - 1.0);
+		set_sta.bit.STAY = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.top  + src->rect.lines - 1.0);
 		break;
-	case D_IM_IIP_UTIL_ORIGIN:
-		set_sta.bit.STAX = im_iip_get_fixed_point(src->rect.left);
-		set_sta.bit.STAY = im_iip_get_fixed_point(src->rect.top);
+	case ImIipDefine_D_IM_IIP_UTIL_ORIGIN:
+		set_sta.bit.STAX = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.left);
+		set_sta.bit.STAY = ImIipDefine_IM_IIP_FIXED_POINT(src->rect.top);
 		break;
 	default:
 		// Don't set paramter about Mirror/Reverse in cases of error.
 		return;
 	}
 
-	if (flip == E_IM_IIP_UTIL_FLIP_REVERSE)
+	if (flip == ImIipStruct_E_IM_IIP_UTIL_FLIP_REVERSE)
 	{
 		afn_struct_param->STAXY0.bit.STAX = set_sta.bit.STAX;
 		afn_struct_param->STAXY0.bit.STAY = set_sta.bit.STAY;
 
 		// make y-component negative to flip vertical
 		// DYX = -DYX
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
 
 		// DYY = -DYY
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, -wok );
 	}
-	else if (flip == E_IM_IIP_UTIL_FLIP_MIRROR)
+	else if (flip == ImIipStruct_E_IM_IIP_UTIL_FLIP_MIRROR)
 	{
 		afn_struct_param->STAXY0.bit.STAX = set_sta.bit.STAX;
 		afn_struct_param->STAXY0.bit.STAY = set_sta.bit.STAY;
 
 		// make x-component negative to flip horizontal
 		// DXY = -DXY
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
 		afn_struct_param->D_OUT_IN_0.bit.DXY = -(afn_struct_param->D_OUT_IN_0.bit.DXY);
 
 		// DXX = -DXX
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, -wok );
 	}
-	else if (flip == E_IM_IIP_UTIL_FLIP_MIR_AND_REV)
+	else if (flip == ImIipStruct_E_IM_IIP_UTIL_FLIP_MIR_AND_REV)
 	{
 		afn_struct_param->STAXY0.bit.STAX = set_sta.bit.STAX;
 		afn_struct_param->STAXY0.bit.STAY = set_sta.bit.STAY;
 
 		// make x and y component negative to flip horizontal and vertical
 		// DXY = -DXY
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
 		afn_struct_param->D_OUT_IN_0.bit.DXY = -(afn_struct_param->D_OUT_IN_0.bit.DXY);
 
 		// DXX = -DXX
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, -wok );
 
 		// DYX = -DYX
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, -wok );
 
 		// DYY = -DYY
-		im_iip_get_reg_signed_a( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, -wok );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, -wok );
 	}
 	else
 	{
@@ -191,52 +191,52 @@ static void imIipSetAfnStructFlip( T_IM_IIP_PARAM_AFN_OPCOL_0* const afn_struct_
 }
 
 static VOID imIipSetAfnStructParam( T_IM_IIP_PARAM_AFN_OPCOL_0* const afn_struct_param,
-										 const T_IM_IIP_UTIL_IMG* const src,
-										 const T_IM_IIP_UTIL_IMG_INT* const dst,
-										 const E_IM_IIP_UTIL_ROTATE rotation,
-										 const E_IM_IIP_UTIL_FLIP flip )
+										 const TImIipUtilImg* const src,
+										 const TImIipUtilImgInt* const dst,
+										 const EImIipUtilRotate rotation,
+										 const EImIipUtilFlip flip )
 {
 	INT32	h_pit_fixed_point;
 	INT32	v_pit_fixed_point;
 
 	memset( afn_struct_param, '\0', sizeof(*afn_struct_param) );
 
-	if( rotation == E_IM_IIP_UTIL_ROTATE_000 ) {
+	if( rotation == ImIipStruct_E_IM_IIP_UTIL_ROTATE_000 ) {
 		h_pit_fixed_point = (((INT32)src->rect.width - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.width - 1);
 		v_pit_fixed_point = (((INT32)src->rect.lines - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.lines - 1);
 
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, h_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, v_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, h_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, v_pit_fixed_point );
 	}
-	else if( rotation == E_IM_IIP_UTIL_ROTATE_090 ) {
+	else if( rotation == ImIipStruct_E_IM_IIP_UTIL_ROTATE_090 ) {
 		h_pit_fixed_point = (((INT32)src->rect.width - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.lines - 1);
 		v_pit_fixed_point = (((INT32)src->rect.lines - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.width - 1);
 
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, - v_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, h_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, - v_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, h_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, 0x0 );
 	}
-	else if( rotation == E_IM_IIP_UTIL_ROTATE_270 ) {
+	else if( rotation == ImIipStruct_E_IM_IIP_UTIL_ROTATE_270 ) {
 		h_pit_fixed_point = (((INT32)src->rect.width - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.lines - 1);
 		v_pit_fixed_point = (((INT32)src->rect.lines - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.width - 1);
 
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, v_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, - h_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, v_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, - h_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, 0x0 );
 	}
 	else {
-		// E_IM_IIP_UTIL_ROTATE_180
+		// ImIipStruct_E_IM_IIP_UTIL_ROTATE_180
 		h_pit_fixed_point = (((INT32)src->rect.width - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.width - 1);
 		v_pit_fixed_point = (((INT32)src->rect.lines - 1) * D_IM_IIP_PARAM_AFN_VAL_1_0) / (dst->rect.lines - 1);
 
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, - h_pit_fixed_point );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, 0x0 );
-		im_iip_set_reg_signed_a( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, - v_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXX, - h_pit_fixed_point );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DXY, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYX, 0x0 );
+		ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->D_OUT_IN_0, U_IM_IIP_PARAM_AFN_D_OUT_IN, DYY, - v_pit_fixed_point );
 	}
 
 	afn_struct_param->SZ.bit.AFNDVSZ = dst->rect.lines;
@@ -247,9 +247,9 @@ static VOID imIipSetAfnStructParam( T_IM_IIP_PARAM_AFN_OPCOL_0* const afn_struct
 
 static VOID imIipSetAfnUnitParam( T_IM_IIP_PARAM_AFN* const afn,
 									   const ULONG afn_struct_param_addr,
-									   const T_IM_IIP_UTIL_RR* const cfg )
+									   const TImIipUtilRr* const cfg )
 {
-	const T_IM_IIP_UTIL_RECT_INT* dst_rect = &cfg->dst.rect;
+	const TImIipUtilRectInt* dst_rect = &cfg->dst.rect;
 	UINT32 max_val;
 	UINT32 min_val;
 
@@ -272,8 +272,8 @@ static VOID imIipSetAfnUnitParam( T_IM_IIP_PARAM_AFN* const afn,
 	afn->AFNCTL.bit.HSMD = E_IM_IIP_PARAM_HSMD_NORMAL;
 	afn->PFCTL.bit.PFEXTMC = 4;
 	afn->PFCTL.bit.PFEXTADC = 64;
-	if( (E_IM_IIP_UTIL_ROTATE_090 == cfg->rotation) ||
-		 (E_IM_IIP_UTIL_ROTATE_270 == cfg->rotation) ) {
+	if( (ImIipStruct_E_IM_IIP_UTIL_ROTATE_090 == cfg->rotation) ||
+		 (ImIipStruct_E_IM_IIP_UTIL_ROTATE_270 == cfg->rotation) ) {
 		afn->PFCTL.bit.PFSP1 = E_IM_IIP_PARAM_PFSP_1;
 		afn->PFCTL.bit.PFSP2 = E_IM_IIP_PARAM_PFSP_1;
 	}
@@ -285,12 +285,12 @@ static VOID imIipSetAfnUnitParam( T_IM_IIP_PARAM_AFN* const afn,
 	afn->PFCTL.bit.PFOFF = E_IM_IIP_PARAM_PFOFF_RUN;
 //	afn->PIXIDEF.bit.IPIXID;		// set later
 	afn->PIXIDEF.bit.EXA = E_IM_IIP_PARAM_EXA_NO_ALPHA_TO_NEXT_UNIT;
-	afn->PIXIDEF.bit.CSEL = cfg->afn_cache_select;
+	afn->PIXIDEF.bit.CSEL = cfg->afnCacheSelect;
 	afn->CALMETHOD.bit.OPCOL = 0;
-	afn->CALMETHOD.bit.ITMD = cfg->resize_mode;
+	afn->CALMETHOD.bit.ITMD = cfg->resizeMode;
 	afn->CALMETHOD.bit.ARA = E_IM_IIP_PARAM_ARA_ITMD;
 	afn->CALMETHOD.bit.FILMD = 0;
-	if( cfg->resize_mode == E_IM_IIP_UTIL_RESIZE_MODE_BILINEAR ) {
+	if( cfg->resizeMode == ImIipStruct_E_IM_IIP_UTIL_RESIZE_MODE_BILINEAR ) {
 		afn->CALMETHOD.bit.DANTI = 1;
 		afn->CALMETHOD.bit.AANTI = 1;
 	}
@@ -298,24 +298,24 @@ static VOID imIipSetAfnUnitParam( T_IM_IIP_PARAM_AFN* const afn,
 		afn->CALMETHOD.bit.DANTI = 0;
 		afn->CALMETHOD.bit.AANTI = 0;
 	}
-	switch( cfg->afn_unitid ) {
-		case E_IM_IIP_UNIT_ID_AFN0:
+	switch( cfg->afnUnitid ) {
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN0:
 			afn->CALMETHOD.bit.CUBSEL = E_IM_IIP_PARAM_CUBSEL_AFN0;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN1:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN1:
 			afn->CALMETHOD.bit.CUBSEL = E_IM_IIP_PARAM_CUBSEL_AFN1;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN2:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN2:
 			afn->CALMETHOD.bit.CUBSEL = E_IM_IIP_PARAM_CUBSEL_AFN2;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN3:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN3:
 			afn->CALMETHOD.bit.CUBSEL = E_IM_IIP_PARAM_CUBSEL_AFN3;
 			break;
 		default:
 			afn->CALMETHOD.bit.CUBSEL = E_IM_IIP_PARAM_CUBSEL_AFN0;	// Failsafe
 			break;
 	}
-	afn->CALMETHOD.bit.SCUB = cfg->bi_cubic_unitid;
+	afn->CALMETHOD.bit.SCUB = cfg->biCubicUnitid;
 	afn->FILVAL0.bit.FILVALYG = 0x0;
 	afn->FILVAL0.bit.FILVALB = 0x0;
 	afn->FILVAL1.bit.FILVALR = 0x0;
@@ -329,16 +329,16 @@ static VOID imIipSetAfnUnitParam( T_IM_IIP_PARAM_AFN* const afn,
 	afn->OPR.bit.OPAR = 0x10;	// 1.0
 	afn->OPA.bit.OPBA = 0;
 	afn->OPA.bit.OPAA = 0x10;	// 1.0
-	imIipGetMaxMinValue( &max_val, &min_val, cfg->pix_depth, cfg->src.gbl.sign_Y_G );
+	imIipGetMaxMinValue( &max_val, &min_val, cfg->pixDepth, cfg->src.gbl.signYG );
 	afn->CLIPLVLY.bit.CLIPLVLYH = max_val;
 	afn->CLIPLVLY.bit.CLIPLVLYL = min_val;
-	imIipGetMaxMinValue( &max_val, &min_val, cfg->pix_depth, cfg->src.gbl.sign_Cb_B );
+	imIipGetMaxMinValue( &max_val, &min_val, cfg->pixDepth, cfg->src.gbl.signCbB );
 	afn->CLIPLVLB.bit.CLIPLVLBH = max_val;
 	afn->CLIPLVLB.bit.CLIPLVLBL = min_val;
-	imIipGetMaxMinValue( &max_val, &min_val, cfg->pix_depth, cfg->src.gbl.sign_Cr_R );
+	imIipGetMaxMinValue( &max_val, &min_val, cfg->pixDepth, cfg->src.gbl.signCrR );
 	afn->CLIPLVLR.bit.CLIPLVLRH = max_val;
 	afn->CLIPLVLR.bit.CLIPLVLRL = min_val;
-	imIipGetMaxMinValue( &max_val, &min_val, cfg->pix_depth, cfg->src.gbl.sign_D3 );
+	imIipGetMaxMinValue( &max_val, &min_val, cfg->pixDepth, cfg->src.gbl.signD3 );
 	afn->CLIPLVLA.bit.CLIPLVLAH = max_val;
 	afn->CLIPLVLA.bit.CLIPLVLAL = min_val;
 	afn->AFNPCNT.bit.AFNPHCNT = 1;
@@ -365,12 +365,12 @@ static VOID imIipUtilSetAfnRawInputUnit( T_IM_IIP_PARAM_AFN* const afn, T_IM_IIP
 {
 	INT32 wok;
 
-	im_iip_get_reg_signed_a( wok, afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAX );
+	ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAX );
 	wok /= 2;
-	im_iip_set_reg_signed_a( afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAX, wok );
-	im_iip_get_reg_signed_a( wok, afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAY );
+	ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAX, wok );
+	ImIipDefine_IM_IIP_GET_REG_SIGNED_A( wok, afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAY );
 	wok /= 2;
-	im_iip_set_reg_signed_a( afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAY, wok );
+	ImIipDefine_IM_IIP_SET_REG_SIGNED_A( afn_struct_param->STAXY0, U_IM_IIP_PARAM_AFN_STAXY, STAY, wok );
 
 	afn->OUTSIZE.bit.OUTHSZ /= 2;
 	afn->OUTSIZE.bit.OUTVSZ /= 2;
@@ -386,36 +386,36 @@ static VOID imIipUtilSetAfnRawInputUnit( T_IM_IIP_PARAM_AFN* const afn, T_IM_IIP
 	sl->BASE.SL_PVSZ.bit.PVSZ1 *= 2;
 }
 
-static VOID imIipUtilSetAfnRawInputPixfmttbl( T_IM_IIP_PIXFMTTBL* const in_pixfmttbl )
+static VOID imIipUtilSetAfnRawInputPixfmttbl( TImIipPixfmttbl* const in_pixfmttbl )
 {
-	in_pixfmttbl->line_bytes.Y_G *= 2;
-	in_pixfmttbl->line_bytes.Cb_B *= 2;
-	in_pixfmttbl->line_bytes.Cr_R *= 2;
+	in_pixfmttbl->lineBytes.yG *= 2;
+	in_pixfmttbl->lineBytes.cbB *= 2;
+	in_pixfmttbl->lineBytes.crR *= 2;
 	in_pixfmttbl->width *= 2;
 	in_pixfmttbl->lines *= 2;
 }
 
-static INT32 imIipUtilSetParamResizerotate( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* const rr_param, const T_IM_IIP_UTIL_RR* const cfg )
+static INT32 imIipUtilSetParamResizerotate( TImIipUtilParamResizeRotate* const rr_param, const TImIipUtilRr* const cfg )
 {
 	T_IM_IIP_PARAM_AFN*			afn;
 	T_IM_IIP_PARAM_AFN_OPCOL_0*	afn_struct_param;
 	T_IM_IIP_PARAM_STS*			sl;
-	T_IM_IIP_UTIL_PHVSZ			phvsz;
+	TImIipUtilPhvsz			phvsz;
 	UINT32						mod_sz;
 
 	/// Set Pointer of SDRAM parameter
 
-	afn_struct_param = (T_IM_IIP_PARAM_AFN_OPCOL_0*)rr_param->param_buffer_addr;
-	rr_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_AFN_OPCOL_0) );
+	afn_struct_param = (T_IM_IIP_PARAM_AFN_OPCOL_0*)rr_param->paramBufferAddr;
+	rr_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_AFN_OPCOL_0) );
 
-	afn = (T_IM_IIP_PARAM_AFN*)rr_param->param_buffer_addr;
-	rr_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_AFN) );
+	afn = (T_IM_IIP_PARAM_AFN*)rr_param->paramBufferAddr;
+	rr_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_AFN) );
 
-	sl = (T_IM_IIP_PARAM_STS*)rr_param->param_buffer_addr;
-	rr_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_STS) );
+	sl = (T_IM_IIP_PARAM_STS*)rr_param->paramBufferAddr;
+	rr_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_STS) );
 
 
-//	printf( "SIZE: %u, %u\n", im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_AFN_OPCOL_0) ) + im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_AFN) ) + im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_STS) ), D_IM_IIP_UTIL_RR_BUF_BYTES );
+//	printf( "SIZE: %u, %u\n", ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_AFN_OPCOL_0) ) + ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_AFN) ) + ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_STS) ), ImIipDefine_D_IM_IIP_UTIL_RR_BUF_BYTES );
 
 	/// Set SDRAM paramter
 
@@ -453,7 +453,7 @@ static INT32 imIipUtilSetParamResizerotate( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* c
 			phvsz.PVSZ1 = 2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 	if( (afn->OUTSIZE.bit.OUTHSZ == 0) && (afn->OUTSIZE.bit.OUTVSZ == 0) ) {
 		phvsz.PHSZ0 = phvsz.PHSZ1;
@@ -466,32 +466,32 @@ static INT32 imIipUtilSetParamResizerotate( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* c
 		phvsz.PVSZ0 = (mod_sz == 0) ? phvsz.PVSZ1 : (phvsz.PVSZ1 - mod_sz);
 	}
 
-	im_iip_set_sl_unit_param( sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pix_depth );
+	im_iip_define_set_sl_unit_param(NULL, sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pixDepth );
 
 	afn->PIXIDEF.bit.IPIXID = rr_param->pixid[0];
-	afn->AFNTOPCNF.bit.WAITCONF = im_iip_util_conv_portid( cfg->sl_unitid );
+	afn->AFNTOPCNF.bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->slUnitid );
 
 	sl->BASE.PIXIDDEF.bit.OPIXID = rr_param->pixid[1];
-	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_util_conv_portid( cfg->afn_unitid );
+	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_sub_util_conv_portid( cfg->afnUnitid );
 
 
-	if( cfg->src.gbl.pix_format == E_IM_IIP_PFMT_BAYER ) {
+	if( cfg->src.gbl.pixFormat == ImIipStruct_E_IM_IIP_PFMT_BAYER ) {
 		imIipUtilSetAfnRawInputUnit( afn, afn_struct_param, sl );
 	}
 
 
-	rr_param->p_param_afn = afn;
-	rr_param->p_afn_struct_param = afn_struct_param;
-	rr_param->p_param_sl = sl;
+	rr_param->pParamAfn = afn;
+	rr_param->pAfnStructParam = afn_struct_param;
+	rr_param->pParamSl = sl;
 
-	im_iip_set_unitinftbl_param( &rr_param->unit_cfg_afn, cfg->afn_unitid, afn, 0ULL );
-	im_iip_set_unitinftbl_param( &rr_param->unit_cfg_sl, cfg->sl_unitid, sl, rr_param->open_param.unitid_bitmask );
+	im_iip_sub_set_unitinftbl_param(NULL,&rr_param->unitCfgAfn, cfg->afnUnitid, afn, 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL,&rr_param->unitCfgSl, cfg->slUnitid, sl, rr_param->openParam.unitidBitmask );
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 static VOID imIipSetCscUnitParam( T_IM_IIP_PARAM_CSC* const csc,
-									   const T_IM_IIP_UTIL_CSC* const cfg )
+									   const TImIipUtilCsc* const cfg )
 {
 	INT32	loopcnt;
 
@@ -510,10 +510,10 @@ static VOID imIipSetCscUnitParam( T_IM_IIP_PARAM_CSC* const csc,
 		csc->CSCK[loopcnt].bit.CSCK_3 = cfg->csck[loopcnt][3];
 	}
 
-	csc->MDSEL.bit.MDSEL = cfg->csck_mode_sel;
-	csc->ALPSEL.bit.ALPSEL = cfg->alpha_in_sel;
-	csc->ALPSEL.bit.ALOSEL = cfg->alpha_out_sel;
-	csc->ALPVAL.bit.ALPVAL = cfg->alpha_val;
+	csc->MDSEL.bit.MDSEL = cfg->csckModeSel;
+	csc->ALPSEL.bit.ALPSEL = cfg->alphaInSel;
+	csc->ALPSEL.bit.ALOSEL = cfg->alphaOutSel;
+	csc->ALPVAL.bit.ALPVAL = cfg->alphaVal;
 	csc->MAXMIN.bit.MAXMIN0 = E_IM_IIP_PARAM_MAXMIN_THROUGH;
 	csc->MAXMIN.bit.MAXMIN1 = E_IM_IIP_PARAM_MAXMIN_THROUGH;
 	csc->MAXMIN.bit.MAXMIN2 = E_IM_IIP_PARAM_MAXMIN_THROUGH;
@@ -528,62 +528,62 @@ static VOID imIipSetCscUnitParam( T_IM_IIP_PARAM_CSC* const csc,
 	csc->OUTCLIP.bit.CLPMIN3 = -0x100;
 }
 
-static VOID imIipUtilSetParamCsc( T_IM_IIP_UTIL_PARAM_CSC* const csc_param, const T_IM_IIP_UTIL_CSC* const cfg )
+static VOID imIipUtilSetParamCsc( TImIipUtilParamCsc* const csc_param, const TImIipUtilCsc* const cfg )
 {
 	T_IM_IIP_PARAM_1DL*			oned;
 	T_IM_IIP_PARAM_CSC*			csc;
 	T_IM_IIP_PARAM_STS*			sl;
-	T_IM_IIP_UTIL_PHVSZ			phvsz;
+	TImIipUtilPhvsz			phvsz;
 
 	/// Set Pointer of SDRAM parameter
 
-	oned = (T_IM_IIP_PARAM_1DL*)csc_param->param_buffer_addr;
-	csc_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_1DL) );
+	oned = (T_IM_IIP_PARAM_1DL*)csc_param->paramBufferAddr;
+	csc_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_1DL) );
 
-	csc = (T_IM_IIP_PARAM_CSC*)csc_param->param_buffer_addr;
-	csc_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_CSC) );
+	csc = (T_IM_IIP_PARAM_CSC*)csc_param->paramBufferAddr;
+	csc_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_CSC) );
 
-	sl = (T_IM_IIP_PARAM_STS*)csc_param->param_buffer_addr;
-	csc_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_STS) );
+	sl = (T_IM_IIP_PARAM_STS*)csc_param->paramBufferAddr;
+	csc_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_STS) );
 
 
 	/// Set SDRAM paramter
-	im_iip_set_phvsz_1d_sl( &phvsz, &cfg->dst );
+	im_iip_sub_set_phvsz_1d_sl( NULL,&phvsz, &cfg->dst );
 
-	im_iip_set_1d_unit_param( oned, &phvsz, &cfg->src, cfg->pix_depth, cfg->ld_cache_select );
+	im_iip_define_set_1d_unit_param(NULL, oned, &phvsz, &cfg->src, cfg->pixDepth, cfg->ldCacheSelect );
 
 	imIipSetCscUnitParam( csc, cfg );
 
-	im_iip_set_sl_unit_param( sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pix_depth );
+	im_iip_define_set_sl_unit_param(NULL, sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pixDepth );
 
 	//Set Shift bit
-	sl->BASE.SFT_0.bit.SFTVAL = cfg->sl_sftval;
+	sl->BASE.SFT_0.bit.SFTVAL = cfg->slSftval;
 
 	oned->PIXIDDEF.bit.IPIXID = csc_param->pixid[0];
-	oned->LD_TOPCNF0.bit.WAITCONF = im_iip_util_conv_portid( cfg->csc_unitid );
+	oned->LD_TOPCNF0.bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->cscUnitid );
 
-	csc->CSCTOPCNF.bit.DATACONF = im_iip_util_conv_portid( cfg->ld_unitid );
-	csc->CSCTOPCNF.bit.WAITCONF = im_iip_util_conv_portid( cfg->sl_unitid );
+	csc->CSCTOPCNF.bit.DATACONF = im_iip_sub_util_conv_portid( cfg->ldUnitid );
+	csc->CSCTOPCNF.bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->slUnitid );
 
 	sl->BASE.PIXIDDEF.bit.OPIXID = csc_param->pixid[1];
-	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_util_conv_portid( cfg->csc_unitid );
+	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_sub_util_conv_portid( cfg->cscUnitid );
 
-	csc_param->p_param_1d = oned;
-	csc_param->p_param_csc = csc;
-	csc_param->p_param_sl = sl;
+	csc_param->pParam1D = oned;
+	csc_param->pParamCsc = csc;
+	csc_param->pParamSl = sl;
 
-	im_iip_set_unitinftbl_param( &csc_param->unit_cfg_1d, cfg->ld_unitid, oned, 0ULL );
-	im_iip_set_unitinftbl_param( &csc_param->unit_cfg_csc, cfg->csc_unitid, csc, 0ULL );
-	im_iip_set_unitinftbl_param( &csc_param->unit_cfg_sl, cfg->sl_unitid, sl, csc_param->open_param.unitid_bitmask );
+	im_iip_sub_set_unitinftbl_param(NULL,  &csc_param->unitCfg1D, cfg->ldUnitid, oned, 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &csc_param->unitCfgCsc, cfg->cscUnitid, csc, 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &csc_param->unitCfgSl, cfg->slUnitid, sl, csc_param->openParam.unitidBitmask );
 }
 
-VOID im_iip_set_1d_unit_param( T_IM_IIP_PARAM_1DL* const p1D,
-									  const T_IM_IIP_UTIL_PHVSZ* const phvsz,
-									  const T_IM_IIP_UTIL_IMG_INT* const src,
-									  const UINT32 pix_depth,
+VOID im_iip_define_set_1d_unit_param( ImIipDefine* self, T_IM_IIP_PARAM_1DL* const p1D,
+									  const TImIipUtilPhvsz* const phvsz,
+									  const TImIipUtilImgInt* const src,
+									  const UINT32 pixDepth,
 									  const E_IM_IIP_PARAM_CSEL cache_select )
 {
-	const T_IM_IIP_UTIL_RECT_INT* src_rect = &src->rect;
+	const TImIipUtilRectInt* src_rect = &src->rect;
 
 	memset( p1D, '\0', sizeof(*p1D) );
 
@@ -600,9 +600,9 @@ VOID im_iip_set_1d_unit_param( T_IM_IIP_PARAM_1DL* const p1D,
 	p1D->LD_CTL.bit.SAVERD = 0;
 	p1D->LD_CTL.bit.CSEL = cache_select;
 	p1D->LD_PREFETCH.bit.PFOFF = E_IM_IIP_PARAM_PFOFF_RUN;
-	p1D->LD_PREFETCH.bit.PF_PDIST = im_iip_get_PF_PDIST( pix_depth,
-														 src->gbl.frame_type,
-														 src->gbl.pix_format,
+	p1D->LD_PREFETCH.bit.PF_PDIST = im_iip_sub_get_pf_pdist( pixDepth,
+														 src->gbl.frameType,
+														 src->gbl.pixFormat,
 														 src->gbl.alpha );
 	p1D->LD_PREFETCH.bit.PF_1ST = E_IM_IIP_PARAM_PF_1ST_ACCESS_BEFORE_PF;
 	p1D->LD_PREFETCH.bit.PFB_NUM = 0;
@@ -630,11 +630,11 @@ VOID im_iip_set_1d_unit_param( T_IM_IIP_PARAM_1DL* const p1D,
 	p1D->RING.bit.DRINGSIZE = 0;
 }
 
-VOID im_iip_set_sl_unit_param( T_IM_IIP_PARAM_STS* const sl,
-									  const T_IM_IIP_UTIL_PHVSZ* const phvsz,
-									  const T_IM_IIP_UTIL_RECT_INT* const dst_rect,
-									  const T_IM_IIP_UTIL_IMG_GBL* const dst_gbl,
-									  const UINT32 pix_depth )
+VOID im_iip_define_set_sl_unit_param(ImIipDefine* self, T_IM_IIP_PARAM_STS* const sl,
+									  const TImIipUtilPhvsz* const phvsz,
+									  const TImIipUtilRectInt* const dst_rect,
+									  const TImIipUtilImgGbl* const dst_gbl,
+									  const UINT32 pixDepth )
 {
 	UINT32 max_val, min_val;
 
@@ -671,7 +671,7 @@ VOID im_iip_set_sl_unit_param( T_IM_IIP_PARAM_STS* const sl,
 	sl->BASE.SEL_OPARA.bit.SEL_OPARA = 0;
 
 	sl->BASE.OFSET_0.bit.OFSET = 0;
-	imIipGetMaxMinValue( &max_val, &min_val, pix_depth, dst_gbl->sign_Y_G );
+	imIipGetMaxMinValue( &max_val, &min_val, pixDepth, dst_gbl->signYG );
 	sl->BASE.CLPTH_U_0.bit.CLPTH_U = max_val;
 	sl->BASE.CLPTH_L_0.bit.CLPTH_L = min_val;
 	sl->BASE.CLPVAL_U_0.bit.CLPVAL_U = sl->BASE.CLPTH_U_0.bit.CLPTH_U;
@@ -706,79 +706,79 @@ VOID im_iip_set_sl_unit_param( T_IM_IIP_PARAM_STS* const sl,
 	sl->FILL_EN.bit.FILL_EN19 = E_IM_IIP_PARAM_FILL_EN_DISABLE;
 }
 
-INT32 Im_IIP_Get_MAXMON( T_IM_IIP_MAXMON* const mon )
+INT32 Im_IIP_Get_MAXMON( TImIipMaxmon* const mon )
 {
 	UINT32 loopcnt;
 
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( mon == NULL ) {
 		Ddim_Assertion(("I:Im_IIP_Get_MAXMON INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	for( loopcnt = 0; loopcnt < 4; loopcnt++ ) {
 		mon->max[loopcnt].value = IO_IIP.MAXMON[loopcnt].bit.MAXVAL;
-		mon->max[loopcnt].pos_x = IO_IIP.MAXMON[loopcnt].bit.HPOINTMAX;
-		mon->max[loopcnt].pos_y = IO_IIP.MAXMON[loopcnt].bit.VPOINTMAX;
-		im_iip_get_reg_signed_a( mon->max[loopcnt].value, IO_IIP.MAXMON[loopcnt], union io_iip_maxmon, MAXVAL );
+		mon->max[loopcnt].posX = IO_IIP.MAXMON[loopcnt].bit.HPOINTMAX;
+		mon->max[loopcnt].posY = IO_IIP.MAXMON[loopcnt].bit.VPOINTMAX;
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( mon->max[loopcnt].value, IO_IIP.MAXMON[loopcnt], union io_iip_maxmon, MAXVAL );
 	}
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
-INT32 im_iip_util_resizerotate_main( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* const rr_param, const T_IM_IIP_UTIL_RR* const cfg )
+INT32 im_iip_define_util_resizerotate_main( TImIipUtilParamResizeRotate* const rr_param, const TImIipUtilRr* const cfg )
 {
 	INT32	retval;
 
-	rr_param->open_param.unitid_bitmask = im_iip_util_conv_unitid_to_pldunit(cfg->afn_unitid)
-										| im_iip_util_conv_unitid_to_pldunit(cfg->sl_unitid);
-	rr_param->open_param.pixid_bitmask = cfg->src_pixid | cfg->dst_pixid;
-	rr_param->open_param.open_res_bitmask = E_IM_IIP_OPEN_RES_NONE;
+	rr_param->openParam.unitidBitmask = ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->afnUnitid)
+										| ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->slUnitid);
+	rr_param->openParam.pixidBitmask = cfg->srcPixid | cfg->dstPixid;
+	rr_param->openParam.openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_NONE;
 
-	if( cfg->resize_mode == E_IM_IIP_UTIL_RESIZE_MODE_BICUBIC ) {
-		switch( cfg->bi_cubic_unitid ) {
+	if( cfg->resizeMode == ImIipStruct_E_IM_IIP_UTIL_RESIZE_MODE_BICUBIC ) {
+		switch( cfg->biCubicUnitid ) {
 			case E_IM_IIP_PARAM_SCUB_0:
-				rr_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_BICUBIC0;
+				rr_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_BICUBIC0;
 				break;
 			case E_IM_IIP_PARAM_SCUB_1:
-				rr_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_BICUBIC1;
+				rr_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_BICUBIC1;
 				break;
 			default:
-				return D_IM_IIP_INVALID_ARG_ERR;
+				return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 		}
 	}
-	switch( cfg->afn_cache_select ) {
+	switch( cfg->afnCacheSelect ) {
 		case E_IM_IIP_PARAM_CSEL_0:
-			rr_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE0;
+			rr_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 			break;
 		case E_IM_IIP_PARAM_CSEL_1:
-			rr_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE1;
+			rr_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE1;
 			break;
 		case E_IM_IIP_PARAM_CSEL_2:
-			rr_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE2;
+			rr_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	rr_param->pixid[0] = im_iip_util_conv_pixid( cfg->src_pixid );
-	if( rr_param->pixid[0] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	rr_param->pixid[0] = im_iip_sub_util_conv_pixid( cfg->srcPixid );
+	if( rr_param->pixid[0] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
-	rr_param->pixid[1] = im_iip_util_conv_pixid( cfg->dst_pixid );
-	if( rr_param->pixid[1] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	rr_param->pixid[1] = im_iip_sub_util_conv_pixid( cfg->dstPixid );
+	if( rr_param->pixid[1] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	retval = Im_IIP_Open_SWTRG( rr_param->open_param.unitid_bitmask, rr_param->open_param.pixid_bitmask, rr_param->open_param.open_res_bitmask, rr_param->wait_param.wait_time );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Open_SWTRG( rr_param->openParam.unitidBitmask, rr_param->openParam.pixidBitmask, rr_param->openParam.openResBitmask, rr_param->waitParam.waitTime );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 		return retval;
 	}
 
@@ -788,20 +788,20 @@ INT32 im_iip_util_resizerotate_main( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* const rr
 		imIipUtilSetParamResizerotate( rr_param, cfg );
 
 		/// Set IIP driver parameter
-		im_iip_set_pixfmttbl_param( &rr_param->pixfmttbl[0], &cfg->src.gbl, cfg->pix_depth, NULL );
-		im_iip_set_pixfmttbl_param( &rr_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pix_depth, NULL );
+		im_iip_sub_set_pixfmttbl_param(NULL, &rr_param->pixfmttbl[0], &cfg->src.gbl, cfg->pixDepth, NULL );
+		im_iip_sub_set_pixfmttbl_param(NULL, &rr_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pixDepth, NULL );
 
-		if( cfg->src.gbl.pix_format == E_IM_IIP_PFMT_BAYER ) {
+		if( cfg->src.gbl.pixFormat == ImIipStruct_E_IM_IIP_PFMT_BAYER ) {
 			imIipUtilSetAfnRawInputPixfmttbl( &rr_param->pixfmttbl[0] );
 		}
 
-		im_iip_set_axi_param( cfg->afn_unitid, &rr_param->axi_id_afn, &rr_param->axi_cfg_afn, rr_param->param_master_IF );
+		im_iip_new_set_axi_param( NULL,cfg->afnUnitid, &rr_param->axiIdAfn, &rr_param->axiCfgAfn, rr_param->paramMasterIf );
 
-		im_iip_set_axi_param( cfg->sl_unitid, &rr_param->axi_id_sl, &rr_param->axi_cfg_sl, rr_param->param_master_IF );
+		im_iip_new_set_axi_param(  NULL,cfg->slUnitid, &rr_param->axiIdSl, &rr_param->axiCfgSl, rr_param->paramMasterIf );
 
 		/// Execute IIP
-		retval = im_iip_util_exec_rotate( rr_param, cfg );
-		if( retval != D_IM_IIP_OK ) {
+		retval = im_iip_new_util_exec_rotate( rr_param, cfg );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			break;
 		}
 
@@ -810,47 +810,47 @@ INT32 im_iip_util_resizerotate_main( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* const rr
 	}
 
 	// Error route
-	(VOID)Im_IIP_Close_SWTRG( rr_param->open_param.unitid_bitmask, rr_param->open_param.pixid_bitmask, rr_param->open_param.open_res_bitmask );
+	(VOID)Im_IIP_Close_SWTRG( rr_param->openParam.unitidBitmask, rr_param->openParam.pixidBitmask, rr_param->openParam.openResBitmask );
 
 	return retval;
 }
 
-INT32 im_iip_util_csc_main( T_IM_IIP_UTIL_PARAM_CSC* const csc_param, const T_IM_IIP_UTIL_CSC* const cfg, const INT32 wait_time )
+INT32 im_iip_define_util_csc_main(TImIipUtilParamCsc* const csc_param, const TImIipUtilCsc* const cfg, const INT32 waitTime )
 {
 	INT32	retval;
-	T_IM_IIP_UTIL_ALPHA_INFO	alpha_info;
+	TImIipUtilAlphaInfo	alpha_info;
 
-	csc_param->open_param.unitid_bitmask = im_iip_util_conv_unitid_to_pldunit(cfg->ld_unitid)
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->csc_unitid)
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->sl_unitid);
-	csc_param->open_param.pixid_bitmask = cfg->src_pixid | cfg->dst_pixid;
-	csc_param->open_param.open_res_bitmask = E_IM_IIP_OPEN_RES_NONE;
+	csc_param->openParam.unitidBitmask = ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->ldUnitid)
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->cscUnitid)
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->slUnitid);
+	csc_param->openParam.pixidBitmask = cfg->srcPixid | cfg->dstPixid;
+	csc_param->openParam.openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_NONE;
 
-	switch( cfg->ld_cache_select ) {
+	switch( cfg->ldCacheSelect ) {
 		case E_IM_IIP_PARAM_CSEL_0:
-			csc_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE0;
+			csc_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 			break;
 		case E_IM_IIP_PARAM_CSEL_1:
-			csc_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE1;
+			csc_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE1;
 			break;
 		case E_IM_IIP_PARAM_CSEL_2:
-			csc_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE2;
+			csc_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	csc_param->pixid[0] = im_iip_util_conv_pixid( cfg->src_pixid );
-	if( csc_param->pixid[0] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	csc_param->pixid[0] = im_iip_sub_util_conv_pixid( cfg->srcPixid );
+	if( csc_param->pixid[0] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
-	csc_param->pixid[1] = im_iip_util_conv_pixid( cfg->dst_pixid );
-	if( csc_param->pixid[1] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	csc_param->pixid[1] = im_iip_sub_util_conv_pixid( cfg->dstPixid );
+	if( csc_param->pixid[1] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	retval = Im_IIP_Open_SWTRG( csc_param->open_param.unitid_bitmask, csc_param->open_param.pixid_bitmask, csc_param->open_param.open_res_bitmask, csc_param->wait_param.wait_time );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Open_SWTRG( csc_param->openParam.unitidBitmask, csc_param->openParam.pixidBitmask, csc_param->openParam.openResBitmask, csc_param->waitParam.waitTime );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 		return retval;
 	}
 
@@ -860,18 +860,18 @@ INT32 im_iip_util_csc_main( T_IM_IIP_UTIL_PARAM_CSC* const csc_param, const T_IM
 		imIipUtilSetParamCsc( csc_param, cfg );
 
 		/// Set IIP driver parameter
-		alpha_info.alpha_depth = cfg->alpha_depth;
-		alpha_info.alpha_subsampling = cfg->alpha_subsampling;
-		im_iip_set_pixfmttbl_param( &csc_param->pixfmttbl[0], &cfg->src.gbl, cfg->pix_depth, &alpha_info );
-		im_iip_set_pixfmttbl_param( &csc_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pix_depth, &alpha_info );
+		alpha_info.alphaDepth = cfg->alphaDepth;
+		alpha_info.alphaSubsampling = cfg->alphaSubsampling;
+		im_iip_sub_set_pixfmttbl_param(NULL, &csc_param->pixfmttbl[0], &cfg->src.gbl, cfg->pixDepth, &alpha_info );
+		im_iip_sub_set_pixfmttbl_param(NULL, &csc_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pixDepth, &alpha_info );
 
-		im_iip_set_axi_param( cfg->ld_unitid, &csc_param->axi_id_ld, &csc_param->axi_cfg_1d, csc_param->param_master_IF );
+		im_iip_new_set_axi_param(  NULL,cfg->ldUnitid, &csc_param->axiIdLd, &csc_param->axiCfg1D, csc_param->paramMasterIf );
 
-		im_iip_set_axi_param( cfg->sl_unitid, &csc_param->axi_id_sl, &csc_param->axi_cfg_sl, csc_param->param_master_IF );
+		im_iip_new_set_axi_param(  NULL,cfg->slUnitid, &csc_param->axiIdSl, &csc_param->axiCfgSl, csc_param->paramMasterIf );
 
 		/// Execute IIP
-		retval = im_iip_util_exec_csc( csc_param, cfg );
-		if( retval != D_IM_IIP_OK ) {
+		retval = im_iip_new_util_exec_csc( csc_param, cfg );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			break;
 		}
 
@@ -880,7 +880,7 @@ INT32 im_iip_util_csc_main( T_IM_IIP_UTIL_PARAM_CSC* const csc_param, const T_IM
 	}
 
 	// Error route
-	(VOID)Im_IIP_Close_SWTRG( csc_param->open_param.unitid_bitmask, csc_param->open_param.pixid_bitmask, csc_param->open_param.open_res_bitmask );
+	(VOID)Im_IIP_Close_SWTRG( csc_param->openParam.unitidBitmask, csc_param->openParam.pixidBitmask, csc_param->openParam.openResBitmask );
 
 	return retval;
 }

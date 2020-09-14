@@ -28,7 +28,7 @@ struct _ImR2yUtility3Private
 };
 
 #ifdef CO_DDIM_UTILITY_USE
-static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMRGBDF_Tbl_Addr[3] = {
+static const RdmaGmdfTblAddr	gIM_R2Y_GMRGBDF_Tbl_Addr[3] = {
 	{
 		{
 			0x294A8000, 0x294A8004, 0x294A8008, 0x294A800C, 0x294A8010, 0x294A8014, 0x294A8018, 0x294A801C,
@@ -235,7 +235,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMRGBDF_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMRDF_Tbl_Addr[3] = {
+static const RdmaGmdfTblAddr	gIM_R2Y_GMRDF_Tbl_Addr[3] = {
 	{
 		{
 			0x294A8800, 0x294A8804, 0x294A8808, 0x294A880C, 0x294A8810, 0x294A8814, 0x294A8818, 0x294A881C,
@@ -442,7 +442,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMRDF_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMGDF_Tbl_Addr[3] = {
+static const RdmaGmdfTblAddr	gIM_R2Y_GMGDF_Tbl_Addr[3] = {
 	{
 		{
 			0x294A9000, 0x294A9004, 0x294A9008, 0x294A900C, 0x294A9010, 0x294A9014, 0x294A9018, 0x294A901C,
@@ -649,7 +649,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMGDF_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMBDF_Tbl_Addr[3] = {
+static const RdmaGmdfTblAddr	gIM_R2Y_GMBDF_Tbl_Addr[3] = {
 	{
 		{
 			0x294A9800, 0x294A9804, 0x294A9808, 0x294A980C, 0x294A9810, 0x294A9814, 0x294A9818, 0x294A981C,
@@ -884,34 +884,34 @@ static void im_r2y_utility3_destructor(ImR2yUtility3 *self)
 
 #ifdef CO_DDIM_UTILITY_USE
 
-INT32 im_r2y_utility3_get_rdma_addr_gmdf_table(ImR2yUtility3 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR** addr )
+INT32 im_r2y_utility3_get_rdma_addr_gmdf_table(ImR2yUtility3 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaGmdfTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( tbl_index > 4 ){
 		Ddim_Assertion(("im_r2y_utility3_get_rdma_addr_gmdf_table error. tbl_index > 4\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility3_get_rdma_addr_gmdf_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility3_get_rdma_addr_gmdf_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
 	switch( tbl_index ){
 		case 0:
-			*addr = &(gIM_R2Y_GMRGBDF_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMRGBDF_Tbl_Addr[pipeNo]);
 			break;
 		case 1:
-			*addr = &(gIM_R2Y_GMRDF_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMRDF_Tbl_Addr[pipeNo]);
 			break;
 		case 2:
-			*addr = &(gIM_R2Y_GMGDF_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMGDF_Tbl_Addr[pipeNo]);
 			break;
 		case 3:
-			*addr = &(gIM_R2Y_GMBDF_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMBDF_Tbl_Addr[pipeNo]);
 			break;
 		case 4:
-			im_r2y_utility4_get_rdmaaddr_gmdf_table(im_r2y_utility4_new(), pipe_no, addr);
+			im_r2y_utility4_get_rdmaaddr_gmdf_table(im_r2y_utility4_new(), pipeNo, addr);
 			break;
 		default:
 			break;

@@ -59,7 +59,8 @@ It waits until forwarding ends. (synchronization)
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 2MByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 */
-INT32				dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, UINT32 wait_mode);
+kint32				dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, kuchar ch, kulong srcAddr,
+						kulong dstAddr, kulong size, kuint32 wait_mode);
 
 /**
 HDMAC0 forwarding between SDRAM-SDRAM.<br>
@@ -82,7 +83,8 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 2MByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 */
-INT32				dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler);
+kint32				dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, kuchar ch,
+						kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 
 /**
 It is a function to transfer the input data of Audio by using HDMAC0. 
@@ -104,7 +106,8 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
          Transfer MAX size of this API as following.<br>
          	WORD transfer (source address and destination address are 4byte alignment) : MAX size is 256KByte.<br>
 */
-INT32				dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR inputSel, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler);
+kint32				dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, kuchar ch, kuchar inputSel,
+						kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 
 /**
 It is a function to transfer the output data of Audio by using HDMAC0. 
@@ -126,7 +129,8 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
          Transfer MAX size of this API as following.<br>
          	WORD transfer (source address and destination address are 4byte alignment) : MAX size is 256KByte.<br>
 */
-INT32				dd_hdmac0_utility_output_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR inputSel, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler);
+kint32				dd_hdmac0_utility_output_audio_async(DdHdmac0Utility *self, kuchar ch, kuchar inputSel,
+						kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 
 #endif
 

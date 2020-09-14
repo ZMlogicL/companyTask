@@ -180,23 +180,23 @@ ImproSendmipi*	impro_sendmipi_new();
 MIPI-DPHY initialize
 @param[in]	ch : MIPI-DPHY channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_sendmipi_init( E_IM_PRO_DMIPI_CH ch );
+extern	INT32			impro_sendmipi_init( EimproDmipiCh ch );
 /**
 Software reset of MIPI-DPHY
 @param[in]	ch : MIPI-DPHY channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_sendmipi_sr( E_IM_PRO_DMIPI_CH ch );
+extern	INT32			impro_sendmipi_sr( EimproDmipiCh ch );
 /**
 MIPI-DPHY macro start.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Macro Start OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: D-MIPI has not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: D-MIPI has not stopped NG
 */
-extern	INT32			impro_sendmipi_start( E_IM_PRO_DMIPI_CH ch );
+extern	INT32			impro_sendmipi_start( EimproDmipiCh ch );
 /**
 MIPI-DPHY macro stop.
 @param[in]	ch : Channel No.
@@ -204,15 +204,15 @@ MIPI-DPHY macro stop.
 @retval		D_DDIM_OK					: Macro Stop OK
 @retval		D_IM_PRO_NG					: Macro Stop NG
 */
-extern	INT32			impro_sendmipi_stop( E_IM_PRO_DMIPI_CH ch, UCHAR force );
+extern	INT32			impro_sendmipi_stop( EimproDmipiCh ch, UCHAR force );
 /**
 The control parameter of MIPI-DPHY is set.
 @param[in]	ch : Channel No.
 @param[in]	dmipiCtrl : MIPI-DPHY control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_sendmipi_ctrl( E_IM_PRO_DMIPI_CH ch, TimproDmipiCtrl* dmipiCtrl );
+extern	INT32			impro_sendmipi_ctrl( EimproDmipiCh ch, TimproDmipiCtrl* dmipiCtrl );
 /**
 A setup of enable access to the built-in RAM of MIPI-DPHY.
 @param[in]	ch : Channel No.
@@ -221,18 +221,18 @@ A setup of enable access to the built-in RAM of MIPI-DPHY.
 @param[in]	paen1Trg : RAM1 access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
-extern	INT32			impro_sendmipi_set_paen( E_IM_PRO_DMIPI_CH ch, UCHAR paen0Trg, UCHAR paen1Trg );
+extern	INT32			impro_sendmipi_set_paen( EimproDmipiCh ch, UCHAR paen0Trg, UCHAR paen1Trg );
 /**
 Get MIPI D-PHY status..
 @param[in]	ch : Channel No.
 @param[out]	status : MIPI-DPHY status information
 @retval		D_DDIM_OK					: Getting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
 */
-extern	INT32			impro_sendmipi_get_status( E_IM_PRO_DMIPI_CH ch, TimproDmipiStatus* status );
+extern	INT32			impro_sendmipi_get_status( EimproDmipiCh ch, TimproDmipiStatus* status );
 
 
 #endif /* __IMPRO_SENDMIPI_H__ */

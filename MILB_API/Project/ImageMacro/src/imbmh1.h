@@ -46,19 +46,19 @@ KConstType 		    im_bmh1_get_type(void);
 ImBmh1*		        im_bmh1_get(void);
 
 extern	INT32 Im_BMH_Set_Interrupt( BYTE channel_no, USHORT interrupt_bit, UCHAR permission_flg );
-extern	INT32 Im_BMH_Set_Cur( BYTE channel_no, const T_IM_BMH_CUR_BLOCK* const cur_write_data );
-extern	INT32 Im_BMH_Set_Ref( BYTE channel_no, const T_IM_BMH_REF_BLOCK* const ref_write_data );
-extern	INT32 Im_BMH_Get_Sadr_000( BYTE channel_no, T_IM_BMH_SADR_000* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_001( BYTE channel_no, T_IM_BMH_SADR_001* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_010( BYTE channel_no, T_IM_BMH_SADR_010* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_011( BYTE channel_no, T_IM_BMH_SADR_011* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_100( BYTE channel_no, T_IM_BMH_SADR_100* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_101( BYTE channel_no, T_IM_BMH_SADR_101* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Sadr_110( BYTE channel_no, T_IM_BMH_SADR_110* const sadr_read_data );
-extern	INT32 Im_BMH_Get_Ctrl_Dma( BYTE channel_no, T_IM_BMH_CTRL_DMA* const bmh_ctrl_dma );
-extern	INT32 Im_BMH_Get_Bmhsad_wr( BYTE channel_no, T_IM_BMH_BMHSAD_WR* const sad_wr );
-extern	INT32 Im_BMH_Get_Bmhhcnt( BYTE channel_no, T_IM_BMH_BMHHCNT* const cnt );
-extern	INT32 Im_BMH_Get_Bmhaxierr( BYTE channel_no, T_IM_BMH_AXI_STATUS* const sts );
+extern	INT32 Im_BMH_Set_Cur( BYTE channel_no, const ImBmhCurBlock* const cur_write_data );
+extern	INT32 Im_BMH_Set_Ref( BYTE channel_no, const ImBmhRefBlock* const ref_write_data );
+extern	INT32 Im_BMH_Get_Sadr_000( BYTE channel_no, ImBmhSadr000* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_001( BYTE channel_no, ImBmhSadr001* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_010( BYTE channel_no, ImBmhSadr010* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_011( BYTE channel_no, ImBmhSadr011* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_100( BYTE channel_no, ImBmhSadr100* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_101( BYTE channel_no, ImBmhSadr101* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Sadr_110( BYTE channel_no, ImBmhSadr110* const sadr_read_data );
+extern	INT32 Im_BMH_Get_Ctrl_Dma( BYTE channel_no, ImBmhCtrlDma* const bmh_ctrl_dma );
+extern	INT32 Im_BMH_Get_Bmhsad_wr( BYTE channel_no, ImBmhBmhsadWr* const sadWr );
+extern	INT32 Im_BMH_Get_Bmhhcnt( BYTE channel_no, ImBmhBmhhcnt* const cnt );
+extern	INT32 Im_BMH_Get_Bmhaxierr( BYTE channel_no, ImBmhAxiStatus* const sts );
 extern	INT32 Im_BMH_Open( BYTE channel_no, const INT32 tmout );
 
 

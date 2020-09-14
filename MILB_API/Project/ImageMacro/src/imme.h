@@ -131,95 +131,95 @@
 #define ImMe_D_IM_ME_M1ORG_PICT_I					(2)			/**< I Pic.												*/
 
 // M1 correct KY/X max.
-#define D_IM_ME_M1CRCT_KY_MAX					(4)			/**< KY max.											*/
-#define D_IM_ME_M1CRCT_KX_MAX					(3)			/**< KX max.											*/
+#define ImMe_D_IM_ME_M1CRCT_KY_MAX					(4)			/**< KY max.											*/
+#define ImMe_D_IM_ME_M1CRCT_KX_MAX					(3)			/**< KX max.											*/
 
 // M1 split mode.
-#define D_IM_ME_SPLITMODE_NORMAL				(0)			/**< Normal.											*/
-#define D_IM_ME_SPLITMODE_HORIZONTAL			(1)			/**< Horizontal split.									*/
-#define D_IM_ME_SPLITMODE_VERTICAL				(2)			/**< Vertical split.									*/
+#define ImMe_D_IM_ME_SPLITMODE_NORMAL				(0)			/**< Normal.											*/
+#define ImMe_D_IM_ME_SPLITMODE_HORIZONTAL			(1)			/**< Horizontal split.									*/
+#define ImMe_D_IM_ME_SPLITMODE_VERTICAL				(2)			/**< Vertical split.									*/
 
 // PME Core mode parameter.
-#define D_IM_ME_LINEINTV_0QMB					(0)			/**< 0QMB line interval.								*/
-#define D_IM_ME_LINEINTV_1QMB					(1)			/**< 1QMB line interval.								*/
-#define D_IM_ME_LINEINTV_2QMB					(2)			/**< 2QMB line interval.								*/
-#define D_IM_ME_LINEINTV_3QMB					(3)			/**< 3QMB line interval.								*/
+#define ImMe_D_IM_ME_LINEINTV_0QMB					(0)			/**< 0QMB line interval.								*/
+#define ImMe_D_IM_ME_LINEINTV_1QMB					(1)			/**< 1QMB line interval.								*/
+#define ImMe_D_IM_ME_LINEINTV_2QMB					(2)			/**< 2QMB line interval.								*/
+#define ImMe_D_IM_ME_LINEINTV_3QMB					(3)			/**< 3QMB line interval.								*/
 
 // Vector search limitation max.
-#define	D_IM_ME_VEC_LIMITV_MAX					(12)		/**< Horizon max.										*/
-#define	D_IM_ME_VEC_LIMITH_MAX					(16)		/**< Vertical max.										*/
+#define	ImMe_D_IM_ME_VEC_LIMITV_MAX					(12)		/**< Horizon max.										*/
+#define	ImMe_D_IM_ME_VEC_LIMITH_MAX					(16)		/**< Vertical max.										*/
 
 // Previous image width min/max.
-#define	D_IM_ME_PRE_WIDTH_MIN					(48)		/**< Min.												*/
-#define	D_IM_ME_PRE_WIDTH_MAX					(1024)		/**< Max.												*/
+#define	ImMe_D_IM_ME_PRE_WIDTH_MIN					(48)		/**< Min.												*/
+#define	ImMe_D_IM_ME_PRE_WIDTH_MAX					(1024)		/**< Max.												*/
 
 // Previous image height min/max.
-#define	D_IM_ME_PRE_HEIGHT_MIN					(32)		/**< Min.												*/
-#define	D_IM_ME_PRE_HEIGHT_MAX					(752)		/**< Max.												*/
+#define	ImMe_D_IM_ME_PRE_HEIGHT_MIN					(32)		/**< Min.												*/
+#define	ImMe_D_IM_ME_PRE_HEIGHT_MAX					(752)		/**< Max.												*/
 
 // Prefetch image width min/max.
-#define	D_IM_ME_PREF_WIDTH_MIN					(192)		/**< Min.												*/
-#define	D_IM_ME_PREF_WIDTH_MAX					(4160)		/**< Max.												*/
+#define	ImMe_D_IM_ME_PREF_WIDTH_MIN					(192)		/**< Min.												*/
+#define	ImMe_D_IM_ME_PREF_WIDTH_MAX					(4160)		/**< Max.												*/
 
 // Prefetch image height min/max.
-#define	D_IM_ME_PREF_HEIGHT_MIN					(128)		/**< Min.												*/
-#define	D_IM_ME_PREF_HEIGHT_MAX					(3072)		/**< Max.												*/
+#define	ImMe_D_IM_ME_PREF_HEIGHT_MIN					(128)		/**< Min.												*/
+#define	ImMe_D_IM_ME_PREF_HEIGHT_MAX					(3072)		/**< Max.												*/
 
 // Search width min/max.
-#define	D_IM_ME_SRCH_WIDTH_MIN					(40)		/**< Min.												*/
-#define	D_IM_ME_SRCH_WIDTH_MAX					(128)		/**< Max.												*/
+#define	ImMe_D_IM_ME_SRCH_WIDTH_MIN					(40)		/**< Min.												*/
+#define	ImMe_D_IM_ME_SRCH_WIDTH_MAX					(128)		/**< Max.												*/
 
 // Search height min/max.
-#define	D_IM_ME_SRCH_HEIGHT_MIN					(8)			/**< Min.												*/
-#define	D_IM_ME_SRCH_HEIGHT_MAX					(48)		/**< Max.												*/
+#define	ImMe_D_IM_ME_SRCH_HEIGHT_MIN					(8)			/**< Min.												*/
+#define	ImMe_D_IM_ME_SRCH_HEIGHT_MAX					(48)		/**< Max.												*/
 
 // Previous image shift min/max.
-#define	D_IM_ME_PRE_SHIFT_MIN					(-64)		/**< Min.												*/
-#define	D_IM_ME_PRE_SHIFT_MAX					(63)		/**< Max.												*/
+#define	ImMe_D_IM_ME_PRE_SHIFT_MIN					(-64)		/**< Min.												*/
+#define	ImMe_D_IM_ME_PRE_SHIFT_MAX					(63)		/**< Max.												*/
 
 /*----------------------------------------------------------------------*/
 /* Enumeration															*/
 /*----------------------------------------------------------------------*/
 /** PP number */
 typedef enum {
-	E_IM_ME_PPNUM_PPA = 0,				/**< PPA						*/
-	E_IM_ME_PPNUM_PPB,					/**< PPB						*/
-	E_IM_ME_PPNUM_PPC,					/**< PPC						*/
-	E_IM_ME_PPNUM_MAX,					/**< Maximum value				*/
-} E_IM_ME_PPNUM;
+	ImMe_E_IM_ME_PPNUM_PPA = 0,				/**< PPA						*/
+	ImMe_E_IM_ME_PPNUM_PPB,					/**< PPB						*/
+	ImMe_E_IM_ME_PPNUM_PPC,					/**< PPC						*/
+	ImMe_E_IM_ME_PPNUM_MAX,					/**< Maximum value				*/
+} ImMe_EImMePpnum;
 
 /** BANK number */
 typedef enum {
-	E_IM_ME_BANKNUM_0 = 0,				/**< BANK 0						*/
-	E_IM_ME_BANKNUM_1,					/**< BANK 1						*/
-	E_IM_ME_BANKNUM_2,					/**< BANK 2						*/
-	E_IM_ME_BANKNUM_3,					/**< BANK 3						*/
-	E_IM_ME_BANKNUM_MAX,				/**< Maximum value				*/
-} E_IM_ME_BANKNUM;
+	ImMe_E_IM_ME_BANKNUM_0 = 0,				/**< BANK 0						*/
+	ImMe_E_IM_ME_BANKNUM_1,					/**< BANK 1						*/
+	ImMe_E_IM_ME_BANKNUM_2,					/**< BANK 2						*/
+	ImMe_E_IM_ME_BANKNUM_3,					/**< BANK 3						*/
+	ImMe_E_IM_ME_BANKNUM_MAX,				/**< Maximum value				*/
+} ImMe_EImMeBanknum;
 
 /*----------------------------------------------------------------------*/
 /* Structure															*/
 /*----------------------------------------------------------------------*/
 /** User callback function pointer(Frame complete) */
-typedef VOID (*T_IM_ME_CALLBACK)( ULONG interrupt_flag_mask );
+typedef VOID (*ImMeCallback)( ULONG interrupt_flag_mask );
 
 /** APBBRG control parameter	*/
 typedef struct {
-	UCHAR					pp_enable[ E_IM_ME_PPNUM_MAX ];
+	UCHAR					ppEnable[ ImMe_E_IM_ME_PPNUM_MAX ];
 														/**< PP part A/B/C core enable.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_DISABLE
 																<li>@ref ImMe_D_IM_ME_ENABLE
 															</ul>
 														*/
-	UCHAR					int_mode;					/**< Interrupt mode (MEINT).
+	UCHAR					intMode;					/**< Interrupt mode (MEINT).
 															<ul>
 																<li>@ref ImMe_D_IM_ME_INTMODE_AFTER_CYCLE
 																<li>@ref ImMe_D_IM_ME_INTMODE_LOGICAL_OR
 															</ul>
 														*/
 	USHORT					interval;					/**< Interrupt output interval (10bit).		*/
-} T_IM_ME_CTRL_APBBRG;
+} ImMeCtrlApbbrg;
 
 /** M1 Original image mode parameter	*/
 typedef struct {
@@ -235,13 +235,13 @@ typedef struct {
 																<li>@ref ImMe_D_IM_ME_M1ORG_PARI_BOTTOM
 															</ul>
 														*/
-	UCHAR					read_mode;					/**< ME1 information read mode.
+	UCHAR					readMode;					/**< ME1 information read mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_READ_FIXED
 																<li>@ref ImMe_D_IM_ME_M1ORG_READ_SDRAM
 															</ul>
 														*/
-	UCHAR					sad0_mode;					/**< SAD0 write mode.
+	UCHAR					sad0Mode;					/**< SAD0 write mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_SAVE
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_WRITE
@@ -250,7 +250,7 @@ typedef struct {
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_MIN1
 															</ul>
 														*/
-	UCHAR					sad1_mode;					/**< SAD1 write mode.
+	UCHAR					sad1Mode;					/**< SAD1 write mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_SAVE
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_WRITE
@@ -259,48 +259,48 @@ typedef struct {
 																<li>@ref ImMe_D_IM_ME_M1ORG_SAD_MIN1
 															</ul>
 														*/
-	UCHAR					vec_mode;					/**< Vector write mode.
+	UCHAR					vecMode;					/**< Vector write mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_VECM_WRITE0
 																<li>@ref ImMe_D_IM_ME_M1ORG_VECM_WRITE1
 															</ul>
 														*/
-	UCHAR					vec_select;					/**< Vector selection.
+	UCHAR					vecSelect;					/**< Vector selection.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_VECS_SAVE
 																<li>@ref ImMe_D_IM_ME_M1ORG_VECS_COPY0
 																<li>@ref ImMe_D_IM_ME_M1ORG_VECS_COPY1
 															</ul>
 														*/
-	UCHAR					pic_type;					/**< Picture type.
+	UCHAR					picType;					/**< Picture type.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_M1ORG_PICT_P
 																<li>@ref ImMe_D_IM_ME_M1ORG_PICT_B
 																<li>@ref ImMe_D_IM_ME_M1ORG_PICT_I
 															</ul>
 														*/
-} T_IM_ME_CTRL_PME_M1ORG;
+} ImMeCtrlPmeM1org;
 
 /** M1 Correct parameter	*/
 typedef struct {
-	UCHAR					front_ky;					/**< Front ky for ME1(L0 direction). (3bit 0~4)				*/
-	UCHAR					back_ky;					/**< Back  ky for ME1(L1 direction). (3bit 0~4)				*/
-	UCHAR					front_kx;					/**< Front kx for ME1(L0 direction). (2bit 0~3)				*/
-	UCHAR					back_kx;					/**< Back  kx for ME1(L1 direction). (2bit 0~3)				*/
+	UCHAR					frontKy;					/**< Front ky for ME1(L0 direction). (3bit 0~4)				*/
+	UCHAR					backKy;					/**< Back  ky for ME1(L1 direction). (3bit 0~4)				*/
+	UCHAR					frontKx;					/**< Front kx for ME1(L0 direction). (2bit 0~3)				*/
+	UCHAR					backKx;					/**< Back  kx for ME1(L1 direction). (2bit 0~3)				*/
 	UCHAR					mode;						/**< mode[ 0 ]:CPU specified vector base.<br>
 															 mode[ 1 ]:0 vector.<br>
 															 mode[ 2 ]:Lower left MB vector base.<br>
 															 mode[ 3 ]:Upper left MB vector base.<br>
 														*/
-	UCHAR					front_h;					/**< Correction base position. (Front, horizontal, 6bit, mode[ 0 ]=1 valid only)	*/
-	UCHAR					front_v;					/**< Correction base position. (Front, vertical,   5bit, mode[ 0 ]=1 valid only)	*/
-	UCHAR					back_h;						/**< Correction base position. (Back,  horizontal, 6bit, mode[ 0 ]=1 valid only)	*/
-	UCHAR					back_v;						/**< Correction base position. (Back,  vertical,   5bit, mode[ 0 ]=1 valid only)	*/
-} T_IM_ME_CTRL_PME_M1CRCT;
+	UCHAR					frontH;					/**< Correction base position. (Front, horizontal, 6bit, mode[ 0 ]=1 valid only)	*/
+	UCHAR					frontV;					/**< Correction base position. (Front, vertical,   5bit, mode[ 0 ]=1 valid only)	*/
+	UCHAR					backH;						/**< Correction base position. (Back,  horizontal, 6bit, mode[ 0 ]=1 valid only)	*/
+	UCHAR					backV;						/**< Correction base position. (Back,  vertical,   5bit, mode[ 0 ]=1 valid only)	*/
+} ImMeCtrlPmeM1crct;
 
 /** M1 MC on/off parameter	*/
 typedef struct {
-	USHORT					p_pic;						/**< MC on/off decision threshold for P pic. (13bit).<br>
+	USHORT					pPic;						/**< MC on/off decision threshold for P pic. (13bit).<br>
 															 1. Normal.<br>
 															  - Accept.
 															 2. SAD of fixed 0 vector.<br>
@@ -308,7 +308,7 @@ typedef struct {
 															 3. SAD is 0.<br>
 															  - Set 0x1FFF.
 														*/
-	USHORT					b_pic;						/**< MC on/off decision threshold for B pic. (13bit).
+	USHORT					bPic;						/**< MC on/off decision threshold for B pic. (13bit).
 															 1. Normal.<br>
 															  - Accept.
 															 2. SAD of fixed 0 vector.<br>
@@ -316,85 +316,86 @@ typedef struct {
 															 3. SAD is 0.<br>
 															  - Set 0x1FFF.
 														*/
-} T_IM_ME_CTRL_PME_M1MC;
+} ImMeCtrlPmeM1mc;
+
 
 /** M1 Split parameter	*/
 typedef struct {
 	UCHAR					mode;						/**< Split mode.
 															<ul>
-																<li>@ref D_IM_ME_SPLITMODE_NORMAL
-																<li>@ref D_IM_ME_SPLITMODE_HORIZONTAL
-																<li>@ref D_IM_ME_SPLITMODE_VERTICAL
+																<li>@ref ImMe_D_IM_ME_SPLITMODE_NORMAL
+																<li>@ref ImMe_D_IM_ME_SPLITMODE_HORIZONTAL
+																<li>@ref ImMe_D_IM_ME_SPLITMODE_VERTICAL
 															</ul>
 														*/
-	UCHAR					th_h;						/**< Threshold for horizontal split. (8bit)	*/
-	UCHAR					th_v;						/**< Threshold fot vertical split. (8bit)	*/
-} T_IM_ME_CTRL_PME_M1SPLT;
+	UCHAR					thH;						/**< Threshold for horizontal split. (8bit)	*/
+	UCHAR					thV;						/**< Threshold fot vertical split. (8bit)	*/
+} ImMeCtrlPmeM1splt;
 
 /** M1 Sad parameter	*/
 typedef struct {
 	USHORT					upper;						/**< Upper value. (12bit)	*/
 	USHORT					lower;						/**< Lower value. (12bit)	*/
-} T_IM_ME_CTRL_PME_M1SAD;
+} ImMeCtrlPmeM1sad;
 
 /** M1 Adjust parameter	*/
 typedef struct {
-	USHORT					wait_cycle;					/**< Wait cycle. (15bit)	*/
-	UCHAR					wait_onoff;					/**< Wait on/off.
+	USHORT					waitCycle;					/**< Wait cycle. (15bit)	*/
+	UCHAR					waitOnoff;					/**< Wait on/off.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_OFF
 																<li>@ref ImMe_D_IM_ME_ON
 															</ul>
 														*/
-} T_IM_ME_CTRL_PME_M1ADJUST;
+} ImMeCtrlPmeM1adjust;
 
 /** M1 Pause parameter	*/
 typedef struct {
-	UCHAR					pause_line;					/**< Pause QMB line. (0~QMB line-1, 7bit)	*/
-	UCHAR					pause_onoff;				/**< Pause on/off.
+	UCHAR					pauseLine;					/**< Pause QMB line. (0~QMB line-1, 7bit)	*/
+	UCHAR					pauseOnoff;				/**< Pause on/off.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_OFF
 																<li>@ref ImMe_D_IM_ME_ON
 															</ul>
 														*/
-} T_IM_ME_CTRL_PME_M1PAUSE;
+} ImMeCtrlPmeM1pause;
 
 /** M1 Limit parameter	*/
 typedef struct {
-	UCHAR					v_plus;						/**< Vector search limitation parameter (Vertical   plus  side. 4bit. 0~12).	*/
-	UCHAR					v_minus;					/**< Vector search limitation parameter (Vertical   minus side. 4bit. 0~12).	*/
-	UCHAR					h_plus;						/**< Vector search limitation parameter (Horizontal plus  side. 5bit. 0~16).	*/
-	UCHAR					h_minus;					/**< Vector search limitation parameter (Horizontal minus side. 5bit. 0~16).	*/
-} T_IM_ME_CTRL_PME_M1LIMIT;
+	UCHAR					vPlus;						/**< Vector search limitation parameter (Vertical   plus  side. 4bit. 0~12).	*/
+	UCHAR					vMinus;					/**< Vector search limitation parameter (Vertical   minus side. 4bit. 0~12).	*/
+	UCHAR					hPlus;						/**< Vector search limitation parameter (Horizontal plus  side. 5bit. 0~16).	*/
+	UCHAR					hMinus;					/**< Vector search limitation parameter (Horizontal minus side. 5bit. 0~16).	*/
+} ImMeCtrlPmeM1limit;
 
 /** PME Core mode parameter		*/
 typedef struct {
-	UCHAR					line_interval;				/**< QME line interval.
+	UCHAR					lineInterval;				/**< QME line interval.
 															<ul>
-																<li>@ref D_IM_ME_LINEINTV_0QMB
-																<li>@ref D_IM_ME_LINEINTV_1QMB
-																<li>@ref D_IM_ME_LINEINTV_2QMB
-																<li>@ref D_IM_ME_LINEINTV_3QMB
+																<li>@ref ImMe_D_IM_ME_LINEINTV_0QMB
+																<li>@ref ImMe_D_IM_ME_LINEINTV_1QMB
+																<li>@ref ImMe_D_IM_ME_LINEINTV_2QMB
+																<li>@ref ImMe_D_IM_ME_LINEINTV_3QMB
 															</ul>
 														*/
-	UCHAR					init_pos_y;					/**< QMB initial y position. (2bit)	*/
-} T_IM_ME_CTRL_PME_COREMODE;
+	UCHAR					initPosY;					/**< QMB initial y position. (2bit)	*/
+} ImMeCtrlPmeCoremode;
 
 /** PME control parameter		*/
 typedef struct {
-	UCHAR					input_mode;					/**< Input image mode.
+	UCHAR					inputMode;					/**< Input image mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_INPUTMODE_INTERLACE
 																<li>@ref ImMe_D_IM_ME_INPUTMODE_PROGRESSIVE
 															</ul>
 														*/
-	UCHAR					ref_txb;					/**< Reference image Top/Bottom (if input_mode is progressive, select ImMe_D_IM_ME_REFTXB_TOP).
+	UCHAR					refTxb;					/**< Reference image Top/Bottom (if inputMode is progressive, select ImMe_D_IM_ME_REFTXB_TOP).
 															<ul>
 																<li>@ref ImMe_D_IM_ME_REFTXB_TOP
 																<li>@ref ImMe_D_IM_ME_REFTXB_BOTTOM
 															</ul>
 														*/
-	UCHAR					out_limit;					/**< The limit of the use of off-screen as a reference pixel.
+	UCHAR					outLimit;					/**< The limit of the use of off-screen as a reference pixel.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_OUTLIMIT_NOLIMIT0
 																<li>@ref ImMe_D_IM_ME_OUTLIMIT_NOLIMIT1
@@ -402,7 +403,7 @@ typedef struct {
 																<li>@ref ImMe_D_IM_ME_OUTLIMIT_TOP
 															</ul>
 														*/
-	UCHAR					bank_num;					/**< PME processing target number of screens.
+	UCHAR					bankNum;					/**< PME processing target number of screens.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_BANKNUM_1
 																<li>@ref ImMe_D_IM_ME_BANKNUM_2
@@ -411,77 +412,77 @@ typedef struct {
 															</ul>
 														*/
 														/**< M1 Original image mode.				*/
-	T_IM_ME_CTRL_PME_M1ORG		m1org_mode[ E_IM_ME_BANKNUM_MAX ];
-	T_IM_ME_CTRL_PME_M1CRCT		m1correct;				/**< M1 Correct parameter.					*/
-	T_IM_ME_CTRL_PME_M1MC		m1mc;					/**< M1 MC on/off parameter.				*/
-	T_IM_ME_CTRL_PME_M1SPLT		m1splt;					/**< M1 Split parameter.					*/
+	ImMeCtrlPmeM1org		m1orgMode[ ImMe_E_IM_ME_BANKNUM_MAX ];
+	ImMeCtrlPmeM1crct		m1correct;				/**< M1 Correct parameter.					*/
+	ImMeCtrlPmeM1mc		m1mc;					/**< M1 MC on/off parameter.				*/
+	ImMeCtrlPmeM1splt		m1splt;					/**< M1 Split parameter.					*/
 	UCHAR						m1skip;					/**< M1 Skip parameter.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_OFF
 																<li>@ref ImMe_D_IM_ME_ON
 															</ul>
 														*/
-	T_IM_ME_CTRL_PME_M1SAD		m1sad;					/**< M1 Sad parameter.						*/
-	T_IM_ME_CTRL_PME_M1ADJUST	m1adjust;				/**< M1 Adjust parameter.					*/
-	T_IM_ME_CTRL_PME_M1PAUSE	m1pause;				/**< M1 Pause parameter.					*/
-	T_IM_ME_CTRL_PME_M1LIMIT	m1limit;				/**< M1 Limit parameterer.					*/
-	T_IM_ME_CTRL_PME_COREMODE	core_mode;				/**< PME Core mode parameterer.				*/
-} T_IM_ME_CTRL_PME;
+	ImMeCtrlPmeM1sad		m1sad;					/**< M1 Sad parameter.						*/
+	ImMeCtrlPmeM1adjust	m1adjust;				/**< M1 Adjust parameter.					*/
+	ImMeCtrlPmeM1pause	m1pause;				/**< M1 Pause parameter.					*/
+	ImMeCtrlPmeM1limit	m1limit;				/**< M1 Limit parameterer.					*/
+	ImMeCtrlPmeCoremode	coreMode;				/**< PME Core mode parameterer.				*/
+} ImMeCtrlPme;
 
 /** Bank table parameter	*/
 typedef struct {
-	UCHAR					fwd_pvec;					/**< Physical bank number for foward vector data read/write access. (8bit)	*/
+	UCHAR					fwdPvec;					/**< Physical bank number for foward vector data read/write access. (8bit)	*/
 	UCHAR					top;						/**< Physical bank number for TopField of Interlace.  (8bit)				*/
-	UCHAR					fwd_8pel;					/**< Physical bank number for 1/8 reference image read access. (8bit)		*/
-} T_IM_ME_CTRL_RMCIF_BNKTBL;
+	UCHAR					fwd8pel;					/**< Physical bank number for 1/8 reference image read access. (8bit)		*/
+} ImMeCtrlRmcifBnktbl;
 
 /** AXI interface			*/
 typedef struct {
-	UCHAR					r_cache_type;				/**< Read cache type for AXI IF (4bit)									*/
-	UCHAR					r_protect_type;				/**< Read protect type for AXI IF (3bit)								*/
-	UCHAR					w_cache_type;				/**< Write cache type for AXI IF (4bit)									*/
-	UCHAR					w_protect_type;				/**< Write protect type for AXI IF (3bit)								*/
-} T_IM_ME_CTRL_RMCIF_AXIIF;
+	UCHAR					rCacheType;				/**< Read cache type for AXI IF (4bit)									*/
+	UCHAR					rProtectType;				/**< Read protect type for AXI IF (3bit)								*/
+	UCHAR					wCacheType;				/**< Write cache type for AXI IF (4bit)									*/
+	UCHAR					wProtectType;				/**< Write protect type for AXI IF (3bit)								*/
+} ImMeCtrlRmcifAxiif;
 
 /** RMCIF control parameter		*/
 typedef struct {
-	UCHAR						pme_num;				/**< Number of PME use. (2bit. 0~2)<br>
-															pme_num = 0 : PME 1 use.<br>
-															pme_num = 1 : PME 2 use.<br>
-															pme_num = 2 : PME 3 use.<br>
+	UCHAR						pmeNum;				/**< Number of PME use. (2bit. 0~2)<br>
+															pmeNum = 0 : PME 1 use.<br>
+															pmeNum = 1 : PME 2 use.<br>
+															pmeNum = 2 : PME 3 use.<br>
 														*/
-	UCHAR						abt_type;				/**< Request arbitration method selection.
+	UCHAR						abtType;				/**< Request arbitration method selection.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_ABT_FIXED
 																<li>@ref ImMe_D_IM_ME_ABT_ROUND
 															</ul>
 														*/
-	T_IM_ME_CTRL_RMCIF_BNKTBL	bank_tbl;				/* Bank table parameter.					*/
-	T_IM_ME_CTRL_RMCIF_AXIIF	axi_if;					/* AXI interface.							*/
-} T_IM_ME_CTRL_RMCIF;
+	ImMeCtrlRmcifBnktbl	bankTbl;				/* Bank table parameter.					*/
+	ImMeCtrlRmcifAxiif	axiIf;					/* AXI interface.							*/
+} ImMeCtrlRmcif;
 
 /** ME control parameter */
 typedef struct {
-	T_IM_ME_CTRL_APBBRG		apbbrg;						/**< APBBRG control parameter.				*/
-	T_IM_ME_CTRL_PME		pme[ E_IM_ME_PPNUM_MAX ];	/**< PME    control parameter.				*/
-	T_IM_ME_CTRL_RMCIF		rmcif;						/**< RMCIF  control parameter.				*/
-	T_IM_ME_CALLBACK		pCallBack;					/**< User callback function. (Frame comp)	*/
-} T_IM_ME_CTRL;
+	ImMeCtrlApbbrg		apbbrg;						/**< APBBRG control parameter.				*/
+	ImMeCtrlPme		pme[ ImMe_E_IM_ME_PPNUM_MAX ];	/**< PME    control parameter.				*/
+	ImMeCtrlRmcif		rmcif;						/**< RMCIF  control parameter.				*/
+	ImMeCallback		pCallBack;					/**< User callback function. (Frame comp)	*/
+} ImMeCtrl;
 
 /** PME start parameter */
 typedef struct {
-	USHORT					mbnum_h;					/**< MB number (Horizontal 9bit. Max:256)	*/
-	USHORT					mbnum_v;					/**< MB number (Vertical   8bit. Max:144)	*/
-	UCHAR					cancel_mode;				/**< Vector cancel mode.
+	USHORT					mbnumH;					/**< MB number (Horizontal 9bit. Max:256)	*/
+	USHORT					mbnumV;					/**< MB number (Vertical   8bit. Max:144)	*/
+	UCHAR					cancelMode;				/**< Vector cancel mode.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_VEC_CANCEL_MODE_OFF
 																<li>@ref ImMe_D_IM_ME_VEC_CANCEL_MODE_CUR1
 																<li>@ref ImMe_D_IM_ME_VEC_CANCEL_MODE_CUR2
 															</ul>
 														*/
-	UCHAR					cancel_threshold_hi;		/**< Vector cancel comparison threshold high. (8bit)	*/
-	UCHAR					cancel_threshold_lo;		/**< Vector cancel comparison threshold low.  (8bit)	*/
-	USHORT					vec_hsize;					/**< Vector output foramt horizontal size.<br>
+	UCHAR					cancelThresholdHi;		/**< Vector cancel comparison threshold high. (8bit)	*/
+	UCHAR					cancelThresholdLo;		/**< Vector cancel comparison threshold low.  (8bit)	*/
+	USHORT					vecHsize;					/**< Vector output foramt horizontal size.<br>
 															 - Reduction image horizontal size <= 1024 : set  512 byte.<br>
 															 - Reduction image horizontal size  > 1024 : set 1024 byte.<br>
 															<ul>
@@ -489,62 +490,62 @@ typedef struct {
 																<li>@ref ImMe_D_IM_ME_PRE_VEC_HSIZE_1024
 															</ul>
 														*/
-} T_IM_ME_START_PME;
+} ImMeStartPme;
 
 /** RMCIF start parameter */
 typedef struct {
-	CHAR					pre_shift_x;				/**< Previous image shift X. (7bit. -64~63)								*/
-	CHAR					pre_shift_y;				/**< Previous image shift Y. (7bit. -64~63)								*/
+	CHAR					preShiftX;				/**< Previous image shift X. (7bit. -64~63)								*/
+	CHAR					preShiftY;				/**< Previous image shift Y. (7bit. -64~63)								*/
 
-	USHORT					pre_r_addr_hi;				/**< Previous image base address high[31:16]. (16bit)					*/
-	USHORT					pre_r_addr_lo;				/**< Previous image base address low [15:12].
+	USHORT					preRAddrHi;				/**< Previous image base address high[31:16]. (16bit)					*/
+	USHORT					preRAddrLo;				/**< Previous image base address low [15:12].
 															(16bit. Previous image base address[31:12] is 16K byte align)		*/
-	USHORT					cur_r_addr_hi;				/**< Current image base address high[31:16]. (16bit)					*/
-	USHORT					cur_r_addr_lo;				/**< Current image base address low[15:12].
+	USHORT					curRAddrHi;				/**< Current image base address high[31:16]. (16bit)					*/
+	USHORT					curRAddrLo;				/**< Current image base address low[15:12].
 															(16bit. Current image base address[31:12] is 16K byte align)		*/
-	USHORT					vec_w_addr_hi;				/**< Vector information base address high[31:16]. (16bit)				*/
-	USHORT					vec_w_addr_lo;				/**< Vector information base address low[15:10].
+	USHORT					vecWAddrHi;				/**< Vector information base address high[31:16]. (16bit)				*/
+	USHORT					vecWAddrLo;				/**< Vector information base address low[15:10].
 															(16bit. Vector information base address[31:10] is 1K byte align)	*/
-	USHORT					pre_gwidth;					/**< Previous image global width. (11bit. 128 byte align)				*/
-	USHORT					pre_width;					/**< Previous image width.        (11bit. 48~1024 pixel. unit 4 pixel)	*/
-	USHORT					pre_height;					/**< Previous image height.       (10bit. 32~ 752 pixel. unit 4 pixel)	*/
-	USHORT					cur_gwidth;					/**< Current  image global width. (11bit. 128 byte align)				*/
-	USHORT					cur_margin_width;			/**< Current  image margin size Left/Right.
+	USHORT					preGwidth;					/**< Previous image global width. (11bit. 128 byte align)				*/
+	USHORT					preWidth;					/**< Previous image width.        (11bit. 48~1024 pixel. unit 4 pixel)	*/
+	USHORT					preHeight;					/**< Previous image height.       (10bit. 32~ 752 pixel. unit 4 pixel)	*/
+	USHORT					curGwidth;					/**< Current  image global width. (11bit. 128 byte align)				*/
+	USHORT					curMarginWidth;			/**< Current  image margin size Left/Right.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_0
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_4
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_8
 															</ul>
 														*/
-	USHORT					cur_margin_height;			/**< Current  image margin size Top/Bottom.
+	USHORT					curMarginHeight;			/**< Current  image margin size Top/Bottom.
 															<ul>
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_0
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_4
 																<li>@ref ImMe_D_IM_ME_CUR_MARGIN_8
 															</ul>
 														*/
-	USHORT					prefetch_width;				/**< Prefetch image width. (13bit. 192~4160 pixel)<br>
-															ex. prefetch_width = ( pre_width + ( cur_margin_width * 2 ) ) * 4
+	USHORT					prefetchWidth;				/**< Prefetch image width. (13bit. 192~4160 pixel)<br>
+															ex. prefetchWidth = ( preWidth + ( curMarginWidth * 2 ) ) * 4
 														*/
-	USHORT					prefetch_height;			/**< Prefetch image height. (12bit. 128~3072 pixel)<br>
-															ex. prefetch_height = ( pre_height + ( cur_margin_height * 2 ) ) * 4
+	USHORT					prefetchHeight;			/**< Prefetch image height. (12bit. 128~3072 pixel)<br>
+															ex. prefetchHeight = ( preHeight + ( curMarginHeight * 2 ) ) * 4
 														*/
-	UCHAR					search_width;				/**< ME1 initialize search width. ( 8bit. 40~136 pixel)<br>
-															ex1. cur_margin_width = 4 or 8 : search_width = 136<br>
-															ex2. cur_margin_width = 0      : search_width = 136 - 8<br>
+	UCHAR					searchWidth;				/**< ME1 initialize search width. ( 8bit. 40~136 pixel)<br>
+															ex1. curMarginWidth = 4 or 8 : searchWidth = 136<br>
+															ex2. curMarginWidth = 0      : searchWidth = 136 - 8<br>
 														*/
-	UCHAR					search_height;				/**< ME1 initialize search height.( 6bit. 8~48 pixel)<br>
-															ex1. pme_num = 2 : search_height = 40<br>
-															ex2. pme_num = 1 : search_height = 32<br>
-															ex3. pme_num = 0 : search_height = 24<br>
+	UCHAR					searchHeight;				/**< ME1 initialize search height.( 6bit. 8~48 pixel)<br>
+															ex1. pmeNum = 2 : searchHeight = 40<br>
+															ex2. pmeNum = 1 : searchHeight = 32<br>
+															ex3. pmeNum = 0 : searchHeight = 24<br>
 														*/
-} T_IM_ME_START_RMCIF;
+} ImMeStartRmcif;
 
 /** ME start parameter */
 typedef struct {
-	T_IM_ME_START_PME		pme[ E_IM_ME_PPNUM_MAX ];	/**< PME   start parameter.		*/
-	T_IM_ME_START_RMCIF		rmcif;						/**< RMCIF start parameter.		*/
-} T_IM_ME_START;
+	ImMeStartPme		pme[ ImMe_E_IM_ME_PPNUM_MAX ];	/**< PME   start parameter.		*/
+	ImMeStartRmcif		rmcif;						/**< RMCIF start parameter.		*/
+} ImMeStart;
 
 typedef struct 				_ImMe ImMe;
 typedef struct 				_ImMePrivate ImMePrivate;
@@ -600,22 +601,22 @@ extern INT32 Im_ME_Close( VOID );
 
 /**
 ME control parameters set.<br>
-@param[in]		me_ctrl						ME control parameters. See @ref T_IM_ME_CTRL.<br>
+@param[in]		me_ctrl						ME control parameters. See @ref ImMeCtrl.<br>
 @retval			D_DDIM_OK					Success.
 @retval			ImMe_D_IM_ME_INPUT_PARAM_ERROR	Parameter error.
 @remarks		This API uses DDIM_User_Dly_Tsk().
 */
-extern INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl );
+extern INT32 Im_ME_Ctrl( const ImMeCtrl* const me_ctrl );
 
 /**
 ME start.<br>
-@param[in]		me_start					ME start parameters. See @ref T_IM_ME_START.<br>
+@param[in]		me_start					ME start parameters. See @ref ImMeStart.<br>
 @retval			D_DDIM_OK					Success.
 @retval			ImMe_D_IM_ME_INPUT_PARAM_ERROR	Parameter error.
 @remarks		This API uses DDIM_User_Dly_Tsk().
 @remarks		This API uses DDIM_User_Clr_Flg().
 */
-extern INT32 Im_ME_Start( const T_IM_ME_START* const me_start );
+extern INT32 Im_ME_Start( const ImMeStart* const me_start );
 
 /**
 ME wait end.<br>
@@ -666,8 +667,8 @@ extern VOID Im_ME_Int_Handler( VOID );
 	<br>
 	@section ME_Start			ME start
 	@code
-	T_IM_ME_CTRL	me_ctrl;
-	T_IM_ME_START	me_start;
+	ImMeCtrl	me_ctrl;
+	ImMeStart	me_start;
 	UINT32			wait_factor;
 
 	Im_ME_Open( 100 );

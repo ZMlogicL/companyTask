@@ -105,22 +105,22 @@ static ULONG S_GIM_DISP_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), align
 /**
 It is confirmed whether TRG can be set up.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	start_stop		Startup status.<br>
-							<ul><li>@ref E_IM_DISP_TRG_WRITE_NO_ACT
-								<li>@ref E_IM_DISP_TRG_WRITE_ACT
-								<li>@ref E_IM_DISP_TRG_READ_NO_ACT
-								<li>@ref E_IM_DISP_TRG_READ_ACT</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_WRITE_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_READ_NO_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_READ_ACT</ul>
 @retval	D_DDIM_OK				Normal end.
 @retval	D_IM_DISP_ACCESS_ERR	TRG cannot be set up.
 */
-static INT32 imDispIsTrgSet(E_IM_DISP_SEL block, E_IM_DISP_TRG start_stop)
+static INT32 imDispIsTrgSet(ImDispEImDispSel block, ImDispEImDispTrg start_stop)
 {
 	INT32 ret = D_DDIM_OK;
 	ULONG ifs = 0;
 
-	if(start_stop == E_IM_DISP_TRG_WRITE_ACT) {
+	if(start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) {
 		ifs = IO_DISP.MAIN[block].DCORE.IFS.bit.IFS;
 		switch (ifs) {
 			case D_IM_DISP_IFS_LCD:		// LCD.
@@ -202,19 +202,19 @@ Copy Gamma table to IO_DISP or IO_DISP to Gamma table.
 @param[in]	table_top				gamma table top address.<br>
 @param[in]	register_table_top		gamma table register top address.<br>
 @param[in]	correct					Correct selection.<br>
-									<ul><li>@ref E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA
-										<li>@ref E_IM_DISP_CORRECT_SELECT_GAMMA_IN
-										<li>@ref E_IM_DISP_CORRECT_SELECT_GAMMA_OUT
-										<li>@ref E_IM_DISP_CORRECT_SELECT_LUMINANCE
-										<li>@ref E_IM_DISP_CORRECT_SELECT_CHROMA</ul>
+									<ul><li>@ref ImDisp_E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA
+										<li>@ref ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_IN
+										<li>@ref ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_OUT
+										<li>@ref ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE
+										<li>@ref ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA</ul>
 @param[in]	access					Set or get.<br>
-									<ul><li>@ref E_IM_DISP_ACCESS_GAMMA_SET
-										<li>@ref E_IM_DISP_ACCESS_GAMMA_GET</ul>
+									<ul><li>@ref ImDisp_E_IM_DISP_ACCESS_GAMMA_SET
+										<li>@ref ImDisp_E_IM_DISP_ACCESS_GAMMA_GET</ul>
 */
 VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 									 const BYTE* register_table_top,
-									 const E_IM_DISP_CORRECT_SELECT correct,
-									 const E_IM_DISP_ACCESS_GAMMA access)
+									 const ImDispEImDispCorrectSelect correct,
+									 const ImDispEImDispAccessGamma access)
 {
 	INT32 loop;
 	INT32 array_num;
@@ -273,14 +273,14 @@ VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 	};
 
 	switch (correct) {
-		case E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA:			// Anti Gamma.
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA:			// Anti Gamma.
 			array_num = sizeof(anti_gamma_tbl_index) / sizeof(anti_gamma_tbl_index[0]);
 			for(loop = 0; loop < array_num; loop++) {
 				tbl_address = (BYTE**)(table_top + anti_gamma_tbl_index[loop]);
 				tbl_register_address = (BYTE*)(register_table_top + anti_gamma_tbl_register_index[loop]);
 				// check address
 				if (((*tbl_address) != NULL) && ((tbl_register_address) != NULL)) {
-					if (access == E_IM_DISP_ACCESS_GAMMA_SET){
+					if (access == ImDisp_E_IM_DISP_ACCESS_GAMMA_SET){
 						// Set table data
 						memcpy((tbl_register_address), (*tbl_address), anti_gamma_tbl_size[loop]);
 					}
@@ -291,14 +291,14 @@ VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 				}
 			}
 			break;
-		case E_IM_DISP_CORRECT_SELECT_GAMMA_IN:				// Gamma (Main data input block).
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_IN:				// Gamma (Main data input block).
 			array_num = sizeof(gamma_tbl_in_index) / sizeof(gamma_tbl_in_index[0]);
 			for(loop = 0; loop < array_num; loop++) {
 				tbl_address = (BYTE**)(table_top + gamma_tbl_in_index[loop]);
 				tbl_register_address = (BYTE*)(register_table_top + gamma_tbl_in_register_index[loop]);
 				// check address
 				if (((*tbl_address) != NULL) && ((tbl_register_address) != NULL)) {
-					if (access == E_IM_DISP_ACCESS_GAMMA_SET){
+					if (access == ImDisp_E_IM_DISP_ACCESS_GAMMA_SET){
 						// Set table data
 						memcpy((tbl_register_address), (*tbl_address), gamma_tbl_in_size[loop]);
 					}
@@ -309,14 +309,14 @@ VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 				}
 			}
 			break;
-		case E_IM_DISP_CORRECT_SELECT_GAMMA_OUT:				// Gamma (Data output block).
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_OUT:				// Gamma (Data output block).
 			array_num = sizeof(gamma_tbl_out_index) / sizeof(gamma_tbl_out_index[0]);
 			for(loop = 0; loop < array_num; loop++) {
 				tbl_address = (BYTE**)(table_top + gamma_tbl_out_index[loop]);
 				tbl_register_address = (BYTE*)(register_table_top + gamma_tbl_out_register_index[loop]);
 				// check address
 				if (((*tbl_address) != NULL) && ((tbl_register_address) != NULL)) {
-					if (access == E_IM_DISP_ACCESS_GAMMA_SET){
+					if (access == ImDisp_E_IM_DISP_ACCESS_GAMMA_SET){
 						// Set table data
 						memcpy((tbl_register_address), (*tbl_address), gamma_tbl_out_size[loop]);
 					}
@@ -332,7 +332,7 @@ VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 			tbl_address = (BYTE**)(table_top);
 			tbl_register_address = (BYTE*)(register_table_top);
 			if (((*tbl_address) != NULL) && ((tbl_register_address) != NULL)) {
-				if (access == E_IM_DISP_ACCESS_GAMMA_SET) {
+				if (access == ImDisp_E_IM_DISP_ACCESS_GAMMA_SET) {
 					// Set table data
 					memcpy((tbl_register_address), (*tbl_address), sizeof(IO_DISP_TBL.MAIN[0].DCORE.YSTBLAYT));
 				}
@@ -348,19 +348,19 @@ VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 /**
 Wait the channel stop.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer		layer selection.<br>
 						(Two or more layer can be specified by the OR value.)<br>
 						<ul><li>@ref E_IM_DISP_SEL_LAYER_MAIN
 							<li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 							<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
 							<li>@ref E_IM_DISP_SEL_LAYER_OSD_ALL</ul>
-@param[in]	act			E_IM_DISP_TRG_READ_NO_ACT: Wait stop.E_IM_DISP_TRG_READ_ACT: Wait Start.
+@param[in]	act			ImDisp_E_IM_DISP_TRG_READ_NO_ACT: Wait stop.ImDisp_E_IM_DISP_TRG_READ_ACT: Wait Start.
 @retval	D_DDIM_OK				Normal end.
 @retval	D_IM_DISP_TIMEOUT		The channel cannot stop within 33ms.
 */
- INT32 im_disp_wait_trg_stop_start(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, UINT32 act)
+ INT32 im_disp_wait_trg_stop_start(ImDisp *self, ImDispEImDispSel block, UINT32 layer, UINT32 act)
 {
 	INT32 ret = D_DDIM_OK;
 	INT32 wait_counter = 0;
@@ -427,8 +427,8 @@ Wait the channel stop.
 /**
 Start/stop Main layer.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			layer selection.<br>
 							(Two or more layer can be specified by the OR value.)<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_MAIN
@@ -442,32 +442,32 @@ Start/stop Main layer.
 							2 : Write channel 1 (Chrominance data)<br>
 							3 : Write channel 0 & 1<br>
 @param[in]	start_stop		Startup status.<br>
-							<ul><li>@ref E_IM_DISP_TRG_WRITE_NO_ACT
-								<li>@ref E_IM_DISP_TRG_WRITE_ACT
-								<li>@ref E_IM_DISP_TRG_READ_NO_ACT
-								<li>@ref E_IM_DISP_TRG_READ_ACT</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_WRITE_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_READ_NO_ACT
+								<li>@ref ImDisp_E_IM_DISP_TRG_READ_ACT</ul>
 @retval	D_DDIM_OK						Normal end.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_TIMEOUT				The channel cannot stop within 33ms.
 @retval	D_IM_DISP_ACCESS_ERR			TRG cannot be set up.
 */
-INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE write_channel, E_IM_DISP_TRG start_stop)
+INT32 im_disp_set_trg(ImDisp *self, ImDispEImDispSel block, UINT32 layer, BYTE write_channel, ImDispEImDispTrg start_stop)
 {
 	// Wait
 	INT32 ret = D_DDIM_OK;
-	UINT32 act = E_IM_DISP_TRG_WRITE_NO_ACT;
+	UINT32 act = ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT;
 	E_IM_DISP_P2M_PWCH_TRG wc_trg = E_IM_DISP_P2M_PWCH_TRG_READ_NO_ACT;
 	INT32 loop;
 	INT32 wc_num[2] = { 1, 2};	// Write channel 0, Write channel 1.
 
 	switch(start_stop) {
-		case  E_IM_DISP_TRG_WRITE_ACT:		// Start
+		case  ImDisp_E_IM_DISP_TRG_WRITE_ACT:		// Start
 			// To set start must be at stopping state
-			act = E_IM_DISP_TRG_READ_NO_ACT;
+			act = ImDisp_E_IM_DISP_TRG_READ_NO_ACT;
 			break;
-		case E_IM_DISP_TRG_READ_NO_ACT:		// Stop
-		case E_IM_DISP_TRG_WRITE_NO_ACT:
-			act = E_IM_DISP_TRG_READ_ACT;
+		case ImDisp_E_IM_DISP_TRG_READ_NO_ACT:		// Stop
+		case ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT:
+			act = ImDisp_E_IM_DISP_TRG_READ_ACT;
 			break;
 		default:
 			// do nothing
@@ -481,9 +481,9 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 			// wait
 			if (im_disp_wait_trg_stop_start(im_disp_new(), block, E_IM_DISP_SEL_LAYER_MAIN, act) == D_DDIM_OK) {
 				// check trigger status
-				if ((start_stop == E_IM_DISP_TRG_WRITE_NO_ACT) ||
-					(start_stop == E_IM_DISP_TRG_READ_NO_ACT) ||
-					(IO_DISP.MAIN[block].LCH.LTRG.word == E_IM_DISP_TRG_READ_NO_ACT)){
+				if ((start_stop == ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT) ||
+					(start_stop == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+					(IO_DISP.MAIN[block].LCH.LTRG.word == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)){
 
 					// SpinLock.
 					Dd_ARM_Critical_Section_Start(S_GIM_DISP_SPIN_LOCK);
@@ -493,7 +493,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 						// Set trigger
 						IO_DISP.MAIN[block].LCH.LTRG.word = start_stop;
 #ifdef CO_DEBUG_ON_PC
-						IO_DISP.MAIN[block].LCH.LTRG.word = (start_stop == E_IM_DISP_TRG_WRITE_ACT) ? E_IM_DISP_TRG_READ_ACT : E_IM_DISP_TRG_READ_NO_ACT;
+						IO_DISP.MAIN[block].LCH.LTRG.word = (start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) ? ImDisp_E_IM_DISP_TRG_READ_ACT : ImDisp_E_IM_DISP_TRG_READ_NO_ACT;
 #endif // CO_DEBUG_ON_PC
 					}
 
@@ -509,9 +509,9 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 			// wait
 			if (im_disp_wait_trg_stop_start(im_disp_new(), block, E_IM_DISP_SEL_LAYER_OSD_0, act) == D_DDIM_OK) {
 				// check trigger status
-				if ((start_stop == E_IM_DISP_TRG_WRITE_NO_ACT) ||
-					(start_stop == E_IM_DISP_TRG_READ_NO_ACT) ||
-					(IO_DISP.MAIN[block].GRCH[0].GRTRG.word == E_IM_DISP_TRG_READ_NO_ACT)){
+				if ((start_stop == ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT) ||
+					(start_stop == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+					(IO_DISP.MAIN[block].GRCH[0].GRTRG.word == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)){
 
 					// SpinLock.
 					Dd_ARM_Critical_Section_Start(S_GIM_DISP_SPIN_LOCK);
@@ -521,7 +521,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 						// Set trigger
 						IO_DISP.MAIN[block].GRCH[0].GRTRG.word = start_stop;
 #ifdef CO_DEBUG_ON_PC
-						IO_DISP.MAIN[block].GRCH[0].GRTRG.word = (start_stop == E_IM_DISP_TRG_WRITE_ACT) ? E_IM_DISP_TRG_READ_ACT : E_IM_DISP_TRG_READ_NO_ACT;
+						IO_DISP.MAIN[block].GRCH[0].GRTRG.word = (start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) ? ImDisp_E_IM_DISP_TRG_READ_ACT : ImDisp_E_IM_DISP_TRG_READ_NO_ACT;
 #endif // CO_DEBUG_ON_PC
 					}
 					// SpinUnLock.
@@ -536,9 +536,9 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 			// wait
 			if (im_disp_wait_trg_stop_start(im_disp_new(), block, E_IM_DISP_SEL_LAYER_OSD_1, act) == D_DDIM_OK) {
 				// check trigger status
-				if ((start_stop == E_IM_DISP_TRG_WRITE_NO_ACT) ||
-					(start_stop == E_IM_DISP_TRG_READ_NO_ACT) ||
-					(IO_DISP.MAIN[block].GRCH[1].GRTRG.word == E_IM_DISP_TRG_READ_NO_ACT)){
+				if ((start_stop == ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT) ||
+					(start_stop == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+					(IO_DISP.MAIN[block].GRCH[1].GRTRG.word == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)){
 
 					// SpinLock.
 					Dd_ARM_Critical_Section_Start(S_GIM_DISP_SPIN_LOCK);
@@ -548,7 +548,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 						// Set trigger
 						IO_DISP.MAIN[block].GRCH[1].GRTRG.word = start_stop;
 #ifdef CO_DEBUG_ON_PC
-						IO_DISP.MAIN[block].GRCH[1].GRTRG.word = (start_stop == E_IM_DISP_TRG_WRITE_ACT) ? E_IM_DISP_TRG_READ_ACT : E_IM_DISP_TRG_READ_NO_ACT;
+						IO_DISP.MAIN[block].GRCH[1].GRTRG.word = (start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) ? ImDisp_E_IM_DISP_TRG_READ_ACT : ImDisp_E_IM_DISP_TRG_READ_NO_ACT;
 #endif // CO_DEBUG_ON_PC
 					}
 
@@ -564,7 +564,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 			// check write channel number.
 			if ((write_channel & wc_num[loop]) == wc_num[loop]) {
 				// set write channel trigger.
-				if (start_stop == E_IM_DISP_TRG_WRITE_ACT) {
+				if (start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) {
 					// After forcibly stopped, if it is not already stopped.
 					if ((S_GIM_DISP_WC_FORCE_STOP == D_IM_DISP_ENABLE_ON) &&
 						((IO_DISP.PWCH[loop].PWCHTRG.bit.PWCHTRG == E_IM_DISP_P2M_PWCH_TRG_READ_ACT) ||
@@ -580,7 +580,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 					// force stop flag OFF.
 					S_GIM_DISP_WC_FORCE_STOP = D_IM_DISP_ENABLE_OFF;
 				}
-				else if (start_stop == E_IM_DISP_TRG_READ_NO_ACT) {
+				else if (start_stop == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) {
 					// stop.
 					wc_trg = E_IM_DISP_P2M_PWCH_TRG_WRITE_STOP;
 
@@ -609,9 +609,9 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 			// wait
 			if (im_disp_wait_trg_stop_start(im_disp_new(), block, E_IM_DISP_SEL_LAYER_DCORE, act) == D_DDIM_OK) {
 				// check trigger status
-				if ((start_stop == E_IM_DISP_TRG_WRITE_NO_ACT) ||
-					(start_stop == E_IM_DISP_TRG_READ_NO_ACT) ||
-					(IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT)){
+				if ((start_stop == ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT) ||
+					(start_stop == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+					(IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)){
 					// DCORE and other layer access
 					if (layer != E_IM_DISP_SEL_LAYER_DCORE) {
 						// wait
@@ -626,7 +626,7 @@ INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE writ
 						// Set trigger
 						IO_DISP.MAIN[block].DCORE.TRG.bit.TRG = start_stop;
 #ifdef CO_DEBUG_ON_PC
-						IO_DISP.MAIN[block].DCORE.TRG.bit.TRG = (start_stop == E_IM_DISP_TRG_WRITE_ACT) ? E_IM_DISP_TRG_READ_ACT : E_IM_DISP_TRG_READ_NO_ACT;
+						IO_DISP.MAIN[block].DCORE.TRG.bit.TRG = (start_stop == ImDisp_E_IM_DISP_TRG_WRITE_ACT) ? ImDisp_E_IM_DISP_TRG_READ_ACT : ImDisp_E_IM_DISP_TRG_READ_NO_ACT;
 #endif // CO_DEBUG_ON_PC
 					}
 
@@ -644,79 +644,79 @@ Get the event flag of vertical synchronization interrupt.
 @param[in]	interrupt_type	interrupt type
 @return The event flag.
 */
-UINT32 im_disp_get_event_flag(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interrupt_type)
+UINT32 im_disp_get_event_flag(ImDisp *self, ImDispEImDispInterruptionSelect interrupt_type)
 {
 	UINT32 disp_flg;
 
 	// Set GR/Main flag
 	switch(interrupt_type) {
-		case E_IM_DISP_INTERRUPTION_SELECT_VE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE:
 			disp_flg = D_IM_DISP_FLG_VE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_VE2:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2:
 			disp_flg = D_IM_DISP_FLG_VE2;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA0EE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE:
 			disp_flg = D_IM_DISP_FLG_GA0EF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA1EE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE:
 			disp_flg = D_IM_DISP_FLG_GA1EF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR0EE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE:
 			disp_flg = D_IM_DISP_FLG_GR0EF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR1EE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE:
 			disp_flg = D_IM_DISP_FLG_GR1EF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_LEE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE:
 			disp_flg = D_IM_DISP_FLG_LEF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA0REE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE:
 			disp_flg = D_IM_DISP_FLG_GA0REF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA1REE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE:
 			disp_flg = D_IM_DISP_FLG_GA1REF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR0REE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE:
 			disp_flg = D_IM_DISP_FLG_GR0REF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR1REE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE:
 			disp_flg = D_IM_DISP_FLG_GR1REF;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_LREE:
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE:
 			disp_flg = D_IM_DISP_FLG_LREE;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_VE:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_VE:
 			disp_flg =  D_IM_DISP_FLG_VE |
 						D_IM_DISP_FLG_VE2;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_GRREE:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GRREE:
 			disp_flg =  D_IM_DISP_FLG_GR0REF |
 						D_IM_DISP_FLG_GR1REF |
 						D_IM_DISP_FLG_GA0REF |
 						D_IM_DISP_FLG_GA1REF;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_GREE:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GREE:
 			disp_flg =  D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
 						D_IM_DISP_FLG_GA0EF |
 						D_IM_DISP_FLG_GA1EF;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_REE:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_REE:
 			disp_flg =  D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
 						D_IM_DISP_FLG_GA0EF |
 						D_IM_DISP_FLG_GA1EF |
 						D_IM_DISP_FLG_LREE;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_EE:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_EE:
 			disp_flg =  D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
 						D_IM_DISP_FLG_GA0EF |
 						D_IM_DISP_FLG_GA1EF |
 						D_IM_DISP_FLG_LEF;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR:
 			disp_flg =  D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
 						D_IM_DISP_FLG_GA0EF |
@@ -726,11 +726,11 @@ UINT32 im_disp_get_event_flag(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interr
 						D_IM_DISP_FLG_GA0REF |
 						D_IM_DISP_FLG_GA1REF;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR:
 			disp_flg =  D_IM_DISP_FLG_LREE |
 						D_IM_DISP_FLG_LEF;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_ALL_ERROR:
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_ERROR:
 			disp_flg =  D_IM_DISP_FLG_LEF |
 						D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
@@ -742,7 +742,7 @@ UINT32 im_disp_get_event_flag(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interr
 						D_IM_DISP_FLG_GA0REF |
 						D_IM_DISP_FLG_GA1REF;
 			break;
-		default: // E_IM_DISP_CORRECT_SELECT_ALL
+		default: // ImDisp_E_IM_DISP_CORRECT_SELECT_ALL
 			disp_flg =  D_IM_DISP_FLG_LEF |
 						D_IM_DISP_FLG_GR0EF |
 						D_IM_DISP_FLG_GR1EF |
@@ -766,45 +766,45 @@ Get call back function pointer array's index
 @param[in]	interrupt_type	interrupt's type
 @return call back function pointer array's index.
 */
-INT32 im_disp_get_cb_index(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interrupt_type)
+INT32 im_disp_get_cb_index(ImDisp *self, ImDispEImDispInterruptionSelect interrupt_type)
 {
 	INT32 cb_index;
 	switch(interrupt_type) {
-		case E_IM_DISP_INTERRUPTION_SELECT_VE:
-			cb_index = E_IM_DISP_INT_CB_VE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_VE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_VE2:
-			cb_index = E_IM_DISP_INT_CB_VE2;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_VE2;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR0EE:
-			cb_index = E_IM_DISP_INT_CB_GR0EE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GR0EE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR1EE:
-			cb_index = E_IM_DISP_INT_CB_GR1EE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GR1EE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA0EE:
-			cb_index = E_IM_DISP_INT_CB_GA0EE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GA0EE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA1EE:
-			cb_index = E_IM_DISP_INT_CB_GA1EE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GA1EE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_LEE:
-			cb_index = E_IM_DISP_INT_CB_LEE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_LEE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR0REE:
-			cb_index = E_IM_DISP_INT_CB_GR0REE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GR0REE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GR1REE:
-			cb_index = E_IM_DISP_INT_CB_GR1REE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GR1REE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA0REE:
-			cb_index = E_IM_DISP_INT_CB_GA0REE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GA0REE;
 			break;
-		case E_IM_DISP_INTERRUPTION_SELECT_GA1REE:
-			cb_index = E_IM_DISP_INT_CB_GA1REE;
+		case ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE:
+			cb_index = ImDisp_E_IM_DISP_INT_CB_GA1REE;
 			break;
-		default: // E_IM_DISP_INTERRUPTION_SELECT_LREE,
-			cb_index = E_IM_DISP_INT_CB_LREE;
+		default: // ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE,
+			cb_index = ImDisp_E_IM_DISP_INT_CB_LREE;
 			break;
 	}
 	return cb_index;

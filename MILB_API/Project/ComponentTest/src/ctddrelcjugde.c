@@ -15,7 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "_relc.h"
-#include "dd_relc.h"
+// #include "dd_relc.h"
+#include "../../DeviceDriver/Exs/src/ddrelccommon.h"
+#include "../../DeviceDriver/Exs/src/ddrelc.h"
 #include "exstop.h"
 #include "chiptop.h"
 #include "dd_exs.h"
@@ -29,19 +31,17 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtDdRelcJugde, ct_dd_relc_jugde);
 struct _CtDdRelcJugdePrivate
 {
 	CtDdRelcMain *cdrm;
+	DdRelc* ddrelc; 
 };
 
 static kulong S_GRELC_DESC_TABLE1[] =
 {
 	0x00000000, 0x58100000, 0x00000000, 0x58200000,
 	0x00000000, 0x00000000, 0x00000000, 0x00000000,
-
 	0x00000000, 0x58300000, 0x00000000, 0x58400000,
 	0x00000000, 0x00000000, 0x00000000, 0x00000000,
-
 	0x00000000, 0x58500000, 0x00000000, 0x58600000,
 	0x00000000, 0x00000000, 0x00000000, 0x00000000,
-
 	0x00000000, 0x00000000, 0x00000000, 0x00000000,
 	0x00000000, 0x00000000, 0x00000000, 0x00000000
 };
@@ -60,15 +60,22 @@ static void putDump(kulong *buffer, kulong ofs, kulong adr, kushort cnt);
 
 static void ct_dd_relc_jugde_constructor(CtDdRelcJugde *self) 
 {
-    self->ret = D_DD_RELC_OK;
+	self->priv = CT_DD_RELC_JUGDE_GET_PRIVATE(self);
+	self->priv->ddrelc = dd_relc_new();
+    self->ret = DdRelc_D_DD_RELC_OK;
     self->setSize = 0;
     self->refBufSize = 0;
 }
 
 static void ct_dd_relc_jugde_destructor(CtDdRelcJugde *self) 
 {
+	k_object_unref(self->priv->ddrelc);
+	if(self->priv->ddrelc){
+		self->priv  = NULL;
+	}
 	self->endstr = NULL;
     self->hprot = NULL;
+
 }
 
 /*
@@ -162,16 +169,16 @@ void ct_dd_relc_help(void)
 	Ddim_Print(("USAGE>relc stop\n"));
 	Ddim_Print(("                    # Stop RELC macro.\n"));
 	Ddim_Print(("\n"));
-	Ddim_Print(("USAGE>relc ctrlcomm [reg/desc] [nmod/cmod] [seq_num]\n"));
+	Ddim_Print(("USAGE>relc ctrlcomm [reg/desc] [nmod/cmod] [seqNum]\n"));
 	Ddim_Print(("                    # Set control common data.\n"));
 	Ddim_Print(("                    #   [reg/des]          reg  : register \n"));
 	Ddim_Print(("                    #                      desc : Output disable\n"));
 	Ddim_Print(("                    #   [nmod/cmod]        nmod : Normal mode\n"));
 	Ddim_Print(("                    #                      smod : Continuous mode\n"));
-	Ddim_Print(("                    #   [seq_num]          Sequential run number of times\n"));
+	Ddim_Print(("                    #   [seqNum]          Sequential run number of times\n"));
 	Ddim_Print(("                    #                      When 0 or 1 is specified, a value is 1.\n"));
 	Ddim_Print(("\n"));
-	Ddim_Print(("USAGE>relc ctrlreg [imaxd/imaxe] [omaxd/omaxe] [in_sta_addr] [in_end_addr] [out_sta_addr] [out_end_addr]\n"));
+	Ddim_Print(("USAGE>relc ctrlreg [imaxd/imaxe] [omaxd/omaxe] [in_sta_addr] [inEndAddr] [out_sta_addr] [outEndAddr]\n"));
 	Ddim_Print(("                    # Set control register data.\n"));
 	Ddim_Print(("                    #   [imaxd/imaxe]      imaxd : Input end address disable\n"));
 	Ddim_Print(("                    #                      imaxe : Input end address enable\n"));
@@ -187,17 +194,17 @@ void ct_dd_relc_help(void)
 	Ddim_Print(("                    # Set control input start address.\n"));
 	Ddim_Print(("                    #   [in_sta_addr]       Input start address\n"));
 	Ddim_Print(("\n"));
-	Ddim_Print(("USAGE>relc set in_end_addr [in_end_addr]\n"));
+	Ddim_Print(("USAGE>relc set inEndAddr [inEndAddr]\n"));
 	Ddim_Print(("                    # Set control input end address.\n"));
-	Ddim_Print(("                    #   [in_end_addr]       Input end address\n"));
+	Ddim_Print(("                    #   [inEndAddr]       Input end address\n"));
 	Ddim_Print(("\n"));
 	Ddim_Print(("USAGE>relc set out_sta_addr [out_sta_addr]\n"));
 	Ddim_Print(("                    # Set control output start address.\n"));
 	Ddim_Print(("                    #   [out_sta_addr]      Output start address\n"));
 	Ddim_Print(("\n"));
-	Ddim_Print(("USAGE>relc set out_end_addr [out_end_addr]\n"));
+	Ddim_Print(("USAGE>relc set outEndAddr [outEndAddr]\n"));
 	Ddim_Print(("                    # Set control output end address.\n"));
-	Ddim_Print(("                    #   [out_end_addr]      Output end address\n"));
+	Ddim_Print(("                    #   [outEndAddr]      Output end address\n"));
 	Ddim_Print(("\n"));
 	Ddim_Print(("USAGE>relc get ctrlcomm\n"));
 	Ddim_Print(("                    # Get control common data.\n"));
@@ -260,6 +267,11 @@ void ct_dd_relc_help(void)
 	Ddim_Print(("\n"));
 }
 
+DdRelc* ct_dd_relc_judge_get_ddrelc(CtDdRelcJugde* self)
+{
+	return self->priv->ddrelc;
+}
+
 /**
  * @brief  Command main function for RELC test.
  * @param  kint32 argc	:The number of parameters
@@ -273,29 +285,29 @@ void ct_dd_relc_help(void)
  *	|               |                  |               |               |               |               |               | >>Dd_RELC_Init                              |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| open          |                  |               |               |               |               |               | Open RELC macro.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Open                              |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_open                              |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| close         |                  |               |               |               |               |               | Close RELC macro.                           |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Close                             |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_close                             |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| start         | sync             |               |               |               |               |               | Start RELC macro.                           |
  *	|               | async            |               |               |               |               |               |  sync : Synchronization of RELC macro start |
  *	|               |                  |               |               |               |               |               |  async: Asynchronous of RELC macro start    |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Start_Sync                        |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Start_Async                       |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_start_sync                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_start_async                       |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| stop          |                  |               |               |               |               |               | Stop RELC macro.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Stop                              |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_stop                              |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
- *	| ctrlcomm      | reg              | nmod          | seq_num       |               |               |               | Set control common data.                    |
+ *	| ctrlcomm      | reg              | nmod          | seqNum       |               |               |               | Set control common data.                    |
  *	|               | desc             | cmod          |               |               |               |               |  reg  : register                            |
  *	|               |                  |               |               |               |               |               |  desc : Output disable                      |
  *	|               |                  |               |               |               |               |               |  nmod : Normal mode                         |
  *	|               |                  |               |               |               |               |               |  smod : Continuous mode                     |
- *	|               |                  |               |               |               |               |               |  seq_num : Sequential run number of times   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Common                       |
+ *	|               |                  |               |               |               |               |               |  seqNum : Sequential run number of times   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_common                       |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
- *	| ctrlreg       | imaxd            | omaxd         | in_sta_addr   | in_end_addr   | out_sta_addr  | out_end_addr  | Set control register data.                  |
+ *	| ctrlreg       | imaxd            | omaxd         | in_sta_addr   | inEndAddr   | out_sta_addr  | outEndAddr  | Set control register data.                  |
  *	|               | imaxe            | omaxe         |               |               |               |               |  imaxd : Input end address disable          |
  *	|               |                  |               |               |               |               |               |  imaxe : Input end address enable           |
  *	|               |                  |               |               |               |               |               |  omaxd : Output end address disable         |
@@ -304,53 +316,53 @@ void ct_dd_relc_help(void)
  *	|               |                  |               |               |               |               |               |  Input end address                          |
  *	|               |                  |               |               |               |               |               |  Output start address                       |
  *	|               |                  |               |               |               |               |               |  Output end address                         |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Register                     |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_register                     |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| ctrldesc      | desc_addr        |               |               |               |               |               | Set control descriptor data.                |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Descriptor                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_descriptor                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| set           | in_sta_addr      | in_sta_addr   |               |               |               |               | Set control input start address.            |
  *	|               |                  |               |               |               |               |               |  in_sta_addr : Input start address          |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Start_Addr                 |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_start_addr                 |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
- *	| set           | in_end_addr      | in_end_addr   |               |               |               |               | Set control input end address.              |
- *	|               |                  |               |               |               |               |               |  in_end_addr : Input end address            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_End_Addr                   |
+ *	| set           | inEndAddr      | inEndAddr   |               |               |               |               | Set control input end address.              |
+ *	|               |                  |               |               |               |               |               |  inEndAddr : Input end address            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_end_addr                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| set           | out_sta_addr     | out_sta_addr  |               |               |               |               | Set control output start address.           |
  *	|               |                  |               |               |               |               |               |  out_sta_addr : Output start address        |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Out_Start_Addr                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_out_start_addr                |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
- *	| set           | out_end_addr     | out_end_addr  |               |               |               |               | Set control output end address.             |
- *	|               |                  |               |               |               |               |               |  out_end_addr : Output end address          |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Out_End_Addr                  |
+ *	| set           | outEndAddr     | outEndAddr  |               |               |               |               | Set control output end address.             |
+ *	|               |                  |               |               |               |               |               |  outEndAddr : Output end address          |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_out_end_addr                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | ctrlcomm         |               |               |               |               |               | Get control common data.                    |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Common                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_common                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | ctrlreg          |               |               |               |               |               | Get control register data.                  |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Register                 |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_register                 |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | ctrldesc         |               |               |               |               |               | Get control descriptor data.                |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Descriptor               |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_descriptor               |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | msta             |               |               |               |               |               | Get RELC macro status.                      |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Status                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_status                        |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | sleep            |               |               |               |               |               | Get RELC sleep status.                      |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Sleep_Reason                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_sleep_reason                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | errsta           |               |               |               |               |               | Get RELC error status.                      |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error_Status                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error_status                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | err              |               |               |               |               |               | Get RELC error number.                      |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error                         |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error                         |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | psta             |               |               |               |               |               | Get RELC process status.                    |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Process_Status                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_process_status                |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | bufsiz           |               |               |               |               |               | Get RELC buffer size.                       |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Buf_Size                      |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_buf_size                      |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| set           | inbuf            | in_addr       | in_size       |               |               |               | Set data to RELC buffer.                    |
  *	|               | inbufm           |               |               |               |               |               |  inbuf  : input data buffer                 |
@@ -358,9 +370,9 @@ void ct_dd_relc_help(void)
  *	|               |                  |               |               |               |               |               |  refbuf : reference data buffer             |
  *	|               |                  |               |               |               |               |               |  in_addr : input data address on RAM        |
  *	|               |                  |               |               |               |               |               |  in_size : input data size on RAM           |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Buf_Data                   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Buf_Data_Mirror            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Ref_Buf_Data                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_buf_data                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_buf_data_mirror            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_ref_buf_data                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| get           | inbuf            | out_addr      | out_size      |               |               |               | Get data from RELC buffer.                  |
  *	|               | inbufm           |               |               |               |               |               |  inbuf  : input data buffer                 |
@@ -369,112 +381,112 @@ void ct_dd_relc_help(void)
  *	|               |                  |               |               |               |               |               |  out_addr : outputdata address from         |
  *	|               |                  |               |               |               |               |               |             input data buffer to SDRAM      |
  *	|               |                  |               |               |               |               |               |  out_size : output data size                |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_In_Buf_Data                   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_In_Buf_Data_Mirror            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ref_Buf_Data                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_in_buf_data                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_in_buf_data_mirror            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ref_buf_data                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| norm          | async            | testNum      |               |               |               |               | Set and Start RELC normal mode.             |
  *	|               |                  |               |               |               |               |               |  testNum : test pattern number             |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Utility_Register                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_utility_register                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| desc          | async            | testNum      |               |               |               |               | Set and Start RELC descriptor mode.         |
  *	|               |                  |               |               |               |               |               |  testNum : test pattern number             |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Utility_Descriptor                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_utility_descriptor                |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| norm          | sync             | testNum      |               |               |               |               | Set and Start RELC normal mode.             |
  *	|               |                  |               |               |               |               |               |  testNum : test pattern number             |
  *	|               |                  |               |               |               |               |               | >>Dd_RELC_Init                              |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Open                              |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Common                       |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Common                   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Register                     |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Register                 |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Start_Sync                        |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Status                        |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Process_Status                |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error_Status                  |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error                         |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_open                              |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_common                       |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_common                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_register                     |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_register                 |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_start_sync                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_status                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_process_status                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error_status                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error                         |
  *	|               |                  |               |               |               |               |               | >>Dd_RELC_Wait_End                          |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Close                             |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_close                             |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| desc          | sync             | testNum      |               |               |               |               | Set and Start RELC descriptor mode.         |
  *	|               |                  |               |               |               |               |               |  testNum : test pattern number             |
  *	|               |                  |               |               |               |               |               | >>Dd_RELC_Init                              |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Open                              |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Common                       |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Common                   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Descriptor                   |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Descriptor               |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Status                        |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Process_Status                |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error_Status                  |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Error                         |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Start_Sync                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_open                              |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_common                       |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_common                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_descriptor                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_descriptor               |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_status                        |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_process_status                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error_status                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_error                         |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_start_sync                        |
  *	|               |                  |               |               |               |               |               | >>Dd_RELC_Wait_End                          |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Close"                            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_close"                            |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| inthdr        | testNum         |               |               |               |               |               | Interrupt Handler.                          |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Int_Handler                       |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_int_handler                       |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | open             |               |               |               |               |               | Open error.                                 |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Open                              |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_open                              |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | ctrlcomm         |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Common                       |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_common                       |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | ctrlreg          |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Register                     |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_register                     |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | ctrldesc         |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Ctrl_Descriptor                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_ctrl_descriptor                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_in_sta_addr  |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Start_Addr                 |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_start_addr                 |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_in_end_addr  |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_End_Addr                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_end_addr                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_out_sta_addr |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Out_Start_Addr                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_out_start_addr                |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_out_end_addr |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Out_End_Addr                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_out_end_addr                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_inbuf        |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Buf_Data                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_buf_data                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_inbufm       |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_In_Buf_Data_Mirror            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_in_buf_data_mirror            |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | set_refbuf       |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Set_Ref_Buf_Data                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_set_ref_buf_data                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_ctrlcomm     |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Common                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_common                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_ctrlreg      |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Register                 |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_register                 |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_ctrldesc     |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ctrl_Descriptor               |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ctrl_descriptor               |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_psta         |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Process_Status                |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_process_status                |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_bufsize1     |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Buf_Size                      |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_buf_size                      |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_bufsize2     |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Buf_Size                      |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_buf_size                      |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_inbuf        |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_In_Buf_Data                   |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_in_buf_data                   |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_inbufm       |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_In_Buf_Data_Mirror            |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_in_buf_data_mirror            |
  *	+---------------+------------------+---------------+---------------+---------------+---------------+---------------+---------------------------------------------+
  *	| err           | get_refbuf       |               |               |               |               |               | Parameter error.                            |
- *	|               |                  |               |               |               |               |               | >>Dd_RELC_Get_Ref_Buf_Data                  |
+ *	|               |                  |               |               |               |               |               | >>dd_relc_get_ref_buf_data                  |
  *	+---------------+------------------+---------------+---------------+---------------+---------------;---------------+---------------------------------------------+
 */
 void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
@@ -483,21 +495,21 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 		if ( strcmp( argv[ 2 ], "async" ) == 0 ) {
 
 			self->testNum = (kuchar)atoi( (const kchar *)argv[ 3 ] );
-			memset( &(self->setModDesc), 0, sizeof(T_DD_RELC_SET_MOD_DESC) );
+			memset( &(self->setModDesc), 0, sizeof(TDdRelcSetModDesc) );
 
 			if ( self->testNum == 1 ) {
 				/* Normal mode */
-				self->setModDesc.write_hprot = 11;
-				self->setModDesc.read_hprot = 11;
-				self->setModDesc.relc_descriptor_addr	= 0x58000000;
-				self->setModDesc.seq_num = 1;
+				self->setModDesc.writeHprot = 11;
+				self->setModDesc.readHprot = 11;
+				self->setModDesc.relcDescriptorAddr	= 0x58000000;
+				self->setModDesc.seqNum = 1;
 				self->setModDesc.callback	= (RELK_CALLBACK)ct_dd_relc_cmd_cb;
 
 				memcpy( (kuchar *)0x58000000, S_GRELC_DESC_TABLE1, sizeof(S_GRELC_DESC_TABLE1) );
 
-				self->ret = Dd_RELC_Utility_Descriptor( &(self->setModDesc) );
+				self->ret = dd_relc_utility_descriptor(self->priv->ddrelc, &(self->setModDesc) );
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Set and Start RELC descriptor mode error. ret=%d\n", self->ret));
 					return;
 				}
@@ -507,16 +519,16 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 			}
 			/* Continuous run mode */
 			else if ( self->testNum == 2 ) {		
-				self->setModDesc.write_hprot = 11;
-				self->setModDesc.read_hprot = 11;
-				self->setModDesc.relc_descriptor_addr	= 0x58000000;
-				self->setModDesc.seq_num = 3;
+				self->setModDesc.writeHprot = 11;
+				self->setModDesc.readHprot = 11;
+				self->setModDesc.relcDescriptorAddr	= 0x58000000;
+				self->setModDesc.seqNum = 3;
 				self->setModDesc.callback	= (RELK_CALLBACK)ct_dd_relc_cmd_cb;
 
 				memcpy( (kuchar *)0x58000000, S_GRELC_DESC_TABLE1, sizeof(S_GRELC_DESC_TABLE1) );
 
-				self->ret = Dd_RELC_Utility_Descriptor( &(self->setModDesc) );
-				if ( self->ret != D_DD_RELC_OK ) {
+				self->ret = dd_relc_utility_descriptor(self->priv->ddrelc, &(self->setModDesc) );
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Set and Start RELC descriptor mode error. ret=%d\n", self->ret));
 					return;
 				}
@@ -531,119 +543,119 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 			if ( self->testNum == 1 ) {		
 
 				memcpy( (kuchar *)0x58000000, S_GRELC_DESC_TABLE1, sizeof(S_GRELC_DESC_TABLE1) );
-				memset( &(self->ctrlCom), 0, sizeof(T_DD_RELC_CTRL_CMN) );
-				memset( &(self->ctrlDesc), 0, sizeof(T_DD_RELC_CTRL_DESC) );
+				memset( &(self->ctrlCom), 0, sizeof(TDdRelcCtrlCmn) );
+				memset( &(self->ctrlDesc), 0, sizeof(TDdRelcCtrlDesc) );
 
-				self->ctrlCom.write_hprot	= 11;
-				self->ctrlCom.read_hprot = 11;
+				self->ctrlCom.writeHprot	= 11;
+				self->ctrlCom.readHprot = 11;
 
 				/* After power on and the reset, this is executed only once.
 				 * Initialize RELC macro.
 				 */
-				Dd_RELC_Init( self->ctrlCom.write_hprot, self->ctrlCom.read_hprot );
+				Dd_RELC_Init( self->ctrlCom.writeHprot, self->ctrlCom.readHprot );
 				Ddim_Print(("RELC init OK\n"));
 
 				// Open RELC macro.
-				self->ret = Dd_RELC_Open();
+				self->ret = dd_relc_open(self->priv->ddrelc);
 
 				if ( self->ret != D_DDIM_OK ) {
 					Ddim_Print( ("Error RELC Open !!\n" ) );
 					return;
 				}
 
-				self->ctrlCom.desc_mode = D_DD_RELC_RUN_MODE_DESC;
+				self->ctrlCom.descMode = DdRelc_D_DD_RELC_RUN_MODE_DESC;
 				self->ctrlCom.callback = (RELK_CALLBACK)ct_dd_relc_cmd_cb;
-				self->ctrlCom.seq_num = 1;	
+				self->ctrlCom.seqNum = 1;	
 				// Normal mode	
-				self->ctrlCom.cont_run_mode = D_DD_RELC_CONT_MODE_NORMAL;
-				self->ctrlDesc.descriptor_addr = 0x58000000;
+				self->ctrlCom.contRunMode = DdRelc_D_DD_RELC_CONT_MODE_NORMAL;
+				self->ctrlDesc.descriptorAddr = 0x58000000;
 
 				// Set control common data.
-				self->ret = Dd_RELC_Ctrl_Common(&(self->ctrlCom));
+				self->ret = dd_relc_ctrl_common(self->priv->ddrelc,&(self->ctrlCom));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution common control setting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				// Get control common data.
-				memset( &(self->ctrlCom), 0, sizeof(T_DD_RELC_CTRL_CMN) );
-				self->ret = Dd_RELC_Get_Ctrl_Common( &(self->ctrlCom) );
+				memset( &(self->ctrlCom), 0, sizeof(TDdRelcCtrlCmn) );
+				self->ret = dd_relc_get_ctrl_common(self->priv->ddrelc, &(self->ctrlCom));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution comon control getting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("Common control information\n"));
-				Ddim_Print(("# Descriptor Mode = %d\n", self->ctrlCom.desc_mode));
-				Ddim_Print(("# Continuous Run Mode = %d\n", self->ctrlCom.cont_run_mode));
-				Ddim_Print(("# Sequential Run Number of Times = %lu\n", self->ctrlCom.seq_num));
+				Ddim_Print(("# Descriptor Mode = %d\n", self->ctrlCom.descMode));
+				Ddim_Print(("# Continuous Run Mode = %d\n", self->ctrlCom.contRunMode));
+				Ddim_Print(("# Sequential Run Number of Times = %lu\n", self->ctrlCom.seqNum));
 
 				// Set control descriptor data.
-				self->ret = Dd_RELC_Ctrl_Descriptor( &(self->ctrlDesc) );
+				self->ret = dd_relc_ctrl_descriptor(self->priv->ddrelc, &(self->ctrlDesc));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution descriptor control setting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				// Get control descriptor data.
-				self->ret = Dd_RELC_Get_Ctrl_Descriptor( &(self->ctrlDesc) );
+				self->ret = dd_relc_get_ctrl_descriptor(self->priv->ddrelc,&(self->ctrlDesc));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution descriptor control getting error. ret=0x%x\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("Discriptor control information\n"));
-				Ddim_Print(("# Descriptor address = 0x%lx\n", self->ctrlDesc.descriptor_addr));
+				Ddim_Print(("# Descriptor address = 0x%lx\n", self->ctrlDesc.descriptorAddr));
 
 				// Start RELC macro.(Synchronization of RELC macro start)
-				self->ret = Dd_RELC_Start_Sync();
+				self->ret = dd_relc_start_sync(self->priv->ddrelc);
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Synchronous RELC start ERR. ret=0x%x\n", self->ret));
 				}else {
 					Ddim_Print(("Synchronous RELC start OK\n"));
 				}
 
 				// Get RELC macro status.
-				self->ret = Dd_RELC_Get_Status();
+				self->ret = dd_relc_get_status(self->priv->ddrelc);
 
 				Ddim_Print(("RELC decode status\n"));
 				Ddim_Print(("# RELC macro status = 0x%x\n", self->ret));
 
 				// Get RELC process status.
-				self->ret = Dd_RELC_Get_Process_Status(&(self->decInfo));
+				self->ret = dd_relc_get_process_status(self->priv->ddrelc,&(self->decInfo));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution RELC processing status getting error. ret=0x%x\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("RELC processing status\n"));
-				Ddim_Print(("# Number of bytes read = %d\n", self->decInfo.read_byte));
-				Ddim_Print(("# Number of bytes written = %d\n", self->decInfo.write_byte));
-				Ddim_Print(("# Number of processing blocks = %d\n", self->decInfo.proc_block));
-				Ddim_Print(("# Decode the total number of bytes to read = %lu\n", self->decInfo.dec_total_read_bytes));
-				Ddim_Print(("# Decode the total number of bytes to write = %lu\n", self->decInfo.dec_total_write_bytes));
-				Ddim_Print(("# Sequential run counter = %lu\n", self->decInfo.seq_cnt));
+				Ddim_Print(("# Number of bytes read = %d\n", self->decInfo.readByte));
+				Ddim_Print(("# Number of bytes written = %d\n", self->decInfo.writeByte));
+				Ddim_Print(("# Number of processing blocks = %d\n", self->decInfo.procBlock));
+				Ddim_Print(("# Decode the total number of bytes to read = %lu\n", self->decInfo.decTotalReadBytes));
+				Ddim_Print(("# Decode the total number of bytes to write = %lu\n", self->decInfo.decTotalWriteBytes));
+				Ddim_Print(("# Sequential run counter = %lu\n", self->decInfo.seqCnt));
 
 				// Get RELC error status.
-				self->ret = Dd_RELC_Get_Error_Status();
+				self->ret = dd_relc_get_error_status(self->priv->ddrelc);
 
 				Ddim_Print(("RELC error status information\n"));
 				Ddim_Print(("# RELC error = 0x%x\n", self->ret));
 
 				// Get RELC error number. 
-				self->ret = Dd_RELC_Get_Error();
+				self->ret = dd_relc_get_error(self->priv->ddrelc);
 
 				Ddim_Print(("RELC error information\n"));
 				Ddim_Print(("# RELC error = 0x%x\n", self->ret));
 
 				// Close RELC macro.
-				Dd_RELC_Close();
+				dd_relc_close(self->priv->ddrelc);
 
 				ct_dd_relc_register_dump();
 				ct_dd_relc_buffer_dump();
@@ -651,120 +663,121 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 			else if ( self->testNum == 2 ) {		
 				/* Continuous run mode */
 				memcpy((kuchar *)0x58000000, S_GRELC_DESC_TABLE1, sizeof(S_GRELC_DESC_TABLE1));
-				memset( &(self->ctrlCom), 0, sizeof(T_DD_RELC_CTRL_CMN) );
-				memset( &(self->ctrlDesc), 0, sizeof(T_DD_RELC_CTRL_DESC) );
+				memset( &(self->ctrlCom), 0, sizeof(TDdRelcCtrlCmn) );
+				memset( &(self->ctrlDesc), 0, sizeof(TDdRelcCtrlDesc) );
 
-				self->ctrlCom.write_hprot = 11;
-				self->ctrlCom.read_hprot = 11;
+				self->ctrlCom.writeHprot = 11;
+				self->ctrlCom.readHprot = 11;
 
 				/*
 				 * After power on and the reset, this is executed only once.
 				 *  Initialize RELC macro.
 				 */
-				Dd_RELC_Init( self->ctrlCom.write_hprot, self->ctrlCom.read_hprot );
+				Dd_RELC_Init( self->ctrlCom.writeHprot, self->ctrlCom.readHprot );
 				Ddim_Print(("RELC init OK\n"));
 
 				// Open RELC macro.
-				self->ret = Dd_RELC_Open();
+				self->ret = dd_relc_open(self->priv->ddrelc);
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print( ("Error RELC Open !!\n" ) );
 					return;
 				}
 
-				self->ctrlCom.desc_mode = D_DD_RELC_RUN_MODE_DESC;
+				self->ctrlCom.descMode = DdRelc_D_DD_RELC_RUN_MODE_DESC;
 				self->ctrlCom.callback = (RELK_CALLBACK)ct_dd_relc_cmd_cb;
-				self->ctrlCom.seq_num = 3;
+				self->ctrlCom.seqNum = 3;
 				// Continuous run mode 	
-				self->ctrlCom.cont_run_mode = D_DD_RELC_CONT_MODE_CONT;
-				self->ctrlDesc.descriptor_addr = 0x58000000;
+				self->ctrlCom.contRunMode = DdRelc_D_DD_RELC_CONT_MODE_CONT;
+				self->ctrlDesc.descriptorAddr = 0x58000000;
 
 				// Set control common data.
-				self->ret = Dd_RELC_Ctrl_Common( &(self->ctrlCom) );
+				self->ret = dd_relc_ctrl_common(ct_dd_relc_judge_get_ddrelc(priv->judge),
+						self->priv->ddrelc, &(self->ctrlCom));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution common control setting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				// Get control common data.
-				memset(&(self->ctrlCom), 0, sizeof(T_DD_RELC_CTRL_CMN));
-				self->ret = Dd_RELC_Get_Ctrl_Common(&(self->ctrlCom));
+				memset(&(self->ctrlCom), 0, sizeof(TDdRelcCtrlCmn));
+				self->ret = dd_relc_get_ctrl_common(self->priv->ddrelc,&(self->ctrlCom));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution comon control getting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("Common control information\n"));
-				Ddim_Print(("# Descriptor Mode = %d\n", self->ctrlCom.desc_mode));
-				Ddim_Print(("# Continuous Run Mode = %d\n", self->ctrlCom.cont_run_mode));
-				Ddim_Print(("# Sequential Run Number of Times = %lu\n", self->ctrlCom.seq_num));
+				Ddim_Print(("# Descriptor Mode = %d\n", self->ctrlCom.descMode));
+				Ddim_Print(("# Continuous Run Mode = %d\n", self->ctrlCom.contRunMode));
+				Ddim_Print(("# Sequential Run Number of Times = %lu\n", self->ctrlCom.seqNum));
 
 				// Set control descriptor data.
-				self->ret = Dd_RELC_Ctrl_Descriptor(&(self->ctrlDesc));
+				self->ret = dd_relc_ctrl_descriptor(self->priv->ddrelc,&(self->ctrlDesc));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution descriptor control setting error. ret=%d\n", self->ret));
 					return;
 				}
 
 				// Get control descriptor data.
-				self->ret = Dd_RELC_Get_Ctrl_Descriptor(&(self->ctrlDesc));
+				self->ret = dd_relc_get_ctrl_descriptor(self->priv->ddrelc,&(self->ctrlDesc));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution descriptor control getting error. ret=0x%x\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("Discriptor control information\n"));
-				Ddim_Print(("# Descriptor address = 0x%lx\n", self->ctrlDesc.descriptor_addr));
+				Ddim_Print(("# Descriptor address = 0x%lx\n", self->ctrlDesc.descriptorAddr));
 
 				// Start RELC macro.(Synchronization of RELC macro start)
-				self->ret = Dd_RELC_Start_Sync();
+				self->ret = dd_relc_start_sync(self->priv->ddrelc);
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Synchronous RELC start ERR. ret=0x%x\n", self->ret));
 				}else {
 					Ddim_Print(("Synchronous RELC start OK\n"));
 				}
 
 				// Get RELC macro status.
-				self->ret = Dd_RELC_Get_Status();
+				self->ret = dd_relc_get_status(self->priv->ddrelc);
 
 				Ddim_Print(("RELC decode status\n"));
 				Ddim_Print(("# RELC macro status = 0x%x\n", self->ret));
 
 				// Get RELC process status.
-				self->ret = Dd_RELC_Get_Process_Status( &(self->decInfo) );
+				self->ret = dd_relc_get_process_status(self->priv->ddrelc, &(self->decInfo));
 
-				if ( self->ret != D_DD_RELC_OK ) {
+				if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 					Ddim_Print(("Execution RELC processing status getting error. ret=0x%x\n", self->ret));
 					return;
 				}
 
 				Ddim_Print(("RELC processing status\n"));
-				Ddim_Print(("# Number of bytes read = %d\n", self->decInfo.read_byte));
-				Ddim_Print(("# Number of bytes written = %d\n", self->decInfo.write_byte));
-				Ddim_Print(("# Number of processing blocks = %d\n", self->decInfo.proc_block));
-				Ddim_Print(("# Decode the total number of bytes to read = %lu\n", self->decInfo.dec_total_read_bytes));
-				Ddim_Print(("# Decode the total number of bytes to write = %lu\n", self->decInfo.dec_total_write_bytes));
-				Ddim_Print(("# Sequential run counter = %lu\n", self->decInfo.seq_cnt));
+				Ddim_Print(("# Number of bytes read = %d\n", self->decInfo.readByte));
+				Ddim_Print(("# Number of bytes written = %d\n", self->decInfo.writeByte));
+				Ddim_Print(("# Number of processing blocks = %d\n", self->decInfo.procBlock));
+				Ddim_Print(("# Decode the total number of bytes to read = %lu\n", self->decInfo.decTotalReadBytes));
+				Ddim_Print(("# Decode the total number of bytes to write = %lu\n", self->decInfo.decTotalWriteBytes));
+				Ddim_Print(("# Sequential run counter = %lu\n", self->decInfo.seqCnt));
 
 				// Get RELC error status.
-				self->ret = Dd_RELC_Get_Error_Status();
+				self->ret = dd_relc_get_error_status(self->priv->ddrelc);
 
 				Ddim_Print(("RELC error status information\n"));
 				Ddim_Print(("# RELC error = 0x%x\n", self->ret));
 
 				// Get RELC error number. 
-				self->ret = Dd_RELC_Get_Error();
+				self->ret = dd_relc_get_error(self->priv->ddrelc);
 
 				Ddim_Print(("RELC error information\n"));
 				Ddim_Print(("# RELC error = 0x%x\n", self->ret));
 
 				// Close RELC macro.
-				Dd_RELC_Close();
+				dd_relc_close(self->priv->ddrelc);
 
 				ct_dd_relc_register_dump();
 				ct_dd_relc_buffer_dump();
@@ -793,121 +806,121 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 				break;
 		}
 #endif
-		Dd_RELC_Int_Handler();
+		dd_relc_int_handler(self->priv->ddrelc);
 #ifdef PC_DEBUG
 		ct_dd_relc_register_dump();
 #endif
 	}
 	else if ( strcmp( argv[ 1 ], "err" ) == 0 ) {
 		if ( strcmp( argv[ 2 ], "open" ) == 0 ) {
-			self->ret = Dd_RELC_Open();
-			self->ret = Dd_RELC_Open();
+			self->ret = dd_relc_open(self->priv->ddrelc);
+			self->ret = dd_relc_open(self->priv->ddrelc);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Open error. ret=%d\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "ctrlcomm" ) == 0 ) {
-			self->ret = Dd_RELC_Ctrl_Common( NULL );
+		else if (strcmp( argv[ 2 ], "ctrlcomm" ) == 0) {
+			self->ret = dd_relc_ctrl_common(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution comon control getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "ctrlreg" ) == 0 ) {
-			self->ret = Dd_RELC_Ctrl_Register( NULL );
+			self->ret = dd_relc_ctrl_register(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution register control getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "ctrldesc" ) == 0 ) {
-			self->ret = Dd_RELC_Ctrl_Descriptor( NULL );
+			self->ret = dd_relc_ctrl_descriptor(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution descriptor control getting error. ret=0x%x\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "set_in_sta_addr" ) == 0 ) {
-			self->ret = Dd_RELC_Set_In_Start_Addr( 0 );
+		else if ( strcmp(argv[ 2 ], "set_in_sta_addr" ) == 0) {
+			self->ret = dd_relc_set_in_start_addr(self->priv->ddrelc, 0);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution input start address setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "set_in_end_addr" ) == 0 ) {
-			self->ret = Dd_RELC_Set_In_End_Addr( 0 );
+		else if ( strcmp( argv[ 2 ], "set_in_end_addr" ) == 0) {
+			self->ret = dd_relc_set_in_end_addr(self->priv->ddrelc, 0);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution input end address setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "set_out_sta_addr" ) == 0 ) {
-			self->ret = Dd_RELC_Set_Out_Start_Addr( 0 );
+		else if ( strcmp( argv[ 2 ], "set_out_sta_addr" ) == 0) {
+			self->ret = dd_relc_set_out_start_addr(self->priv->ddrelc, 0);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution output start address setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "set_out_end_addr" ) == 0 ) {
-			self->ret = Dd_RELC_Set_Out_End_Addr( 0 );
+			self->ret = dd_relc_set_out_end_addr(self->priv->ddrelc, 0);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution output end address setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "set_inbuf" ) == 0 ) {
-			self->ret = Dd_RELC_Set_In_Buf_Data( 0, self->refBufSize );		
+		else if ( strcmp( argv[ 2 ], "set_inbuf" ) == 0) {
+			self->ret = dd_relc_set_in_buf_data(self->priv->ddrelc, self->refBufSize);		
 			/* pgr0039 */
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution input buffer setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
-		else if ( strcmp( argv[ 2 ], "set_inbufm" ) == 0 ) {
-			self->ret = Dd_RELC_Set_In_Buf_Data_Mirror( 0, 256 );
+		else if ( strcmp( argv[ 2 ], "set_inbufm" ) == 0  {
+			self->ret = dd_relc_set_in_buf_data_mirror(elf->priv->ddrelc, 0, 256);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution input buffer(mirror) setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "set_refbuf" ) == 0 ) {
-			self->ret = Dd_RELC_Set_Ref_Buf_Data( 0, 256 );
+			self->ret = dd_relc_set_ref_buf_data(self->priv->ddrelc, 0, 256);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution reference buffer setting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_ctrlcomm" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Ctrl_Common( NULL );
+			self->ret = dd_relc_get_ctrl_common(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution comon control getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_ctrlreg" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Ctrl_Register( NULL );
+			self->ret = dd_relc_get_ctrl_register(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution register control getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_ctrldesc" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Ctrl_Descriptor( NULL );
+			self->ret = dd_relc_get_ctrl_descriptor(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution descriptor control getting error. ret=0x%x\n", self->ret));
 				return;
 			}
@@ -923,49 +936,49 @@ void ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv)
 			IO_RELC.RELC_SEQ_CNT = 65;
 #endif
 
-			self->ret = Dd_RELC_Get_Process_Status( NULL );
+			self->ret = dd_relc_get_process_status(self->priv->ddrelc, NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC processing status getting error. ret=0x%x\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_bufsize1" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Buf_Size( NULL, &(self->refBufSize) );
+			self->ret = dd_relc_get_buf_size(self->priv->ddrelc, NULL, &(self->refBufSize));
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC buffer size getting error. ret=0x%x\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_bufsize2" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Buf_Size( &(self->inBufSize), NULL );
+			self->ret = dd_relc_get_buf_size(self->priv->ddrelc, &(self->inBufSize), NULL);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC buffer size getting error. ret=0x%x\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_inbuf" ) == 0 ) {
-			self->ret = Dd_RELC_Get_In_Buf_Data( 0, self->setSize );
+			self->ret = dd_relc_get_in_buf_data(self->priv->ddrelc, self->setSize );
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC input buffer data getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_inbufm" ) == 0 ) {
-			self->ret = Dd_RELC_Get_In_Buf_Data_Mirror( 0, self->setSize );
+			self->ret = dd_relc_get_in_buf_data_mirror(self->priv->ddrelc, self->setSize);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC input data buffer getting error. ret=%d\n", self->ret));
 				return;
 			}
 		}
 		else if ( strcmp( argv[ 2 ], "get_refbuf" ) == 0 ) {
-			self->ret = Dd_RELC_Get_Ref_Buf_Data( 0, self->setSize );
+			self->ret = dd_relc_get_ref_buf_data(self->priv->ddrelc, 0, self->setSize);
 
-			if ( self->ret != D_DD_RELC_OK ) {
+			if ( self->ret != DdRelc_D_DD_RELC_OK ) {
 				Ddim_Print(("Execution RELC reference data buffer getting error. ret=%d\n", self->ret));
 				return;
 			}

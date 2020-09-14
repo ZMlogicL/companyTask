@@ -30,8 +30,8 @@ struct _CtDdPdmTestone
 {
 	KObject parent;
 	kuint32 cnt;
-	T_DD_PDM_CORE_CFG pdmCfg;
-	T_DD_PDM_DMA_CFG pdmDmaCfg;
+	DdPdmCoreCfg pdmCfg;
+	DdPdmDmaCfg pdmDmaCfg;
 	CtDdPdmTestonePrivate *priv;
 };
 

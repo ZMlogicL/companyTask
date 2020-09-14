@@ -36,11 +36,11 @@ ImR2yCtrl4*		        im_r2y_ctrl4_new(void);
 
 /**
 Multi Axis Control
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_ctrl_multi_axis		: pointer of Multi Axis control parameters.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_ctrl4_multi_axis(ImR2yCtrl4 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_MULTI_AXIS* const r2y_ctrl_multi_axis );
+INT32 im_r2y_ctrl4_multi_axis(ImR2yCtrl4 *self, kuint16 pipeNo, const CtrlMultiAxis* const r2y_ctrl_multi_axis );
 
 #endif /* __IM_R2Y_CTRL4_H__ */

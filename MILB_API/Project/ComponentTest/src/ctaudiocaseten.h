@@ -13,25 +13,36 @@
 
 #ifndef __CT_AUDIO_CASE_TEN_H__
 #define __CT_AUDIO_CASE_TEN_H__
-#include <klib.h>
+#include <glib-object.h>
 #include "absctaudiocase.h"
 
-#define CT_TYPE_AUDIO_CASE_TEN   		(ct_audio_case_ten_get_type())
-#define CT_IS_AUDIO_CASE_TEN(obj)    K_TYPE_CHECK_INSTANCE_TYPE(obj, CtAudioCaseTen)
-#define CT_AUDIO_CASE_TEN(obj)     		(K_TYPE_CHECK_INSTANCE_CAST(obj, CtAudioCaseTen))
+G_BEGIN_DECLS
 
+#define CT_TYPE_AUDIO_CASE_TEN					(ct_audio_case_ten_get_type())
+#define CT_AUDIO_CASE_TEN(obj)					(G_TYPE_CHECK_INSTANCE_CAST (obj, CtAudioCaseTen))
+#define CT_AUDIO_CASE_TEN_CLASS(klass)					(G_TYPE_CHECK_CLASS_CAST ((klass), CT_TYPE_AUDIO_CASE_TEN, CtAudioCaseTenClass))
+#define CT_IS_AUDIO_CASE_TEN(obj)					(G_TYPE_CHECK_INSTANCE_TYPE ((obj), CT_TYPE_AUDIO_CASE_TEN))
+#define CT_IS_AUDIO_CASE_TEN_CLASS(klass)					(G_TYPE_CHECK_CLASS_TYPE ((klass), CT_TYPE_AUDIO_CASE_TEN))
+#define CT_AUDIO_CASE_TEN_GET_CLASS(obj)					(G_TYPE_INSTANCE_GET_CLASS ((obj), CT_TYPE_AUDIO_CASE_TEN, CtAudioCaseTenClass))
 
-typedef struct 				_CtAudioCaseTen CtAudioCaseTen;
-typedef struct 				_CtAudioCaseTenPrivate CtAudioCaseTenPrivate;
+typedef struct 			_CtAudioCaseTen CtAudioCaseTen;
+typedef struct 			_CtAudioCaseTenClass CtAudioCaseTenClass;
+typedef struct 			_CtAudioCaseTenPrivate CtAudioCaseTenPrivate;
 
 struct _CtAudioCaseTen
 {
 	AbsCtAudioCase parent;
 };
 
+struct _CtAudioCaseTenClass
+{
+	AbsCtAudioCaseClass parentclass;
+};
 
-KConstType		            ct_audio_case_ten_get_type(void);
+GType				            ct_audio_case_ten_get_type(void);
 CtAudioCaseTen       *ct_audio_case_ten_new(void);
+
+G_END_DECLS
 
 #endif /* __K_AUDIO_CASE_TEN_H__ */
 

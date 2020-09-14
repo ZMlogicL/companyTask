@@ -112,31 +112,31 @@ void spi_test()
 	ioSpi = (gpointer)0x1E800000;
 #endif
 
-	IntErnals_RS_printf("SPI\n");
+	CheckHeaderMain_RS_PRINTF("SPI\n");
 #if 0
 	int loop;
 
 	for (loop = 0; loop < 3; loop++) {
-		IntErnals_RS_printf("ioSpi[%d].txdata       = %lx\n", loop, (gulong)&ioSpi[loop].txdata );
-		IntErnals_RS_printf("ioSpi[%d].rxdata       = %lx\n", loop, (gulong)&ioSpi[loop].rxdata );
-		IntErnals_RS_printf("ioSpi[%d].div          = %lx\n", loop, (gulong)&ioSpi[loop].div );
-		IntErnals_RS_printf("ioSpi[%d].ctrl         = %lx\n", loop, (gulong)&ioSpi[loop].ctrl );
-		IntErnals_RS_printf("ioSpi[%d].aucxCtrl    = %lx\n", loop, (gulong)&ioSpi[loop].aucxCtrl );
-		IntErnals_RS_printf("ioSpi[%d].st           = %lx\n", loop, (gulong)&ioSpi[loop].st );
-		IntErnals_RS_printf("ioSpi[%d].slvSel      = %lx\n", loop, (gulong)&ioSpi[loop].slvSel );
-		IntErnals_RS_printf("ioSpi[%d].slvPol      = %lx\n", loop, (gulong)&ioSpi[loop].slvPol );
-		IntErnals_RS_printf("ioSpi[%d].intEn       = %lx\n", loop, (gulong)&ioSpi[loop].intEn );
-		IntErnals_RS_printf("ioSpi[%d].intSt       = %lx\n", loop, (gulong)&ioSpi[loop].intSt );
-		IntErnals_RS_printf("ioSpi[%d].intClr      = %lx\n", loop, (gulong)&ioSpi[loop].intClr );
-		IntErnals_RS_printf("ioSpi[%d].txfifo       = %lx\n", loop, (gulong)&ioSpi[loop].txfifo );
-		IntErnals_RS_printf("ioSpi[%d].rxfifo       = %lx\n", loop, (gulong)&ioSpi[loop].rxfifo );
-		IntErnals_RS_printf("ioSpi[%d].dmaTo       = %lx\n", loop, (gulong)&ioSpi[loop].dmaTo );
-		IntErnals_RS_printf("ioSpi[%d].msDly       = %lx\n", loop, (gulong)&ioSpi[loop].msDly );
-		IntErnals_RS_printf("ioSpi[%d].en           = %lx\n", loop, (gulong)&ioSpi[loop].en );
-		IntErnals_RS_printf("ioSpi[%d].fifoDpth    = %lx\n", loop, (gulong)&ioSpi[loop].fifoDpth );
-		IntErnals_RS_printf("ioSpi[%d].fifoWmk     = %lx\n", loop, (gulong)&ioSpi[loop].fifoWmk );
-		IntErnals_RS_printf("ioSpi[%d].txDwr       = %lx\n", loop, (gulong)&ioSpi[loop].txDwr );
-		IntErnals_RS_printf(" \n");
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].txdata       = %lx\n", loop, (gulong)&ioSpi[loop].txdata );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].rxdata       = %lx\n", loop, (gulong)&ioSpi[loop].rxdata );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].div          = %lx\n", loop, (gulong)&ioSpi[loop].div );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].ctrl         = %lx\n", loop, (gulong)&ioSpi[loop].ctrl );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].aucxCtrl    = %lx\n", loop, (gulong)&ioSpi[loop].aucxCtrl );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].st           = %lx\n", loop, (gulong)&ioSpi[loop].st );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].slvSel      = %lx\n", loop, (gulong)&ioSpi[loop].slvSel );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].slvPol      = %lx\n", loop, (gulong)&ioSpi[loop].slvPol );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].intEn       = %lx\n", loop, (gulong)&ioSpi[loop].intEn );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].intSt       = %lx\n", loop, (gulong)&ioSpi[loop].intSt );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].intClr      = %lx\n", loop, (gulong)&ioSpi[loop].intClr );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].txfifo       = %lx\n", loop, (gulong)&ioSpi[loop].txfifo );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].rxfifo       = %lx\n", loop, (gulong)&ioSpi[loop].rxfifo );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].dmaTo       = %lx\n", loop, (gulong)&ioSpi[loop].dmaTo );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].msDly       = %lx\n", loop, (gulong)&ioSpi[loop].msDly );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].en           = %lx\n", loop, (gulong)&ioSpi[loop].en );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].fifoDpth    = %lx\n", loop, (gulong)&ioSpi[loop].fifoDpth );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].fifoWmk     = %lx\n", loop, (gulong)&ioSpi[loop].fifoWmk );
+		CheckHeaderMain_RS_PRINTF("ioSpi[%d].txDwr       = %lx\n", loop, (gulong)&ioSpi[loop].txDwr );
+		CheckHeaderMain_RS_PRINTF(" \n");
 	}
 #endif
 }

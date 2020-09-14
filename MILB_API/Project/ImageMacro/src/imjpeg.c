@@ -18,13 +18,14 @@
 #include "imjpeg.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImJpeg, im_jpeg);
-#define IM_JPEG_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImJpegPrivate, IM_TYPE_JPEG))
+G_DEFINE_TYPE(ImJpeg, im_jpeg, G_TYPE_OBJECT);
+#define IM_JPEG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_JPEG, ImJpegPrivate));
+
 
 
 struct _ImJpegPrivate
 {
-	kint a;
+	gint a;
 };
 
 /*----------------------------------------------------------------------*/
@@ -32,7 +33,7 @@ struct _ImJpegPrivate
 /*----------------------------------------------------------------------*/
 // quantization table for the next frame
 static TimgQuatTblPack S_GIM_JPEG_NEXT_FRAME_QUANT_TBL;
-static volatile kuchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
+static volatile guchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
 
 // encode setting table
 static TimgEncMng S_GIM_JPEG_ENC_MNG;
@@ -43,16 +44,16 @@ static TimgDecFrameMng S_GIM_JPEG_DEC_FRAME_MNG;
 
 // Clock control counter (0~255)
 #ifdef ImJpegCommon_CO_ACT_JPEG_CLOCK
-volatile kuchar gImJpgClkCtrlCnt = 0;
+volatile guchar gImJpgClkCtrlCnt = 0;
 #endif // ImJpegCommon_CO_ACT_JPEG_CLOCK
 #ifdef ImJpegCommon_CO_ACT_JPEG_HCLOCK
-volatile kuchar gImJpgHclkCtrlCnt = 0;
+volatile guchar gImJpgHclkCtrlCnt = 0;
 #endif // ImJpegCommon_CO_ACT_JPEG_HCLOCK
 #ifdef ImJpegCommon_CO_ACT_JPEG_ICLOCK
-volatile kuchar gImJpgIclkCtrlCnt = 0;
+volatile guchar gImJpgIclkCtrlCnt = 0;
 #endif // ImJpegCommon_CO_ACT_JPEG_ICLOCK
 
-static kint32 S_GIM_JPEG_RESULT_JUDGE = 0;
+static gint32 S_GIM_JPEG_RESULT_JUDGE = 0;
 
 /********************************************************/
 /* Default Quantization Table							*/
@@ -81,16 +82,42 @@ static const TimgQuatTbl S_GDEFAULT_QUANTIZE_TBL_CHROMA = {
 		0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63	}
 };
 /**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
  *IMPL
  */
-static void im_jpeg_constructor(ImJpeg *self)
+static void 		im_jpeg_class_init(ImJpegClass *klass)
 {
-//	ImJpegPrivate *priv = IM_JPEG_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImJpegPrivate));
 }
 
-static void im_jpeg_destructor(ImJpeg *self)
+static void 		im_jpeg_init(ImJpeg *self)
 {
-//	ImJpegPrivate *priv = IM_JPEG_GET_PRIVATE(self);
+	ImJpegPrivate *priv = IM_JPEG_GET_PRIVATE(self);
+	self->ddTopthree = dd_topthree_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImJpegPrivate *priv = IM_JPEG_GET_PRIVATE(object);
+	ImJpeg *self = im_jpeg_new();
+	if(self->ddTopthree){
+		g_object_unref(self->ddTopthree);
+		self->ddTopthree = NULL;
+	}
+	G_OBJECT_CLASS(im_jpeg_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImJpegPrivate *priv = IM_JPEG_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_jpeg_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -107,7 +134,7 @@ static void im_jpeg_destructor(ImJpeg *self)
 void im_jpeg_on_clk(ImJpeg*self)
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_CLOCK
-	Dd_Top_Start_Clock((kuchar*) &gImJpgClkCtrlCnt, ImJpegCommon_D_IM_JPEG_CLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_CLK_BIT);
+	dd_topthree_start_clock(self->ddTopthree, (guchar*) &gImJpgClkCtrlCnt, ImJpegCommon_D_IM_JPEG_CLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_CLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_CLOCK
 }
 
@@ -120,7 +147,7 @@ void im_jpeg_on_clk(ImJpeg*self)
 void im_jpeg_off_clk(ImJpeg*self)
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_CLOCK
-	Dd_Top_Stop_Clock((kuchar*) &gImJpgClkCtrlCnt, ImJpegCommon_D_IM_JPEG_CLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_CLK_BIT);
+	dd_topthree_stop_clock(self->ddTopthree, (guchar*) &gImJpgClkCtrlCnt, ImJpegCommon_D_IM_JPEG_CLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_CLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_CLOCK
 }
 
@@ -133,7 +160,7 @@ void im_jpeg_off_clk(ImJpeg*self)
 void im_jpeg_on_hclk(ImJpeg*self)
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_HCLOCK
-	Dd_Top_Start_Clock((kuchar*) &gImJpgHclkCtrlCnt, ImJpegCommon_D_IM_JPEG_HCLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_HCLK_BIT);
+	dd_topthree_start_clock(self->ddTopthree, (guchar*) &gImJpgHclkCtrlCnt, ImJpegCommon_D_IM_JPEG_HCLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_HCLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_HCLOCK
 }
 
@@ -146,7 +173,7 @@ void im_jpeg_on_hclk(ImJpeg*self)
 void im_jpeg_off_hclk(ImJpeg*self)
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_HCLOCK
-	Dd_Top_Stop_Clock((kuchar*) &gImJpgHclkCtrlCnt, ImJpegCommon_D_IM_JPEG_HCLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_HCLK_BIT);
+	dd_topthree_stop_clock(self->ddTopthree, (guchar*) &gImJpgHclkCtrlCnt, ImJpegCommon_D_IM_JPEG_HCLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_HCLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_HCLOCK
 }
 
@@ -159,7 +186,7 @@ void im_jpeg_off_hclk(ImJpeg*self)
 void im_jpeg_on_iclk( ImJpeg*self )
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_ICLOCK
-	Dd_Top_Start_Clock((kuchar*) &gImJpgIclkCtrlCnt, ImJpegCommon_D_IM_JPEG_ICLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_ICLK_BIT);
+	dd_topthree_start_clock(self->ddTopthree, (guchar*) &gImJpgIclkCtrlCnt, ImJpegCommon_D_IM_JPEG_ICLK_REG_ADDR, ~ImJpegCommon_D_IM_JPEG_ICLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_ICLOCK
 }
 
@@ -172,7 +199,7 @@ void im_jpeg_on_iclk( ImJpeg*self )
 void im_jpeg_off_iclk( ImJpeg*self )
 {
 #ifdef ImJpegCommon_CO_ACT_JPEG_ICLOCK
-	Dd_Top_Stop_Clock((kuchar*) &gImJpgIclkCtrlCnt, ImJpegCommon_D_IM_JPEG_ICLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_ICLK_BIT);
+	dd_topthree_stop_clock(self->ddTopthree, (guchar*) &gImJpgIclkCtrlCnt, ImJpegCommon_D_IM_JPEG_ICLK_REG_ADDR, ImJpegCommon_D_IM_JPEG_ICLK_BIT);
 #endif	// ImJpegCommon_CO_ACT_JPEG_ICLOCK
 }
 
@@ -212,7 +239,7 @@ void im_jpeg_reset( ImJpeg*self )
  */
 void im_jpeg_set_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl )
 {
-	kint32 i, index;
+	gint32 i, index;
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 
@@ -222,7 +249,7 @@ void im_jpeg_set_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl )
 	ImJpegCommon_IM_JPEG_DSB();
 
 	// QTTBL SRAM power down control wait time.
-	Dd_ARM_Wait_ns(1000);
+	DD_ARM_WAIT_NS(1000);
 
 	if (pQuantTbl == NULL) {
 		// Quantization table No.0 for Y
@@ -386,7 +413,7 @@ void im_jpeg_set_next_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl )
 	}
 
 #ifdef CO_IM_JPEG_DEBUG
-	kuchar i;
+	guchar i;
 	for ( i=0; i < 64; i++ ) {
 		Ddim_Print(("S_GIM_JPEG_NEXT_FRAME_QUANT_TBL.quantizationTbl0.quantValue[%d]=0x%X\n", i,
 				S_GIM_JPEG_NEXT_FRAME_QUANT_TBL.quantizationTbl0->quantValue[i]));
@@ -411,10 +438,10 @@ void im_jpeg_set_next_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl )
 /**
  * @brief  interrupt handler for QTWINT.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return None
  */
-void im_jpeg_sub_int_handler_enc_core_qtwint(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_enc_core_qtwint(ImJpeg*self, gint32* result )
 {
 	// Check update enable
 	if (ioJpg7.jpintsta.bit.qtwint == 1) {
@@ -438,10 +465,10 @@ void im_jpeg_sub_int_handler_enc_core_qtwint(ImJpeg*self, kint32* result )
 /**
  * @brief  Encode normal end handler.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return None
  */
-void im_jpeg_sub_int_handler_enc_core_end(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_enc_core_end(ImJpeg*self, gint32* result )
 {
 	// Normal end
 	if (ioJpg7.jpintsta.bit.intflg == 1) {
@@ -463,12 +490,12 @@ void im_jpeg_sub_int_handler_enc_core_end(ImJpeg*self, kint32* result )
 /**
  * @brief  Decode err handler.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return None
  */
-void im_jpeg_sub_int_handler_dec_core_errint(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_dec_core_errint(ImJpeg*self, gint32* result )
 {
-	kint32 res = 0;
+	gint32 res = 0;
 
 	// get error code
 	S_GIM_JPEG_DEC_MNG.errCode = ioJpg7.jperrcod.bit.jperrcod;
@@ -492,13 +519,13 @@ void im_jpeg_sub_int_handler_dec_core_errint(ImJpeg*self, kint32* result )
 /**
  * @brief  interrupt handler for REGRDINT.
  * @param[in]	None
- * @param[out]	kint32* result
- * @return	kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_DECODE_ERR
+ * @param[out]	gint32* result
+ * @return	gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_DECODE_ERR
  */
-kint32 im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, kint32* result )
+gint32 im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, gint32* result )
 {
-	kushort width;
-	kushort lines;
+	gushort width;
+	gushort lines;
 
 	if (ioJpg7.jpintsta.bit.regrdint == 1) {
 		// REGRDINT bit clear
@@ -556,7 +583,7 @@ kint32 im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, kint32* result )
 		if (S_GIM_JPEG_DEC_MNG.smplType == ImJpegCommon_E_IM_JPEG_SMPL_TYPE_YCC422 ||
 			S_GIM_JPEG_DEC_MNG.smplType == ImJpegCommon_E_IM_JPEG_SMPL_TYPE_YCC420) {
 			// 2pix unit
-			width = (kushort) (((width >> 1) << 1) + 2);
+			width = (gushort) (((width >> 1) << 1) + 2);
 		}
 	}
 
@@ -565,7 +592,7 @@ kint32 im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, kint32* result )
 	if ((lines & 0x01) != 0) {
 		if (S_GIM_JPEG_DEC_MNG.smplType == ImJpegCommon_E_IM_JPEG_SMPL_TYPE_YCC420) {
 			// 2lines unit
-			lines = (kushort) (((lines >> 1) << 1) + 2);
+			lines = (gushort) (((lines >> 1) << 1) + 2);
 		}
 	}
 
@@ -615,12 +642,12 @@ kint32 im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, kint32* result )
 /**
  * @brief  Decode normal end.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return	None
  */
-void im_jpeg_sub_int_handler_dec_core_end(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_dec_core_end(ImJpeg*self, gint32* result )
 {
-	kint32 res = 0;
+	gint32 res = 0;
 
 	// correction process end
 	if (ioJpg7.jpintsta.bit.corend == 1) {
@@ -664,12 +691,12 @@ void im_jpeg_sub_int_handler_dec_core_end(ImJpeg*self, kint32* result )
 /**
  * @brief  Detection segment interrupt handler.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return	None
  */
-void im_jpeg_sub_int_handler_dec_core_segint(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_dec_core_segint(ImJpeg*self, gint32* result )
 {
-	kint32 res = 0;
+	gint32 res = 0;
 
 	// Segment error
 	if (ioJpg7.jpintsta.bit.sizerr != 0) {
@@ -699,12 +726,12 @@ void im_jpeg_sub_int_handler_dec_core_segint(ImJpeg*self, kint32* result )
 /**
  * @brief  Detection marker interrupt handler.
  * @param[in]	None
- * @param[out]	kint32* result
+ * @param[out]	gint32* result
  * @return	None
  */
-void im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, kint32* result )
+void im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, gint32* result )
 {
-	kint32 res = 0;
+	gint32 res = 0;
 
 	// Marker detection interrupt
 	if (ioJpg7.jpintsta.bit.umksinfo == 1) {
@@ -741,8 +768,8 @@ void im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, kint32* result )
 	return;
 }
 
-ImJpeg* im_jpeg_new(void)
+ImJpeg* 		im_jpeg_new(void)
 {
-	ImJpeg *self = k_object_new_with_private(IM_TYPE_JPEG, sizeof(ImJpegPrivate));
+	ImJpeg *self = g_object_new(IM_TYPE_JPEG, NULL);
 	return self;
 }

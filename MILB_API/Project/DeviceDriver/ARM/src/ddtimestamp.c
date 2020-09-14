@@ -3,7 +3,7 @@
 *@date                :2020-08-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -14,13 +14,12 @@
 */
 
 
-#include <MILB_API/Project/PalladiumTest/src/ddimusercustom.h>
 #include "ddarm.h"
 #include "ddtimestamp.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(DdTimestamp, dd_timestamp);
-#define DD_TDDESTAMP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), DdTimestampPrivate, DD_TYPE_TDDESTAMP))
+G_DEFINE_TYPE(DdTimestamp, dd_timestamp, G_TYPE_OBJECT);
+#define DD_TIMESTAMP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), DD_TYPE_TIMESTAMP, DdTimestampPrivate));
 /*----------------------------------------------------------------------	*/
 /* Definition																	*/
 /*----------------------------------------------------------------------	*/
@@ -34,19 +33,64 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdTimestamp, dd_timestamp);
 
 struct _DdTimestampPrivate
 {
-	kint a;
+	gint a;
+	DdTimestamp *ddtimestamp;
+	DdimUserCustom_ER ercd;
+	DdimUserCustom_ID sid;
 };
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  *IMPL
  */
-static void dd_timestamp_constructor(DdTimestamp *self)
+static void 		dd_timestamp_class_init(DdTimestampClass *klass)
 {
-//	DdTimestampPrivate *priv = DD_TDDESTAMP_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(DdTimestampPrivate));
 }
 
-static void dd_timestamp_destructor(DdTimestamp *self)
+static void 		dd_timestamp_init(DdTimestamp *self)
 {
-//	DdTimestampPrivate *priv = DD_TDDESTAMP_GET_PRIVATE(self);
+	DdTimestampPrivate *priv = DD_TIMESTAMP_GET_PRIVATE(self);
+	priv->a = 0;
+	self->ddmiUserCustom = ddim_user_custom_new();
+	priv->ddtimestamp = dd_timestamp_new();
+	priv->ercd = dd_timestamp_new();
+	priv->sid = dd_timestamp_new();
+}
+static void 		dispose_od(GObject *object)
+{
+	DdTimestampPrivate *priv = DD_TIMESTAMP_GET_PRIVATE(object);
+	G_OBJECT_CLASS(dd_timestamp_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	DdTimestampPrivate *priv = DD_TIMESTAMP_GET_PRIVATE(object);
+	DdTimestamp *self = dd_timestamp_new();
+	if(self->ddmiUserCustom)
+	{
+		g_object_unref(self->ddmiUserCustom);
+		self->ddmiUserCustom = NULL;
+	}
+	if(priv->ddtimestamp){
+		g_object_unref(priv->ddtimestamp);
+		priv->ddtimestamp;
+	}
+	if(priv->ercd){
+		g_object_unref(priv->ercd);
+		priv->ercd = NULL;
+	}
+	if(priv->sid){
+		g_object_unref(priv->sid);
+		priv->sid = NULL;
+	}
+	G_OBJECT_CLASS(dd_timestamp_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -94,34 +138,35 @@ void dd_timestamp_init(DdTimestamp*self)
 
 /**
  * @brief	Timestamp fuction is exclusively controlled.
- * @param	kint32 tmout
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_SEM_NG/
+ * @param	gint32 tmout
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_SEM_NG/
  * DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR/DdTimestamp_D_DD_TIMESTAMP_SEM_TIMEOUT
  */
-kint32 dd_timestamp_open(DdTimestamp*self, kint32 tmout)
+gint32 dd_timestamp_open(DdTimestamp*self, gint32 tmout)
 {
-	DDIM_USER_ER ercd;
-	DDIM_USER_ID sid;
+	DdimUserCustom_ER ercd;
+	DdimUserCustom_ID sid;
 
 #ifdef CO_PARAM_CHECK
-	if (tmout < D_DDIM_USER_SEM_WAIT_FEVR) {
+	if (tmout < DdimUserCustom_SEM_WAIT_FEVR) {
 		Ddim_Assertion(("dd_timestamp_open: input param error. tmout = %d\n", tmout));
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
 #endif
 	sid = SID_DD_TIMESTAMP;
 
-	if (D_DDIM_USER_SEM_WAIT_POL == tmout) {
+	if (DdimUserCustom_SEM_WAIT_POL == tmout) {
 		// pol_sem()
-		ercd = DDIM_User_Pol_Sem(sid);
+		//ercd = ddim_user_custom_pol_sem(ddim_user_custom_get(), sid);
+		ercd = ddim_user_custom_pol_sem(self->ddmiUserCustom, sid);
 	}
 	else {
 		// twai_sem()
-		ercd = DDIM_User_Twai_Sem(sid, (DDIM_USER_TMO) tmout);
+		ercd = ddim_user_custom_twai_sem(self->ddmiUserCustom, sid, (DDIM_USER_TMO) tmout);
 	}
 
-	if (D_DDIM_USER_E_OK != ercd) {
-		if (D_DDIM_USER_E_TMOUT == ercd) {
+	if (DdimUserCustom_E_OK != ercd) {
+		if (DdimUserCustom_E_TMOUT == ercd) {
 			return DdTimestamp_D_DD_TIMESTAMP_SEM_TIMEOUT;
 		}
 		return DdTimestamp_D_DD_TIMESTAMP_SEM_NG;
@@ -132,32 +177,32 @@ kint32 dd_timestamp_open(DdTimestamp*self, kint32 tmout)
 
 /**
  * @brief	Operation condition of Timestamp is set.
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
  */
-kint32 dd_timestamp_ctrl(DdTimestamp*self, DdTimestamp* timestampCtrl)
+gint32 dd_timestamp_ctrl(DdTimestamp*self)
 {
 #ifdef CO_PARAM_CHECK
-	if (timestampCtrl == NULL) {
-		Ddim_Assertion(("dd_timestamp_ctrl: input param error. [*timestampCtrl] NULL\n"));
+	if (self == NULL) {
+		Ddim_Assertion(("dd_timestamp_ctrl: input param error. [*self] NULL\n"));
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
-	if (timestampCtrl->frequency == 0) {
+	if (self->frequency == 0) {
 		Ddim_Assertion(("dd_timestamp_ctrl: input param error. [frequency] 0\n"));
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
-	if (timestampCtrl->frequency > DdTimestamp_D_DD_TIMESTAMP_FREQUENCY_MAX) {
+	if (self->frequency > DdTimestamp_D_DD_TIMESTAMP_FREQUENCY_MAX) {
 		Ddim_Assertion(("dd_timestamp_ctrl: input param error. [frequency] MAX Over\n"));
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
 #endif
 	// Set value of CNTCR register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTCR_HDbg(timestampCtrl->hdbg);
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTCR_HDbg(self->hdbg);
 	// Set value of CNTCVL register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVL((kulong )(timestampCtrl->counter & 0x00000000FFFFFFFF));
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVL((gulong )(self->counter & 0x00000000FFFFFFFF));
 	// Set value of CNTCVU register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVU((kulong )((timestampCtrl->counter & 0xFFFFFFFF00000000) >> 32));
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVU((gulong )((self->counter & 0xFFFFFFFF00000000) >> 32));
 	// Set value of CNTFID0 register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTFID0(timestampCtrl->frequency);
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTFID0(self->frequency);
 
 	return D_DDIM_OK;
 }
@@ -169,7 +214,7 @@ void dd_timestamp_start(DdTimestamp*self)
 {
 	// Timestamp Counter Increment
 	DdTimestamp_Dd_TIMESTAMP_Set_CNTCR_En(1);
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POC();
 }
 
 /**
@@ -179,23 +224,21 @@ void dd_timestamp_stop(DdTimestamp*self)
 {
 	// Timestamp Counter no Increment
 	DdTimestamp_Dd_TIMESTAMP_Set_CNTCR_En(0);
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POC();
 }
 
 /**
  * @brief	Exclusive control of Timestamp is released.
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_SEM_NG
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_SEM_NG
  */
-kint32 dd_timestamp_close(DdTimestamp*self)
+gint32 dd_timestamp_close(DdTimestamp*self)
 {
-	DDIM_USER_ER ercd;
-	DDIM_USER_ID sid;
-
-	sid = SID_DD_TIMESTAMP;
+	DdTimestampPrivate *priv = DD_TDDESTAMP_GET_PRIVATE(self);
+	priv->sid = SID_DD_TIMESTAMP;
 
 	// sig_sem()
-	ercd = DDIM_User_Sig_Sem(sid);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	priv->ercd = ddim_user_custom_sig_sem(self->ddmiUserCustom, priv->sid);
+	if ( DdimUserCustom_E_OK != priv->ercd) {
 		return DdTimestamp_D_DD_TIMESTAMP_SEM_NG;
 	}
 
@@ -205,13 +248,13 @@ kint32 dd_timestamp_close(DdTimestamp*self)
 /**
  * @brief	Get value of TIMESTAMP CNTCVL and CNTCVU register.
  * @param	kulonglong* timestampCounter
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
  */
-kint32 dd_timestamp_get_counter(DdTimestamp*self, kulonglong* timestampCounter)
+gint32 dd_timestamp_get_counter(DdTimestamp*self, kulonglong* timestampCounter)
 {
-	kulong upCounter1 = 0;
-	kulong upCounter2 = 0;
-	kulong lowCounter = 0;
+	gulong upCounter1 = 0;
+	gulong upCounter2 = 0;
+	gulong lowCounter = 0;
 
 #ifdef CO_PARAM_CHECK
 	if (timestampCounter == NULL) {
@@ -239,23 +282,24 @@ kint32 dd_timestamp_get_counter(DdTimestamp*self, kulonglong* timestampCounter)
 
 /**
  * @brief	Get value of Timestamp Control value.
- * @param	DdTimestamp* timestampCtrl
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
+ * @param	DdTimestamp* self
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
  */
-kint32 dd_timestamp_get_control(DdTimestamp*self, DdTimestamp* timestampCtrl)
+gint32 dd_timestamp_get_control(DdTimestamp*self)
 {
+	DdTimestampPrivate *priv = DD_TDDESTAMP_GET_PRIVATE(self);
 #ifdef CO_PARAM_CHECK
-	if (timestampCtrl == NULL) {
-		Ddim_Assertion(("dd_timestamp_get_control: input param error. [*timestampCtrl] NULL\n"));
+	if (self == NULL) {
+		Ddim_Assertion(("dd_timestamp_get_control: input param error. [*self] NULL\n"));
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
 #endif
 	// Get value of CNTCR register
-	timestampCtrl->hdbg = DdTimestamp_Dd_TIMESTAMP_Get_CNTCR_HDbg;
+	self->hdbg = DdTimestamp_Dd_TIMESTAMP_Get_CNTCR_HDbg;
 	// Get value of CNTCVL and CNTCVU register
-	dd_timestamp_get_counter(NULL, &(timestampCtrl->counter));
+	dd_timestamp_get_counter(priv->ddtimestamp, &(self->counter));
 	// Get value of CNTFID0 register
-	timestampCtrl->frequency = DdTimestamp_Dd_TIMESTAMP_Get_CNTFID0;
+	self->frequency = DdTimestamp_Dd_TIMESTAMP_Get_CNTFID0;
 
 	return D_DDIM_OK;
 }
@@ -263,16 +307,16 @@ kint32 dd_timestamp_get_control(DdTimestamp*self, DdTimestamp* timestampCtrl)
 /**
  * @brief	Set value of TIMESTAMP CNTCVL and CNTCVU register.
  * @param	kulonglong timestampCounter
- * @return	kint32 D_DDIM_OK
+ * @return	gint32 D_DDIM_OK
  */
-kint32 dd_timestamp_set_counter(DdTimestamp*self, kulonglong timestampCounter)
+gint32 dd_timestamp_set_counter(DdTimestamp*self, kulonglong timestampCounter)
 {
 	// Timestamp Counter no Increment
 	DdTimestamp_Dd_TIMESTAMP_Set_CNTCR_En(0);
 	// Set value of CNTCVL register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVL((kulong )(timestampCounter & 0x00000000FFFFFFFF));
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVL((gulong )(timestampCounter & 0x00000000FFFFFFFF));
 	// Set value of CNTCVU register
-	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVU((kulong )((timestampCounter & 0xFFFFFFFF00000000) >> 32));
+	DdTimestamp_Dd_TIMESTAMP_Set_CNTCVU((gulong )((timestampCounter & 0xFFFFFFFF00000000) >> 32));
 
 	return D_DDIM_OK;
 }
@@ -281,22 +325,23 @@ kint32 dd_timestamp_set_counter(DdTimestamp*self, kulonglong timestampCounter)
 //---------------------------- utility section ---------------------------
 /**
  * @brief	The operation condition of Timestamp is set. VALUE unit:[us]
- * @param	kulong usec, kulong frequency
- * @return	kint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
+ * @param	gulong usec, gulong frequency
+ * @return	gint32 D_DDIM_OK/DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR
  */
-kint32 dd_timestamp_set_timer(DdTimestamp*self, kulong usec, kulong frequency)
+gint32 dd_timestamp_set_timer(DdTimestamp*self, gulong usec, gulong frequency)
 {
+	DdTimestampPrivate *priv = DD_TDDESTAMP_GET_PRIVATE(self);
 	//	kulonglong usec_count;
-	kulong usecCountL;
-	kulong usecCountU;
-	kulong usec3124;
-	kulong usec2312;
-	kulong usec110;
-	kulong usecCount3124;
-	kulong usecCount2312;
-	kulong usecCount110;
-	kulong usecCountLWk;
-	kulong usecCountUWk;
+	gulong usecCountL;
+	gulong usecCountU;
+	gulong usec3124;
+	gulong usec2312;
+	gulong usec110;
+	gulong usecCount3124;
+	gulong usecCount2312;
+	gulong usecCount110;
+	gulong usecCountLWk;
+	gulong usecCountUWk;
 
 #ifdef CO_PARAM_CHECK
 	if (frequency == 0) {
@@ -308,7 +353,7 @@ kint32 dd_timestamp_set_timer(DdTimestamp*self, kulong usec, kulong frequency)
 		return DdTimestamp_D_DD_TIMESTAMP_INPUT_PARAM_ERR;
 	}
 #endif
-	dd_timestamp_init(NULL);
+	dd_timestamp_init(priv->ddtimestamp);
 	// Counter value
 	//	usec_count = (usec * 1000000) / frequency;
 	usec3124 = ((usec & 0xFF000000) >> 24);
@@ -346,8 +391,17 @@ kint32 dd_timestamp_set_timer(DdTimestamp*self, kulong usec, kulong frequency)
 }
 #endif	// CO_DDIM_UTILITY_USE
 
-DdTimestamp* dd_timestamp_new(void)
+DdTimestamp* 		dd_timestamp_new(void)
 {
-	DdTimestamp *self = k_object_new_with_private(DD_TYPE_TDDESTAMP, sizeof(DdTimestampPrivate));
+	DdTimestamp *self = g_object_new(DD_TYPE_TIMESTAMP, NULL);
 	return self;
 }
+
+//DdTimestamp* dd_timestamp_get(void)
+//{
+//	DdTimestamp *self = NULL;
+//	if(!self){
+//		self = k_object_new(DD_TYPE_TDDESTAMP, NULL);
+//	}
+//	return self;
+//}

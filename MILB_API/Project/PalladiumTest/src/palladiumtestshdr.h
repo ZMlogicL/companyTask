@@ -36,7 +36,7 @@ PalladiumTestShdr* 	palladium_test_shdr_new(void);
 /*
  * PUBLIC
  */
-void palladium_test_shdr_im_main( void );
+void                            palladium_test_shdr_im_main(PalladiumTestShdr *self);
 
 #endif /* __PALLADIUM_TEST_SHDR_H__ */
 

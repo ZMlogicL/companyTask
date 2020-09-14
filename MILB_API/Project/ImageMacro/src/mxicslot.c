@@ -30,9 +30,9 @@ struct _MxicSlotPrivate
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckLevelCtrlBlock( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
+static kint32 imMxicCheckLevelCtrlBlock( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
 										ImMxicPort port, MxicSlotLevelCtrl levelNumber );
-static INT32 imMxicCheckSlot( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
+static kint32 imMxicCheckSlot( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
 								ImMxicPort port, ImMxicSlot slot );
 #endif // CO_PARAM_CHECK
 
@@ -68,10 +68,10 @@ Check level control block specifies parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckLevelCtrlBlock( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
+static kint32 imMxicCheckLevelCtrlBlock( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
 										ImMxicPort port, MxicSlotLevelCtrl levelNumber )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -94,10 +94,10 @@ Check slot parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckSlot( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
+static kint32 imMxicCheckSlot( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter, 
 							  ImMxicPort port, ImMxicSlot slot )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -119,9 +119,9 @@ Get TLVL*.LML* bit flag.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 im_mxic_get_slot_mask_bit_flag( ImMxicSlot slot, INT32* const bitFlag )
+static kint32 im_mxic_get_slot_mask_bit_flag( ImMxicSlot slot, kint32* const bitFlag )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -169,11 +169,11 @@ This function set the slot priority level control.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting ranges are from 1 to 64.
 */
-INT32 mxic_slot_set_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
+kint32 mxic_slot_set_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
 		MxicSlotLevelCtrl levelNumber, const MxicSlotPriorityLevel* const priority )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicSlotPrivate *priv = MXIC_SLOT_GET_PRIVATE(self);
 
@@ -502,11 +502,11 @@ param[in]		wrArbiter				Target write or read Arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_slot_get_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
+kint32 mxic_slot_get_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
 		MxicSlotLevelCtrl levelNumber, MxicSlotPriorityLevel* const priority )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicSlotPrivate *priv = MXIC_SLOT_GET_PRIVATE(self);
 
@@ -834,11 +834,11 @@ This function set the slot priority level control to all arbiter.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting  ranges are from 1 to 64.
 */
-INT32 mxic_slot_set_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
+kint32 mxic_slot_set_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
 		const MxicAllSlotPriority* const allPriority )
 {
-	INT32 result;
-	INT32 i, j, k;
+	kint32 result;
+	kint32 i, j, k;
 	SlotArgs priArgs;
 	priArgs.unit = unit;
 
@@ -935,11 +935,11 @@ This function get the slot priority level control from all arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_slot_get_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
+kint32 mxic_slot_get_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
 												MxicAllSlotPriority* const allPriority )
 {
-	INT32 result;
-	INT32 i, j, k;
+	kint32 result;
+	kint32 i, j, k;
 	SlotArgs priArgs;
 	priArgs.unit = unit;
 
@@ -1044,11 +1044,11 @@ This function set the slot mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_slot_set_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
-								ImMxicSlot slot, UCHAR maskEnable )
+kint32 mxic_slot_set_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
+								ImMxicSlot slot, kuchar maskEnable )
 {
-	INT32						result;
-	INT32						bitFlag;
+	kint32						result;
+	kint32						bitFlag;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicSlotPrivate *priv = MXIC_SLOT_GET_PRIVATE(self);
 
@@ -1209,11 +1209,11 @@ This function get the slot mask.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32 mxic_slot_get_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
-								ImMxicSlot slot, UCHAR* const maskEnable )
+kint32 mxic_slot_get_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
+								ImMxicSlot slot, kuchar* const maskEnable )
 {
-	INT32						result;
-	INT32						bitFlag;
+	kint32						result;
+	kint32						bitFlag;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicSlotPrivate *priv = MXIC_SLOT_GET_PRIVATE(self);
 

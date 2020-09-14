@@ -14,7 +14,7 @@
 
 #include "im_ltm.h"
 #include <string.h>
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "jdsltm.h"
 #include "imltmmaplist.h"
 #include "imltmmapevent.h"
@@ -206,7 +206,7 @@ INT32 Im_LTM_MAP_SW_Reset( UCHAR pipe_no )
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 	Im_LTM_On_RBKClk( pipe_no );
@@ -347,7 +347,7 @@ INT32 Im_LTM_MAP_Get_AxiCtrlParam( UCHAR pipe_no, T_IM_LTM_MAP_AXI_CTRL_PARAM* c
 	return D_DDIM_OK;
 }
 
-INT32 Im_LTM_MAP_Set_AxiCtrlParam( UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm )
+INT32 im_ltm_map_list_im_ltm_map_set_axictrlparam( UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
@@ -355,11 +355,11 @@ INT32 Im_LTM_MAP_Set_AxiCtrlParam( UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PA
 	// check on input pointer
 	if( axi_ctrl_prm == NULL ){
 		// Parameter setting error
-		Ddim_Assertion(("Im_LTM_MAP_Set_AxiCtrlParam error. axi_ctrl_prm = NULL\n"));
+		Ddim_Assertion(("im_ltm_map_list_im_ltm_map_set_axictrlparam error. axi_ctrl_prm = NULL\n"));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 	if( pipe_no > D_IM_LTM_PIPE12 ){
-		Ddim_Assertion(( "Im_LTM_MAP_Set_AxiCtrlParam error. pipe_no>D_IM_LTM_PIPE12\n" ));
+		Ddim_Assertion(( "im_ltm_map_list_im_ltm_map_set_axictrlparam error. pipe_no>D_IM_LTM_PIPE12\n" ));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -397,7 +397,7 @@ INT32 Im_LTM_MAP_Ctrl_Common( UCHAR pipe_no, const T_IM_LTM_MAP_CTRL_COMMON* con
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -444,7 +444,7 @@ INT32 Im_LTM_MAP_Ctrl_ModeSDRAMInput( UCHAR pipe_no, const T_IM_LTM_MAP_CTRL_SDR
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_ltm_map_list_get_gIM_LTM_MAP_Mng(imLtmMapList,loop_cnt).inputSize = map_ctrl_sdram_input->input_rect;

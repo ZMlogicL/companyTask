@@ -3,7 +3,7 @@
 *@date                :2020-09-03
 *@author              :zhaoxin
 *@brief               :CtDdAudioThree8类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -52,9 +52,8 @@
 #include "ctddaudiothree8.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioThree8, ct_dd_audio_three8);
-#define CT_DD_AUDIO_THREE8_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o), \
-		CtDdAudioThree8Private,CT_TYPE_DD_AUDIO_THREE8))
+G_DEFINE_TYPE(CtDdAudioThree8, ct_dd_audio_three8, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_THREE8_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_THREE8, CtDdAudioThree8Private))
 
 struct _CtDdAudioThree8Private
 {
@@ -63,8 +62,10 @@ struct _CtDdAudioThree8Private
 /*
 *DECLS
 */
-static void 	ct_dd_audio_three8_constructor(CtDdAudioThree8 *self);
-static void 	ct_dd_audio_three8_destructor(CtDdAudioThree8 *self);
+static void 	ct_dd_audio_three8_class_init(CtDdAudioThree8Class *klass);
+static void 	ct_dd_audio_three8_init(CtDdAudioThree8 *self);
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 static void 	ctDdAudioDmaIntHandler088_cb( void );
 #if 0
 static void 	ctDdAudioDmaIntHandler089_cb( void );
@@ -75,12 +76,29 @@ static void 	ctDdAudioDmaIntHandler0891_cb( void );
 /*
  * IMPL
  */
-static void ct_dd_audio_three8_constructor(CtDdAudioThree8 *self) 
+static void ct_dd_audio_three8_class_init(CtDdAudioThree8Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioThree8Private));
 }
 
-static void ct_dd_audio_three8_destructor(CtDdAudioThree8 *self) 
+static void ct_dd_audio_three8_init(CtDdAudioThree8 *self)
 {
+	CtDdAudioThree8Private *priv = CT_DD_AUDIO_THREE8_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioThree8 *self = (CtDdAudioThree8*)object;
+	CtDdAudioThree8Private *priv = CT_DD_AUDIO_THREE8_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioThree8 *self = (CtDdAudioThree8*)object;
+	CtDdAudioThree8Private *priv = CT_DD_AUDIO_THREE8_GET_PRIVATE(self);
 }
 
 static void ctDdAudioDmaIntHandler088_cb( void )
@@ -833,7 +851,7 @@ void ct_dd_audio_three8_093(CtDdAudioThree8 *self)
 
 CtDdAudioThree8 *ct_dd_audio_three8_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioThree8 *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_THREE8, sizeof(CtDdAudioThree8Private));
+    CtDdAudioThree8 *self = g_object_new(CT_TYPE_DD_AUDIO_THREE8, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

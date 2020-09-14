@@ -15,8 +15,12 @@
 #define __IM_IIP_UNIT_PARAMETER_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imiipslregister.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,9 +28,12 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_UNIT_PARAMETER							(im_iip_unit_parameter_get_type())
-#define IM_IIP_UNIT_PARAMETER(obj)							(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipUnitParameter))
-#define IM_IS_IIP_UNIT_PARAMETER(obj)						(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_UNIT_PARAMETER))
+#define IM_TYPE_IIP_UNIT_PARAMETER							(im_iip_unit_parameter_struct_get_type ())
+#define IM_IIP_UNIT_PARAMETER(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_UNIT_PARAMETER, ImIipUnitParameter))
+#define IM_IIP_UNIT_PARAMETER_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_UNIT_PARAMETER, ImIipUnitParameterClass))
+#define IM_IS_IIP_UNIT_PARAMETER(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_UNIT_PARAMETER))
+#define IM_IS_IIP_UNIT_PARAMETER_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_UNIT_PARAMETER))
+#define IM_IIP_UNIT_PARAMETER_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_UNIT_PARAMETER, ImIipUnitParameterClass))
 
 
 typedef union _UimPacketHeader					UimPacketHeader;
@@ -50,8 +57,9 @@ typedef struct _TimMft										TimMft;
 
 typedef union _UimUnitdebug						UimUnitdebug;
 
-typedef struct _ImIipUnitParameter 								ImIipUnitParameter;
-typedef struct _ImIipUnitParameterPrivate 					ImIipUnitParameterPrivate;
+typedef struct _ImIipUnitParameter			ImIipUnitParameter;
+typedef struct _ImIipUnitParameterClass		ImIipUnitParameterClass;
+typedef struct _ImIipUnitParameterPrivate 		ImIipUnitParameterPrivate;
 
 
 ///////////////////////////////////////////////////////////////
@@ -61,14 +69,14 @@ typedef struct _ImIipUnitParameterPrivate 					ImIipUnitParameterPrivate;
 union _UimPacketHeader
 {
 		/**< All bits */
-		kuint32 word;
+		guint32 word;
 		struct {
 			/**< Beginning address of the register */
-			kuint32 BeginningAddress :16;
+			guint32 BeginningAddress :16;
 			/**< Word Length (including Packed header) */
-			kuint32 WordLength :8;
+			guint32 WordLength :8;
 			/**< Control code<br>Refer to @ref EimCtlCode. */
-			kuint32 CtrlCode :8;
+			guint32 CtrlCode :8;
 		} bit;
 };
 
@@ -82,7 +90,7 @@ struct _Tim1dl
 		/**< ldTopcnf1		(+0008h) */
 		Uim1dlLdTopcnf1 ldTopcnf1;
 		/**< Unused variable */
-		kuchar dmy000c000f[0x0010 - 0x000C];
+		guchar dmy000c000f[0x0010 - 0x000C];
 		/**< pixiddef			(+0010h) */
 		Uim1dlPixiddef pixiddef;
 		/**< ldCtl				(+0014h) */
@@ -90,7 +98,7 @@ struct _Tim1dl
 		/**< ldPrefetch		(+0018h) */
 		Uim1dlLdPrefetch ldPrefetch;
 		/**< Unused variable */
-		kuchar dmy001c001f[0x0020 - 0x001C];
+		guchar dmy001c001f[0x0020 - 0x001C];
 		/**< ldHsize			(+0020h) */
 		Uim1dlLdHsize ldHsize;
 		/**< ldVsize			(+0024h) */
@@ -155,23 +163,23 @@ struct _TimFlt
 		/**< spfMd			(+0064h) */
 		UimfltSpfSpfMd spfMd;
 		/**< Unused variable */
-		kuchar dmy0068007f[0x0080 - 0x0068];
+		guchar dmy0068007f[0x0080 - 0x0068];
 		/**< spfFltwD0		(+0080h) */
 		UimfltSpfSpfFltw spfFltwD0;
 		/**< Unused variable */
-		kuchar dmy00a400bf[0x00C0 - 0x00A4];
+		guchar dmy00a400bf[0x00C0 - 0x00A4];
 		/**< spfFltwD1		(+00C0h) */
 		UimfltSpfSpfFltw spfFltwD1;
 		/**< Unused variable */
-		kuchar dmy00e400ff[0x0100 - 0x00E4];
+		guchar dmy00e400ff[0x0100 - 0x00E4];
 		/**< spfFltwD2		(+0100h) */
 		UimfltSpfSpfFltw spfFltwD2;
 		/**< Unused variable */
-		kuchar dmy0124013f[0x0140 - 0x0124];
+		guchar dmy0124013f[0x0140 - 0x0124];
 		/**< spfFltwD3		(+0140h) */
 		UimfltSpfSpfFltw spfFltwD3;
 		/**< Unused variable */
-		kuchar dmy0164017f[0x0180 - 0x0164];
+		guchar dmy0164017f[0x0180 - 0x0164];
 		/**< spfVthD0		(+0180h) */
 		UimfltSpfVthD0 spfVthD0;
 		/**< spfVthD1		(+0184h) */
@@ -199,7 +207,7 @@ struct _TimFlt
 		/**< epMd				(+01B0h) */
 		UimfltEpMd epMd;
 		/**< Unused variable */
-		kuchar dmy01b401b7[0x01B8 - 0x01B4];
+		guchar dmy01b401b7[0x01B8 - 0x01B4];
 		/**< EP_GA_D0~3	(+01B8h,+01C0h,+01C8h,+01D0h) */
 		UimfltEpGa epGaD[4];
 		/**< EP_OFS_D0~3(+01D8h,+01E0h,+01E8h,+01F0h) */
@@ -252,7 +260,7 @@ struct _TimAfn
 		/**< opmd				(+0020h) */
 		UimAfnOpmd opmd;
 		/**< Unused variable */
-		kuchar dmy0024002f[0x0030 - 0x0024];
+		guchar dmy0024002f[0x0030 - 0x0024];
 		/**< opy					(+0030h) */
 		UimAfnOpy opy;
 		/**< opb				(+0034h) */
@@ -311,7 +319,7 @@ struct _TimFrect
 		/**< opmd				(+0020h) */
 		UimFrectOpmd opmd;
 		/**< Unused variable */
-		kuchar dmy0024002f[0x0030 - 0x0024];
+		guchar dmy0024002f[0x0030 - 0x0024];
 		/**< opy					(+0030h) */
 		UimFrectOpy opy;
 		/**< opb				(+0034h) */
@@ -360,7 +368,7 @@ struct _TimStsBase
 		/**< outcol			(+0010h) */
 		UimStsOutcol outcol;
 		/**< Unused variable */
-		kuchar dmy0018001f[0x0020 - 0x0018];
+		guchar dmy0018001f[0x0020 - 0x0018];
 		/**< slHsize			(+0020h) */
 		UimStsSlHsize slHsize;
 		/**< slVsize			(+0024h) */
@@ -370,11 +378,11 @@ struct _TimStsBase
 		/**< slPvsz				(+002Ch) */
 		UimStsSlPvsz slPvsz;
 		/**< Unused variable */
-		kuchar dmy0030003f[0x0040 - 0x0030];
+		guchar dmy0030003f[0x0040 - 0x0030];
 		/**< selOpara		(+0040h) */
 		UimStsSelOpara selOpara;
 		/**< Unused variable */
-		kuchar dmy00440047[0x0048 - 0x0044];
+		guchar dmy00440047[0x0048 - 0x0044];
 		/**< ofset0			(+0048h) */
 		UimStsOfset ofset0;
 		/**< clpthU0			(+004Ch) */
@@ -471,7 +479,7 @@ struct _TimCsc
 		/**< csctopcnf		(+0000h) */
 		UimCscCsctopcnf csctopcnf;
 		/**< Unused variable */
-		kuchar dmy0004001f[0x0020 - 0x0004];
+		guchar dmy0004001f[0x0020 - 0x0004];
 		/**< csck				(+0020h) */
 		UimCscCsck csck[4];
 		/**< mdsel			(+0040h) */
@@ -493,40 +501,40 @@ struct _TimLut
 		/**< lutunitctl		(+0010h) */
 		UimLutLutunitctl lutunitctl;
 		/**< Unused variable */
-		kuchar dmy0014001f[0x0020 - 0x0014];
+		guchar dmy0014001f[0x0020 - 0x0014];
 		/**< lutctlA			(+0020h) */
 		UimLutLutctl lutctlA;
 		/**< Unused variable */
-		kuchar dmy0024002f[0x0030 - 0x0024];
+		guchar dmy0024002f[0x0030 - 0x0024];
 		/**< lutprecalA		(+0030h) */
 		UimLutLutprecal lutprecalA;
 		/**< lutctlB			(+0040h) */
 		UimLutLutctl lutctlB;
 		/**< Unused variable */
-		kuchar dmy0044004f[0x0050 - 0x0044];
+		guchar dmy0044004f[0x0050 - 0x0044];
 		/**< lutprecalB		(+0050h) */
 		UimLutLutprecal lutprecalB;
 		/**< lutctlC			(+0060h) */
 		UimLutLutctl lutctlC;
 		/**< Unused variable */
-		kuchar dmy0064006f[0x0070 - 0x0064];
+		guchar dmy0064006f[0x0070 - 0x0064];
 		/**< lutprecalC		(+0070h) */
 		UimLutLutprecal lutprecalC;
 		/**< lutctlD			(+0080h) */
 		UimLutLutctl lutctlD;
 		/**< Unused variable */
-		kuchar dmy0084008f[0x0090 - 0x0084];
+		guchar dmy0084008f[0x0090 - 0x0084];
 		/**< lutprecalD		(+0090h) */
 		UimLutLutprecal lutprecalD;
 		/**< lutctlE				(+00A0h) */
 		UimLutLutctl lutctlE;
 		/**< Unused variable */
-		kuchar dmy_00A4_00AF[0x00B0 - 0x00A4];
+		guchar dmy_00A4_00AF[0x00B0 - 0x00A4];
 		/**< lutprecalE		(+00B0h) */
 		UimLutLutprecal lutprecalE;
 		UimLutLutctl lutctlF;
 		/**< Unused variable */
-		kuchar dmy00c400cf[0x00D0 - 0x00C4];
+		guchar dmy00c400cf[0x00D0 - 0x00C4];
 		/**< lutprecalF		(+00D0h) */
 		UimLutLutprecal lutprecalF;
 };
@@ -539,7 +547,7 @@ struct _Timgpc
 		/**< gpctopcnf		(+0000h) */
 		UimgpcGpctopcnf gpctopcnf[2];
 		/**< Unused variable */
-		kuchar dmy0008000f[0x0010 - 0x0008];
+		guchar dmy0008000f[0x0010 - 0x0008];
 		/**< gpccontrol		(+0010h) */
 		UimgpcGpccontrol gpccontrol;
 		/**< gpccloadadr	(+0014h) */
@@ -562,7 +570,7 @@ struct _TimBlend
 		/**< blendctl			(+0080h) */
 		UimBlendBlendctl blendctl;
 		/**< Unused variable */
-		kuchar dmy00840087[0x0088 - 0x0084];
+		guchar dmy00840087[0x0088 - 0x0084];
 		/**< alphactl0		(+0088h) */
 		UimBlendAlphactl0 alphactl0;
 		/**< alphactl1		(+008Ch) */
@@ -570,19 +578,19 @@ struct _TimBlend
 		/**< alphactl2		(+0090h) */
 		UimBlendAlphactl2 alphactl2;
 		/**< Unused variable */
-		kuchar dmy00940097[0x0098 - 0x0094];
+		guchar dmy00940097[0x0098 - 0x0094];
 		/**< WADDCTL0~3	(+0098h) */
 		UimBlendWaddctl waddctl[4];
 		/**< Unused variable */
-		kuchar dmy00a800ab[0x00AC - 0x00A8];
+		guchar dmy00a800ab[0x00AC - 0x00A8];
 		/**< divctl0			(+00ACh) */
 		UimBlendDivctl0 divctl0;
 		/**< Unused variable */
-		kuchar dmy00b000b3[0x00B4 - 0x00B0];
+		guchar dmy00b000b3[0x00B4 - 0x00B0];
 		/**< mskctl0			(+00B4h) */
 		UimBlendMskctl0 mskctl0;
 		/**< Unused variable */
-		kuchar dmy_00B8_00BB[0x00BC - 0x00B8];
+		guchar dmy_00B8_00BB[0x00BC - 0x00B8];
 		/**< mulctl[4]		(+00BCh) */
 		UimBlendMulctl mulctl[4];
 };
@@ -597,7 +605,7 @@ struct _TimMon
 		/**< mondsel		(+0004h) */
 		UimMonMondsel mondsel;
 		/**< Unused variable */
-		kuchar dmy0008000f[0x0010 - 0x0008];
+		guchar dmy0008000f[0x0010 - 0x0008];
 		/**< histctl				(+0010h) */
 		UimMonHistctl histctl[4];
 		/**< absmax			(+0020h) */
@@ -605,11 +613,11 @@ struct _TimMon
 		/**< absmin			(+0024h) */
 		UimMonAbsmin absmin;
 		/**< Unused variable */
-		kuchar dmy0028003f[0x0040 - 0x0028];
+		guchar dmy0028003f[0x0040 - 0x0028];
 		/**< absadd			(+0040h) */
 		UimMonAbsadd absadd;
 		/**< Unused variable */
-		kuchar dmy0044004f[0x0050 - 0x0044];
+		guchar dmy0044004f[0x0050 - 0x0044];
 		/**< overvalue		(+0050h) */
 		UimMonOvervalue overvalue[4];
 };
@@ -621,7 +629,7 @@ struct _TimCflow
 		UimPacketHeader header0;
 		UimCflowDiffCftopconf cftopconf;
 		/**< Unused variable */
-		kuchar dmy0004000f[0x0010 - 0x0004];
+		guchar dmy0004000f[0x0010 - 0x0004];
 		/**< diffPrewait	(+0010h) */
 		UimCflowDiffPrewait diffPrewait;
 		UimCflowDiffPostwait diffPostwait;
@@ -662,17 +670,26 @@ union _UimUnitdebug
 
 struct _ImIipUnitParameter
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipUnitParameterClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    					im_iip_unit_parameter_get_type(void);
-ImIipUnitParameter*		        im_iip_unit_parameter_new(void);
+GType						im_iip_unit_parameter_struct_get_type(void)	G_GNUC_CONST;
+ImIipUnitParameter*					im_iip_unit_parameter_struct_new(void);
+
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_UNIT_PARAMETER_H__ */

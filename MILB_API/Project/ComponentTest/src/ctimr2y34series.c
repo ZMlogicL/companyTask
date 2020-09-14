@@ -29,7 +29,8 @@ struct _CtImR2y34seriesPrivate
 
 static void ct_im_r2y_34series_constructor(CtImR2y34series *self)
 {
-	//CtImR2y34seriesPrivate *priv = CT_IM_R2Y_34SERIES_GET_PRIVATE(self);
+	CtImR2y34seriesPrivate *priv = CT_IM_R2Y_34SERIES_GET_PRIVATE(self);
+
 }
 
 static void ct_im_r2y_34series_destructor(CtImR2y34series *self)
@@ -61,9 +62,9 @@ kint32 ct_im_r2y_34series_0(CtImR2y34series *self, kuchar pipeNo)
 	r2yResizeRectParam.inputSize.imgLines = 960;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywWidth = 1280;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines = 960;
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y] = 1280;
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y] = 1280;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR] = 1280;
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y] = 1280 / 32;
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y] = 1280 / 32;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_CBCR] = 1280 / 32;
 	r2yCtrlTrimming.trimmingEnable = ImR2y_ENABLE_ON;
 	r2yCtrlTrimming.trimWindow.imgLeft = 0;
@@ -74,37 +75,37 @@ kint32 ct_im_r2y_34series_0(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 	memset(&r2yAddr0a, '\x00', sizeof(r2yAddr0a));
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_Y_ADDR_TOP_1;
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CB_ADDR_TOP_1;
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCr = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CR_ADDR_TOP_1;
-	ct_im_r2y_set_ltm(pipeNo);
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_Y_ADDR_TOP_1;
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CB_ADDR_TOP_1;
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCr = (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CR_ADDR_TOP_1;
+	ct_im_r2y_classa_set_ltm(self->ctImR2yClassa, pipeNo);
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeDirect(pipeNo, &r2yCtrlDirect);
+	ercd = im_r2y3_ctrl_mode_direct(self->imR2y3,  pipeNo, &r2yCtrlDirect);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	ercd = im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	ercd = Im_R2Y_Ctrl_ModeDirect(pipeNo, &r2yCtrlDirect);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	ercd = im_r2y3_ctrl_mode_direct(self->imR2y3,  pipeNo, &r2yCtrlDirect);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -116,10 +117,10 @@ kint32 ct_im_r2y_34series_0(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -129,8 +130,8 @@ kint32 ct_im_r2y_34series_0(CtImR2y34series *self, kuchar pipeNo)
 		gimR2yMacroFakeFinish[1] = 0;
 	}
 #endif
-	ct_im_r2y_start_ltm(pipeNo);
-	ct_im_r2y_waitend_stop_ltm(pipeNo);
+	ct_im_r2y_classa_start_ltm(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_classa_waitend_stop_ltm(self->ctImR2yClassa, pipeNo);
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
 		flgptn |= D_IM_R2Y1_INT_FLG_YYW0_END;
 		flgptn |= D_IM_R2Y1_INT_FLG_YYW0A_END;
@@ -140,21 +141,21 @@ kint32 ct_im_r2y_34series_0(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0A_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modedirect_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modedirect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -181,38 +182,38 @@ kint32 ct_im_r2y_34series_1(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -224,10 +225,10 @@ kint32 ct_im_r2y_34series_1(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -244,22 +245,22 @@ kint32 ct_im_r2y_34series_1(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -286,29 +287,29 @@ kint32 ct_im_r2y_34series_2(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -320,10 +321,10 @@ kint32 ct_im_r2y_34series_2(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -340,20 +341,20 @@ kint32 ct_im_r2y_34series_2(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 	return D_DDIM_OK;
 }
@@ -383,29 +384,29 @@ kint32 ct_im_r2y_34series_3(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -417,10 +418,10 @@ kint32 ct_im_r2y_34series_3(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -437,20 +438,20 @@ kint32 ct_im_r2y_34series_3(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -483,32 +484,32 @@ kint32 ct_im_r2y_34series_4(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	ercd = im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -520,10 +521,10 @@ kint32 ct_im_r2y_34series_4(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -540,21 +541,21 @@ kint32 ct_im_r2y_34series_4(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -589,32 +590,32 @@ kint32 ct_im_r2y_34series_5(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_1, &r2yCtrlTrimming);
+	ercd = im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_1, &r2yCtrlTrimming);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_1, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_1, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_1, &r2yCtrlTrimming);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_1, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_1, &r2yCtrlTrimming);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_1, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -626,10 +627,10 @@ kint32 ct_im_r2y_34series_5(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -646,22 +647,22 @@ kint32 ct_im_r2y_34series_5(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW1_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -696,32 +697,32 @@ kint32 ct_im_r2y_34series_6(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yCtrlTrimming);
+	ercd = im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yCtrlTrimming);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yCtrlTrimming);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yCtrlTrimming);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 #ifdef D_IM_R2Y_DEBUG_ON_PC
@@ -735,10 +736,10 @@ kint32 ct_im_r2y_34series_6(CtImR2y34series *self, kuchar pipeNo)
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -755,21 +756,21 @@ kint32 ct_im_r2y_34series_6(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW2_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -796,38 +797,38 @@ kint32 ct_im_r2y_34series_7(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
+	ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
-	Im_R2Y_Set_RGBDeknee_Table(pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_R, gctImR2yRgbDekneeTbl);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_G, gctImR2yRgbDekneeTbl);
+	im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, E_R2Y_DKN_RGBTBL_B, gctImR2yRgbDekneeTbl);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -839,10 +840,10 @@ kint32 ct_im_r2y_34series_7(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -859,21 +860,21 @@ kint32 ct_im_r2y_34series_7(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -886,7 +887,7 @@ kint32 ct_im_r2y_34series_8(CtImR2y34series *self, kuchar pipeNo)
 	TImR2yCtrl r2yCtrl = gctImR2yCtrlBase;
 	TImR2yCtrlSdramInput r2yCtrlSdramIn = gct_im_r2y_ctrl_sdram_in_rgb12bit;
 	TImR2yResizeRect r2yResizeRectParam = gctImR2yResizeRectParamOutYcc422;
-	TImR2yInaddrInfo r2yInAddr = gct_im_r2y_in_addr_rgb12bit;
+	TImR2yInaddrInfo r2yInAddr = gctImR2yInAddrRgb12bit;
 	TImR2yOutbankInfo r2yAddr0;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
@@ -900,29 +901,29 @@ kint32 ct_im_r2y_34series_8(CtImR2y34series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -934,10 +935,10 @@ kint32 ct_im_r2y_34series_8(CtImR2y34series *self, kuchar pipeNo)
 #endif
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
@@ -954,21 +955,21 @@ kint32 ct_im_r2y_34series_8(CtImR2y34series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	DriverCommon_DDIM_PRINT((CtImR2y34series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_other_reg();
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -980,7 +981,7 @@ kint32 ct_im_r2y_34series_9(CtImR2y34series *self, kuchar pipeNo)
 {
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y34series_FUNC_NAME));
 
-	return ct_im_r2y_3series_1(NULL, pipeNo);
+	return ct_im_r2y_3series_1(self->ctImR2y3series, pipeNo);
 }
 
 CtImR2y34series* ct_im_r2y_34series_new(void)

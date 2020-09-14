@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kxdmac.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KXdmac, k_xdmac);
+
 #define K_XDMAC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KXdmacPrivate, K_TYPE_XDMAC))
+
 
 struct _KXdmacPrivate
 {
 
 };
+
 
 volatile IoXdmac ioXdmac __attribute__((section(".XDMAC")));
 volatile IoXdmac ioXdmacs __attribute__((section(".XDMACS")));
@@ -44,4 +49,3 @@ KXdmac* k_xdmac_new(void)
     KXdmac* self = k_object_new_with_private(K_TYPE_XDMAC, sizeof(KXdmacPrivate));
     return self;
 }
-

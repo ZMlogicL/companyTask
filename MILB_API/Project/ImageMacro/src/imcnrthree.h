@@ -59,6 +59,10 @@ struct _ImCnrthreeClass{
 GType 						im_cnrthree_get_type(void) G_GNUC_CONST;
 ImCnrthree* 			im_cnrthree_new(void);
 
+#ifdef CO_CNR_DEBUG
+VOID im_cnrthree_print_clockstatus( ImCnrthree *self );
+#endif
+
 /**
 SPR Get Latest Address information for On The Fly
 @param [in]		ch				channel[0 - 1]

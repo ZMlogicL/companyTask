@@ -38,16 +38,16 @@ CtImpro62* ct_impro_6_2_new(void);
 CtImpro62* ct_impro_6_2_get(void);
 
 #ifndef CO_CT_IM_PRO_DISABL
-void ct_im_pro_6_0_20(const kuint32 idx);
-void ct_im_pro_6_0_21(const kuint32 idx);
-void ct_im_pro_6_0_22(const kuint32 idx);
-void ct_im_pro_6_0_23(const kuint32 idx);
-void ct_im_pro_6_0_24(const kuint32 idx);
-void ct_im_pro_6_0_25(const kuint32 idx);
-void ct_im_pro_6_0_26(const kuint32 idx);
-void ct_im_pro_6_0_27(const kuint32 idx);
-void ct_im_pro_6_0_28(const kuint32 idx);
-void ct_im_pro_6_0_29(const kuint32 idx);
+void ct_im_pro_6_2_0(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_1(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_2(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_3(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_4(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_5(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_6(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_7(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_8(CtImpro62* self,const kuint32 idx);
+void ct_im_pro_6_2_9(CtImpro62* self,const kuint32 idx);
 #endif /*CO_CT_IM_PRO_DISABL*/
 
 

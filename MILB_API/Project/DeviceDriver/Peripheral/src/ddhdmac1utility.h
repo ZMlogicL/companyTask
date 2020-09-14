@@ -57,8 +57,8 @@ It waits until forwarding ends. (synchronization)
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 2MByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 */
-INT32				dd_hdmac1_utility_copy_sdram_sync(DdHdmac1Utility *self, UCHAR ch,
-						ULONG srcAddr, ULONG dstAddr, ULONG size, UINT32 waitMode);
+kint32				dd_hdmac1_utility_copy_sdram_sync(DdHdmac1Utility *self, kuchar ch,
+						kulong srcAddr, kulong dstAddr, kulong size, kuint32 waitMode);
 
 /**
 HDMAC1 forwarding between SDRAM-SDRAM.<br>
@@ -81,8 +81,8 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 2MByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 */
-INT32				dd_hdmac1_utility_copy_sdram_async(DdHdmac1Utility *self, UCHAR ch,
-						ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler);
+kint32				dd_hdmac1_utility_copy_sdram_async(DdHdmac1Utility *self, kuchar ch,
+						kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 
 #endif
 

@@ -15,7 +15,11 @@
 #define __IM_HDMI_ENUM_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -23,9 +27,12 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_HDMI_ENUM						(im_hdmi_enum_get_type())
-#define IM_HDMI_ENUM	(obj)						(K_TYPE_CHECK_INSTANCE_CAST(obj, ImHdmiEnum))
-#define IM_IS_HDMI_ENUM	(obj)					(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_HDMI_ENUM))
+#define IM_TYPE_HDMI_ENUM			(im_hdmi_enum_enum_get_type ())
+#define IM_HDMI_ENUM(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_HDMI_ENUM, ImHdmiEnum))
+#define IM_HDMI_ENUM_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_HDMI_ENUM, ImHdmiEnumClass))
+#define IM_IS_HDMI_ENUM(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_HDMI_ENUM))
+#define IM_IS_HDMI_ENUM_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_HDMI_ENUM))
+#define IM_HDMI_ENUM_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_HDMI_ENUM, ImHdmiEnumClass))
 
 
 typedef enum _EhdmiVideoMapping			EhdmiVideoMapping;
@@ -50,7 +57,8 @@ typedef enum _EhdmiCtsManual				EhdmiCtsManual;
 typedef enum _EhdmiAudIfsfactor				EhdmiAudIfsfactor;
 typedef enum _EhdmiI2cmOperation		EhdmiI2cmOperation;
 
-typedef struct _ImHdmiEnum 						ImHdmiEnum;
+typedef struct _ImHdmiEnum						ImHdmiEnum;
+typedef struct _ImHdmiEnumClass				ImHdmiEnumClass;
 typedef struct _ImHdmiEnumPrivate 		ImHdmiEnumPrivate;
 
 
@@ -463,12 +471,21 @@ enum _EhdmiI2cmOperation
 
 struct _ImHdmiEnum
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustomTest *ddimUserCustomTest;
+	ImHdmi *imHdmi;
+};
+
+struct _ImHdmiEnumClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    		im_hdmi_enum_get_type(void);
-ImHdmiEnum*		        im_hdmi_enum_new(void);
+
+GType								im_hdmi_enum_enum_get_type(void)	G_GNUC_CONST;
+ImHdmiEnum*				im_hdmi_enum_enum_new(void);
+EhdmiIntType 				im_hdmi_enum_get_interrupt_type(ImHdmiEnum*self, EhdmiIntReg intReg, guchar regBit);
 /**
  * @brief	HDMI PHY Power On/Off.
  * @param[in]	power		Power On/Off.
@@ -477,14 +494,14 @@ ImHdmiEnum*		        im_hdmi_enum_new(void);
  * @retval		D_DDIM_OKSuccess.
  * @retval		ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR	Input parameter error.
  */
-extern	kint32 im_hdmi_power_on(ImHdmiEnum*self, kuchar power);
+extern	gint32 im_hdmi_enum_power_on(ImHdmiEnum*self, guchar power);
 
 /**
  * @brief	Initialize HDMI Transmitter macro.
  * @retval		D_DDIM_OK						Success.
  * @retval		ImHdmi_D_IM_HDMI_NG					NG.
  */
-extern	kint32 im_hdmi_init(ImHdmiEnum*self,);
+extern	gint32 im_hdmi_enum_init(ImHdmiEnum*self,);
 
 /**
  * @brief	Configure VGA DVI Video Mode.
@@ -495,7 +512,7 @@ extern	kint32 im_hdmi_init(ImHdmiEnum*self,);
  * @remarks	This API uses DDIM_User_Clr_Flg().
  * @remarks	This API uses DDIM_User_Twai_Flg().
  */
-extern	kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig const *const pllConfig);
+extern	gint32 im_hdmi_enum_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig const *const pllConfig);
 
 /**
  * @brief	Set TMDS Scramble by I2C
@@ -504,7 +521,7 @@ extern	kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConf
  * @remarks	This API uses DDIM_User_Clr_Flg().
  * @remarks	This API uses DDIM_User_Twai_Flg().
  */
-extern kint32 im_hdmi_set_tmds_scramble(ImHdmiEnum*self, BOOL enable);
+extern gint32 im_hdmi_enum_set_tmds_scramble(ImHdmiEnum*self, BOOL enable);
 
 /**
  * @brief	Read Sink's E-EDID.
@@ -517,7 +534,7 @@ extern kint32 im_hdmi_set_tmds_scramble(ImHdmiEnum*self, BOOL enable);
  * @remarks	This API uses DDIM_User_Clr_Flg().
  * @remarks	This API uses DDIM_User_Twai_Flg().
  */
-extern	kint32 im_hdmi_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i2cmConfig, kuchar readData[8]);
+extern	gint32 im_hdmi_enum_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i2cmConfig, guchar readData[8]);
 /**
  * @brief		Set control data of HDMI Transmitter.
  * @param[in]	ctrl	Control data.
@@ -526,12 +543,15 @@ extern	kint32 im_hdmi_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *
  * @remarks	This API uses DDIM_User_Clr_Flg().
  * @remarks	This API uses DDIM_User_Twai_Flg().
  */
-extern	kint32 im_hdmi_ctrl(ImHdmiEnum*self, ThdmiCtrl const *const ctrl );
+extern	gint32 im_hdmi_enum_ctrl(ImHdmiEnum*self, ImHdmiStruct const *const ctrl );
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_HDMI_ENUM_H__ */

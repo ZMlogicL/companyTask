@@ -12,101 +12,107 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #ifndef __JDSRDMA_CORE_REG_H__
 #define __JDSRDMA_CORE_REG_H__
 
+
 #include <klib.h>
 
-#define JDSRDMA_TYPE_CORE_REG	(jdsrdma_core_reg_get_type())
-#define JDSRDMA_CORE_REG(obj)	(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsrdmaCoreReg))
-#define JDSRDMA_IS_CORE_REG(obj)	(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSRDMA_TYPE_CORE_REG))
 
-typedef struct _JdsrdmaCoreReg JdsrdmaCoreReg;
-typedef struct _JdsrdmaCoreRegPrivate JdsrdmaCoreRegPrivate;
+#define JDSRDMA_TYPE_CORE_REG	        (jdsrdma_core_reg_get_type())
+#define JDSRDMA_CORE_REG(obj)	        (K_TYPE_CHECK_INSTANCE_CAST((obj), JdsrdmaCoreReg))
+#define JDSRDMA_IS_CORE_REG(obj)	    (K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSRDMA_TYPE_CORE_REG))
 
-typedef struct _IoRdmaCore IoRdmaCore;
 
-typedef union _IoRmdaCoreRdmatrg IoRmdaCoreRdmatrg;
-typedef union _IoRmdaCoreRdmaintenb IoRmdaCoreRdmaintenb;
-typedef union _IoRmdaCoreRdmaintflg IoRmdaCoreRdmaintflg;
-typedef union _IoRmdaCoreRdmaaxctl IoRmdaCoreRdmaaxctl;
-typedef union _IoRmdaCoreRdmabresp IoRmdaCoreRdmabresp;
-typedef union _IoRmdaCoreRdmaprcherr IoRmdaCoreRdmaprcherr;
+typedef struct _JdsrdmaCoreReg          JdsrdmaCoreReg;
+typedef struct _JdsrdmaCoreRegPrivate   JdsrdmaCoreRegPrivate;
+
+typedef struct _IoRdmaCore              IoRdmaCore;
+
+typedef union _IoRmdaCoreRdmatrg        IoRmdaCoreRdmatrg;
+typedef union _IoRmdaCoreRdmaintenb     IoRmdaCoreRdmaintenb;
+typedef union _IoRmdaCoreRdmaintflg     IoRmdaCoreRdmaintflg;
+typedef union _IoRmdaCoreRdmaaxctl      IoRmdaCoreRdmaaxctl;
+typedef union _IoRmdaCoreRdmabresp      IoRmdaCoreRdmabresp;
+typedef union _IoRmdaCoreRdmaprcherr    IoRmdaCoreRdmaprcherr;
+
 
 struct _JdsrdmaCoreReg
 {
     KObject parent;
 };
 
+
 /*  structure of rdmatrg (2886_9100h)   */
 union _IoRmdaCoreRdmatrg
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long rdmatrg :2;
-        unsigned long :30;
+        kulong rdmatrg :2;
+        kulong :30;
     } bit;
 };
 
 /*  structure of rdmaintenb (2886_9104h)    */
 union _IoRmdaCoreRdmaintenb
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long rdmae :1;
-        unsigned long :3;
-        unsigned long rdmaxe :1;
-        unsigned long :27;
+        kulong rdmae :1;
+        kulong :3;
+        kulong rdmaxe :1;
+        kulong :27;
     } bit;
 };
 
 /*  structure of rdmaintflg (2886_9108h)    */
 union _IoRmdaCoreRdmaintflg
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long rdmaf :1;
-        unsigned long :3;
-        unsigned long rdmaxf :1;
-        unsigned long :27;
+        kulong rdmaf :1;
+        kulong :3;
+        kulong rdmaxf :1;
+        kulong :27;
     } bit;
 };
 
 /*  structure of rdmaaxctl (2886_910Ch) */
 union _IoRmdaCoreRdmaaxctl
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long awcache :4;
-        unsigned long :4;
-        unsigned long awprot :3;
-        unsigned long :21;
+        kulong awcache :4;
+        kulong :4;
+        kulong awprot :3;
+        kulong :21;
     } bit;
 };
 
 /*  structure of rdmabresp (2886_9110h) */
 union _IoRmdaCoreRdmabresp
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long rdmabresp :2;
-        unsigned long :30;
+        kulong rdmabresp :2;
+        kulong :30;
     } bit;
 };
 
 /*  structure of rdmaprcherr (2886_9114h)   */
 union _IoRmdaCoreRdmaprcherr
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long rdmaprcherr :1;
-        unsigned long :31;
+        kulong rdmaprcherr :1;
+        kulong :31;
     } bit;
 };
 
@@ -121,11 +127,12 @@ struct _IoRdmaCore
     IoRmdaCoreRdmabresp rdmabresp; /* 2886_(9110 - 0113h) */
     IoRmdaCoreRdmaprcherr rdmaprcherr; /* 2886_(9114 - 0117h) */
 
-    unsigned char dmy001800ff[0x0100 - 0x0018]; /* 2886_(9018 - 00FFh) */
+    kuchar dmy001800ff[0x0100 - 0x0018]; /* 2886_(9018 - 00FFh) */
 };
 
-KConstType jdsrdma_core_reg_get_type(void);
+
+KConstType      jdsrdma_core_reg_get_type(void);
 JdsrdmaCoreReg* jdsrdma_core_reg_new(void);
 
-#endif/*__JDSRDMA_CORE_REG_H__*/
 
+#endif/*__JDSRDMA_CORE_REG_H__*/

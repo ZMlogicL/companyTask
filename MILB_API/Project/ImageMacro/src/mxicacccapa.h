@@ -41,8 +41,8 @@ This function set acceptance capability of the specified port.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32	mxic_acc_capa_set_acceptance_capability( MxicAccCapa *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiter arbiter, ImMxicPort port, UCHAR capability );
+kint32	mxic_acc_capa_set_acceptance_capability( MxicAccCapa *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiter arbiter, ImMxicPort port, kuchar capability );
 
 /**
 This function set acceptance capability of all ports.<br>
@@ -52,7 +52,7 @@ This function set acceptance capability of all ports.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_acc_capa_set_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
+kint32	mxic_acc_capa_set_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
 			const MxicAllAcceptanceCapability* const allCapability );
 
 /**
@@ -63,7 +63,7 @@ This function get acceptance capability of all ports.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_acc_capa_get_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
+kint32	mxic_acc_capa_get_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
 			MxicAllAcceptanceCapability* const allCapability );
 
 /**
@@ -78,8 +78,8 @@ This function set acceptance capability (gropu) of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_acc_capa_set_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
-			ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, UCHAR capability );
+kint32	mxic_acc_capa_set_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
+			ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, kuchar capability );
 
 /**
 This function get acceptance capability (gropu) of the specified port.<br>
@@ -93,7 +93,7 @@ This function get acceptance capability (gropu) of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_acc_capa_get_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
-			ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, UCHAR* capability );
+kint32	mxic_acc_capa_get_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
+			ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, kuchar* capability );
 
 #endif	// __MXIC_ACC_CAPA_H__

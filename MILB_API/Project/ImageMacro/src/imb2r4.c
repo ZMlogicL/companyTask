@@ -65,14 +65,14 @@ INT32 Im_B2R_Ctrl_Left_Shift( UCHAR pipe_no, UCHAR bayer_left_shift, UCHAR satur
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( bayer_left_shift > D_IM_B2R_BLSFT_4BIT ) {
+	if( bayer_left_shift > ImB2r_D_IM_B2R_BLSFT_4BIT ) {
 		// Parameter setting error
-		Ddim_Assertion(("Im_B2R_Ctrl_Left_Shift error. bayer_left_shift > D_IM_B2R_BLSFT_4BIT\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		Ddim_Assertion(("Im_B2R_Ctrl_Left_Shift error. bayer_left_shift > ImB2r_D_IM_B2R_BLSFT_4BIT\n"));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_Left_Shift error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_Left_Shift error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 
@@ -95,11 +95,11 @@ INT32 Im_B2R_Set_WB_Gain( UCHAR pipe_no, const T_IM_B2R_BAYER_COLOR* const b2r_b
 	if(b2r_bay_color == NULL) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Set_WB_Gain error. bay_color = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_WB_Gain error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_WB_Gain error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 
@@ -124,11 +124,11 @@ INT32 Im_B2R_Ctrl_Axi( UCHAR pipe_no, const T_IM_B2R_CTRL_AXI* const b2r_ctrl_ax
 	if( b2r_ctrl_axi == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl_Axi error. b2r_ctrl_axi = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_Axi error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_Axi error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -136,12 +136,12 @@ INT32 Im_B2R_Ctrl_Axi( UCHAR pipe_no, const T_IM_B2R_CTRL_AXI* const b2r_ctrl_ax
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBRAXCTL.bit.YBRCACHE = b2r_ctrl_axi->ybr.cache_type;
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBRAXCTL.bit.YBRPROT  = b2r_ctrl_axi->ybr.protect_type;
 
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_0 = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_0].cache_type;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_0  = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_0].protect_type;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_1 = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_1].cache_type;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_1  = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_1].protect_type;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_2 = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_2].cache_type;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_2  = b2r_ctrl_axi->ybw[D_IM_B2R_PORT_2].protect_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_0 = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_0].cache_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_0  = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_0].protect_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_1 = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_1].cache_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_1  = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_1].protect_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWCACHE_2 = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_2].cache_type;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXCTL.bit.YBWPROT_2  = b2r_ctrl_axi->ybw[ImB2r_D_IM_B2R_PORT_2].protect_type;
 	Im_B2R_Off_Pclk( pipe_no );
 
 	ImB2r1_IM_B2R_DSB();
@@ -160,11 +160,11 @@ INT32 Im_B2R_Get_AxiReadStat( UCHAR pipe_no, T_IM_B2R_AXI_YBR_STAT* const b2r_ax
 	if( b2r_axi_read_stat == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_AxiReadStat error. b2r_axi_read_stat = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_AxiReadStat error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_AxiReadStat error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -186,18 +186,18 @@ INT32 Im_B2R_Get_AxiWriteStat( UCHAR pipe_no, T_IM_B2R_AXI_YBW_STAT* const b2r_a
 	if( b2r_axi_write_stat == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_AxiWriteStat error. b2r_axi_write_stat = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_AxiWriteStat error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_AxiWriteStat error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Im_B2R_On_Pclk( pipe_no );
-	b2r_axi_write_stat->ybw_axi_stat[D_IM_B2R_PORT_0] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_0;
-	b2r_axi_write_stat->ybw_axi_stat[D_IM_B2R_PORT_1] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_1;
-	b2r_axi_write_stat->ybw_axi_stat[D_IM_B2R_PORT_2] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_2;
+	b2r_axi_write_stat->ybw_axi_stat[ImB2r_D_IM_B2R_PORT_0] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_0;
+	b2r_axi_write_stat->ybw_axi_stat[ImB2r_D_IM_B2R_PORT_1] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_1;
+	b2r_axi_write_stat->ybw_axi_stat[ImB2r_D_IM_B2R_PORT_2] = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXSTS.bit.YBBRESP_2;
 	Im_B2R_Off_Pclk( pipe_no );
 
 	return D_DDIM_OK;
@@ -215,11 +215,11 @@ INT32 Im_B2R_Get_AxiWriteMode( UCHAR pipe_no, T_IM_B2R_AXI_YBW_MODE* const b2r_a
 	if( b2r_axi_write_mode == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_AxiWriteMode error. b2r_axi_write_mode = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_AxiWriteMode error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_AxiWriteMode error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -242,11 +242,11 @@ INT32 Im_B2R_Set_AxiWriteMode( UCHAR pipe_no, const T_IM_B2R_AXI_YBW_MODE* const
 	if( b2r_axi_write_mode == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Set_AxiWriteMode error. b2r_axi_write_mode = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_AxiWriteMode error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_AxiWriteMode error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -265,9 +265,9 @@ INT32 Im_B2R_Set_OutBankIndex( UCHAR pipe_no, UCHAR bank_index )
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_OutBankIndex error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_OutBankIndex error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -288,9 +288,9 @@ INT32 Im_B2R_Inc_OutBankIndex( UCHAR pipe_no )
 
 	UCHAR loop_cnt, loop_sta, loop_end;
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Inc_OutBankIndex error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Inc_OutBankIndex error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -315,9 +315,9 @@ INT32 Im_B2R_Set_ExternalIfOutput( UCHAR pipe_no, const UCHAR ext_out_en, const 
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_ExternalIfOutput error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_ExternalIfOutput error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -337,9 +337,9 @@ INT32 Im_B2R_Get_ExternalIfOutput( UCHAR pipe_no, UCHAR* const ext_out_en, UCHAR
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_ExternalIfOutput error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_ExternalIfOutput error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -358,9 +358,9 @@ INT32 Im_B2R_Set_FrameStop( UCHAR pipe_no, UCHAR onoff )
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_FrameStop error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_FrameStop error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -384,11 +384,11 @@ INT32 Im_B2R_Get_YbrBusy( UCHAR pipe_no, BOOL* const busy_status )
 	if( busy_status == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_YbrBusy error. busy_status = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_YbrBusy error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_YbrBusy error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -415,11 +415,11 @@ INT32 Im_B2R_Get_YBR_Error_Factor( UCHAR pipe_no, UINT32* const err_factor )
 	if( err_factor == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_YBR_Error_Factor error. err_factor = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_YBR_Error_Factor error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_YBR_Error_Factor error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -443,11 +443,11 @@ INT32 Im_B2R_Ctrl_Trimming( UCHAR pipe_no, const T_IM_B2R_CTRL_TRIMMING* const b
 	if( b2r_ctrl_trimming == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl_Trimming error. b2r_ctrl_trimming = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_Trimming error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_Trimming error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -489,44 +489,44 @@ INT32 Im_B2R_WaitEnd( DDIM_USER_FLGPTN* const p_flgptn, DDIM_USER_FLGPTN waiptn,
 	DDIM_USER_FLGPTN	flgptn;
 	DDIM_USER_ER		ercd;
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_WaitEnd begin\n" ));
 #endif
 
 #ifdef CO_PARAM_CHECK
-	if( (waiptn & D_IM_B2R_INT_FLG_ALL) != waiptn ) {
+	if( (waiptn & ImB2r_D_IM_B2R_INT_FLG_ALL) != waiptn ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_WaitEnd error. waiptn\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 	ImB2r1_IM_B2R_DSB();
 
 	switch( DDIM_User_Twai_Flg( FID_IM_B2R, waiptn, D_DDIM_USER_TWF_ORW, &flgptn, tmout ) ) {
 		case D_DDIM_USER_E_OK:
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_WaitEnd twai_flg OK return\n" ));
 #endif
 			flgptn = waiptn & flgptn;
 			ercd = DDIM_User_Clr_Flg( FID_IM_B2R, ~flgptn );
 			if( ercd != D_DDIM_USER_E_OK ) {
 				Ddim_Print(( "Im_B2R_Start: invalid FID.\n" ));
-				return D_IM_B2R_SYSTEM_ERROR;
+				return ImB2r_D_IM_B2R_SYSTEM_ERROR;
 			}
 			if( p_flgptn != NULL ) {
 				*p_flgptn = flgptn;
 			}
 			return D_DDIM_OK;
 		case D_DDIM_USER_E_TMOUT:
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_WaitEnd twai_flg TimeOut return\n" ));
 #endif
-			return D_IM_B2R_TIMEOUT;
+			return ImB2r_D_IM_B2R_TIMEOUT;
 		default:
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_WaitEnd twai_flg NG return\n" ));
 #endif
-			return D_IM_B2R_PARAM_ERROR;
+			return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 }
 
@@ -541,11 +541,11 @@ INT32 Im_B2R_Ctrl_HighPassFilter( UCHAR pipe_no, const T_IM_B2R_CTRL_HPF* const 
 	if(b2r_ctrl_hpf == NULL) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl_HighPassFilter error. b2r_ctrl_cc = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_HighPassFilter error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_HighPassFilter error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 
@@ -649,15 +649,15 @@ INT32 Im_B2R_Ctrl_HighPassFilter( UCHAR pipe_no, const T_IM_B2R_CTRL_HPF* const 
 VOID im_b2r_get_loop_val( UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
 {
 	switch( pipe_no ){
-		case D_IM_B2R_PIPE1:
+		case ImB2r_D_IM_B2R_PIPE1:
 			*loop_sta = 0;
 			*loop_end = 0;
 			break;
-		case D_IM_B2R_PIPE2:
+		case ImB2r_D_IM_B2R_PIPE2:
 			*loop_sta = 1;
 			*loop_end = 1;
 			break;
-//		case D_IM_B2R_PIPE12:
+//		case ImB2r_D_IM_B2R_PIPE12:
 		default:
 			*loop_sta = 0;
 			*loop_end = 1;

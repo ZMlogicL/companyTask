@@ -40,14 +40,14 @@ ImB2r*		        im_b2r_new(void);
 
 #if 1
 #ifdef CO_DEBUG_PRINT_XX_YYY
-#ifndef IM_B2R_STATUS_PRINT
-#define CO_DEBUG_PRINT_IM_B2R	/**< DEBUG */
+#ifndef ImB2r_IM_B2R_STATUS_PRINT
+#define ImB2r_CO_DEBUG_PRINT_IM_B2R	/**< DEBUG */
 #endif
 #endif
 #endif
-#ifdef CO_DEBUG_PRINT_IM_B2R
-#ifndef IM_B2R_STATUS_PRINT
-#define IM_B2R_STATUS_PRINT		/**< DEBUG */
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
+#ifndef ImB2r_IM_B2R_STATUS_PRINT
+#define ImB2r_IM_B2R_STATUS_PRINT		/**< DEBUG */
 #endif
 #endif
 
@@ -63,161 +63,161 @@ ImB2r*		        im_b2r_new(void);
 
 /* Return value of processing result */
 //	D_DDIM_OK is defined with driver_common.h
-#define	D_IM_B2R_PARAM_ERROR				(D_IM_B2R | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error		*/
-#define	D_IM_B2R_TIMEOUT					(D_IM_B2R | D_DDIM_TIMEOUT)				/**< timeout				*/
-#define	D_IM_B2R_SYSTEM_ERROR				(D_IM_B2R | D_DDIM_SYSTEM_ERROR)		/**< System call error		*/
-#define	D_IM_B2R_MACRO_BUSY					(D_IM_B2R | D_DDIM_MACRO_BUSY_NG)		/**< Macro busy error		*/
+#define	ImB2r_D_IM_B2R_PARAM_ERROR				(D_IM_B2R | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error		*/
+#define	ImB2r_D_IM_B2R_TIMEOUT					(D_IM_B2R | D_DDIM_TIMEOUT)				/**< timeout				*/
+#define	ImB2r_D_IM_B2R_SYSTEM_ERROR				(D_IM_B2R | D_DDIM_SYSTEM_ERROR)		/**< System call error		*/
+#define	ImB2r_D_IM_B2R_MACRO_BUSY					(D_IM_B2R | D_DDIM_MACRO_BUSY_NG)		/**< Macro busy error		*/
 
 /** Function Enable
 */
-#define	D_IM_B2R_ENABLE_OFF					(0)						/**< Disable						*/
-#define	D_IM_B2R_ENABLE_ON					(1)						/**< Enable							*/
+#define	ImB2r_D_IM_B2R_ENABLE_OFF					(0)						/**< Disable						*/
+#define	ImB2r_D_IM_B2R_ENABLE_ON					(1)						/**< Enable							*/
 
 /** Wait Enable
 */
-#define	D_IM_B2R_WAIT_OFF					(0)						/**< Wait disable.					*/
-#define	D_IM_B2R_WAIT_ON					(1)						/**< Wait enable.					*/
+#define	ImB2r_D_IM_B2R_WAIT_OFF					(0)						/**< Wait disable.					*/
+#define	ImB2r_D_IM_B2R_WAIT_ON					(1)						/**< Wait enable.					*/
 
 /** Pipe No
 */
-#define	D_IM_B2R_PIPE1						(0)						/**< Pipe1.							*/
-#define	D_IM_B2R_PIPE2						(1)						/**< Pipe2.							*/
-#define	D_IM_B2R_PIPE12						(2)						/**< Pipe1&2.						*/
+#define	ImB2r_D_IM_B2R_PIPE1						(0)						/**< Pipe1.							*/
+#define	ImB2r_D_IM_B2R_PIPE2						(1)						/**< Pipe2.							*/
+#define	ImB2r_D_IM_B2R_PIPE12						(2)						/**< Pipe1&2.						*/
 
 
 /** Interrupt status(bit field)
 */
-#define	D_IM_B2R1_INT_STATE_YBR_END			(0x00000001)			/**< YBR: Normal end				*/
-#define	D_IM_B2R1_INT_STATE_YBW_END			(0x00000002)			/**< YBW: Normal end				*/
-#define	D_IM_B2R1_INT_STATE_FB2R_END		(0x00000004)			/**< F_B2R Frame transfer end		*/
-#define	D_IM_B2R1_INT_STATE_LINE_END		(0x00000008)			/**< YBW Line transferd				*/
-#define	D_IM_B2R1_INT_STATE_YBR_ERR			(0x00000010)			/**< YBR: Transfer error			*/
-#define	D_IM_B2R1_INT_STATE_YBW_ERR			(0x00000020)			/**< YBW: Transfer error			*/
-#define	D_IM_B2R1_INT_STATE_AXR_ERR			(0x00000040)			/**< AXI Read channel error			*/
-#define	D_IM_B2R1_INT_STATE_AXW_ERR			(0x00000080)			/**< AXI Write channel error		*/
-#define	D_IM_B2R1_INT_STATE_CPERR_ERR		(0x00000100)			/**< F_B2R CPERR					*/
-#define	D_IM_B2R2_INT_STATE_YBR_END			(0x00010000)			/**< YBR: Normal end				*/
-#define	D_IM_B2R2_INT_STATE_YBW_END			(0x00020000)			/**< YBW: Normal end				*/
-#define	D_IM_B2R2_INT_STATE_FB2R_END		(0x00040000)			/**< F_B2R Frame transfer end		*/
-#define	D_IM_B2R2_INT_STATE_LINE_END		(0x00080000)			/**< YBW Line transferd				*/
-#define	D_IM_B2R2_INT_STATE_YBR_ERR			(0x00100000)			/**< YBR: Transfer error			*/
-#define	D_IM_B2R2_INT_STATE_YBW_ERR			(0x00200000)			/**< YBW: Transfer error			*/
-#define	D_IM_B2R2_INT_STATE_AXR_ERR			(0x00400000)			/**< AXI Read channel error			*/
-#define	D_IM_B2R2_INT_STATE_AXW_ERR			(0x00800000)			/**< AXI Write channel error		*/
-#define	D_IM_B2R2_INT_STATE_CPERR_ERR		(0x01000000)			/**< F_B2R CPERR					*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_YBR_END			(0x00000001)			/**< YBR: Normal end				*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_YBW_END			(0x00000002)			/**< YBW: Normal end				*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_FB2R_END		(0x00000004)			/**< F_B2R Frame transfer end		*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_LINE_END		(0x00000008)			/**< YBW Line transferd				*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_YBR_ERR			(0x00000010)			/**< YBR: Transfer error			*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_YBW_ERR			(0x00000020)			/**< YBW: Transfer error			*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_AXR_ERR			(0x00000040)			/**< AXI Read channel error			*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_AXW_ERR			(0x00000080)			/**< AXI Write channel error		*/
+#define	ImB2r_D_IM_B2R1_INT_STATE_CPERR_ERR		(0x00000100)			/**< F_B2R CPERR					*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_YBR_END			(0x00010000)			/**< YBR: Normal end				*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_YBW_END			(0x00020000)			/**< YBW: Normal end				*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_FB2R_END		(0x00040000)			/**< F_B2R Frame transfer end		*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_LINE_END		(0x00080000)			/**< YBW Line transferd				*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_YBR_ERR			(0x00100000)			/**< YBR: Transfer error			*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_YBW_ERR			(0x00200000)			/**< YBW: Transfer error			*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_AXR_ERR			(0x00400000)			/**< AXI Read channel error			*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_AXW_ERR			(0x00800000)			/**< AXI Write channel error		*/
+#define	ImB2r_D_IM_B2R2_INT_STATE_CPERR_ERR		(0x01000000)			/**< F_B2R CPERR					*/
 
 /** Interrupt flag for Im_B2R_WaitEnd() (bit field)
 */
-#define	D_IM_B2R1_INT_FLG_YBR_END			(0x00000001)			/**< YBR: Normal end				*/
-#define	D_IM_B2R1_INT_FLG_YBW_END			(0x00000002)			/**< YBW: Normal end				*/
-#define	D_IM_B2R1_INT_FLG_FB2R_END			(0x00000004)			/**< F_B2R Frame transfer end		*/
-#define	D_IM_B2R1_INT_FLG_LINE_END			(0x00000008)			/**< YBW Line transferd				*/
-#define	D_IM_B2R1_INT_FLG_YBR_ERR			(0x00000010)			/**< YBR: Transfer error			*/
-#define	D_IM_B2R1_INT_FLG_YBW_ERR			(0x00000020)			/**< YBW: Transfer error			*/
-#define	D_IM_B2R1_INT_FLG_AXR_ERR			(0x00000040)			/**< AXI Read channel error			*/
-#define	D_IM_B2R1_INT_FLG_AXW_ERR			(0x00000080)			/**< AXI Write channel error		*/
-#define	D_IM_B2R1_INT_FLG_CPERR_ERR			(0x00000100)			/**< F_B2R CPERR					*/
-#define	D_IM_B2R1_INT_FLG_ALL				(0x000001FF)			/**< All flags(PIPE1)				*/
-#define	D_IM_B2R2_INT_FLG_YBR_END			(0x00010000)			/**< YBR: Normal end				*/
-#define	D_IM_B2R2_INT_FLG_YBW_END			(0x00020000)			/**< YBW: Normal end				*/
-#define	D_IM_B2R2_INT_FLG_FB2R_END			(0x00040000)			/**< F_B2R Frame transfer end		*/
-#define	D_IM_B2R2_INT_FLG_LINE_END			(0x00080000)			/**< YBW Line transferd				*/
-#define	D_IM_B2R2_INT_FLG_YBR_ERR			(0x00100000)			/**< YBR: Transfer error			*/
-#define	D_IM_B2R2_INT_FLG_YBW_ERR			(0x00200000)			/**< YBW: Transfer error			*/
-#define	D_IM_B2R2_INT_FLG_AXR_ERR			(0x00400000)			/**< AXI Read channel error			*/
-#define	D_IM_B2R2_INT_FLG_AXW_ERR			(0x00800000)			/**< AXI Write channel error		*/
-#define	D_IM_B2R2_INT_FLG_CPERR_ERR			(0x01000000)			/**< F_B2R CPERR					*/
-#define	D_IM_B2R2_INT_FLG_ALL				(0x01FF0000)			/**< All flags(PIPE2)				*/
-#define	D_IM_B2R_INT_FLG_ALL				(0x01FF01FF)			/**< All flags						*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_YBR_END			(0x00000001)			/**< YBR: Normal end				*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_YBW_END			(0x00000002)			/**< YBW: Normal end				*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_FB2R_END			(0x00000004)			/**< F_B2R Frame transfer end		*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_LINE_END			(0x00000008)			/**< YBW Line transferd				*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_YBR_ERR			(0x00000010)			/**< YBR: Transfer error			*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_YBW_ERR			(0x00000020)			/**< YBW: Transfer error			*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_AXR_ERR			(0x00000040)			/**< AXI Read channel error			*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_AXW_ERR			(0x00000080)			/**< AXI Write channel error		*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_CPERR_ERR			(0x00000100)			/**< F_B2R CPERR					*/
+#define	ImB2r_D_IM_B2R1_INT_FLG_ALL				(0x000001FF)			/**< All flags(PIPE1)				*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_YBR_END			(0x00010000)			/**< YBR: Normal end				*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_YBW_END			(0x00020000)			/**< YBW: Normal end				*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_FB2R_END			(0x00040000)			/**< F_B2R Frame transfer end		*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_LINE_END			(0x00080000)			/**< YBW Line transferd				*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_YBR_ERR			(0x00100000)			/**< YBR: Transfer error			*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_YBW_ERR			(0x00200000)			/**< YBW: Transfer error			*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_AXR_ERR			(0x00400000)			/**< AXI Read channel error			*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_AXW_ERR			(0x00800000)			/**< AXI Write channel error		*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_CPERR_ERR			(0x01000000)			/**< F_B2R CPERR					*/
+#define	ImB2r_D_IM_B2R2_INT_FLG_ALL				(0x01FF0000)			/**< All flags(PIPE2)				*/
+#define	ImB2r_D_IM_B2R_INT_FLG_ALL				(0x01FF01FF)			/**< All flags						*/
 
 /** Error factor for Im_B2R_Get_YBR_Error_Factor() (bit field)
 */
-#define	D_IM_B2R_ERROR_FACOTOR_TRMER		(0x00000001)			/**< Trimming processing error				*/
-#define	D_IM_B2R_ERROR_FACOTOR_HPDDER		(0x00000002)			/**< Horizontal padding processing error	*/
-#define	D_IM_B2R_ERROR_FACOTOR_WAITER		(0x00000004)			/**< WAIT control error						*/
+#define	ImB2r_D_IM_B2R_ERROR_FACOTOR_TRMER		(0x00000001)			/**< Trimming processing error				*/
+#define	ImB2r_D_IM_B2R_ERROR_FACOTOR_HPDDER		(0x00000002)			/**< Horizontal padding processing error	*/
+#define	ImB2r_D_IM_B2R_ERROR_FACOTOR_WAITER		(0x00000004)			/**< WAIT control error						*/
 
 /** Color of top pixel of Bayer data
 */
-#define	D_IM_B2R_TOP_PIXEL_R				(0)						/**< Bayer top pixel is R			*/
-#define	D_IM_B2R_TOP_PIXEL_B				(1)						/**< Bayer top pixel is B			*/
-#define	D_IM_B2R_TOP_PIXEL_GR				(2)						/**< Bayer top pixel is Gr			*/
-#define	D_IM_B2R_TOP_PIXEL_GB				(3)						/**< Bayer top pixel is Gb			*/
+#define	ImB2r_D_IM_B2R_TOP_PIXEL_R				(0)						/**< Bayer top pixel is R			*/
+#define	ImB2r_D_IM_B2R_TOP_PIXEL_B				(1)						/**< Bayer top pixel is B			*/
+#define	ImB2r_D_IM_B2R_TOP_PIXEL_GR				(2)						/**< Bayer top pixel is Gr			*/
+#define	ImB2r_D_IM_B2R_TOP_PIXEL_GB				(3)						/**< Bayer top pixel is Gb			*/
 																		/* @YBRCTL.PIXEL					*/
 
 /** Reading/Writing data type
 */
-#define	D_IM_B2R_STL_DTYP_PACK8				(0)						/**< 8bit							*/
-#define	D_IM_B2R_STL_DTYP_PACK10			(1)						/**< 10bit PACK						*/
-#define	D_IM_B2R_STL_DTYP_PACK12			(2)						/**< 12bit PACK						*/
-#define	D_IM_B2R_STL_DTYP_PACK16			(3)						/**< 16bit							*/
+#define	ImB2r_D_IM_B2R_STL_DTYP_PACK8				(0)						/**< 8bit							*/
+#define	ImB2r_D_IM_B2R_STL_DTYP_PACK10			(1)						/**< 10bit PACK						*/
+#define	ImB2r_D_IM_B2R_STL_DTYP_PACK12			(2)						/**< 12bit PACK						*/
+#define	ImB2r_D_IM_B2R_STL_DTYP_PACK16			(3)						/**< 16bit							*/
 																		/* @YBRCTL.YBRDTYP	*/
 
 /** Transfer data output
 */
-#define	D_IM_B2R_YBW_OUTPUT_RGB				(0)						/**< RGB data output				*/
-#define	D_IM_B2R_YBW_OUTPUT_R_ONLY			(1)						/**< R data only output				*/
+#define	ImB2r_D_IM_B2R_YBW_OUTPUT_RGB				(0)						/**< RGB data output				*/
+#define	ImB2r_D_IM_B2R_YBW_OUTPUT_R_ONLY			(1)						/**< R data only output				*/
 
 /** YBW burst length
 */
-#define	D_IM_B2R_BRST_512					(0)						/**< 512bytes burst					*/
-#define	D_IM_B2R_BRST_256					(1)						/**< 256bytes burst					*/
-#define	D_IM_B2R_BRST_128					(2)						/**< 128bytes burst					*/
+#define	ImB2r_D_IM_B2R_BRST_512					(0)						/**< 512bytes burst					*/
+#define	ImB2r_D_IM_B2R_BRST_256					(1)						/**< 256bytes burst					*/
+#define	ImB2r_D_IM_B2R_BRST_128					(2)						/**< 128bytes burst					*/
 																		/* @YBRAXMD.YBRBL, YBWAXMD.YBWBL	*/
 
 /** Bayer data left shift
 */
-#define D_IM_B2R_BLSFT_THROUGH				(0)						/**< Through */
-#define D_IM_B2R_BLSFT_1BIT					(1)						/**< Bayer data is shifted to the left by 1bit(11bits->12bits) */
-#define D_IM_B2R_BLSFT_2BIT					(2)						/**< Bayer data is shifted to the left by 2bit(10bits->12bits) */
-#define D_IM_B2R_BLSFT_4BIT					(3)						/**< Bayer data is shifted to the left by 4bit( 8bits->12bits) */
+#define ImB2r_D_IM_B2R_BLSFT_THROUGH				(0)						/**< Through */
+#define ImB2r_D_IM_B2R_BLSFT_1BIT					(1)						/**< Bayer data is shifted to the left by 1bit(11bits->12bits) */
+#define ImB2r_D_IM_B2R_BLSFT_2BIT					(2)						/**< Bayer data is shifted to the left by 2bit(10bits->12bits) */
+#define ImB2r_D_IM_B2R_BLSFT_4BIT					(3)						/**< Bayer data is shifted to the left by 4bit( 8bits->12bits) */
 																		/* @BLSFT.BLSFT	*/
 
 /** External output start alarm select
 */
-#define	D_IM_B2R_EXT_OUT_ALARM_1LINE		(0)						/**< Turned on before about 1 line transfer time	*/
-#define	D_IM_B2R_EXT_OUT_ALARM_2LINE		(1)						/**< Turned on before about 2 line transfer time	*/
-#define	D_IM_B2R_EXT_OUT_ALARM_3LINE		(2)						/**< Turned on before about 3 line transfer time	*/
-#define	D_IM_B2R_EXT_OUT_ALARM_VALID_DATA	(3)						/**< Timing of receiving the valid data(B2B direct)<br>
+#define	ImB2r_D_IM_B2R_EXT_OUT_ALARM_1LINE		(0)						/**< Turned on before about 1 line transfer time	*/
+#define	ImB2r_D_IM_B2R_EXT_OUT_ALARM_2LINE		(1)						/**< Turned on before about 2 line transfer time	*/
+#define	ImB2r_D_IM_B2R_EXT_OUT_ALARM_3LINE		(2)						/**< Turned on before about 3 line transfer time	*/
+#define	ImB2r_D_IM_B2R_EXT_OUT_ALARM_VALID_DATA	(3)						/**< Timing of receiving the valid data(B2B direct)<br>
 																		 Timing of YBRTRG start(SDRAM input)			*/
 
 /** B2R start type
 */
-#define D_IM_B2R_START_WITH_YBW				(0)						/**< To output RGB data to the external memory		*/
-#define D_IM_B2R_START_EXTERNAL_IF_ONLY		(1)						/**< Not to output RGB data to the external memory	*/
+#define ImB2r_D_IM_B2R_START_WITH_YBW				(0)						/**< To output RGB data to the external memory		*/
+#define ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY		(1)						/**< Not to output RGB data to the external memory	*/
 
 /** Maximum of Table size
 */
 // JDSB2R
-#define D_IM_B2R_TABLE_MAX_BAYER_DEKNEE		(256)					/**< JDSB2R Bayer Deknee table array number	*/
-#define D_IM_B2R_TABLE_MAX_RGB_KNEE			(257)					/**< JDSB2R RGB Knee table array number		*/
+#define ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE		(256)					/**< JDSB2R Bayer Deknee table array number	*/
+#define ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE			(257)					/**< JDSB2R RGB Knee table array number		*/
 
 /** RGB component to be processed
 */
-#define D_IM_B2R_PORT_0						(0)						/**< Port0						*/
-#define D_IM_B2R_PORT_1						(1)						/**< Port1						*/
-#define D_IM_B2R_PORT_2						(2)						/**< Port2						*/
-#define D_IM_B2R_PORT_MAX					(3)						/**< The maximum values of RGB component to be processed */
+#define ImB2r_D_IM_B2R_PORT_0						(0)						/**< Port0						*/
+#define ImB2r_D_IM_B2R_PORT_1						(1)						/**< Port1						*/
+#define ImB2r_D_IM_B2R_PORT_2						(2)						/**< Port2						*/
+#define ImB2r_D_IM_B2R_PORT_MAX					(3)						/**< The maximum values of RGB component to be processed */
 // RGB
-#define	D_IM_B2R_PORT_R						(D_IM_B2R_PORT_0)		/**< R data						*/
-#define	D_IM_B2R_PORT_G						(D_IM_B2R_PORT_1)		/**< G data						*/
-#define	D_IM_B2R_PORT_B						(D_IM_B2R_PORT_2)		/**< B data						*/
+#define	ImB2r_D_IM_B2R_PORT_R						(ImB2r_D_IM_B2R_PORT_0)		/**< R data						*/
+#define	ImB2r_D_IM_B2R_PORT_G						(ImB2r_D_IM_B2R_PORT_1)		/**< G data						*/
+#define	ImB2r_D_IM_B2R_PORT_B						(ImB2r_D_IM_B2R_PORT_2)		/**< B data						*/
 
 /** YBW output bank number
 */
-#define D_IM_B2R_YBW_BANK_0					(0)						/**< YBW output bank index number 0 */
-#define D_IM_B2R_YBW_BANK_1					(1)						/**< YBW output bank index number 1 */
-#define D_IM_B2R_YBW_BANK_2					(2)						/**< YBW output bank index number 2 */
-#define D_IM_B2R_YBW_BANK_3					(3)						/**< YBW output bank index number 3 */
-#define D_IM_B2R_YBW_BANK_MAX				(4)						/**< Maximum output bank index number of YBW */
+#define ImB2r_D_IM_B2R_YBW_BANK_0					(0)						/**< YBW output bank index number 0 */
+#define ImB2r_D_IM_B2R_YBW_BANK_1					(1)						/**< YBW output bank index number 1 */
+#define ImB2r_D_IM_B2R_YBW_BANK_2					(2)						/**< YBW output bank index number 2 */
+#define ImB2r_D_IM_B2R_YBW_BANK_3					(3)						/**< YBW output bank index number 3 */
+#define ImB2r_D_IM_B2R_YBW_BANK_MAX				(4)						/**< Maximum output bank index number of YBW */
 
 // Output Address array maximum number
-#define D_IM_B2R_ADDR_INDEX_MAX				(D_IM_B2R_YBW_BANK_MAX)	/**< Maximum number of B2R output address information(bank0 ~ 3)	*/
+#define ImB2r_D_IM_B2R_ADDR_INDEX_MAX				(ImB2r_D_IM_B2R_YBW_BANK_MAX)	/**< Maximum number of B2R output address information(bank0 ~ 3)	*/
 
 /** Color difference reference high-frequency correction area A/B merge method
 */
-#define D_IM_B2R_HFACRV_MRG_AVERAGE			(0)						/**< AB result average mode */
-#define D_IM_B2R_HFACRV_MRG_SUPPRESSION		(1)						/**< AB suppression result priority mode */
-#define D_IM_B2R_HFACRV_MRG_ENHANCEMENT		(2)						/**< AB enhancement result priority mode */
+#define ImB2r_D_IM_B2R_HFACRV_MRG_AVERAGE			(0)						/**< AB result average mode */
+#define ImB2r_D_IM_B2R_HFACRV_MRG_SUPPRESSION		(1)						/**< AB suppression result priority mode */
+#define ImB2r_D_IM_B2R_HFACRV_MRG_ENHANCEMENT		(2)						/**< AB enhancement result priority mode */
 
 /* @} */	// im_b2r group
 
@@ -269,7 +269,7 @@ typedef struct {
 */
 typedef struct {
 	T_IM_B2R_CTRL_AXI_TYPE	ybr;							/**< YBRAXCTL.YBRCACHE, YBRAXCTL.YBRPROT YBR Read channel types.		*/
-	T_IM_B2R_CTRL_AXI_TYPE	ybw[D_IM_B2R_PORT_MAX];			/**< YBWAXCTL.YBWCACHE_x, YBWAXCTL.YBWPROT_x YBW Write channel types.	*/
+	T_IM_B2R_CTRL_AXI_TYPE	ybw[ImB2r_D_IM_B2R_PORT_MAX];			/**< YBWAXCTL.YBWCACHE_x, YBWAXCTL.YBWPROT_x YBW Write channel types.	*/
 } T_IM_B2R_CTRL_AXI;
 
 /** AXI bus read channel status
@@ -281,19 +281,19 @@ typedef struct {
 /** AXI bus write channel status
 */
 typedef struct {
-	UCHAR					ybw_axi_stat[D_IM_B2R_PORT_MAX];	/**< YBWAXSTS.YBBRESP[3] : Write channel status	*/
+	UCHAR					ybw_axi_stat[ImB2r_D_IM_B2R_PORT_MAX];	/**< YBWAXSTS.YBBRESP[3] : Write channel status	*/
 } T_IM_B2R_AXI_YBW_STAT;
 
 /** AXI bus write channel control
 */
 typedef struct {
 	UCHAR					burst_length;					/**< YBWAXMD.YBWBL : Transfer burst length (2bit)
-															<ul><li>@ref D_IM_B2R_BRST_512
-																<li>@ref D_IM_B2R_BRST_256
-																<li>@ref D_IM_B2R_BRST_128</ul>									*/
+															<ul><li>@ref ImB2r_D_IM_B2R_BRST_512
+																<li>@ref ImB2r_D_IM_B2R_BRST_256
+																<li>@ref ImB2r_D_IM_B2R_BRST_128</ul>									*/
 	UCHAR					out_sel;						/**< YBWAXMD.YBWDOS : Select the data to be output from YBW (1bit)
-															<ul><li>@ref D_IM_B2R_YBW_OUTPUT_RGB : RGB data output
-																<li>@ref D_IM_B2R_YBW_OUTPUT_R_ONLY : R data only output</ul>	*/
+															<ul><li>@ref ImB2r_D_IM_B2R_YBW_OUTPUT_RGB : RGB data output
+																<li>@ref ImB2r_D_IM_B2R_YBW_OUTPUT_R_ONLY : R data only output</ul>	*/
 } T_IM_B2R_AXI_YBW_MODE;
 
 /** Rectangle of image
@@ -316,19 +316,19 @@ typedef struct {
 typedef struct {
 	T_IM_B2R_AXI_YBW_MODE	axi_write_mode;							/**< AXI bus write channel control parameters			*/
 	UCHAR					output_dtype;							/**< YBWCTL.YBWDTYP : Output data type (2bits)
-																	<ul><li>@ref D_IM_B2R_STL_DTYP_PACK8
-																		<li>@ref D_IM_B2R_STL_DTYP_PACK12
-																		<li>@ref D_IM_B2R_STL_DTYP_PACK16</ul>				*/
-	USHORT					write_request_mask[D_IM_B2R_PORT_MAX];	/**< YBWREQMSK.YBWREQMSK[3] :
+																	<ul><li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK8
+																		<li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK12
+																		<li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK16</ul>				*/
+	USHORT					write_request_mask[ImB2r_D_IM_B2R_PORT_MAX];	/**< YBWREQMSK.YBWREQMSK[3] :
 																		YBW transfer request mask (12bits)<br>
 																		<p>Please set number of cycles, the time until the next access request.<br>
 																		   If you set the "000h" you is disabled.			*/
 	UCHAR					trim_out_enable;						/**< YBWMD.TRMEN : Trimming output enable
-																	<ul><li>@ref D_IM_B2R_ENABLE_OFF : Do not do the trimming.
-																		<li>@ref D_IM_B2R_ENABLE_ON : Trimming.</ul>		*/
+																	<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Do not do the trimming.
+																		<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Trimming.</ul>		*/
 	UCHAR					knee_enable;							/**< YBWMD.KNEEN : Knee enable (1bit)
-																	<ul><li>@ref D_IM_B2R_ENABLE_OFF : Do not process Knee
-																		<li>@ref D_IM_B2R_ENABLE_ON : Processing Knee</ul>	*/
+																	<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Do not process Knee
+																		<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Processing Knee</ul>	*/
 } T_IM_B2R_YBW_CTRL;
 
 /** YBW Line interrupt control
@@ -344,38 +344,38 @@ typedef struct {
 typedef struct {
 	// YBR read channel control
 	UCHAR					bayer_top_pixel;				/**< YBRCTL.PIXEL : Color of Bayer top pixel (2bits)
-															<ul><li>@ref D_IM_B2R_TOP_PIXEL_R
-																<li>@ref D_IM_B2R_TOP_PIXEL_B
-																<li>@ref D_IM_B2R_TOP_PIXEL_GR
-																<li>@ref D_IM_B2R_TOP_PIXEL_GB</ul>	*/
+															<ul><li>@ref ImB2r_D_IM_B2R_TOP_PIXEL_R
+																<li>@ref ImB2r_D_IM_B2R_TOP_PIXEL_B
+																<li>@ref ImB2r_D_IM_B2R_TOP_PIXEL_GR
+																<li>@ref ImB2r_D_IM_B2R_TOP_PIXEL_GB</ul>	*/
 	UCHAR					deknee_enable;					/**< YBRCTL.DKNEN : Deknee enable for Bayer data. (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : Do not process Deknee
-																<li>@ref D_IM_B2R_ENABLE_ON : Processing Deknee</ul>	*/
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Do not process Deknee
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Processing Deknee</ul>	*/
 
 	// YBW write channel control
 	T_IM_B2R_YBW_CTRL		ybw;							/**< YBW control parameters													*/
 	T_IM_B2R_CTRL_LINE_INTR	line_intr;						/**< YBW Line interrupt control parameters									*/
 	UCHAR					ybw_continue_start_enable;		/**< YBWCTL.YBWCSE : YBW continue start enable (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : Frame processing one-shot.
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Frame processing one-shot.
 																	(YBWTRG will need to restart each process one frame.)
-																<li>@ref D_IM_B2R_ENABLE_ON : Continuous frame processing.
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Continuous frame processing.
 																	(I continue to frame processing writing "00" to YBWTRG.)</ul>		*/
 
 	/* B2R control */
 	UCHAR					cia_bypass;						/**< B2RMODE.CIABYP : Color interpolation bypass mode of the F_B2R (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : F_B2R color interpolation unit is set to normal mode.
-																<li>@ref D_IM_B2R_ENABLE_ON : F_B2R color interpolation unit is set to bypass mode.</ul>	*/
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : F_B2R color interpolation unit is set to normal mode.
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : F_B2R color interpolation unit is set to bypass mode.</ul>	*/
 	UCHAR					cia_padding;					/**< B2RMODE.CIAPDD : Color interpolation padding mode of the F_B2R (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : Ring pixel padding is OFF.
-																<li>@ref D_IM_B2R_ENABLE_ON : Ring pixel padding is ON.</ul>			*/
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Ring pixel padding is OFF.
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Ring pixel padding is ON.</ul>			*/
 	UCHAR					ext_out_en;						/**< DINSEL.EXTOEN : RGB data external output enable (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : Output to the outside is disabled.
-																<li>@ref D_IM_B2R_ENABLE_ON : Output to the outside is enabled.</ul>	*/
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Output to the outside is disabled.
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Output to the outside is enabled.</ul>	*/
 	UCHAR					ext_out_alarm;					/**< EXALMSL : External output start alarm select (2bits)
-															<ul><li>@ref D_IM_B2R_EXT_OUT_ALARM_1LINE
-																<li>@ref D_IM_B2R_EXT_OUT_ALARM_2LINE
-																<li>@ref D_IM_B2R_EXT_OUT_ALARM_3LINE
-																<li>@ref D_IM_B2R_EXT_OUT_ALARM_VALID_DATA</ul>							*/
+															<ul><li>@ref ImB2r_D_IM_B2R_EXT_OUT_ALARM_1LINE
+																<li>@ref ImB2r_D_IM_B2R_EXT_OUT_ALARM_2LINE
+																<li>@ref ImB2r_D_IM_B2R_EXT_OUT_ALARM_3LINE
+																<li>@ref ImB2r_D_IM_B2R_EXT_OUT_ALARM_VALID_DATA</ul>							*/
 
 	VOID					(*b2r_user_handler)(UINT32* int_status, UINT32 user_param);	/**< Interrupt Handler														*/
 	UINT32					user_param;						/**< This set value will return to callback argument value when interrupt occurs.	*/
@@ -385,18 +385,18 @@ typedef struct {
 */
 typedef struct {
 	UCHAR					burst_length;					/**< YBRAXMD.YBRBL : Transfer burst length of the read channel. (2bit)
-															<ul><li>@ref D_IM_B2R_BRST_512
-																<li>@ref D_IM_B2R_BRST_256
-																<li>@ref D_IM_B2R_BRST_128</ul>							*/
+															<ul><li>@ref ImB2r_D_IM_B2R_BRST_512
+																<li>@ref ImB2r_D_IM_B2R_BRST_256
+																<li>@ref ImB2r_D_IM_B2R_BRST_128</ul>							*/
 	USHORT					read_request_mask;				/**< YBRREQMSK.YBRREQMSK : Mask transfer request(12bits)<br>
 																<p>Mask setting of the transfer request from the read to do YBR.<br>
 																Please set number of cycles, the time until the next access request.<br>
 																If you set the 000h you is disabled.					*/
 	UCHAR					input_dtype;					/**< YBRCTL.YBRDTYP : Input data type (2bits)
-															<ul><li>@ref D_IM_B2R_STL_DTYP_PACK8
-																<li>@ref D_IM_B2R_STL_DTYP_PACK10
-																<li>@ref D_IM_B2R_STL_DTYP_PACK12
-																<li>@ref D_IM_B2R_STL_DTYP_PACK16</ul>					*/
+															<ul><li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK8
+																<li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK10
+																<li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK12
+																<li>@ref ImB2r_D_IM_B2R_STL_DTYP_PACK16</ul>					*/
 	UCHAR					top_offset;						/**< YBROFS : Setting top bit input data area (3bits)<br>
 															<p>Set the first bit of the data area is read YBR.
 															   Set the position of the LSB bit in bit position at the time of each data format.<br>
@@ -440,8 +440,8 @@ typedef struct {
 */
 typedef struct {
 	UCHAR					trimming_enable;				/**< YBWMD.TRMEN : Trimming enable (1bit)
-															<ul><li>@ref D_IM_B2R_ENABLE_OFF : Do not do the trimming
-																<li>@ref D_IM_B2R_ENABLE_ON : Trimming</ul>			*/
+															<ul><li>@ref ImB2r_D_IM_B2R_ENABLE_OFF : Do not do the trimming
+																<li>@ref ImB2r_D_IM_B2R_ENABLE_ON : Trimming</ul>			*/
 	USHORT					start_x;						/**< YBWTRMH.TRMHSTA : start X position (13bits)		*/
 	USHORT					start_y;						/**< YBWTRMV.TRMVSTA : start Y position (14bits)		*/
 	USHORT					width;							/**< YBWTRMH.TRMHSIZ : Width (13bits, multiple of 2)	*/
@@ -478,14 +478,14 @@ typedef union {
 */
 typedef struct {
 	UCHAR					bank_initial_position;				/**< YBWBANK.BANKPS : Bank initial position
-																<ul><li>@ref D_IM_B2R_YBW_BANK_0
-																	<li>@ref D_IM_B2R_YBW_BANK_1
-																	<li>@ref D_IM_B2R_YBW_BANK_2
-																	<li>@ref D_IM_B2R_YBW_BANK_3</ul>					*/
+																<ul><li>@ref ImB2r_D_IM_B2R_YBW_BANK_0
+																	<li>@ref ImB2r_D_IM_B2R_YBW_BANK_1
+																	<li>@ref ImB2r_D_IM_B2R_YBW_BANK_2
+																	<li>@ref ImB2r_D_IM_B2R_YBW_BANK_3</ul>					*/
 	UCHAR					use_bank_num;						/**< YBWCTL.YBWUSEB : Use bank number<br>
 																	Use only one bank in the setting of 0 (d),
 																	and use of the four banks in the setting of 3 (d).	*/
-	T_IM_B2R_OUTADDR_INFO	output_addr[D_IM_B2R_YBW_BANK_MAX];	/**< Output bank address information					*/
+	T_IM_B2R_OUTADDR_INFO	output_addr[ImB2r_D_IM_B2R_YBW_BANK_MAX];	/**< Output bank address information					*/
 } T_IM_B2R_OUTBANK_INFO;
 
 /* @} */	// im_b2r group
@@ -597,9 +597,9 @@ typedef struct {
 	UCHAR					area_a_enable;					/**< HFACRVCTL.HFACAE : Color difference reference high-frequency component correction area A enable. (1bits)	*/
 	UCHAR					area_b_enable;					/**< HFACRVCTL.HFACBE : Color difference reference high-frequency component correction area B enable. (1bits)	*/
 	UCHAR					area_marge_method;				/**< HFACRVCTL.HFACRVMRG : Color difference reference high-frequency component correction area a/B merge method. (2bits)
-															<ul><li>@ref D_IM_B2R_HFACRV_MRG_AVERAGE
-																<li>@ref D_IM_B2R_HFACRV_MRG_SUPPRESSION
-																<li>@ref D_IM_B2R_HFACRV_MRG_ENHANCEMENT</ul>									*/
+															<ul><li>@ref ImB2r_D_IM_B2R_HFACRV_MRG_AVERAGE
+																<li>@ref ImB2r_D_IM_B2R_HFACRV_MRG_SUPPRESSION
+																<li>@ref ImB2r_D_IM_B2R_HFACRV_MRG_ENHANCEMENT</ul>									*/
 	T_IM_B2R_CTRL_CRV		area_a_ctrl;					/**< Color difference reference high-frequency component correction area A control	*/
 	T_IM_B2R_CTRL_CRV		area_b_ctrl;					/**< Color difference reference high-frequency component correction area B control	*/
 } T_IM_B2R_CTRL_HPF;							/**< High pass filter control	*/

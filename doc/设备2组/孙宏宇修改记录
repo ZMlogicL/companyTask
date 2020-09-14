@@ -1,0 +1,122 @@
+im_ltm_ltm文件:
+im_ltm_ltm.c被拆成imltmltmutils.c和imltmltmwin.c
+
+VOID 		Im_LTM_LTM_Print_Status( VOID );改为
+VOID 		im_ltm_ltm_utlis_im_ltm_ltm_print_status(ImLtmLtmUtlis*self);
+
+VOID 		im_ltm_ltm_utlis_im_ltm_ltm_print_accenstatus(ImLtmLtmUtlis*self);改为
+VOID 		Im_LTM_LTM_Print_AccEnStatus( VOID );
+
+im_ltm.h中
+#define	D_IM_LTM_LTM1_INT_FLG_EXIP_END		(0x00000002)
+#define	D_IM_LTM_LTM1_INT_FLG_LINE_END		(0x00000004)
+#define	D_IM_LTM_LTM1_INT_FLG_AXR_ERR		(0x00000008)	
+#define	D_IM_LTM_LTM1_INT_FLG_AXW_ERR		(0x00000010)	
+#define	D_IM_LTM_LTM1_INT_FLG_YLOG_ERR		(0x00000020)
+#define	D_IM_LTM_LTM2_INT_FLG_EXIP_END		(0x00000200)	
+#define	D_IM_LTM_LTM2_INT_FLG_LINE_END		(0x00000400)
+#define	D_IM_LTM_LTM2_INT_FLG_AXR_ERR		(0x00000800)
+#define	D_IM_LTM_LTM2_INT_FLG_AXW_ERR		(0x00001000)
+#define	D_IM_LTM_LTM2_INT_FLG_YLOG_ERR		(0x00002000)
+#define	D_IM_LTM_LTM1_INT_FLG_ALL			(0x0000003F)	
+#define	D_IM_LTM_LTM2_INT_FLG_ALL			(0x00003F00)	
+#define	D_IM_LTM_LTM_INT_FLG_ALL			(0x00003F3F)	
+#define D_IM_LTM_TABLE_MAX_RCG				(32)		
+被移入imltmltmutlis.h
+
+在ct_im_ltm_ltm.c 中加入#include "imltmmapevent.h";
+在ct_im_ltm_ltm.c  ct_im_r2y.c  im_ltm_common.c中加入#include "imltmltmwin.h"
+
+
+
+im_ltm_map文件:
+im_ltm_map.c被拆成imltmmaplist.c和imltmmapevent.c
+
+im_ltm.h中
+#define	D_IM_LTM_MAP1_INT_FLG_ALL			(0x0000003F)	
+#define	D_IM_LTM_MAP2_INT_FLG_ALL			(0x00003F00)
+#define	D_IM_LTM_MAP_INT_FLG_ALL			(0x00003F3F)
+#define	D_IM_LTM_MAP1_INT_FLG_LINE_END                  (0x00000002)
+#define	D_IM_LTM_MAP1_INT_STATE_HISTINI_END	(0x00000020)
+#define	D_IM_LTM_MAP1_INT_FLG_HISTINI_END	(0x00000020)
+#define	D_IM_LTM_MAP1_INT_FLG_AXR_ERR		(0x00000004)	
+#define	D_IM_LTM_MAP1_INT_FLG_AXW_ERR		(0x00000008)
+#define	D_IM_LTM_MAP1_INT_FLG_YLOG_ERR		(0x00000010)	
+#define	D_IM_LTM_MAP2_INT_FLG_LINE_END		(0x00000200)	
+#define	D_IM_LTM_MAP2_INT_STATE_HISTINI_END	(0x00002000)
+#define	D_IM_LTM_MAP2_INT_FLG_HISTINI_END	(0x00002000)	
+#define	D_IM_LTM_MAP2_INT_FLG_AXR_ERR		(0x00000400)
+#define	D_IM_LTM_MAP2_INT_FLG_AXW_ERR		(0x00000800)	
+#define	D_IM_LTM_MAP2_INT_FLG_YLOG_ERR		(0x00001000)	
+被移入imltmmaplist.h	
+在ct_im_ltm_map.c  im_ltm_common.c   ip_bin_para.c  ctrl_ltm.c  ctrl_pro2pipe.c  stm_sensor2yuv.c中加入#include "imltmmaplist.h",
+在ct_im_ltm_map.c  im_ltm_common.c 中加入#include "imltmmapevent.h"
+
+INT32 Im_LTM_MAP_Set_AxiCtrlParam( UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm )改为：
+im_ltm_map_list_im_ltm_map_set_axictrlparam(UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm);
+
+INT32 Im_LTM_MAP_Set_ParamHold( UCHAR pipe_no, const UCHAR hold_enable )改为：
+INT32im_ltm_map_list_im_ltm_map_set_paramhold(ImLtmMapList*self,UCHAR pipe_no, const UCHAR hold_enable);
+
+INT32 Im_LTM_MAP_Get_MapBusy( UCHAR pipe_no, BOOL* const busy_status )改为：INT32 im_ltm_map_list_im_ltm_map_get_mapbusy(UCHAR pipe_no, BOOL* const busy_status );
+
+INT32 Im_LTM_MAP_ContStart( UCHAR pipe_no )改为：INT32 im_ltm_map_list_im_ltm_map_contstart(ImLtmMapList*self,UCHAR pipe_no); 
+
+VOID Im_LTM_MAP_Print_Status( VOID );改为：VOID im_ltm_map_list_im_ltm_map_print_status(ImLtmMapList*self);
+
+VOID Im_LTM_MAP_Print_AccEnStatus( VOID )改为：VOID im_ltm_map_list_im_ltm_map_print_accenstatus(ImLtmMapList*self);
+
+注：以下宏定义由于被多个文件调用没有修改
+D_IM_LTM_PIPE_MAX
+D_IM_LTM_MAP1_INT_STATE_MAP_END
+D_IM_LTM_MAP1_INT_FLG_MAP_END
+D_IM_LTM_MAP1_INT_STATE_LINE_END
+D_IM_LTM_MAP1_INT_STATE_AXR_ERR
+D_IM_LTM_MAP1_INT_STATE_AXW_ERR
+D_IM_LTM_MAP1_INT_STATE_YLOG_ERR
+D_IM_LTM_MAP2_INT_STATE_MAP_END
+D_IM_LTM_MAP2_INT_FLG_MAP_END
+D_IM_LTM_MAP2_INT_STATE_LINE_END
+D_IM_LTM_MAP2_INT_STATE_AXR_ERR
+D_IM_LTM_PIPE1
+D_IM_LTM_PIPE2
+D_IM_LTM_PIPE12
+D_IM_LTM_PARAM_ERROR
+D_IM_LTM_SYSTEM_ERROR
+D_LTM_YLOG_TBL_00
+D_LTM_YLOG_TBL_10
+D_LTM_YLOG_TBL_01
+D_IM_LTM_MACRO_BUSY
+D_IM_LTM_PORT_Y_YP
+D_IM_LTM_PORT_Y_YN
+D_IM_LTM_PORT_2
+D_IM_LTM_PORT_1
+D_IM_LTM_DTYP_PACK12
+D_IM_LTM_ENABLE_ON
+D_IM_LTM_TIMEOUT
+D_IM_LTM_LTM1_INT_STATE_LTM_END
+D_IM_LTM_LTM1_INT_FLG_LTM_END
+D_IM_LTM_LTM1_INT_STATE_EXIP_END
+D_IM_LTM_LTM1_INT_STATE_LINE_END
+D_IM_LTM_LTM1_INT_STATE_AXR_ERR
+D_IM_LTM_LTM1_INT_STATE_AXW_ERR
+D_IM_LTM_LTM1_INT_STATE_YLOG_ERR
+D_IM_LTM_LTM2_INT_STATE_LTM_END
+D_IM_LTM_LTM2_INT_FLG_LTM_END
+D_IM_LTM_LTM2_INT_STATE_EXIP_END
+D_IM_LTM_LTM2_INT_STATE_LINE_END
+D_IM_LTM_LTM2_INT_STATE_AXR_ERR
+D_IM_LTM_LTM2_INT_STATE_AXW_ERR
+D_IM_LTM_LTM2_INT_STATE_YLOG_ERR
+D_IM_LTM_TIMEOUT
+D_IM_LTM_TABLE_MAX_YLOG
+D_LTM_YLOG_TBL_11
+D_LTM_YLOG_TBL_01
+D_LTM_YLOG_TBL_10
+D_LTM_YLOG_TBL_00
+D_IM_LTM_PORT_R
+D_IM_LTM_PORT_G
+D_IM_LTM_PORT_B
+D_IM_LTM_PORT_3
+D_IM_LTM_ENABLE_OFF
+

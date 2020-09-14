@@ -408,3 +408,28 @@
 		typedef struct _IoIipUinftbl
 		typedef union _IoIipLutram
 	搬到kjdsiip4b1中
+	
+	
+1、在_jdscnr_otf_reg_rw.h添加头文件#include "../Project/Image/src/kjdscnr1a.h"
+2、将_jdscnr_otf_reg_rw.h里的代码搬到kjdscnr1a.h中
+3、注释_jdscnr_otf_reg_rw.h里的代码
+4、将kjdscnr1a.h中的头文件#include "_jdscnr_otf_reg_rw"注释掉
+
+5、在_jdscnr_cspr_reg.h添加头文件#include "../Project/Image/src/kjdscnr1a.h"
+6、将_jdscnr_cspr_reg.h里的代码搬到kjdscnr1a.h中
+7、注释_jdscnr_cspr_reg.h里的代码
+8、将kjdscnr1a.h中的头文件#include "_jdscnr_cspr_reg.h"注释掉
+
+9、在_jdscnr_ofl_reg_rw.h添加头文件#include "../Project/Image/src/kjdscnr1a.h"
+10、将_jdscnr_ofl_reg_rw.h里的代码搬到kjdscnr1a.h中
+11、注释_jdscnr_ofl_reg_rw.h里的代码
+12、将kjdsiip4b.h中的头文件#include "kjdscnr1a.h"注释掉
+
+13、在_jdscnr_ofl_reg_yspr.h添加头文件#include "../Project/Image/src/kjdscnr1a.h"
+14、将_jdscnr_ofl_reg_yspr.h里的代码搬到kjdscnr1a.h中
+15、注释_jdscnr_ofl_reg_yspr.h里的代码
+16、将kjdscnr1a.h中的头文件#include "_jdscnr_ofl_reg_yspr"注释掉
+17、规范移过来的结构体与变量
+
+18、拆分kjdscnr1a为kjdscnr1a1、kjdscnr1a2
+19、在makefile里面添加编译文件kjdscnr1a1.c、kjdscnr1a2.c

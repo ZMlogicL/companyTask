@@ -33,18 +33,18 @@ typedef struct                          _CtImImg CtImImg;
 typedef struct                          _CtImImgPrivate CtImImgPrivate;
 
 struct _CtImImg {
-    KObject         parent;
-    kushort         reg;
-    kboolean        reg1;
-    ImImgMxicmonTyp			mxicmonTyp;
-	ImImgMxicmonSts			mxicmonSts;
-	ImImgImgpipepswTyp		imgpipeswTyp;
-	ImImgImgpipeswSel		imgpipeswSel;
-	ImImgSrampdTyp			srampdTyp;
-	kboolean				srampdSts;
-	kuint32					argv1;
-	kushort					argv2;
-	kushort					argv3;
+    KObject         	parent;
+    kushort         	reg;
+    kboolean        	reg1;
+    ImImgMxicmonTyp		mxicmonTyp;
+	ImImgMxicmonSts		mxicmonSts;
+	ImImgImgpipepswTyp	imgpipeswTyp;
+	ImImgImgpipeswSel	imgpipeswSel;
+	ImImgSrampdTyp		srampdTyp;
+	kboolean			srampdSts;
+	kuint32				argv1;
+	kushort				argv2;
+	kushort				argv3;
 };
 
 KConstType      ct_im_img_get_type(void);

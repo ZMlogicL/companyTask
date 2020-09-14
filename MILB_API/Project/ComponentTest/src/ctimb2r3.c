@@ -12,16 +12,20 @@
 *
 */
 
-#include "ct_im_b2r.h"
+#include "ctimb2r.h"
 
-#include "im_b2r.h"
+// #include "im_b2r.h"
+#include "../../ImageMacro/src/imb2r.h"
 #include "im_pro.h"
-#include "im_pro_common.h"
+// #include "im_pro_common.h"
+#include "../../ImageMacro/src/improcommon.h"
 
 #include "driver_common.h"
-#include "ddim_user_custom.h"
+// #include "ddim_user_custom.h"
+#include "../../../../milb_api_usercustom/src/ddimusercustom.h"
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #endif
 
 #include "jdsb2r.h"
@@ -41,8 +45,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImB2r3, ct_im_b2r3);
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
-#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (D_IM_B2R_PIPE1+1))
-#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (D_IM_B2R_PIPE2+1))
+#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE1+1))
+#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE2+1))
 
 
 struct _CtImB2r3Private
@@ -85,7 +89,7 @@ kint32 ct_im_b2r3_1_23( CtImB2r3 *self )
 	kint32 ercd;
 #endif
 
-	if( self->pipeNo == D_IM_B2R_PIPE12 ){
+	if( self->pipeNo == ImB2r_D_IM_B2R_PIPE12 ){
 		return D_DDIM_OK;
 	}
 
@@ -97,18 +101,18 @@ kint32 ct_im_b2r3_1_23( CtImB2r3 *self )
 
 		switch( loopcnt ) {
 			case 0:	// max
-				b2r_addr.bank_initial_position = D_IM_B2R_YBW_BANK_3;
-				b2r_addr.use_bank_num = D_IM_B2R_YBW_BANK_3;
-				for( ybw_bank_no = D_IM_B2R_YBW_BANK_0; ybw_bank_no < D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
+				b2r_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_3;
+				b2r_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_3;
+				for( ybw_bank_no = ImB2r_D_IM_B2R_YBW_BANK_0; ybw_bank_no < ImB2r_D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_R = (void*)0xFFFFFFFF;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_G = (void*)0xFFFFFFFF;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_B = (void*)0xFFFFFFFF;
 				}
 				break;
 			case 1:	// min
-				b2r_addr.bank_initial_position = D_IM_B2R_YBW_BANK_0;
-				b2r_addr.use_bank_num = D_IM_B2R_YBW_BANK_0;
-				for( ybw_bank_no = D_IM_B2R_YBW_BANK_0; ybw_bank_no < D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
+				b2r_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_0;
+				b2r_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_0;
+				for( ybw_bank_no = ImB2r_D_IM_B2R_YBW_BANK_0; ybw_bank_no < ImB2r_D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_R = (void*)0;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_G = (void*)0;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_B = (void*)0;
@@ -116,9 +120,9 @@ kint32 ct_im_b2r3_1_23( CtImB2r3 *self )
 				break;
 			default:
 //			case 2:	// indivisual
-				b2r_addr.bank_initial_position = D_IM_B2R_YBW_BANK_1;
-				b2r_addr.use_bank_num = D_IM_B2R_YBW_BANK_2;
-				for( ybw_bank_no = D_IM_B2R_YBW_BANK_0; ybw_bank_no < D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
+				b2r_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_1;
+				b2r_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_2;
+				for( ybw_bank_no = ImB2r_D_IM_B2R_YBW_BANK_0; ybw_bank_no < ImB2r_D_IM_B2R_YBW_BANK_MAX; ybw_bank_no++ ) {
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_R = (void*)0x1FFFFFF0;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_G = (void*)0x2FFFFFF0;
 					b2r_addr.output_addr[ybw_bank_no].rgb.addr_B = (void*)0x3FFFFFF0;
@@ -141,7 +145,7 @@ kint32 ct_im_b2r3_1_23( CtImB2r3 *self )
 		Im_B2R_Set_OutBankInfo( self->pipeNo, &b2r_addr );
 #endif
 
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( "IO_B2R_P1.YBW.YBWCTL.bit.USEBANK = %u\n",   (kuint32)IO_B2R_P1.YBW.YBWCTL.bit.USEBANK ));
 		Ddim_Print(( "IO_B2R_P1.YBW.YBWA.bit.YBWA_0_0  = 0x%x\n", (kuint32)IO_B2R_P1.YBW.YBWA.bit.YBWA_0_0 ));
 		Ddim_Print(( "IO_B2R_P1.YBW.YBWA.bit.YBWA_1_0  = 0x%x\n", (kuint32)IO_B2R_P1.YBW.YBWA.bit.YBWA_1_0 ));
@@ -168,10 +172,10 @@ kint32 ct_im_b2r3_1_23( CtImB2r3 *self )
 		Ddim_Print(( "IO_B2R_P2.YBW.YBWA.bit.YBWA_0_3  = 0x%x\n", (kuint32)IO_B2R_P2.YBW.YBWA.bit.YBWA_0_3 ));
 		Ddim_Print(( "IO_B2R_P2.YBW.YBWA.bit.YBWA_1_3  = 0x%x\n", (kuint32)IO_B2R_P2.YBW.YBWA.bit.YBWA_1_3 ));
 		Ddim_Print(( "IO_B2R_P2.YBW.YBWA.bit.YBWA_2_3  = 0x%x\n", (kuint32)IO_B2R_P2.YBW.YBWA.bit.YBWA_2_3 ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 		Im_B2R_Print_Status();
 #endif
 	}
@@ -188,38 +192,38 @@ kint32 ct_im_b2r3_1_24( CtImB2r3 *self )
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
 	kuint32 loopcnt;
 	UCHAR bank_index;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
-	if( self->pipeNo == D_IM_B2R_PIPE12 ){
+	if( self->pipeNo == ImB2r_D_IM_B2R_PIPE12 ){
 		return D_DDIM_OK;
 	}
 
 	b2r_rect_param.input_size.img_top = 0;
 	b2r_rect_param.input_size.img_left = 0;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES;
-	b2r_rect_param.output_size.output_global_w = D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U8;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES;
+	b2r_rect_param.output_size.output_global_w = CtImB2r_D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U8;
 
-	b2r_in_addr.raw.addr = (void*)D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
+	b2r_in_addr.raw.addr = (void*)CtImB2r_D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
 
 	memset( &b2r_out_addr, '\x0', sizeof(b2r_out_addr) );
-	b2r_out_addr.bank_initial_position = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.use_bank_num = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x0);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x0);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x0);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x4);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x4);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x4);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x8);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x8);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x8);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0xC);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0xC);
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)(D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0xC);
+	b2r_out_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x0);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x0);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x0);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x4);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x4);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x4);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0x8);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0x8);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0x8);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP + 0xC);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP + 0xC);
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)(CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP + 0xC);
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Ctrl( self->pipeNo, &gctImB2rCtrlBase );
@@ -246,12 +250,12 @@ kint32 ct_im_b2r3_1_24( CtImB2r3 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
 
-	for( loopcnt = 0; loopcnt < D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
+	for( loopcnt = 0; loopcnt < ImB2r_D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -267,10 +271,10 @@ kint32 ct_im_b2r3_1_24( CtImB2r3 *self )
 
 #ifdef CO_MSG_PRINT_ON
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "loopcnt = %u\n", loopcnt ));
-		ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+		ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-		Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+		Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -283,10 +287,10 @@ kint32 ct_im_b2r3_1_24( CtImB2r3 *self )
 #endif
 
 		if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-			flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+			flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 		}
 		if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-			flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+			flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 		}
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -304,7 +308,7 @@ kint32 ct_im_b2r3_1_24( CtImB2r3 *self )
 #endif
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 		Im_B2R_Print_Status();
 #endif
 	}
@@ -322,16 +326,16 @@ kint32 ct_im_b2r3_1_25( CtImB2r3 *self )
 #endif
 
 #ifdef CO_MSG_PRINT_ON
-	for( loopcnt = D_IM_B2R_YBW_BANK_0; loopcnt < D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
+	for( loopcnt = ImB2r_D_IM_B2R_YBW_BANK_0; loopcnt < ImB2r_D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "##loop %u\n", loopcnt ));
 		ercd = Im_B2R_Set_OutBankIndex( self->pipeNo, loopcnt );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWBANK.bit.BANKST = %u\n", IO_B2R_P1.YBW.YBWBANK.bit.BANKST ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWBANK.bit.BANKPS = %u\n", IO_B2R_P1.YBW.YBWBANK.bit.BANKPS ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWBANK.bit.BANKST = %u\n", IO_B2R_P2.YBW.YBWBANK.bit.BANKST ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWBANK.bit.BANKPS = %u\n", IO_B2R_P2.YBW.YBWBANK.bit.BANKPS ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	}
 #endif
 	return D_DDIM_OK;
@@ -348,26 +352,26 @@ kint32 ct_im_b2r3_1_26( CtImB2r3 *self )
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
 
 	memset( &b2r_out_addr, '\x0', sizeof(b2r_out_addr) );
-	b2r_out_addr.bank_initial_position = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.use_bank_num = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
+	b2r_out_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U8_B_ADDR_TOP;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Set_OutBankInfo( self->pipeNo, &b2r_out_addr );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 
-	for( loopcnt = D_IM_B2R_YBW_BANK_0; loopcnt < D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
+	for( loopcnt = ImB2r_D_IM_B2R_YBW_BANK_0; loopcnt < ImB2r_D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "##loop %u\n", loopcnt ));
 
 #ifdef CO_DEBUG_ON_PC
@@ -381,12 +385,12 @@ kint32 ct_im_b2r3_1_26( CtImB2r3 *self )
 
 		ercd = Im_B2R_Inc_OutBankIndex( self->pipeNo );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWBANK.bit.BANKPS = %u\n", IO_B2R_P1.YBW.YBWBANK.bit.BANKPS ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWBANK.bit.BANKST = %u\n", IO_B2R_P1.YBW.YBWBANK.bit.BANKST ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWBANK.bit.BANKPS = %u\n", IO_B2R_P2.YBW.YBWBANK.bit.BANKPS ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWBANK.bit.BANKST = %u\n", IO_B2R_P2.YBW.YBWBANK.bit.BANKST ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	}
 #endif
 
@@ -405,10 +409,10 @@ kint32 ct_im_b2r3_1_27( CtImB2r3 *self )
 		.raw.addr = (void*)0x10000000,		// RAW
 	};
 	const UCHAR input_dtype[4] = {
-		D_IM_B2R_STL_DTYP_PACK8,
-		D_IM_B2R_STL_DTYP_PACK10,
-		D_IM_B2R_STL_DTYP_PACK12,
-		D_IM_B2R_STL_DTYP_PACK16
+		ImB2r_D_IM_B2R_STL_DTYP_PACK8,
+		ImB2r_D_IM_B2R_STL_DTYP_PACK10,
+		ImB2r_D_IM_B2R_STL_DTYP_PACK12,
+		ImB2r_D_IM_B2R_STL_DTYP_PACK16
 	};
 
 #ifdef CO_MSG_PRINT_ON
@@ -454,7 +458,7 @@ kint32 ct_im_b2r3_1_27( CtImB2r3 *self )
 		ct_im_b2r1_print_b2r_ctrl_modesdraminput_reg();
 		ct_im_b2r1_print_rect_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 		Im_B2R_Print_Status();
 #endif
 	}
@@ -471,7 +475,7 @@ kint32 ct_im_b2r3_1_28( CtImB2r3 *self )
 	kint32 ercd;
 #endif
 
-	if( self->pipeNo == D_IM_B2R_PIPE12 ){
+	if( self->pipeNo == ImB2r_D_IM_B2R_PIPE12 ){
 		return D_DDIM_OK;
 	}
 
@@ -509,7 +513,7 @@ kint32 ct_im_b2r3_1_28( CtImB2r3 *self )
 	Im_B2R_Get_Rect_Param( self->pipeNo, &b2r_rect_param );
 #endif
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -527,7 +531,7 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 	T_IM_B2R_OUTADDR_INFO out_addr_info;
 	kuint32 loopcnt;
 	UCHAR bank_index;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 	const char dumpmsg[] = "%d idx=%u addr y=0x%05lx cb=0x%05lx cr=0x%05lx\n";
@@ -535,27 +539,27 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 
 	b2r_rect_param.input_size.img_top = 0;
 	b2r_rect_param.input_size.img_left = 0;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES;
-	b2r_rect_param.output_size.output_global_w = D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U8;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES;
+	b2r_rect_param.output_size.output_global_w = CtImB2r_D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U8;
 
-	b2r_in_addr.raw.addr = (void*)D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
+	b2r_in_addr.raw.addr = (void*)CtImB2r_D_IM_B2R_IMG_MEM_IN_BAY_ADDR_TOP;
 
 	memset( &b2r_out_addr, '\x0', sizeof(b2r_out_addr) );
-	b2r_out_addr.bank_initial_position = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.use_bank_num = D_IM_B2R_YBW_BANK_3;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)0x100;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)0x200;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)0x300;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)0x400;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)0x500;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)0x600;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)0x700;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)0x800;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)0x900;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)0xa00;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)0xb00;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)0xc00;
+	b2r_out_addr.bank_initial_position = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.use_bank_num = ImB2r_D_IM_B2R_YBW_BANK_3;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)0x100;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)0x200;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)0x300;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_R = (void*)0x400;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_G = (void*)0x500;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_B = (void*)0x600;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_R = (void*)0x700;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_G = (void*)0x800;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_B = (void*)0x900;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_R = (void*)0xa00;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_G = (void*)0xb00;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_B = (void*)0xc00;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Ctrl( self->pipeNo, &b2r_ctrl );
@@ -582,12 +586,12 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
 
-	for( loopcnt = 0; loopcnt < D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
+	for( loopcnt = 0; loopcnt < ImB2r_D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
 #ifdef D_IM_B2R_DEBUG_ON_PC
 		if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
 			gIM_B2R_macro_fake_finish[0] = 1;
@@ -601,10 +605,10 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 
 #ifdef CO_MSG_PRINT_ON
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "loopcnt = %u\n", loopcnt ));
-		ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+		ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-		Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+		Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -617,10 +621,10 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 #endif
 
 		if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-			flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+			flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 		}
 		if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-			flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+			flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 		}
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -656,7 +660,7 @@ kint32 ct_im_b2r3_1_29( CtImB2r3 *self )
 #endif
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 //		Im_B2R_Print_Status();
 #endif
 	}
@@ -677,16 +681,16 @@ kint32 ct_im_b2r3_1_30( CtImB2r3 *self )
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Set_FrameStop( self->pipeNo, 1 );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-	Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBR.DINCTL.bit.FRMSTP = %u\n", IO_B2R_P1.YBR.DINCTL.bit.FRMSTP ));
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBR.DINCTL.bit.FRMSTP = %u\n", IO_B2R_P2.YBR.DINCTL.bit.FRMSTP ));
-	Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	ercd = Im_B2R_Set_FrameStop( self->pipeNo, 0 );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-	Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBR.DINCTL.bit.FRMSTP = %u\n", IO_B2R_P1.YBR.DINCTL.bit.FRMSTP ));
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBR.DINCTL.bit.FRMSTP = %u\n", IO_B2R_P2.YBR.DINCTL.bit.FRMSTP ));
-	Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 
 
@@ -820,7 +824,7 @@ kint32 ct_im_b2r3_1_34( CtImB2r3 *self )
 		Ddim_Print(( "** %u\n", loopcnt ));
 		ercd = Im_B2R_Ctrl_Trimming( self->pipeNo, &b2r_ctrl_trimming[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWMD.bit.TRMEN     = %u\n", IO_B2R_P1.YBW.YBWMD.bit.TRMEN ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWTRMH.bit.TRMHSTA = %u\n", IO_B2R_P1.YBW.YBWTRMH.bit.TRMHSTA ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.YBW.YBWTRMH.bit.TRMHSIZ = %u\n", IO_B2R_P1.YBW.YBWTRMH.bit.TRMHSIZ ));
@@ -831,7 +835,7 @@ kint32 ct_im_b2r3_1_34( CtImB2r3 *self )
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWTRMH.bit.TRMHSIZ = %u\n", IO_B2R_P2.YBW.YBWTRMH.bit.TRMHSIZ ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWTRMV.bit.TRMVSTA = %u\n", IO_B2R_P2.YBW.YBWTRMV.bit.TRMVSTA ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.YBW.YBWTRMV.bit.TRMVSIZ = %u\n", IO_B2R_P2.YBW.YBWTRMV.bit.TRMVSIZ ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	}
 #endif
 
@@ -844,14 +848,14 @@ kint32 ct_im_b2r3_1_35( CtImB2r3 *self )
 {
 #ifdef CO_DEBUG_ON_PC
 	struct t_ct_im_b2r_1_35 {
-		USHORT src_tbl[D_IM_B2R_TABLE_MAX_BAYER_DEKNEE];
+		USHORT src_tbl[ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE];
 	};
 	struct t_ct_im_b2r_1_35 tbl_body;
 	struct t_ct_im_b2r_1_35* tbl = &tbl_body;
 #else //!CO_DEBUG_ON_PC
 	struct t_ct_im_b2r_1_35 {
-		USHORT src_tbl[D_IM_B2R_TABLE_MAX_BAYER_DEKNEE];
-	}* tbl = (struct t_ct_im_b2r_1_35*)D_IM_B2R_IMG_MEM_IN_ADDR_TOP;
+		USHORT src_tbl[ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE];
+	}* tbl = (struct t_ct_im_b2r_1_35*)CtImB2r_D_IM_B2R_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32			loopcnt;
 	kuint32			loopcnt2;
@@ -867,17 +871,17 @@ kint32 ct_im_b2r3_1_35( CtImB2r3 *self )
 		switch( loopcnt ) {
 			default:	// max
 //			case 0:
-				for( loopcnt2 = 0; loopcnt2 < D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
+				for( loopcnt2 = 0; loopcnt2 < ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
 					tbl->src_tbl[loopcnt2] = 0xFFF;
 				}
 				break;
 			case 1:	// min
-				for( loopcnt2 = 0; loopcnt2 < D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
+				for( loopcnt2 = 0; loopcnt2 < ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
 					tbl->src_tbl[loopcnt2] = 0;
 				}
 				break;
 			case 2:	// indvisual
-				for( loopcnt2 = 0; loopcnt2 < D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
+				for( loopcnt2 = 0; loopcnt2 < ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
 					tbl->src_tbl[loopcnt2] = 0xFFF - loopcnt2;
 				}
 				break;
@@ -888,22 +892,22 @@ kint32 ct_im_b2r3_1_35( CtImB2r3 *self )
 		ercd = Im_B2R_Set_Deknee_Table( self->pipeNo, tbl->src_tbl );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 		Im_B2R_On_Hclk( self->pipeNo );
-		Im_B2R_Set_DekneeAccessEnable( self->pipeNo, D_IM_B2R_ENABLE_ON, D_IM_B2R_WAIT_ON );
+		Im_B2R_Set_DekneeAccessEnable( self->pipeNo, ImB2r_D_IM_B2R_ENABLE_ON, ImB2r_D_IM_B2R_WAIT_ON );
 		if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-			for( loopcnt2 = 0; loopcnt2 < D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
+			for( loopcnt2 = 0; loopcnt2 < ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
 				if( IO_B2R_TBL_P1.DKNTBL.hword[loopcnt2] != tbl->src_tbl[loopcnt2] ) {
 					Ddim_Print(( errmsg, loopcnt2 ));
 				}
 			}
 		}
 		if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-			for( loopcnt2 = 0; loopcnt2 < D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
+			for( loopcnt2 = 0; loopcnt2 < ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE; loopcnt2++ ) {
 				if( IO_B2R_TBL_P2.DKNTBL.hword[loopcnt2] != tbl->src_tbl[loopcnt2] ) {
 					Ddim_Print(( errmsg, loopcnt2 ));
 				}
 			}
 		}
-		Im_B2R_Set_DekneeAccessEnable( self->pipeNo, D_IM_B2R_ENABLE_OFF, D_IM_B2R_WAIT_OFF );
+		Im_B2R_Set_DekneeAccessEnable( self->pipeNo, ImB2r_D_IM_B2R_ENABLE_OFF, ImB2r_D_IM_B2R_WAIT_OFF );
 		Im_B2R_Off_Hclk( self->pipeNo );
 #else
 		Im_B2R_Set_Deknee_Table( self->pipeNo, tbl->src_tbl );
@@ -930,28 +934,28 @@ kint32 ct_im_b2r3_1_36( CtImB2r3 *self )
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
 #ifdef CO_MSG_PRINT_ON
-	Im_B2R_Init( D_IM_B2R_PIPE12 );
+	Im_B2R_Init( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( "Initial value\n" ));
-	Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.word                  = 0x%lx\n", IO_B2R_P1.B2R_CMN.RAMAEN.word ));
 	Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE = %u\n",    IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE ));
 	Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.word                  = 0x%lx\n", IO_B2R_P2.B2R_CMN.RAMAEN.word ));
 	Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE = %u\n",    IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE ));
-	Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 
 	for( loopcnt = 0; loopcnt < (sizeof(access_enable) / sizeof(access_enable[0])); loopcnt++ ) {
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_B2R_Set_DekneeAccessEnable( self->pipeNo, access_enable[loopcnt], D_IM_B2R_WAIT_ON );
+		ercd = Im_B2R_Set_DekneeAccessEnable( self->pipeNo, access_enable[loopcnt], ImB2r_D_IM_B2R_WAIT_ON );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.word                  = 0x%lx\n", IO_B2R_P1.B2R_CMN.RAMAEN.word ));
 		Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE = %u\n",    IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE ));
 		Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.word                  = 0x%lx\n", IO_B2R_P2.B2R_CMN.RAMAEN.word ));
 		Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE = %u\n",    IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -965,14 +969,14 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 {
 #ifdef CO_DEBUG_ON_PC
 	struct t_ct_im_b2r_1_37 {
-		UCHAR src_tbl[D_IM_B2R_TABLE_MAX_RGB_KNEE];
+		UCHAR src_tbl[ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE];
 	};
 	struct t_ct_im_b2r_1_37 tbl_body;
 	struct t_ct_im_b2r_1_37* tbl = &tbl_body;
 #else //!CO_DEBUG_ON_PC
 	struct t_ct_im_b2r_1_37 {
-		UCHAR src_tbl[D_IM_B2R_TABLE_MAX_RGB_KNEE];
-	}* tbl = (struct t_ct_im_b2r_1_37*)D_IM_B2R_IMG_MEM_IN_ADDR_TOP;
+		UCHAR src_tbl[ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE];
+	}* tbl = (struct t_ct_im_b2r_1_37*)CtImB2r_D_IM_B2R_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32			loopcnt;
 	E_B2R_RGBTBL	loopcnt2;
@@ -989,17 +993,17 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 		switch( loopcnt ) {
 			default:	// max
 //			case 0:
-				for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+				for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 					tbl->src_tbl[loopcnt3] = 0xFF;
 				}
 				break;
 			case 1:	// min
-				for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+				for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 					tbl->src_tbl[loopcnt3] = 0;
 				}
 				break;
 			case 2:	// indvisual
-				for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+				for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 					tbl->src_tbl[loopcnt3] = 0xFF - loopcnt3;
 				}
 				break;
@@ -1013,19 +1017,19 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 			ercd = Im_B2R_Set_Knee_Table( self->pipeNo, loopcnt2, tbl->src_tbl );
 			Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 			Im_B2R_On_Hclk( self->pipeNo );
-			Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, D_IM_B2R_ENABLE_ON, D_IM_B2R_WAIT_ON );
+			Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, ImB2r_D_IM_B2R_ENABLE_ON, ImB2r_D_IM_B2R_WAIT_ON );
 			switch( loopcnt2 ) {
 				default:
 //				case E_B2R_RGBTBL_R:
 					if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P1.KNETBLR.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
 						}
 					}
 					if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P2.KNETBLR.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
@@ -1034,14 +1038,14 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 					break;
 				case E_B2R_RGBTBL_G:
 					if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P1.KNETBLG.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
 						}
 					}
 					if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P2.KNETBLG.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
@@ -1050,14 +1054,14 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 					break;
 				case E_B2R_RGBTBL_B:
 					if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P1.KNETBLB.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
 						}
 					}
 					if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-						for( loopcnt3 = 0; loopcnt3 < D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
+						for( loopcnt3 = 0; loopcnt3 < ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE; loopcnt3++ ) {
 							if( IO_B2R_TBL_P2.KNETBLB.byte[loopcnt3] != tbl->src_tbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
@@ -1065,7 +1069,7 @@ kint32 ct_im_b2r3_1_37( CtImB2r3 *self )
 					}
 					break;
 			}
-			Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, D_IM_B2R_ENABLE_OFF, D_IM_B2R_WAIT_OFF );
+			Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, ImB2r_D_IM_B2R_ENABLE_OFF, ImB2r_D_IM_B2R_WAIT_OFF );
 			Im_B2R_Off_Hclk( self->pipeNo );
 #else
 			Im_B2R_Set_Knee_Table( self->pipeNo, loopcnt2, tbl->src_tbl );

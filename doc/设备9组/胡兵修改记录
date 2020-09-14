@@ -682,10 +682,10 @@ VOID     fj_common_get_base_datetime(FjCommon* self,T_FJ_COMMON_DATE_TIME* date_
 第四个文件
 原文件名：fj_iq.c                                         fjiq.c
 公有函数：
-FJ_ERR_CODE	FJ_IQ_Set_Next_IsoSpeed_Idx_Sen( UCHAR sen_id, FLOAT iso_idx );
+FJ_ERR_CODE	FJ_IQ_Set_Next_IsoSpeed_Idx_Sen( UCHAR sen_id, FLOAT isoIdx );
 FJ_ERR_CODE	FJ_IQ_Get_IsoSpeed_Idx_Sen( UCHAR sen_id, FLOAT* curr_iso_idx, FLOAT* next_iso_idx );
 #if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
-FJ_ERR_CODE	FJ_IQ_Set_Next_ColorTemp_Idx_Sen( UCHAR sen_id, FLOAT color_temp_idx );
+FJ_ERR_CODE	FJ_IQ_Set_Next_ColorTemp_Idx_Sen( UCHAR sen_id, FLOAT colorTempIdx );
 FJ_ERR_CODE	FJ_IQ_Get_ColorTemp_Idx_Sen( UCHAR sen_id, FLOAT* curr_color_temp_idx, FLOAT* next_color_temp_idx );
 FJ_ERR_CODE	FJ_IQ_Set_Next_ExposureValue_Idx_Sen( UCHAR sen_id, FLOAT exp_val_idx );
 FJ_ERR_CODE	FJ_IQ_Get_ExposureValue_Idx_Sen( UCHAR sen_id, FLOAT* curr_exp_val_idx, FLOAT* next_exp_val_idx );
@@ -694,15 +694,15 @@ FJ_ERR_CODE	FJ_IQ_Get_TimeValue_Idx_Sen( UCHAR sen_id, FLOAT* curr_time_val_idx,
 #endif // CO_IQBIN_GENERAL  --- REMOVE_IQBIN_GENERAL END ---
 
 FJ_ERR_CODE	FJ_IQ_Update_Current_Sen( UCHAR sen_id );
-FJ_ERR_CODE	FJ_IQ_Set_Next_IsoSpeed_Idx( UCHAR demosaic_id, FLOAT iso_idx );
+FJ_ERR_CODE	FJ_IQ_Set_Next_IsoSpeed_Idx( UCHAR demosaic_id, FLOAT isoIdx );
 FJ_ERR_CODE	FJ_IQ_Get_IsoSpeed_Idx( UCHAR demosaic_id, FLOAT* curr_iso_idx, FLOAT* next_iso_idx );
 
 #if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
 FJ_ERR_CODE	FJ_IQ_Set_Next_OptZoom_Idx( UCHAR demosaic_id, UINT32 opt_zoom_idx );
 FJ_ERR_CODE	FJ_IQ_Get_OptZoom_Idx( UCHAR demosaic_id, UINT32* curr_opt_zoom_idx, UINT32* next_opt_zoom_idx );
-FJ_ERR_CODE	FJ_IQ_Set_Next_LensType_Idx( UCHAR demosaic_id, UINT32 lens_type_idx );
+FJ_ERR_CODE	FJ_IQ_Set_Next_LensType_Idx( UCHAR demosaic_id, UINT32 lensTypeIdx );
 FJ_ERR_CODE	FJ_IQ_Get_LensType_Idx( UCHAR demosaic_id, UINT32* curr_lens_type_idx, UINT32* next_lens_type_idx );
-FJ_ERR_CODE	FJ_IQ_Set_Next_ColorTemp_Idx( UCHAR demosaic_id, FLOAT color_temp_idx );
+FJ_ERR_CODE	FJ_IQ_Set_Next_ColorTemp_Idx( UCHAR demosaic_id, FLOAT colorTempIdx );
 FJ_ERR_CODE	FJ_IQ_Get_ColorTemp_Idx( UCHAR demosaic_id, FLOAT* curr_color_temp_idx, FLOAT* next_color_temp_idx );
 FJ_ERR_CODE	FJ_IQ_Set_Next_ExposureValue_Idx( UCHAR demosaic_id, FLOAT exp_val_idx );
 FJ_ERR_CODE	FJ_IQ_Get_ExposureValue_Idx( UCHAR demosaic_id, FLOAT* curr_exp_val_idx, FLOAT* next_exp_val_idx );
@@ -721,10 +721,10 @@ FJ_ERR_CODE FJ_IQ_Tbl_Set_Force_Reload( VOID );
 
 fjiq.h更改后公有函数名
 
-FJ_ERR_CODE			fj_iq_set_next_isospeed_idx_sen(FjIq* self, UCHAR sen_id, FLOAT iso_idx );
+FJ_ERR_CODE			fj_iq_set_next_isospeed_idx_sen(FjIq* self, UCHAR sen_id, FLOAT isoIdx );
 FJ_ERR_CODE			fj_iq_get_isospeed_idx_sen(FjIq* self, UCHAR sen_id, FLOAT* curr_iso_idx, FLOAT* next_iso_idx );
 #if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
-FJ_ERR_CODE			fj_iq_set_next_colortemp_idx_sen(FjIq* self, UCHAR sen_id, FLOAT color_temp_idx );
+FJ_ERR_CODE			fj_iq_set_next_colortemp_idx_sen(FjIq* self, UCHAR sen_id, FLOAT colorTempIdx );
 FJ_ERR_CODE			fj_iq_get_colortemp_idx_sen(FjIq* self, UCHAR sen_id, FLOAT* curr_color_temp_idx, FLOAT* next_color_temp_idx );
 FJ_ERR_CODE			fj_iq_set_next_exposurevalue_idx_sen(FjIq* self,  UCHAR sen_id, FLOAT exp_val_idx );
 FJ_ERR_CODE			fj_iq_get_exposurevalue_idx_sen( FjIq* self, UCHAR sen_id, FLOAT* curr_exp_val_idx, FLOAT* next_exp_val_idx );
@@ -733,15 +733,15 @@ FJ_ERR_CODE			fj_iq_get_timevalue_idx_sen( FjIq* self, UCHAR sen_id, FLOAT* curr
 #endif // CO_IQBIN_GENERAL  --- REMOVE_IQBIN_GENERAL END ---
 
 FJ_ERR_CODE			fj_iq_update_current_sen(FjIq* self,  UCHAR sen_id );
-FJ_ERR_CODE			fj_iq_set_next_isospeed_idx( FjIq* self, UCHAR demosaic_id, FLOAT iso_idx );
+FJ_ERR_CODE			fj_iq_set_next_isospeed_idx( FjIq* self, UCHAR demosaic_id, FLOAT isoIdx );
 FJ_ERR_CODE			fj_iq_get_isospeed_idx(FjIq* self,  UCHAR demosaic_id, FLOAT* curr_iso_idx, FLOAT* next_iso_idx );
 
 #if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
 FJ_ERR_CODE			fj_iq_set_next_optzoom_idx(FjIq* self,  UCHAR demosaic_id, UINT32 opt_zoom_idx );
 FJ_ERR_CODE			fj_iq_get_optzoom_idx(FjIq* self,  UCHAR demosaic_id, UINT32* curr_opt_zoom_idx, UINT32* next_opt_zoom_idx );
-FJ_ERR_CODE			fj_iq_set_next_lenstype_idx( FjIq* self, UCHAR demosaic_id, UINT32 lens_type_idx );
+FJ_ERR_CODE			fj_iq_set_next_lenstype_idx( FjIq* self, UCHAR demosaic_id, UINT32 lensTypeIdx );
 FJ_ERR_CODE			fj_iq_get_lenstype_idx( FjIq* self,  UCHAR demosaic_id, UINT32* curr_lens_type_idx, UINT32* next_lens_type_idx );
-FJ_ERR_CODE			fj_iq_set_next_colortemp_idx( FjIq* self, UCHAR demosaic_id, FLOAT color_temp_idx );
+FJ_ERR_CODE			fj_iq_set_next_colortemp_idx( FjIq* self, UCHAR demosaic_id, FLOAT colorTempIdx );
 FJ_ERR_CODE			fj_iq_get_colortemp_idx(  FjIq* self, UCHAR demosaic_id, FLOAT* curr_color_temp_idx, FLOAT* next_color_temp_idx );
 FJ_ERR_CODE			fj_iq_set_next_exposurevalue_idx( FjIq* self,  UCHAR demosaic_id, FLOAT exp_val_idx );
 FJ_ERR_CODE			fj_iq_get_exposurevalue_idx( FjIq* self, UCHAR demosaic_id, FLOAT* curr_exp_val_idx, FLOAT* next_exp_val_idx );
@@ -942,26 +942,232 @@ FjIq_FJ_IQ_BADPIX_COLUM_EVEN = 0,					/**< Even column. */
 
 
 结构体  
-typedef struct   T_FJ_IQ_SEL_INFO						FjIqSelInfo
-                	T_IQ_PRE_CNR_CC0_CTRL					PreCnrCcoCtrl
-                	T_FJ_IQ_GAMMA_TBL						FjIqGammaTbl
-                	T_FJ_IQ_GAMMA						TFjIqGamma
-               	 T_FJ_IQ_YCC						        	TFjIqYcc
-T_CORNER_THRESHOLD_INFO                                     	TCornerThresholdInfo  
-FJ_IQ_CORNER_THRESHOLD                                              FjIqCornerThreshold
-FJ_IQ_BADPIX_POS						FjIqBadpixPos
+修改前  typedef struct  T_FJ_IQ_SEL_INFO
+{
+EIqStillMode	still_mode;			/**< Still mode. (Select IQ binary.) */
+	FLOAT			iso_idx;			/**< ISO number. (IQ parameter select index in IQ binary. 0.0~5.0(ISO100~ISO3200)) */
+	EIqScene		scene_no;			/**< Scene number. (IQ parameter select index in IQ binary.) */
+	EIqScene		scene_no_for_sharpness;	/**< Scene number. (IQ parameter select index in IQ binary.) */
+	EIqScene		scene_no_for_edge;		/**< Scene number. (IQ parameter select index in IQ binary.) */
+#if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
+	UINT32			ozoom_idx;			/**< Optical zoom index. (IQ parameter select index in IQ binary. 0~9) */
+	UINT32			lens_type_idx;		/**< Lens type index. (IQ parameter select index in IQ binary. 0~3) */
+	FLOAT			color_temp_idx;		/**< Color temperature. (IQ parameter select index in IQ binary. 0.0~12.0(2000~10000)) */
+	FLOAT			exposure_value_idx;	/**< Exposure value. (IQ parameter select index in IQ binary. 0.0~22.0(-5.0~16.0)) */
+	FLOAT			time_value_idx;		/**< Time value. (IQ parameter select index in IQ binary. 0.0~18.0(-5.0~12.0)) */
+#endif // CO_IQBIN_xxxx  --- REMOVE_IQBIN_GENERAL END ---
+}
+修改后  FjIqSelInfo
+{
+EIqStillMode	stillMode;			/**< Still mode. (Select IQ binary.) */
+	FLOAT			isoIdx;			/**< ISO number. (IQ parameter select index in IQ binary. 0.0~5.0(ISO100~ISO3200)) */
+	EIqScene		sceneNo;			/**< Scene number. (IQ parameter select index in IQ binary.) */
+	EIqScene		sceneNoForSharpness;	/**< Scene number. (IQ parameter select index in IQ binary.) */
+	EIqScene		sceneNoForEdge;		/**< Scene number. (IQ parameter select index in IQ binary.) */
+#if defined(CO_IQBIN_GENERAL)	// --- REMOVE_IQBIN_GENERAL BEGIN ---
+	UINT32			ozoomIdx;			/**< Optical zoom index. (IQ parameter select index in IQ binary. 0~9) */
+	UINT32			lensTypeIdx;		/**< Lens type index. (IQ parameter select index in IQ binary. 0~3) */
+	FLOAT			colorTempIdx;		/**< Color temperature. (IQ parameter select index in IQ binary. 0.0~12.0(2000~10000)) */
+	FLOAT			exposureValueIdx;	/**< Exposure value. (IQ parameter select index in IQ binary. 0.0~22.0(-5.0~16.0)) */
+	FLOAT			timeValueIdx;		/**< Time value. (IQ parameter select index in IQ binary. 0.0~18.0(-5.0~12.0)) */
+#endif // CO_IQBIN_xxxx  --- REMOVE_IQBIN_GENERAL END ---
+}
+
+修改前  T_IQ_PRE_CNR_CC0_CTRL					
+{
+UCHAR				posi_dec;			/**< Position of decimals			*/ // @CCCTL
+	USHORT				cc_matrix[3][3];	/**< CC-Matrix coefficient 3x3		*/ // @CC00~CC22
+}
+
+修改后 PreCnrCcoCtrl
+{
+UCHAR				posiDec;			/**< Position of decimals			*/ // @CCCTL
+	USHORT				ccMatrix[3][3];	/**< CC-Matrix coefficient 3x3		*/ // @CC00~CC22
+}
+                	
+T_FJ_IQ_GAMMA_TBL						FjIqGammaTbl
+
+修改前 T_FJ_IQ_GAMMA	
+{
+FjIqGammaTbl	rgb_tbl;	/**< RGB table. */
+	FjIqGammaTbl	r_tbl;		/**< R table. */
+	FjIqGammaTbl	g_tbl;		/**< G table. */
+	FjIqGammaTbl	b_tbl;		/**< B table. */
+	FjIqGammaTbl	yb_tbl;		/**< Yb table. */
+	UCHAR				gamma_mode;	/**< Gamma mode. */
+}					
+修改后 TFjIqGamma
+{
+FjIqGammaTbl	rgbTbl;	/**< RGB table. */
+	FjIqGammaTbl	rTbl;		/**< R table. */
+	FjIqGammaTbl	gTbl;		/**< G table. */
+	FjIqGammaTbl	bTbl;		/**< B table. */
+	FjIqGammaTbl	ybTbl;		/**< Yb table. */
+	UCHAR				gammaMode;	/**< Gamma mode. */
+}
+
+ 修改前 T_FJ_IQ_YCC	
+ {
+SHORT				yc_coeff[3][3];		/**< YC : Coefficient of YC convert (9bits signed)			*/
+	UCHAR				y_blend_ratio;		/**< YBLEND.YYBLND : Y blend ratio (6bits 0 ~ 32)			*/
+	UCHAR				yb_blend_ratio;		/**< YBLEND.YBBLND : Yb blend ratio (6bits 0 ~ 32)			*/
+ }					      
+修改后 TFjIqYcc
+{
+SHORT				ycCoeff[3][3];		/**< YC : Coefficient of YC convert (9bits signed)			*/
+	UCHAR				yBlendRatio;		/**< YBLEND.YYBLND : Y blend ratio (6bits 0 ~ 32)			*/
+	UCHAR				ybBlendRatio;		/**< YBLEND.YBBLND : Yb blend ratio (6bits 0 ~ 32)			*/
+}
+修改前 T_CORNER_THRESHOLD_INFO
+{
+USHORT us_h;							/**< horizontal threshold position */
+	USHORT us_v;							/**< vertical threshold position */
+	USHORT us_threshold_high;				/**< high threshold */
+	USHORT us_threshold_low;				/**< low threshold */
+}
+修改后 TCornerThresholdInfo  
+{
+USHORT usH;							/**< horizontal threshold position */
+	USHORT usV;							/**< vertical threshold position */
+	USHORT usThresholdHigh;				/**< high threshold */
+	USHORT usThresholdLow;				/**< low threshold */
+}
+修改前 FJ_IQ_CORNER_THRESHOLD  
+{
+TCornerThresholdInfo t_left_top;		/**< left top corner threshold info */
+	TCornerThresholdInfo t_right_top;	/**< right top corner threshold info */
+	TCornerThresholdInfo t_left_bottom;	/**< left bottom corner threshold info */
+	TCornerThresholdInfo t_right_bottom;	/**< right bottom corner threshold info */
+}                                          
+修改后 FjIqCornerThreshold
+{
+TCornerThresholdInfo tLeftTop;		/**< left top corner threshold info */
+	TCornerThresholdInfo tRightTop;	/**< right top corner threshold info */
+	TCornerThresholdInfo tLeftBottom;	/**< left bottom corner threshold info */
+	TCornerThresholdInfo tRightBottom;	/**< right bottom corner threshold info */
+}
+修改前 FJ_IQ_BADPIX_POS	
+{
+SHORT x_pos;									/**< Position X. */
+	SHORT y_pos;									/**< Position Y. */
+}				
+修改后 FjIqBadpixPos
+{
+SHORT xPos;									/**< Position X. */
+	SHORT yPos;									/**< Position Y. */
+}
    FJ_IQ_BADPIX_RECT					            FjIqBadpixRect
-   FJ_IQ_BADPIX_ADD_POS					FjiqBadpixAddPos
-   FJ_IQ_BADPIX_ADD_PAT					FjiqBadpixAddPat
-   FJ_IQ_BADPIX_CONV_INFO   				FjiqBadpixConvInfo
-   FJ_IQ_BADPIX_FLIP_INFO					FjiqBadpixFlipInfo
-   T_FJ_IQ_FSHD_CONVINFO					FjiqFshdConvinfo
-   T_FJ_IQ_FSHD_SEL_INFO					FjiqFshdSelInfo
-   T_FJ_IQ_FSHD_SLP_GAIN					FjiqFshdSlpGain
-   T_FJ_IQ_FSHDL_TBL					             TFjiqFshdlTbl
-               	 T_FJ_IQ_FSHDL_PARAM					TFjiqFshdlParam
-   T_FJ_IQ_FSHDL_SLP_GAIN					TFjiqFshdlSlpGain
-   T_FJ_IQ_CAG_CONVINFO					TFjiqCagConvinfo
+   
+修改前  FJ_IQ_BADPIX_ADD_POS		
+{
+USHORT	y;										/**< Y position. */
+	USHORT	x[20];									/**< X position(s). */
+	USHORT	x_mum;			
+}			
+修改后 FjiqBadpixAddPos
+{
+USHORT	y;										/**< Y position. */
+	USHORT	x[20];									/**< X position(s). */
+	USHORT	xMum;			
+}
+修改前  FJ_IQ_BADPIX_ADD_PAT
+{
+FjiqBadpixAddPos	add_pos[20];			/**< Additional pixel position. */
+	USHORT					add_pos_num;			/**< @ref add_pos valid number. */
+	FjIqBadpixPos		cycle_start_pos;		/**< Additional pattern cycle start position. */
+	FjIqBadpixRect		cycle_rect;				/**< Additional pattern size. */
+}					
+修改后 FjiqBadpixAddPat
+{
+FjiqBadpixAddPos	 addPos[20];			/**< Additional pixel position. */
+	USHORT					addPosNum;			/**< @ref addPos valid number. */
+	FjIqBadpixPos		cycleStartPos;		/**< Additional pattern cycle start position. */
+	FjIqBadpixRect		cycleRect;				/**< Additional pattern size. */
+}
+修改前 FJ_IQ_BADPIX_CONV_INFO 
+  {
+  FjiqBadpixAddPos	add_pos[20];			/**< Additional pixel position. */
+	USHORT					add_pos_num;			/**< @ref add_pos valid number. */
+	FjIqBadpixPos		cycle_start_pos;		/**< Additional pattern cycle start position. */
+	FjIqBadpixRect		cycle_rect;				/**< Additional pattern size. */
+
+FjiqBadpixAddPat	add_pat[FjIq_FJ_IQ_BADPIX_LINE_MAX][FjIq_FJ_IQ_BADPIX_COLUM_MAX];	/**< Pixel additional pattern data. */
+	FjIqBadpixPos		crop_pos_src;			/**< Cropping window start position. Must even number. */
+	FjIqBadpixRect		crop_rect_src;			/**< Cropping window size. Must even number. */
+	FjIqBadpixPos		sen_window_pos_src;		/**< SEN window start position of source table. Must even number. */
+	FjIqBadpixPos		sen_window_pos_dst;		/**< SEN window start position of destination table Must even number. */
+  }				
+修改后 FjiqBadpixConvInfo
+{
+FjiqBadpixAddPat	addPat[FjIq_FJ_IQ_BADPIX_LINE_MAX][FjIq_FJ_IQ_BADPIX_COLUM_MAX];	/**< Pixel additional pattern data. */
+	FjIqBadpixPos		cropPosSrc;			/**< Cropping window start position. Must even number. */
+	FjIqBadpixRect		cropRectSrc;			/**< Cropping window size. Must even number. */
+	FjIqBadpixPos		senWindowPosSrc;		/**< SEN window start position of source table. Must even number. */
+	FjIqBadpixPos		senWindowPosDst;		/**< SEN window start position of destination table Must even number. */
+}
+修改前 FJ_IQ_BADPIX_FLIP_INFO
+{
+FjIqBadpixPos		flip_pos_dst;			/**< After left-top offset position from VD and HD edge. Must even number. */
+}				
+修改后 	FjiqBadpixFlipInfo
+{
+FjIqBadpixPos		flipPosDst;			/**< After left-top offset position from VD and HD edge. Must even number. */
+}
+修改前 T_FJ_IQ_FSHD_CONVINFO	
+{
+USHORT src_tbl_ttaX;						/**< source start left position (RAW pixels) */
+	USHORT src_tbl_staY;						/**< source start top position (RAW pixels) */
+	USHORT src_tbl_width;						/**< source width (RAW pixels) */
+	USHORT src_tbl_lines;						/**< source lines (RAW pixels) */
+	USHORT dst_tbl_width;						/**< destination width (RAW pixels) */
+	USHORT dst_tbl_lines;						/**< destination lines (RAW pixels) */
+}			
+修改后 FjiqFshdConvinfo
+{
+USHORT srcTblTtaX;						/**< source start left position (RAW pixels) */
+	USHORT srcTblStaY;						/**< source start top position (RAW pixels) */
+	USHORT srcTblWidth;						/**< source width (RAW pixels) */
+	USHORT srcTblLines;						/**< source lines (RAW pixels) */
+	USHORT dstTblWidth;						/**< destination width (RAW pixels) */
+	USHORT dstTblLines;						/**< destination lines (RAW pixels) */
+}
+修改前 T_FJ_IQ_FSHD_SEL_INFO	
+{
+EIqCalibTgt	calib_tgt;					/**< Calibration target.										*/
+	USHORT			ozoomIdx;					/**< Optical zoom index number. (range:0x0000-0xFFFE)			*/
+	USHORT			f_number;					/**< 
+}			
+修改后 FjiqFshdSelInfo
+{
+EIqCalibTgt	calibTgt;					/**< Calibration target.										*/
+	USHORT			ozoomIdx;					/**< Optical zoom index number. (range:0x0000-0xFFFE)			*/
+	USHORT			fNumber;					/**< F number(integer 8bit, decimal 8bit) (range:0x0000-0xFFFE)	*/
+}
+ 
+ T_FJ_IQ_FSHD_SLP_GAIN					FjiqFshdSlpGain
+   
+修改前 T_FJ_IQ_FSHDL_TBL
+{
+UCHAR	ffshgfmt;		/**< FFSHGFMT register value. */
+	USHORT	ffshsubprh;		/**< FFSHSUBPRH register value. */
+	USHORT	ffshsubprv;		/**< FFSHSUBPRV register value. */
+	ULONG	tbl_addr[4];	/**< FSHDL table memory area address. [0]:R [1]:GR [2]:GB [3]:B */
+	ULONG	tbl_g_width[4];	/**< FSHDL table global width bytes. [0]:R [1]:GR [2]:GB [3]:B */
+}					             
+修改后  TFjiqFshdlTbl
+{
+UCHAR	ffshgfmt;		/**< FFSHGFMT register value. */
+	USHORT	ffshsubprh;		/**< FFSHSUBPRH register value. */
+	USHORT	ffshsubprv;		/**< FFSHSUBPRV register value. */
+	ULONG	tblAddr[4];	/**< FSHDL table memory area address. [0]:R [1]:GR [2]:GB [3]:B */
+	ULONG	tblGWidth[4];	/**< FSHDL table global width bytes. [0]:R [1]:GR [2]:GB [3]:B */
+}
+
+T_FJ_IQ_FSHDL_PARAM					 TFjiqFshdlParam
+
+T_FJ_IQ_FSHDL_SLP_GAIN					TFjiqFshdlSlpGain
+
+T_FJ_IQ_CAG_CONVINFO					TFjiqCagConvinfo
 
 fjdisp.c原公有函数名
 
@@ -976,10 +1182,10 @@ FJ_ERR_CODE FJ_Disp_HDMI_Set_Detect_Callback( DISP_HDMI_CALLBACK interrupt_callb
 FJ_DISP_HDMI_DETECT FJ_Disp_HDMI_Get_Detect_Status( VOID );
 FJ_ERR_CODE FJ_Disp_HDMI_Get_Sink( UCHAR disp_id, FJ_DISP_HDMI_SINK_INFO* sink_info );
 FJ_ERR_CODE FJ_Disp_HDMI_Get_DeviceVendorProductID( UCHAR disp_id, FJ_DISP_HDMI_DEV_VENDOR_PRODUCT_ID* vendor_product_id );
-FJ_ERR_CODE FJ_Disp_HDMI_Set_VicInfo( UCHAR disp_id, FJ_DISP_HDMI_VIC_INFO* vic_info );
+FJ_ERR_CODE FJ_Disp_HDMI_Set_VicInfo( UCHAR disp_id, FJ_DISP_HDMI_VIC_INFO* vicInfo );
 FJ_ERR_CODE FJ_Disp_HDMI_Set_SPD( UCHAR disp_id, FJ_DISP_HDMI_SPD_INFO* spd_info );
 FJ_ERR_CODE FJ_Disp_HDMI_Set_Vendor_Specific( UCHAR disp_id, FJ_DISP_HDMI_VENDOR_SPEC_INFO* vendor_spec_info );
-FJ_ERR_CODE FJ_Disp_HDMI_Config_Video( UCHAR disp_id, FJ_DISP_VIDEO_ID video_id, UCHAR freq_ctrl );
+FJ_ERR_CODE FJ_Disp_HDMI_Config_Video( UCHAR disp_id, FJ_DISP_VIDEO_ID videoId, UCHAR freq_ctrl );
 FJ_ERR_CODE FJ_Disp_HDMI_Config_Audio( UCHAR disp_id, ULONG samp_freq );
 FJ_ERR_CODE FJ_Disp_HDMI_Start_Sync( UCHAR disp_id );
 FJ_ERR_CODE FJ_Disp_HDMI_Stop_Sync( UCHAR disp_id );
@@ -989,16 +1195,16 @@ FJ_ERR_CODE FJ_Disp_MIPI_Stop_Sync( UCHAR disp_id );
 FJ_ERR_CODE	FJ_Set_Display_Window( UCHAR disp_id, FJ_DISP_WINDOW_CONFIG* window_config );
 FJ_ERR_CODE	FJ_Get_Display_Window( UCHAR disp_id, FJ_DISP_WINDOW_CONFIG* window_config );
 FJ_ERR_CODE FJ_Disp_Video_Render( UCHAR disp_id, FJ_DISP_YCC_ADDR* ycc_addr, UINT32 global_width );
-FJ_ERR_CODE FJ_Disp_Video_Set_Rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE rotate_degree );
-FJ_ERR_CODE FJ_Disp_Video_Get_Rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE* rotate_degree );
+FJ_ERR_CODE FJ_Disp_Video_Set_Rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE rotateDegree );
+FJ_ERR_CODE FJ_Disp_Video_Get_Rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE* rotateDegree );
 FJ_ERR_CODE FJ_Disp_Video_Enable( UCHAR disp_id );
 FJ_ERR_CODE FJ_Disp_Video_Disable( UCHAR disp_id );
 FJ_ERR_CODE FJ_Disp_Show_Boot_Image( const FJ_DISP_IMAGE_CONFIG* config_info );
-FJ_ERR_CODE FJ_Disp_OSD_Set_Config( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, FJ_DISP_OSD_CONFIG* config_info );
-FJ_ERR_CODE FJ_Disp_OSD_Enable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id );
-FJ_ERR_CODE FJ_Disp_OSD_Disable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id );
-FJ_ERR_CODE FJ_Disp_OSD_Rotate_Copy( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, FJ_DISP_OSD_RECT_INFO* rect_info, FJ_DISP_OSD_BUFF_ADDR* buff_addr );
-FJ_ERR_CODE FJ_Disp_OSD_Render( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, UINT32 disp_buff_addr );
+FJ_ERR_CODE FJ_Disp_OSD_Set_Config( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layerId, FJ_DISP_OSD_CONFIG* config_info );
+FJ_ERR_CODE FJ_Disp_OSD_Enable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layerId );
+FJ_ERR_CODE FJ_Disp_OSD_Disable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layerId );
+FJ_ERR_CODE FJ_Disp_OSD_Rotate_Copy( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layerId, FJ_DISP_OSD_RECT_INFO* rect_info, FJ_DISP_OSD_BUFF_ADDR* buff_addr );
+FJ_ERR_CODE FJ_Disp_OSD_Render( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layerId, UINT32 disp_buff_addr );
 VOID FJ_HDMI_Init( HDMI_CALLBACK interrupt_callback );
 #if 0
 FJ_HDMI_HPD FJ_HDMI_Detect( VOID );
@@ -1006,13 +1212,13 @@ FJ_HDMI_HPD FJ_HDMI_Detect( VOID );
 FJ_ERR_CODE FJ_HDMI_Detect( VOID );
 #endif;
 FJ_ERR_CODE FJ_HDMI_Set_OutFormat( UCHAR format );
-FJ_ERR_CODE FJ_HDMI_Connect_HDMI( UINT32 video_format );
+FJ_ERR_CODE FJ_HDMI_Connect_HDMI( UINT32 videoFormat );
 FJ_ERR_CODE FJ_HDMI_Disconnect_HDMI( VOID );
 VOID FJ_HDMI_Start_Sync( VOID );
 VOID FJ_HDMI_Stop_Sync( VOID );
-FJ_HDMI_HPD FJ_HDMI_Get_EDID( FJ_HDMI_DTD_MAN** dtd_addr, UCHAR edid_data_block_tag_flags );
-FJ_ERR_CODE FJ_HDMI_Get_DTD_No( UINT32 video_format, UINT32* dtd_no );
-FJ_ERR_CODE FJ_HDMI_Get_Format_Tbl_Addr( UINT32 video_format, FJ_HDMI_EDID_DTD** edid_addr );
+FJ_HDMI_HPD FJ_HDMI_Get_EDID( FJ_HDMI_DTD_MAN** dtdAddr, UCHAR edid_data_block_tag_flags );
+FJ_ERR_CODE FJ_HDMI_Get_DTD_No( UINT32 videoFormat, UINT32* dtd_no );
+FJ_ERR_CODE FJ_HDMI_Get_Format_Tbl_Addr( UINT32 videoFormat, FJ_HDMI_EDID_DTD** edid_addr );
 FJ_ERR_CODE FJ_HDMI_Set_Ctrl_Common( FJ_HDMI_CTRL_COMMON const *const ctrl );
 FJ_ERR_CODE FJ_HDMI_Get_Ctrl_Common( FJ_HDMI_CTRL_COMMON *const ctrl );
 FJ_ERR_CODE FJ_HDMI_Set_Ctrl_Video( FJ_HDMI_CTRL_VIDEO const *const ctrl );
@@ -1054,38 +1260,38 @@ FJ_ERR_CODE FJ_MIPI_Init( UCHAR freq_ctrl );
 FJ_ERR_CODE FJ_MIPI_Set_Mode( UCHAR mode );
 FJ_ERR_CODE FJ_MIPI_Command_Ctrl( FJ_MIPI_CMD_INFO* mipi_command_info );
 FJ_ERR_CODE FJ_SetOSDDisplayAttr(FJ_DISP_TYPE disp_type,
-								 E_OSDLayer layer_id, E_FJ_OSD_ATTR_TYPE Attr,
+								 E_OSDLayer layerId, E_FJ_OSD_ATTR_TYPE Attr,
 								 INT32 wParam1, INT32 wParam2, INT32 wParam3, INT32 wParam4);
-FJ_ERR_CODE FJ_OSD_Set_Main_Input_Size(E_OSDLayer layer_id, const T_Rect* disp_rect);
+FJ_ERR_CODE FJ_OSD_Set_Main_Input_Size(E_OSDLayer layerId, const T_Rect* disp_rect);
 FJ_ERR_CODE FJ_OSD_Get_Clip(E_DISP_DEV disp_device, T_CLIP_CAL_DATA* cal_data);
 FJ_ERR_CODE FJ_OSD_Set_Clip(E_DISP_DEV disp_device, T_CLIP_CAL_DATA const* const cal_data);
 FJ_ERR_CODE FJ_Show_SetBackColor(FJ_DISP_TYPE disp_type, UCHAR r_color, UCHAR g_color, UCHAR b_color);
 FJ_ERR_CODE FJ_Show_BackColor(FJ_DISP_TYPE disp_type, BOOL enable);
-FJ_ERR_CODE FJ_Show_Enable(E_OSDLayer layer_id, BOOL enable);
+FJ_ERR_CODE FJ_Show_Enable(E_OSDLayer layerId, BOOL enable);
 FJ_ERR_CODE FJ_OSD_Initialize(VOID);
-FJ_ERR_CODE FJ_Initialize_OSD_Layer(E_OSDLayer layer_id);
+FJ_ERR_CODE FJ_Initialize_OSD_Layer(E_OSDLayer layerId);
 FJ_ERR_CODE FJ_OSD_Set_Matrix(FJ_DISP_TYPE disp_type, FJ_OSD_MATRIX_KIND kind, BYTE enable, T_MATRIX_DATA const* const matrix);
 FJ_ERR_CODE FJ_OSD_Connect(E_DISP_DEV disp_device, const T_HDMI_SET *HDMI_Setting_Data);
 FJ_ERR_CODE FJ_OSD_Disconnect(E_DISP_DEV disp_device);
 FJ_ERR_CODE FJ_Connect_HDMI(const T_HDMI_SET* hdmi_setting_data);
-FJ_ERR_CODE FJ_OSD_Draw_OSD_Area(E_OSDLayer layer_id, const T_Rect drawArea[FjDispE_OSD_DRAW_AREA_NUM], BYTE drawAreaNum);
-FJ_ERR_CODE FJ_OSD_Set_OSD_Area_Enable(E_OSDLayer layer_id, UINT32 enable_area);
-FJ_ERR_CODE FJ_OSD_Get_OSD_Area_Enable(E_OSDLayer layer_id, UINT32* enable_area);
-ULONG FJ_OSD_Get_OSD_Area_Addr(E_OSDLayer layer_id, UINT32 drawAreaNum, UINT32* global_width);
-FJ_ERR_CODE FJ_Clear_Area_Buffer(E_OSDLayer layer_id, UINT32 clear_area);
+FJ_ERR_CODE FJ_OSD_Draw_OSD_Area(E_OSDLayer layerId, const T_Rect drawArea[FjDispE_OSD_DRAW_AREA_NUM], BYTE drawAreaNum);
+FJ_ERR_CODE FJ_OSD_Set_OSD_Area_Enable(E_OSDLayer layerId, UINT32 enable_area);
+FJ_ERR_CODE FJ_OSD_Get_OSD_Area_Enable(E_OSDLayer layerId, UINT32* enable_area);
+ULONG FJ_OSD_Get_OSD_Area_Addr(E_OSDLayer layerId, UINT32 drawAreaNum, UINT32* global_width);
+FJ_ERR_CODE FJ_Clear_Area_Buffer(E_OSDLayer layerId, UINT32 clear_area);
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSD_Set_Tone_Correction(E_OSDLayer layer_id, T_Y_CONV const *const y_conv, T_TC_DATA const *const tc_data);
+FJ_ERR_CODE FJ_OSD_Set_Tone_Correction(E_OSDLayer layerId, T_Y_CONV const *const y_conv, T_TC_DATA const *const tc_data);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSD_Get_Tone_Correction(E_OSDLayer layer_id, T_Y_CONV* y_conv, T_TC_DATA* tc_data);
+FJ_ERR_CODE FJ_OSD_Get_Tone_Correction(E_OSDLayer layerId, T_Y_CONV* y_conv, T_TC_DATA* tc_data);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSD_Set_Tc_Table(E_OSDLayer layer_id, T_TONE_CORRECTION_TBL const *const tone_correction);
+FJ_ERR_CODE FJ_OSD_Set_Tc_Table(E_OSDLayer layerId, T_TONE_CORRECTION_TBL const *const tone_correction);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSD_Get_Tc_Table(E_OSDLayer layer_id, T_TONE_CORRECTION_TBL* tone_correction);
+FJ_ERR_CODE FJ_OSD_Get_Tc_Table(E_OSDLayer layerId, T_TONE_CORRECTION_TBL* tone_correction);
 #endif	// MILB Not Use
-FJ_ERR_CODE FJ_OSD_Set_Inverse_Gamma(E_OSDLayer layer_id, T_INVERSE_GAMMA_TBL const *const inverse_gamma);
+FJ_ERR_CODE FJ_OSD_Set_Inverse_Gamma(E_OSDLayer layerId, T_INVERSE_GAMMA_TBL const *const inverse_gamma);
 
 更改后的公有函数名：
 FJ_ERR_CODE 		fj_disp_fj_disp_open(FjDisp* self,  FjDispType disp_type, UCHAR *disp_id );
@@ -1097,13 +1303,13 @@ FjdispLcdConnectState
 							fj_disp_fj_disp_lcd_get_state(FjDisp* self );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_set_detect_callback( FjDisp* self,  DISP_HDMI_CALLBACK interrupt_callback, FjdispHdmiDetectSetting const* const detect_setting );
 FjDispHdmiDetect
-							j_disp_fj_disp_hdmi_get_detect_status(FjDisp* self );
+							fj_disp_fj_disp_hdmi_get_detect_status(FjDisp* self );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_get_sink( FjDisp* self,  UCHAR disp_id, FjDispHdmiSinkInfo* sink_info );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_get_devicevendorproductid( FjDisp* self,  UCHAR disp_id, FjdispHdmidevVendorProductid* vendor_product_id );
-FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_set_vicinfo( FjDisp* self,  UCHAR disp_id, FjdispHdmiVicInfo* vic_info );
+FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_set_vicinfo( FjDisp* self,  UCHAR disp_id, FjdispHdmiVicInfo* vicInfo );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_set_spd(FjDisp* self, UCHAR disp_id, FjdispHdmiSPpdInfo* spd_info );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_set_vendor_specific( FjDisp* self,  UCHAR disp_id, FjdispHdmiVendorSpecInfo* vendor_spec_info );
-FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_config_video( FjDisp* self,  UCHAR disp_id, FjDispVideoId video_id, UCHAR freq_ctrl );
+FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_config_video( FjDisp* self,  UCHAR disp_id, FjDispVideoId videoId, UCHAR freq_ctrl );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_config_audio( FjDisp* self,  UCHAR disp_id, ULONG samp_freq );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_start_sync(  FjDisp* self,  UCHAR disp_id );
 FJ_ERR_CODE 		fj_disp_fj_disp_hdmi_stop_sync(  FjDisp* self,  UCHAR disp_id );
@@ -1113,16 +1319,16 @@ FJ_ERR_CODE 		fj_disp_fj_disp_mipi_stop_sync( FjDisp* self,  UCHAR disp_id );
 FJ_ERR_CODE		fj_disp_fj_set_display_window( FjDisp* self,  UCHAR disp_id, FjDispWindowConfig* window_config );
 FJ_ERR_CODE		fj_disp_fj_get_display_window( FjDisp* self,  UCHAR disp_id, FjDispWindowConfig* window_config );
 FJ_ERR_CODE 		fj_disp_fj_disp_video_render( FjDisp* self,  UCHAR disp_id, FjDispYccAddr* ycc_addr, UINT32 global_width );
-FJ_ERR_CODE 		fj_disp_fj_disp_video_set_rotate(FjDisp* self, UCHAR disp_id, FjDispRotateDegree rotate_degree );
-FJ_ERR_CODE 		fj_disp_fj_disp_video_get_rotate(FjDisp* self, UCHAR disp_id, FjDispRotateDegree* rotate_degree );
+FJ_ERR_CODE 		fj_disp_fj_disp_video_set_rotate(FjDisp* self, UCHAR disp_id, FjDispRotateDegree rotateDegree );
+FJ_ERR_CODE 		fj_disp_fj_disp_video_get_rotate(FjDisp* self, UCHAR disp_id, FjDispRotateDegree* rotateDegree );
 FJ_ERR_CODE 		fj_disp_fj_disp_video_enable( FjDisp* self,  UCHAR disp_id );
 FJ_ERR_CODE 		fj_disp_fj_disp_video_disable( FjDisp* self,  UCHAR disp_id );
 FJ_ERR_CODE 		fj_disp_fj_disp_show_boot_image( FjDisp* self,  const FjDispImageConfig* config_info );
-FJ_ERR_CODE 		fj_disp_fj_disp_osd_set_config( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layer_id, FjDispOsdConfig* config_info );
-FJ_ERR_CODE 		fj_disp_fj_disp_osd_enable( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layer_id );
-FJ_ERR_CODE 		fj_disp_fj_disp_osd_disable( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layer_id );
-FJ_ERR_CODE 		fj_disp_fj_disp_osd_rotate_copy( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layer_id, FjdispOsdRectInfo* rect_info, FjdispOsdBuffAddr* buff_addr );
-FJ_ERR_CODE 		fj_disp_fj_disp_osd_render( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layer_id, UINT32 disp_buff_addr );
+FJ_ERR_CODE 		fj_disp_fj_disp_osd_set_config( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layerId, FjDispOsdConfig* config_info );
+FJ_ERR_CODE 		fj_disp_fj_disp_osd_enable( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layerId );
+FJ_ERR_CODE 		fj_disp_fj_disp_osd_disable( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layerId );
+FJ_ERR_CODE 		fj_disp_fj_disp_osd_rotate_copy( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layerId, FjdispOsdRectInfo* rect_info, FjdispOsdBuffAddr* buff_addr );
+FJ_ERR_CODE 		fj_disp_fj_disp_osd_render( FjDisp* self,  UCHAR disp_id, FjDispLayeridType layerId, UINT32 disp_buff_addr );
 VOID 					fj_disp_fj_hdmi_init( FjDisp* self,  HDMI_CALLBACK interrupt_callback );
 #if 0
 FjHdmiHpd 			fj_disp_fj_hdmi_detect(FjDisp* self );
@@ -1130,13 +1336,13 @@ FjHdmiHpd 			fj_disp_fj_hdmi_detect(FjDisp* self );
 FJ_ERR_CODE 		fj_disp_fj_hdmi_detect(FjDisp* self );
 #endif
 FJ_ERR_CODE 		fj_disp_fj_hdmi_set_outformat( FjDisp* self,  UCHAR format );
-FJ_ERR_CODE 		fj_disp_fj_hdmi_connect_hdmi( FjDisp* self,  UINT32 video_format );
+FJ_ERR_CODE 		fj_disp_fj_hdmi_connect_hdmi( FjDisp* self,  UINT32 videoFormat );
 FJ_ERR_CODE 		fj_disp_fj_hdmi_disconnect_hdmi( FjDisp* self);
 VOID 					fj_disp_fj_hdmi_start_sync( FjDisp* self);
 VOID 					fj_disp_fj_hdmi_stop_sync(FjDisp* self );
-FjHdmiHpd 	fj_disp_fj_hdmi_get_edid(FjDisp* self, FjHdmiDtdMan** dtd_addr, UCHAR edid_data_block_tag_flags );
-FJ_ERR_CODE 		fj_disp_fj_hdmi_get_dtd_no( FjDisp* self,  UINT32 video_format, UINT32* dtd_no );
-FJ_ERR_CODE 		fj_disp_fj_hdmi_get_format_tbl_addr(FjDisp* self, UINT32 video_format, FjHdmiEdidDtd** edid_addr );
+FjHdmiHpd 	fj_disp_fj_hdmi_get_edid(FjDisp* self, FjHdmiDtdMan** dtdAddr, UCHAR edid_data_block_tag_flags );
+FJ_ERR_CODE 		fj_disp_fj_hdmi_get_dtd_no( FjDisp* self,  UINT32 videoFormat, UINT32* dtd_no );
+FJ_ERR_CODE 		fj_disp_fj_hdmi_get_format_tbl_addr(FjDisp* self, UINT32 videoFormat, FjHdmiEdidDtd** edid_addr );
 FJ_ERR_CODE 		fj_disp_fj_hdmi_set_ctrl_common( FjDisp* self,  FjHdmiCtrlCommon const *const ctrl );
 FJ_ERR_CODE 		fj_disp_fj_hdmi_get_ctrl_common( FjDisp* self,  FjHdmiCtrlCommon *const ctrl );
 FJ_ERR_CODE 		fj_disp_fj_hdmi_set_ctrl_video( FjDisp* self,  FjHdmiCtrlVideo const *const ctrl );
@@ -1178,46 +1384,46 @@ FJ_ERR_CODE 		fj_disp_fj_mipi_init( FjDisp* self,  UCHAR freq_ctrl );
 FJ_ERR_CODE 		fj_disp_fj_mipi_set_mode(FjDisp* self, UCHAR mode );
 FJ_ERR_CODE 		fj_disp_fj_mipi_command_ctrl( FjDisp* self,  FjMipiCmdInfo* mipi_command_info );
 FJ_ERR_CODE 		fj_disp_fj_setosddisplayattr(FjDisp* self,  FjDispType disp_type,
-							EOsdLayer layer_id, EfjOsdAttrType Attr,
+							EOsdLayer layerId, EfjOsdAttrType Attr,
 							INT32 wParam1, INT32 wParam2, INT32 wParam3, INT32 wParam4);
-FJ_ERR_CODE 		fj_disp_fj_osd_set_main_input_size(FjDisp* self,  EOsdLayer layer_id, const TRect* disp_rect);
+FJ_ERR_CODE 		fj_disp_fj_osd_set_main_input_size(FjDisp* self,  EOsdLayer layerId, const TRect* disp_rect);
 FJ_ERR_CODE 		fj_disp_fj_osd_get_clip(FjDisp* self,  EDispDev disp_device, TClipCalData* cal_data);
 FJ_ERR_CODE 		fj_disp_fj_osd_set_clip(FjDisp* self,  EDispDev disp_device, TClipCalData const* const cal_data);
 FJ_ERR_CODE 		fj_disp_fj_show_setbackcolor(FjDisp* self,  FjDispType disp_type, UCHAR r_color, UCHAR g_color, UCHAR b_color);
 FJ_ERR_CODE 		fj_disp_fj_show_backcolor(FjDisp* self,  FjDispType disp_type, BOOL enable);
-FJ_ERR_CODE 		fj_disp_fj_show_enable(FjDisp* self,  EOsdLayer layer_id, BOOL enable);
+FJ_ERR_CODE 		fj_disp_fj_show_enable(FjDisp* self,  EOsdLayer layerId, BOOL enable);
 FJ_ERR_CODE 		fj_disp_fj_osd_initialize(FjDisp* self);
-FJ_ERR_CODE 		fj_disp_fj_initialize_osd_layer(FjDisp* self, EOsdLayer layer_id);
+FJ_ERR_CODE 		fj_disp_fj_initialize_osd_layer(FjDisp* self, EOsdLayer layerId);
 FJ_ERR_CODE 		fj_disp_fj_osd_set_matrix(FjDisp* self,  FjDispType disp_type, FjOsdMatrixKind kind, BYTE enable, TMatrixData const* const matrix);
 FJ_ERR_CODE 		fj_disp_fj_osd_connect(FjDisp* self,  EDispDev disp_device, const THdmiSet *HDMI_Setting_Data);
 FJ_ERR_CODE 		fj_disp_fj_osd_disconnect(FjDisp* self,  EDispDev disp_device);
 FJ_ERR_CODE 		fj_connect_hdmi(FjDisp* self,  const THdmiSet* hdmi_setting_data);
-FJ_ERR_CODE 		fj_disp_fj_osd_draw_osd_area(FjDisp* self,  EOsdLayer layer_id, const TRect drawArea[FjDispE_OSD_DRAW_AREA_NUM], BYTE drawAreaNum);
-FJ_ERR_CODE 		fj_disp_fj_osd_set_osd_area_enable(FjDisp* self,  EOsdLayer layer_id, UINT32 enable_area);
-FJ_ERR_CODE 		fj_disp_fj_osd_get_osd_area_enable(FjDisp* self,  EOsdLayer layer_id, UINT32* enable_area);
-ULONG 				fj_disp_fj_osd_get_osd_area_addr(FjDisp* self,  EOsdLayer layer_id, UINT32 drawAreaNum, UINT32* global_width);
-FJ_ERR_CODE 		fj_disp_fj_clear_area_buffer(FjDisp* self,  EOsdLayer layer_id, UINT32 clear_area);
+FJ_ERR_CODE 		fj_disp_fj_osd_draw_osd_area(FjDisp* self,  EOsdLayer layerId, const TRect drawArea[FjDispE_OSD_DRAW_AREA_NUM], BYTE drawAreaNum);
+FJ_ERR_CODE 		fj_disp_fj_osd_set_osd_area_enable(FjDisp* self,  EOsdLayer layerId, UINT32 enable_area);
+FJ_ERR_CODE 		fj_disp_fj_osd_get_osd_area_enable(FjDisp* self,  EOsdLayer layerId, UINT32* enable_area);
+ULONG 				fj_disp_fj_osd_get_osd_area_addr(FjDisp* self,  EOsdLayer layerId, UINT32 drawAreaNum, UINT32* global_width);
+FJ_ERR_CODE 		fj_disp_fj_clear_area_buffer(FjDisp* self,  EOsdLayer layerId, UINT32 clear_area);
 #if 0	// MILB Not Use
-FJ_ERR_CODE 		fj_disp_fj_osd_set_tone_correction(FjDisp* self,  EOsdLayer layer_id, TYConv const *const y_conv, TTcData const *const tc_data);
+FJ_ERR_CODE 		fj_disp_fj_osd_set_tone_correction(FjDisp* self,  EOsdLayer layerId, TYConv const *const y_conv, TTcData const *const tc_data);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE 		fj_disp_fj_osd_get_tone_correction(FjDisp* self,  EOsdLayer layer_id, TYConv* y_conv, TTcData* tc_data);
+FJ_ERR_CODE 		fj_disp_fj_osd_get_tone_correction(FjDisp* self,  EOsdLayer layerId, TYConv* y_conv, TTcData* tc_data);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE 		fj_disp_fj_osd_set_tc_table(FjDisp* self,  EOsdLayer layer_id, TToneCorrectionTbl const *const tone_correction);
+FJ_ERR_CODE 		fj_disp_fj_osd_set_tc_table(FjDisp* self,  EOsdLayer layerId, TToneCorrectionTbl const *const tone_correction);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE 		fj_disp_fj_osd_get_tc_table(FjDisp* self,  EOsdLayer layer_id, TToneCorrectionTbl* tone_correction);
+FJ_ERR_CODE 		fj_disp_fj_osd_get_tc_table(FjDisp* self,  EOsdLayer layerId, TToneCorrectionTbl* tone_correction);
 #endif	// MILB Not Use
-FJ_ERR_CODE 		fj_disp_fj_osd_set_inverse_gamma(FjDisp* self,  EOsdLayer layer_id, TInverseGammaTbl const *const inverse_gamma);
+FJ_ERR_CODE 		fj_disp_fj_osd_set_inverse_gamma(FjDisp* self,  EOsdLayer layerId, TInverseGammaTbl const *const inverse_gamma);
 
 
 fjdipa.c 原公有函数名
 
 
-FJ_ERR_CODE FJ_OSD_Get_Inverse_Gamma(E_OSDLayer layer_id, T_INVERSE_GAMMA_TBL* inverse_gamma);
-FJ_ERR_CODE FJ_OSD_Set_Gamma(E_OSDLayer layer_id, T_GAMMA_TBL const *const gamma);
-FJ_ERR_CODE FJ_OSD_Get_Gamma(E_OSDLayer layer_id, T_GAMMA_TBL* gamma);
+FJ_ERR_CODE FJ_OSD_Get_Inverse_Gamma(E_OSDLayer layerId, T_INVERSE_GAMMA_TBL* inverse_gamma);
+FJ_ERR_CODE FJ_OSD_Set_Gamma(E_OSDLayer layerId, T_GAMMA_TBL const *const gamma);
+FJ_ERR_CODE FJ_OSD_Get_Gamma(E_OSDLayer layerId, T_GAMMA_TBL* gamma);
 FJ_ERR_CODE FJ_OSD_Set_Compensation_Table_Enable(FJ_DISP_TYPE disp_type, E_CORRECT_SELECT select, T_TBL_ACCESS_SET const *const compensation_table);
 FJ_ERR_CODE FJ_OSD_Get_Compensation_Table_Enable(FJ_DISP_TYPE disp_type, E_CORRECT_SELECT select, T_TBL_ACCESS_SET* compensation_table);
 FJ_ERR_CODE FJ_OSD_Set_Layer_Order(FJ_DISP_TYPE disp_type, T_ORDER_LAYER const *const order_layer);
@@ -1228,31 +1434,31 @@ FJ_ERR_CODE FJ_OSD_Set_Grid_Line_Enable(FJ_DISP_TYPE disp_type, BOOL enable);
 FJ_ERR_CODE FJ_OSD_Draw_Face_Frame(FJ_DISP_TYPE disp_type, const T_FACE_FRAME_EACH_SET face_pos[FjDispE_OSD_DRAW_FACE_NUM],  const T_FACE_FRAME_SET* face_set);
 FJ_ERR_CODE FJ_OSD_Set_Face_Frame_Enable(FJ_DISP_TYPE disp_type, UINT32 enable, UINT32 top_face);
 FJ_ERR_CODE FJ_OSD_Set_Color_Bar(FJ_DISP_TYPE disp_type, U_RGB_COLOR color[FjDispE_OSD_COLOR_BAR_NUM],  ULONG color_bar_num);
-FJ_ERR_CODE FJ_SetMainDispBuffAddr(E_OSDLayer layer_id, ULONG addr[3]);
-FJ_ERR_CODE FJ_GetMainDispBuffAddr(E_OSDLayer layer_id, ULONG addr[3]);
-FJ_ERR_CODE FJ_SetOsdDispBuffAddr(E_OSDLayer layer_id, UINT32 drawAreaNum, ULONG addr);
-FJ_ERR_CODE FJ_GetOsdDispBuffAddr(E_OSDLayer layer_id, UINT32 drawAreaNum, ULONG* addr);
+FJ_ERR_CODE FJ_SetMainDispBuffAddr(E_OSDLayer layerId, ULONG addr[3]);
+FJ_ERR_CODE FJ_GetMainDispBuffAddr(E_OSDLayer layerId, ULONG addr[3]);
+FJ_ERR_CODE FJ_SetOsdDispBuffAddr(E_OSDLayer layerId, UINT32 drawAreaNum, ULONG addr);
+FJ_ERR_CODE FJ_GetOsdDispBuffAddr(E_OSDLayer layerId, UINT32 drawAreaNum, ULONG* addr);
 FJ_ERR_CODE FJ_Set_Main_Display(E_DISP_DEV disp_device, E_FJ_IMAGE_SIZE image_type,E_FJ_IMAGE_FORMAT image_format, ULONG image_global_width);
 FJ_ERR_CODE FJ_Set_OSD_Vsync_Callback(FJ_DISP_TYPE disp_type, BOOL bSetup, VP_CALLBACK pcallback);
 FJ_ERR_CODE FJ_OSD_Flush_Draw_Area(const FJ_OSD_COMM_FLUSH_DARA_AREA_INFO* switch_buffer_infor,UINT32 switch_buffer_infor_size);
 FJ_ERR_CODE FJ_LoadFontFile(CHAR const* const FontName);
-FJ_ERR_CODE FJ_Clear_OSD_Buffer(E_OSDLayer layer_id);
-FJ_ERR_CODE FJ_OSD_Set_Blink_On_Off(E_OSDLayer layer_id, BYTE blink_show_period[FjDispE_OSD_DRAW_AREA_NUM], BYTE blink_hide_period[FjDispE_OSD_DRAW_AREA_NUM], ULONG area);
-FJ_ERR_CODE FJ_SetDispHistogramPosition(E_OSDLayer layer_id, unsigned short histo_x, unsigned short histo_y,
+FJ_ERR_CODE FJ_Clear_OSD_Buffer(E_OSDLayer layerId);
+FJ_ERR_CODE FJ_OSD_Set_Blink_On_Off(E_OSDLayer layerId, BYTE blink_show_period[FjDispE_OSD_DRAW_AREA_NUM], BYTE blink_hide_period[FjDispE_OSD_DRAW_AREA_NUM], ULONG area);
+FJ_ERR_CODE FJ_SetDispHistogramPosition(E_OSDLayer layerId, unsigned short histo_x, unsigned short histo_y,
 										unsigned short histo_width, unsigned short histo_height, BYTE drawAreaNum);
-UINT16 FJ_GetHistogramWidth(E_OSDLayer layer_id);
-UINT16 FJ_GetHistogramHeight(E_OSDLayer layer_id);
-FJ_ERR_CODE FJ_PreHistogram(E_OSDLayer layer_id, UINT32 threshold);
-FJ_ERR_CODE FJ_HistogramEnable(E_OSDLayer layer_id);
-FJ_ERR_CODE	FJ_OSDDrawShape(E_OSDLayer layer_id, E_FJ_OSD_SHAPE_TYPE wType,
+UINT16 FJ_GetHistogramWidth(E_OSDLayer layerId);
+UINT16 FJ_GetHistogramHeight(E_OSDLayer layerId);
+FJ_ERR_CODE FJ_PreHistogram(E_OSDLayer layerId, UINT32 threshold);
+FJ_ERR_CODE FJ_HistogramEnable(E_OSDLayer layerId);
+FJ_ERR_CODE	FJ_OSDDrawShape(E_OSDLayer layerId, E_FJ_OSD_SHAPE_TYPE wType,
 							INT32 wStartX, INT32 wStartY, INT32 uwWidth, INT32 uwHeight, BYTE drawAreaNum);
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSDDrawLine(E_OSDLayer layer_id, const FJ_LINE_COORDINATES* line, USHORT Thickness, BYTE TerminatorType, BYTE drawAreaNum);
+FJ_ERR_CODE FJ_OSDDrawLine(E_OSDLayer layerId, const FJ_LINE_COORDINATES* line, USHORT Thickness, BYTE TerminatorType, BYTE drawAreaNum);
 #endif	// MILB Not Use
-FJ_ERR_CODE FJ_OSDDrawImage(E_OSDLayer layer_id, UCHAR* y_addr, UCHAR* c_addr,
+FJ_ERR_CODE FJ_OSDDrawImage(E_OSDLayer layerId, UCHAR* yAddr, UCHAR* c_addr,
 							USHORT start_x, USHORT start_y, USHORT width, USHORT height);
-FJ_ERR_CODE FJ_OSDDrawBufferOSD(E_OSDLayer layer_id, BYTE* addr_src, T_Rect const* const draw_info, BYTE drawAreaNum, USHORT global_width);
-FJ_ERR_CODE FJ_OSDClearPart(E_OSDLayer layer_id, T_Rect clear_rect, BYTE drawAreaNum);
+FJ_ERR_CODE FJ_OSDDrawBufferOSD(E_OSDLayer layerId, BYTE* addr_src, T_Rect const* const draw_info, BYTE drawAreaNum, USHORT global_width);
+FJ_ERR_CODE FJ_OSDClearPart(E_OSDLayer layerId, T_Rect clear_rect, BYTE drawAreaNum);
 #if 0	// MILB Not Use
 FJ_ERR_CODE FJ_SetGDA(FJ_E_OSD_GDA_ATTR_TYPE bAttr, INT32 wParam1, INT32 wParam2);
 #endif	// MILB Not Use
@@ -1261,7 +1467,7 @@ FJ_ERR_CODE FJ_DrawShape(FJ_E_OSD_SHAPE_TYPE bShapeType, SHORT wStartX, SHORT wS
 						 USHORT uwSizeX, USHORT uwSizeY, USHORT uwGlobalWidth, FJ_T_OSD_ADDR_YCC const* const image_addr);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE FJ_OSDPrint(E_OSDLayer layer_id, FJ_OSD_PRINT_COLOR color[2], T_POS postion, CHAR* string, BYTE drawAreaNum);
+FJ_ERR_CODE FJ_OSDPrint(E_OSDLayer layerId, FJ_OSD_PRINT_COLOR color[2], T_POS postion, CHAR* string, BYTE drawAreaNum);
 #endif	// MILB Not Use
 BOOL FJ_DirectSelectFont(E_Draw_Type ulFontId);
 FJ_ERR_CODE 	FJ_DirectLoadFont(CHAR const* const szFontName);
@@ -1269,18 +1475,18 @@ FJ_ERR_CODE	FJ_LoadStringFile(CHAR const* const StringFileName);
 FJ_ERR_CODE FJ_SetRGBAPalette(const char* RGBPaletteTableName);
 FJ_ERR_CODE FJ_Set_Display_Stream(UINT32 stream_idx);
 FJ_ERR_CODE FJ_Get_Display_Stream(UINT32* stream_idx);
-FJ_ERR_CODE FJ_OSDTextOutID(E_OSDLayer layer_id, INT32 wStartX, INT32 wStartY, INT32 wLength, INT32 uwStringID
+FJ_ERR_CODE FJ_OSDTextOutID(E_OSDLayer layerId, INT32 wStartX, INT32 wStartY, INT32 wLength, INT32 uwStringID
 							,E_DrawMode DrawMode, BYTE alpha, BYTE drawAreaNum);
-FJ_ERR_CODE	FJ_DrawFile(E_OSDLayer layer_id, FJ_GR_FILE_TYPE wFileType, CHAR* FileName,
+FJ_ERR_CODE	FJ_DrawFile(E_OSDLayer layerId, FJ_GR_FILE_TYPE wFileType, CHAR* FileName,
 						USHORT uStartX, USHORT uStartY, USHORT uWidth, USHORT uHight, BYTE drawAreaNum);
 FJ_ERR_CODE FJ_OSDTextOutbyASCIITable(E_OSDLayer layerID, const T_OSD_TEXT_OUT_BY_ASCII_TABLE_INFO* textOutInfo);
 FJ_ERR_CODE FJ_OSD_Icon_Notify_Loading_Complete( E_FJ_RESOURCE_TYPE type, UINT32 addr );
 
 Fjdispa.h更改后公有函数
 
-FJ_ERR_CODE 			fj_disp_a_fj_osd_get_inverse_gamma(FjDispA* self, E_OSDLayer layer_id, T_INVERSE_GAMMA_TBL* inverse_gamma);
-FJ_ERR_CODE 			fj_disp_a_fj_osd_set_gamma(FjDispA* self, E_OSDLayer layer_id, T_GAMMA_TBL const *const gamma);
-FJ_ERR_CODE		    fj_disp_a_fj_osd_get_gamma(FjDispA* self, E_OSDLayer layer_id, T_GAMMA_TBL* gamma);
+FJ_ERR_CODE 			fj_disp_a_fj_osd_get_inverse_gamma(FjDispA* self, E_OSDLayer layerId, T_INVERSE_GAMMA_TBL* inverse_gamma);
+FJ_ERR_CODE 			fj_disp_a_fj_osd_set_gamma(FjDispA* self, E_OSDLayer layerId, T_GAMMA_TBL const *const gamma);
+FJ_ERR_CODE		    fj_disp_a_fj_osd_get_gamma(FjDispA* self, E_OSDLayer layerId, T_GAMMA_TBL* gamma);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_set_compensation_table_enable(FjDispA* self, FJ_DISP_TYPE disp_type, E_CORRECT_SELECT select, T_TBL_ACCESS_SET const *const compensation_table);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_get_compensation_table_enable(FjDispA* self, FJ_DISP_TYPE disp_type, E_CORRECT_SELECT select, T_TBL_ACCESS_SET* compensation_table);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_set_layer_order(FjDispA* self, FJ_DISP_TYPE disp_type, T_ORDER_LAYER const *const order_layer);
@@ -1291,31 +1497,31 @@ FJ_ERR_CODE 			fj_disp_a_fj_osd_set_grid_line_enable(FjDispA* self, FJ_DISP_TYPE
 FJ_ERR_CODE 			fj_disp_a_fj_osd_draw_face_frame(FjDispA* self, FJ_DISP_TYPE disp_type, const T_FACE_FRAME_EACH_SET face_pos[FjDispE_OSD_DRAW_FACE_NUM],  const T_FACE_FRAME_SET* face_set);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_set_face_frame_enable(FjDispA* self, FJ_DISP_TYPE disp_type, UINT32 enable, UINT32 top_face);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_set_color_bar(FjDispA* self, FJ_DISP_TYPE disp_type, U_RGB_COLOR color[FjDispE_OSD_COLOR_BAR_NUM],  ULONG color_bar_num);
-FJ_ERR_CODE 			fj_disp_a_fj_setmaindispbuffaddr(FjDispA* self, E_OSDLayer layer_id, ULONG addr[3]);
-FJ_ERR_CODE 			fj_disp_a_fj_getmaindispbuffaddr(FjDispA* self, E_OSDLayer layer_id, ULONG addr[3]);
-FJ_ERR_CODE 			fj_disp_a_fj_setosddispbuffaddr(FjDispA* self, E_OSDLayer layer_id, UINT32 drawAreaNum, ULONG addr);
-FJ_ERR_CODE 			fj_disp_a_fj_getosddispbuffaddr(FjDispA* self, E_OSDLayer layer_id, UINT32 drawAreaNum, ULONG* addr);
+FJ_ERR_CODE 			fj_disp_a_fj_setmaindispbuffaddr(FjDispA* self, E_OSDLayer layerId, ULONG addr[3]);
+FJ_ERR_CODE 			fj_disp_a_fj_getmaindispbuffaddr(FjDispA* self, E_OSDLayer layerId, ULONG addr[3]);
+FJ_ERR_CODE 			fj_disp_a_fj_setosddispbuffaddr(FjDispA* self, E_OSDLayer layerId, UINT32 drawAreaNum, ULONG addr);
+FJ_ERR_CODE 			fj_disp_a_fj_getosddispbuffaddr(FjDispA* self, E_OSDLayer layerId, UINT32 drawAreaNum, ULONG* addr);
 FJ_ERR_CODE 			fj_disp_a_fj_set_main_display(FjDispA* self, E_DISP_DEV disp_device, E_FJ_IMAGE_SIZE image_type,E_FJ_IMAGE_FORMAT image_format, ULONG image_global_width);
 FJ_ERR_CODE 			fj_disp_a_fj_set_osd_vsync_callback(FjDispA* self, FJ_DISP_TYPE disp_type, BOOL bSetup, VP_CALLBACK pcallback);
 FJ_ERR_CODE 			fj_disp_a_fj_osd_flush_draw_area(FjDispA* self, const FJ_OSD_COMM_FLUSH_DARA_AREA_INFO* switch_buffer_infor,UINT32 switch_buffer_infor_size);
 FJ_ERR_CODE 			fj_disp_a_fj_loadfontfile(FjDispA* self, CHAR const* const FontName);
-FJ_ERR_CODE 			fj_disp_a_fj_clear_osd_buffer(FjDispA* self, E_OSDLayer layer_id);
-FJ_ERR_CODE 			fj_disp_a_fj_osd_set_blink_on_off(FjDispA* self, E_OSDLayer layer_id, BYTE blink_show_period[FjDispE_OSD_DRAW_AREA_NUM], BYTE blink_hide_period[FjDispE_OSD_DRAW_AREA_NUM], ULONG area);
-FJ_ERR_CODE 			fj_disp_a_fj_setdisphistogramposition(FjDispA* self, E_OSDLayer layer_id, unsigned short histo_x, unsigned short histo_y,
+FJ_ERR_CODE 			fj_disp_a_fj_clear_osd_buffer(FjDispA* self, E_OSDLayer layerId);
+FJ_ERR_CODE 			fj_disp_a_fj_osd_set_blink_on_off(FjDispA* self, E_OSDLayer layerId, BYTE blink_show_period[FjDispE_OSD_DRAW_AREA_NUM], BYTE blink_hide_period[FjDispE_OSD_DRAW_AREA_NUM], ULONG area);
+FJ_ERR_CODE 			fj_disp_a_fj_setdisphistogramposition(FjDispA* self, E_OSDLayer layerId, unsigned short histo_x, unsigned short histo_y,
 								unsigned short histo_width, unsigned short histo_height, BYTE drawAreaNum);
-UINT16 					fj_disp_a_fj_gethistogramwidth(FjDispA* self, E_OSDLayer layer_id);
-UINT16 					fj_disp_a_fj_getHistogramheight(FjDispA* self, E_OSDLayer layer_id);
-FJ_ERR_CODE 			fj_disp_a_fj_prehistogram(FjDispA* self, E_OSDLayer layer_id, UINT32 threshold);
-FJ_ERR_CODE 			fj_disp_a_fj_histogramenable(FjDispA* self, E_OSDLayer layer_id);
-FJ_ERR_CODE			fj_disp_a_FJ_osddrawshape(FjDispA* self, E_OSDLayer layer_id, E_FJ_OSD_SHAPE_TYPE wType,
+UINT16 					fj_disp_a_fj_gethistogramwidth(FjDispA* self, E_OSDLayer layerId);
+UINT16 					fj_disp_a_fj_getHistogramheight(FjDispA* self, E_OSDLayer layerId);
+FJ_ERR_CODE 			fj_disp_a_fj_prehistogram(FjDispA* self, E_OSDLayer layerId, UINT32 threshold);
+FJ_ERR_CODE 			fj_disp_a_fj_histogramenable(FjDispA* self, E_OSDLayer layerId);
+FJ_ERR_CODE			fj_disp_a_FJ_osddrawshape(FjDispA* self, E_OSDLayer layerId, E_FJ_OSD_SHAPE_TYPE wType,
 								INT32 wStartX, INT32 wStartY, INT32 uwWidth, INT32 uwHeight, BYTE drawAreaNum);
 #if 0	// MILB Not Use
-FJ_ERR_CODE 			fj_disp_a_fj_osddrawline(FjDispA* self, E_OSDLayer layer_id, const FJ_LINE_COORDINATES* line, USHORT Thickness, BYTE TerminatorType, BYTE drawAreaNum);
+FJ_ERR_CODE 			fj_disp_a_fj_osddrawline(FjDispA* self, E_OSDLayer layerId, const FJ_LINE_COORDINATES* line, USHORT Thickness, BYTE TerminatorType, BYTE drawAreaNum);
 #endif	// MILB Not Use
-FJ_ERR_CODE 			fj_disp_a_FJ_osddrawimage(FjDispA* self, E_OSDLayer layer_id, UCHAR* y_addr, UCHAR* c_addr,
+FJ_ERR_CODE 			fj_disp_a_FJ_osddrawimage(FjDispA* self, E_OSDLayer layerId, UCHAR* yAddr, UCHAR* c_addr,
 							    USHORT start_x, USHORT start_y, USHORT width, USHORT height);
-FJ_ERR_CODE 			fj_disp_a_FJ_osddrawbufferosd(FjDispA* self, E_OSDLayer layer_id, BYTE* addr_src, T_Rect const* const draw_info, BYTE drawAreaNum, USHORT global_width);
-FJ_ERR_CODE 			fj_disp_a_FJ_osdclearpart(FjDispA* self, E_OSDLayer layer_id, T_Rect clear_rect, BYTE drawAreaNum);
+FJ_ERR_CODE 			fj_disp_a_FJ_osddrawbufferosd(FjDispA* self, E_OSDLayer layerId, BYTE* addr_src, T_Rect const* const draw_info, BYTE drawAreaNum, USHORT global_width);
+FJ_ERR_CODE 			fj_disp_a_FJ_osdclearpart(FjDispA* self, E_OSDLayer layerId, T_Rect clear_rect, BYTE drawAreaNum);
 #if 0	// MILB Not Use
 FJ_ERR_CODE			 fj_disp_a_fj_setgda(FjDispA* self, FJ_E_OSD_GDA_ATTR_TYPE bAttr, INT32 wParam1, INT32 wParam2);
 #endif	// MILB Not Use
@@ -1324,7 +1530,7 @@ FJ_ERR_CODE 			fj_disp_a_FJ_drawshape(FjDispA* self, FJ_E_OSD_SHAPE_TYPE bShapeT
 						 	 	USHORT uwSizeX, USHORT uwSizeY, USHORT uwGlobalWidth, FJ_T_OSD_ADDR_YCC const* const image_addr);
 #endif	// MILB Not Use
 #if 0	// MILB Not Use
-FJ_ERR_CODE 			fj_disp_a_fj_osdprint(FjDispA* self, E_OSDLayer layer_id, FJ_OSD_PRINT_COLOR color[2], T_POS postion, CHAR* string, BYTE drawAreaNum);
+FJ_ERR_CODE 			fj_disp_a_fj_osdprint(FjDispA* self, E_OSDLayer layerId, FJ_OSD_PRINT_COLOR color[2], T_POS postion, CHAR* string, BYTE drawAreaNum);
 #endif	// MILB Not Use
 BOOL 						fj_disp_a_fj_directselectfont(FjDispA* self, E_Draw_Type ulFontId);
 FJ_ERR_CODE 			fj_disp_a_Fj_directloadfont(FjDispA* self, CHAR const* const szFontName);
@@ -1333,9 +1539,9 @@ extern FJ_ERR_CODE
 								fj_disp_a_fj_setrgbapalette(FjDispA* self, const char* RGBPaletteTableName);
 FJ_ERR_CODE 			fj_disp_a_fj_set_display_stream(FjDispA* self, UINT32 stream_idx);
 FJ_ERR_CODE 			fj_disp_a_fj_get_display_stream(FjDispA* self, UINT32* stream_idx);
-FJ_ERR_CODE 			fj_disp_a_fj_osdtextoutid(FjDispA* self, E_OSDLayer layer_id, INT32 wStartX, INT32 wStartY, INT32 wLength, INT32 uwStringID
+FJ_ERR_CODE 			fj_disp_a_fj_osdtextoutid(FjDispA* self, E_OSDLayer layerId, INT32 wStartX, INT32 wStartY, INT32 wLength, INT32 uwStringID
 								,E_DrawMode DrawMode, BYTE alpha, BYTE drawAreaNum);
-FJ_ERR_CODE			fj_disp_a_fj_drawfile(FjDispA* self, E_OSDLayer layer_id, FJ_GR_FILE_TYPE wFileType, CHAR* FileName,
+FJ_ERR_CODE			fj_disp_a_fj_drawfile(FjDispA* self, E_OSDLayer layerId, FJ_GR_FILE_TYPE wFileType, CHAR* FileName,
 								USHORT uStartX, USHORT uStartY, USHORT uWidth, USHORT uHight, BYTE drawAreaNum);
 FJ_ERR_CODE 			fj_disp_a_fj_osdtextoutbyasciitable(FjDispA* self, E_OSDLayer layerID, const T_OSD_TEXT_OUT_BY_ASCII_TABLE_INFO* textOutInfo);
 FJ_ERR_CODE		    fj_disp_a_fj_osd_icon_notify_loading_complete( FjDispA* self, E_FJ_RESOURCE_TYPE type, UINT32 addr );
@@ -2161,34 +2367,539 @@ FjDispB_FJ_HDMI_VP_REMAP_16BIT	= 0,	/**< YCC 422 16-bit input video (8 bits per 
 
 
 结构体typedef struct
-
-FJ_DISP_POS 						BFjDispPos
-FJ_DISP_RECT						BFjDispRect
+ FJ_DISP_POS 							BFjDispPos
+FJ_DISP_RECT							BFjDispRect
 FJ_DISP_LCD_POLARITY				FjDispLcdPolarity	
 FJ_DISP_LCD_TIMING					FjDispLcdTiming	
-FJ_DISP_LCD_FORMAT					FjDispLcdFormat	
- FJ_DISP_LCD_CONFIG						FjDispLcdConfig
-FJ_DISP_HDMI_DETECT_SETTING				FjdispHdmiDetectSetting	
-FJ_DISP_HDMI_VIC_INFO					FjdispHdmiVicInfo
-FJ_DISP_HDMI_SINK_INFO					FjDispHdmiSinkInfo
-FJ_DISP_HDMI_DEV_VENDOR_PRODUCT_ID			FjdispHdmidevVendorProductid
-FJ_DISP_HDMI_SPD_INFO					FjdispHdmiSPpdInfo
-FJ_DISP_HDMI_VENDOR_SPEC_INFO				FjdispHdmiVendorSpecInfo
- FJ_MIPI_CTRL_VIDEO						FjMipiCtrlVideo
-FJ_MIPI_CMD_VALUE						FjMipiCmdValue
-FJ_MIPI_CMD_INFO						FjMipiCmdInfo
-FJ_DISP_WINDOW_CONFIG					FjDispWindowConfig
-FJ_DISP_YCC_ADDR						FjDispYccAddr
-FJ_DISP_OSD_CONFIG						FjDispImageConfig
-FJ_DISP_OSD_CONFIG						FjDispOsdConfig
-FJ_DISP_OSD_RECT_INFO					FjdispOsdRectInfo
-FJ_DISP_OSD_BUFF_ADDR					 FjdispOsdBuffAddr
-T_FACE_FRAME_EACH_SET					TfaceFrameEachEt
-T_FACE_FRAME_SET						TFaceFrameSet
-FJ_HDMI_EDID_DTD						FjHdmiEdidDtd
-FJ_HDMI_EDID_DTD_SAD					FjHdmiEdidDtdsad
-FJ_HDMI_DTD_MAN						FjHdmiDtdMan
 
+修改前 FJ_DISP_LCD_FORMAT	
+{
+FjdispLcdOutputMode		output_mode;		/**< LCD output mode<br>
+														<ul><li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_24BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_1
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_2
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_3
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_3
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB666_18BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_YCC422_8BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_YCC422_16BIT</ul>		*/
+	FjdispLcdOutputOrder	output_order[6];	/**< LCD data output order.<br>
+														 Please refer to the DISP macro specifications.
+														 <ul><li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_R_Y0
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_G_CB
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_B_CR
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_0_Y1</ul>			*/
+	FjDispLcdPixFmt			pix_fmt;			/**< LCD pixel format type<br>
+														<ul><li>@ref FjDispB_FJ_DISP_LCD_PIX_FMT_DELTA
+															<li>@ref FjDispB_FJ_DISP_LCD_PIX_FMT_STRIPE</ul>				*/
+}
+			
+修改后	FjDispLcdFormat	
+{
+FjdispLcdOutputMode		outputMode;		/**< LCD output mode<br>
+														<ul><li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_24BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_1
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_2
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_3
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB888_8BIT_3
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_RGB666_18BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_YCC422_8BIT
+															<li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_MODE_YCC422_16BIT</ul>		*/
+	FjdispLcdOutputOrder	outputOrder[6];	/**< LCD data output order.<br>
+														 Please refer to the DISP macro specifications.
+														 <ul><li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_R_Y0
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_G_CB
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_B_CR
+															 <li>@ref FjDispB_FJ_DISP_LCD_OUTPUT_ORDER_0_Y1</ul>			*/
+	FjDispLcdPixFmt			pixFmt;			/**< LCD pixel format type<br>
+														<ul><li>@ref FjDispB_FJ_DISP_LCD_PIX_FMT_DELTA
+															<li>@ref FjDispB_FJ_DISP_LCD_PIX_FMT_STRIPE</ul>				*/
+}
+修改前 FJ_DISP_LCD_CONFIG
+{
+UINT32						lcd_clk;			/**< LCD clock[KHz]<br>
+														 Value range:6750~65000										*/
+	FjDispLcdPolarity		lcd_polarity;		/**< LCD signal polarity information							*/
+	FjDispLcdTiming			lcd_timing;			/**< LCD timing information										*/
+	FjDispLcdFormat			lcd_format;			/**< LCD format information										*/
+}						
+修改后  FjDispLcdConfig
+{
+UINT32						lcdClk;			/**< LCD clock[KHz]<br>
+														 Value range:6750~65000										*/
+	FjDispLcdPolarity		lcdPolarity;		/**< LCD signal polarity information							*/
+	FjDispLcdTiming			lcdTiming;			/**< LCD timing information										*/
+	FjDispLcdFormat			lcdFormat;			/**< LCD format information										*/
+}
+
+修改前 FJ_DISP_HDMI_DETECT_SETTING	
+{
+FjdispHdmiCheckSignal	check_signal;		/**< Check signal (HPD only or HPD and RX_SENSE)	*/
+	UINT32						interval_ms;		/**< Detect check interval(msec)			*/
+	UINT32						detect_count;		/**< Detects continues count in check_count	*/
+	UINT32						check_count;		/**< Total check count						*/
+}	
+
+修改后 FjdispHdmiDetectSetting	
+{
+FjdispHdmiCheckSignal	checkSignal;		/**< Check signal (HPD only or HPD and RX_SENSE)	*/
+	UINT32						intervalMs;		/**< Detect check interval(msec)			*/
+	UINT32						detectCount;		/**< Detects continues count in checkCount	*/
+	UINT32						checkCount;		/**< Total check count						*/
+}
+修改前 FJ_DISP_HDMI_VIC_INFO	
+{
+FjDispVideoId	video_id;					/**< Video ID Code							*/
+	UINT32				h_active;					/**< Horizontal Active						*/
+	UINT32				v_active;					/**< Vertical Active						*/
+	UINT32				h_total; 					/**< Horizonal Total						*/
+	UINT32				h_blank; 					/**< Horizonal Blank						*/
+	UINT32				v_total; 					/**< Vertical Total							*/
+	UINT32				v_blank; 					/**< Vertical Blank							*/
+	USHORT				h_sync_offset;				/**< H sync offset					*/
+	USHORT				v_sync_offset;				/**< V sync offset					*/
+	UINT32				h_pulse_width;				/**< Horizonal Pulse width 					*/
+	UINT32				v_pulse_width;				/**< Vertical Pulse width	 				*/
+	USHORT				h_image_size;				/**< H image size					*/
+	USHORT				v_image_size;				/**< V image size					*/
+	UINT32				pixel_freq;					/**< Pixel Frequency(KHz)	 				*/
+	UCHAR				format_flags;				/**< 1) Synchronization polarity<br>
+														 2) Interlace or not<br>
+														See @ref FjdispHdmiFlagBitmap		*/
+	UCHAR				phy_index; 		 			/**< PHY Register configuration index */
+}
+			
+修改后 	FjdispHdmiVicInfo
+{
+FjDispVideoId	videoId;					/**< Video ID Code							*/
+	UINT32				hActive;					/**< Horizontal Active						*/
+	UINT32				vActive;					/**< Vertical Active						*/
+	UINT32				hTotal; 					/**< Horizonal Total						*/
+	UINT32				hBlank; 					/**< Horizonal Blank						*/
+	UINT32				vTotal; 					/**< Vertical Total							*/
+	UINT32				vBlank; 					/**< Vertical Blank							*/
+	USHORT				hSyncSffset;				/**< H sync offset					*/
+	USHORT				vSyncOffset;				/**< V sync offset					*/
+	UINT32				hPulseWidth;				/**< Horizonal Pulse width 					*/
+	UINT32				vPulseWidth;				/**< Vertical Pulse width	 				*/
+	USHORT				hImageSize;				/**< H image size					*/
+	USHORT				vImageSize;				/**< V image size					*/
+	UINT32				pixelFreq;					/**< Pixel Frequency(KHz)	 				*/
+	UCHAR				formatFlags;				/**< 1) Synchronization polarity<br>
+														 2) Interlace or not<br>
+														See @ref FjdispHdmiFlagBitmap		*/
+	UCHAR				phyIndex; 		 			/**< PHY Register configuration index */
+}
+修改前 FJ_DISP_HDMI_SINK_INFO		
+{
+
+UINT32							vic_info_num; 			/**< Number of valid vic_info			*/
+	FjdispHdmiVicInfo			vic_info[128];			/**< VIC resolution information list	*/
+}			
+修改后 FjDispHdmiSinkInfo
+{
+UINT32							vicInfoNum; 			/**< Number of valid vicInfo			*/
+	FjdispHdmiVicInfo			vicInfo[128];			/**< VIC resolution information list	*/
+}
+修改前 FJ_DISP_HDMI_DEV_VENDOR_PRODUCT_ID			
+{
+UCHAR	vendor_id[3];			 /**< Vendor ID			*/
+	UCHAR	product_code[2];		 /**< Product Code		*/
+	UCHAR	serial_id[4];			 /**< Serial No.		*/
+	UCHAR	manufacture_model[2];	 /**< Week of Manufacture or Model Year Flag, Year of Manufacture or Model Year No.	*/
+}
+修改后 FjdispHdmidevVendorProductid
+{
+UCHAR	vendorId[3];			 /**< Vendor ID			*/
+	UCHAR	productCode[2];		 /**< Product Code		*/
+	UCHAR	serialId[4];			 /**< Serial No.		*/
+	UCHAR	manufactureModel[2];	 /**< Week of Manufacture or Model Year Flag, Year of Manufacture or Model Year No.	*/
+}
+修改前  FJ_DISP_HDMI_SPD_INFO		
+{
+UCHAR						vendorId[8+1];			 /**< Vendor Name Character			*/
+	UCHAR						productCode[16+1];		 /**< Product Description Character	*/
+	FjdispHdmiSpdDevtype	device_type;			 /**< Source Device Information		*/
+}
+修改后 	FjdispHdmiSPpdInfo
+{
+UCHAR						vendorId[8+1];			 /**< Vendor Name Character			*/
+	UCHAR						productCode[16+1];		 /**< Product Description Character	*/
+	FjdispHdmiSpdDevtype	deviceType;			 /**< Source Device Information		*/
+}
+
+修改前 FJ_DISP_HDMI_VENDOR_SPEC_INFO	
+{
+FjdispHdmivendorSpecvideoFormat	video_format;	/**< HDMI Video Format			*/
+	FjdispHdmiVendorSpecVic			vic;			/**< HDMI proprietary Video Format Identification Code
+																 @remarks Please specify only the case of video_format = FjDispB_FJ_DISP_HDMI_VENDOR_SPEC_VIDEO_FORMAT_EX. */
+	FjdispHdmiVendorspec3Dstructure	structure_3d;	/**< 3D Structure
+																 @remarks Please specify only the case of video_format = FjDispB_FJ_DISP_HDMI_VENDOR_SPEC_VIDEO_FORMAT_3D. */
+}
+		
+修改后 FjdispHdmiVendorSpecInfo
+{
+FjdispHdmivendorSpecvideoFormat	videoFormat;	/**< HDMI Video Format			*/
+	FjdispHdmiVendorSpecVic			vic;			/**< HDMI proprietary Video Format Identification Code
+																 @remarks Please specify only the case of videoFormat = FjDispB_FJ_DISP_HDMI_VENDOR_SPEC_VIDEO_FORMAT_EX. */
+	FjdispHdmiVendorspec3Dstructure	structure3d;	/**< 3D Structure
+																 @remarks Please specify only the case of videoFormat = FjDispB_FJ_DISP_HDMI_VENDOR_SPEC_VIDEO_FORMAT_3D. */
+}
+ 修改前  FJ_MIPI_CTRL_VIDEO		
+ {
+
+UINT32						lane;					/**< Set the number of data lanes		*/
+	UINT32						color_coding;			/**< Set the color code of the DPI		*/
+	UINT32						vid_pkt_size;			/**< video packet size					*/
+	UINT32						vid_hsa_time;			/**< horizontal synchronism active time	*/
+	UINT32						vid_hbp_time;			/**< horizontal back porch time			*/
+	UINT32						vid_hline_time;			/**< the size of the total line time(HSA+HBP+HACT+HFP)	*/
+	UINT32						vid_vsa_lines;			/**< vertical synchronism active period	*/
+	UINT32						vid_vbp_lines;			/**< vertical back porch period			*/
+	UINT32						vid_vfp_lines;			/**< vertical front porch period		*/
+	UINT32						vid_vactive_lines;		/**< vertical active period				*/
+ }				
+ 修改后FjMipiCtrlVideo
+ {
+ UINT32						lane;					/**< Set the number of data lanes		*/
+	UINT32						colorCoding;			/**< Set the color code of the DPI		*/
+	UINT32						vidPktSize;			/**< video packet size					*/
+	UINT32						vidHsaTime;			/**< horizontal synchronism active time	*/
+	UINT32						vidHbpTime;			/**< horizontal back porch time			*/
+	UINT32						vidHlineTime;			/**< the size of the total line time(HSA+HBP+HACT+HFP)	*/
+	UINT32						vidVsaLines;			/**< vertical synchronism active period	*/
+	UINT32						vidVbpLines;			/**< vertical back porch period			*/
+	UINT32						vidVfpLines;			/**< vertical front porch period		*/
+	UINT32						vidVactiveLines;		/**< vertical active period				*/
+ }
+ 
+修改前 FJ_MIPI_CMD_VALUE	
+{
+UCHAR						cmd_id;					/**< Command Id			*/
+	UCHAR						param_size;				/**< parameter Size		*/
+	UCHAR						param[14];				/**< Parameter			*/
+}					
+修改后 FjMipiCmdValue
+{
+UCHAR						cmdId;					/**< Command Id			*/
+	UCHAR						paramSize;				/**< parameter Size		*/
+	UCHAR						param[14];				/**< Parameter			*/
+}
+
+修改前 FJ_MIPI_CMD_INFO	
+{
+UINT32						cmd_num;				/**< number of commands	*/
+	FjMipiCmdValue			cmd_val[16];			/**< Command Value		*/
+}
+修改后 FjMipiCmdInfo
+{
+UINT32						cmdNum;				/**< number of commands	*/
+	FjMipiCmdValue			cmdVal[16];			/**< Command Value		*/
+}
+修改前 FJ_DISP_WINDOW_CONFIG
+{
+UINT32		in_x_pos;		/**< Input X offset		*/
+	UINT32		in_y_pos;		/**< Input Y offset		*/
+	UINT32		in_width;		/**< Input width		*/
+	UINT32		in_lines;		/**< Input lines		*/
+	UINT32		out_x_pos;		/**< Output X offset	*/
+	UINT32		out_y_pos;		/**< Output Y offset	*/
+	UINT32		out_width;		/**< Output width		*/
+	UINT32		out_lines;		/**< Output lines		*/
+}					
+修改后 FjDispWindowConfig
+{
+UINT32		inXPos;		/**< Input X offset		*/
+	UINT32		inYPos;		/**< Input Y offset		*/
+	UINT32		inWidth;		/**< Input width		*/
+	UINT32		inLines;		/**< Input lines		*/
+	UINT32		outXPos;		/**< Output X offset	*/
+	UINT32		outYPos;		/**< Output Y offset	*/
+	UINT32		outWidth;		/**< Output width		*/
+	UINT32		outLines;		/**< Output lines		*/
+}
+修改前 FJ_DISP_YCC_ADDR						
+{
+UINT32		y_addr;			/**< Y    data stored address. */
+	UINT32		cbcr_addr;		/**< CbCr data stored address. */
+}
+修改后 FjDispYccAddr
+{
+UINT32		yAddr;			/**< Y    data stored address. */
+	UINT32		cbcrAddr;		/**< CbCr data stored address. */
+}
+修改前 FJ_DISP_IMAGE_CONFIG	
+{
+UINT32 addr;				/**< Logo Data address.		*/
+	UINT32 g_width;				/**< Logo Data global width.		*/
+	UINT32 g_height;			/**< Logo Data global height.		*/
+	FjDispType block;			/**< Display Enumelation	*/
+	FjDispWindowConfig window;/**< Display window config.*/
+}
+					
+修改后 FjDispImageConfig
+{
+UINT32 addr;				/**< Logo Data address.		*/
+	UINT32 gWidth;				/**< Logo Data global width.		*/
+	UINT32 gHeight;			/**< Logo Data global height.		*/
+	FjDispType block;			/**< Display Enumelation	*/
+	FjDispWindowConfig window;/**< Display window config.*/
+}FjDispImageConfig;
+}
+修改前 FJ_DISP_OSD_CONFIG
+{
+BFjDispRect in_osd;		/**< Input OSD size and position	*/
+	USHORT in_pitch;			/**< Input OSD pitch information	*/
+	FjDispOsdFormat in_fmt;	/**< Input format type				*/
+	BFjDispRect out_osd;		/**< Output OSD size and position	*/
+	USHORT out_pitch;			/**< Output OSD pitch information	*/
+	FjDispOsdFormat out_fmt;	/**< Output format type				*/
+}
+修改后 FjDispOsdConfig
+{
+BFjDispRect inOsd;		/**< Input OSD size and position	*/
+	USHORT inPitch;			/**< Input OSD pitch information	*/
+	FjDispOsdFormat inFmt;	/**< Input format type				*/
+	BFjDispRect outOsd;		/**< Output OSD size and position	*/
+	USHORT outPitch;			/**< Output OSD pitch information	*/
+	FjDispOsdFormat outFmt;	/**< Output format type				*/
+}
+修改前 FJ_DISP_OSD_RECT_INFO
+{
+BFjDispRect inOsd;						/**< Input OSD size and position	*/
+	USHORT inPitch;							/**< Input OSD pitch information	*/
+	BFjDispRect outOsd;						/**< Output OSD size and position	*/
+	USHORT outPitch;							/**< Output OSD pitch information	*/
+	FjDispRotateDegree rotate_degree;		/**< Rotation Degree (clockwise)	*/
+}					
+修改后 FjdispOsdRectInfo
+{
+BFjDispRect inOsd;						/**< Input OSD size and position	*/
+	USHORT inPitch;							/**< Input OSD pitch information	*/
+	BFjDispRect outOsd;						/**< Output OSD size and position	*/
+	USHORT outPitch;							/**< Output OSD pitch information	*/
+	FjDispRotateDegree rotateDegree;		/**< Rotation Degree (clockwise)	*/
+}
+修改前 FJ_DISP_OSD_BUFF_ADDR		
+{
+UINT32 in_buff_addr;						/**< input OSD buffer address	*/
+	UINT32 out_buff_addr;						/**< output OSD buffer address	*/
+}			
+修改后  FjdispOsdBuffAddr
+{
+UINT32 inBuffAddr;						/**< input OSD buffer address	*/
+	UINT32 outBuffBddr;						/**< output OSD buffer address	*/
+}
+修改前 T_FACE_FRAME_EACH_SET					
+{
+BFjDispRect   start_pos;		/**< The start of coordinate and size.	*/
+	UINT32   v_thickness;	/**< The vertical thickness of the frame.
+									 Value range:2~62 (2-pixel unit)		*/
+	UINT32   h_thickness;	/**< The horizontal thickness of the frame.
+									 Value range:2~62 (2-pixel unit)		*/
+	TIconColor  rgba;		/**< Line color.								*/
+}
+修改后 TfaceFrameEachEt
+{
+BFjDispRect   startPos;		/**< The start of coordinate and size.	*/
+	UINT32   vThickness;	/**< The vertical thickness of the frame.
+									 Value range:2~62 (2-pixel unit)		*/
+	UINT32   hThickness;	/**< The horizontal thickness of the frame.
+									 Value range:2~62 (2-pixel unit)		*/
+	TIconColor  rgba;		/**< Line color.								*/
+}
+修改前 T_FACE_FRAME_SET						
+{
+USHORT   face_count;	/**< Number of face frame. Erased, except for the specified face.<br>
+						         (face frame 0 ~ face frame 15).<br>		*/
+	USHORT   iv_size;		/**< Screen vertical size used as the standard of
+										"Face Frame Information".			*/
+	USHORT   ih_size;		/**< Screen horizonal size used as the standard of
+										"Face Frame Information".			*/
+}
+TFaceFrameSet
+{
+USHORT   faceCount;	/**< Number of face frame. Erased, except for the specified face.<br>
+						         (face frame 0 ~ face frame 15).<br>		*/
+	USHORT   ivSize;		/**< Screen vertical size used as the standard of
+										"Face Frame Information".			*/
+	USHORT   ihSize;		/**< Screen horizonal size used as the standard of
+										"Face Frame Information".			*/
+}
+修改前 FJ_HDMI_EDID_DTD						
+{
+USHORT		VideoIDCode;		/**< Video ID Code					*/
+	USHORT		PixelClock;			/**< Pixel Freq						*/
+	USHORT		H_Active;			/**< H active						*/
+	USHORT		V_Active;			/**< V active						*/
+	USHORT		H_Blanking;			/**< H blank						*/
+	USHORT		V_Blanking;			/**< V blank						*/
+	USHORT		H_SyncOffset;		/**< H sync offset					*/
+	USHORT		V_SyncOffset;		/**< V sync offset					*/
+	USHORT		H_SyncPulseWidth;	/**< H sync pulse width				*/
+	USHORT		V_SyncPulseWidth;	/**< V sync pulse width				*/
+	USHORT		H_ImageSize;		/**< H image size					*/
+	USHORT		V_ImageSize;		/**< V image size					*/
+	UCHAR		Flags;				/**< output format flags<br>
+										 Combine the following three elements.<br>
+										<ul><li>@ref FjDispE_FJ_HDMI_INTERLACE or @ref FjDispE_FJ_HDMI_NON_INTERLACE
+											<li>@ref FjDispE_FJ_HDMI_VSYNC_POS or @ref FjDispE_FJ_HDMI_VSYNC_NEG
+											<li>@ref FjDispE_FJ_HDMI_HSYNC_POS or @ref FjDispE_FJ_HDMI_HSYNC_NEG</ul> */
+	UCHAR		Phy_Index;			/**< PHY Register configuration index */
+}
+修改后 FjHdmiEdidDtd
+{
+USHORT		VideoIDCode;		/**< Video ID Code					*/
+	USHORT		PixelClock;			/**< Pixel Freq						*/
+	USHORT		hActive;			/**< H active						*/
+	USHORT		vActive;			/**< V active						*/
+	USHORT		hBlanking;			/**< H blank						*/
+	USHORT		vBlanking;			/**< V blank						*/
+	USHORT		hSyncOffset;		/**< H sync offset					*/
+	USHORT		vSyncOffset;		/**< V sync offset					*/
+	USHORT		hSyncPulseWidth;	/**< H sync pulse width				*/
+	USHORT		vSyncPulseWidth;	/**< V sync pulse width				*/
+	USHORT		hImageSize;		/**< H image size					*/
+	USHORT		vImageSize;		/**< V image size					*/
+	UCHAR		Flags;				/**< output format flags<br>
+										 Combine the following three elements.<br>
+										<ul><li>@ref FjDispE_FJ_HDMI_INTERLACE or @ref FjDispE_FJ_HDMI_NON_INTERLACE
+											<li>@ref FjDispE_FJ_HDMI_VSYNC_POS or @ref FjDispE_FJ_HDMI_VSYNC_NEG
+											<li>@ref FjDispE_FJ_HDMI_HSYNC_POS or @ref FjDispE_FJ_HDMI_HSYNC_NEG</ul> */
+	UCHAR		phyIndex;			/**< PHY Register configuration index */
+}
+修改前 FJ_HDMI_EDID_DTD_SAD					
+{
+FjdimiEdidAudioFormat		audio_type;			/**< AUDIO Format Type Code.<br>	*/
+	FjdimiEdidAudioChannel		audio_max_channels;	/**< AUDIO Max Channels.<br>		*/
+	UCHAR							audio_sample_rate;	/**< AUDIO Sample Frequency.<br>
+															<ul><li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_REFER
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_32
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_44_1
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_48
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_88_2
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_96
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_176_4
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_192</ul> */
+	UCHAR							audio_sample_size;	/**< AUDIO Sample Size.<br>
+															<ul><li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_REFER
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_16BIT
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_20BIT
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_24BIT</ul> */
+	UCHAR							audio_dbyte;		/**< AUDIO Data Byte.				*/
+}
+修改后 FjHdmiEdidDtdsad
+{
+FjdimiEdidAudioFormat		audioType;			/**< AUDIO Format Type Code.<br>	*/
+	FjdimiEdidAudioChannel		audioMaxChannels;	/**< AUDIO Max Channels.<br>		*/
+	UCHAR							audioSampleRate;	/**< AUDIO Sample Frequency.<br>
+															<ul><li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_REFER
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_32
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_44_1
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_48
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_88_2
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_96
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_176_4
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_FREQ_192</ul> */
+	UCHAR							audioSampleSize;	/**< AUDIO Sample Size.<br>
+															<ul><li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_REFER
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_16BIT
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_20BIT
+																<li>@ref FjDispB_FJ_HDMI_EDID_AUDIO_SAMPLE_24BIT</ul> */
+	UCHAR							audioDbyte;		/**< AUDIO Data Byte.				*/
+}
+修改前 FJ_HDMI_DTD_MAN		
+{
+USHORT							dtd_num;				/**< DTD number						*/
+	ULONG*							dtd_addr;				/**< DTD address. See @ref FjHdmiEdidDtd */
+	USHORT							phy_addr;				/**< IEEE24bit address				*/
+	ULONG							sup_fmat;				/**< support format<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_1280x720p60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1280x720p50Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080i60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080i50Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_720x480p60Hz_4_3
+																	<li>@ref FjDispE_FJ_HDMI_720x576p50Hz_4_3
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p50Hz_16_9
+																	<li>@ref FJ_HDMI_1280x720p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1280x720p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_3840x2160p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_3840x2160p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_DVI_MONITOR</ul>*/
+	UCHAR							out_fmat;				/**< out format<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_OUT_RGB
+																	<li>@ref FjDispE_FJ_HDMI_OUT_YCC422
+																	<li>@ref FjDispE_FJ_HDMI_OUT_YCC444</ul> */
+	UCHAR							scn_mode;				/**< scan mode<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_SCAN_OVER
+																	<li>@ref FjDispE_FJ_HDMI_SCAN_UNDER</ul> */
+	FjHdmiDisplayInterface 		dev_inf;				/**< device interface <br>
+																<ul><li>@ref FjDispB_FJ_HDMI_DISPLAY_INTERFACE_DVI
+																	<li>@ref FjDispB_FJ_HDMI_DISPLAY_INTERFACE_HDMI</ul> */
+	UCHAR							data_block_flags;		/**< CEA Data Block Tag flags (0-7bit) 0:skip 1:parse.<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_AUDIO
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VIDEO
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VENDOR
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_SPEAKER
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VESA
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_EXTENDED</ul>*/
+	UCHAR							short_audio_count;		/**< CEA Data Block - Short Audio Descriptor Count  */
+	FjHdmiEdidDtdsad 			short_audio_desc[10];	/**< CEA Data Block - Short Audio Descriptor */
+	UCHAR							speaker_data_block;		/**< CEA Data Block - Speaker Allocation Data Block (The first byte)*/
+	UCHAR							vesa_dtc_size;			/**< CEA Data Block - VESA DTC Data Block size*/
+	UCHAR							vesa_dtc_dbyte[31];		/**< CEA Data Block - VESA DTC Data Block*/
+	UCHAR							use_extended_size;		/**< CEA Data Block - Use Extended Data Block size(Include Extended Tag Code)*/
+	UCHAR							use_extended_dbyte[31]; /**< CEA Data Block - Use Extended Data Block (Include Extended Tag Code)*/
+}				
+修改后FjHdmiDtdMan
+{
+USHORT							dtdNum;				/**< DTD number						*/
+	ULONG*							dtdAddr;				/**< DTD address. See @ref FjHdmiEdidDtd */
+	USHORT							phyAddr;				/**< IEEE24bit address				*/
+	ULONG							supFmat;				/**< support format<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_1280x720p60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1280x720p50Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080i60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080i50Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_720x480p60Hz_4_3
+																	<li>@ref FjDispE_FJ_HDMI_720x576p50Hz_4_3
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p60Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1920x1080p50Hz_16_9
+																	<li>@ref FJ_HDMI_1280x720p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_1280x720p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_3840x2160p25Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_3840x2160p30Hz_16_9
+																	<li>@ref FjDispE_FJ_HDMI_DVI_MONITOR</ul>*/
+	UCHAR							outFmat;				/**< out format<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_OUT_RGB
+																	<li>@ref FjDispE_FJ_HDMI_OUT_YCC422
+																	<li>@ref FjDispE_FJ_HDMI_OUT_YCC444</ul> */
+	UCHAR							scnMode;				/**< scan mode<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_SCAN_OVER
+																	<li>@ref FjDispE_FJ_HDMI_SCAN_UNDER</ul> */
+	FjHdmiDisplayInterface 		devInf;				/**< device interface <br>
+																<ul><li>@ref FjDispB_FJ_HDMI_DISPLAY_INTERFACE_DVI
+																	<li>@ref FjDispB_FJ_HDMI_DISPLAY_INTERFACE_HDMI</ul> */
+	UCHAR							dataBlockFlags;		/**< CEA Data Block Tag flags (0-7bit) 0:skip 1:parse.<br>
+																<ul><li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_AUDIO
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VIDEO
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VENDOR
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_SPEAKER
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_VESA
+																	<li>@ref FjDispE_FJ_HDMI_EDID_TAG_FLAG_EXTENDED</ul>*/
+	UCHAR							shortAudioCount;		/**< CEA Data Block - Short Audio Descriptor Count  */
+	FjHdmiEdidDtdsad 			shortAudioDesc[10];	/**< CEA Data Block - Short Audio Descriptor */
+	UCHAR							speakerDataBlock;		/**< CEA Data Block - Speaker Allocation Data Block (The first byte)*/
+	UCHAR							vesaDtcSize;			/**< CEA Data Block - VESA DTC Data Block size*/
+	UCHAR							vesaDtcDbyte[31];		/**< CEA Data Block - VESA DTC Data Block*/
+	UCHAR							useExtendedSize;		/**< CEA Data Block - Use Extended Data Block size(Include Extended Tag Code)*/
+	UCHAR							useExtendedDbyte[31]; /**< CEA Data Block - Use Extended Data Block (Include Extended Tag Code)*/
+}
 共用体typedef union
 T_IconColor							TIconColor
 
@@ -2197,10 +2908,134 @@ T_IconColor							TIconColor
 
 共用体typedef union
 FJ_HDMI_SYS_CTRL1					FjHdmiSYysCtrl1
-FJ_HDMI_SYS_STAT					FjHdmiSysStat
-FJ_HDMI_DCTL						FjHdmiDctl
-FJ_HDMI_DE_CTRL					FjHdmiDeCtrl
-FJ_HDMI_IADJUST					FjHdmiIAdjust
+修改前  FJ_HDMI_SYS_STAT	
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	TX_PHY_LOCK	:1;		/**< TX_PHY_LOCK : TX PHY PLL lock indication.<br>
+										 Value 0:PLL is unlocked, 1:PLL is locked.								*/
+		UCHAR	HPD			:1;		/**< HPD : HDMI Hot Plug Detect indication.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR				:2;		/**< Reserve																*/
+		UCHAR	RX_SENSE_0	:1;		/**< RX_SENSE_0 : TX PHY RX_SENSE indication for TMDS channel 0 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	RX_SENSE_1	:1;		/**< RX_SENSE_1 : TX PHY RX_SENSE indication for TMDS channel 1 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	RX_SENSE_2	:1;		/**< RX_SENSE_2 : TX PHY RX_SENSE indication for TMDS channel 2 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	RX_SENSE_3	:1;		/**< RX_SENSE_3 : TX PHY RX_SENSE indication for TMDS channel 3 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		 } bit;							/**< for bit access			*/
+}				
+修改后 FjHdmiSysStat
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	txPhyLock	:1;		/**< txPhyLock : TX PHY PLL lock indication.<br>
+										 Value 0:PLL is unlocked, 1:PLL is locked.								*/
+		UCHAR	HPD			:1;		/**< HPD : HDMI Hot Plug Detect indication.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR				:2;		/**< Reserve																*/
+		UCHAR	rxSense0	:1;		/**< rxSense0 : TX PHY RX_SENSE indication for TMDS channel 0 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	rxSense1	:1;		/**< rxSense1 : TX PHY RX_SENSE indication for TMDS channel 1 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	rxSense2	:1;		/**< rxSense2 : TX PHY RX_SENSE indication for TMDS channel 2 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		UCHAR	rxSense3	:1;		/**< rxSense3 : TX PHY RX_SENSE indication for TMDS channel 3 driver.<br>
+										 Value 0:non active, 1:active.											*/
+		} bit;							/**< for bit access			*/
+}
+修改前 FJ_HDMI_DCTL	
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	HDCP_SEL		:1;		/**< HDCP_SEL: HDCP Select.(Read only bit)<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_HDCP_SEL_UNENCRYPTED
+												 <li>@ref FjDispE_FJ_HDMI_HDCP_SEL_ENCRYPTED</ul>			*/
+		UCHAR	AUD_MUTE		:1;		/**< AUD_MUTE: Audio mute or not.<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_AUD_MUTE_NORMAL
+												 <li>@ref FjDispE_FJ_HDMI_AUD_MUTE_SEND_ZERO</ul>			*/
+		UCHAR	VID_BANK		:1;		/**< VID_BLANK: Video output is blank or not.<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_VID_BLANK_NORMAL
+												 <li>@ref FjDispE_FJ_HDMI_VID_BLANK_BLANKED</ul>			*/
+		UCHAR					:5;		/**< Reserve												*/
+	} bit;							/**< for bit access			*/
+}
+					
+修改后 FjHdmiDctl
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	hdcpSel		:1;		/**< hdcpSel: HDCP Select.(Read only bit)<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_HDCP_SEL_UNENCRYPTED
+												 <li>@ref FjDispE_FJ_HDMI_HDCP_SEL_ENCRYPTED</ul>			*/
+		UCHAR	audMute		:1;		/**< audMute: Audio mute or not.<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_AUD_MUTE_NORMAL
+												 <li>@ref FjDispE_FJ_HDMI_AUD_MUTE_SEND_ZERO</ul>			*/
+		UCHAR	vidBank		:1;		/**< VID_BLANK: Video output is blank or not.<br>
+											 <ul><li>@ref FjDispE_FJ_HDMI_VID_BLANK_NORMAL
+												 <li>@ref FjDispE_FJ_HDMI_VID_BLANK_BLANKED</ul>			*/
+		UCHAR					:5;		/**< Reserve												*/
+	} bit;							/**< for bit access			*/
+}
+修改前FJ_HDMI_DE_CTRL		
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR					:4;		/**< Reserve												*/
+		UCHAR	HS_POL			:1;		/**< HS_POL: HSYNC polarity.<br>
+											 Value 0:Positive polarity, 1:Negative polarity			*/
+		UCHAR	VS_POL			:1;		/**< VS_POL: VSYNC polatity.<br>
+											 Value 0:Positive polarity, 1:Negative polarity			*/
+		UCHAR	DE_GEN			:1;		/**< DE_GEN: Generate DE signal.<br>
+											 Value 0:Disabled, 1:Enabled							*/
+		UCHAR					:1;		/**< Reserve												*/
+	} bit;							/**< for bit access			*/
+}			
+修改后FjHdmiDeCtrl
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR					:4;		/**< Reserve												*/
+		UCHAR	hsPol			:1;		/**< hsPol: HSYNC polarity.<br>
+											 Value 0:Positive polarity, 1:Negative polarity			*/
+		UCHAR	vsPol			:1;		/**< vsPol: VSYNC polatity.<br>
+											 Value 0:Positive polarity, 1:Negative polarity			*/
+		UCHAR	deGen			:1;		/**< deGen: Generate DE signal.<br>
+											 Value 0:Disabled, 1:Enabled							*/
+		UCHAR					:1;		/**< Reserve												*/
+	} bit;							/**< for bit access			*/
+}
+修改前 FJ_HDMI_IADJUST
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	F2VOFST			:1;		/**< F2VOFST: Select the VBIT_TO_VSYNC decremented/incremented.<br>
+											 Value 0:VBIT_TO_VSYNC is decremented by one during field 2<br>
+											 Value 1:VBIT_TO_VSYNC is incremented by one during field 2<br>		*/
+		UCHAR	F2VADJ			:1;		/**< F2VADJ: VBIT_TO_VSYNC value adjust.<br>
+											 Value 0:default<br>
+											 Value 1:VBIT_TO_VSYNC value is adjusted during field 2.<br>		*/
+		UCHAR	DE_ADJ			:1;		/**< DE_ADJ: Enable VSYNC.<br>
+											 Value 0:Enable VSYNC, 1:Disable VSYNC<br>							*/
+		UCHAR					:5;		/**< Reserve															*/
+}					
+修改后 FjHdmiIAdjust
+{
+UCHAR		byte;				/**< for byte access			*/
+	struct {
+		UCHAR	F2VOFST			:1;		/**< F2VOFST: Select the VBIT_TO_VSYNC decremented/incremented.<br>
+											 Value 0:VBIT_TO_VSYNC is decremented by one during field 2<br>
+											 Value 1:VBIT_TO_VSYNC is incremented by one during field 2<br>		*/
+		UCHAR	F2VADJ			:1;		/**< F2VADJ: VBIT_TO_VSYNC value adjust.<br>
+											 Value 0:default<br>
+											 Value 1:VBIT_TO_VSYNC value is adjusted during field 2.<br>		*/
+		UCHAR	deAdj			:1;		/**< deAdj: Enable VSYNC.<br>
+											 Value 0:Enable VSYNC, 1:Disable VSYNC<br>							*/
+		UCHAR					:5;		/**< Reserve															*/
+	} bit;							/**< for bit access			*/
+}
 FJ_HDMI_VID_CTRL					FjHdmiVidCtrl
 FJ_HDMI_VID_ACEN					FjHdmiVidAcen
 FJ_HDMI_VID_MODE					FjHdmiVidMode
@@ -2244,41 +3079,779 @@ FJ_HDMI_FC_AUDICONF3				FjHdmiFcAudiconf3
 
 结构体typedef struct
 
-FJ_HDMI_PLL_CONFIG					FjHdmiPllConfig
+修改前 FJ_HDMI_PLL_CONFIG	
+{
+FjHdmivpPrCd				vpPrCd;					/**< Video Packetizer Pixel Repetition and Color Depth Register.	*/
+	UCHAR							phy_reg_num;				/**< PHY Register Number.											*/
+	UCHAR							phy_i2cm_address[8];		/**< PHY I2C Address Configuration Register.<br>
+																	 Value range : 0x00~0xFF.										*/
+	USHORT							phy_i2cm_datao[8];			/**< PHY I2C Data Write Register.<br>
+																	 Value range : 0x00~0xFF.										*/
+
+}				
+修改后  FjHdmiPllConfig
+{
+FjHdmivpPrCd				vpPrCd;					/**< Video Packetizer Pixel Repetition and Color Depth Register.	*/
+	UCHAR							phyRegNum;				/**< PHY Register Number.											*/
+	UCHAR							phyI2cmAddress[8];		/**< PHY I2C Address Configuration Register.<br>
+																	 Value range : 0x00~0xFF.										*/
+	USHORT							phyI2cmDatao[8];			/**< PHY I2C Data Write Register.<br>
+																	 Value range : 0x00~0xFF.										*/
+}
 
       
 由fj_disp.h拆分出的fjdispd.h文件
 
 结构体
 typedef struct
-FJ_HDMI_INFO_FRAMES				FjHdmiCtrlCommon
- FJ_HDMI_CTRL_VIDEO				FjHdmiCtrlVideo
-FJ_HDMI_CTRL_AUDIO				FjHdmiCtrlAudio
-FJ_HDMI_CTRL_AUDIO_I2S				FjHdmiCtrlAudioi2s
-T_CAL_DATA						TCalAta
-T_CLIP_DATA						TCliDate
-T_CLIP_CAL_DATA					TClipCalData
-T_MATRIX_DATA					TMatrixData
-T_POS							TPos
-T_Rect							TRect
-T_Y_CONV						TYConv
-T_TC_DATA						TTcData
-T_TONE_CORRECTION_TBL				TToneCorrectionTbl
-T_ORDER_LAYER					TOrderLayer
-T_HDMI_SET						THdmiSet
-T_GRID_SET						TGridSet
-T_GRID_NUM_SET					TGridNumSet
-T_INVERSE_GAMMA_TBL				TInverseGammaTbl
-T_GAMMA_TBL					TGammaTbl
-T_TBL_ACCESS_SET					TTblAccessSet
+修改前 FJ_HDMI_INFO_FRAMES				
+{
+FjHdmiFcAviconfo				fc_aviconf0;				/**< Frame Composer AVI Packet Configuration Register 0.						*/
+	FjHdmiFcAviconf1				fc_aviconf1;				/**< Frame Composer AVI Packet Configuration Register 1.						*/
+	FjHdmiFcAviconf2				fc_aviconf2;				/**< Frame Composer AVI Packet Configuration Register 2.						*/
+	FjHdmiFcAviconf3				fc_aviconf3;				/**< Frame Composer AVI Packet Configuration Register 3.						*/
+	UCHAR							fc_avivid;					/**< Frame Composer AVI Packet VIC Register.<br>
+																	 Value range : 0~255.														*/
+	FjHdmiFcPrconf				fc_prconf;					/**< Frame Composer Pixel Repetition Configuration Register.					*/
+	FjHdmiFcAudiconf0			fc_audiconf0;				/**< Frame Composer AUD Packet Configuration Register 0.						*/
+	FjHdmiFcAudiconf1			fc_audiconf1;				/**< Frame Composer AUD Packet Configuration Register 1.						*/
+	UCHAR							fc_audiconf2;				/**< Frame Composer AUD Packet Configuration Register 2.<br>
+																	 Value range : 0~255.														*/
+	FjHdmiFcAudiconf3			fc_audiconf3;				/**< Frame Composer AUD Packet Configuration Register 3.						*/
+	UCHAR							fc_vsdieeeid[3];			/**< Frame Composer VSI Packet Data IEEE Register.<br>
+																	 index=0 -> fc_vsdieeeid0 ~ index=2 -> fc_vsdieeeid2.<br>
+																	 Value range : 0~255.														*/
+	UCHAR							video_mode;					/**< Video Mode.<br>
+																	 Value:<br>
+																		0x20:HDMI Video Mode.</ul>
+																		0x40:3D Video Mode.														*/
+	UCHAR							videoFormat;				/**< Video Format.<br>
+																	 If Video Mode=HDMI, this is HDMI Video Format.<br>
+																	 - Value range : 0~255.<br>
+																	 If Video Mode=3D, this is Format of 3D Video data and 3D_Meta_present.<br>
+																	 - bit[7:4]: Format of 3D Video data.<br>
+																	 - bit[3]: 3D_Meta_present.													*/
+	UCHAR							meta_present;				/**< 3D_Meta_present.<br>
+																	 Value range : 0~1.															*/
+	UCHAR							additional_video_format;	/**< 3D_EXT_DATA  EAdditional Video Format.<br>
+																	 Value range : 0~15.														*/
+	UCHAR							meta_type;					/**< 3D_Metadata_Type.<br>
+																	 Value range : 0~7.															*/
+	UCHAR							meta_length;				/**< 3D_Metadata_Length.<br>
+																	 Value range : 0~31.														*/
+	UCHAR							meta_data[8];				/**< 3D_Metadata.<br>
+																	 Value range : 0~255.														*/
+	UCHAR							scrambler_on;				/**< the HDMI 2.0 scrambler feature.											*/
+}
+修改后 FjHdmiInfoFrames
+{
+FjHdmiFcAviconfo				fcAviconf0;				/**< Frame Composer AVI Packet Configuration Register 0.						*/
+	FjHdmiFcAviconf1				fcAviconf1;				/**< Frame Composer AVI Packet Configuration Register 1.						*/
+	FjHdmiFcAviconf2				fcAviconf2;				/**< Frame Composer AVI Packet Configuration Register 2.						*/
+	FjHdmiFcAviconf3				fcAviconf3;				/**< Frame Composer AVI Packet Configuration Register 3.						*/
+	UCHAR							fcAvivid;					/**< Frame Composer AVI Packet VIC Register.<br>
+																	 Value range : 0~255.														*/
+	FjHdmiFcPrconf				fcPrconf;					/**< Frame Composer Pixel Repetition Configuration Register.					*/
+	FjHdmiFcAudiconf0			fcAudiconf0;				/**< Frame Composer AUD Packet Configuration Register 0.						*/
+	FjHdmiFcAudiconf1			fcAudiconf1;				/**< Frame Composer AUD Packet Configuration Register 1.						*/
+	UCHAR							fcAudiconf2;				/**< Frame Composer AUD Packet Configuration Register 2.<br>
+																	 Value range : 0~255.														*/
+	FjHdmiFcAudiconf3			fcAudiconf3;				/**< Frame Composer AUD Packet Configuration Register 3.						*/
+	UCHAR							fcVsdieeeid[3];			/**< Frame Composer VSI Packet Data IEEE Register.<br>
+																	 index=0 -> fc_vsdieeeid0 ~ index=2 -> fc_vsdieeeid2.<br>
+																	 Value range : 0~255.														*/
+	UCHAR							videoMode;					/**< Video Mode.<br>
+																	 Value:<br>
+																		0x20:HDMI Video Mode.</ul>
+																		0x40:3D Video Mode.														*/
+	UCHAR							videoFormat;				/**< Video Format.<br>
+																	 If Video Mode=HDMI, this is HDMI Video Format.<br>
+																	 - Value range : 0~255.<br>
+																	 If Video Mode=3D, this is Format of 3D Video data and 3D_Meta_present.<br>
+																	 - bit[7:4]: Format of 3D Video data.<br>
+																	 - bit[3]: 3D_Meta_present.													*/
+	UCHAR							metaPresent;				/**< 3D_Meta_present.<br>
+																	 Value range : 0~1.															*/
+	UCHAR							additionalVideoFormat;	/**< 3D_EXT_DATA  EAdditional Video Format.<br>
+																	 Value range : 0~15.														*/
+	UCHAR							metaType;					/**< 3D_Metadata_Type.<br>
+																	 Value range : 0~7.															*/
+	UCHAR							metaLength;				/**< 3D_Metadata_Length.<br>
+																	 Value range : 0~31.														*/
+	UCHAR							metaData[8];				/**< 3D_Metadata.<br>
+																	 Value range : 0~255.														*/
+	UCHAR							scramblerOn;				/**< the HDMI 2.0 scrambler feature.											*/
+}
+修改前 FJ_HDMI_CTRL_COMMON
+{
+FjHdmiVideoMapping			video_input_mapping;		/**< Video Input mapping. See @ref FjHdmiVideoMapping.				*/
+	UCHAR							hdcp_keepout;				/**< Start/stop HDCP keepout window generation.
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							vsync_in_polarity;			/**< Vsync input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							hsync_in_polarity;			/**< Hsync input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							de_in_polarity;				/**< Data enable input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							DVI_modez;					/**< DVI mode selected.<br>
+																	 Value : 0=DVI mode, 1=HDMI mode.									*/
+	UCHAR							r_v_blank_in_osc;			/**< Used for CEA861-D modes.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							in_i_p;						/**< Input video mode.<br>
+																	 Value : 0=Progressive, 1=Interlace.								*/
+	USHORT							h_in_activ;					/**< Input video Horizontal active pixel region width.<br>
+																	 Value range :0~16383.												*/
+	USHORT							v_in_activ;					/**< Input video Vertical active pixel region width.<br>
+																	 Value range :0~8191.												*/
+	USHORT							fc_invact_2d;				/**< 2D Input video vertical active pixel region width.<br>
+																	 Value range :0~4095.												*/
+	FjHdmifcActspcHdlrcfg		fc_actspc_hdFjHdmifcActspcHdlrcfglr_cfg;			/**< Frame Composer Active Space Control.								*/
+	USHORT							fc_inhblank;				/**< Frame Composer Input Video HBlank Pixels Register 0/1.<br>
+																	 Value range : 0~8191.												*/
+	UCHAR							fc_invblank;				/**< Frame Composer Input Video VBlank Pixels Register.<br>
+																	 Value range : 0~255.												*/
+	USHORT							fc_hsyncindelay;			/**< Frame Composer Input Video HSync Front Porch Register 0/1.<br>
+																	 Value range : 0~8191.												*/
+	USHORT							fc_hsyncinwidth;			/**< Frame Composer Input Video HSync width Register 0/1.<br>
+																	 Value range : 0~1023.												*/
+	UCHAR							fc_vsyncindelay;			/**< Frame Composer Input Video VSync Front Porch Register.<br>
+																	 Value range : 0~255.												*/
+	UCHAR							fc_vsyncinwidth;			/**< Frame Composer Input Video VSync width Register.<br>
+																	 Value range : 0~63.												*/
+	FjHdmiPllConfig				pll_config;					/**< PLL configuration data.											*/
+	FjHdmiAudioConfig			audio_config;				/**< Audio configuration data.											*/
+	FjHdmiInfoFrames				info_frames;				/**< Infoframes configuration data.										*/
+}
+修改后FjHdmiCtrlCommon
+{
+	FjHdmiVideoMapping			videoInputMapping;		/**< Video Input mapping. See @ref FjHdmiVideoMapping.				*/
+	UCHAR							hdcpKeepout;				/**< Start/stop HDCP keepout window generation.
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							vsyncInPolarity;			/**< Vsync input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							hsyncInPolarity;			/**< Hsync input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							deInPolarity;				/**< Data enable input polarity.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							dviModez;					/**< DVI mode selected.<br>
+																	 Value : 0=DVI mode, 1=HDMI mode.									*/
+	UCHAR							rVBlankInOsc;			/**< Used for CEA861-D modes.<br>
+																	 Value : 0=Active Low, 1=Active High.								*/
+	UCHAR							inIP;						/**< Input video mode.<br>
+																	 Value : 0=Progressive, 1=Interlace.								*/
+	USHORT							hInActiv;					/**< Input video Horizontal active pixel region width.<br>
+																	 Value range :0~16383.												*/
+	USHORT							vInActiv;					/**< Input video Vertical active pixel region width.<br>
+																	 Value range :0~8191.												*/
+	USHORT							fcInvact2d;				/**< 2D Input video vertical active pixel region width.<br>
+																	 Value range :0~4095.												*/
+	FjHdmifcActspcHdlrcfg		fcActspcHdFjHdmifcActspcHdlrcfglrCfg;			/**< Frame Composer Active Space Control.								*/
+	USHORT							fcInhblank;				/**< Frame Composer Input Video HBlank Pixels Register 0/1.<br>
+																	 Value range : 0~8191.												*/
+	UCHAR							fcInvblank;				/**< Frame Composer Input Video VBlank Pixels Register.<br>
+																	 Value range : 0~255.												*/
+	USHORT							fcHsyncindelay;			/**< Frame Composer Input Video HSync Front Porch Register 0/1.<br>
+																	 Value range : 0~8191.												*/
+	USHORT							fcHsyncinwidth;			/**< Frame Composer Input Video HSync width Register 0/1.<br>
+																	 Value range : 0~1023.												*/
+	UCHAR							fcVsyncindelay;			/**< Frame Composer Input Video VSync Front Porch Register.<br>
+																	 Value range : 0~255.												*/
+	UCHAR							fcVsyncinwidth;			/**< Frame Composer Input Video VSync width Register.<br>
+																	 Value range : 0~63.												*/
+	FjHdmiPllConfig				pllConfig;					/**< PLL configuration data.											*/
+	FjHdmiAudioConfig			audioConfig;				/**< Audio configuration data.											*/
+	FjHdmiInfoFrames				infoFrames;				/**< Infoframes configuration data.										*/
+}
+ 修改前 FJ_HDMI_CTRL_VIDEO	
+ {
+ // Data input control register area.
+	FjHdmiTxInvid0				tx_invid0;				/**< Video Sampler register. */
+	FjHdmivpPrCd				vp_pr_cd;				/**< Video Packetizer Pixel Repetition and Color Depth Register.			*/
+	FjHdmiVpRemap				vp_remap;				/**< Video Packetizer YCC422 Remapping Register.<br>
+																 See @ref FjHdmiVpRemap.												*/
+	FjHdmiVpConf					vp_conf;				/**< vp_conf: Video Packetizer Output, Bypass and Enable Configuration Register.	*/
+	FjHdmiFcInvidconf			fc_invidconf;			/**< fc_invidconf: Frame Composer Input Video Configuration.						*/
+	USHORT							fc_inhactiv;			/**< fc_inhactiv: Frame Composer Input Video HActive Pixels Register 0/1.<br>
+																 Value range : 0~16838.															*/
+	USHORT							fcInhblank;			/**< fcInhblank: Frame Composer Input Video HBlank Pixels Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	USHORT							fc_invactiv;			/**< fc_invactiv: Frame Composer Input Video VActive Pixels Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	UCHAR							fcInvblank;			/**< fcInvblank: Frame Composer Input Video VBlank Pixels Register.<br>
+																 Value range : 0~255.															*/
+	USHORT							fcHsyncindelay;		/**< fcHsyncindelay: Frame Composer Input Video HSync Front Porch Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	USHORT							fcHsyncinwidth;		/**< fcHsyncinwidth: Frame Composer Input Video HSync width Register 0/1.<br>
+																 Value range : 0~1023.															*/
+	UCHAR							fcVsyncindelay;		/**< fcVsyncindelay: Frame Composer Input Video VSync Front Porch Register.<br>
+																 Value range : 0~255.															*/
+	UCHAR							fcVsyncinwidth;		/**< fcVsyncinwidth: Frame Composer Input Video VSync width Register.<br>
+																 Value range : 0~63.															*/
+	FjHdmiFcAviconfo				fcAviconf0;			/**< fcAviconf0: Frame Composer AVI Packet Configuration Register 0.				*/
+	FjHdmiFcAviconf1				fcAviconf1;			/**< fcAviconf1: Frame Composer AVI Packet Configuration Register 1.				*/
+	FjHdmiFcAviconf2				fcAviconf2;			/**< fcAviconf2: Frame Composer AVI Packet Configuration Register 2.				*/
+	FjHdmiFcAviconf3				fcAviconf3;			/**< fcAviconf3: Frame Composer AVI Packet Configuration Register 3.				*/
+	UCHAR							fcAvivid;				/**< fcAvivid: Frame Composer AVI Packet VIC Register.<br>
+																 Value range : 0~255.	
+ }			
+ 修改后 FjHdmiCtrlVideo
+ {
+ // Data input control register area.
+	FjHdmiTxInvid0				txInvid0;				/**< Video Sampler register. */
+	FjHdmivpPrCd				vpPrCd;				/**< Video Packetizer Pixel Repetition and Color Depth Register.			*/
+	FjHdmiVpRemap				vpRemap;				/**< Video Packetizer YCC422 Remapping Register.<br>
+																 See @ref FjHdmiVpRemap.												*/
+	FjHdmiVpConf					vpConf;				/**< vpConf: Video Packetizer Output, Bypass and Enable Configuration Register.	*/
+	FjHdmiFcInvidconf			fcInvidconf;			/**< fcInvidconf: Frame Composer Input Video Configuration.						*/
+	USHORT							fcInhactiv;			/**< fcInhactiv: Frame Composer Input Video HActive Pixels Register 0/1.<br>
+																 Value range : 0~16838.															*/
+	USHORT							fcInhblank;			/**< fcInhblank: Frame Composer Input Video HBlank Pixels Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	USHORT							fcInvactiv;			/**< fcInvactiv: Frame Composer Input Video VActive Pixels Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	UCHAR							fcInvblank;			/**< fcInvblank: Frame Composer Input Video VBlank Pixels Register.<br>
+																 Value range : 0~255.															*/
+	USHORT							fcHsyncindelay;		/**< fcHsyncindelay: Frame Composer Input Video HSync Front Porch Register 0/1.<br>
+																 Value range : 0~8191.															*/
+	USHORT							fcHsyncinwidth;		/**< fcHsyncinwidth: Frame Composer Input Video HSync width Register 0/1.<br>
+																 Value range : 0~1023.															*/
+	UCHAR							fcVsyncindelay;		/**< fcVsyncindelay: Frame Composer Input Video VSync Front Porch Register.<br>
+																 Value range : 0~255.															*/
+	UCHAR							fcVsyncinwidth;		/**< fcVsyncinwidth: Frame Composer Input Video VSync width Register.<br>
+																 Value range : 0~63.															*/
+	FjHdmiFcAviconfo				fcAviconf0;			/**< fcAviconf0: Frame Composer AVI Packet Configuration Register 0.				*/
+	FjHdmiFcAviconf1				fcAviconf1;			/**< fcAviconf1: Frame Composer AVI Packet Configuration Register 1.				*/
+	FjHdmiFcAviconf2				fcAviconf2;			/**< fcAviconf2: Frame Composer AVI Packet Configuration Register 2.				*/
+	FjHdmiFcAviconf3				fcAviconf3;			/**< fcAviconf3: Frame Composer AVI Packet Configuration Register 3.				*/
+	UCHAR							fcAvivid;				/**< fcAvivid: Frame Composer AVI Packet VIC Register.<br>
+																 Value range : 0~255.															*/
+	FjHdmiFcPrconf				fcPrconf;				/**< fcPrconf: Frame Composer Pixel Repetition Configuration Register.				*/
+	UCHAR							mcFlowctrl;			/**< Main Controller Feed Through Control Register.<br>
+																 Value 0:CSC is bypassed, 1:CSC is in the video data path.						*/
+ }
+修改前 FJ_HDMI_CTRL_AUDIO	
+{
+// Data input control register area.
+	FjHdmiAudConf0				aud_conf0;				/**< Audio I2S Control Register 0.											*/
+	FjHdmiAudConf1				aud_conf1;				/**< Audio I2S Control Register 1.											*/
+	FjHdmiAudConf2				aud_conf2;				/**< Audio I2S Control Register 2.											*/
+	FjHdmiAudSpdif1				aud_spdif1;				/**< Audio SPDIF Control Register 1.										*/
+	UCHAR							aud_inputclkfs;			/**< Audio Input Clock FS Factor Register.<br>
+																 Value:<br>
+																	 0:128xFs.<br>
+																	 1:256xFs.<br>
+																	 2:512xFs.<br>
+																	 3:invalid.<br>
+																	 4:64xFs.<br>
+																	 If the value is 5-7, same as 128xFs(= 0).							*/
+	FjHdmiFcAudiconf1			fcAudiconf1;			/**< Frame Composer AUD Packet Configuration Register 1. 					*/
+	FjHdmiFcAudsconf				fc_audsconf;			/**< Frame Composer Audio Sample Flat and Layout Configuration Register.	*/
+}			
+修改后 FjHdmiCtrlAudio
+{
+// Data input control register area.
+	FjHdmiAudConf0				audConf0;				/**< Audio I2S Control Register 0.											*/
+	FjHdmiAudConf1				audConf1;				/**< Audio I2S Control Register 1.											*/
+	FjHdmiAudConf2				audConf2;				/**< Audio I2S Control Register 2.											*/
+	FjHdmiAudSpdif1				audSpdif1;				/**< Audio SPDIF Control Register 1.										*/
+	UCHAR							audInputclkfs;			/**< Audio Input Clock FS Factor Register.<br>
+																 Value:<br>
+																	 0:128xFs.<br>
+																	 1:256xFs.<br>
+																	 2:512xFs.<br>
+																	 3:invalid.<br>
+																	 4:64xFs.<br>
+																	 If the value is 5-7, same as 128xFs(= 0).							*/
+	FjHdmiFcAudiconf1			fcAudiconf1;			/**< Frame Composer AUD Packet Configuration Register 1. 					*/
+	FjHdmiFcAudsconf				fcAudsconf;			/**< Frame Composer Audio Sample Flat and Layout Configuration Register.	*/
+}
+修改前 FJ_HDMI_CTRL_AUDIO_I2S	
+{
+// Data input control register area.
+	FjHdmiaudioI2sinMap		i2s_in_map;			/**< I2S_IN_MAP: Audio In I2S Data In Map Register.<br>					*/
+	FjHdmiaudioI2sControl		i2s_control;		/**< I2S_CONTROL: Audio In I2S Control setting register.<br>			*/
+	UCHAR							i2s_chst1;			/**< I2S_CHST1: Audio In I2S Channel Status setting register.<br>		*/
+	UCHAR							i2s_chst2;			/**< I2S_CHST2: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst3			i2s_chst3;			/**< I2S_CHST3: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst4			i2s_chst4;			/**< I2S_CHST4: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst5			i2s_chst5;			/**< I2S_CHST5: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sInlen		i2s_in_len;			/**< I2S_IN_LEN: Audio In I2S Input Length setting register.<br>		*/
+	FjHdmiI2sSwapI2s		i2s_swap_i2s;		/**<*Audio In I2S Channel Swap Register */
+
+}			
+修改后 FjHdmiCtrlAudioi2s
+{
+// Data input control register area.
+	FjHdmiaudioI2sinMap		i2sInMap;			/**< I2S_IN_MAP: Audio In I2S Data In Map Register.<br>					*/
+	FjHdmiaudioI2sControl		i2sControl;		/**< I2S_CONTROL: Audio In I2S Control setting register.<br>			*/
+	UCHAR							i2sChst1;			/**< I2S_CHST1: Audio In I2S Channel Status setting register.<br>		*/
+	UCHAR							i2sChst2;			/**< I2S_CHST2: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst3			i2sChst3;			/**< I2S_CHST3: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst4			i2sChst4;			/**< I2S_CHST4: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sChst5			i2sChst5;			/**< I2S_CHST5: Audio In I2S Channel Status setting register.<br>		*/
+	FjHdmiaudioI2sInlen		i2sInLen;			/**< I2S_IN_LEN: Audio In I2S Input Length setting register.<br>		*/
+	FjHdmiI2sSwapI2s		i2sSwapI2s;		/**<*Audio In I2S Channel Swap Register */
+}
+
+
+ T_CAL_DATA				TCalAta
+
+T_CLIP_DATA	
+{
+USHORT	clip_h;					/**< Clip's H.<br>
+										 Value range:0x0000~0xFFFF<br>
+										 0xFFFF is set up when clip processing is not performed.	*/
+	USHORT	clip_l;					/**< Clip's L.<br>
+										 Value range:0x0000~0xFFFF<br>
+										 0x0000 is set up when clip processing is not performed.	*/
+}					
+修改后 TCliDate
+{
+	USHORT	clipH;					/**< Clip's H.<br>
+										 Value range:0x0000~0xFFFF<br>
+										 0xFFFF is set up when clip processing is not performed.	*/
+	USHORT	clipL;					/**< Clip's L.<br>
+										 Value range:0x0000~0xFFFF<br>
+										 0x0000 is set up when clip processing is not performed.	*/
+}
+修改前 T_CLIP_CAL_DATA
+{
+TCalAta		y_cal;		/**< Gain and offset setting of Y data		*/
+	TCliDate		y_clip;		/**< Clip setting of Y data					*/
+	TCalAta		cb_cal;		/**< Gain and offset setting of Cb data		*/
+	TCliDate		cb_clip;	/**< Clip setting of Cb data				*/
+	TCalAta		cr_cal;		/**< Gain and offset setting of Cr data		*/
+	TCliDate		cr_clip;	/**< Clip setting of Cr data				*/
+}					
+修改后 TClipCalData
+{
+TCalAta		yCal;		/**< Gain and offset setting of Y data		*/
+	TCliDate		yClip;		/**< Clip setting of Y data					*/
+	TCalAta		cbCal;		/**< Gain and offset setting of Cb data		*/
+	TCliDate		cbClip;	/**< Clip setting of Cb data				*/
+	TCalAta		crCal;		/**< Gain and offset setting of Cr data		*/
+	TCliDate		crClip;	/**< Clip setting of Cr data				*/
+}
+修改前 T_MATRIX_DATA		
+{
+/**
+	@remarks
+	The order cannot be changed
+	*/
+	BYTE Coefficient00;	/**< Matrix coefficient 00<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient01;	/**< Matrix coefficient 01<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient02;	/**< Matrix coefficient 02<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient10;	/**< Matrix coefficient 10<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient11;	/**< Matrix coefficient 11<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient12;	/**< Matrix coefficient 12<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient20;	/**< Matrix coefficient 20<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient21;	/**< Matrix coefficient 21<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE Coefficient22;	/**< Matrix coefficient 22<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+}			
+修改后 TMatrixData
+{
+	/**
+	@remarks
+	The order cannot be changed
+	*/
+	BYTE coefficient00;	/**< Matrix coefficient 00<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient01;	/**< Matrix coefficient 01<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient02;	/**< Matrix coefficient 02<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient10;	/**< Matrix coefficient 10<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient11;	/**< Matrix coefficient 11<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient12;	/**< Matrix coefficient 12<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient20;	/**< Matrix coefficient 20<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient21;	/**< Matrix coefficient 21<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+	BYTE coefficient22;	/**< Matrix coefficient 22<br>
+							 Value range:0~255(-2.0~-0.008)<br>	*/
+}
+修改前 T_POS		
+{
+SHORT StartX;	/**< Coordinate of X	*/
+	SHORT StartY;	/**< Coordinate of Y	*/
+}					
+修改后 TPos
+{
+SHORT startX;	/**< Coordinate of X	*/
+	SHORT startY;	/**< Coordinate of Y	*/
+}
+修改前 T_Rect		
+{
+TPos Postion;	/**< Rectangle's coordinate	*/
+	SHORT Width;	/**< Rectangle's Width		*/
+	SHORT Height;	/**< Rectangle's Height		*/
+}					
+修改后 TRect
+{
+TPos postion;	/**< Rectangle's coordinate	*/
+	SHORT width;	/**< Rectangle's width		*/
+	SHORT height;	/**< Rectangle's height		*/
+}
+修改前 T_Y_CONV			
+{
+USHORT y_conv0;	/**< Y convert coefficient0(0~255)	*/
+	USHORT y_conv1;	/**< Y convert coefficient1(0~255)	*/
+	USHORT y_conv2;	/**< Y convert coefficient2(0~255)	*/
+}			
+修改后 TYConv
+{
+USHORT yConv0;	/**< Y convert coefficient0(0~255)	*/
+	USHORT yConv1;	/**< Y convert coefficient1(0~255)	*/
+	USHORT yConv2;	/**< Y convert coefficient2(0~255)	*/
+}
+修改前 T_TC_DATA		
+{
+ETcResolution tc_res;		/**< Compare resolution	*/
+	BYTE            tc_tbl;		/**< Table selection	*/
+	BOOL            tc_blend;	/**< Table blend enable	*/
+	SHORT           tc_ratio;	/**< Table blend ratio	*/
+}				
+修改后 TTcData
+{
+ETcResolution tcRes;		/**< Compare resolution	*/
+	BYTE            tcTbl;		/**< Table selection	*/
+	BOOL            tcBlend;	/**< Table blend enable	*/
+	SHORT           tcRatio;	/**< Table blend ratio	*/
+}
+
+
+ T_TONE_CORRECTION_TBL			TToneCorrectionTbl
+
+修改前 T_ORDER_LAYER	
+{
+layer_id
+}
+				
+修改后TOrderLayer
+{
+layerId
+}
+
+修改前 T_HDMI_SET	
+{
+EHdResolutiion		HD_resolution;					/**< Resolution of HDMI connected was.
+															@ref EHdResolutiion					*/
+	USHORT	polarity_scan;								/**< 1) Synchronization polarity <br>
+													         2) Interlace or not.
+													        See @ref EHdmiFlagBitMap				*/
+	USHORT H_ActiveSize;	/**< HDMI horizonal size									*/
+	USHORT V_ActiveSize;	/**< HDMI vertical size										*/
+	USHORT H_BlankSize;		/**< HDMI horizonal blank size								*/
+	USHORT V_BlankSize;		/**< HDMI vertical blank size								*/
+	USHORT H_OffsetSize;	/**< HDMI horizonal offset size								*/
+	USHORT V_OffsetSize;	/**< HDMI vertical offset size								*/
+	USHORT H_PulseSize;		/**< HDMI horizonal pulse size								*/
+	USHORT V_PulseSize;		/**< HDMI vertical pulse size								*/
+	TRect osd_size[2];		/**<OSDx's coodinate and size.<br>
+							osd_size[0] is GR0's data and osd_size[1] is GR1's data.*/
+}					
+修改后 THdmiSet
+{
+EHdResolutiion		hdResolution;					/**< Resolution of HDMI connected was.
+															@ref EHdResolutiion					*/
+	USHORT	polarityScan;								/**< 1) Synchronization polarity <br>
+													         2) Interlace or not.
+													        See @ref EHdmiFlagBitMap				*/
+	USHORT hActiveSize;	/**< HDMI horizonal size									*/
+	USHORT vActiveSize;	/**< HDMI vertical size										*/
+	USHORT hBlankSize;		/**< HDMI horizonal blank size								*/
+	USHORT vBlankSize;		/**< HDMI vertical blank size								*/
+	USHORT hOffsetSize;	/**< HDMI horizonal offset size								*/
+	USHORT vOffsetSize;	/**< HDMI vertical offset size								*/
+	USHORT hPulseSize;		/**< HDMI horizonal pulse size								*/
+	USHORT vPulseSize;		/**< HDMI vertical pulse size								*/
+	TRect osdSize[2];		/**<OSDx's coodinate and size.<br>
+							osdSize[0] is GR0's data and osdSize[1] is GR1's data.*/
+}
+修改前 T_GRID_SET	
+{
+TRect   v_pos;			/**< The start of the vertical coordinate and size.
+								 postion : vertical grid line start postion(X,Y).
+								 width   : vertical grid line thickness.
+								 height  : vertical grid line size.							*/
+	TRect   h_pos;			/**< The start of the horizontal coordinate and size.
+								 postion : horizontal grid line start postion(X,Y).
+								 width   : horizontal grid line size.
+								 height  : horizontal grid line thickness.					*/
+	USHORT   v_interval;	/**< Interval of the vertical line.								*/
+	USHORT   h_interval;	/**< Interval of the horizontal line.							*/
+	USHORT   v_numLine;		/**< The number of vertical lines.[1-8]							*/
+	USHORT   h_numLine;		/**< The number of horizontal lines.[1-8]						*/
+	USHORT   ivSize;		/**< Screen vertical size used as the standard of
+										"Grid Information".									*/
+	USHORT   ihSize;		/**< Screen horizonal size used as the standard of
+										"Grid Information".									*/
+	TIconColor  rgba;		/**< Line color.
+								 a(Alpha) : 0 :  25%
+											1 :  50%
+											2 :  75%
+											3 : 100% 										*/
+}
+					
+修改后 TGridSet
+
+{
+TRect   vPos;			/**< The start of the vertical coordinate and size.
+								 postion : vertical grid line start postion(X,Y).
+								 width   : vertical grid line thickness.
+								 height  : vertical grid line size.							*/
+	TRect   hPos;			/**< The start of the horizontal coordinate and size.
+								 postion : horizontal grid line start postion(X,Y).
+								 width   : horizontal grid line size.
+								 height  : horizontal grid line thickness.					*/
+	USHORT   vInterval;	/**< Interval of the vertical line.								*/
+	USHORT   hInterval;	/**< Interval of the horizontal line.							*/
+	USHORT   vNumLine;		/**< The number of vertical lines.[1-8]							*/
+	USHORT   hNumLine;		/**< The number of horizontal lines.[1-8]						*/
+	USHORT   ivSize;		/**< Screen vertical size used as the standard of
+										"Grid Information".									*/
+	USHORT   ihSize;		/**< Screen horizonal size used as the standard of
+										"Grid Information".									*/
+	TIconColor  rgba;		/**< Line color.
+								 a(Alpha) : 0 :  25%
+											1 :  50%
+											2 :  75%
+											3 : 100% 										*/
+}
+
+修改前 T_GRID_NUM_SET		
+{
+USHORT   v_numLine;			/**< The number of vertical lines.[1-8]				*/
+	USHORT   h_numLine;			/**< The number of horizontal lines.[1-8]			*/
+	USHORT   ivSize;			/**< Screen vertical size used as the standard of
+										"Grid Information".							*/
+	USHORT   ihSize;			/**< Screen horizonal size used as the standard of
+										"Grid Information".							*/
+	UGridLineWidth width;	/**< Grid line width informatin.					*/
+	TIconColor  rgba;		/**< Line color.
+								a(Alpha) : 0 :  25%
+										   1 :  50%
+										   2 :  75%
+										   3 : 100% 				
+}			
+修改后 TGridNumSet
+{
+USHORT   vNumLine;			/**< The number of vertical lines.[1-8]				*/
+	USHORT   hNumLine;			/**< The number of horizontal lines.[1-8]			*/
+	USHORT   ivSize;			/**< Screen vertical size used as the standard of
+										"Grid Information".							*/
+	USHORT   ihSize;			/**< Screen horizonal size used as the standard of
+										"Grid Information".							*/
+	UGridLineWidth width;	/**< Grid line width informatin.					*/
+	TIconColor  rgba;		/**< Line color.
+								a(Alpha) : 0 :  25%
+										   1 :  50%
+										   2 :  75%
+										   3 : 100% 								*/
+}
+修改前 T_INVERSE_GAMMA_TBL	
+{
+USHORT*   r_anti;	/**< Pointer of R data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   g_anti;	/**< Pointer of G data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   b_anti;	/**< Pointer of B data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+}		
+	
+修改后 TInverseGammaTbl
+{
+USHORT*   rAnti;	/**< Pointer of R data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   gAnti;	/**< Pointer of G data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   bAnti;	/**< Pointer of B data anti gamma table.
+						 Please specify the address of the array of USHORT[256]<br>
+						 If NULL is specified, this setting is skipped.<br>			*/
+}
+
+修改前 T_GAMMA_TBL	
+{
+USHORT*   r_data;			/**< Pointer of R data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   g_data;			/**< Pointer of G data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   b_data;			/**< Pointer of B data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+}				
+修改后 TGammaTbl
+{
+USHORT*   rData;			/**< Pointer of R data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   gData;			/**< Pointer of G data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+ USHORT*   bData;			/**< Pointer of B data gamma table(Full)<br>
+								 Please specify the address of the array of USHORT[128]<br>
+								 If NULL is specified, this setting is skipped.<br>			*/
+}
+
+ T_TBL_ACCESS_SET		 TTblAccessSet
 FJ_T_OSD_ADDR_YCC					FjtOsdAddrYcc
-FJ_LINE_COORDINATES				FjLineCoordinates
-FJ_OSD_BRIGHT_WARN_INFO				FjosdBrightWarnInfo
-FJ_OSD_COMM_FLUSH_DARA_AREA_INFO		FjosdCommflushDaraAreainfo
-T_OSD_TEXT_OUT_BY_ASCII_TABLE_INFO         	TosdtextOutasciiTableinfo
 
+修改前 FJ_LINE_COORDINATES	
+{
+TPos	startPos;/**< Start point */
+	TPos	end_pos;/**< End point */
+}		
 
+修改后 FjLineCoordinates
+{
+TPos	startPos;/**< Start point */
+	TPos	endPos;/**< End point */
+}
+修改前 FJ_OSD_BRIGHT_WARN_INFO		
+{
+USHORT	high_threshold;								/**< High level threshold value.					*/
+	USHORT	low_threshold;								/**< Low level threshold value.						*/
+	FjosdBrightWarnMethodSel	high_warn_method;	/**< High level brightness warning method selection	*/
+	FjosdBrightWarnMethodSel	low_warn_method;	/**< Low level brightness warning method selection	*/
+	USHORT	high_y_color;								/**< High level Y data of warning color.(0~255)		*/
+	USHORT	high_cb_color;								/**< High level Cb data of warning color.(0~255)	*/
+	USHORT	high_cr_color;								/**< High level Cr data of warning color.(0~255)	*/
+	USHORT	low_y_color;								/**< Low level Y data of warning color.(0~255)		*/
+	USHORT	low_cb_color;								/**< Low level Cb data of warning color.(0~255)		*/
+	USHORT	low_cr_color;								/**< Low level Cr data of warning color.(0~255)		*/
+	USHORT	warn_show_frame_cnt;						/**< Warning show period.(1~64)						*/
+	USHORT	warn_hide_frame_cnt;						/**< Warning hide period.(1~64)						*/
+}		
+修改后 FjosdBrightWarnInfo
+{
+	USHORT	highThreshold;								/**< High level threshold value.					*/
+	USHORT	lowThreshold;								/**< Low level threshold value.						*/
+	FjosdBrightWarnMethodSel	highWarnMethod;	/**< High level brightness warning method selection	*/
+	FjosdBrightWarnMethodSel	lowWarnMethod;	/**< Low level brightness warning method selection	*/
+	USHORT	highYColor;								/**< High level Y data of warning color.(0~255)		*/
+	USHORT	highCbColor;								/**< High level Cb data of warning color.(0~255)	*/
+	USHORT	highCrColor;								/**< High level Cr data of warning color.(0~255)	*/
+	USHORT	lowYColor;								/**< Low level Y data of warning color.(0~255)		*/
+	USHORT	lowCbColor;								/**< Low level Cb data of warning color.(0~255)		*/
+	USHORT	lowCrColor;								/**< Low level Cr data of warning color.(0~255)		*/
+	USHORT	warnShowFrame_cnt;						/**< Warning show period.(1~64)						*/
+	USHORT	warnHideFrameCnt;						/**< Warning hide period.(1~64)						*/
+}
+修改前  FJ_OSD_COMM_FLUSH_DARA_AREA_INFO		
+{
+EOsdLayer	flush_layers;						/**< Flush layer. See @ref EOsdLayer.		*/
+	USHORT	flush_showing_area;						/**< It's a showing area's bit map No.<br>
+													e.g. flush_showing_area = 0x11 means the showing area<br>
+													No. 0 and No. 4 would be flush.<br>
+													It don't care if @ref flush_layers is not XXX_OSDx	*/
+	USHORT	Is_Copy_flush_showing_area;				/**< Copy flag. It's a showing area's bit map No. <br>
+													if the  @ref flush_layers is XXX_OSDx.<br>
+													e.g. Is_Copy_flush_showing_area = 0x11 and flush_showing_area = 0x11 means the showing area<br>
+													No. 0 and No. 4 would be copy to next buffer after it's flushed.<br>
+													Is_Copy_flush_showing_area = 0x01 and flush_showing_area = 0x11 means the showing area<br>
+													No. 0 only would be copy to next buffer after it's flushed.<br>
+													 It's a 0 or 1 if the  @ref flush_layers is not XXX_OSDx.<br>
+													*/
+}
+修改后 FjosdCommflushDaraAreainfo
+{
+EOsdLayer	flushLayers;						/**< Flush layer. See @ref EOsdLayer.		*/
+	USHORT	flushShowingArea;						/**< It's a showing area's bit map No.<br>
+													e.g. flushShowingArea = 0x11 means the showing area<br>
+													No. 0 and No. 4 would be flush.<br>
+													It don't care if @ref flushLayers is not XXX_OSDx	*/
+	USHORT	isCopyFlushShowingArea;				/**< Copy flag. It's a showing area's bit map No. <br>
+													if the  @ref flushLayers is XXX_OSDx.<br>
+													e.g. isCopyFlushShowingArea = 0x11 and flushShowingArea = 0x11 means the showing area<br>
+													No. 0 and No. 4 would be copy to next buffer after it's flushed.<br>
+													isCopyFlushShowingArea = 0x01 and flushShowingArea = 0x11 means the showing area<br>
+													No. 0 only would be copy to next buffer after it's flushed.<br>
+													 It's a 0 or 1 if the  @ref flushLayers is not XXX_OSDx.<br>
+													*/
+}
+修改前 T_OSD_TEXT_OUT_BY_ASCII_TABLE_INFO
+{
+TRect obj_wnd;			/**< the output rectangle in which there is
+								 coordinate and size. See @ref TRect. 	*/
+	UCHAR* prt_str;			/**< the pointer that point to a buffer in
+								 which there are texts output.			*/
+	UINT32 formatFlag;		/**< formatFlag is alignment of output as following:
+									@ref FjDispE_FJ_LEFT : left in X
+									@ref FjDispE_FJ_RIGHT : right in X
+									@ref FjDispE_FJ_CENTER : Center in X
+									@ref FjDispE_FJ_TOP : top in Y<br>
+									@ref FjDispE_FJ_BOTTOM : bottom in Y
+									@ref FjDispE_FJ_VCENTER : Center in Y	*/
+	SHORT* asciiTbl;		/**< an array of string ID indexed by ascii value. */
+	SHORT tblSize;			/**< the size of the ascii table we pass in.*/
 
+	EDrawMode DrawMode;	/**< DrawMode is a set draw mode. See @ref EDrawMode.
+									@ref FjDispD_E_DrawMode_Speed_Optimized :
+											Write drawing data directly.
+									@ref FjDispD_E_DrawMode_Effect_Optimized :
+											Blend drawing data with the
+											color of the place drawn to.*/
+	BYTE alpha;				/**< alpha is attribute level for blending
+								 when a icon is drawn. It's valid when
+								 DrawMode is @ref FjDispD_E_DrawMode_Effect_Optimized only.
+								 And it's valid on GR layer only. It can be set 0~255.
+								 e.g.) It's set to 255 if the writting data 100% will be adopted.
+									   There are not any changed if it's set 0.
+									   The writting icon will be  blended with
+									   destination color by 50%-50% if it is set to 128.*/
+	BYTE drawAreaNum;		/**< number of Area[0-9]. 					*/
+}         	
+修改后 TosdtextOutasciiTableinfo
+{
+TRect objWnd;			/**< the output rectangle in which there is
+								 coordinate and size. See @ref TRect. 	*/
+	UCHAR* prtStr;			/**< the pointer that point to a buffer in
+								 which there are texts output.			*/
+	UINT32 formatFlag;		/**< formatFlag is alignment of output as following:
+									@ref FjDispE_FJ_LEFT : left in X
+									@ref FjDispE_FJ_RIGHT : right in X
+									@ref FjDispE_FJ_CENTER : Center in X
+									@ref FjDispE_FJ_TOP : top in Y<br>
+									@ref FjDispE_FJ_BOTTOM : bottom in Y
+									@ref FjDispE_FJ_VCENTER : Center in Y	*/
+	SHORT* asciiTbl;		/**< an array of string ID indexed by ascii value. */
+	SHORT tblSize;			/**< the size of the ascii table we pass in.*/
+
+	EDrawMode DrawMode;	/**< DrawMode is a set draw mode. See @ref EDrawMode.
+									@ref FjDispD_E_DrawMode_Speed_Optimized :
+											Write drawing data directly.
+									@ref FjDispD_E_DrawMode_Effect_Optimized :
+											Blend drawing data with the
+											color of the place drawn to.*/
+	BYTE alpha;				/**< alpha is attribute level for blending
+								 when a icon is drawn. It's valid when
+								 DrawMode is @ref FjDispD_E_DrawMode_Effect_Optimized only.
+								 And it's valid on GR layer only. It can be set 0~255.
+								 e.g.) It's set to 255 if the writting data 100% will be adopted.
+									   There are not any changed if it's set 0.
+									   The writting icon will be  blended with
+									   destination color by 50%-50% if it is set to 128.*/
+	BYTE drawAreaNum;		/**< number of Area[0-9]. 					*/
+}
 
 共用体
 typedef union
@@ -2756,7 +4329,6 @@ FjDispD_FJ_OSD_PRINT_COLOR_INDEX_BACK = 0,		/**< Background index	*/
 	FjDispD_FJ_OSD_PRINT_COLOR_INDEX_TEXT,			/**< Text index			*/
 	FjDispD_FJ_OSD_PRINT_COLOR_INDEX_END			/**< End flag			*/
 }
-
 修改前 FJ_OSD_BRIGHT_WARN_KIND_SEL	
 {
 FJ_OSD_BRIGHT_WARN_KIND_SEL_HIGH,	/**< High-intensity warning.	*/
@@ -2768,7 +4340,6 @@ FjDispD_FJ_OSD_BRIGHT_WARN_KIND_SEL_HIGH,	/**< High-intensity warning.	*/
 	FjDispD_FJ_OSD_BRIGHT_WARN_KIND_SEL_LOW,	/**< Low-intensity warning.		*/
 	FjDispD_FJ_OSD_BRIGHT_WARN_KIND_SEL_ALL		/**< High and Low-intensity warning. */
 }
-
 修改前 FJ_OSD_BRIGHT_WARN_METHOD_SEL
 {
 FJ_OSD_BRIGHT_WARN_METHOD_SEL_REVERSE_Y,	/**< Reversed Y data.		*/
@@ -3064,12 +4635,12 @@ FjDispD_E_FJ_RESOURCE_TYPE_GR_ICON				= 0,	/**< icon			*/
 #define FJ_HDMI_VEN_INPUT				(1)			/**< SYS_CTRL1.VEN Register<br> Follow VSYNC input				*/
 #define FJ_HDMI_VSYNC_ACTIVE			(0)			/**< SYS_CTRL1.VSYNC Register<br> VSYNC active					*/
 #define FJ_HDMI_VSYNC_DEACTIVE			(1)			/**< SYS_CTRL1.VSYNC Register<br> VSYNC deactive				*/
-#define FJ_HDMI_HDCP_SEL_UNENCRYPTED	(0)			/**< DCTL.HDCP_SEL Register<br> Send unencrypted data	*/
-#define FJ_HDMI_HDCP_SEL_ENCRYPTED		(1)			/**< DCTL.HDCP_SEL Register<br> Send encrypted data		*/
-#define FJ_HDMI_AUD_MUTE_NORMAL			(0)			/**< DCTL.AUD_MUTE Register<br> Do not send zeros in audio packet	*/
-#define FJ_HDMI_AUD_MUTE_SEND_ZERO		(1)			/**< DCTL.AUD_MUTE Register<br> Send zeros in audio packet			*/
-#define FJ_HDMI_VID_BLANK_NORMAL		(0)			/**< DCTL.VID_BANK Register<br> Normal operation				*/
-#define FJ_HDMI_VID_BLANK_BLANKED		(1)			/**< DCTL.VID_BANK Register<br> Video output is blanked			*/
+#define FJ_HDMI_HDCP_SEL_UNENCRYPTED	(0)			/**< DCTL.hdcpSel Register<br> Send unencrypted data	*/
+#define FJ_HDMI_HDCP_SEL_ENCRYPTED		(1)			/**< DCTL.hdcpSel Register<br> Send encrypted data		*/
+#define FJ_HDMI_AUD_MUTE_NORMAL			(0)			/**< DCTL.audMute Register<br> Do not send zeros in audio packet	*/
+#define FJ_HDMI_AUD_MUTE_SEND_ZERO		(1)			/**< DCTL.audMute Register<br> Send zeros in audio packet			*/
+#define FJ_HDMI_VID_BLANK_NORMAL		(0)			/**< DCTL.vidBank Register<br> Normal operation				*/
+#define FJ_HDMI_VID_BLANK_BLANKED		(1)			/**< DCTL.vidBank Register<br> Video output is blanked			*/
 #define FJ_HDMI_VID_CTRL_ICLK_NOTREP	(0)			/**< VID_CTRL.ICLK Register<br> Pixel data is not replicated				*/
 #define FJ_HDMI_VID_CTRL_ICLK_ONCE		(1)			/**< VID_CTRL.ICLK Register<br> Pixels are replicated once(each sent twice)	*/
 #define FJ_HDMI_VID_CTRL_ICLK_4TIMES	(3)			/**< VID_CTRL.ICLK Register<br> Pixels are replicated 4 times(each sent four times)	*/
@@ -3218,12 +4789,12 @@ FjDispD_E_FJ_RESOURCE_TYPE_GR_ICON				= 0,	/**< icon			*/
 #define FjDispE_FJ_HDMI_VEN_INPUT				(1)			/**< SYS_CTRL1.VEN Register<br> Follow VSYNC input				*/
 #define FjDispE_FJ_HDMI_VSYNC_ACTIVE			(0)			/**< SYS_CTRL1.VSYNC Register<br> VSYNC active					*/
 #define FjDispE_FJ_HDMI_VSYNC_DEACTIVE			(1)			/**< SYS_CTRL1.VSYNC Register<br> VSYNC deactive				*/
-#define FjDispE_FJ_HDMI_HDCP_SEL_UNENCRYPTED	(0)			/**< DCTL.HDCP_SEL Register<br> Send unencrypted data	*/
-#define FjDispE_FJ_HDMI_HDCP_SEL_ENCRYPTED		(1)			/**< DCTL.HDCP_SEL Register<br> Send encrypted data		*/
-#define FjDispE_FJ_HDMI_AUD_MUTE_NORMAL			(0)			/**< DCTL.AUD_MUTE Register<br> Do not send zeros in audio packet	*/
-#define FjDispE_FJ_HDMI_AUD_MUTE_SEND_ZERO		(1)			/**< DCTL.AUD_MUTE Register<br> Send zeros in audio packet			*/
-#define FjDispE_FJ_HDMI_VID_BLANK_NORMAL		(0)			/**< DCTL.VID_BANK Register<br> Normal operation				*/
-#define FjDispE_FJ_HDMI_VID_BLANK_BLANKED		(1)			/**< DCTL.VID_BANK Register<br> Video output is blanked			*/
+#define FjDispE_FJ_HDMI_HDCP_SEL_UNENCRYPTED	(0)			/**< DCTL.hdcpSel Register<br> Send unencrypted data	*/
+#define FjDispE_FJ_HDMI_HDCP_SEL_ENCRYPTED		(1)			/**< DCTL.hdcpSel Register<br> Send encrypted data		*/
+#define FjDispE_FJ_HDMI_AUD_MUTE_NORMAL			(0)			/**< DCTL.audMute Register<br> Do not send zeros in audio packet	*/
+#define FjDispE_FJ_HDMI_AUD_MUTE_SEND_ZERO		(1)			/**< DCTL.audMute Register<br> Send zeros in audio packet			*/
+#define FjDispE_FJ_HDMI_VID_BLANK_NORMAL		(0)			/**< DCTL.vidBank Register<br> Normal operation				*/
+#define FjDispE_FJ_HDMI_VID_BLANK_BLANKED		(1)			/**< DCTL.vidBank Register<br> Video output is blanked			*/
 #define FjDispE_FJ_HDMI_VID_CTRL_ICLK_NOTREP	(0)			/**< VID_CTRL.ICLK Register<br> Pixel data is not replicated				*/
 #define FjDispE_FJ_HDMI_VID_CTRL_ICLK_ONCE		(1)			/**< VID_CTRL.ICLK Register<br> Pixels are replicated once(each sent twice)	*/
 #define FjDispE_FJ_HDMI_VID_CTRL_ICLK_4TIMES	(3)			/**< VID_CTRL.ICLK Register<br> Pixels are replicated 4 times(each sent four times)	*/

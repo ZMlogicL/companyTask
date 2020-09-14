@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMxicFunc1类
 *@rely                :klib
@@ -25,24 +25,50 @@
 #include "ctimmxiccreate.h"
 #include "ctimmxicfunc1.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicFunc1, ct_im_mxic_func1);
-#define CT_IM_MXIC_FUNC1_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicFunc1Private,CT_TYPE_IM_MXIC_FUNC1))
+
+G_DEFINE_TYPE(CtImMxicFunc1, ct_im_mxic_func1, G_TYPE_OBJECT);
+#define CT_IM_MXIC_FUNC1_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_FUNC1, CtImMxicFunc1Private))
 
 struct _CtImMxicFunc1Private
 {
 
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_im_mxic_func1_constructor(CtImMxicFunc1 *self) 
+
+static void ct_im_mxic_func1_class_init(CtImMxicFunc1Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicFunc1Private));
 }
 
-static void ct_im_mxic_func1_destructor(CtImMxicFunc1 *self) 
+static void ct_im_mxic_func1_init(CtImMxicFunc1 *self)
 {
+//	CtImMxicFunc1Private *priv = CT_IM_MXIC_FUNC1_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+//	CtImMxicFunc1 *self = (CtImMxicFunc1*)object;
+//	CtImMxicFunc1Private *priv = CT_IM_MXIC_FUNC1_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImMxicFunc1 *self = (CtImMxicFunc1*)object;
+//	CtImMxicFunc1Private *priv = CT_IM_MXIC_FUNC1_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
@@ -52,7 +78,7 @@ static void ct_im_mxic_func1_destructor(CtImMxicFunc1 *self)
 /*----------------------------------------------------------------------*/
 void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 {
-	kint32								result;
+	gint32								result;
 	T_IM_MXIC_ALL_ARBITER_ASSIGN		allArbiterAssign;
 	T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL	allLevelCtrl;
 	T_IM_MXIC_ALL_LEVELPORT 			allLevelport;
@@ -60,7 +86,7 @@ void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 	Ddim_Print(("ct_im_mxic_func1_01(self->unit=%d)\n", self->unit));
 
 	result = Im_MXIC_Init( (E_IM_MXIC_UNIT)self->unit );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Init OK(self->unit=%d).\n", self->unit));
 	}
 	else {
@@ -68,7 +94,7 @@ void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Get_Master_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allArbiterAssign );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_all_arbiter_assign(  &allArbiterAssign );
 		Ddim_Print(("Im_MXIC_Get_Master_All_Arbiter OK.\n"));
 	}
@@ -77,7 +103,7 @@ void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Get_Slot_Priority_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allLevelCtrl );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		ct_im_mxic_print_all_slot_priority_level(  &allLevelCtrl );
 		Ddim_Print(("Im_MXIC_Get_Slot_Priority_All_Arbiter OK.\n"));
 	}
@@ -86,7 +112,7 @@ void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Get_LevelPort_All( (E_IM_MXIC_UNIT)self->unit, &allLevelport );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		ct_im_mxic_print_all_levelport( &allLevelport );
 		Ddim_Print(("Im_MXIC_Get_LevelPort_All OK.\n"));
 	}
@@ -99,7 +125,7 @@ void ct_im_mxic_func1_01(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_02(CtImMxicFunc1* self)
 {
-	kint32						result;
+	gint32						result;
 	T_IM_MXIC_CONFIG_ARBITER	config;
 
 	Ddim_Print(("ct_im_mxic_func1_02(self->unit=%d)\n", self->unit));
@@ -130,7 +156,7 @@ void ct_im_mxic_func1_02(CtImMxicFunc1* self)
 	config.gr_r7_config_on_flg = D_IM_MXIC_ON;
 
 	result = Im_MXIC_Start_Config( (E_IM_MXIC_UNIT)self->unit, &config );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Start_Config OK(self->unit=%d).\n", self->unit));
 	}
 	else {
@@ -163,7 +189,7 @@ void ct_im_mxic_func1_02(CtImMxicFunc1* self)
 	config.gr_r7_config_on_flg = D_IM_MXIC_OFF;
 
 	result = Im_MXIC_Start_Config( (E_IM_MXIC_UNIT)self->unit, &config );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Start_Config OK(self->unit=%d).\n", self->unit));
 	}
 	else {
@@ -175,7 +201,7 @@ void ct_im_mxic_func1_02(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 {
-	kint32			result;
+	gint32			result;
 	T_IM_MXIC_CLOCK	clockCtrl;
 
 	Ddim_Print(("ct_im_mxic_func1_03(self->unit=%d)\n", self->unit));
@@ -208,7 +234,7 @@ void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 	clockCtrl.clk_en_monitor   = D_IM_MXIC_ON;
 
 	result = Im_MXIC_Set_Clock_Enable( (E_IM_MXIC_UNIT)self->unit, &clockCtrl );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Set_Clock_Enable OK(self->unit=%d).\n",self->unit));
 	}
 	else {
@@ -218,7 +244,7 @@ void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 	memset( &clockCtrl, 0, sizeof(T_IM_MXIC_CLOCK) );
 
 	result = Im_MXIC_Get_Clock_Enable( (E_IM_MXIC_UNIT)self->unit, &clockCtrl );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("clockCtrl.clk_en_slave_1_0=%d\n", clockCtrl.clk_en_slave_1_0));
 		Ddim_Print(("clockCtrl.clk_en_slave_1_1=%d\n", clockCtrl.clk_en_slave_1_1));
 		Ddim_Print(("clockCtrl.clk_en_slave_1_2=%d\n", clockCtrl.clk_en_slave_1_2));
@@ -279,7 +305,7 @@ void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 	clockCtrl.clk_en_monitor   = D_IM_MXIC_OFF;
 
 	result = Im_MXIC_Set_Clock_Enable( (E_IM_MXIC_UNIT)self->unit, &clockCtrl );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Set_Clock_Enable OK(self->unit=%d).\n",self->unit));
 	}
 	else {
@@ -289,7 +315,7 @@ void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 	memset( &clockCtrl, 0, sizeof(T_IM_MXIC_CLOCK) );
 
 	result = Im_MXIC_Get_Clock_Enable( (E_IM_MXIC_UNIT)self->unit, &clockCtrl );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("clockCtrl.clk_en_slave_1_0=%d\n", clockCtrl.clk_en_slave_1_0));
 		Ddim_Print(("clockCtrl.clk_en_slave_1_1=%d\n", clockCtrl.clk_en_slave_1_1));
 		Ddim_Print(("clockCtrl.clk_en_slave_1_2=%d\n", clockCtrl.clk_en_slave_1_2));
@@ -327,10 +353,10 @@ void ct_im_mxic_func1_03(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 {
-	kint32								result;
-	kuint32								workvalue;
-	kuint32								i, j;
-	kuchar								capability = 0;
+	gint32								result;
+	guint32								workvalue;
+	guint32								i, j;
+	guchar								capability = 0;
 	T_IM_MXIC_ALL_ACCEPTANCE_CAPABILITY	allCapability;
 
 	Ddim_Print(("ct_im_mxic_func1_04(self->unit=%d)\n", self->unit));
@@ -359,7 +385,7 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Set_Acceptance_Capability_All_Port( (E_IM_MXIC_UNIT)self->unit, &allCapability );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Acceptance_Capability_All_Port OK.\n"));
 	}
 	else {
@@ -367,7 +393,7 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Get_Acceptance_Capability_All_Port( (E_IM_MXIC_UNIT)self->unit, &allCapability );
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		ct_im_mxic_print_all_acceptance_capability(&allCapability);
 		Ddim_Print(("Im_MXIC_Get_Acceptance_Capability_All_Port OK.\n"));
 	}
@@ -379,8 +405,8 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 												(E_IM_MXIC_WR_ARBITER)0,
 												(E_IM_MXIC_SPEC_ARBITER)0,
 												(E_IM_MXIC_PORT)0,
-												(kuchar)8);
-	if (result == D_DDIM_OK) {
+												(guchar)8);
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Set_Acceptance_Capability OK.\n"));
 	}
 	else {
@@ -392,7 +418,7 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 												(E_IM_MXIC_SPEC_ARBITER)0,
 												(E_IM_MXIC_PORT)0,
 												&capability);
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("capability = %d\n", capability));
 		Ddim_Print(("Im_MXIC_Get_Acceptance_Capability OK.\n"));
 	}
@@ -403,8 +429,8 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 	result = Im_MXIC_Set_Acceptance_Capability_Group( (E_IM_MXIC_WR_ARBITER)0,
 													  (E_IM_MXIC_SPEC_ARBITER_GR)0,
 													  (E_IM_MXIC_PORT_GR)0,
-													  (kuchar)1 );
-	if (result == D_DDIM_OK) {
+													  (guchar)1 );
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Set_Acceptance_Capability_Group OK.\n"));
 	}
 	else {
@@ -415,7 +441,7 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 													  (E_IM_MXIC_SPEC_ARBITER_GR)0,
 													  (E_IM_MXIC_PORT_GR)0,
 													  &capability );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("capability = %d\n", capability));
 		Ddim_Print(("Im_MXIC_Get_Acceptance_Capability_Group OK.\n"));
 	}
@@ -428,23 +454,23 @@ void ct_im_mxic_func1_04(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_05(CtImMxicFunc1* self)
 {
-	kint32						result;
+	gint32						result;
 	T_IM_MXIC_ALL_SLAVE_AREA	allSlaveArea;
 	T_IM_MXIC_SLAVE_AREA		slaveArea;
 
 	Ddim_Print(("ct_im_mxic_func1_05(self->unit=%d)\n", self->unit));
 
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].size    = (kuint32)0x20000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].address = (kuint32)0x40000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].size    = (kuint32)0x20000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].address = (kuint32)0x60000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].size    = (kuint32)0x20000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].address = (kuint32)0x80000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].size    = (kuint32)0x20000000;
-	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].address = (kuint32)0xA0000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].size    = (guint32)0x20000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].address = (guint32)0x40000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].size    = (guint32)0x20000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].address = (guint32)0x60000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].size    = (guint32)0x20000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].address = (guint32)0x80000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].size    = (guint32)0x20000000;
+	allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].address = (guint32)0xA0000000;
 
 	result = Im_MXIC_Set_Slave_Area_All( (E_IM_MXIC_UNIT)self->unit, &allSlaveArea );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Slave_Area_All OK.\n"));
 	}
 	else {
@@ -454,7 +480,7 @@ void ct_im_mxic_func1_05(CtImMxicFunc1* self)
 	memset( &allSlaveArea, 0, sizeof(T_IM_MXIC_ALL_SLAVE_AREA) );
 
 	result = Im_MXIC_Get_Slave_Area_All( (E_IM_MXIC_UNIT)self->unit, &allSlaveArea );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_all_slave_area( &allSlaveArea );
 		Ddim_Print(("Im_MXIC_Get_Slave_Area_All OK.\n"));
 	}
@@ -462,11 +488,11 @@ void ct_im_mxic_func1_05(CtImMxicFunc1* self)
 		Ddim_Print(("E:Im_MXIC_Get_Slave_Area_All NG. result=0x%X\n", result));
 	}
 
-	slaveArea.size    = (kuint32)0x40000000;
-	slaveArea.address = (kuint32)0x40000000;
+	slaveArea.size    = (guint32)0x40000000;
+	slaveArea.address = (guint32)0x40000000;
 
 	result = Im_MXIC_Set_Slave_Area( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_SLAVE_NUMBER)0, &slaveArea );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Slave_Area OK.\n"));
 	}
 	else {
@@ -476,7 +502,7 @@ void ct_im_mxic_func1_05(CtImMxicFunc1* self)
 	memset( &slaveArea, 0, sizeof(T_IM_MXIC_SLAVE_AREA) );
 
 	result = Im_MXIC_Get_Slave_Area( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_SLAVE_NUMBER)0, &slaveArea );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_slave_area( &slaveArea );
 		Ddim_Print(("Im_MXIC_Get_Slave_Area OK.\n"));
 	}
@@ -489,7 +515,7 @@ void ct_im_mxic_func1_05(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_ALL_ARBITER_ASSIGN		allArbiterAssign;
 	T_IM_MXIC_W_ARBITER_ASSIGN_PORT	wSlotStatus;
 	T_IM_MXIC_R_ARBITER_ASSIGN_PORT	rSlotStatus;
@@ -497,10 +523,10 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	Ddim_Print(("ct_im_mxic_func1_06(self->unit=%d)\n", self->unit));
 
 	result = ct_im_mxic_create_master_all_arbiter_param( (E_IM_MXIC_UNIT)self->unit, &allArbiterAssign );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		// Execute function.
 		result = Im_MXIC_Set_Master_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allArbiterAssign );
-		if ( result == D_DDIM_OK ) {
+		if ( result == DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Im_MXIC_Set_Master_All_Arbiter OK.\n"));
 		}
 		else {
@@ -511,7 +537,7 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	memset( &allArbiterAssign, 0, sizeof(T_IM_MXIC_ALL_ARBITER_ASSIGN) );
 
 	result = Im_MXIC_Get_Master_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allArbiterAssign );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_all_arbiter_assign(  &allArbiterAssign );
 		Ddim_Print(("Im_MXIC_Get_Master_All_Arbiter OK.\n"));
 	}
@@ -520,10 +546,10 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	}
 
 	result = ct_im_mxic_create_master_w_arbiter_param( (E_IM_MXIC_UNIT)self->unit, &wSlotStatus );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		// Execute function.
 		result = Im_MXIC_Set_Master_W_Arbiter( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_W_ARBITER)0, &wSlotStatus );
-		if (result == D_DDIM_OK) {
+		if (result == DriverCommon_D_DDIM_OK) {
 			Ddim_Print(("Im_MXIC_Set_Master_W_Arbiter OK.\n"));
 		}
 		else {
@@ -534,7 +560,7 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	memset( &wSlotStatus, 0, sizeof(T_IM_MXIC_W_ARBITER_ASSIGN_PORT) );
 
 	result = Im_MXIC_Get_Master_W_Arbiter( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_W_ARBITER)0, &wSlotStatus );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_w_arbiter_assign(  &wSlotStatus );
 		Ddim_Print(("Im_MXIC_Get_Master_W_Arbiter OK.\n"));
 	}
@@ -543,10 +569,10 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	}
 
 	result = ct_im_mxic_create_master_r_arbiter_param( (E_IM_MXIC_UNIT)self->unit, &rSlotStatus );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		// Execute function.
 		result = Im_MXIC_Set_Master_R_Arbiter( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_R_ARBITER)0, &rSlotStatus );
-		if ( result == D_DDIM_OK ) {
+		if ( result == DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Im_MXIC_Set_Master_R_Arbiter OK.\n"));
 		}
 		else {
@@ -557,7 +583,7 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 	memset( &rSlotStatus, 0, sizeof(T_IM_MXIC_R_ARBITER_ASSIGN_PORT) );
 
 	result = Im_MXIC_Get_Master_R_Arbiter( (E_IM_MXIC_UNIT)self->unit, (E_IM_MXIC_R_ARBITER)0, &rSlotStatus );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_r_arbiter_assign(  &rSlotStatus );
 		Ddim_Print(("Im_MXIC_Get_Master_R_Arbiter OK.\n"));
 	}
@@ -570,17 +596,17 @@ void ct_im_mxic_func1_06(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 {
-	kint32								result;
+	gint32								result;
 	T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL	allLevelCtrl;
 	T_IM_MXIC_SLOT_PRIORITY_LEVEL		levelCtrl;
 
 	Ddim_Print(("ct_im_mxic_func1_07(self->unit=%d)\n", self->unit));
 
 	result = ct_im_mxic_create_slot_priority_all_arbiter_param( &allLevelCtrl );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		// Execute function.
 		result = Im_MXIC_Set_Slot_Priority_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allLevelCtrl);
-		if (result == D_DDIM_OK) {
+		if (result == DriverCommon_D_DDIM_OK) {
 			Ddim_Print(("Im_MXIC_Set_Slot_Priority_All_Arbiter OK.\n"));
 		}
 		else {
@@ -589,7 +615,7 @@ void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Get_Slot_Priority_All_Arbiter( (E_IM_MXIC_UNIT)self->unit, &allLevelCtrl );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		ct_im_mxic_print_all_slot_priority_level(  &allLevelCtrl );
 		Ddim_Print(("Im_MXIC_Get_Slot_Priority_All_Arbiter OK.\n"));
 	}
@@ -597,9 +623,9 @@ void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 		Ddim_Print(("E:Im_MXIC_Get_Slot_Priority_All_Arbiter NG. result=0x%X\n", result));
 	}
 
-	levelCtrl.priority_level_type  = (kuchar)1;
-	levelCtrl.upper_priority_level = (kuchar)0;
-	levelCtrl.lower_priority_level = (kuchar)63;
+	levelCtrl.priority_level_type  = (guchar)1;
+	levelCtrl.upper_priority_level = (guchar)0;
+	levelCtrl.lower_priority_level = (guchar)63;
 
 	result = Im_MXIC_Set_Slot_Priority( (E_IM_MXIC_UNIT)self->unit,
 										(E_IM_MXIC_WR_ARBITER)0,
@@ -607,7 +633,7 @@ void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 										(E_IM_MXIC_PORT)0,
 										(E_IM_MXIC_SLOT_LEVEL_CTRL)0,
 										&levelCtrl);
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("Im_MXIC_Set_Slot_Priority OK.\n"));
 	}
 	else {
@@ -622,7 +648,7 @@ void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 										(E_IM_MXIC_PORT)0,
 										(E_IM_MXIC_SLOT_LEVEL_CTRL)0,
 										&levelCtrl);
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("priority_level_type  = %d\n", levelCtrl.priority_level_type));
 		Ddim_Print(("upper_priority_level = %d\n", levelCtrl.upper_priority_level));
 		Ddim_Print(("lower_priority_level = %d\n", levelCtrl.lower_priority_level));
@@ -637,23 +663,23 @@ void ct_im_mxic_func1_07(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_08(CtImMxicFunc1* self)
 {
-	kint32	result;
-	kuchar	masterPriority;
+	gint32	result;
+	guchar	masterPriority;
 
 	Ddim_Print(("ct_im_mxic_func1_08(self->unit=%d)\n", self->unit));
 
 	result = Im_MXIC_Set_Master_Priority( (E_IM_MXIC_UNIT)self->unit,
-										  (kuchar)0x81,
-										  (kuchar)3 );
-	if ( result == D_DDIM_OK ) {
+										  (guchar)0x81,
+										  (guchar)3 );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Master_Priority OK.\n"));
 	}
 	else {
 		Ddim_Print(("E:Im_MXIC_Set_Master_Priority NG. result=0x%X\n", result));
 	}
 
-	result = Im_MXIC_Get_Master_Priority( (E_IM_MXIC_UNIT)self->unit, (kuchar)0x81, &masterPriority );
-	if ( result == D_DDIM_OK ) {
+	result = Im_MXIC_Get_Master_Priority( (E_IM_MXIC_UNIT)self->unit, (guchar)0x81, &masterPriority );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("masterPriority = %d\n", masterPriority));
 		Ddim_Print(("Im_MXIC_Get_Master_Priority OK.\n"));
 	}
@@ -666,8 +692,8 @@ void ct_im_mxic_func1_08(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_09(CtImMxicFunc1* self)
 {
-	kint32	result;
-	kuchar	maskEnable;
+	gint32	result;
+	guchar	maskEnable;
 
 	Ddim_Print(("ct_im_mxic_func1_09(self->unit=%d)\n", self->unit));
 
@@ -676,8 +702,8 @@ void ct_im_mxic_func1_09(CtImMxicFunc1* self)
 									(E_IM_MXIC_SPEC_ARBITER)0,
 									(E_IM_MXIC_PORT)0,
 									(E_IM_MXIC_SLOT)0,
-									(kuchar)1 );
-	if ( result == D_DDIM_OK ) {
+									(guchar)1 );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Slot_Mask OK.\n"));
 	}
 	else {
@@ -690,7 +716,7 @@ void ct_im_mxic_func1_09(CtImMxicFunc1* self)
 									(E_IM_MXIC_PORT)0,
 									(E_IM_MXIC_SLOT)0,
 									&maskEnable);
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		Ddim_Print(("maskEnable = %d\n", maskEnable));
 		Ddim_Print(("Im_MXIC_Get_Slot_Mask OK.\n"));
 	}
@@ -703,16 +729,16 @@ void ct_im_mxic_func1_09(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_10(CtImMxicFunc1* self)
 {
-	kint32					result;
+	gint32					result;
 	T_IM_MXIC_MASTER_MASK	master_mask;
 
 	Ddim_Print(("ct_im_mxic_func1_10(self->unit=%d)\n", self->unit));
 
-	master_mask.mask_type   = (kuchar)2;
+	master_mask.mask_type   = (guchar)2;
 	master_mask.mask_period = (USHORT)4;
 
-	result = Im_MXIC_Set_Master_Mask( (E_IM_MXIC_UNIT)self->unit, (kuchar)0x81, &master_mask );
-	if ( result == D_DDIM_OK ) {
+	result = Im_MXIC_Set_Master_Mask( (E_IM_MXIC_UNIT)self->unit, (guchar)0x81, &master_mask );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Master_Mask OK.\n"));
 	}
 	else {
@@ -721,8 +747,8 @@ void ct_im_mxic_func1_10(CtImMxicFunc1* self)
 
 	memset( &master_mask, 0, sizeof(T_IM_MXIC_MASTER_MASK) );
 
-	result = Im_MXIC_Get_Master_Mask( (E_IM_MXIC_UNIT)self->unit, (kuchar)0x81, &master_mask );
-	if ( result == D_DDIM_OK ) {
+	result = Im_MXIC_Get_Master_Mask( (E_IM_MXIC_UNIT)self->unit, (guchar)0x81, &master_mask );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("master_mask.mask_type   = %d\n", master_mask.mask_type));
 		Ddim_Print(("master_mask.mask_period = %d\n", master_mask.mask_period));
 		Ddim_Print(("Im_MXIC_Get_Master_Mask OK.\n"));
@@ -737,17 +763,17 @@ void ct_im_mxic_func1_10(CtImMxicFunc1* self)
 
 void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 {
-	kint32	result;
-	kuchar	maskEnable;
-	kuchar	maskSelect;
+	gint32	result;
+	guchar	maskEnable;
+	guchar	maskSelect;
 
 	Ddim_Print(("ct_im_mxic_func1_11(self->unit=%d)\n", self->unit));
 
 	result = Im_MXIC_Set_Master_Mask_Factor( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x81,
+											 (guchar)0x81,
 											 (E_IM_MXIC_MASK_GROUP)0,
-											 (kuchar)1 );
-	if ( result == D_DDIM_OK ) {
+											 (guchar)1 );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Master_Mask_Factor OK.\n"));
 	}
 	else {
@@ -757,10 +783,10 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	maskEnable = 0;
 
 	result = Im_MXIC_Get_Master_Mask_Factor( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x81,
+											 (guchar)0x81,
 											 (E_IM_MXIC_MASK_GROUP)0,
 											 &maskEnable );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("maskEnable = %d\n", maskEnable));
 		Ddim_Print(("Im_MXIC_Get_Master_Mask_Factor OK.\n"));
 	}
@@ -769,10 +795,10 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Set_Master_Mask_Target( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x82,
+											 (guchar)0x82,
 											 (E_IM_MXIC_MASK_GROUP)0,
-											 (kuchar)1 );
-	if ( result == D_DDIM_OK ) {
+											 (guchar)1 );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Master_Mask_Target OK.\n"));
 	}
 	else {
@@ -782,10 +808,10 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	maskEnable = 0;
 
 	result = Im_MXIC_Get_Master_Mask_Target( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x82,
+											 (guchar)0x82,
 											 (E_IM_MXIC_MASK_GROUP)0,
 											 &maskEnable );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("maskEnable = %d\n", maskEnable));
 		Ddim_Print(("Im_MXIC_Get_Master_Mask_Target OK.\n"));
 	}
@@ -794,9 +820,9 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	}
 
 	result = Im_MXIC_Set_Master_Mask_Select( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x81,
-											 (kuchar)1 );
-	if ( result == D_DDIM_OK ) {
+											 (guchar)0x81,
+											 (guchar)1 );
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("Im_MXIC_Set_Master_Mask_Select OK.\n"));
 	}
 	else {
@@ -806,9 +832,9 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	maskSelect = 0;
 
 	result = Im_MXIC_Get_Master_Mask_Select( (E_IM_MXIC_UNIT)self->unit,
-											 (kuchar)0x81,
+											 (guchar)0x81,
 											 &maskSelect );
-	if ( result == D_DDIM_OK ) {
+	if ( result == DriverCommon_D_DDIM_OK ) {
 		Ddim_Print(("maskSelect = %d\n", maskSelect));
 		Ddim_Print(("Im_MXIC_Get_Master_Mask_Select OK.\n"));
 	}
@@ -819,8 +845,8 @@ void ct_im_mxic_func1_11(CtImMxicFunc1* self)
 	Ddim_Print(("\n"));
 }
 
-CtImMxicFunc1* ct_im_mxic_func1_new(void) 
+CtImMxicFunc1 *ct_im_mxic_func1_new(void) 
 {
-    CtImMxicFunc1 *self = k_object_new_with_private(CT_TYPE_IM_MXIC_FUNC1, sizeof(CtImMxicFunc1Private));
+    CtImMxicFunc1 *self = g_object_new(CT_TYPE_IM_MXIC_FUNC1, NULL);
     return self;
 }

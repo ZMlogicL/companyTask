@@ -19,8 +19,13 @@
 #include "dd_spi.h"
 #include "dd_top.h"
 #include "peripheral.h"
-#include "dd_hdmac1.h"
-#include "dd_tmr32.h"
+// #include "dd_hdmac1.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddspi.h"
+#include "../../DeviceDriver/Peripheral/src/ddspi.h"
+#include "../../../MILB_Header/Project/Top/src/kchiptop1.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
 #include "ctddspimain.h"
 #include "ctddspitest.h"
 #include "ctddspitesttwo.h"
@@ -108,7 +113,7 @@ void ct_dd_spi_testtwo_pc_handler_8( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -125,7 +130,7 @@ void ct_dd_spi_testtwo_pc_handler_8( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -150,7 +155,7 @@ void ct_dd_spi_testtwo_pc_handler_9( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -167,13 +172,13 @@ void ct_dd_spi_testtwo_pc_handler_9( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
 	ret = priv->test->gctDdSpiResult;
@@ -198,7 +203,7 @@ void ct_dd_spi_testtwo_pc_handler_10( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -215,10 +220,10 @@ void ct_dd_spi_testtwo_pc_handler_10( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
 	ret = priv->test->gctDdSpiResult;
@@ -243,7 +248,7 @@ void ct_dd_spi_testtwo_pc_handler_11( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -260,13 +265,13 @@ void ct_dd_spi_testtwo_pc_handler_11( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 	Ddim_Print(("INT_CLR.word = 0x%08lX\n", IO_SPI[ch].INT_CLR.word));
 
 	ret = priv->test->gctDdSpiResult;
@@ -282,7 +287,7 @@ void ct_dd_spi_testtwo_pc_calc_1( CtDdSpiTesttwo *self )
 	kint32 ret;
 	kuchar ch = 0;
 
-	IO_CHIPTOP.CLKSEL8.bit.SPICLK = 0;
+	ioChiptop.IoChiptopClksel8.bit.spiclk = 0;
 
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 
@@ -299,7 +304,7 @@ void ct_dd_spi_testtwo_pc_calc_2( CtDdSpiTesttwo *self )
 	kint32 ret;
 	kuchar ch = 0;
 
-	IO_CHIPTOP.CLKSEL8.bit.SPICLK = 1;
+	ioChiptop.IoChiptopClksel8.bit.spiclk = 1;
 
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 
@@ -316,7 +321,7 @@ void ct_dd_spi_testtwo_pc_calc_3( CtDdSpiTesttwo *self )
 	kint32 ret;
 	kuchar ch = 0;
 
-	IO_CHIPTOP.CLKSEL8.bit.SPICLK = 2;
+	ioChiptop.IoChiptopClksel8.bit.spiclk = 2;
 
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 
@@ -333,7 +338,7 @@ void ct_dd_spi_testtwo_pc_calc_4( CtDdSpiTesttwo *self )
 	kint32 ret;
 	kuchar ch = 0;
 
-	IO_CHIPTOP.CLKSEL8.bit.SPICLK = 0;
+	ioChiptop.IoChiptopClksel8.bit.spiclk = 0;
 
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 
@@ -359,7 +364,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_1( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -393,7 +398,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_2( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -427,7 +432,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_3( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -442,7 +447,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_3( CtDdSpiTesttwo *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -466,7 +471,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_4( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -481,16 +486,16 @@ void ct_dd_spi_testtwo_pc_start_send_dma_4( CtDdSpiTesttwo *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -514,7 +519,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_5( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -549,7 +554,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_6( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -584,7 +589,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_7( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -599,7 +604,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_7( CtDdSpiTesttwo *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -623,7 +628,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_8( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -640,7 +645,7 @@ void ct_dd_spi_testtwo_pc_start_send_dma_8( CtDdSpiTesttwo *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -664,7 +669,7 @@ void ct_dd_spi_testtwo_pc_handler_7( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -681,9 +686,9 @@ void ct_dd_spi_testtwo_pc_handler_7( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -708,7 +713,7 @@ void ct_dd_spi_testtwo_pc_handler_6( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -725,9 +730,9 @@ void ct_dd_spi_testtwo_pc_handler_6( CtDdSpiTesttwo *self )
 
 	ct_dd_spi_test_cmd_wrap("ddspi start_recv 2");
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -751,7 +756,7 @@ void ct_dd_spi_testtwo_pc_handler_5( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -771,7 +776,7 @@ void ct_dd_spi_testtwo_pc_handler_5( CtDdSpiTesttwo *self )
 
 	IO_SPI[ch].ST.bit.TXFULL = 0;
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -795,7 +800,7 @@ void ct_dd_spi_testtwo_pc_handler_4( CtDdSpiTesttwo *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -814,7 +819,7 @@ void ct_dd_spi_testtwo_pc_handler_4( CtDdSpiTesttwo *self )
 
 	IO_SPI[ch].ST.bit.TXFULL = 0;
 
-	Dd_SPI_Int_Handler( ch );
+	dd_spi_int_handler( ch );
 
 	ret = priv->test->gctDdSpiResult;
 

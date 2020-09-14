@@ -159,16 +159,657 @@ FJ_Mux_Movie_File_Old_Set(	改为	fj_mux_movie_file_old_set(FjMux *self,
 FJ_Mux_Close_File(	改为	fj_mux_close_file(FjMux *self,
 
 
-FJ_Mux_Demux_Common_Memory_Initialize(	fj_mux_demux_common_memory_initialize(FjMuxDemuxCommon* self,
+FJ_Mux_Demux_Common_Memory_Initialize(　改为	fj_mux_demux_common_memory_initialize(FjMuxDemuxCommon* self,
 
-FJ_Mux_Demux_Common_Memory_Finalize(	fj_mux_demux_common_memory_finalize(FjMuxDemuxCommon* self
+FJ_Mux_Demux_Common_Memory_Finalize(	改为　fj_mux_demux_common_memory_finalize(FjMuxDemuxCommon* self
+
+FJ_GetImageEXIF(　改为　　fj_exif_fj_getimageexif（
+FJ_SetImageEXIF(　改为	fj_exif_fj_setimageexif(
+FJ_SetImageEXIF_Class1(　改为　fj_exif_fj_setimageexif_class1（
+FJ_SetImageEXIF_Class2(　改为　fj_exif_fj_setimageexif_class2（
+BF_Demux_Controller(  改为　　bFDemuxController_od（
+
+bf_demux_memory_close(　改为　mp4_demux1_bf_demux_memory_close(Mp4Demux1* self,
+bf_demux_video_setup(	改为	mp4_demux1_bf_demux_video_setup(Mp4Demux1* self,
+bf_demux_freeatom_size_get(　改为　mp4_demux1_bf_demux_freeatom_size_get(Mp4Demux1* self,
+bf_demux_freeatom_get(	改为　mp4_demux1_bf_demux_freeatom_get(Mp4Demux1* self,
+bf_demux_stream_read(	改为　　mp4_demux1_bf_demux_stream_read(Mp4Demux1* self,
+bf_demux_mp4_hvcc_analyze(	改为　mp4_demux1_bf_demux_mp4_hvcc_analyze(Mp4Demux1* self,
+bf_demux_audio_setup(	改为　mp4_demux1_bf_demux_audio_setup(Mp4Demux1* self,
+
+BF_MP4_Common_Fs_Memory_Write(　改为　mp4_common_bf_mp4_common_fs_memory_write(Mp4Common*self, 
+BF_MP4_Common_Fs_Memory_Update( 改为　mp4_common_bf_mp4_common_fs_memory_update(Mp4Common*self,
+BF_MP4_Common_Fs_Memory_Write_Down( 改为　mp4_common_bf_mp4_common_fs_memory_write_down(
+
+bf_mp4_common_fs_read(	改为 mp4_common1_bf_mp4_common_fs_read(
+bf_mp4_common_fs_bank_change(	改为 mp4_common1_bf_mp4_common_fs_bank_change(
+bf_mp4_common_sdram_memory_ctrl( 改为 mp4_common1_bf_mp4_common_sdram_memory_ctrl(
+bf_mp4_common_fs_bank_get(  改为  mp4_common1_bf_mp4_common_fs_bank_get(
+bf_mp4_common_time_convert(	改为 mp4_common1_bf_mp4_common_time_convert(
+bf_mp4_common_date_get(	改为 mp4_common1_bf_mp4_common_date_get(
+bf_mp4_common_fs_write(	改为 mp4_common1_bf_mp4_common_fs_write(
+bf_mp4_common_fs_memory_get_ctrl( 改为 mp4_common1_bf_mp4_common_fs_memory_get_ctrl(
+BF_MP4_Common_BS_Set_Pointer_Address(	改为 mp4_common1_bf_mp4_common_bs_set_pointer_address(
+BF_MP4_Common_BS_Skip_Pointer_Address(  改为 mp4_common1_bf_mp4_common_bs_skip_pointer_address(
+BF_MP4_Common_BS_Skip_Pointer_Scope_Bit( 改为 mp4_common1_bf_mp4_common_bs_skip_pointer_scope_bit(
+BF_MP4_Common_BS_Get_Pointer(  改为 mp4_common1_bf_mp4_common_bs_get_pointer(
+BF_MP4_Common_BS_Read_U_1bit(  改为 mp4_common1_bf_mp4_common_bs_read_u_1bit(
+BF_MP4_Common_BS_Read_U_Nbit(  改为 mp4_common1_bf_mp4_common_bs_read_u_nbit(
+BF_MP4_Common_BS_Read_64_U_Nbit( 改为 mp4_common1_bf_mp4_common_bs_read_64_u_Nbit(
+bf_mp4_common_system_malloc(	改为 mp4_common1_bf_mp4_common_system_malloc(
+bf_mp4_common_system_free( 改为 mp4_common1_bf_mp4_common_system_free(
+BF_MP4_Common_BS_Read_U_E(	改为 mp4_common1_bf_mp4_common_bs_read_u_e(
+BF_MP4_Common_BS_Read_S_E(	改为 mp4_common1_bf_mp4_common_bs_read_s_e(
+BF_MP4_Common_BS_Write_U_1bit(	改为 mp4_common1_bf_mp4_common_bs_write_u_1bit(
+BF_MP4_Common_BS_Write_U_Nbit(	改为 mp4_common1_bf_mp4_common_bs_write_u_nbit(
+
+
+三　头文件移植	
+cpu_tkernel/media_meta/mp4/demux/include/demux_if.h　移植为　　cpu_tkernel/media_meta/mp4/demux/src/demuxif.h
+
+cpu_tkernel/media_meta/mp4/demux/include/demux.h　　移植为    cpu_tkernel/media_meta/mp4/demux/src/mp4demux.h
+
+cpu_tkernel/media_meta/mp4/mux/include/mux_if.h  移植为 cpu_tkernel/media_meta/mp4/mux/src/muxif.h
+
+cpu_tkernel/media_meta/mp4/mux/include/mux.h  移植为  cpu_tkernel/media_meta/mp4/mux/src/mp4mux.h
+
+
+cpu_tkernel/media_meta/mp4/include/mp4_common.h 移植为　cpu_tkernel/media_meta/mp4/src/mp4common.h
+
+cpu_tkernel/media_meta/include/fj_dcf.h  移植为   cpu_tkernel/media_meta/src/fjdcf.h
+ 
+
+cpu_tkernel/media_meta/include/fj_demux.h  移植为　cpu_tkernel/media_meta/src/fjdemux.h
+
+target/cpu_tkernel/media_meta/include/fj_mux.h 移植为 target/cpu_tkernel/media_meta/src/fjmux.h
+
+target/cpu_tkernel/media_meta/include/fj_mux_demux_common.h  移植为　target/cpu_tkernel/media_meta/src/fjmuxdemuxcommon.h
+
+
+四　结构体修改
+typedef struct {
+	UINT32						header_mem_addr;			/**< SDRAM Address of MP4 Header. */
+	UINT32						header_mem_size;			/**< SDRAM Size of MP4 Header. <br>
+															     <reference> 1file need 4Mbyte (for 30fps case : 2hour) */
+	UINT32						muxing_mem_addr;			/**< SDRAM Address of MP4 Muxing Memory. */
+	UINT32						muxing_mem_size;			/**< SDRAM Size of MP4 Muxing Memory. <br>
+															     <reference> 1file need 16Mbyte  (for filesystem) */
+	UINT32						muxing_file_num;			/**< Muxing File Number. */
+} T_FJ_MUX_DEMUX_COMMON_MEMORY_CONFIG; 
+修改为
+typedef struct
+{
+	kuint headerMemAddr; /**< SDRAM Address of MP4 Header. */
+	kuint headerMemSize; /**< SDRAM Size of MP4 Header. <br>
+	 <reference> 1file need 4Mbyte (for 30fps case : 2hour) */
+	kuint muxingMemAddr; /**< SDRAM Address of MP4 Muxing Memory. */
+	kuint muxingMemSize; /**< SDRAM Size of MP4 Muxing Memory. <br>
+	 <reference> 1file need 16Mbyte  (for filesystem) */
+	kuint muxingFileNum; /**< Muxing File Number. */
+} TFjMuxDemuxCommonMemoryConfig;
+
+
+typedef struct{
+	BOOL						enable;						/**< Mux Enable Flag. */
+	INT32						pre_file_id;				/**< Mux PreFileID. */
+	INT32						file_id;					/**< Mux FileID. */
+	UINT32						stream_id;					/**< Mux StreamID */
+	UINT8						codec_type;					/**< Mux Codec type. <br>
+																 FJ_MOVIE_CODEC_H264 : H264 Codec. <br>
+																 FJ_MOVIE_CODEC_H265 : H265 Codec. <br> */
+	E_FJ_MOVIE_VIDEO_SIZE		image_size;					/**< Mux stream video size <br> */
+	E_FJ_MOVIE_VIDEO_SIZE		display_size;				/**< Mux stream video display size <br> */
+	ULONG						bitrate;					/**< Bitrate. <br>
+																 Please Set Value of Bitrate.<br>
+																 (ex. 24Mbps -> D'24,000,000) *However, the values under 1Kbps is truncated.<br>
+																 Case of CBR, this parameter means "target bitrate".<br>
+																 Case of VBR, this parameter means "MAX bitrate". <br> */
+    ULONG   					time_increment;				/**< Video TimeIncrement Value. */
+	ULONG   					time_scale;					/**< Video TimeScale Value. */
+	UINT32						gop_struct;					/**< Stream GOP Struct.<br><br>
+																 FJ_MOVIE_VIDEO_GOP_STRUCT_IPPP : 0 (B-frame Distance = 0)<br>
+																 FJ_MOVIE_VIDEO_GOP_STRUCT_IBBP : 1 (B-frame Distance = 2)<br>
+																 FJ_MOVIE_VIDEO_GOP_STRUCT_IIII : 2 (I-frame Only) (It support only when GOP num is FJ_MOVIE_VIDEO_GOP_NUM_1 or FJ_MOVIE_VIDEO_GOP_NUM_2.)<br> */
+	UINT32						frame_num_of_gop;			/**< The number of frames of GOP. */
+	ULONG						max_time;					/**< Maximum Mux Time Limitation. (sec) */
+	ULONG						max_size;					/**< Maximum Mux Size Limitation. (byte) */
+	ULONG						compatible_brand_count;		/**< Compatible Brand count (0~3) */
+	UINT32						compatible_brand[3];		/**< Compatible Brand string for FTYP atom. (4byte) */
+} T_FJ_MUX_VIDEO_CONFIG;
+修改为
+typedef struct
+{
+	kboolean enable; /**< Mux Enable Flag. */
+	kint32 preFileId; /**< Mux PreFileID. */
+	kint32 fileId; /**< Mux FileID. */
+	kuint streamId; /**< Mux StreamID */
+	kuint8 codecType; /**< Mux Codec type. <br>
+	 FJ_MOVIE_CODEC_H264 : H264 Codec. <br>
+	 FJ_MOVIE_CODEC_H265 : H265 Codec. <br> */
+	E_FJ_MOVIE_VIDEO_SIZE imageSize; /**< Mux stream video size <br> */
+	E_FJ_MOVIE_VIDEO_SIZE displaySize; /**< Mux stream video display size <br> */
+	kulong bitrate; /**< Bitrate. <br>
+	 Please Set Value of Bitrate.<br>
+	 (ex. 24Mbps -> D'24,000,000) *However, the values under 1Kbps is truncated.<br>
+	 Case of CBR, this parameter means "target bitrate".<br>
+	 Case of VBR, this parameter means "MAX bitrate". <br> */
+	kulong timeIncrement; /**< Video TimeIncrement Value. */
+	kulong timeScale; /**< Video TimeScale Value. */
+	kuint gopStruct; /**< Stream GOP Struct.<br><br>
+	 FJ_MOVIE_VIDEO_GOP_STRUCT_IPPP : 0 (B-frame Distance = 0)<br>
+	 FJ_MOVIE_VIDEO_GOP_STRUCT_IBBP : 1 (B-frame Distance = 2)<br>
+	 FJ_MOVIE_VIDEO_GOP_STRUCT_IIII : 2 (I-frame Only) (It support only when GOP num is FJ_MOVIE_VIDEO_GOP_NUM_1 or FJ_MOVIE_VIDEO_GOP_NUM_2.)<br> */
+	kuint frameNumOfGop; /**< The number of frames of GOP. */
+	kulong maxTime; /**< Maximum Mux Time Limitation. (sec) */
+	kulong maxSize; /**< Maximum Mux Size Limitation. (byte) */
+	kulong compatibleBrandCount; /**< Compatible Brand count (0~3) */
+	kuint compatibleBrand[3]; /**< Compatible Brand string for FTYP atom. (4byte) */
+} TFjMuxVideoConfig;
+
+
+
+typedef struct{
+	kboolean						enable;						/**< Mux Enable Flag. */
+	kuint8						codecType;					/**< Mux Codec type. (Now is not use.)*/
+	kuint8						channel;					/**< Channel num(Mono is 1. Stereo is 2.)*/
+	kuint						samplingrate;				/**< Sampling rate */
+	kuint						bitrate;					/**< Bit rate */
+} T_FJ_MUX_AUDIO_CONFIG;
+修改为
+
+typedef struct
+{
+	kboolean enable; /**< Mux Enable Flag. */
+	kuint8 codecType; /**< Mux Codec type. (Now is not use.)*/
+	kuint8 channel; /**< Channel num(Mono is 1. Stereo is 2.)*/
+	kuint samplingrate; /**< Sampling rate */
+	kuint bitrate; /**< Bit rate */
+} TFjMuxAudioConfig;
+
+
+
+typedef struct{
+	kuint						major_brand;				/**< Major Brand string for FTYP atom. (4byte) */
+	kushort						major_version;				/**< Major Version number for FTYP atom. (2byte) . */
+	kushort						minor_version;				/**< Minor Version number for FTYP atom. (2byte) . */
+	kchar						video_handler_name[64];		/**< Video Handler Name string for HDLR atom. (Max 64byte) */
+	kchar						audio_handler_name[64];		/**< Audio Handler Name string for HDLR atom. (Max 64byte) */
+} T_FJ_MUX_MP4_STRING_CONFIG;
+修改为：
+typedef struct
+{
+	kuint majorBrand; /**< Major Brand string for FTYP atom. (4byte) */
+	kushort majorVersion; /**< Major Version number for FTYP atom. (2byte) . */
+	kushort minorVersion; /**< Minor Version number for FTYP atom. (2byte) . */
+	kchar videoHandlerName[64]; /**< Video Handler Name string for HDLR atom. (Max 64byte) */
+	kchar audioHandlerName[64]; /**< Audio Handler Name string for HDLR atom. (Max 64byte) */
+} TFjMuxMp4StringConfig;
+
+
+typedef struct{
+	TFjMuxAudioConfig		audio[2];						/**< Audio Mux Config */
+	TFjMuxVideoConfig		video[E_FJ_MUX_CH_MAX];		/**< Video Mux Config */
+	TFjMuxMp4StringConfig	string;						/**< MP4 string information */
+} T_FJ_MUX_CONFIG;
+修改为：
+typedef struct{
+	TFjMuxAudioConfig		audio[2];						/**< Audio Mux Config */
+	TFjMuxVideoConfig		video[E_FJ_MUX_CH_MAX];		/**< Video Mux Config */
+	TFjMuxMp4StringConfig	string;						/**< MP4 string information */
+} TFJMuxConfig;
+
+
+
+
+typedef struct {
+	kuint						sps_size;					/**< SPS info Size of Video Stream Header. */
+	kuchar*						sps_address;				/**< SPS info Address of Video Stream Header. */
+	kuint						pps_size;					/**< PPS info Size of Video Stream Header. */
+	kuchar*						pps_address;				/**< PPS info Address of Video Stream Header. */
+} T_FJ_MUX_H264_SPS_PPS_INFO;
+修改为：
+typedef struct
+{
+	kuint spsSize; /**< SPS info Size of Video Stream Header. */
+	kuchar* spsAddress; /**< SPS info Address of Video Stream Header. */
+	kuint ppsSize; /**< PPS info Size of Video Stream Header. */
+	kuchar* ppsAddress; /**< PPS info Address of Video Stream Header. */
+} TFjMuxH264SpsPpsInfo;
+
+
+
+typedef struct {
+	kboolean						array_completeness;
+	kuint						nal_type;
+	kuint						nal_num;
+	kuint						nal_address[D_BF_MUX_HVCC_NAL_NUM_MAX];
+	kuint						nal_size[D_BF_MUX_HVCC_NAL_NUM_MAX];
+} T_FJ_MUX_H265_PS_INFO_ARRAY;
+修改为：
+typedef struct
+{
+	kboolean arrayCompleteness;
+	kuint nalType;
+	kuint nalNum;
+	kuint nalAddress[D_BF_MUX_HVCC_NAL_NUM_MAX];
+	kuint nalSize[D_BF_MUX_HVCC_NAL_NUM_MAX];
+} TFjMuxH265PsInfoArray;
+
+
+
+typedef struct {
+	kuint						array_num;
+	TFjMuxH265PsInfoArray	array_elements[D_BF_MUX_HVCC_ARRAY_NUM_MAX];
+} T_FJ_MUX_H265_PS_INFO;
+修改为：
+typedef struct
+{
+	kuint arrayNum;
+	TFjMuxH265PsInfoArray arrayElements[D_BF_MUX_HVCC_ARRAY_NUM_MAX];
+} TFjMuxH265PsInfo;
+
+
+
+typedef struct
+{
+	// video
+	EFjDemuxCodec video_codec; /**< Video codec type */
+	ULONG track_width; /**< Track width(display width) */
+	ULONG track_height; /**< Track height(display height) */
+	USHORT stream_width; /**< Stream width */
+	USHORT stream_height; /**< Stream height */
+	UINT32 video_time_scale; /**< Video time scale */
+	UINT32 video_time_delta; /**< Video time delta */
+	UINT32 video_total_sample_num; /**< Video total number of samples */
+	UINT32 video_total_duration; /**< Video total number of duration */
+	UINT32 video_play_last_pts; /**< Last pts at the normal play */
+	UINT32 video_ff_last_pts; /**< Last pts at the fast forward */
+	UINT32 offset_of_start_frame; /**< Offset of the playback start frame. */
+	// audio
+	EFjDemuxCodec audio_codec; /**< Audio codec type */
+	UINT32 sampling_rate; /**< Sampling rate */
+	UINT32 audio_bit_rate; /**< Bit rate */
+	UINT32 audio_ch; /**< Audio channel : mono(1)/stereo(2) */
+	UINT32 audio_time_scale; /**< Audio time scale */
+	UINT32 audio_time_delta; /**< Audio time delta */
+	UINT32 audio_total_sample_num; /**< Audio total number of sample */
+	UINT32 audio_total_duration; /**< Audio total number of duration */
+	UINT32 audio_last_pts; /**< Last pts */
+} T_FJ_DEMUX_HEADER_INFO;
+修改为：
+typedef struct
+{
+	// video
+	EFjDemuxCodec videoCodec; /**< Video codec type */
+	kulong trackWidth; /**< Track width(display width) */
+	kulong trackHeight; /**< Track height(display height) */
+	kushort streamWidth; /**< Stream width */
+	kushort streamHeight; /**< Stream height */
+	kuint videoTimeScale; /**< Video time scale */
+	kuint videoTimeDelta; /**< Video time delta */
+	kuint videoTotalSampleNum; /**< Video total number of samples */
+	kuint videoTotalDuration; /**< Video total number of duration */
+	kuint videoPlayLastPts; /**< Last pts at the normal play */
+	kuint videoFfLastPts; /**< Last pts at the fast forward */
+	kuint offsetOfStartFrame; /**< Offset of the playback start frame. */
+	// audio
+	EFjDemuxCodec audioCodec; /**< Audio codec type */
+	kuint samplingRate; /**< Sampling rate */
+	kuint audioBitRate; /**< Bit rate */
+	kuint audioCh; /**< Audio channel : mono(1)/stereo(2) */
+	kuint audioTimeScale; /**< Audio time scale */
+	kuint audioTimeDelta; /**< Audio time delta */
+	kuint audioTotalSampleNum; /**< Audio total number of sample */
+	kuint audioTotalDuration; /**< Audio total number of duration */
+	kuint audioLastPts; /**< Last pts */
+} TFjDemuxHeaderInfo;
+
+
+
+
+typedef struct {
+	kuint		stream_num;									/**< Number of stream */
+	kuint		stream_size[FJ_DEMUX_READ_MAX_NUM];			/**< Stream size */
+	kuint		stream_address[FJ_DEMUX_READ_MAX_NUM];		/**< Stream address */
+	ULLONG		pts[FJ_DEMUX_READ_MAX_NUM];					/**< Presentation Time Stamp */
+	ULLONG		dts[FJ_DEMUX_READ_MAX_NUM];					/**< Decoding Time Stamp */
+	kuint		stss[FJ_DEMUX_READ_MAX_NUM];				/**< Sync Sample : true(1)/false(0) */
+	kuint		stream_end_flag[FJ_DEMUX_READ_MAX_NUM];		/**< Flag indicating the end of the stream */
+} T_FJ_DEMUX_STREAM_PARAM;
+修改为：
+typedef struct
+{
+	kuint streamNum; /**< Number of stream */
+	kuint streamSize[FJ_DEMUX_READ_MAX_NUM]; /**< Stream size */
+	kuint streamAddress[FJ_DEMUX_READ_MAX_NUM]; /**< Stream address */
+	ULLONG pts[FJ_DEMUX_READ_MAX_NUM]; /**< Presentation Time Stamp */
+	ULLONG dts[FJ_DEMUX_READ_MAX_NUM]; /**< Decoding Time Stamp */
+	kuint stss[FJ_DEMUX_READ_MAX_NUM]; /**< Sync Sample : true(1)/false(0) */
+	kuint streamEndFlag[FJ_DEMUX_READ_MAX_NUM]; /**< Flag indicating the end of the stream */
+} TFjDemuxStreamParam;
+
+
+
+typedef struct {
+	CHAR dcf_root_dir_name[9];	/**< DCF root directory name */
+	CHAR dir_name[9];			/**< directory name */
+	CHAR file_name[9];			/**< file name */
+	CHAR attr;					/**< An attribute for read-only or not */
+	CHAR file_type;				/**< File Type */
+} FJ_DCF_DATE_FILE_INFO;
+修改为：
+typedef struct {
+	kchar dcfRootDirName[9];	/**< DCF root directory name */
+	kchar dirName[9];			/**< directory name */
+	kchar fileName[9];			/**< file name */
+	kchar attr;					/**< An attribute for read-only or not */
+	kchar fileType;				/**< File Type */
+} FjDcfDateFileInfo;
+
+
+
+typedef struct
+{
+	USHORT ad_year; /**< A.D. year */
+	UCHAR month; /**< month */
+	UCHAR day; /**< day */
+	UCHAR hour; /**< hour */
+	UCHAR min; /**< minute */
+	UCHAR sec; /**< second */
+} FJ_DCF_DATEDB_DATE_INFO;
+修改爲：
+typedef struct
+{
+	kushort adYear; /**< A.D. year */
+	kuchar month; /**< month */
+	kuchar day; /**< day */
+	kuchar hour; /**< hour */
+	kuchar min; /**< minute */
+	kuchar sec; /**< second */
+}FjDcfDatedbDateInfo;
+
+
+
+typedef struct
+{
+	kushort DateIndex; /**< The first index specified month */
+	kushort Objnum; /**< Number of objects specified month */
+} FJ_DCF_DATE_DB_INDICATER;
+修改为：
+typedef struct
+{
+	kushort dateIndex; /**< The first index specified month */
+	kushort objnum; /**< Number of objects specified month */
+} FjDcfDateDbIndicater;
 
 
 
 
 
 
+五　枚举修改
+typedef enum {
+	E_FJ_MUX_CH_0	= 0,					/**< Mux CH0 */
+	E_FJ_MUX_CH_1,							/**< Mux CH1 */
+	E_FJ_MUX_CH_2,							/**< Mux CH2 */
+	E_FJ_MUX_CH_3,							/**< Mux CH3 */
+	E_FJ_MUX_CH_MAX							/**< Mux CH MAX */
+} E_FJ_MUX_CH;
+修改为
+typedef enum
+{
+	FjMux_E_FJ_MUX_CH_0 = 0, /**< Mux CH0 */
+	FjMux_E_FJ_MUX_CH_1, /**< Mux CH1 */
+	FjMux_E_FJ_MUX_CH_2, /**< Mux CH2 */
+	FjMux_E_FJ_MUX_CH_3, /**< Mux CH3 */
+	FjMux_E_FJ_MUX_CH_MAX /**< Mux CH MAX */
+} EFjMuxCh;
 
+
+typedef enum {
+	E_FJ_DEMUX_CODEC_VIDEO_H264	= 0,	/**< Codec is H.264 */
+	E_FJ_DEMUX_CODEC_VIDEO_H265	= 1,	/**< Codec is H.265 */
+	E_FJ_DEMUX_CODEC_AUDIO_AAC	= 2,	/**< Codec is AAC */
+	E_FJ_DEMUX_CODEC_AUDIO_PCM	= 3,	/**< Codec is PCM */
+	E_FJ_DEMUX_CODEC_INVALID	= 4,	/**< Video or Audio Codec is invalid. */
+} E_FJ_DEMUX_CODEC;
+修改为：
+typedef enum {
+	FjDemux_E_FJ_DEMUX_CODEC_VIDEO_H264	= 0,	/**< Codec is H.264 */
+	FjDemux_E_FJ_DEMUX_CODEC_VIDEO_H265	= 1,	/**< Codec is H.265 */
+	FjDemux_E_FJ_DEMUX_CODEC_AUDIO_AAC	= 2,	/**< Codec is AAC */
+	FjDemux_E_FJ_DEMUX_CODEC_AUDIO_PCM	= 3,	/**< Codec is PCM */
+	FjDemux_E_FJ_DEMUX_CODEC_INVALID	= 4,	/**< Video or Audio Codec is invalid. */
+} EFjDemuxCodec;
+
+
+
+typedef enum {
+	E_FJ_DEMUX_DIRECTION_FWD	= 0,	/**< Direction is Forward */
+	E_FJ_DEMUX_DIRECTION_RWD	= 1,	/**< Direction is Rewind */
+} E_FJ_DEMUX_DIRECTION;
+修改为：
+typedef enum {
+	FjDemux_E_FJ_DEMUX_DIRECTION_FWD	= 0,	/**< Direction is Forward */
+	FjDemux_E_FJ_DEMUX_DIRECTION_RWD	= 1,	/**< Direction is Rewind */
+} EFjDemuxDirection;
+
+
+typedef enum {
+	E_FJ_DEMUX_SPEED_1X			= 0,	/**< Normal speed */
+	E_FJ_DEMUX_SPEED_2X			= 1,	/**<     2x speed */
+	E_FJ_DEMUX_SPEED_4X			= 2,	/**<     4x speed */
+	E_FJ_DEMUX_SPEED_8X			= 3,	/**<     8x speed */
+	E_FJ_DEMUX_SPEED_1_2X		= 4,	/**<   1/2x speed */
+	E_FJ_DEMUX_SPEED_1_4X		= 5,	/**<   1/4x speed */
+	E_FJ_DEMUX_SPEED_1_8X		= 6,	/**<   1/8x speed */
+} E_FJ_DEMUX_SPEED;
+修改为：
+typedef enum
+{
+	FjDemux_E_FJ_DEMUX_SPEED_1X = 0, /**< Normal speed */
+	FjDemux_E_FJ_DEMUX_SPEED_2X = 1, /**<     2x speed */
+	FjDemux_E_FJ_DEMUX_SPEED_4X = 2, /**<     4x speed */
+	FjDemux_E_FJ_DEMUX_SPEED_8X = 3, /**<     8x speed */
+	FjDemux_E_FJ_DEMUX_SPEED_1_2X = 4, /**<   1/2x speed */
+	FjDemux_E_FJ_DEMUX_SPEED_1_4X = 5, /**<   1/4x speed */
+	FjDemux_E_FJ_DEMUX_SPEED_1_8X = 6, /**<   1/8x speed */
+} EFjDemuxSpeed;
+
+
+
+typedef enum {
+	FJ_DCF_CUR_DIR_FREE_CHARS,	/**< Get free charactor of current directory */
+	FJ_DCF_CUR_FILE_FREE_CHARS,	/**< Get free charactor of current file */
+	FJ_DCF_LAST_DIR_FREE_CHARS,	/**< Get free charactor of last directory */
+	FJ_DCF_LAST_FILE_FREE_CHARS	/**< Get free charactor of last file */
+} FJ_DCF_FREE_CHARS;
+修改为：
+typedef enum {
+	FjDcf_FJ_DCF_CUR_DIR_FREE_CHARS,	/**< Get free charactor of current directory */
+	FjDcf_FJ_DCF_CUR_FILE_FREE_CHARS,	/**< Get free charactor of current file */
+	FjDcf_FJ_DCF_LAST_DIR_FREE_CHARS,	/**< Get free charactor of last directory */
+	FjDcf_FJ_DCF_LAST_FILE_FREE_CHARS	/**< Get free charactor of last file */
+} FDcfFreeChars;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_DIR_BASE_SET_STR,		/**< Creates the database of DCF */
+	FJ_PARA_DCFDB_DIR_CURRENT_SET_STR	/**< Set current directory */
+} FJ_DCF_SET_STR_VAL;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_DIR_BASE_SET_STR,		/**< Creates the database of DCF */
+	FjDcf_FJ_PARA_DCFDB_DIR_CURRENT_SET_STR	/**< Set current directory */
+} FjDcfSetStrVal;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_ATTR_SET,			/**< Set the attribute of the object. */
+	FJ_PARA_DCFDB_DIR_CURRENT_SET	/**< Set current directory */
+} FJ_DCF_SET_LONG_VAL;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_ATTR_SET,			/**< Set the attribute of the object. */
+	FjDcf_FJ_PARA_DCFDB_DIR_CURRENT_SET	/**< Set current directory */
+} FjDcfSetLongVal;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_DIR_GET_STR,		/**< Get directory name */
+	FJ_PARA_DCFDB_OBJ_GET_STR,		/**< Get object name */
+	FJ_PARA_DCFDB_DIR_OBJ_GET_STR,	/**< Get dirctory name and object name */
+	FJ_PARA_DCFDB_EXT_GET_STR,		/**< Get extention type */
+	FJ_PARA_DCFDB_FULL_PATH_GET_STR		/**< Get full path  */
+} FJ_DCF_GET_STR_VAL;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_DIR_GET_STR,		/**< Get directory name */
+	FjDcf_FJ_PARA_DCFDB_OBJ_GET_STR,		/**< Get object name */
+	FjDcf_FJ_PARA_DCFDB_DIR_OBJ_GET_STR,	/**< Get dirctory name and object name */
+	FjDcf_FJ_PARA_DCFDB_EXT_GET_STR,		/**< Get extention type */
+	FjDcf_FJ_PARA_DCFDB_FULL_PATH_GET_STR		/**< Get full path  */
+} FjDcfGetStrVal;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_DIR_TOTAL_CNT_GET,	/**< Get number of total directory in "DCIM" count */
+	FJ_PARA_DCFDB_DIR_GET,				/**< Get index number of directory */
+	FJ_PARA_DCFDB_OBJ_CNT_GET,			/**< Get count of object in the current directory */
+	FJ_PARA_DCFDB_ATTR_GET,				/**< Get attribute of object */
+	FJ_PARA_DCFDB_DATE_TIME_GET			/**< Get the directory created date and time */
+} FJ_DCF_GET_LONG_VAL;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_DIR_TOTAL_CNT_GET,	/**< Get number of total directory in "DCIM" count */
+	FjDcf_FJ_PARA_DCFDB_DIR_GET,				/**< Get index number of directory */
+	FjDcf_FJ_PARA_DCFDB_OBJ_CNT_GET,			/**< Get count of object in the current directory */
+	FjDcf_FJ_PARA_DCFDB_ATTR_GET,				/**< Get attribute of object */
+	FjDcf_FJ_PARA_DCFDB_DATE_TIME_GET			/**< Get the directory created date and time */
+} FjDcfGetLongVal;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_DIR_GET_BY_STR,		/**< Get Directory Index */
+	FJ_PARA_DCFDB_DIR_OBJ_GET_BY_STR,	/**< Get Directory Index and Object Index */
+	FJ_PARA_DCFDB_EXT_GET_BY_STR		/**< Get File Type */
+} FJ_DCF_GET_LONG_VAL_BY_STR;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_DIR_GET_BY_STR,		/**< Get Directory Index */
+	FjDcf_FJ_PARA_DCFDB_DIR_OBJ_GET_BY_STR,	/**< Get Directory Index and Object Index */
+	FjDcf_FJ_PARA_DCFDB_EXT_GET_BY_STR		/**< Get File Type */
+} FjDcfGetLongValByStr;
+
+
+
+typedef enum {
+	FJ_PARA_DCFDB_SELECT_DIR,		/**< The DCF directory specified by "dir_index" parameter is deleted */
+	FJ_PARA_DCFDB_ALL_EMPTY_DIR,	/**< The DCF directory without all files that exist in the directory "DCIM" is deleted. */
+} FJ_DCF_DCF_DIR_DEL;
+修改为：
+typedef enum {
+	FjDcf_FJ_PARA_DCFDB_SELECT_DIR,		/**< The DCF directory specified by "dir_index" parameter is deleted */
+	FjDcf_FJ_PARA_DCFDB_ALL_EMPTY_DIR,	/**< The DCF directory without all files that exist in the directory "DCIM" is deleted. */
+} FjDcfDcfDirDel;
+
+
+
+typedef enum {
+	FJ_DCF_DATE_DO_NOT_FILTER = 0,					/**< Clear filter for DateDB */
+	FJ_DCF_DATE_SET_FACE_FILTER,					/**< Set face filter for DateDB */
+	FJ_DCF_DATE_FILTER_MAX
+} FJ_DCF_DATE_FILTER_TYPE;
+修改为：
+typedef enum {
+	FjDcf_FJ_DCF_DATE_DO_NOT_FILTER = 0,					/**< Clear filter for DateDB */
+	FjDcf_FJ_DCF_DATE_SET_FACE_FILTER,					/**< Set face filter for DateDB */
+	FjDcf_FJ_DCF_DATE_FILTER_MAX
+} FjDcfDateFilterType;
+
+
+
+六　宏修改
+CO_WIFI_EMMC_SAVE　　　　　改为	FjMux_CO_WIFI_EMMC_SAVE
+
+
+#define FJ_MUX_OFF						0	/**< flag OFF. */
+#define FJ_MUX_ON						1	/**< flag OFF. */
+#define D_BF_MUX_HVCC_ARRAY_NUM_MAX		(3)		// VPS + SPS + PPS = 3.
+#define D_BF_MUX_HVCC_NAL_NUM_MAX		(10)
+#define D_BF_MUX_H265_NALTYPE_AUD		(35)
+#define D_BF_MUX_H265_NALTYPE_VPS		(32)
+#define D_BF_MUX_H265_NALTYPE_SPS		(33)
+#define D_BF_MUX_H265_NALTYPE_PPS		(34)
+/* Function Result*/
+#define FJ_OK_MP4_COMMON_OK			( 0)		// OK
+#define FJ_OK_MAX_TIME_END			( 1)		// Normal End(MaxTime)
+#define FJ_OK_MAX_SIZE_END			( 2)		// Normal End(MaxSize)
+#define FJ_OK_MEDIAFULL_END			( 3)		// Normal End(Media Full)
+#define FJ_ERROR_MP4_COMMON_NG		( 4)		// NG
+//Memory Controller Update Opt
+#define FJ_MUX_MEMOPT_ADD			( 0)		// Add New File
+#define FJ_MUX_MEMOPT_DELETE		( 1)		// Delete
+
+修改为：
+#define FjMux_FJ_MUX_OFF						0	/**< flag OFF. */
+#define FjMux_FJ_MUX_ON						1	/**< flag OFF. */
+
+#define FjMux_D_BF_MUX_HVCC_ARRAY_NUM_MAX		(3)		// VPS + SPS + PPS = 3.
+#define FjMux_D_BF_MUX_HVCC_NAL_NUM_MAX		(10)
+
+#define FjMux_D_BF_MUX_H265_NALTYPE_AUD		(35)
+#define FjMux_D_BF_MUX_H265_NALTYPE_VPS		(32)
+#define FjMux_D_BF_MUX_H265_NALTYPE_SPS		(33)
+#define FjMux_D_BF_MUX_H265_NALTYPE_PPS		(34)
+
+/* Function Result*/
+#define FjMux_FJ_OK_MP4_COMMON_OK			( 0)		// OK
+#define FjMux_FJ_OK_MAX_TIME_END			( 1)		// Normal End(MaxTime)
+#define FjMux_FJ_OK_MAX_SIZE_END			( 2)		// Normal End(MaxSize)
+#define FjMux_FJ_OK_MEDIAFULL_END			( 3)		// Normal End(Media Full)
+#define FjMux_FJ_ERROR_MP4_COMMON_NG		( 4)		// NG
+
+//Memory Controller Update Opt
+#define FjMux_FJ_MUX_MEMOPT_ADD			( 0)		// Add New File
+#define FjMux_FJ_MUX_MEMOPT_DELETE		( 1)		// Delete
+
+ 
+DCF_DB_CURRENT_DIR   修改为　 FjDcf_DCF_DB_CURRENT_DIR
+FJ_DCF_DATE_FILE_EXIST　　　　修改为　　　FjDcf_FJ_DCF_DATE_FILE_EXIST
+FJ_DCF_DATE_FILE_NO_EXIST　修改为　　　FjDcf_FJ_DCF_DATE_FILE_NO_EXIST
+FJ_DCF_DATE_FILE_MEDIA_ID_UNMATCH　　修改为　FjDcf_FJ_DCF_DATE_FILE_MEDIA_ID_UNMATCH
+FJ_DCF_DATE_FILE_DB_VERSION_UNMATCH　　修改为　FjDcf_FJ_DCF_DATE_FILE_DB_VERSION_UNMATCH
+FJ_DCF_DATE_UPDATE_DB_ADD_FILE　　修改为　FjDcf_FJ_DCF_DATE_UPDATE_DB_ADD_FILE
+FJ_DCF_DATE_UPDATE_DB_DEL_FILE　　修改为　FjDcf_FJ_DCF_DATE_UPDATE_DB_DEL_FILE
+FJ_DCF_DATE_SYNCHRO　　　修改为　FjDcf_FJ_DCF_DATE_SYNCHRO
+FJ_DCF_DATE_ASYNCHRO　　修改为　FjDcf_FJ_DCF_DATE_ASYNCHRO
+
+
+
+
+七　修改参数到５个以内
+kint32　fj_mux_video_add_sample(FjMux *self, kuint streamId, kuchar* sampleAddress,
+				kulong sampleSize, kulong ctOffset, kuint frameType,
+				kuchar endChunkFlg, kuchar endFlg);
+通过参数结构体：
+typedef struct
+{
+	kuint streamId;
+	kuchar* sampleAddress;
+	kulong sampleSize;
+	kulong ctOffset;
+	kuint frameType;
+	kuchar endChunkFlg;
+	kuchar endFlg;
+}videoAddSample;
+修改为：
+kint32 	fj_mux_video_add_sample(FjMux *self,videoAddSample *paras);
 
 
 

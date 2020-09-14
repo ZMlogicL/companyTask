@@ -36,25 +36,25 @@ struct _MxicMasterSlavePrivate
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckRwMasterNumber( UCHAR masterType, UCHAR master );
-static INT32 imMxicCheckSetMasterWArbiterParam( ImMxicWArbiter arbiter, 
+static kint32 imMxicCheckRwMasterNumber( kuchar masterType, kuchar master );
+static kint32 imMxicCheckSetMasterWArbiterParam( ImMxicWArbiter arbiter, 
 												const MxicWarbiterAssignPort* const assign );
-static INT32 imMxicCheckGetMasterWArbiterParam(ImMxicWArbiter arbiter, 
+static kint32 imMxicCheckGetMasterWArbiterParam(ImMxicWArbiter arbiter, 
 												MxicWarbiterAssignPort* const assign);
-static INT32 imMxicCheckSetMasterRArbiterParam( ImMxicRArbiter arbiter, 
+static kint32 imMxicCheckSetMasterRArbiterParam( ImMxicRArbiter arbiter, 
 												const MxicRarbiterAssignPort* const assign );
-static INT32 imMxicCheckGetMasterRArbiterParam( ImMxicRArbiter arbiter, 
+static kint32 imMxicCheckGetMasterRArbiterParam( ImMxicRArbiter arbiter, 
 												MxicRarbiterAssignPort* const assign );
 #endif // CO_PARAM_CHECK
-static INT32 imMxicSetMasterWArbiterReg( MxicMasterSlave *self, WArbiter arg, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetMasterWArbiterReg( MxicMasterSlave *self, WArbiter arg, volatile struct io_jdsmxic* ioMxic, 
 										 volatile struct io_jdsmxic_tbl* ioMxicTbl, 
 										 const MxicWarbiterAssignPort* const assign );
-static INT32 imMxicSetMasterRArbiterReg( MxicMasterSlave *self, RArbiter arg, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetMasterRArbiterReg( MxicMasterSlave *self, RArbiter arg, volatile struct io_jdsmxic* ioMxic, 
 										 volatile struct io_jdsmxic_tbl* ioMxicTbl,  
 										 const MxicRarbiterAssignPort* const assign );
-static INT32 imMxicSetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
 									ImMxicSlaveNumber slaveNumber, ImMxicSlaveArea const* const slaveArea );
-static INT32 imMxicGetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicGetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
 									ImMxicSlaveNumber slaveNumber, ImMxicSlaveArea* const slaveArea );
 
 
@@ -92,9 +92,9 @@ Check master number and type.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckRwMasterNumber( UCHAR masterType, UCHAR master )
+static kint32 imMxicCheckRwMasterNumber( kuchar masterType, kuchar master )
 {
-	INT32 result;
+	kint32 result;
 
 	// Check master type
 	if ( ( master & MxicUtlis_MASTER_TYPE_CHECK_MASK ) == masterType ) {
@@ -118,13 +118,13 @@ Check parameter of mxic_master_slave_set_master_w_arbiter function.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckSetMasterWArbiterParam( ImMxicWArbiter arbiter, 
+static kint32 imMxicCheckSetMasterWArbiterParam( ImMxicWArbiter arbiter, 
 												const MxicWarbiterAssignPort* const assign )
 {
-	INT32 portPos;
-	INT32 portPos2;
-	INT32 slotPos;
-	INT32 slotPos2;
+	kint32 portPos;
+	kint32 portPos2;
+	kint32 slotPos;
+	kint32 slotPos2;
 
 	if ( arbiter >= MxicUtlis_W_ARBITER_MAX ) {
 		// arbiter parameter value is illegal.
@@ -225,7 +225,7 @@ Check parameter of mxic_master_slave_get_master_w_arbiter function.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckGetMasterWArbiterParam(ImMxicWArbiter arbiter, 
+static kint32 imMxicCheckGetMasterWArbiterParam(ImMxicWArbiter arbiter, 
 												MxicWarbiterAssignPort* const assign)
 {
 	if ( arbiter >= MxicUtlis_W_ARBITER_MAX ) {
@@ -250,13 +250,13 @@ Check parameter of mxic_master_slave_set_master_r_arbiter function.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckSetMasterRArbiterParam( ImMxicRArbiter arbiter, 
+static kint32 imMxicCheckSetMasterRArbiterParam( ImMxicRArbiter arbiter, 
 												const MxicRarbiterAssignPort* const assign )
 {
-	INT32 portPos;
-	INT32 portPos2;
-	INT32 slotPos;
-	INT32 slotPos2;
+	kint32 portPos;
+	kint32 portPos2;
+	kint32 slotPos;
+	kint32 slotPos2;
 
 	if ( arbiter >= MxicUtlis_R_ARBITER_MAX ) {
 		// arbiter parameter value is illegal.
@@ -361,7 +361,7 @@ Check parameter of mxic_master_slave_get_master_r_arbiter function.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckGetMasterRArbiterParam( ImMxicRArbiter arbiter, 
+static kint32 imMxicCheckGetMasterRArbiterParam( ImMxicRArbiter arbiter, 
 												MxicRarbiterAssignPort* const assign )
 {
 	if ( arbiter >= MxicUtlis_R_ARBITER_MAX ) {
@@ -393,12 +393,12 @@ This local function set the W master to the W arbiter.<br>
 @remarks		The setting changed by this function is reflected by the configration start.
 @remarks		MxicUtlis_W_RESERVE is set to the part where the channel is not set up without fail.
 */
-static INT32 imMxicSetMasterWArbiterReg( MxicMasterSlave *self, WArbiter args, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetMasterWArbiterReg( MxicMasterSlave *self, WArbiter args, volatile struct io_jdsmxic* ioMxic, 
 										 volatile struct io_jdsmxic_tbl* ioMxicTbl,  
 										 const MxicWarbiterAssignPort* const assign )
 {
-	INT32 i, j;
-	INT32 result;
+	kint32 i, j;
+	kint32 result;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
 	result = D_DDIM_OK;
@@ -475,12 +475,12 @@ This local function get the R master from the R arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicSetMasterRArbiterReg( MxicMasterSlave *self, RArbiter args, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetMasterRArbiterReg( MxicMasterSlave *self, RArbiter args, volatile struct io_jdsmxic* ioMxic, 
 										 volatile struct io_jdsmxic_tbl* ioMxicTbl, 
 										 const MxicRarbiterAssignPort* const assign )
 {
-	INT32 i, j;
-	INT32 result;
+	kint32 i, j;
+	kint32 result;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
 	result = D_DDIM_OK;
@@ -575,10 +575,10 @@ However, reflection of change is not carried out.
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-static INT32 imMxicSetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicSetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
 									ImMxicSlaveNumber slaveNumber,  ImMxicSlaveArea const* const slaveArea )
 {
-	UCHAR regReadSw;
+	kuchar regReadSw;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -625,7 +625,7 @@ Get slave area setting of specified slave number.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-static INT32 imMxicGetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
+static kint32 imMxicGetSlaveAreaReg( MxicMasterSlave *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, 
 									ImMxicSlaveNumber slaveNumber, ImMxicSlaveArea* const slaveArea )
 {
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
@@ -667,11 +667,11 @@ This function set slave area setting of specified slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_set_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_set_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
 										ImMxicSlaveNumber slaveNumber, 
 										ImMxicSlaveArea const* const slaveArea )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
@@ -715,11 +715,11 @@ This function get slave area setting of specified slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_get_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
 										ImMxicSlaveNumber slaveNumber, 
 										ImMxicSlaveArea* const slaveArea )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
@@ -750,12 +750,12 @@ This function set slave area setting of all slave number.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32 mxic_master_slave_set_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_set_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
 											const MxicAllSlaveArea* const allSlaveArea )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
-	INT32						i;
+	kint32						i;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -806,12 +806,12 @@ This function get slave area setting of all slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_get_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
 											MxicAllSlaveArea* const allSlaveArea )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
-	INT32						i;
+	kint32						i;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -854,10 +854,10 @@ This function set interruption setting of salave area decode error.<br>
 @remarks		Please acquire error status with an mxic_master_slave_get_decode_error function 
 				at the time of decode error interruption generating. 
 */
-INT32 mxic_master_slave_set_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_set_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
 											  const MxicDecErrInt* const decErrInt )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
@@ -901,10 +901,10 @@ This function get interruption setting of salave area decode error.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_get_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
 											  MxicDecErrInt* const decErrInt )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
@@ -948,9 +948,9 @@ This function get decode error status.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_decode_error( MxicMasterSlave *self, ImMxicUnit unit, ImMxicDecErr* const status )
+kint32 mxic_master_slave_get_decode_error( MxicMasterSlave *self, ImMxicUnit unit, ImMxicDecErr* const status )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 
@@ -1016,11 +1016,11 @@ This function set the W master to the W arbiter.<br>
 @remarks		The setting changed by this function is reflected by the configration start.
 @remarks		MxicUtlis_W_RESERVE is set to the part where the channel is not set up without fail.
 */
-INT32 mxic_master_slave_set_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_set_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 											  ImMxicWArbiter arbiter, 
 											  const MxicWarbiterAssignPort* const assign )
 {
-	INT32							result;
+	kint32							result;
 	volatile struct io_jdsmxic*		ioMxic;
 	volatile struct io_jdsmxic_tbl*	ioMxicTbl;
 	WArbiter wArgs = {unit, arbiter};
@@ -1080,11 +1080,11 @@ This function get the W master from the W arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
+kint32 mxic_master_slave_get_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
 											  MxicWarbiterAssignPort* const assign )
 {
-	INT32							i, j;
-	INT32							result;
+	kint32							i, j;
+	kint32							result;
 	volatile struct io_jdsmxic*		ioMxic;
 	volatile struct io_jdsmxic_tbl*	ioMxicTbl;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
@@ -1188,10 +1188,10 @@ This function set the R master to the R arbiter.<br>
 @remarks		The setting changed by this function is reflected by the configration start.
 @remarks		MxicUtlis_R_RESERVE is set to the part where the channel is not set up without fail.
 */
-INT32 mxic_master_slave_set_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicRArbiter arbiter, 
+kint32 mxic_master_slave_set_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicRArbiter arbiter, 
 											  const MxicRarbiterAssignPort* const assign )
 {
-	INT32							result;
+	kint32							result;
 	volatile struct io_jdsmxic*		ioMxic;
 	volatile struct io_jdsmxic_tbl*	ioMxicTbl;
 	RArbiter rArgs = {unit, arbiter};
@@ -1251,11 +1251,11 @@ This function get the R master from the R arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicRArbiter arbiter, 
+kint32 mxic_master_slave_get_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicRArbiter arbiter, 
 											  MxicRarbiterAssignPort* const assign )
 {
-	INT32							i, j;
-	INT32							result;
+	kint32							i, j;
+	kint32							result;
 	volatile struct io_jdsmxic*		ioMxic;
 	volatile struct io_jdsmxic_tbl*	ioMxicTbl;
     MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
@@ -1356,11 +1356,11 @@ This function set the master to the all arbiter.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting changed by this function is reflected by the configration start.
 */
-INT32 mxic_master_slave_set_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_set_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												const MxicAllArbiterAssign* const allAssign )
 {
-	INT32							i;
-	INT32							result;
+	kint32							i;
+	kint32							result;
 	volatile struct io_jdsmxic*		ioMxic;
 	volatile struct io_jdsmxic_tbl*	ioMxicTbl;
 	WArbiter wArgs;
@@ -1437,11 +1437,11 @@ This function get the master from the all arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_slave_get_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32 mxic_master_slave_get_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												MxicAllArbiterAssign* const allAssign )
 {
-	INT32 i;
-	INT32 result;
+	kint32 i;
+	kint32 result;
 
 #ifdef CO_PARAM_CHECK
 	if ( allAssign == NULL ) {
@@ -1478,11 +1478,11 @@ INT32 mxic_master_slave_get_master_all_arbiter( MxicMasterSlave *self, ImMxicUni
 	return D_DDIM_OK;
 }
 
-void mxic_master_slave_for_dec_err(MxicMasterSlave *self, ImMxicUnit unit, INT32 decErrCh)
+void mxic_master_slave_for_dec_err(MxicMasterSlave *self, ImMxicUnit unit, kint32 decErrCh)
 {
 	MxicMasterSlavePrivate *priv = MXIC_MASTER_SLAVE_GET_PRIVATE(self);
 	if ( priv->gImMxicDecErrCallback[unit] != NULL ) {
-		((VOID (*)()) priv->gImMxicDecErrCallback[unit])( decErrCh );
+		((void (*)()) priv->gImMxicDecErrCallback[unit])( decErrCh );
 	}
 }
 

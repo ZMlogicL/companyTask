@@ -15,8 +15,12 @@
 #define __IM_IIP_FLT_REGISTER_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imiipmultiregister.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,9 +28,13 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_FLT_REGISTER							(im_iip_flt_register_get_type())
-#define IM_IIP_FLT_REGISTER(obj)							(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipFltRegister))
-#define IM_IS_IIP_FLT_REGISTER(obj)						(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_FLT_REGISTER))
+#define IM_TYPE_IIP_FLT_REGISTER			(im_iip_flt_register_struct_get_type ())
+#define IM_IIP_FLT_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_FLT_REGISTER, ImIipFltRegister))
+#define IM_IIP_FLT_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_FLT_REGISTER, ImIipFltRegisterClass))
+#define IM_IS_IIP_FLT_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_FLT_REGISTER))
+#define IM_IS_IIP_FLT_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_FLT_REGISTER))
+#define IM_IIP_FLT_REGISTER_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_FLT_REGISTER, ImIipFltRegisterClass))
+
 
 typedef union _UimfltTdltopcnf				UimfltTdltopcnf;
 typedef union _UimfltPixiddef					UimfltPixiddef;
@@ -77,8 +85,10 @@ typedef union _UimfltRing						UimfltRing;
 typedef union _UimfltBfMd						UimfltBfMd;
 typedef struct _TimFltDump						TimFltDump;
 
-typedef struct _ImIipFltRegister 								ImIipFltRegister;
-typedef struct _ImIipFltRegisterPrivate 					ImIipFltRegisterPrivate;
+typedef struct _ImIipFltRegister				ImIipFltRegister;
+typedef struct _ImIipFltRegisterClass		ImIipFltRegisterClass;
+typedef struct _ImIipFltRegisterPrivate 		ImIipFltRegisterPrivate;
+
 
 
 ///////////////////////////////////////////////////////////////
@@ -88,15 +98,15 @@ typedef struct _ImIipFltRegisterPrivate 					ImIipFltRegisterPrivate;
 union _UimfltTdltopcnf
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< waitconf0<br>Refer to @ref EimPortid. */
-			kulong waitconf0 :6;
-			kulong :2;
-			kulong waitconf1 :6;
-			kulong :2;
-			kulong dataconf :6;
-			kulong :10;
+			gulong waitconf0 :6;
+			gulong :2;
+			gulong waitconf1 :6;
+			gulong :2;
+			gulong dataconf :6;
+			gulong :10;
 		} bit;
 };
 
@@ -104,13 +114,13 @@ union _UimfltTdltopcnf
 union _UimfltPixiddef
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< ipixid0 */
-			kulong ipixid0 :4;
-			kulong :12;
-			kulong ipixid1 :4;
-			kulong :12;
+			gulong ipixid0 :4;
+			gulong :12;
+			gulong ipixid1 :4;
+			gulong :12;
 		} bit;
 };
 
@@ -118,19 +128,19 @@ union _UimfltPixiddef
 union _UimfltTdlCtl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< fm<br>Refer to @ref EimFm. */
-			kulong fm :2;
-			kulong :2;
-			kulong lnum :1;
-			kulong :3;
-			kulong saverd :2;
-			kulong :2;
-			kulong inputMode :2;
-			kulong :2;
-			kulong csel :2;
-			kulong :14;
+			gulong fm :2;
+			gulong :2;
+			gulong lnum :1;
+			gulong :3;
+			gulong saverd :2;
+			gulong :2;
+			gulong inputMode :2;
+			gulong :2;
+			gulong csel :2;
+			gulong :14;
 		} bit;
 };
 
@@ -138,11 +148,11 @@ union _UimfltTdlCtl
 union _UimfltCalcMd
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< calcMd<br>Refer to @ref EimCalcMd */
-			kulong calcMd :2;
-			kulong :30;
+			gulong calcMd :2;
+			gulong :30;
 		} bit;
 };
 
@@ -150,13 +160,13 @@ union _UimfltCalcMd
 union _UimfltTdlHsize
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< hstart */
-			kulong hstart :14;
-			kulong :2;
-			kulong hend :14;
-			kulong :2;
+			gulong hstart :14;
+			gulong :2;
+			gulong hend :14;
+			gulong :2;
 		} bit;
 };
 
@@ -164,13 +174,13 @@ union _UimfltTdlHsize
 union _UimfltTdlVsize
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< vstart */
-			kulong vstart :14;
-			kulong :2;
-			kulong vend :14;
-			kulong :2;
+			gulong vstart :14;
+			gulong :2;
+			gulong vend :14;
+			gulong :2;
 		} bit;
 };
 
@@ -178,13 +188,13 @@ union _UimfltTdlVsize
 union _UimfltTdlPhsz
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< phsz0 */
-			kulong phsz0 :14;
-			kulong :2;
-			kulong phsz1 :14;
-			kulong :2;
+			gulong phsz0 :14;
+			gulong :2;
+			gulong phsz1 :14;
+			gulong :2;
 		} bit;
 };
 
@@ -192,30 +202,30 @@ union _UimfltTdlPhsz
 union _UimfltTdlPvsz
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< pvsz0 */
-			kulong pvsz0 :14;
-			kulong :2;
-			kulong pvsz1 :14;
-			kulong :2;
+			gulong pvsz0 :14;
+			gulong :2;
+			gulong pvsz1 :14;
+			gulong :2;
 		} bit;
 };
 
 /** structure of tdlPf (0020h) */
 union _UimfltTdlPf
 {
-		kulong word; /**< All bits */
+		gulong word; /**< All bits */
 		struct {
 			/**< pfOn<br>Refer to @ref EimPfOn. */
-			kulong pfOn :1;
-			kulong :1;
-			kulong pfMd :1;
-			kulong :1;
-			kulong pfNum :6;
-			kulong :2;
-			kulong pfAdjNum :4;
-			kulong pfAdjVal :16;
+			gulong pfOn :1;
+			gulong :1;
+			gulong pfMd :1;
+			gulong :1;
+			gulong pfNum :6;
+			gulong :2;
+			gulong pfAdjNum :4;
+			gulong pfAdjVal :16;
 		} bit;
 };
 
@@ -223,21 +233,21 @@ union _UimfltTdlPf
 union _UimfltUnitOut
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< unitOutAD0<br>Refer to @ref EimUnitOut. */
-			kulong unitOutAD0 :3;
-			kulong :1;
-			kulong unitOutAD1 :3;
-			kulong :1;
-			kulong unitOutAD2 :3;
-			kulong :5;
-			kulong unitOutBD0 :3;
-			kulong :1;
-			kulong unitOutBD1 :3;
-			kulong :1;
-			kulong unitOutBD2 :3;
-			kulong :5;
+			gulong unitOutAD0 :3;
+			gulong :1;
+			gulong unitOutAD1 :3;
+			gulong :1;
+			gulong unitOutAD2 :3;
+			gulong :5;
+			gulong unitOutBD0 :3;
+			gulong :1;
+			gulong unitOutBD1 :3;
+			gulong :1;
+			gulong unitOutBD2 :3;
+			gulong :5;
 		} bit;
 };
 
@@ -245,13 +255,13 @@ union _UimfltUnitOut
 union _UimfltFinClpAd0
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpAD0 */
-			kint64 finClvlpAD0 :15;
-			kulong :1;
-			kint64 finClvlmAD0 :15;
-			kulong :1;
+			gs64 finClvlpAD0 :15;
+			gulong :1;
+			gs64 finClvlmAD0 :15;
+			gulong :1;
 		} bit;
 };
 
@@ -259,13 +269,13 @@ union _UimfltFinClpAd0
 union _UimfltFinClpAd1
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpAD1 */
-			kint64 finClvlpAD1 :9;
-			kulong :7;
-			kint64 finClvlmAD1 :9;
-			kulong :7;
+			gs64 finClvlpAD1 :9;
+			gulong :7;
+			gs64 finClvlmAD1 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -273,13 +283,13 @@ union _UimfltFinClpAd1
 union _UimfltFinClpAd2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpAD2 */
-			kint64 finClvlpAD2 :9;
-			kulong :7;
-			kint64 finClvlmAD2 :9;
-			kulong :7;
+			gs64 finClvlpAD2 :9;
+			gulong :7;
+			gs64 finClvlmAD2 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -287,13 +297,13 @@ union _UimfltFinClpAd2
 union _UimfltFinClpBd0
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpBD0 */
-			kint64 finClvlpBD0 :15;
-			kulong :1;
-			kint64 finClvlmBD0 :15;
-			kulong :1;
+			gs64 finClvlpBD0 :15;
+			gulong :1;
+			gs64 finClvlmBD0 :15;
+			gulong :1;
 		} bit;
 };
 
@@ -301,13 +311,13 @@ union _UimfltFinClpBd0
 union _UimfltFinClpBd1
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpBD1 */
-			kint64 finClvlpBD1 :9;
-			kulong :7;
-			kint64 finClvlmBD1 :9;
-			kulong :7;
+			gs64 finClvlpBD1 :9;
+			gulong :7;
+			gs64 finClvlmBD1 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -315,13 +325,13 @@ union _UimfltFinClpBd1
 union _UimfltFinClpBd2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< finClvlpBD2 */
-			kint64 finClvlpBD2 :9;
-			kulong :7;
-			kint64 finClvlmBD2 :9;
-			kulong :7;
+			gs64 finClvlpBD2 :9;
+			gulong :7;
+			gs64 finClvlmBD2 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -329,13 +339,13 @@ union _UimfltFinClpBd2
 union _UimfltIsoMd
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< IsoJm */
-			kulong IsoJm :1;
-			kulong :15;
-			kulong IsoCm :1;
-			kulong :15;
+			gulong IsoJm :1;
+			gulong :15;
+			gulong IsoCm :1;
+			gulong :15;
 		} bit;
 };
 
@@ -344,13 +354,13 @@ union _UimfltIsoMd
 union _UimfltIsoThD
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< IsoUthD */
-			kulong IsoUthD :15;
-			kulong :1;
-			kulong IsoLthD :15;
-			kulong :1;
+			gulong IsoUthD :15;
+			gulong :1;
+			gulong IsoLthD :15;
+			gulong :1;
 		} bit;
 };
 
@@ -359,13 +369,13 @@ union _UimfltIsoThD
 union _UimfltIsoGainD
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< IsoGaD */
-			kulong IsoGaD :12;
-			kulong :4;
-			kulong IsoGbD :12;
-			kulong :4;
+			gulong IsoGaD :12;
+			gulong :4;
+			gulong IsoGbD :12;
+			gulong :4;
 		} bit;
 };
 
@@ -373,11 +383,11 @@ union _UimfltIsoGainD
 union _UimfltSpfSpfMd
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfMd<br>Refer to @ref EimSpfMd. */
-			kulong spfMd :2;
-			kulong :30;
+			gulong spfMd :2;
+			gulong :30;
 		} bit;
 };
 
@@ -386,44 +396,44 @@ union _UimfltSpfSpfMd
 union _UimfltSpfSpfFltw
 {
 		/**< All bits */
-		kulong word[9];
+		gulong word[9];
 		struct {
 			/**< spfFltw0 (+00h) */
-			kint64 spfFltw0 :13;
-			kulong :3;
-			kint64 spfFltw1 :13;
-			kulong :3;
-			kint64 spfFltw2 :13;
-			kulong :3;
-			kint64 spfFltw3 :13;
-			kulong :3;
-			kint64 spfFltw4 :13;
-			kulong :3;
-			kint64 spfFltw5 :13;
-			kulong :3;
-			kint64 spfFltw6 :13;
-			kulong :3;
-			kint64 spfFltw7 :13;
-			kulong :3;
-			kint64 spfFltw8 :13;
-			kulong :3;
-			kint64 spfFltw9 :13;
-			kulong :3;
-			kint64 spfFltw10 :13;
-			kulong :3;
-			kint64 spfFltw11 :13;
-			kulong :3;
-			kint64 spfFltw12 :13;
-			kulong :3;
-			kint64 spfFltw13 :13;
-			kulong :3;
-			kint64 spfFltw14 :13;
-			kulong :3;
-			kint64 spfFltw15 :13;
-			kulong :3;
-			kint64 spfFltw16 :13;
-			kulong :3;
-			kulong :16;
+			gs64 spfFltw0 :13;
+			gulong :3;
+			gs64 spfFltw1 :13;
+			gulong :3;
+			gs64 spfFltw2 :13;
+			gulong :3;
+			gs64 spfFltw3 :13;
+			gulong :3;
+			gs64 spfFltw4 :13;
+			gulong :3;
+			gs64 spfFltw5 :13;
+			gulong :3;
+			gs64 spfFltw6 :13;
+			gulong :3;
+			gs64 spfFltw7 :13;
+			gulong :3;
+			gs64 spfFltw8 :13;
+			gulong :3;
+			gs64 spfFltw9 :13;
+			gulong :3;
+			gs64 spfFltw10 :13;
+			gulong :3;
+			gs64 spfFltw11 :13;
+			gulong :3;
+			gs64 spfFltw12 :13;
+			gulong :3;
+			gs64 spfFltw13 :13;
+			gulong :3;
+			gs64 spfFltw14 :13;
+			gulong :3;
+			gs64 spfFltw15 :13;
+			gulong :3;
+			gs64 spfFltw16 :13;
+			gulong :3;
+			gulong :16;
 		} bit;
 };
 
@@ -431,13 +441,13 @@ union _UimfltSpfSpfFltw
 union _UimfltSpfVthD0
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfUthD0 */
-			kulong spfUthD0 :15;
-			kulong :1;
-			kulong spfLthD0 :15;
-			kulong :1;
+			gulong spfUthD0 :15;
+			gulong :1;
+			gulong spfLthD0 :15;
+			gulong :1;
 		} bit;
 };
 
@@ -445,13 +455,13 @@ union _UimfltSpfVthD0
 union _UimfltSpfVthD1
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfUthD1 */
-			kulong spfUthD1 :9;
-			kulong :7;
-			kulong spfLthD1 :9;
-			kulong :7;
+			gulong spfUthD1 :9;
+			gulong :7;
+			gulong spfLthD1 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -459,13 +469,13 @@ union _UimfltSpfVthD1
 union _UimfltSpfVthD2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfUthD2 */
-			kulong spfUthD2 :9;
-			kulong :7;
-			kulong spfLthD2 :9;
-			kulong :7;
+			gulong spfUthD2 :9;
+			gulong :7;
+			gulong spfLthD2 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -473,13 +483,13 @@ union _UimfltSpfVthD2
 union _UimfltSpfCoreD0
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfCthpD0 */
-			kulong spfCthpD0 :14;
-			kulong :2;
-			kulong spfCthmD0 :14;
-			kulong :2;
+			gulong spfCthpD0 :14;
+			gulong :2;
+			gulong spfCthmD0 :14;
+			gulong :2;
 		} bit;
 };
 
@@ -487,13 +497,13 @@ union _UimfltSpfCoreD0
 union _UimfltSpfCoreD1
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfCthpD1 */
-			kulong spfCthpD1 :8;
-			kulong :8;
-			kulong spfCthmD1 :8;
-			kulong :8;
+			gulong spfCthpD1 :8;
+			gulong :8;
+			gulong spfCthmD1 :8;
+			gulong :8;
 		} bit;
 };
 
@@ -501,13 +511,13 @@ union _UimfltSpfCoreD1
 union _UimfltSpfCoreD2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfCthpD2 */
-			kulong spfCthpD2 :8;
-			kulong :8;
-			kulong spfCthmD2 :8;
-			kulong :8;
+			gulong spfCthpD2 :8;
+			gulong :8;
+			gulong spfCthmD2 :8;
+			gulong :8;
 		} bit;
 };
 
@@ -515,13 +525,13 @@ union _UimfltSpfCoreD2
 union _UimfltSpfClpD0
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfClvlpD0 */
-			kint64 spfClvlpD0 :15;
-			kulong :1;
-			kint64 spfClvlmD0 :15;
-			kulong :1;
+			gs64 spfClvlpD0 :15;
+			gulong :1;
+			gs64 spfClvlmD0 :15;
+			gulong :1;
 		} bit;
 };
 
@@ -529,13 +539,13 @@ union _UimfltSpfClpD0
 union _UimfltSpfClpD1
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfClvlpD1 */
-			kint64 spfClvlpD1 :9;
-			kulong :7;
-			kint64 spfClvlmD1 :9;
-			kulong :7;
+			gs64 spfClvlpD1 :9;
+			gulong :7;
+			gs64 spfClvlmD1 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -543,13 +553,13 @@ union _UimfltSpfClpD1
 union _UimfltSpfClpD2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfClvlpD2 */
-			kint64 spfClvlpD2 :9;
-			kulong :7;
-			kint64 spfClvlmD2 :9;
-			kulong :7;
+			gs64 spfClvlpD2 :9;
+			gulong :7;
+			gs64 spfClvlmD2 :9;
+			gulong :7;
 		} bit;
 };
 
@@ -557,11 +567,11 @@ union _UimfltSpfClpD2
 union _UimfltSpfEoaddD0
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfEoaddD0 */
-			kulong spfEoaddD0 :14;
-			kulong :18;
+			gulong spfEoaddD0 :14;
+			gulong :18;
 		} bit;
 };
 
@@ -569,11 +579,11 @@ union _UimfltSpfEoaddD0
 union _UimfltSpfEoaddD1
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfEoaddD1 */
-			kulong spfEoaddD1 :8;
-			kulong :24;
+			gulong spfEoaddD1 :8;
+			gulong :24;
 		} bit;
 };
 
@@ -581,11 +591,11 @@ union _UimfltSpfEoaddD1
 union _UimfltSpfEoaddD2
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< spfEoaddD2 */
-			kulong spfEoaddD2 :8;
-			kulong :24;
+			gulong spfEoaddD2 :8;
+			gulong :24;
 		} bit;
 };
 
@@ -593,11 +603,11 @@ union _UimfltSpfEoaddD2
 union _UimfltEpMd
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< epMd<br>Refer to @ref EimEpMd. */
-			kulong epMd :2;
-			kulong :30;
+			gulong epMd :2;
+			gulong :30;
 		} bit;
 };
 
@@ -606,16 +616,16 @@ union _UimfltEpMd
 union _UimfltEpGa
 {
 		/**< All bits */
-		kulong word[2];
+		gulong word[2];
 		struct {
 			/**< EP_GA[0] (+00h) */
-			kint64 epGa0 :11;
-			kulong :5;
-			kint64 epGa1 :11;
-			kulong :5;
-			kint64 epGa2 :11;
-			kulong :5;
-			kulong :16;
+			gs64 epGa0 :11;
+			gulong :5;
+			gs64 epGa1 :11;
+			gulong :5;
+			gs64 epGa2 :11;
+			gulong :5;
+			gulong :16;
 		} bit;
 };
 
@@ -624,16 +634,16 @@ union _UimfltEpGa
 union _UimfltEpOfs
 {
 		/**< All bits */
-		kulong word[2];
+		gulong word[2];
 		struct {
 			/**< epOfs[0] (+00h) */
-			kint64 epOfs0 :15;
-			kulong :1;
-			kint64 epOfs1 :15;
-			kulong :1;
-			kint64 epOfs2 :15;
-			kulong :1;
-			kulong :16;
+			gs64 epOfs0 :15;
+			gulong :1;
+			gs64 epOfs1 :15;
+			gulong :1;
+			gs64 epOfs2 :15;
+			gulong :1;
+			gulong :16;
 		} bit;
 };
 
@@ -642,16 +652,16 @@ union _UimfltEpOfs
 union _UimfltEdBd
 {
 		 /**< All bits */
-		kulong word[2];
+		gulong word[2];
 		struct {
 			/**< epBd[0] (+00h) */
-			kint64 epBd0 :15;
-			kulong :1;
-			kint64 epBd1 :15;
-			kulong :1;
-			kint64 epBd2 :15;
-			kulong :1;
-			kulong :16;
+			gs64 epBd0 :15;
+			gulong :1;
+			gs64 epBd1 :15;
+			gulong :1;
+			gs64 epBd2 :15;
+			gulong :1;
+			gulong :16;
 		} bit;
 };
 
@@ -659,17 +669,17 @@ union _UimfltEdBd
 union _UimfltEdFm
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< edFm0<br>Refer to @ref EimEdFm. */
-			kulong edFm0 :1;
-			kulong :7;
-			kulong edFm1 :1;
-			kulong :7;
-			kulong edFm2 :1;
-			kulong :7;
-			kulong edFm3 :1;
-			kulong :7;
+			gulong edFm0 :1;
+			gulong :7;
+			gulong edFm1 :1;
+			gulong :7;
+			gulong edFm2 :1;
+			gulong :7;
+			gulong edFm3 :1;
+			gulong :7;
 		} bit;
 };
 
@@ -677,17 +687,17 @@ union _UimfltEdFm
 union _UimfltEdOut
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< edOut0<br>Refer to @ref EimEdOut. */
-			kulong edOut0 :1;
-			kulong :7;
-			kulong edOut1 :1;
-			kulong :7;
-			kulong edOut2 :1;
-			kulong :7;
-			kulong edOut3 :1;
-			kulong :7;
+			gulong edOut0 :1;
+			gulong :7;
+			gulong edOut1 :1;
+			gulong :7;
+			gulong edOut2 :1;
+			gulong :7;
+			gulong edOut3 :1;
+			gulong :7;
 		} bit;
 };
 
@@ -695,15 +705,15 @@ union _UimfltEdOut
 union _UimfltAdaptK
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
 			/**< adaptK0 */
-			kint64 adaptK0 :6;
-			kulong :2;
-			kint64 adaptK1 :6;
-			kulong :2;
-			kint64 adaptK2 :6;
-			kulong :10;
+			gs64 adaptK0 :6;
+			gulong :2;
+			gs64 adaptK1 :6;
+			gulong :2;
+			gs64 adaptK2 :6;
+			gulong :10;
 		} bit;
 };
 
@@ -711,10 +721,10 @@ union _UimfltAdaptK
 union _UimfltAdaptTh
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
-			kulong adaptTh :10;
-			kulong :22;
+			gulong adaptTh :10;
+			gulong :22;
 		} bit;
 };
 
@@ -722,10 +732,10 @@ union _UimfltAdaptTh
 union _UimfltAdaptDiv
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		struct {
-			kulong adaptDiv :3;
-			kulong :29;
+			gulong adaptDiv :3;
+			gulong :29;
 		} bit;
 };
 
@@ -733,65 +743,65 @@ union _UimfltAdaptDiv
 union _UimfltUplkTarget
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		struct {
-			kulong upsu0 :4;
-			kulong :4;
-			kulong upsu1 :4;
-			kulong :4;
-			kulong upsu2 :4;
-			kulong :12;
+			gulong upsu0 :4;
+			gulong :4;
+			gulong upsu1 :4;
+			gulong :4;
+			gulong upsu2 :4;
+			gulong :12;
 		} bit;
 };
 
 /** structure of dwlkTarget	(0230h) */
 union _UimfltDwlkTarget
 {
-		kulong word;
+		gulong word;
 		struct {
-			kulong dwsu0 :4;
-			kulong :4;
-			kulong dwsu1 :4;
-			kulong :4;
-			kulong dwsu2 :4;
-			kulong :12;
+			gulong dwsu0 :4;
+			gulong :4;
+			gulong dwsu1 :4;
+			gulong :4;
+			gulong dwsu2 :4;
+			gulong :12;
 		} bit;
 };
 
 /** structure of lknum	(0234h) */
 union _UimfltLknum
 {
-		kulong word;
+		gulong word;
 		struct {
-			kulong upnum :2;
-			kulong :2;
-			kulong dwnum :2;
-			kulong :26;
+			gulong upnum :2;
+			gulong :2;
+			gulong dwnum :2;
+			gulong :26;
 		} bit;
 };
 
 /** structure of ring	(0238h) */
 union _UimfltRing
 {
-		kulong word;
+		gulong word;
 		struct {
-			kulong uringsize :8;
-			kulong umarginiysz :4;
-			kulong :4;
-			kulong dringsize :8;
-			kulong :8;
+			gulong uringsize :8;
+			gulong umarginiysz :4;
+			gulong :4;
+			gulong dringsize :8;
+			gulong :8;
 		} bit;
 };
 
 /** structure of bfMd	(023Ch) */
 union _UimfltBfMd
 {
-		kulong word;
+		gulong word;
 		struct {
-			kulong bfFmt :1;
-			kulong :3;
-			kulong bfPrt :1;
-			kulong :27;
+			gulong bfFmt :1;
+			gulong :3;
+			gulong bfPrt :1;
+			gulong :27;
 		} bit;
 };
 
@@ -820,23 +830,23 @@ struct _TimFltDump
 		UimfltIsoGainD isoGainD[4];
 		UimfltSpfSpfMd spfMd;
 		/**< (0068 - 007Fh) */
-		kuchar dmy0068007f[0x0080 - 0x0068];
+		guchar dmy0068007f[0x0080 - 0x0068];
 		/**< (0080 - 00A3h) */
 		UimfltSpfSpfFltw spfFltwD0;
 		/**< (00A4 - 00BFh) */
-		kuchar dmy00a400bf[0x00C0 - 0x00A4];
+		guchar dmy00a400bf[0x00C0 - 0x00A4];
 		/**< (00C0 - 00E3h) */
 		UimfltSpfSpfFltw spfFltwD1;
 		/**< (00E4 - 00FFh) */
-		kuchar dmy00e400ff[0x0100 - 0x00E4];
+		guchar dmy00e400ff[0x0100 - 0x00E4];
 		/**< (0100 - 0123h) */
 		UimfltSpfSpfFltw spfFltwD2;
 		/**< (0124 - 013Fh) */
-		kuchar dmy0124013f[0x0140 - 0x0124];
+		guchar dmy0124013f[0x0140 - 0x0124];
 		/**< (0140 - 0163h) */
 		UimfltSpfSpfFltw spfFltwD3;
 		/**< (0164 - 017Fh) */
-		kuchar dmy0164017f[0x0180 - 0x0164];
+		guchar dmy0164017f[0x0180 - 0x0164];
 		/**< (0180 - 0183h) */
 		UimfltSpfVthD0 spfVthD0;
 		UimfltSpfVthD1 spfVthD1;
@@ -852,7 +862,7 @@ struct _TimFltDump
 		UimfltSpfEoaddD2 spfEoaddD2;
 		UimfltEpMd epMd;
 		/**< (01B4 - 01B7h) */
-		kuchar dmy01b401b7[0x01B8 - 0x01B4];
+		guchar dmy01b401b7[0x01B8 - 0x01B4];
 		/**< (01B8 - 01BFh) */
 		UimfltEpGa epGaD[4];
 		UimfltEpOfs epOfs[4];
@@ -868,22 +878,31 @@ struct _TimFltDump
 		UimfltRing ring;
 		UimfltBfMd bfMd;
 		/**< 0240 - FFFFh */
-		kuchar dmy502405ffff[0x60000 - 0x50240];
+		guchar dmy502405ffff[0x60000 - 0x50240];
 };
 
 struct _ImIipFltRegister
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipFltRegisterClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    			im_iip_flt_register_get_type(void);
-ImIipFltRegister*		        im_iip_flt_register_new(void);
+GType									im_iip_flt_register_struct_get_type(void)	G_GNUC_CONST;
+ImIipFltRegister*				im_iip_flt_register_struct_new(void);
+
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_FLT_REGISTER_H__ */

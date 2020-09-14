@@ -28,6 +28,7 @@
 typedef struct _KDispTest	        KDispTest;
 typedef struct _KDispTestPrivate	KDispTestPrivate;
 
+
 struct  _KDispTest
 {
 	KObject parent;

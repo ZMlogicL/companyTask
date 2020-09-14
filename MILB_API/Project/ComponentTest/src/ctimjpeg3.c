@@ -44,7 +44,7 @@ struct _CtImJpeg3Private {
 	CtImJpeg6 	*jpeg6;
 };
 // PBUF(AXI) controll.
-static const TImJpegAxiCtrl CtImJpeg3_GCT_IM_JPEG_PBUF_CTRL = {
+static const TimgAxiCtrl CtImJpeg3_GCT_IM_JPEG_PBUF_CTRL = {
 		.endian = ImJpegCommon_E_IM_JPEG_ENDIAN_LITTLE,
 		.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_8,
 		.cacheType = ImJpegCommon_D_IM_JPEG_NON_CACHE_NON_BUF,
@@ -52,7 +52,7 @@ static const TImJpegAxiCtrl CtImJpeg3_GCT_IM_JPEG_PBUF_CTRL = {
 		.err_state = 0,
 };
 // JBUF(AXI) controll.
-static const TImJpegAxiCtrl CtImJpeg3_GCT_IM_JPEG_JBUF_CTRL = {
+static const TimgAxiCtrl CtImJpeg3_GCT_IM_JPEG_JBUF_CTRL = {
 		.endian = ImJpegCommon_E_IM_JPEG_ENDIAN_LITTLE,
 		.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_8,
 		.cacheType = ImJpegCommon_D_IM_JPEG_NON_CACHE_NON_BUF,
@@ -67,7 +67,7 @@ static void 	finalize_od(GObject *object);
 static void 	ct_im_jpeg111(void);
 static void 	ct_im_jpeg121(void);
 static void 	ct_im_jpeg122(void);
-static void 	ct_im_jpeg152(void);
+static void 	ct_im_jpeg152(CtImJpeg3 *self);
 
 static void ct_im_jpeg3_class_init(CtImJpeg3Class *klass)
 {
@@ -80,8 +80,8 @@ static void ct_im_jpeg3_class_init(CtImJpeg3Class *klass)
 static void ct_im_jpeg3_init(CtImJpeg3 *self)
 {
 	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
-	priv->jpeg1=NULL;
 	priv->jpeg=ct_im_jpeg_new();
+	priv->jpeg1=ct_im_jpeg1_new();
 	priv->jpeg5=ct_im_jpeg5_new();
 	priv->jpeg6=ct_im_jpeg6_new();
 }
@@ -91,32 +91,36 @@ static void ct_im_jpeg3_init(CtImJpeg3 *self)
  * */
 static void dispose_od(GObject *object)
 {
-//	CtImJpeg3 *self = (CtImJpeg3*)object;
-//	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
+	CtImJpeg3 *self = (CtImJpeg3*)object;
+	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg3_parent_class)->dispose(object);
+
+	if(priv->jpeg){
+		g_object_unref(priv->jpeg);
+		priv->jpeg=NULL;
+	}
+
+	if(priv->jpeg1){
+			g_object_unref(priv->jpeg1);
+			priv->jpeg1=NULL;
+		}
+
+	if(priv->jpeg5){
+		g_object_unref(priv->jpeg5);
+		priv->jpeg5=NULL;
+	}
+
+	if(priv->jpeg6){
+		g_object_unref(priv->jpeg6);
+		priv->jpeg6=NULL;
+	}
 }
 
 static void finalize_od(GObject *object)
 {
-	CtImJpeg3 *self = (CtImJpeg3*)object;
-	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
+//	CtImJpeg3 *self = (CtImJpeg3*)object;
+//	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg3_parent_class)->finalize(object);
-
-	if(priv->jpeg)
-	{
-		g_object_unref(priv->jpeg);
-		priv->jpeg=NULL;
-	}
-	if(priv->jpeg5)
-	{
-		g_object_unref(priv->jpeg5);
-		priv->jpeg5=NULL;
-	}
-	if(priv->jpeg6)
-	{
-		g_object_unref(priv->jpeg6);
-		priv->jpeg6=NULL;
-	}
 }
 
 static void ct_im_jpeg111(void)
@@ -125,7 +129,7 @@ static void ct_im_jpeg111(void)
 	IO_JPG7.JSTATE.bit.JALLRSTP = 1;
 #endif	// CO_DEBUG_ON_PC
 
-	Im_JPEG_Init();
+	im_jpeg_init();
 
 #ifdef CO_DEBUG_ON_PC
 	Ddim_Print(("IO_JPG7.JPCMD.bit.JRESET=%d\n", IO_JPG7.JPCMD.bit.JRESET));
@@ -136,8 +140,8 @@ static void ct_im_jpeg111(void)
 static void ct_im_jpeg121(void)
 {
 	gint32 ret;
-	ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);//NO
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 	return;
 }
 
@@ -145,23 +149,24 @@ static void ct_im_jpeg122(void)
 {
 	gint32 ret;
 
-	ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 
-	ret = Im_JPEG_Close();
-	Ddim_Print(("Im_JPEG_Close ret=0x%X\n", ret));
+	ret = im_jpeg_close();
+	Ddim_Print(("im_jpeg_close ret=0x%X\n", ret));
 
 	return;
 }
 
-static void ct_im_jpeg152(void)
+static void ct_im_jpeg152(CtImJpeg3 *self)
 {
+	CtImJpeg3Private *priv = CT_IM_JPEG_3_GET_PRIVATE(self);
 	gint32 ret;
-	EImJpegAxiSt status;
+	EimgAxiSt status;
 
-	ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
+	ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-		Ddim_Print(("Im_JPEG_Open error ret=0x%X\n", ret));
+		Ddim_Print(("im_jpeg_open error ret=0x%X\n", ret));
 		return;
 	}
 
@@ -170,19 +175,17 @@ static void ct_im_jpeg152(void)
 	IO_JPG7.JSTATE.bit.JPBACTP = 1;
 #endif	// CO_DEBUG_ON_PC
 
-	ret = Im_JPEG_Get_Axi_State(&status);
-	Ddim_Print(("Im_JPEG_Get_Axi_State ret=0x%X\n", ret));
+	ret = im_jpeg_get_axi_state(&status);
+	Ddim_Print(("im_jpeg_get_axi_state ret=0x%X\n", ret));
 	Ddim_Print(("status=0x%X\n", status));
 
-	CtImJpeg1 *self1=ct_im_jpeg1_new();
-
-	ct_im_jpeg1_start_hclock(self1);
+	ct_im_jpeg1_start_hclock(priv->jpeg1);
 	Ddim_Print(("IO_JPG7.JPSTATUS.bit.JPSTATUS=0x%X\n", IO_JPG7.JPSTATUS.bit.JPSTATUS));
-	ct_im_jpeg1_stop_hclock(self1);
+	ct_im_jpeg1_stop_hclock(priv->jpeg1);
 
-	ret = Im_JPEG_Close();
+	ret = im_jpeg_close();
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-		Ddim_Print(("Im_JPEG_Close error ret=0x%X\n", ret));
+		Ddim_Print(("im_jpeg_close error ret=0x%X\n", ret));
 		return;
 	}
 
@@ -205,7 +208,7 @@ void ct_Im_jpeg3_run1(CtImJpeg3 *self,gint32 ctParam1, gint32 ctParam2)
 #endif	// CO_DEBUG_ON_PC
 
 		Ddim_Print(("*** Jpeg begin Im_Jpeg_Init\n"));
-		Im_JPEG_Init();
+		im_jpeg_init();
 		Ddim_Print(("*** Jpeg end Im_Jpeg_Init\n"));
 	}
 
@@ -431,7 +434,7 @@ void ct_Im_jpeg3_run1(CtImJpeg3 *self,gint32 ctParam1, gint32 ctParam2)
 			}
 			else if (ctParam2 == 2) {
 				Ddim_Print(("TEST 1_5_2 Start\n"));
-				ct_im_jpeg152();
+				ct_im_jpeg152(self);
 				Ddim_Print(("TEST 1_5_2 End\n"));
 			}
 			else {
@@ -487,7 +490,6 @@ void ct_Im_jpeg3_run1(CtImJpeg3 *self,gint32 ctParam1, gint32 ctParam2)
 
 			// Quality
 			self->quality							= ct_im_jpeg_get_encode_quality(CtImJpeg_CR_4_0);
-
 
 			ct_im_jpeg1_set2(priv->jpeg1,ct_im_jpeg_special_encode(priv->jpeg,self));
 			ct_im_jpeg1_set3(priv->jpeg1,ct_im_jpeg1_get2(priv->jpeg1));

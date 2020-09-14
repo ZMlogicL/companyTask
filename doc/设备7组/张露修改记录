@@ -1,0 +1,284 @@
+张露修改记录
+1.audio_decoder.c 拆分为类audiodecoder、类audiodecoder１以及audiodecoderdef.h，并新建一个工具类audiodecoderutils
+(1)移动audio_decoder.h 到 cpu_tkernel/basefw/fj/audio/src/audiodecoder.h、audiodecoder１.h并删除原文件
+
+(2)audiodecoderdef.h
+	宏名全加Ｃ_
+	
+	结构体名T_AUDIO_DEC_STRM_BUFFER_INFO　修改为　AudioDecStrmBufferInfo;
+		结构体内变量名in_pos　　   			修改为　inPos
+		结构体内变量名out_pos　　			修改为　outPos
+		结构体内变量名data_num　			修改为　dataNum
+	结构体名T_AUDIO_DEC_OUT_BUFFER_INFO　  修改为　AudioDecOutBufferInfo;
+		结构体内变量名in_pos　　   			修改为　inPos
+		结构体内变量名out_pos　　			修改为　outPos
+		结构体内变量名count_out　			修改为　countOut
+		结构体内变量名data_num　			修改为　dataNum
+	结构体名T_AUDIO_DEC_IN_BUFF						   修改为 	AudioDecInBuff;
+		结构体内变量名end_flg　				修改为　endFlg
+	结构体名T_AUDIO_DEC_SET_SPEC_CFG				修改为	AudioDecSetSpecCfg;
+		结构体内变量名smpl_rate　			修改为　smplRate
+	结构体名T_AUDIO_DEC_DECODER_CB_INFO       修改为	AudioDecDecoderCbInfo;
+		结构体内变量名dec_status　			修改为　decStatus
+	
+	
+(3)类audiodecoder（new方法：audio_decoder_new()）（get方法：audio_decoder_get()）
+.h文件中：
+	宏全加AudioDecoder_
+	
+	结构体名T_AUDIO_DEC_INSTANCE　　修改为　AudioDecInstance;
+		结构体内变量名audio_dec_id　　　  修改为　audioDecId
+		结构体内变量名dec_enable　　         修改为　decEnable
+		结构体内变量名compress_type			  修改为　compressType
+		结构体内变量名connect_out_id　      修改为　connectOutId
+		结构体内变量名smpl_rate　                修改为　smplRate	
+		结构体内变量名ch_type　                    修改为　chType
+		结构体内变量名dec_count　　            修改为　decCount
+		结构体内变量名current_pts　　          修改为　currentPts
+		结构体内变量名file_end						   修改为　fileEnd
+	
+	公有函数名BF_AudioDec_Open　						修改为　audio_decoder_bf_audio_dec_open  (不加参数)
+	公有函数名BF_AudioDec_Close　						修改为　audio_decoder_bf_audio_dec_close
+	公有函数名BF_AudioDec_Connect　				修改为　audio_decoder_bf_audio_dec_connect
+	公有函数名BF_AudioDec_Disconnect　			修改为　audio_decoder_bf_audio_dec_disconnect
+	公有函数名BF_AudioDec_SetAudioStream　	修改为　audio_decoder_bf_audio_dec_set_audio_stream
+	公有函数名BF_AudioDec_Start　						修改为　audio_decoder_bf_audio_dec_start
+	公有函数名BF_AudioDec_Stop　						修改为　audio_decoder_bf_audio_dec_stop
+	公有函数名BF_AudioDec_StartOutput　			修改为　audio_decoder_bf_audio_dec_sart_out_put
+	公有函数名BF_AudioDec_StopOutput　			修改为　audio_decoder_bf_audio_dec_stop_out_put
+	公有函数名BF_AudioDec_MemAllocate　		修改为　audio_decoder_bf_audio_dec_mem_allocate
+	公有函数名BF_AudioDec_Request_Decode　	修改为　audio_decoder_bf_audio_dec_request_decode
+	公有函数名BF_AudioDec_Renov_Buff　			修改为　audio_decoder_bf_audio_dec_renov_buff
+	公有函数名BF_AudioDec_Get_BuffAddr　		修改为　audio_decoder_bf_audio_dec_get_buffaddr
+	公有函数名BF_AudioDec_Get_BuffSize　			修改为　audio_decoder_bf_audio_dec_get_buffsize
+	公有函数名BF_AudioDec_Ntfy_DecoderInfo	修改为　audio_decoder_bf_audio_dec_ntfy_decoder_info
+	公有函数名BF_AudioDec_Req_AudioStream	修改为　audio_decoder_bf_audio_dec_req_audio_stream
+	公有函数名BF_AudioDec_Init_Decode　			修改为　audio_decoder_bf_audio_dec_init_decode
+	公有函数名BF_AudioDec_Get_InstanceInfo　修改为　audio_decoder_bf_audio_dec_get_instanceinfo
+	
+	
+(4)类audiodecoder1（new方法：audio_decoder1_new()）（get方法：audio_decoder1_get()）
+	公有函数名BF_AudioDec_Init　								修改为　audio_decoder1_bf_audio_dec_init
+	公有函数名BF_AudioDec_Stop_Decode_Ntfy　	修改为　audio_decoder1_bf_audio_dec_stop_decode_ntfy
+	公有函数名BF_AudioDec_Stop_Decode　			修改为　audio_decoder1_bf_audio_dec_stop_decode
+	公有函数名BF_AudioDec_Start_Decode　			修改为　audio_decoder1_bf_audio_dec_start_decode
+	公有函数名BF_AudioDec_Config　						修改为　audio_decoder1_bf_audio_dec_config
+	
+
+2.audio_dma.c 修改为类audiodma（new方法：audio_dma_new()）（get方法：audio_dma_get()）
+(1)移动audio_dma.h 到 cpu_tkernel/basefw/fj/audio/src/audiodma.h并删除原文件
+
+(2)结构体名T_AUDIO_DMA_START_PARAM　修改为　AudioDmaStartParam
+	 结构体内变量名dma_id　　　　修改为　dmaId
+	 结构体内变量名audio_dev_ch　 修改为　audioDevCh
+	 结构体内变量名src_address　　修改为　srcAddress
+	 结构体内变量名dst_address　　修改为　dstAddress
+	 结构体内变量名trans_size　　　修改为　transSize
+	 
+(3)公有函数名BF_Audio_DMA_Init　							 				修改为　audio_dma_bf_audio_dma_init
+	 公有函数名BF_Audio_DMA_Set_Callback_Fnc0　				修改为　audio_dma_bf_audio_dma_set_callback_fnc0
+	 公有函数名BF_Audio_DMA_Set_Callback_Fnc1　				修改为　audio_dma_bf_audio_dma_set_callback_fnc1
+	 公有函数名BF_Audio_DMA_Input_Start0　			 			 	修改为　audio_dma_bf_audio_dma_input_start0
+	 公有函数名BF_Audio_DMA_Input_Start1　			  				修改为　audio_dma_bf_audio_dma_input_start1
+	 公有函数名BF_Audio_DMA_Output_Start0　		  				修改为　audio_dma_bf_audio_dma_output_start0
+	 公有函数名BF_Audio_DMA_Output_Start1　        				修改为　audio_dma_bf_audio_dma_output_start1
+	 公有函数名BF_Audio_DMA_Stop　                 						修改为　audio_dma_bf_audio_dma_stop
+	 公有函数名BF_Audio_DMA_Get_Remain_Trns_Size　		修改为　audio_dma_bf_audio_dma_get_remain_trns_size
+	 公有函数名BF_Audio_DMA_Get_Trns_Size　 						修改为　audio_dma_bf_audio_dma_get_trns_size
+	 公有函数名BF_Audio_DMA_Get_RemainNumDmaID　   修改为　audio_dma_bf_audio_dma_get_remain_num_dma_id
+
+
+3.audio_encdec.c 修改为类audioencdec（new方法：audio_encdec_new()）（get方法：audio_encdec_get()）
+(1)移动audio_encdec.h 到 cpu_tkernel/basefw/fj/audio/src/audioencdec.h并删除原文件
+
+(2)公有函数名Audio_EncDec_Process				修改为　audio_encdec_audio_encdec_process  (不加参数)
+	 公有函数名BF_AudioEncDec_TaskStart		修改为　audio_encdec_bf_audio_encdec_task_start
+	 公有函数名BF_AudioEncDec_TaskStop		修改为　audio_encdec_bf_audio_encdec_task_stop
+	 公有函数名BF_AudioEncDec_Wai_Sem		修改为　audio_encdec_bf_audio_encdec_wai_sem
+	 公有函数名BF_AudioEncDec_Sig_Sem			修改为　audio_encdec_bf_audio_encdec_sig_sem
+	 
+
+4.audio_encoder.c 拆分为类audioencoder、类audioencoder1以及audioencoderdef.h，并新建一个工具类audioencoderutils
+(1)移动audio_encoder.h 到 cpu_tkernel/basefw/fj/audio/src/audioencoder.h、audioencoder1.h并删除原文件
+
+(2)audioencoderdef.h
+	宏名全加Ｃ_
+	
+	结构体名T_AUDIO_ENC_BUFFER_INFO　修改为　AudioEncBufferInfo
+		结构体内变量名in_pos　　   			修改为　inPos
+		结构体内变量名out_pos　　			修改为　outPos
+		结构体内变量名data_num　			修改为　dataNum
+	结构体名T_AUDIO_ENC_IN_BUFF　			修改为　AudioEncInBuff
+		结构体内变量名end_flg　　   		修改为　endFlg
+	结构体名T_AUDIO_ENC_STREAM_CTRL　 修改为　AudioEncStreamCtrl
+		结构体内变量名sample_size　　 	修改为　sampleSize
+		结构体内变量名sample_data　   	修改为　sampleData
+		结构体内变量名sample_count　 	修改为　sampleCount
+		结构体内变量名use_flg　　          	修改为　useFlg
+		结构体内变量名total_time　　    	修改为　totalTime
+	结构体名T_AUDIO_ENC_CHK_BIT_RATE　修改为　AudioEncChkBitRate
+		结构体内变量名smpl_rate　　		修改为　smplRate
+	结构体名T_AUDIO_ENC_TX_DATA_INFO　修改为　AudioEncTxDataInfo
+		结构体内变量名area_index　  		修改为　areaIndex
+		结构体内变量名end_flag　　   		修改为　endFlag
+	
+	回调T_AUDIO_ENC_GET_SDRAM_AREA　修改为　AudioEncGetSdramAreaFunc
+
+
+(3)类audioencoder（new方法：audio_encoder_new()）（get方法：audio_encoder_get()）
+.h文件中：
+	宏名全加Audioencoder_
+	
+	结构体名T_AUDIO_ENC_INSTANCE　修改为　AudioEncInstance
+		结构体内变量名audio_enc_id　          修改为　audioEncId
+		结构体内变量名enc_enable　　         修改为　encEnable
+		结构体内变量名compress_type　      修改为　compressType
+		结构体内变量名connect_cap_id　      修改为　connectCapId
+		结构体内变量名smpl_rate　                修改为　smplRate
+		结构体内变量名bit_rate　　                修改为　bitRate
+		结构体内变量名ch_type　                    修改为　chType
+		结构体内变量名enc_count　　           修改为　encCount
+
+	公有函数名BF_AudioEnc_Open　			 			修改为　audio_encoder_bf_audioenc_open　(不加参数)
+	公有函数名BF_AudioEnc_Close　						修改为　audio_encoder_bf_audioenc_close
+	公有函数名BF_AudioEnc_Connect　		 			修改为　audio_encoder_bf_audioenc_connect
+	公有函数名BF_AudioEnc_Disconnect　 			修改为　audio_encoder_bf_audioenc_disconnect
+	公有函数名BF_AudioEnc_Config　		  			修改为　audio_encoder_bf_audioenc_config
+	公有函数名BF_AudioEnc_Setup　			  			修改为　audio_encoder_bf_audioenc_setup
+	公有函数名BF_AudioEnc_Stop　			  			修改为　audio_encoder_bf_audioenc_stop
+	公有函数名BF_AudioEnc_StartMute　    			修改为　audio_encoder_bf_audioenc_startmute
+	公有函数名BF_AudioEnc_StopMute　     			修改为　audio_encoder_bf_audioenc_stopmute
+	公有函数名BF_AudioEnc_SetTestMode　			修改为　audio_encoder_bf_audioenc_set_test_mode
+	公有函数名BF_AudioEnc_GetTestMode　		修改为　audio_encoder_bf_audioenc_get_test_mode
+	公有函数名BF_AudioEnc_StopEncode　   		修改为　audio_encoder_bf_audioenc_stop_encode
+	公有函数名BF_AudioEnc_TxStreamData　		修改为　audio_encoder_bf_audioenc_tx_stream_data
+	公有函数名BF_AudioEnc_Get_InstanceInfo　修改为　audio_encoder_bf_audioenc_get_instance_info
+
+
+(4)类audioencoder1（new方法：audio_encoder1_new()）（get方法：audio_encoder1_get()）
+	公有函数名BF_AudioEnc_Init_Encoder　			修改为　audio_encoder1_bf_audioenc_encoder
+	公有函数名BF_AudioEnc_StartEncode　			修改为　audio_encoder1_bf_audioenc_start_encode
+	公有函数名BF_AudioEnc_Start　			 			修改为　audio_encoder1_bf_audioenc_start
+	公有函数名BF_AudioEnc_Request_Encode　	修改为　audio_encoder1_bf_audioenc_request_encode
+	公有函数名BF_AudioEnc_FreeIndex　			 	修改为　audio_encoder1_bf_audioenc_free_index
+
+
+5.audio_instance_print.c 修改为类audioinstanceprint
+(1)移动audio_instance_print.h 到 cpu_tkernel/basefw/fj/audio/src/audioinstanceprint.h并删除原文件
+
+(2)公有函数名BF_Audio_Instance_Print_Info　修改为　audio_instance_print_bf_audio_instance_print_info
+
+
+6.audio_out.c 拆分为类audioout、类audioout1、类audioout2以及audiooutdef.h，并新建一个工具类audiooututils
+(1)移动audio_out.h 到 cpu_tkernel/basefw/fj/audio/src/audioout.h、audioout1.h、audioout2.h、audioout３.h并删除原文件
+
+(2)audiooutdef.h
+	宏名全加Ｃ_
+	
+	结构体名T_AUDIO_OUT_BUFF　					修改为　AudioOutBuff
+	结构体名T_AUDIO_OUT_BUFFER_INFO　		修改为　AudioOutBufferInfo
+		结构体内变量名in_pos　　  	修改为　inPos
+		结构体内变量名out_pos　　	修改为　outPos
+		结构体内变量名data_num　	修改为　dataNum
+	结构体名T_AUDIO_OUT_CNV_DATA_INFO　修改为　AudioOutCnvDataInfo
+		结构体内变量名in_addr　　   修改为　inAddr
+		结构体内变量名out_addr　　修改为　outAddr
+		结构体内变量名data_ch　		修改为　dataCh
+	
+	
+(3)类audioout（new方法：audio_out_new()）（get方法：audio_out_get()）
+.h文件中：
+	宏名D_AUDIO_OUT_INST_NUM　　　     修改为　AudioOut_D_AUDIO_OUT_INST_NUM
+	宏名D_AUDIO_OUT_STATUS_INIT　　　  修改为　AudioOut_D_AUDIO_OUT_STATUS_INIT
+	宏名D_AUDIO_OUT_STATUS_START　　   修改为　AudioOut_D_AUDIO_OUT_STATUS_START
+	宏名D_AUDIO_OUT_STATUS_STOP　　　 修改为　AudioOut_D_AUDIO_OUT_STATUS_STOP
+	
+	结构体名T_AUDIO_OUT_INSTANCE　  修改为　AudioOutInstance
+		结构体内变量名audio_out_id　        修改为　audioOutId
+		结构体内变量名buzzer_flg　　         修改为　buzzerFlg
+		结构体内变量名cap_flg　      			   修改为　capFlg
+		结构体内变量名dec_flg　                   修改为　decFlg
+		结构体内变量名bz_mode　               修改为　bzMode
+		结构体内变量名connect_cap_id　　修改为　connectCapId
+		结构体内变量名connect_dec_id　    修改为　connectDecId
+		结构体内变量名set_cfg_flg　　         修改为　setCfgFlg
+		结构体内变量名out_port　　            修改为　outPort
+		结构体内变量名i2s_cfg　　                修改为　i2sCfg
+		结构体内变量名in_smpl_rate　　     修改为　inSmplRate
+		结构体内变量名out_smpl_rate　　  修改为　outSmplRate
+		结构体内变量名in_ch_type　　         修改为　inChType
+		结构体内变量名out_ch_type　　      修改为　outChType
+		结构体内变量名dma_id　　               修改为　dmaId
+		结构体内变量名output_count　　    修改为　outputCount
+		
+	公有函数名Audio_Out_Process								修改为　audio_out_audio_out_process　(不加参数)
+	公有函数名BF_AudioOut_TaskStart　					修改为　audio_out_bf_audio_out_task_start
+	公有函数名BF_AudioOut_TaskStop　					修改为　audio_out_bf_audio_out_task_stop
+	公有函数名BF_AudioOut_Open　							修改为　audio_out_bf_audio_out_open
+	公有函数名BF_AudioOut_ConnectCap　				修改为　audio_out_bf_audio_out_connect_cap
+	公有函数名BF_AudioOut_ConnectDec　				修改为　audio_out_bf_audio_out_connect_dec
+	公有函数名BF_AudioOut_DisconnectDec　			修改为　audio_out_bf_audio_out_disconnect_dec
+	公有函数名BF_AudioOut_SetChannelType			修改为　audio_out_bf_audio_out_set_channel_type　(不加参数)
+	公有函数名BF_AudioOut_SetSmplRate　				修改为　audio_out_bf_audio_out_set_smpl_rate　(不加参数)
+	公有函数名BF_AudioOut_Get_Status　				修改为　audio_out_bf_audio_out_get_status
+	公有函数名BF_AudioOut_Get_ConfigSetFlag　	修改为　audio_out_bf_audio_out_get_config_set_flag
+	公有函数名BF_AudioOut_Set_BuzzerMode　		修改为　audio_out_bf_audio_out_set_buzzer_mode
+	公有函数名BF_AudioOut_Get_Config_I2sCh　	修改为　audio_out_bf_audio_out_get_config_12s_ch
+	公有函数名BF_AudioOut_SetTestMode　			修改为　audio_out_bf_audio_out_set_test_mode
+	公有函数名BF_AudioOut_PcmSend					　修改为　audio_out_bf_audio_out_pcm_send
+	公有函数名BF_AudioOut_NotifyBZStop　			修改为　audio_out_bf_audio_out_notify_bz_stop
+	公有函数名BF_AudioOut_Get_OutCh　				修改为　audio_out_bf_audio_out_get_outch
+	公有函数名BF_AudioOut_Set_Volume　				修改为　audio_out_bf_audio_out_set_volume
+	公有函数名BF_AudioOut_Get_InstanceInfo　	修改为　audio_out_bf_audio_out_get_instance_info
+
+(4)类audioout1（new方法：audio_out1_new()）（get方法：audio_out1_get()）
+	公有函数名BF_AudioOut_Close							修改为　audio_out1_bf_audio_out_close
+	公有函数名BF_AudioOut_DisconnectCap　	修改为　audio_out1_bf_audio_out_disconnect_cap
+	公有函数名BF_AudioOut_Config　					修改为　audio_out1_bf_audio_out_config
+	公有函数名BF_AudioOut_Start　						修改为　audio_out1_bf_audio_out_start
+	公有函数名BF_AudioOut_Start_Capture　		修改为　audio_out1_bf_audio_out_start_capture
+	公有函数名BF_AudioOut_Start_Decoder　		修改为　audio_out1_bf_audio_out_start_decoder
+	公有函数名BF_AudioOut_Start_Buzzer　			修改为　audio_out1_bf_audio_out_start_buzzer　(不加参数)
+	公有函数名BF_AudioOut_Stop			       　　 修改为　audio_out1_bf_audio_out_stop
+	公有函数名BF_AudioOut_Stop_Decoder　		修改为　audio_out1_bf_audio_out_stop_decoder
+	公有函数名BF_AudioOut_Stop_Buzzer　			修改为　audio_out1_bf_audio_out_stop_buzzer
+
+	
+(5)类audioout2（new方法：audio_out2_new()）（get方法：audio_out2_get()）
+	公有函数名BF_AudioOut_OutputInit			修改为　audio_out2_bf_audio_out_output_init
+	公有函数名BF_AudioOut_OutputStart　		修改为　audio_out2_bf_audio_out_output_start
+	公有函数名BF_AudioOut_OutputStop　		修改为　audio_out2_bf_audio_out_output_stop
+
+
+(6)类audioout3
+	无公有函数
+
+
+7.audio_pdm.c 修改为类audiopdm
+(1)移动audio_pdm.h 到 cpu_tkernel/basefw/fj/audio/src/audiopdm.h并删除原文件
+
+(2)宏名全加AudioPdm_
+
+(3)公有函数名BF_Audio_Pdm_Init_PdmMacro	修改为　audio_pdm_bf_audio_pdm_init_pdmmacro
+	 公有函数名BF_Audio_Pdm_Open　					修改为　audio_pdm_bf_audio_pdm_open
+	 公有函数名BF_Audio_Pdm_Close　					修改为　audio_pdm_bf_audio_pdm_close
+	 公有函数名BF_AudioSrc_Config　					修改为　audio_pdm_bf_audio_pdm_config
+	 公有函数名BF_AudioSrc_Start　						修改为　audio_pdm_bf_audio_pdm_start
+	 公有函数名BF_AudioSrc_Stop　						修改为　audio_pdm_bf_audio_pdm_stop
+	 公有函数名BF_AudioSrc_GetStatus　				修改为　audio_pdm_bf_audio_pdm_get_status
+
+
+8.audio_source.c 修改为类audiosource
+(1)移动audio_source.h 到 cpu_tkernel/basefw/fj/audio/src/audiosource.h并删除原文件
+
+(2)宏名D_AUDIO_SRC_INST_NUM　修改为　AudioSource_D_AUDIO_SRC_INST_NUM
+
+(3)结构体名T_AUDIO_SOURCE_INSTANCE　修改　为AudioSourceInstance
+       结构体内变量audio_src_id　　 修改为　audioSrcId
+       结构体内变量connect_cap_id　修改为　connectCapId
+       
+(4)公有函数名BF_AudioSrc_Open　											    修改为　audio_source_bf_audiosrc_open
+	 公有函数名BF_AudioSrc_Close　											    修改为　audio_source_bf_audiosrc_close
+	 公有函数名BF_AudioSrc_Connect　										    修改为　audio_source_bf_audiosrc_connect
+	 公有函数名BF_AudioSrc_Disconnect　								    修改为　audio_source_bf_audiosrc_disconnect
+	 公有函数名audio_source_bf_audiosrc_get_instanceinfo		修改为　audio_source_bf_audiosrc_get_instanceinfo

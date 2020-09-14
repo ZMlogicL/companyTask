@@ -11,11 +11,12 @@
 *@version
 *1.0.0 2020年06月开始开发
 */
-#include "ct_im_iip_utility.h"
-#include "ct_im_iip.h"
+#include "ctimiip.h"
 
 // im_iip header
-#include "im_iip.h"
+#include "imiipdefine.h"
+#include "imiipstruct.h"
+#include "imiipparamenum.h"
 #include "ctimiiputility1.h"
 #ifndef CO_CT_IM_IIP_DISABLE
 #if 1
@@ -56,7 +57,7 @@ struct _CtImIipUtility1Private {
 /*----------------------------------------------------------------------*/
 
 #ifndef CO_CT_IM_IIP_14_3_1_DISABLE_LUT
-static const kushort S_G_CT_IM_IIP_LUTRAM_A_8BIE[D_IM_IIP_LUT_MAXNUM] = {
+static const kushort S_G_CT_IM_IIP_LUTRAM_A_8BIE[ImIipDefine_D_IM_IIP_LUT_MAXNUM] = {
 	 255,  253,  251,  249,  247,  245,  243,  241,  239,  237,  235,  233,  231,  229,  227,  225,	// 0
 	 223,  221,  219,  217,  215,  213,  211,  209,  207,  205,  203,  201,  199,  197,  195,  193,	// 32
 	 191,  189,  187,  185,  183,  181,  179,  177,  175,  173,  171,  169,  167,  165,  163,  161,	// 64
@@ -66,7 +67,7 @@ static const kushort S_G_CT_IM_IIP_LUTRAM_A_8BIE[D_IM_IIP_LUT_MAXNUM] = {
 	  63,   61,   59,   57,   55,   53,   51,   49,   47,   45,   43,   41,   39,   37,   35,   33,	// 192
 	  31,   29,   27,   25,   23,   21,   19,   17,   15,   13,   11,    9,    7,    5,    3,    1,	// 224
 };
-static const kushort S_G_CT_IM_IIP_LUTRAM_D_8BIE[D_IM_IIP_LUT_MAXNUM] = {
+static const kushort S_G_CT_IM_IIP_LUTRAM_D_8BIE[ImIipDefine_D_IM_IIP_LUT_MAXNUM] = {
 	 254,  252,  250,  248,  246,  244,  242,  240,  238,  236,  234,  232,  230,  228,  226,  224,	// 1
 	 222,  220,  218,  216,  214,  212,  210,  208,  206,  204,  202,  200,  198,  196,  194,  192,	// 33
 	 190,  188,  186,  184,  182,  180,  178,  176,  174,  172,  170,  168,  166,  164,  162,  160,	// 65
@@ -79,7 +80,7 @@ static const kushort S_G_CT_IM_IIP_LUTRAM_D_8BIE[D_IM_IIP_LUT_MAXNUM] = {
 #endif //!CO_CT_IM_IIP_14_3_2_DISABLE_LUT
 
 #ifndef CO_CT_IM_IIP_14_3_2_DISABLE_LUT
-static const kushort S_G_CT_IM_IIP_LUTRAM_A_11BIE[D_IM_IIP_LUT_MAXNUM] = {
+static const kushort S_G_CT_IM_IIP_LUTRAM_A_11BIE[ImIipDefine_D_IM_IIP_LUT_MAXNUM] = {
 	4095, 4090, 4086, 4082, 4078, 4074, 4070, 4066, 4062, 4058, 4054, 4050, 4046, 4042, 4038, 4034,	// 0
 	4030, 4026, 4022, 4018, 4014, 4010, 4006, 4002, 3998, 3994, 3990, 3986, 3982, 3978, 3974, 3970,	// 32
 	3966, 3962, 3958, 3954, 3950, 3946, 3942, 3938, 3934, 3930, 3926, 3922, 3918, 3914, 3910, 3906,	// 64
@@ -145,7 +146,7 @@ static const kushort S_G_CT_IM_IIP_LUTRAM_A_11BIE[D_IM_IIP_LUT_MAXNUM] = {
 	 126,  122,  118,  114,  110,  106,  102,   98,   94,   90,   86,   82,   78,   74,   70,   66,	// 1984
 	  62,   58,   54,   50,   46,   42,   38,   34,   30,   26,   22,   18,   14,   10,    6,    2,	// 2016
 };
-static const kushort S_G_CT_IM_IIP_LUTRAM_D_11BIE[D_IM_IIP_LUT_MAXNUM] = {
+static const kushort S_G_CT_IM_IIP_LUTRAM_D_11BIE[ImIipDefine_D_IM_IIP_LUT_MAXNUM] = {
 	4092, 4088, 4084, 4080, 4076, 4072, 4068, 4064, 4060, 4056, 4052, 4048, 4044, 4040, 4036, 4032,	// 1
 	4028, 4024, 4020, 4016, 4012, 4008, 4004, 4000, 3996, 3992, 3988, 3984, 3980, 3976, 3972, 3968,	// 33
 	3964, 3960, 3956, 3952, 3948, 3944, 3940, 3936, 3932, 3928, 3924, 3920, 3916, 3912, 3908, 3904,	// 65
@@ -216,9 +217,9 @@ static const kushort S_G_CT_IM_IIP_LUTRAM_D_11BIE[D_IM_IIP_LUT_MAXNUM] = {
 static void ct_im_iip_utility1_constructor(CtImIipUtility1 *self) 
 {
 	CtImIipUtility1Private *priv = CT_IM_IIP_UTILITY1_GET_PRIVATE(self);
-	priv->ciIipUtility1 = ct_im_iip_utility1_new();
-	priv->paramMasterIf = D_IM_IIP_MASTER_IF0;
-	priv->waitTime = 30;
+	priv->ciIipUtility1 		= ct_im_iip_utility1_new();
+	priv->paramMasterIf 		= ImIipDefine_D_IM_IIP_MASTER_IF0;
+	priv->waitTime 				= 30;
 }
 
 static void ct_im_iip_utility1_destructor(CtImIipUtility1 *self)
@@ -229,64 +230,69 @@ static void ct_im_iip_utility1_destructor(CtImIipUtility1 *self)
 	}
 	priv->ciIipUtility1 = NULL;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 // Im_IIP_Utility_CSC 14-2-1
 #undef D_IM_IIP_FUNC_NAME
 #define CtImIipUtility1_D_IM_IIP_FUNC_NAME "ct_im_iip_utility1_14_2_1: "
 kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 {
 	CtImIipUtility1Private *priv = CT_IM_IIP_UTILITY1_GET_PRIVATE(self);
-	T_IM_IIP_UTIL_CSC iipUtilCsc0 = {
-		.ld_unitid = E_IM_IIP_UNIT_ID_LD0,
-		.csc_unitid = E_IM_IIP_UNIT_ID_CSC1,
-		.sl_unitid = E_IM_IIP_UNIT_ID_SL3,
-		.src_pixid = E_IM_IIP_PIXID_1,
-		.dst_pixid = E_IM_IIP_PIXID_2,
+	TImIipUtilCsc iipUtilCsc0 = {
+		.ldUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD0,
+		.cscUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_CSC1,
+		.slUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL3,
+		.srcPixid = ImIipStruct_E_IM_IIP_PIXID_1,
+		.dstPixid = ImIipStruct_E_IM_IIP_PIXID_2,
 		.src = {								// Source image info.
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF0,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF0,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF0,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF0,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
@@ -294,52 +300,57 @@ kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,		// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,	// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA, // PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA, 
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_1_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF1,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF1,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF1,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF1,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
-		.ld_cache_select = E_IM_IIP_PARAM_CSEL_0,
-		.pix_depth = D_IM_IIP_PDEPTH_8BITS,
-		.alpha_depth = E_IM_IIP_ADEPTH_8BITS,
-		.alpha_subsampling = D_IM_IIP_ALPHA_NO_SUBSAMP,
+		.ldCacheSelect = ImIipParamEnum_E_IM_IIP_PARAM_CSEL_0,
+		.pixDepth = ImIipDefine_D_IM_IIP_PDEPTH_8BITS,
+		.alphaDepth = ImIipStruct_E_IM_IIP_ADEPTH_8BITS,
+		.alphaSubsampling = ImIipDefine_D_IM_IIP_ALPHA_NO_SUBSAMP,
 		.csck = {
 			//    G      B      R      A
 			{ 0x000, 0x000, 0x400, 0x000 },		// G
@@ -347,62 +358,67 @@ kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 			{ 0x000, 0x000, 0x000, 0x400 },		// R
 			{ 0x000, 0x400, 0x000, 0x000 },		// A
 		},
-		.csck_mode_sel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
-		.alpha_in_sel = E_IM_IIP_PARAM_ALPSEL_DIRECT,
-		.alpha_out_sel = E_IM_IIP_PARAM_ALOSEL_CALCULATED,
-		.alpha_val = 0,	// dummy
-		.sl_sftval = 0,
+		.csckModeSel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
+		.alphaInSel = ImIipParamEnum_E_IM_IIP_PARAM_ALPSEL_DIRECT,
+		.alphaOutSel = ImIipParamEnum_E_IM_IIP_PARAM_ALOSEL_CALCULATED,
+		.alphaVal = 0,	// dummy
+		.slSftval = 0,
 	};
 
-	T_IM_IIP_UTIL_CSC iipUtilCsc1 = {
-		.ld_unitid = E_IM_IIP_UNIT_ID_LD1,
-		.csc_unitid = E_IM_IIP_UNIT_ID_CSC0,
-		.sl_unitid = E_IM_IIP_UNIT_ID_SL4,
-		.src_pixid = E_IM_IIP_PIXID_3,
-		.dst_pixid = E_IM_IIP_PIXID_4,
+	TImIipUtilCsc iipUtilCsc1 = {
+		.ldUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD1,
+		.cscUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_CSC0,
+		.slUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL4,
+		.srcPixid = ImIipStruct_E_IM_IIP_PIXID_3,
+		.dstPixid = ImIipStruct_E_IM_IIP_PIXID_4,
 		.src = {								// Source image info.
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel. [2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel. [2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF0,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF0,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF0,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF0,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
@@ -410,52 +426,57 @@ kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_RGBA4444_GLOBAL_WIDTH,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_2_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_2_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF1,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF1,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF1,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF1,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
-		.ld_cache_select = E_IM_IIP_PARAM_CSEL_0,
-		.pix_depth = D_IM_IIP_PDEPTH_8BITS,
-		.alpha_depth = E_IM_IIP_ADEPTH_8BITS,
-		.alpha_subsampling = D_IM_IIP_ALPHA_NO_SUBSAMP,
+		.ldCacheSelect = ImIipParamEnum_E_IM_IIP_PARAM_CSEL_0,
+		.pixDepth = ImIipDefine_D_IM_IIP_PDEPTH_8BITS,
+		.alphaDepth = ImIipStruct_E_IM_IIP_ADEPTH_8BITS,
+		.alphaSubsampling = ImIipDefine_D_IM_IIP_ALPHA_NO_SUBSAMP,
 		.csck = {
 			//    G      B      R      A
 			{ 0x400, 0x000, 0x000, 0x000 },		// G
@@ -463,14 +484,14 @@ kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 			{ 0x000, 0x000, 0x400, 0x000 },		// R
 			{ 0x000, 0x000, 0x000, 0x400 },		// A
 		},
-		.csck_mode_sel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
-		.alpha_in_sel = E_IM_IIP_PARAM_ALPSEL_DIRECT,
-		.alpha_out_sel = E_IM_IIP_PARAM_ALOSEL_CALCULATED,
-		.alpha_val = 0,	// dummy
-		.sl_sftval = 0,
+		.csckModeSel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
+		.alphaInSel = ImIipParamEnum_E_IM_IIP_PARAM_ALPSEL_DIRECT,
+		.alphaOutSel = ImIipParamEnum_E_IM_IIP_PARAM_ALOSEL_CALCULATED,
+		.alphaVal = 0,	// dummy
+		.slSftval = 0,
 	};
-	kuchar paramBuffer[D_IM_IIP_UTIL_CSC_BUF_BYTES *2];
-	kulong paramBufferAddr = ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
+	kuchar paramBuffer[ImIipDefine_D_IM_IIP_UTIL_CSC_BUF_BYTES *2];
+	kulong paramBufferAddr = CtImIip_ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
 
 	CtImIipUtility1_DDIM_PRINT((CtImIipUtility1_D_IM_IIP_FUNC_NAME "\n"));
 
@@ -488,12 +509,12 @@ kint32 ct_im_iip_utility1_14_2_1(CtImIipUtility1 *self)
 kint32 ct_im_iip_utility1_14_2_2(CtImIipUtility1 *self)
 {
 	CtImIipUtility1Private *priv = CT_IM_IIP_UTILITY1_GET_PRIVATE(self);
-	T_IM_IIP_UTIL_CSC iipUtilCsc0 = {
-		.ld_unitid = E_IM_IIP_UNIT_ID_LD0,
-		.csc_unitid = E_IM_IIP_UNIT_ID_CSC1,
-		.sl_unitid = E_IM_IIP_UNIT_ID_SL3,
-		.src_pixid = E_IM_IIP_PIXID_1,
-		.dst_pixid = E_IM_IIP_PIXID_2,
+	TImIipUtilCsc iipUtilCsc0 = {
+		.ldUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD0,
+		.cscUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_CSC1,
+		.slUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL3,
+		.srcPixid = ImIipStruct_E_IM_IIP_PIXID_1,
+		.dstPixid = ImIipStruct_E_IM_IIP_PIXID_2,
 		.src = {								// Source image info.
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
@@ -502,41 +523,44 @@ kint32 ct_im_iip_utility1_14_2_2(CtImIipUtility1 *self)
 				.lines = 240,							// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
 				.width = 320,		// PIXFMTTBL.PICHSZ[14:0]	<br><br> The number of horizontal pixel. [16~16383]
 				.lines = 240,		// PIXFMTTBL.PICVSZ[13:0]	<br><br> The number of vertical pixel. [2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = 320 *2,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = 320 *2,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF0,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF0,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF0,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF0,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
@@ -548,48 +572,51 @@ kint32 ct_im_iip_utility1_14_2_2(CtImIipUtility1 *self)
 				.lines = 240,					// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_TRUE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_TRUE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_RGBA4444,		// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
 				.width = 320,			// PIXFMTTBL.PICHSZ[14:0]	<br><br> The number of horizontal pixel. [16~16383]
 				.lines = 240,			// PIXFMTTBL.PICVSZ[13:0]	<br><br> The number of vertical pixel. [2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = 320 *2,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = 320 *2,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_1_RGBA4444,
-					.Cb_B  = 0,	// dummy
-					.Cr_R  = 0,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_RGBA4444,
+					.cbB  = 0,	// dummy
+					.crR  = 0,	// dummy
 					.Alpha = 0,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF1,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF1,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF1,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF1,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
-		.ld_cache_select = E_IM_IIP_PARAM_CSEL_0,
-		.pix_depth = D_IM_IIP_PDEPTH_8BITS,
-		.alpha_depth = E_IM_IIP_ADEPTH_8BITS,
-		.alpha_subsampling = D_IM_IIP_ALPHA_NO_SUBSAMP,
+		.ldCacheSelect = ImIipParamEnum_E_IM_IIP_PARAM_CSEL_0,
+		.pixDepth = ImIipDefine_D_IM_IIP_PDEPTH_8BITS,
+		.alphaDepth = ImIipStruct_E_IM_IIP_ADEPTH_8BITS,
+		.alphaSubsampling = ImIipDefine_D_IM_IIP_ALPHA_NO_SUBSAMP,
 		.csck = {
 			//    G      B      R      A
 			{ 0x400, 0x000, 0x000, 0x400 },		// G
@@ -597,14 +624,14 @@ kint32 ct_im_iip_utility1_14_2_2(CtImIipUtility1 *self)
 			{ 0x000, 0x000, 0x400, 0x400 },		// R
 			{ 0x000, 0x000, 0x000, 0x000 },		// A
 		},
-		.csck_mode_sel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
-		.alpha_in_sel = E_IM_IIP_PARAM_ALPSEL_DIRECT,
-		.alpha_out_sel = E_IM_IIP_PARAM_ALOSEL_CALCULATED,
-		.alpha_val = 0,	// dummy
-		.sl_sftval = 0,
+		.csckModeSel = 2,		// bit format: Sxx_xx.xx_xxxx_xxxx
+		.alphaInSel = ImIipParamEnum_E_IM_IIP_PARAM_ALPSEL_DIRECT,
+		.alphaOutSel = ImIipParamEnum_E_IM_IIP_PARAM_ALOSEL_CALCULATED,
+		.alphaVal = 0,	// dummy
+		.slSftval = 0,
 	};
-	kuchar paramBuffer[D_IM_IIP_UTIL_CSC_BUF_BYTES];
-	kulong paramBufferAddr = ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
+	kuchar paramBuffer[ImIipDefine_D_IM_IIP_UTIL_CSC_BUF_BYTES];
+	kulong paramBufferAddr = CtImIip_ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
 
 	CtImIipUtility1_DDIM_PRINT((CtImIipUtility1_D_IM_IIP_FUNC_NAME "\n"));
 
@@ -646,55 +673,60 @@ kint32 ct_im_iip_utility1_14_3_1(CtImIipUtility1 *self)
 {
 #ifndef CO_CT_IM_IIP_14_3_1_DISABLE_LUT
 	CtImIipUtility1Private *priv = CT_IM_IIP_UTILITY1_GET_PRIVATE(self);
-	T_IM_IIP_UTIL_LUT iipUtilLut = {
-		.ld_unitid = E_IM_IIP_UNIT_ID_LD0,
-		.lut_unitid = E_IM_IIP_UNIT_ID_LUT,
-		.sl_unitid = E_IM_IIP_UNIT_ID_SL3,
-		.src_pixid = E_IM_IIP_PIXID_1,
-		.dst_pixid = E_IM_IIP_PIXID_2,
+	TImIipUtilLut iipUtilLut = {
+		.ldUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD0,
+		.lutUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LUT,
+		.slUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL3,
+		.srcPixid = ImIipStruct_E_IM_IIP_PIXID_1,
+		.dstPixid = ImIipStruct_E_IM_IIP_PIXID_2,
 		.src = {								// Source image info.
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_FALSE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_Y_PACKED_CBCR,	// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_FALSE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_Y_PACKED_CBCR,	// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH,
-					.Cb_B  = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
-					.Cr_R  = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
-					.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH,			// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH,
+					.cbB  = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
+					.crR  = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
+					.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH,			// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y,
-					.Cb_B  = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C,
-					.Cr_R  = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C,
-					.Alpha = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y,
+					.cbB  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C,
+					.crR  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C,
+					.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF0,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF0,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF0,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF0,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
@@ -702,79 +734,84 @@ kint32 ct_im_iip_utility1_14_3_1(CtImIipUtility1 *self)
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_FALSE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_Y_PACKED_CBCR,	// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_FALSE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_Y_PACKED_CBCR,	// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH,
-					.Cb_B  = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
-					.Cr_R  = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
-					.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH,			// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH,
+					.cbB  = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
+					.crR  = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH,
+					.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y,
-					.Cb_B  = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C,
-					.Cr_R  = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C,
-					.Alpha = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y,
+					.cbB  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C,
+					.crR  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C,
+					.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF1,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF1,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF1,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF1,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
-		.ld_cache_select = E_IM_IIP_PARAM_CSEL_0,
-		.pix_depth = D_IM_IIP_PDEPTH_8BITS,
-		.alpha_depth = E_IM_IIP_ADEPTH_8BITS,
-		.alpha_subsampling = D_IM_IIP_ALPHA_NO_SUBSAMP,
-		.lut_pix_depth = {
+		.ldCacheSelect = ImIipParamEnum_E_IM_IIP_PARAM_CSEL_0,
+		.pixDepth = ImIipDefine_D_IM_IIP_PDEPTH_8BITS,
+		.alphaDepth = ImIipStruct_E_IM_IIP_ADEPTH_8BITS,
+		.alphaSubsampling = ImIipDefine_D_IM_IIP_ALPHA_NO_SUBSAMP,
+		.lutPixDepth = {
 			8, 8, 8, 8
 		},
 		.splbit = {
 			0, 0, 0, 0
 		},
 		.lutram = {
-			.buffer_bytes = {
-				[E_IM_IIP_LUTRAM_TYPE_A] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
-				[E_IM_IIP_LUTRAM_TYPE_B] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
-				[E_IM_IIP_LUTRAM_TYPE_C] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
-				[E_IM_IIP_LUTRAM_TYPE_D] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
-				[E_IM_IIP_LUTRAM_TYPE_E] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
-				[E_IM_IIP_LUTRAM_TYPE_F] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
+			.bufferBytes = {
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_8BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_D] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_E] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_F] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_8BIE),
 			},
-			.buffer_addr = {
-				[E_IM_IIP_LUTRAM_TYPE_A] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
-				[E_IM_IIP_LUTRAM_TYPE_B] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
-				[E_IM_IIP_LUTRAM_TYPE_C] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
-				[E_IM_IIP_LUTRAM_TYPE_D] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
-				[E_IM_IIP_LUTRAM_TYPE_E] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
-				[E_IM_IIP_LUTRAM_TYPE_F] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
+			.bufferAddr = {
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C] = S_G_CT_IM_IIP_LUTRAM_A_8BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_D] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_E] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_F] = S_G_CT_IM_IIP_LUTRAM_D_8BIE,
 			},
 		},
 	};
-	kuchar paramBuffer[D_IM_IIP_UTIL_LUT_BUF_BYTES];
-	kulong paramBufferAddr = ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
+	kuchar paramBuffer[ImIipDefine_D_IM_IIP_UTIL_LUT_BUF_BYTES];
+	kulong paramBufferAddr = CtImIip_ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
 
 	CtImIipUtility1_DDIM_PRINT((CtImIipUtility1_D_IM_IIP_FUNC_NAME "\n"));
 
@@ -794,55 +831,60 @@ kint32 ct_im_iip_utility1_14_3_2(CtImIipUtility1 *self)
 {
 #ifndef CO_CT_IM_IIP_14_3_2_DISABLE_LUT
 	CtImIipUtility1Private *priv = CT_IM_IIP_UTILITY1_GET_PRIVATE(self);
-	T_IM_IIP_UTIL_LUT iipUtilLut = {
-		.ld_unitid = E_IM_IIP_UNIT_ID_LD0,
-		.lut_unitid = E_IM_IIP_UNIT_ID_LUT,
-		.sl_unitid = E_IM_IIP_UNIT_ID_SL3,
-		.src_pixid = E_IM_IIP_PIXID_1,
-		.dst_pixid = E_IM_IIP_PIXID_2,
+	TImIipUtilLut iipUtilLut = {
+		.ldUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD0,
+		.lutUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LUT,
+		.slUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL3,
+		.srcPixid = ImIipStruct_E_IM_IIP_PIXID_1,
+		.dstPixid = ImIipStruct_E_IM_IIP_PIXID_2,
 		.src = {								// Source image info.
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_FALSE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_FALSE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_YCC422_U12_Y_GLOBAL_WIDTH,
-					.Cb_B  = D_IM_IIP_VGA_YCC422_U12_CB_GLOBAL_WIDTH,
-					.Cr_R  = D_IM_IIP_VGA_YCC422_U12_CR_GLOBAL_WIDTH,
-					.Alpha = D_IM_IIP_VGA_YCC422_U12_A_GLOBAL_WIDTH,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_YCC422_U12_Y_GLOBAL_WIDTH,
+					.cbB  = CtImIip_D_IM_IIP_VGA_YCC422_U12_CB_GLOBAL_WIDTH,
+					.crR  = CtImIip_D_IM_IIP_VGA_YCC422_U12_CR_GLOBAL_WIDTH,
+					.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U12_A_GLOBAL_WIDTH,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_Y,
-					.Cb_B  = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_CB,
-					.Cr_R  = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_CR,
-					.Alpha = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_A,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_Y,
+					.cbB  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_CB,
+					.crR  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_CR,
+					.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U12_A,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF0,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF0,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF0,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF0,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF0,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
@@ -850,79 +892,84 @@ kint32 ct_im_iip_utility1_14_3_2(CtImIipUtility1 *self)
 			.rect = {								// Rectangle info. (Source image area)
 				.top = 0.0,								// Vertical position of top-left pixel
 				.left = 0.0,							// Horizontal position of top-left pixel
-				.width = D_IM_IIP_VGA_WIDTH,			// Width
-				.lines = D_IM_IIP_VGA_LINES,			// Lines
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,			// Width
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,			// Lines
 			},
 			.gbl = {								// Global image info.
-				.alpha = D_IM_IIP_ALPHA_FALSE,				// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
-				.frame_type = E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
-				.pix_format = E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
-				.chunky_color = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
-					.component0 = D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> Chunky component (offset +0).
-					.component1 = D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> Chunky component (offset +1).
-					.component2 = D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> Chunky component (offset +2).
-					.component3 = D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> Chunky component (offset +3).
+				.alpha = ImIipDefine_D_IM_IIP_ALPHA_FALSE,	// PIXFMTTBL.ALPHA <br><br> Whether image has alpha or not.
+				.frameType = ImIipStruct_E_IM_IIP_FTYPE_PLANE,			// PIXFMTTBL.FTYPE[2:0] <br><br> Frame format.
+				.pixFormat = ImIipStruct_E_IM_IIP_PFMT_YCC422,			// PIXFMTTBL.PFMT[3:0] <br><br> Pixel format.
+				.chunkyColor = {							// PIXFMTTBL.CHKYORDR[7:0] <br><br> Chunky component.
+					.component0 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y0_G,// ...[1:0] <br><br> ... (offset +0).
+					.component1 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CB_B,// ...[3:2] <br><br> ... (offset +1).
+					.component2 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_CR_R,// ...[5:4] <br><br> ... (offset +2).
+					.component3 = ImIipDefine_D_IM_IIP_CHUNKY_COLOR_Y1_A,// ...[7:6] <br><br> ... (offset +3).
 				},
-				.sign_Y_G = D_IM_IIP_UNSIGNED_DATA,	// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
-				.sign_Cb_B = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
-				.sign_Cr_R = D_IM_IIP_UNSIGNED_DATA,// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
-				.sign_D3 = D_IM_IIP_UNSIGNED_DATA,	
+				.signYG = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
+				// PIXFMTTBL.SGYG <br><br> Whether Y(G) image has sign bit or not.
+				.signCbB = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGB <br><br> Whether Cb(B) image has sign bit or not.
+				.signCrR = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,
+				// PIXFMTTBL.SGR <br><br> Whether Cr(R) image has sign bit or not.
+				.signD3 = ImIipDefine_D_IM_IIP_UNSIGNED_DATA,	
 				// PIXFMTTBL.SGA <br><br> Whether the fourth color which CSC uses has sign bit or not.
-				.width = D_IM_IIP_VGA_WIDTH,// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
-				.lines = D_IM_IIP_VGA_LINES,// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
-				.line_bytes = {								// The size of byte of Global image 1 line.
-					.Y_G   = D_IM_IIP_VGA_YCC422_U12_Y_GLOBAL_WIDTH,
-					.Cb_B  = D_IM_IIP_VGA_YCC422_U12_CB_GLOBAL_WIDTH,
-					.Cr_R  = D_IM_IIP_VGA_YCC422_U12_CR_GLOBAL_WIDTH,
-					.Alpha = D_IM_IIP_VGA_YCC422_U12_A_GLOBAL_WIDTH,	// dummy
+				.width = CtImIip_D_IM_IIP_VGA_WIDTH,
+				// PIXFMTTBL.PICHSZ[14:0]<br><br> The number of horizontal pixel.[16~16383]
+				.lines = CtImIip_D_IM_IIP_VGA_LINES,
+				// PIXFMTTBL.PICVSZ[13:0]<br><br> The number of vertical pixel.[2~16383]
+				.lineyBtes = {								// The size of byte of Global image 1 line.
+					.yG   = CtImIip_D_IM_IIP_VGA_YCC422_U12_Y_GLOBAL_WIDTH,
+					.cbB  = CtImIip_D_IM_IIP_VGA_YCC422_U12_CB_GLOBAL_WIDTH,
+					.crR  = CtImIip_D_IM_IIP_VGA_YCC422_U12_CR_GLOBAL_WIDTH,
+					.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U12_A_GLOBAL_WIDTH,	// dummy
 				},
 				.addr = {									// Beginning address of Global image.
-					.Y_G   = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_Y,
-					.Cb_B  = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_CB,
-					.Cr_R  = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_CR,
-					.Alpha = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_A,	// dummy
+					.yG   = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_Y,
+					.cbB  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_CB,
+					.crR  = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_CR,
+					.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U12_A,	// dummy
 				},
-				.masterIF_Y_G = D_IM_IIP_MASTER_IF1,		
+				.masterifYG = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFYG <br><br> Whether the location of Y(G) image is master I/F 0 or 1.
-				.masterIF_Cb_B = D_IM_IIP_MASTER_IF1,		
+				.masterifCbB = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFB <br><br> Whether the location of Cb(B) image is master I/F 0 or 1.
-				.masterIF_Cr_R = D_IM_IIP_MASTER_IF1,		
+				.masterifCrR = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFR <br><br> Whether the location of Cr(R) image is master I/F 0 or 1.
-				.masterIF_Alpha = D_IM_IIP_MASTER_IF1,		
+				.masterifAlpha = ImIipDefine_D_IM_IIP_MASTER_IF1,		
 				// PIXFMTTBL.MTIFA <br><br> Whether the location of Alpha image is master I/F 0 or 1.
 			},
 		},
-		.ld_cache_select = E_IM_IIP_PARAM_CSEL_0,
-		.pix_depth = D_IM_IIP_PDEPTH_12BITS,
-		.alpha_depth = E_IM_IIP_ADEPTH_8BITS,
-		.alpha_subsampling = D_IM_IIP_ALPHA_NO_SUBSAMP,
-		.lut_pix_depth = {
+		.ldCacheSelect = ImIipParamEnum_E_IM_IIP_PARAM_CSEL_0,
+		.pixDepth = ImIipDefine_D_IM_IIP_PDEPTH_12BITS,
+		.alphaDepth = ImIipStruct_E_IM_IIP_ADEPTH_8BITS,
+		.alphaSubsampling = ImIipDefine_D_IM_IIP_ALPHA_NO_SUBSAMP,
+		.lutPixDepth = {
 			12, 12, 12, 12
 		},
 		.splbit = {
 			1, 1, 1, 1
 		},
 		.lutram = {
-			.buffer_bytes = {
-				[E_IM_IIP_LUTRAM_TYPE_A] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
-				[E_IM_IIP_LUTRAM_TYPE_B] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
-				[E_IM_IIP_LUTRAM_TYPE_C] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
-				[E_IM_IIP_LUTRAM_TYPE_D] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
-				[E_IM_IIP_LUTRAM_TYPE_E] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
-				[E_IM_IIP_LUTRAM_TYPE_F] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
+			.bufferBytes = {
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C] = sizeof(S_G_CT_IM_IIP_LUTRAM_A_11BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_D] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_E] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_F] = sizeof(S_G_CT_IM_IIP_LUTRAM_D_11BIE),
 			},
-			.buffer_addr = {
-				[E_IM_IIP_LUTRAM_TYPE_A] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
-				[E_IM_IIP_LUTRAM_TYPE_B] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
-				[E_IM_IIP_LUTRAM_TYPE_C] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
-				[E_IM_IIP_LUTRAM_TYPE_D] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
-				[E_IM_IIP_LUTRAM_TYPE_E] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
-				[E_IM_IIP_LUTRAM_TYPE_F] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
+			.bufferAddr = {
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C] = S_G_CT_IM_IIP_LUTRAM_A_11BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_D] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_E] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
+				[ImIipStruct_E_IM_IIP_LUTRAM_TYPE_F] = S_G_CT_IM_IIP_LUTRAM_D_11BIE,
 			},
 		},
 	};
-	kuchar paramBuffer[D_IM_IIP_UTIL_LUT_BUF_BYTES];
-	kulong paramBufferAddr = ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
+	kuchar paramBuffer[ImIipDefine_D_IM_IIP_UTIL_LUT_BUF_BYTES];
+	kulong paramBufferAddr = CtImIip_ct_im_iip_roundup_8((kulong)paramBuffer);	// Convet 8bytes align
 	
 	CtImIipUtility1_DDIM_PRINT((CtImIipUtility1_D_IM_IIP_FUNC_NAME "\n"));
 

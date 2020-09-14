@@ -211,25 +211,6 @@ Set SPR Hue specified for CbcCr for On The Fly
 extern	INT32 im_cnrtwo_otf_set_cspr_hue_specified_table(ImCnrtwo *self, UCHAR ch,
 		const ImCnrHueSpecTable* const sprCsprFue );
 
-/**
-Set CbCr setting of source for Off Line
-@param [in]	ch				channel[0 - 2]
-@param[in]	sprsCtrl	Source CbCr adjustment parameter
-@retval		D_DDIM_OK						Success
-@retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@remarks	The calcurate mode of the source CbCr Adjustment is set.
-*/
-extern	INT32 im_cnrtwo_ofl_ctrl_sprs_cc(ImCnrtwo *self, UCHAR ch, const ImCnrCtrlCcSrcDst* const sprsCtrl );
-
-/**
-Set CbCr setting of source for On The Fly
-@param [in]	ch				channel[0 - 2]
-@param[in]	sprsCtrl	Source CbCr adjustment parameter
-@retval		D_DDIM_OK						Success
-@retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@remarks	The calcurate mode of the source CbCr Adjustment is set.
-*/
-extern	INT32 im_cnrtwo_otf_ctrl_sprs_cc(ImCnrtwo *self, UCHAR ch, const ImCnrCtrlCcSrcDst* const sprsCtrl );
 
 
 #ifdef __cplusplus

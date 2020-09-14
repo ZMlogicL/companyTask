@@ -37,17 +37,17 @@ static void im_disp0_destructor(ImDisp0 *self){
 /*----------------------------------------------------------------------*/
 //---------------------- driver  section -------------------------------
 /**< Interrupt callback functions.	*/
-static volatile VP_CALLBACK	S_GIM_DISP_INTERRUPT_CALLBACK[D_IM_DISP_BLOCK_NUM][E_IM_DISP_INT_CB_MAX] = {
+static volatile VP_CALLBACK	S_GIM_DISP_INTERRUPT_CALLBACK[D_IM_DISP_BLOCK_NUM][ImDisp_E_IM_DISP_INT_CB_MAX] = {
 		{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
 		{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
 
-void im_disp0_memcpy(ImDisp0 * self,E_IM_DISP_SEL block , T_IM_DISP_CTRL_OUTPUT const *const ctrl)
+void im_disp0_memcpy(ImDisp0 * self,ImDispEImDispSel block , T_IM_DISP_CTRL_OUTPUT const *const ctrl)
 {
 	memcpy((void*)S_GIM_DISP_INTERRUPT_CALLBACK[block], ctrl->int_callback, sizeof(ctrl->int_callback));
 
 }
 
-void im_disp0_memcpy1(ImDisp0 * self,E_IM_DISP_SEL block , T_IM_DISP_CTRL_OUTPUT *const ctrl)
+void im_disp0_memcpy1(ImDisp0 * self,ImDispEImDispSel block , T_IM_DISP_CTRL_OUTPUT *const ctrl)
 {
 	memcpy(ctrl->int_callback, (void*)S_GIM_DISP_INTERRUPT_CALLBACK[block], sizeof(ctrl->int_callback));
 
@@ -60,26 +60,26 @@ void im_disp0_gim_Disp_Interrupt_Callback1(ImDisp0 * self)
 		INT32 cbf_index;
 		DDIM_USER_ER ercd;
 
-		E_IM_DISP_INTERRUPTION_SELECT interrupt_bit_map[] ={
-				E_IM_DISP_INTERRUPTION_SELECT_VE2,		// Check 2nd field at first.
-				E_IM_DISP_INTERRUPTION_SELECT_VE,
+		ImDispEImDispInterruptionSelect interrupt_bit_map[] ={
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2,		// Check 2nd field at first.
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE,
 
-				E_IM_DISP_INTERRUPTION_SELECT_GR0EE,
-				E_IM_DISP_INTERRUPTION_SELECT_GR1EE,
-				E_IM_DISP_INTERRUPTION_SELECT_GA0EE,
-				E_IM_DISP_INTERRUPTION_SELECT_GA1EE,
-				E_IM_DISP_INTERRUPTION_SELECT_LEE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE,
 
-				E_IM_DISP_INTERRUPTION_SELECT_GR0REE,
-				E_IM_DISP_INTERRUPTION_SELECT_GR1REE,
-				E_IM_DISP_INTERRUPTION_SELECT_GA0REE,
-				E_IM_DISP_INTERRUPTION_SELECT_GA1REE,
-				E_IM_DISP_INTERRUPTION_SELECT_LREE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE,
+				ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE,
 			};
 			im_disp_pclk_on(im_disp_new());
 		#ifdef CO_DEBUG_DISP
-			Ddim_Print(("I:Im_DISP_Int_Handler: start IO_DISP.MAIN[0].DCORE.INTF = %08X\n", (UINT32)IO_DISP.MAIN[0].DCORE.INTF.word));
-			Ddim_Print(("I:Im_DISP_Int_Handler: start IO_DISP.MAIN[1].DCORE.INTF = %08X\n", (UINT32)IO_DISP.MAIN[1].DCORE.INTF.word));
+			Ddim_Print(("I:im_disp2_int_handler: start IO_DISP.MAIN[0].DCORE.INTF = %08X\n", (UINT32)IO_DISP.MAIN[0].DCORE.INTF.word));
+			Ddim_Print(("I:im_disp2_int_handler: start IO_DISP.MAIN[1].DCORE.INTF = %08X\n", (UINT32)IO_DISP.MAIN[1].DCORE.INTF.word));
 		#endif // CO_DEBUG_DISP
 
 	for(block_index = D_IM_DISP_BLOCK_NUM - 1; block_index >= 0; block_index--) {
@@ -94,11 +94,11 @@ void im_disp0_gim_Disp_Interrupt_Callback1(ImDisp0 * self)
 					// Set the flag for waiting vertical synchronization interrupt
 					ercd = DDIM_User_Set_Flg(FID_IM_DISP, disp_flg);
 	#ifdef CO_DEBUG_DISP
-					Ddim_Print(("I:Im_DISP_Int_Handler: DDIM_User_Set_Flg(%08X)\n", disp_flg));
+					Ddim_Print(("I:im_disp2_int_handler: DDIM_User_Set_Flg(%08X)\n", disp_flg));
 	#endif // CO_DEBUG_DISP
 					if (ercd != D_DDIM_USER_E_OK) {
 						// DDIM_User_Set_Flg error
-						Ddim_Print(("E:Im_DISP_Int_Handler: DDIM_User_Set_Flg error. ercd = %d\n", ercd));
+						Ddim_Print(("E:im_disp2_int_handler: DDIM_User_Set_Flg error. ercd = %d\n", ercd));
 					}
 	cbf_index = im_disp_get_cb_index(im_disp_new(), interrupt_bit_map[loop]);
 	// check callback
@@ -111,7 +111,7 @@ void im_disp0_gim_Disp_Interrupt_Callback1(ImDisp0 * self)
 								IO_DISP.MAIN[block_index].DCORE.INTF.word = next_intf;
 				#endif // CO_DEBUG_ON_PC
 							}
-							if ((IO_DISP.MAIN[block_index].DCORE.INTF.word & E_IM_DISP_CORRECT_SELECT_ALL) == 0) {
+							if ((IO_DISP.MAIN[block_index].DCORE.INTF.word & ImDisp_E_IM_DISP_CORRECT_SELECT_ALL) == 0) {
 								break;
 							}
 						}
@@ -121,33 +121,33 @@ void im_disp0_gim_Disp_Interrupt_Callback1(ImDisp0 * self)
 
 /* Set interruption's call-back function pointer.
 */
-INT32 Im_DISP_Set_Int_Callback(E_IM_DISP_SEL block, UINT32 interruption_select, VP_CALLBACK vp_callback)
+INT32 im_disp0_set_int_callback(ImDisp0 * self, ImDispEImDispSel block, UINT32 interruption_select, VP_CALLBACK vp_callback)
 {
 	INT32 index;
 	INT32 cbf_index;
 	INT32 array_num;
 	INT32 ret = D_DDIM_OK;
 
-	E_IM_DISP_INTERRUPTION_SELECT interrupt_index[] = {
-		E_IM_DISP_INTERRUPTION_SELECT_VE2,		/**< Vertical syschronization signal interruption for 2nd field permission */
-		E_IM_DISP_INTERRUPTION_SELECT_VE,		/**< Vertical syschronization signal interruption permission*/
+	ImDispEImDispInterruptionSelect interrupt_index[] = {
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2,		/**< Vertical syschronization signal interruption for 2nd field permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE,		/**< Vertical syschronization signal interruption permission*/
 
-		E_IM_DISP_INTERRUPTION_SELECT_GA1REE,	/**< GR1 A component AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GA0REE,	/**< GR0 A component AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR1REE,	/**< GR1 AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR0REE,	/**< GR0 AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_LREE,		/**< Main AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE,	/**< GR1 A component AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE,	/**< GR0 A component AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE,	/**< GR1 AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE,	/**< GR0 AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE,		/**< Main AXI error interruption permission */
 
-		E_IM_DISP_INTERRUPTION_SELECT_GA1EE,	/**< GR1 A component transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GA0EE,	/**< GR0 A component transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR1EE,	/**< GR1 transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR0EE,	/**< GR0 transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_LEE,		/**< Main transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE,	/**< GR1 A component transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE,	/**< GR0 A component transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE,	/**< GR1 transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE,	/**< GR0 transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE,		/**< Main transmitte error interruption permission */
 	};
 
 #ifdef CO_PARAM_CHECK
-	if ((interruption_select & E_IM_DISP_CORRECT_SELECT_ALL) == 0) {
-		Ddim_Print(("E:Im_DISP_Set_Int_Callback: interruption_select parameter error\n"));
+	if ((interruption_select & ImDisp_E_IM_DISP_CORRECT_SELECT_ALL) == 0) {
+		Ddim_Print(("E:im_disp0_set_int_callback: interruption_select parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -169,47 +169,47 @@ INT32 Im_DISP_Set_Int_Callback(E_IM_DISP_SEL block, UINT32 interruption_select, 
 
 /* Get interruption's call-back function pointer.
 */
-INT32 Im_DISP_Get_Int_Callback(E_IM_DISP_SEL block, E_IM_DISP_INTERRUPTION_SELECT interruption_select, VP_CALLBACK *vp_callback)
+INT32 im_disp0_get_int_callback(ImDisp0 * self, ImDispEImDispSel block, ImDispEImDispInterruptionSelect interruption_select, VP_CALLBACK *vp_callback)
 {
 	INT32 index;
 	INT32 cbf_index;
 	INT32 ret = D_DDIM_OK;
 
-	E_IM_DISP_INTERRUPTION_SELECT interrupt_select[] = {
-		E_IM_DISP_INTERRUPTION_SELECT_VE2,		/**< Vertical syschronization signal interruption for 2nd field permission */
-		E_IM_DISP_INTERRUPTION_SELECT_VE,		/**< Vertical syschronization signal interruption permission*/
+	ImDispEImDispInterruptionSelect interrupt_select[] = {
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2,		/**< Vertical syschronization signal interruption for 2nd field permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE,		/**< Vertical syschronization signal interruption permission*/
 
-		E_IM_DISP_INTERRUPTION_SELECT_GA1REE,	/**< GR1 A component AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GA0REE,	/**< GR0 A component AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR1REE,	/**< GR1 AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR0REE,	/**< GR0 AXI error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_LREE,		/**< Main AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE,	/**< GR1 A component AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE,	/**< GR0 A component AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE,	/**< GR1 AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE,	/**< GR0 AXI error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE,		/**< Main AXI error interruption permission */
 
-		E_IM_DISP_INTERRUPTION_SELECT_GA1EE,	/**< GR1 A component transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GA0EE,	/**< GR0 A component transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR1EE,	/**< GR1 transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_GR0EE,	/**< GR0 transmitte error interruption permission */
-		E_IM_DISP_INTERRUPTION_SELECT_LEE,		/**< Main transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE,	/**< GR1 A component transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE,	/**< GR0 A component transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE,	/**< GR1 transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE,	/**< GR0 transmitte error interruption permission */
+		ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE,		/**< Main transmitte error interruption permission */
 	};
 
 #ifdef CO_PARAM_CHECK
 	if (vp_callback == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Int_Callback: NULL check error\n"));
+		Ddim_Print(("E:im_disp0_get_int_callback: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if ((interruption_select != E_IM_DISP_INTERRUPTION_SELECT_VE2) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_VE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GA1REE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GA0REE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GR1REE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GR0REE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_LREE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GA1EE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GA0EE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GR1EE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_GR0EE) &&
-		(interruption_select != E_IM_DISP_INTERRUPTION_SELECT_LEE)) {
-		Ddim_Print(("E:Im_DISP_Get_Int_Callback: interruption_select parameter error\n"));
+	if ((interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE) &&
+		(interruption_select != ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE)) {
+		Ddim_Print(("E:im_disp0_get_int_callback: interruption_select parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK

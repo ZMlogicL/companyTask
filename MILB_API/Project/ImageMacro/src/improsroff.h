@@ -107,7 +107,7 @@ FF start.
 @param[in]	unitNo : Unit number.
 @param[in]	ch : FFSH channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroff_start( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch );
 /**
@@ -116,7 +116,7 @@ FF stop.
 @param[in]	ch : FFSH channel
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroff_stop( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, UCHAR force );
 /**
@@ -125,7 +125,7 @@ Setup of FF control parameter.
 @param[in]	ch : FFSH channel
 @param[in]	ffCtrl : FF Controller
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroff_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproFfCtrl* ffCtrl );
 /**
@@ -142,16 +142,16 @@ Setup of input position .
 					value range :lines[4 - 8192] 4pixel boundary<br>
 					target registor :@@FFVW<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_sroff_area( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, T_IM_PRO_AREA_INFO* ffArea );
+extern	INT32			impro_sroff_area( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproAreaInfo* ffArea );
 /**
 FIR coefficient setting.
 @param[in]	unitNo : Unit number.
 @param[in]	ch : FFSH channel
 @param[in]	ffCtrl :LPF Control information.<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroff_set_fir_filter( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproFfLpfCtrl* ffCtrl );
 

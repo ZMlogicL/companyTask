@@ -43,9 +43,9 @@ static void ct_dd_timestamp_destructor(CtDdTimestamp *self)
 {
 // CtDdTimestampPrivate *priv = CT_DD_TIMESTAMP_GET_PRIVATE(self);
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
@@ -172,7 +172,7 @@ void ct_dd_timestamp_main(CtDdTimestamp *self, kint argc, KType* argv)
 				// CNTFID0
 				self->dat = DdTimestamp_Dd_TIMESTAMP_Get_CNTFID0;
 				Ddim_Print(("CNTFID0 = 0x%08x\n", self->dat));
-				// TDdTimestampCtrl
+				// DdTimestamp
 				self->dat = dd_timestamp_get_control(dtStamp, &self->timestampCtrlGet);
 				if(self->dat == D_DDIM_OK){
 					Ddim_Print(("T_DD_TIMESTAMP_CTRL hdbg = 0x%08lx\n", 

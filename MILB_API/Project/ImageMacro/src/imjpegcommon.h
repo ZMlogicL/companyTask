@@ -15,8 +15,12 @@
 #define __IM_JPEG_COMMON_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,10 +28,12 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_JPEG_COMMON			(im_jpeg_common_get_type())
-#define IM_JPEG_COMMON(obj)				(K_TYPE_CHECK_INSTANCE_CAST(obj, ImJpegCommon))
-#define IM_IS_JPEG_COMMON(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_JPEG_COMMON))
-
+#define IM_TYPE_JPEG_COMMON							(im_jpeg_common_struct_get_type ())
+#define IM_JPEG_COMMON(obj)								(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_JPEG_COMMON, ImJpegCommon))
+#define IM_JPEG_COMMON_CLASS(klass)				(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_JPEG_COMMON, ImJpegCommonClass))
+#define IM_IS_JPEG_COMMON(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_JPEG_COMMON))
+#define IM_IS_JPEG_COMMON_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_JPEG_COMMON))
+#define IM_JPEG_COMMON_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_JPEG_COMMON, ImJpegCommonClass))
 /*----------------------------------------------------------------------	*/
 /* im_jpeg.h Definition													*/
 /*----------------------------------------------------------------------	*/
@@ -189,7 +195,7 @@ extern "C" {
 #define ImJpegCommon_IM_JPEG_LIMIT_MIN(A, B)			(((A) > (B)) ? (A) : (B))
 #define ImJpegCommon_IM_JPEG_LIMIT_MAX(A, B)			(((A) < (B)) ? (A) : (B))
 #define ImJpegCommon_IM_JPEG_LIMIT(A, B, C)					(ImJpegCommon_IM_JPEG_LIMIT_MAX(ImJpegCommon_IM_JPEG_LIMIT_MIN((A), (B)), (C)))
-#define ImJpegCommon_IM_JPEG_DSB()								Dd_ARM_Dsb_Pou()
+#define ImJpegCommon_IM_JPEG_DSB()								DD_ARM_DSB_POU()
 
 
 typedef enum _EimgSmplType						EimgSmplType;
@@ -221,7 +227,8 @@ typedef struct _TimgDecOutput						TimgDecOutput;
 //---------------------- colabo  section ----------------------------
 #endif	// CO_DDIM_UTILITY_USE
 
-typedef struct _ImJpegCommon 						ImJpegCommon;
+typedef struct _ImJpegCommon						ImJpegCommon;
+typedef struct _ImJpegCommonClass			ImJpegCommonClass;
 typedef struct _ImJpegCommonPrivate 		ImJpegCommonPrivate;
 
 
@@ -355,25 +362,25 @@ enum _EimgIipBlock
  */
 struct _TimgAddrYcc
 {
-	kulong y;
-	kulong c;
+	gulong y;
+	gulong c;
 } ;
 
 /** Jpeg Component table*/
 struct _TimgComponentTbl
 {
 	/**< Quantization table number.<br>:value range[0 - 3] */
-	kuchar quantTblNo;
+	guchar quantTblNo;
 	/**< DC huffman table number.<br>:value range[0 - 1] */
-	kuchar hufDcTblNo;
+	guchar hufDcTblNo;
 	/**< AC huffman table number.<br>:value range[0 - 1] */
-	kuchar hufAcTblNo;
+	guchar hufAcTblNo;
 } ;
 
 /** Jpeg Quatization table*/
 struct _TimgQuatTbl
 {
-	kuchar quantValue[64];
+	guchar quantValue[64];
 } ;
 
 /** Jpeg Quatization table pack
@@ -394,9 +401,9 @@ struct _TimgQuatTblPack
  */
 struct _TimgColorBand
 {
-	kuchar yBand;
-	kuchar cbBand;
-	kuchar crBand;
+	guchar yBand;
+	guchar cbBand;
+	guchar crBand;
 } ;
 
 /** JBUF/PBUF(AXI) Contoroll table*/
@@ -406,9 +413,9 @@ struct _TimgAxiCtrl
 	EimgEndian endian;
 	/**< Continuous issuing number of the transaction. */
 	EimgIssueTran issueTranNum;
-	kuchar cacheType;
-	kuchar protType;
-	kuchar errState;
+	guchar cacheType;
+	guchar protType;
+	guchar errState;
 } ;
 
 /** Jpeg encode base management structure*/
@@ -419,19 +426,19 @@ struct _TimgEncMng
 	/**< Memory format type. */
 	EimgMemForm memFormat;
 	/**< Horizontal size.<br> :value range[64 - 65520] */
-	kushort width;
+	gushort width;
 	/**< Vertical size.<br>:value range[64 - 65280] */
-	kushort lines;
+	gushort lines;
 	/**< Use number of the component table. */
 	TimgComponentTbl component[3];
-	kuchar skipMkFlg;
+	guchar skipMkFlg;
 	/**< MCU number to insert the DRI marker. */
-	kushort driMkNum;
-	kuchar exifFmtFlg;
+	gushort driMkNum;
+	guchar exifFmtFlg;
 	/**< Periodic line interrupt function.<br> Generate an interrupt after setting lines processed. */
-	kushort pintLine;
+	gushort pintLine;
 	/**< Periodic sector interrupt function.<br> Generate an interrupt after setting sector processed. */
-	kulong pintSect;
+	gulong pintSect;
 	TimgAxiCtrl pbufCtrl;
 	TimgAxiCtrl jbufCtrl;
 	EimgBurstIncr pburstLength;
@@ -439,23 +446,23 @@ struct _TimgEncMng
 	EimgBitDepth bitDepth;
 	EimgBurstAl burstAlignment;
 	EimgIipPortMode portMode;
-	kuchar ringOn;
+	guchar ringOn;
 	EimgIipBlock blockSize;
-	kuchar ringSize;
-	kulong codeSize;
-	kint32 result;
-	VpCallback pcallback;
+	guchar ringSize;
+	gulong codeSize;
+	gint32 result;
+	VpCallbackFunc pcallback;
 } ;
 
 /** Jpeg encode frame management structure*/
 struct _TimgEncFrameMng
 {
-	kulong globalYWidth;
-	kulong globalCWidth;
+	gulong globalYWidth;
+	gulong globalCWidth;
 	TimgAddrYcc yccAddr;
-	kulong codeAddr;
-	kuchar codeCountFlg;
-	kuchar codeOverCountFlg;
+	gulong codeAddr;
+	guchar codeCountFlg;
+	guchar codeOverCountFlg;
 	kulonglong limitSize;
 } ;
 
@@ -464,10 +471,10 @@ struct _TimgDecMng
 {
 	EimgMemForm memFormat;
 	EimgResizeExt extMode;
-	kuchar corrMode;
-	kuchar skipMkFlg;
-	kushort pintLine;
-	kulong pintSect;
+	guchar corrMode;
+	guchar skipMkFlg;
+	gushort pintLine;
+	gulong pintSect;
 	TimgColorBand colorBand;
 	TimgAxiCtrl pbufCtrl;
 	TimgAxiCtrl jbufCtrl;
@@ -475,40 +482,40 @@ struct _TimgDecMng
 	EimgBurstIncr jburstLength;
 	EimgBurstAl burstAlignment;
 	EimgIipPortMode portMode;
-	kuchar ringOn;
+	guchar ringOn;
 	EimgIipBlock blockSize;
-	kuchar ringSize;
+	guchar ringSize;
 	EimgSmplType smplType;
-	kushort orgWidth;
-	kushort orgLines;
-	kint32 result;
-	kuchar errCode;
-	VpCallback pcallback;
+	gushort orgWidth;
+	gushort orgLines;
+	gint32 result;
+	guchar errCode;
+	VpCallbackFunc pcallback;
 } ;
 
 /** Jpeg decode frame management structure*/
 struct _TimgDecFrameMng
 {
 	/**< Global Y width.<br> Should be aligned on 8:value range[64 - 1048512]  */
-	kulong globalYWidth;
+	gulong globalYWidth;
 	/**< Global C width.<br> Should be aligned on 8:value range[64 - 1048512]  */
-	kulong globalCWidth;
+	gulong globalCWidth;
 	/**< Flag to use the cutout function of image. */
-	kuchar cutoutFlg;
+	guchar cutoutFlg;
 	/**< Horizontal of cutout.<br> Should be aligned on 16:value range[64 - 65280]<br>
 	 But, Please set to 0 if you do not use the cutout function. */
-	kushort cutoutWidth;
+	gushort cutoutWidth;
 	/**< Vertical of cutout.<br> Should be aligned on 16.<br> :value range[64 - 65520]<br>
 	 But, Please set to 0 if you do not use the cutout function. */
-	kushort cutoutLines;
+	gushort cutoutLines;
 	/**< Horizontal offset of cutout.<br> Should be aligned on 16:value range[0 - 65216] */
-	kushort cutoutOffsetH;
+	gushort cutoutOffsetH;
 	/**< Vertical offset of cutout.<br> Should be aligned on 16:value range[0 - 65456] */
-	kushort cutoutOffsetV;
+	gushort cutoutOffsetV;
 	/**< Header address of YCC.Should be aligned on 8.*/
 	TimgAddrYcc yccAddr;
 	/**< Header address of compressed data.Should be aligned on 8. */
-	kulong codeAddr;
+	gulong codeAddr;
 	kulonglong codeSize;
 } ;
 
@@ -578,9 +585,9 @@ struct _TimgDecFrameMng
 struct _TimgDecInput
 {
 	/**< Global Y width (must 8 byte aligned value) :value range[64 - 1048512] */
-	kulong globalYWidth;
+	gulong globalYWidth;
 	/**< Global CbCr width (must 8 byte aligned value) :value range[64 - 1048512] */
-	kulong globalCWidth;
+	gulong globalCWidth;
 	/**< Memory format type */
 	EimgMemForm memFormat;
 	/**< Sampling type */
@@ -588,7 +595,7 @@ struct _TimgDecInput
 	/**< Size of Jpeg compressed data :value range[0 - 0x1FFFFFFFC00] */
 	kulonglong codeSize;
 	/**< Header address of compressed data (must 8 byte aligned value) */
-	kulong codeAddr;
+	gulong codeAddr;
 	/**< Header address of YCC data (must 8 byte aligned value) */
 	TimgAddrYcc dstYccAddr;
 } ;
@@ -601,11 +608,11 @@ struct _TimgDecOutput
 	/**< Sampling type */
 	EimgSmplType smplType;
 	/**< Horizontal of the original image data */
-	kushort orgWidth;
+	gushort orgWidth;
 	/**< Vertical of the original image data */
-	kushort orgLines;
+	gushort orgLines;
 	/**< Decompression error code */
-	kuchar errCode;
+	guchar errCode;
 } ;
 //---------------------- colabo  section -------------------------------
 #endif	// CO_DDIM_UTILITY_USE
@@ -613,12 +620,19 @@ struct _TimgDecOutput
 
 struct _ImJpegCommon
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustom *ddimUserCustom;
+};
+
+struct _ImJpegCommonClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    			im_jpeg_common_get_type(void);
-ImJpegCommon*		        im_jpeg_common_new(void);
+GType										im_jpeg_common_get_type(void)	G_GNUC_CONST;
+ImJpegCommon*					im_jpeg_common_new(void);
+
 /**
 This function cancels the Sleep state of Jpeg macro
 */
@@ -638,7 +652,7 @@ extern	void	im_jpeg_init( ImJpegCommon*self );
  @remarks		This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
  This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
  */
-extern	kint32	im_jpeg_open(ImJpegCommon*self, kint32 tmout );
+extern	gint32	im_jpeg_open(ImJpegCommon*self, gint32 tmout );
 
 /**
  This function close (release semaphore) of Jpeg macro.
@@ -646,7 +660,7 @@ extern	kint32	im_jpeg_open(ImJpegCommon*self, kint32 tmout );
  @retval		ImJpegCommon_D_IM_JPEG_SEM_NG		: Semaphoore acquisition error.
  @remarks		This API uses DDIM_User_Sig_Sem().
  */
-extern	kint32	im_jpeg_close( ImJpegCommon*self );
+extern	gint32	im_jpeg_close( ImJpegCommon*self );
 /**
  This function set quantization table.
  @param [in]	pQuantTbl				: Pointer of quantization table pack.<br>
@@ -654,7 +668,7 @@ extern	kint32	im_jpeg_close( ImJpegCommon*self );
  0: Current frame / 1: Next frame
  @remarks		"pQuantTbl" is NULL, use the default table.<br>
  */
-extern	void	im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, kuchar nextFrmFlg );
+extern	void	im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, guchar nextFrmFlg );
 
 /**
  This function set Jpeg quality values depend on quantization table.
@@ -664,7 +678,7 @@ extern	void	im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, kuch
  @retval		ImJpegCommon_D_IM_JPEG_OK			: Success.
  @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
  */
-extern	kint32	im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg );
+extern	gint32	im_jpeg_set_quality(ImJpegCommon*self, gint32 quaValue, guchar nextFrmFlg );
 /**
   This function is setting of the block downsampling.
   @param [in]	downspType		: downsampling type
@@ -674,10 +688,10 @@ extern	kint32	im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nex
 										<li>@ref ImJpegCommon_D_IM_JPEG_DOWNSP_1_4
 										<li>@ref ImJpegCommon_D_IM_JPEG_DOWNSP_1_8
 									</ul>
-  @retval		kushort					: Proportion of remainder after adjusting for size when decimated.( format: 8.8 )
+  @retval		gushort					: Proportion of remainder after adjusting for size when decimated.( format: 8.8 )
   @remarks		Please call this function after you have made the setting in im_jpeg_ctrl_enc()
 */
-extern	kushort	im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType );
+extern	gushort	im_jpeg_set_down_sampling_rate(ImJpegCommon*self, guchar downspType );
 /**
   This function set Jpeg encode base management table data before encode process start.
   @param [in]	pJpgEncMng													: Pointer to Jpeg encode base management table
@@ -685,7 +699,7 @@ extern	kushort	im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspTy
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
   @retval		D_IM_JPEG_BUSY_NG		: Macro busy.
 */
-extern	kint32	im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng );
+extern	gint32	im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng );
 /**
   This function get the frame settings for Jpeg decode.
   @param [out]	pJpgDecFrmMng											: pointer to Jpeg decode frame management table
@@ -695,7 +709,7 @@ extern	kint32	im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng );
 				It can set during the decoding process, If the same base configuration to decode<br>
 				If you want to set in during Jpeg decoding process, please set after PBUF and JBUF is running.<br>
 */
-extern	kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrmMng );
+extern	gint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrmMng );
 /**
   This function starts as asynchronous processing Jpeg decoded.
   @retval		ImJpegCommon_D_IM_JPEG_OK												: Normal end.
@@ -705,12 +719,15 @@ extern	kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJp
   				This API uses DDIM_User_Clr_Flg().
   @remarks		This API uses DDIM_User_Twai_Flg().
 */
-extern	kint32 im_jpeg_start_dec( ImJpegCommon*self );
+extern	gint32 im_jpeg_start_dec( ImJpegCommon*self );
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_JPEG_COMMON_H__ */

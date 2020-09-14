@@ -79,8 +79,8 @@ static void dd_hdmac_destructor(DdHdmac *self)
 static kint32 ddHdmacWaitEnd(DdHdmac *self, kuchar ch, kushort* const status, kuint32 waitMode)
 {
 	DdHdmacPrivate 			*priv = DD_HDMAC_GET_PRIVATE(self);
-	DdimUserCustom_FLGPTN 	flg_ptn;
-	DDIM_USER_ER 			ercd = 0;
+	DdimUserCustom_FLGPTN 	flgPtn;
+	DdimUserCustom_ER 			ercd = 0;
 	kushort 							ss;
 
 	// CPU Polling (no use interrupt)
@@ -107,22 +107,22 @@ static kint32 ddHdmacWaitEnd(DdHdmac *self, kuchar ch, kushort* const status, ku
 		switch (ch) {
 			case 0:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, priv->ddimUserCustom, DdimUserCustom_FID_DD_HDMAC,\
-						DdHdmac_FLG_CH0, D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdHdmacWaitEndTime[ch]);
+						DdHdmac_FLG_CH0, D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdHdmacWaitEndTime[ch]);
 				break;
 //TODO:ddim_user_custom_twai_flg原型:DDIM_User_Twai_Flg
 			case 1:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, DdimUserCustom_FID_DD_HDMAC, DdHdmac_FLG_CH1,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdHdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdHdmacWaitEndTime[ch]);
 				break;
 
 			case 2:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, DdimUserCustom_FID_DD_HDMAC, DdHdmac_FLG_CH2,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdHdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdHdmacWaitEndTime[ch]);
 				break;
 
 			case 3:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, DdimUserCustom_FID_DD_HDMAC, DdHdmac_FLG_CH3,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdHdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdHdmacWaitEndTime[ch]);
 				break;
 
 			default:
@@ -224,7 +224,7 @@ static kint32 ddHdmacStart(DdHdmac *self, kuchar ch, kushort* const status, kuin
 kint32 dd_hdmac_open(DdHdmac *self, kuchar ch, kint32 tmout)
 {
 	DdHdmacPrivate *priv = DD_HDMAC_GET_PRIVATE(self);
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (ch >= DdHdmac_CH_NUM_MAX) {
@@ -237,7 +237,7 @@ kint32 dd_hdmac_open(DdHdmac *self, kuchar ch, kint32 tmout)
 		ercd = ddim_user_custom_pol_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_HDMAC(ch));				// pol_sem()
 	}
 	else {
-		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_HDMAC(ch), (DDIM_USER_TMO)tmout);	// twai_sem()
+		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_HDMAC(ch), (DdimUserCustom_TMO)tmout);	// twai_sem()
 	}
 
 	if (DdimUserCustom_E_OK != ercd) {
@@ -260,7 +260,7 @@ kint32 dd_hdmac_open(DdHdmac *self, kuchar ch, kint32 tmout)
 kint32 dd_hdmac_close(DdHdmac *self, kuchar ch)
 {
 	DdHdmacPrivate *priv = DD_HDMAC_GET_PRIVATE(self);
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (ch >= DdHdmac_CH_NUM_MAX) {
@@ -782,8 +782,8 @@ void dd_hdmac_set_int_handler(DdHdmac *self, kuchar ch, void (*IntHandlerFunc)(v
 void dd_hdmac_int_handler(DdHdmac *self, kuchar ch)
 {
 	DdHdmacPrivate *priv = DD_HDMAC_GET_PRIVATE(self);
-	DDIM_USER_ER 	ercd;
-	kushort 					status;
+	DdimUserCustom_ER 	ercd;
+	kushort 							status;
 	VpCallback 					handler;
 
 #ifdef DriverCommon_CO_PARAM_CHECK

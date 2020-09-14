@@ -44,7 +44,7 @@ extern T_IM_B2R_RECT gctImB2rRectParamOutRgbU8;
 extern T_IM_B2R_INADDR_INFO gctImB2rInAddrRaw;
 extern T_IM_B2R_OUTBANK_INFO gctImB2rOutAddrRgb;
 
-extern const UCHAR gctImB2rKneeTbl[D_IM_B2R_TABLE_MAX_RGB_KNEE];
+extern const UCHAR gctImB2rKneeTbl[ImB2r_D_IM_B2R_TABLE_MAX_RGB_KNEE];
 
 //本身就是全局变量
 extern T_IM_B2R_CTRL_B2B_DIRECT gctImB2rCtrlB2bDirect;

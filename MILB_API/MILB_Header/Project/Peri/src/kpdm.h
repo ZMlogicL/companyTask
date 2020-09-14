@@ -28,8 +28,8 @@
 #define K_IS_PDM(obj)				(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_PDM))
 
 
-typedef struct _KPdm KPdm;
-typedef struct _KPdmPrivate KPdmPrivate;
+typedef struct _KPdm 				KPdm;
+typedef struct _KPdmPrivate 	KPdmPrivate;
 
 
 struct _KPdm
@@ -40,82 +40,82 @@ struct _KPdm
 /*	structure of PDM_CORE_CFG	*/
 typedef union _IoPdmCorecfg
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long pdmcoreEn :1;
-		unsigned long softMute :1;
-		unsigned long sCycles :3;
-		unsigned long hpcutoff :4;
-		unsigned long adchpd :1;
-		unsigned long sincRate :7;
-		unsigned long mclkdiv :6;
-		unsigned long pgaL :4;
-		unsigned long pgaR :4;
-		unsigned long lrswap :1;
+		kulong pdmcoreEn :1;
+		kulong softMute :1;
+		kulong sCycles :3;
+		kulong hpcutoff :4;
+		kulong adchpd :1;
+		kulong sincRate :7;
+		kulong mclkdiv :6;
+		kulong pgaL :4;
+		kulong pgaR :4;
+		kulong lrswap :1;
 	} bit;
 } IoPdmCorecfg;
 
 /*	structure of PDM_DMA_CFG	*/
 typedef union _IoPdmDmacfg
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long dmaEn :1;
-		unsigned long pcmWdlen :2;
-		unsigned long pcmChset :2;
-		unsigned long :1;
-		unsigned long dmaBurstlen :2;
-		unsigned long :2;
-		unsigned long dmaFlush :1;
-		unsigned long :1;
-		unsigned long clrIrqDma0 :1;
-		unsigned long clrIrqDma1 :1;
-		unsigned long :1;
-		unsigned long clrIrqFfovf :1;
-		unsigned long :8;
-		unsigned long sincShift :4;
-		unsigned long dmickDly :2;
-		unsigned long :2;
+		kulong dmaEn :1;
+		kulong pcmWdlen :2;
+		kulong pcmChset :2;
+		kulong :1;
+		kulong dmaBurstlen :2;
+		kulong :2;
+		kulong dmaFlush :1;
+		kulong :1;
+		kulong clrIrqDma0 :1;
+		kulong clrIrqDma1 :1;
+		kulong :1;
+		kulong clrIrqFfovf :1;
+		kulong :8;
+		kulong sincShift :4;
+		kulong dmickDly :2;
+		kulong :2;
 	} bit;
 } IoPdmDmacfg;
 
 /*	structure of PDM_DMA_LEN	*/
 typedef union _IoPdmDmalen
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long :8;
-		unsigned long dmaTsize :8;
-		unsigned long dmaTtsize :15;
-		unsigned long :1;
+		kulong :8;
+		kulong dmaTsize :8;
+		kulong dmaTtsize :15;
+		kulong :1;
 	} bit;
 } IoPdmDmalen;
 
 /*	structure of PDM_DMA_DST_ADDR	*/
 typedef union _IoPdmDmadstaddr
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long :2;
-		unsigned long dmaAddr :30;
+		kulong :2;
+		kulong dmaAddr :30;
 	} bit;
 } IoPdmDmadstaddr;
 
 /*	structure of PDM_statUS	*/
 typedef union _IoPdmStatus
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long ffovfIntReg :1;
-		unsigned long :1;
-		unsigned long dma0IntReg :1;
-		unsigned long dma1IntReg :1;
-		unsigned long :28;
+		kulong ffovfIntReg :1;
+		kulong :1;
+		kulong dma0IntReg :1;
+		kulong dma1IntReg :1;
+		kulong :28;
 	} bit;
 } IoPdmStatus;
 
@@ -137,7 +137,7 @@ typedef struct _IoPdm
 	/* 1E00_(4014 - 4017h)	*/
 	IoPdmStatus status;
 	/* 1E00_(4018 - 43FFh)	*/
-	unsigned char dmy1e0040181e0043ff[0x1E004400 - 0x1E004018];
+	kuchar dmy1e0040181e0043ff[0x1E004400 - 0x1E004018];
 } IoPdm;
 
 

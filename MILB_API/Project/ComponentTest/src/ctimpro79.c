@@ -22,7 +22,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro79, ct_impro_7_9)
 
 struct _CtImpro79Private
 {
-
+    T_IM_PRO_INT_CFG intCtrl;
+    TImProCallbackCfg callbackIntCtrl;
 };
 
 
@@ -32,6 +33,12 @@ struct _CtImpro79Private
 static void ct_impro_7_9_constructor(CtImpro79 *self)
 {
 	CtImpro79Private *priv = CT_IMPRO_7_9_GET_PRIVATE(self);
+
+    priv->intCtrl.interruptBit = 0; 
+    priv->intCtrl.permissionFlg = 0;
+
+    priv->callbackIntCtrl.inthandler = NULL;
+    priv->callbackIntCtrl.userParam = 0;
 }
 
 static void ct_impro_7_9_destructor(CtImpro79 *self)
@@ -44,29 +51,27 @@ static void ct_impro_7_9_destructor(CtImpro79 *self)
  *PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_90(const kuint32 idx)
+void ct_im_pro_7_9_0(CtImpro79* self,const kuint32 idx)
 {
+	CtImpro79Private *priv = CT_IMPRO_7_9_GET_PRIVATE(self);    
     kint32 ercd;
     kuchar permissionFlg;
     E_IM_PRO_UNIT_NUM unitNo;
     E_IM_PRO_BLOCK_TYPE blockType;
     kuchar ch;
-    T_IM_PRO_INT_CFG intCtrl = {
-        .interruptBit = 0,
-        .permissionFlg = 0,
-    };
+
 #ifdef CO_DEBUG_ON_PC
     const T_IM_PRO_COMMON_PRCH_INFO* prchRegInfo = 0;
 #endif  // CO_DEBUG_ON_PC
 
     if(idx == 1) {
         for(unitNo = 0; unitNo < E_IM_PRO_BOTH_UNIT; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = 0; ch < E_IM_PRO_PRCH_MAX; ch++) {
                     for(permissionFlg = 0; permissionFlg < 2; permissionFlg++) {
-                        intCtrl.permissionFlg = permissionFlg;
+                        priv->intCtrl.permissionFlg = permissionFlg;
 
-                        intCtrl.interruptBit = (D_IM_PRO_PRCHINTENB_PRE |
+                        priv->intCtrl.interruptBit = (D_IM_PRO_PRCHINTENB_PRE |
                                                 D_IM_PRO_PRCHINTENB_PREE |
                                                 D_IM_PRO_PRCHINTENB_PRXE |
                                                 D_IM_PRO_PRCHINTFLG_PRF |
@@ -74,11 +79,11 @@ void ct_im_pro_7_90(const kuint32 idx)
                                                 D_IM_PRO_PRCHINTFLG_PRXF);
 #ifdef CO_DEBUG_ON_PC
                         im_pro_comm_get_prchRegInfo(unitNo, blockType, ch, &prchRegInfo);
-                        prchRegInfo->regPtr->prchintflg.word = intCtrl.interruptBit;
+                        prchRegInfo->regPtr->prchintflg.word = priv->intCtrl.interruptBit;
 #endif  // CO_DEBUG_ON_PC
 
-                        ercd = Im_PRO_PRch_Set_Interrupt(unitNo, blockType, ch, &intCtrl);
-                        im_pro_7_90_Print(NULL,ercd, unitNo, blockType, ch, &intCtrl, permissionFlg);
+                        ercd = Im_PRO_PRch_Set_Interrupt(unitNo, blockType, ch, &priv->intCtrl);
+                        im_pro_7_print_90(im_pro_7_print_get(), ercd, unitNo, blockType, ch, &priv->intCtrl, permissionFlg);
                     }
                 }
             }
@@ -86,27 +91,24 @@ void ct_im_pro_7_90(const kuint32 idx)
     }
 }
 
-void ct_im_pro_7_91(const kuint32 idx)
+void ct_im_pro_7_9_1(CtImpro79* self,const kuint32 idx)
 {
+	CtImpro79Private *priv = CT_IMPRO_7_9_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     E_IM_PRO_BLOCK_TYPE blockType;
     kuchar ch;
     kulong userParam;
-    TImProCallbackCfg intCtrl = {
-        .inthandler = NULL,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = 0; ch < E_IM_PRO_PRCH_MAX; ch++) {
                     for(userParam = 0; userParam < 4; userParam++) {
-                        intCtrl.inthandler = im_pro_callback_prch_int_cb;
-                        intCtrl.userParam = userParam;
-                        ercd = Im_PRO_PRch_Set_Int_Handler(unitNo, blockType, ch, &intCtrl);
-                        im_pro_7_91_Print(NULL,"", unitNo, blockType, ch, ercd, &intCtrl);
+                        priv->callbackIntCtrl.inthandler = im_pro_callback_prch_int_cb;
+                        priv->callbackIntCtrl.userParam = userParam;
+                        ercd = Im_PRO_PRch_Set_Int_Handler(unitNo, blockType, ch, &priv->callbackIntCtrl);
+                        im_pro_7_print_91(im_pro_7_print_get(), "", unitNo, blockType, ch, ercd, &priv->callbackIntCtrl);
                     }
                 }
             }

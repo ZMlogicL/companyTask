@@ -40,8 +40,8 @@ struct _ImproSenobtPrivate
 
 /*文件全局变量(含常量及静态变量)定义区域*/
 // RDMA I/F
-static const TimproRdmaObtAddr S_G_IM_PRO_OBT_Addr[D_IM_PRO_SEN_OBT_CNT] = {
-	// E_IM_PRO_OBT_CH_0_0
+static const TimproRdmaObtAddr S_G_IM_PRO_OBT_Addr[ImproBase_D_IM_PRO_SEN_OBT_CNT] = {
+	// ImproBase_E_IM_PRO_OBT_CH_0_0
 	{
 		0x2800B8C0,0x2800B8D4,0x2800B8E8,0x2800B8EC,
 		0x2800B8F0,0x2800B8F4,
@@ -114,9 +114,9 @@ static void impro_senobt_destructor(ImproSenobt *self)
 Start TOP OB macro.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senobt_start( E_IM_PRO_OBT_CH ch )
+INT32 impro_senobt_start( EimproObtCh ch )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -124,11 +124,11 @@ INT32 impro_senobt_start( E_IM_PRO_OBT_CH ch )
 	im_pro_comm_get_obt_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obt[blockNum][chNum].obttrg.bit.obttrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
-	im_pro_sen_set_start_status(D_IM_SEN_STATUS_OBT00, ch);
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_OBT00, ch);
 
 	return D_DDIM_OK;
 }
@@ -138,9 +138,9 @@ Stop TOP OB macro.
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobt_stop( E_IM_PRO_OBT_CH ch, UCHAR force )
+INT32 impro_senobt_stop( EimproObtCh ch, UCHAR force )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -148,7 +148,7 @@ INT32 impro_senobt_stop( E_IM_PRO_OBT_CH ch, UCHAR force )
 	im_pro_comm_get_obt_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if (force == 0){
 		// frame stop
 		ioPro.sen.obt[blockNum][chNum].obttrg.bit.obttrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -158,9 +158,9 @@ INT32 impro_senobt_stop( E_IM_PRO_OBT_CH ch, UCHAR force )
 		ioPro.sen.obt[blockNum][chNum].obttrg.bit.obttrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_stop_status(D_IM_SEN_STATUS_OBT00, ch);
+	im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_OBT00, ch);
 
 	return D_DDIM_OK;
 }
@@ -170,9 +170,9 @@ The control parameter of TOP OB compensation is set.
 @param[in]	ch : Channel No.
 @param[in]	obtCtrl	:	TOP OB Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobt_ctrl( E_IM_PRO_OBT_CH ch, TimproObtCtrl* obtCtrl )
+INT32 impro_senobt_ctrl( EimproObtCh ch, TimproObtCtrl* obtCtrl )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -180,14 +180,14 @@ INT32 impro_senobt_ctrl( E_IM_PRO_OBT_CH ch, TimproObtCtrl* obtCtrl )
 #ifdef CO_PARAM_CHECK
 	if (obtCtrl == NULL){
 		Ddim_Assertion(("I:impro_senobt_ctrl error. obtCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	im_pro_comm_get_obt_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtctl.bit.obten			= obtCtrl->obtEnable;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtctl.bit.obtmd			= obtCtrl->mode;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtctl.bit.obtsl			= obtCtrl->sel;
@@ -195,7 +195,7 @@ INT32 impro_senobt_ctrl( E_IM_PRO_OBT_CH ch, TimproObtCtrl* obtCtrl )
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtthbit.bit.obththbit	= obtCtrl->obMaxValue;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtthbit.bit.obtlthbit	= obtCtrl->obMinValue;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -203,7 +203,7 @@ INT32 impro_senobt_ctrl( E_IM_PRO_OBT_CH ch, TimproObtCtrl* obtCtrl )
 /**
 The area for Top OB detection is set up.
 @param[in]	ch : Channel No.
-@param[in]	obtArea	:The area for Top OB detection. See @ref T_IM_PRO_AREA_INFO<br>
+@param[in]	obtArea	:The area for Top OB detection. See @ref TimproAreaInfo<br>
 							value range  :posX[0 - 12287]<br>
 							target registor  :@@OBTH<br>
 							value range  :posY[0 - 8191]<br>
@@ -215,9 +215,9 @@ The area for Top OB detection is set up.
 															2pixel boundary(OBTMD=1)<br>
 							target registor  :@@OBTVW
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
-INT32 impro_senobt_set_area( E_IM_PRO_OBT_CH ch, T_IM_PRO_AREA_INFO* obtArea )
+INT32 impro_senobt_set_area( EimproObtCh ch, TimproAreaInfo* obtArea )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -225,35 +225,35 @@ INT32 impro_senobt_set_area( E_IM_PRO_OBT_CH ch, T_IM_PRO_AREA_INFO* obtArea )
 #ifdef CO_PARAM_CHECK
 	if (obtArea == NULL){
 		Ddim_Assertion(("I:impro_senobt_set_area error. obtArea=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobt_D_IM_PRO_OBT_OBTH_MIN, ImproSenobt_D_IM_PRO_OBT_OBTH_MAX,
 					obtArea->posX, "impro_senobt_set_area : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobt_D_IM_PRO_OBT_OBTV_MIN, ImproSenobt_D_IM_PRO_OBT_OBTV_MAX,
 					obtArea->posY, "impro_senobt_set_area : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobt_D_IM_PRO_OBT_OBTHW_MIN, ImproSenobt_D_IM_PRO_OBT_OBTHW_MAX,
 					obtArea->width, "impro_senobt_set_area : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobt_D_IM_PRO_OBT_OBTVW_MIN, ImproSenobt_D_IM_PRO_OBT_OBTVW_MAX,
 					obtArea->lines, "impro_senobt_set_area : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_pro_comm_get_obt_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obt[blockNum][chNum].obtcore.obth.bit.obth		= obtArea->posX;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtv.bit.obtv		= obtArea->posY;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obthw.bit.obthw	= obtArea->width;
 	ioPro.sen.obt[blockNum][chNum].obtcore.obtvw.bit.obtvw	= obtArea->lines;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -272,10 +272,10 @@ Set TOP OB offset
 					 value range : bb :[0x4000(=-16384) - 0x3FFF(=+16383)]<br>
 					 target registor :@@obtOfsb
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 @remarks	Please set up a minus value by a complement. bit15 is sign bit
 */
-INT32 impro_senobt_set_offset( E_IM_PRO_OBT_CH ch, T_IM_PRO_RGB2* offset )
+INT32 impro_senobt_set_offset( EimproObtCh ch, TimproARgb2* offset )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -283,19 +283,19 @@ INT32 impro_senobt_set_offset( E_IM_PRO_OBT_CH ch, T_IM_PRO_RGB2* offset )
 #ifdef CO_PARAM_CHECK
 	if (offset == NULL){
 		Ddim_Assertion(("I:impro_senobt_set_offset error. offset=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_pro_comm_get_obt_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	im_pro_set_reg_signed( ioPro.sen.obt[blockNum][chNum].obtcore.obtofsr, union IoObtofsr, obtofsr, offset->rr );
 	im_pro_set_reg_signed( ioPro.sen.obt[blockNum][chNum].obtcore.obtofsgr, union IoObtofsgr, obtofsgr, offset->gr );
 	im_pro_set_reg_signed( ioPro.sen.obt[blockNum][chNum].obtcore.obtofsgb, union IoObtofsgb, obtofsgb, offset->gb );
 	im_pro_set_reg_signed( ioPro.sen.obt[blockNum][chNum].obtcore.obtofsb, union IoObtofsb, obtofsb, offset->bb );
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -306,9 +306,9 @@ Get TOP OB detection data
 				 value range:[0 - 1]<br>
 @param[out]	obtdata : OBTDATA
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobt_get_bot_data( E_IM_PRO_OBT_CH ch, T_IM_PRO_RGB2* obtdata )
+INT32 impro_senobt_get_bot_data( EimproObtCh ch, TimproARgb2* obtdata )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -326,12 +326,12 @@ Get the top address of the address array of OBT control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 impro_senobt_get_rdma_addr_obt_cntl( E_IM_PRO_OBT_CH ch, const TimproRdmaObtAddr** addr )
+INT32 impro_senobt_get_rdma_addr_obt_cntl( EimproObtCh ch, const TimproRdmaObtAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_senobt_get_rdma_addr_obt_cntl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 

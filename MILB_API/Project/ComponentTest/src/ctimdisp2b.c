@@ -1,7 +1,7 @@
 /*
  *ctimdisp2b.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -27,25 +30,49 @@
 #include "imdisp2group.h"
 #include "ctimdisp2b.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2b, ct_im_disp2b, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2B_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2bPrivate, CT_TYPE_IM_DISP2B))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2b, ct_im_disp2b, IM_TYPE_DISP2_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2B_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2B, CtImDisp2bPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp2bPrivate
 {
 	Disp2bNewParams *params;
 };
 
 /*
+ * 文件级全局变量定义
+ * */
+
+/*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2bDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp2b_constructor(CtImDisp2b *self)
+static void ct_im_disp2b_class_init(CtImDisp2bClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2bPrivate));
+}
+
+static void ct_im_disp2b_init(CtImDisp2b *self)
 {
 	CtImDisp2bPrivate *priv = CT_IM_DISP2B_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -55,17 +82,39 @@ static void ct_im_disp2b_constructor(CtImDisp2b *self)
 	self->privCtImDisp2b = priv;
 }
 
-static void ct_im_disp2b_destructor(CtImDisp2b *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2b *self = CT_IM_DISP2B(object);
+//	CtImDisp2bPrivate *priv = CT_IM_DISP2B_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2b_parent_class)->dispose(object);
 }
 
+static void finalize_od(GObject *object)
+{
+//	CtImDisp2b *self = CT_IM_DISP2B(object);
+//	CtImDisp2bPrivate *priv = CT_IM_DISP2B_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2b_parent_class)->finalize(object);
+}
+
+
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void disp2bDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
 {
 	CtImDisp2b *self= (CtImDisp2b *)parent;
 	CtImDisp2bPrivate *priv = self->privCtImDisp2b;
 	E_IM_DISP_SEL block = strtoul(argv[3], NULL, 0);
-	kint32 error = D_DDIM_OK;
+	gint32 error = D_DDIM_OK;
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
 	CtImDisp3a *disp3a = (CtImDisp3a *)im_disp2_group_get_disp3a(imDisp2Group);
 
@@ -75,84 +124,84 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 	// HDMI
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 1
-	if (strcmp((kchar*) argv[4], "67") == 0)
+	if (strcmp((gchar *) argv[4], "67") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "68") == 0)
+	else if (strcmp((gchar *) argv[4], "68") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_2;
 	}
-	else if (strcmp((kchar*) argv[4], "69") == 0)
+	else if (strcmp((gchar *) argv[4], "69") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_3;
 	}
-	else if (strcmp((kchar*) argv[4], "70") == 0)
+	else if (strcmp((gchar *) argv[4], "70") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "71") == 0)
+	else if (strcmp((gchar *) argv[4], "71") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_2;
 	}
-	else if (strcmp((kchar*) argv[4], "72") == 0)
+	else if (strcmp((gchar *) argv[4], "72") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB565_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "73") == 0)
+	else if (strcmp((gchar *) argv[4], "73") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB565_16BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "74") == 0)
+	else if (strcmp((gchar *) argv[4], "74") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB666_18BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "75") == 0)
+	else if (strcmp((gchar *) argv[4], "75") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "76") == 0)
+	else if (strcmp((gchar *) argv[4], "76") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DUAL_YCC444_12BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "77") == 0)
+	else if (strcmp((gchar *) argv[4], "77") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "78") == 0)
+	else if (strcmp((gchar *) argv[4], "78") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -160,7 +209,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_16BIT;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 2
-	else if (strcmp((kchar*) argv[4], "79") == 0)
+	else if (strcmp((gchar *) argv[4], "79") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -170,7 +219,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->polsel.bit.VEPS = D_IM_DISP_POLARITY_NEGATIVE;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 3
-	else if (strcmp((kchar*) argv[4], "80") == 0)
+	else if (strcmp((gchar *) argv[4], "80") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -181,7 +230,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->vrfctl = D_IM_DISP_VENS_HSYNC;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 4
-	else if (strcmp((kchar*) argv[4], "81") == 0)
+	else if (strcmp((gchar *) argv[4], "81") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -193,7 +242,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ovsize = 0x2002;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 5
-	else if (strcmp((kchar*) argv[4], "82") == 0)
+	else if (strcmp((gchar *) argv[4], "82") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -207,7 +256,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ohsize = 0x1002;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : HDMI 6
-	else if (strcmp((kchar*) argv[4], "83") == 0)
+	else if (strcmp((gchar *) argv[4], "83") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_HDMI;
@@ -223,133 +272,133 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 	// LCD
 	// "CP:im_disp_param_check_ctrl_output() : LCD 1
-	else if (strcmp((kchar*) argv[4], "84") == 0)
+	else if (strcmp((gchar *) argv[4], "84") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "85") == 0)
+	else if (strcmp((gchar *) argv[4], "85") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_36BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "86") == 0)
+	else if (strcmp((gchar *) argv[4], "86") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "87") == 0)
+	else if (strcmp((gchar *) argv[4], "87") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_2;
 	}
-	else if (strcmp((kchar*) argv[4], "88") == 0)
+	else if (strcmp((gchar *) argv[4], "88") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB565_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "89") == 0)
+	else if (strcmp((gchar *) argv[4], "89") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB565_16BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "90") == 0)
+	else if (strcmp((gchar *) argv[4], "90") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB666_18BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "91") == 0)
+	else if (strcmp((gchar *) argv[4], "91") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC444_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "92") == 0)
+	else if (strcmp((gchar *) argv[4], "92") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_20BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "93") == 0)
+	else if (strcmp((gchar *) argv[4], "93") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "94") == 0)
+	else if (strcmp((gchar *) argv[4], "94") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DEEP_YCC444_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "95") == 0)
+	else if (strcmp((gchar *) argv[4], "95") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DEEP_YCC444_36BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "96") == 0)
+	else if (strcmp((gchar *) argv[4], "96") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DUAL_YCC444_12BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "97") == 0)
+	else if (strcmp((gchar *) argv[4], "97") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC420_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "98") == 0)
+	else if (strcmp((gchar *) argv[4], "98") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC420_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "99") == 0)
+	else if (strcmp((gchar *) argv[4], "99") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "A1") == 0)
+	else if (strcmp((gchar *) argv[4], "A1") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_16BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "A2") == 0)
+	else if (strcmp((gchar *) argv[4], "A2") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
 		// ct_im_disp3_hclk_counter_off(pImDispHclkCounter);
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_10BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "A3") == 0)
+	else if (strcmp((gchar *) argv[4], "A3") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -357,7 +406,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_10BIT_2;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : LCD 2
-	else if (strcmp((kchar*) argv[4], "A4") == 0)
+	else if (strcmp((gchar *) argv[4], "A4") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -367,7 +416,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->toctl.bit.CON = D_IM_DISP_CON_INTERNAL;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : LCD 3
-	else if (strcmp((kchar*) argv[4], "A5") == 0)
+	else if (strcmp((gchar *) argv[4], "A5") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -378,7 +427,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ovsize = 0x2002;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : LCD 4
-	else if (strcmp((kchar*) argv[4], "A6") == 0)
+	else if (strcmp((gchar *) argv[4], "A6") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -391,7 +440,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ohsize = 0x782;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : LCD 5
-	else if (strcmp((kchar*) argv[4], "A7") == 0)
+	else if (strcmp((gchar *) argv[4], "A7") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -404,7 +453,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 	// MIPI
 	// "CP:im_disp_param_check_ctrl_output() : MIPI 1
-	else if (strcmp((kchar*) argv[4], "A8") == 0)
+	else if (strcmp((gchar *) argv[4], "A8") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -412,7 +461,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "A9") == 0)
+	else if (strcmp((gchar *) argv[4], "A9") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -420,7 +469,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_36BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "B1") == 0)
+	else if (strcmp((gchar *) argv[4], "B1") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -428,7 +477,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "B2") == 0)
+	else if (strcmp((gchar *) argv[4], "B2") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -436,7 +485,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_2;
 	}
-	else if (strcmp((kchar*) argv[4], "B3") == 0)
+	else if (strcmp((gchar *) argv[4], "B3") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -444,7 +493,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_8BIT_3;
 	}
-	else if (strcmp((kchar*) argv[4], "B4") == 0)
+	else if (strcmp((gchar *) argv[4], "B4") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -452,7 +501,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "B5") == 0)
+	else if (strcmp((gchar *) argv[4], "B5") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -460,7 +509,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB888_16BIT_2;
 	}
-	else if (strcmp((kchar*) argv[4], "B6") == 0)
+	else if (strcmp((gchar *) argv[4], "B6") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -468,7 +517,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_RGB565_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "B7") == 0)
+	else if (strcmp((gchar *) argv[4], "B7") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -476,7 +525,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "B8") == 0)
+	else if (strcmp((gchar *) argv[4], "B8") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -484,7 +533,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_16BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "B9") == 0)
+	else if (strcmp((gchar *) argv[4], "B9") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -492,7 +541,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC444_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C1") == 0)
+	else if (strcmp((gchar *) argv[4], "C1") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -500,7 +549,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_20BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C2") == 0)
+	else if (strcmp((gchar *) argv[4], "C2") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -508,7 +557,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC422_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C3") == 0)
+	else if (strcmp((gchar *) argv[4], "C3") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -516,7 +565,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DEEP_YCC444_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C4") == 0)
+	else if (strcmp((gchar *) argv[4], "C4") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -524,7 +573,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DEEP_YCC444_36BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C5") == 0)
+	else if (strcmp((gchar *) argv[4], "C5") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -532,7 +581,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_DUAL_YCC444_12BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C6") == 0)
+	else if (strcmp((gchar *) argv[4], "C6") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -540,7 +589,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC420_24BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C7") == 0)
+	else if (strcmp((gchar *) argv[4], "C7") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -548,7 +597,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_YCC420_30BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C8") == 0)
+	else if (strcmp((gchar *) argv[4], "C8") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -556,7 +605,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_8BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "C9") == 0)
+	else if (strcmp((gchar *) argv[4], "C9") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -564,7 +613,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_16BIT;
 	}
-	else if (strcmp((kchar*) argv[4], "D1") == 0)
+	else if (strcmp((gchar *) argv[4], "D1") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -572,7 +621,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		// mode error for MIPI
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_10BIT_1;
 	}
-	else if (strcmp((kchar*) argv[4], "D2") == 0)
+	else if (strcmp((gchar *) argv[4], "D2") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_MIPI;
@@ -581,7 +630,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->domd.bit.MODE = D_IM_DISP_MODE_GENERAL_10BIT_2;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : MIPI 2
-	else if (strcmp((kchar*) argv[4], "D3") == 0)
+	else if (strcmp((gchar *) argv[4], "D3") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -591,7 +640,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->toctl.bit.CON = D_IM_DISP_CON_EXTERNAL;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : MIPI 3
-	else if (strcmp((kchar*) argv[4], "D4") == 0)
+	else if (strcmp((gchar *) argv[4], "D4") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -601,7 +650,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ovsize = 0x2002;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : MIPI 4
-	else if (strcmp((kchar*) argv[4], "D5") == 0)
+	else if (strcmp((gchar *) argv[4], "D5") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -613,7 +662,7 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		pOutCtrlTrgLimit->ohsize = 0x782;
 	}
 	// "CP:im_disp_param_check_ctrl_output() : MIPI 5
-	else if (strcmp((kchar*) argv[4], "D6") == 0)
+	else if (strcmp((gchar *) argv[4], "D6") == 0)
 	{
 		// ct_im_disp3_hclk_counter_on(pImDispHclkCounter);
 		// IO_DISP.MAIN[block].DCORE.IFS.bit.IFS = D_IM_DISP_IFS_LCD;
@@ -659,9 +708,8 @@ static void disp2bDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 CtImDisp2b *ct_im_disp2b_new(Disp2bNewParams *disp2NewParams)
 {
-	CtImDisp2b *self = (CtImDisp2b *) k_object_new_with_private(CT_TYPE_IM_DISP2B,sizeof(CtImDisp2bPrivate));
+	CtImDisp2b *self = (CtImDisp2b *) g_object_new(CT_TYPE_IM_DISP2B, NULL);
 	CtImDisp2bPrivate *priv = self->privCtImDisp2b;
 	priv->params = disp2NewParams;
 	return self;
 }
-

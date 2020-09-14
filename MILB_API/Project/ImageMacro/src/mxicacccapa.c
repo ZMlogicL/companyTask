@@ -28,8 +28,8 @@ struct _MxicAccCapaPrivate
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckAcceptanceCapability( UCHAR capability );
-static INT32 imMxicCheckPortGroup( ImMxicWrArbiter wrArbiter, 
+static kint32 imMxicCheckAcceptanceCapability( kuchar capability );
+static kint32 imMxicCheckPortGroup( ImMxicWrArbiter wrArbiter, 
 									ImMxicSpecArbiterGr arbiter, ImMxicPortGr port );
 #endif // CO_PARAM_CHECK
 
@@ -62,9 +62,9 @@ Check value of acceptance capability.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckAcceptanceCapability( UCHAR capability )
+static kint32 imMxicCheckAcceptanceCapability( kuchar capability )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -84,9 +84,9 @@ Check port specifies parameter. (gropu)
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckPortGroup( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiterGr arbiter, ImMxicPortGr port )
+static kint32 imMxicCheckPortGroup( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiterGr arbiter, ImMxicPortGr port )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -119,11 +119,11 @@ This function set acceptance capability of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_acc_capa_set_acceptance_capability( MxicAccCapa *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiter arbiter, ImMxicPort port, UCHAR capability )
+kint32 mxic_acc_capa_set_acceptance_capability( MxicAccCapa *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiter arbiter, ImMxicPort port, kuchar capability )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicAccCapaPrivate *priv = MXIC_ACC_CAPA_GET_PRIVATE(self);
 
@@ -401,11 +401,11 @@ This function set acceptance capability of all ports.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_acc_capa_set_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
+kint32 mxic_acc_capa_set_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
 		const MxicAllAcceptanceCapability* const allCapability )
 {
-	INT32	result;
-	INT32	i, j;
+	kint32	result;
+	kint32	i, j;
 
 #ifdef CO_PARAM_CHECK
 	if ( allCapability == NULL ) {
@@ -490,11 +490,11 @@ This function get acceptance capability of all ports.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_acc_capa_get_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
+kint32 mxic_acc_capa_get_acceptance_capability_all_port( MxicAccCapa *self, ImMxicUnit unit, 
 		MxicAllAcceptanceCapability* const allCapability )
 {
-	INT32	result;
-	INT32	i, j;
+	kint32	result;
+	kint32	i, j;
 	MxicAccCapaPrivate *priv = MXIC_ACC_CAPA_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -582,11 +582,11 @@ This function set acceptance capability (gropu) of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_acc_capa_set_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, UCHAR capability )
+kint32 mxic_acc_capa_set_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, kuchar capability )
 {
-	UCHAR	regReadSw;
-	INT32	result;
+	kuchar	regReadSw;
+	kint32	result;
 	MxicAccCapaPrivate *priv = MXIC_ACC_CAPA_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -936,10 +936,10 @@ This function get acceptance capability (gropu) of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_acc_capa_get_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, UCHAR* capability )
+kint32 mxic_acc_capa_get_acceptance_capability_group( MxicAccCapa *self, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiterGr arbiter, ImMxicPortGr port, kuchar* capability )
 {
-	INT32	result;
+	kint32	result;
 	MxicAccCapaPrivate *priv = MXIC_ACC_CAPA_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK

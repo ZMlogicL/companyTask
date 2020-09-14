@@ -24,7 +24,7 @@
 
 #include <klib.h>
 #include "driver_common.h"
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_DD_TMR32                  (ct_dd_tmr32_get_type())
 #define CT_DD_TMR32(obj)                  (K_TYPE_CHECK_INSTANCE_CAST (obj, CtDdTmr32)) 

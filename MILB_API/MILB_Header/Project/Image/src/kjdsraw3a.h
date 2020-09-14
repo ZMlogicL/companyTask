@@ -12,556 +12,602 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #ifndef __K_JDSRAW3A_H__
 #define __K_JDSRAW3A_H__
+
 
 #include <klib.h>
 #include "kjdsraw3a2.h"
 
-#define K_TYPE_JDSRAW3A	(k_jdsraw3a_get_type())
-#define K_JDSRAW3A(obj)	(K_TYPE_CHECK_INSTANCE_CAST((obj), KJdsraw3a))
-#define K_IS_JDSRAW3A(obj)	(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSRAW3A))
 
-typedef struct _KJdsraw3a KJdsraw3a;
-typedef struct _KJdsraw3aPrivate KJdsraw3aPrivate;
+#define K_TYPE_JDSRAW3A	            (k_jdsraw3a_get_type())
+#define K_JDSRAW3A(obj)	            (K_TYPE_CHECK_INSTANCE_CAST((obj), KJdsraw3a))
+#define K_IS_JDSRAW3A(obj)	        (K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSRAW3A))
 
-typedef struct _IoRawCode IoRawCode;
-typedef struct _IoRawLen IoRawLen;
-typedef struct _IoRawLut IoRawLut;
-typedef struct _IoJdsraw IoJdsraw;
 
-typedef union _IoRawRctl0 IoRawRctl0;
-typedef union _IoRawRctl1 IoRawRctl1;
-typedef union _IoRawCond IoRawCond;
-typedef union _IoRawRintf IoRawRintf;
-typedef union _IoRawRinte IoRawRinte;
-typedef union _IoRawHsize IoRawHsize;
-typedef union _IoRawVsize IoRawVsize;
-typedef union _IoRawDsize IoRawDsize;
-typedef union _IoRawMsa IoRawMsa;
-typedef union _IoRawMda IoRawMda;
-typedef union _IoRawDefinit IoRawDefinit;
-typedef union _IoRawClmt IoRawClmt;
-typedef union _IoRawCcnt IoRawCcnt;
-typedef union _IoRawTblaen IoRawTblaen;
-typedef union _IoRawMraxctl IoRawMraxctl;
-typedef union _IoRawMwaxctl IoRawMwaxctl;
-typedef union _IoRawMraxsts IoRawMraxsts;
-typedef union _IoRawMwaxsts IoRawMwaxsts;
-typedef union _IoRawCode1 IoRawCode1;
-typedef union _IoRawCode2 IoRawCode2;
-typedef union _IoRawCode3 IoRawCode3;
-typedef union _IoRawCode4 IoRawCode4;
-typedef union _IoRawCode5 IoRawCode5;
-typedef union _IoRawCode6 IoRawCode6;
-typedef union _IoRawCode7 IoRawCode7;
-typedef union _IoRawCode8 IoRawCode8;
-typedef union _IoRawLen1 IoRawLen1;
-typedef union _IoRawLen2 IoRawLen2;
-typedef union _IoRawLen3 IoRawLen3;
-typedef union _IoRawLen4 IoRawLen4;
-typedef union _IoRawLen5 IoRawLen5;
-typedef union _IoRawLen6 IoRawLen6;
-typedef union _IoRawLen7 IoRawLen7;
-typedef union _IoRawLen8 IoRawLen8;
-typedef union _IoRawLut1 IoRawLut1;
-typedef union _IoRawLut2 IoRawLut2;
-typedef union _IoRawLut3 IoRawLut3;
-typedef union _IoRawLut4 IoRawLut4;
-typedef union _IoRawLut5 IoRawLut5;
-typedef union _IoRawLut6 IoRawLut6;
-typedef union _IoRawLut7 IoRawLut7;
-typedef union _IoRawLut8 IoRawLut8;
-typedef union _IoRawLut9 IoRawLut9;
-typedef union _IoRawLut10 IoRawLut10;
-typedef union _IoRawLut11 IoRawLut11;
-typedef union _IoRawLut12 IoRawLut12;
-typedef union _IoRawLut13 IoRawLut13;
-typedef union _IoRawLut14 IoRawLut14;
-typedef union _IoRawLut15 IoRawLut15;
-typedef union _IoRawLut16 IoRawLut16;
-typedef union _IoRawLut17 IoRawLut17;
-typedef union _IoRawLut18 IoRawLut18;
-typedef union _IoRawLut19 IoRawLut19;
-typedef union _IoRawLut20 IoRawLut20;
-typedef union _IoRawLut21 IoRawLut21;
-typedef union _IoRawLut22 IoRawLut22;
-typedef union _IoRawLut23 IoRawLut23;
-typedef union _IoRawLut24 IoRawLut24;
-typedef union _IoRawLut25 IoRawLut25;
-typedef union _IoRawLut26 IoRawLut26;
-typedef union _IoRawLut27 IoRawLut27;
-typedef union _IoRawLut28 IoRawLut28;
-typedef union _IoRawLut29 IoRawLut29;
-typedef union _IoRawLut30 IoRawLut30;
-typedef union _IoRawLut31 IoRawLut31;
-typedef union _IoRawLut32 IoRawLut32;
-typedef union _IoRawLut33 IoRawLut33;
-typedef union _IoRawLut34 IoRawLut34;
-typedef union _IoRawLut35 IoRawLut35;
-typedef union _IoRawLut36 IoRawLut36;
-typedef union _IoRawLut37 IoRawLut37;
-typedef union _IoRawLut38 IoRawLut38;
-typedef union _IoRawLut39 IoRawLut39;
-typedef union _IoRawLut40 IoRawLut40;
-typedef union _IoRawLut41 IoRawLut41;
-typedef union _IoRawLut42 IoRawLut42;
-typedef union _IoRawLut43 IoRawLut43;
-typedef union _IoRawLut44 IoRawLut44;
-typedef union _IoRawLut45 IoRawLut45;
-typedef union _IoRawLut46 IoRawLut46;
-typedef union _IoRawLut47 IoRawLut47;
-typedef union _IoRawLut48 IoRawLut48;
-typedef union _IoRawLut49 IoRawLut49;
-typedef union _IoRawLut50 IoRawLut50;
-typedef union _IoRawLut51 IoRawLut51;
-typedef union _IoRawLut52 IoRawLut52;
-typedef union _IoRawLut53 IoRawLut53;
-typedef union _IoRawLut54 IoRawLut54;
-typedef union _IoRawLut55 IoRawLut55;
-typedef union _IoRawLut56 IoRawLut56;
-typedef union _IoRawLut57 IoRawLut57;
-typedef union _IoRawLut58 IoRawLut58;
-typedef union _IoRawLut59 IoRawLut59;
-typedef union _IoRawLut60 IoRawLut60;
-typedef union _IoRawLut61 IoRawLut61;
-typedef union _IoRawLut62 IoRawLut62;
-typedef union _IoRawLut63 IoRawLut63;
-typedef union _IoRawLut64 IoRawLut64;
+typedef struct _KJdsraw3a           KJdsraw3a;
+typedef struct _KJdsraw3aPrivate    KJdsraw3aPrivate;
+
+typedef struct _IoRawCode           IoRawCode;
+typedef struct _IoRawLen            IoRawLen;
+typedef struct _IoRawLut            IoRawLut;
+typedef struct _IoJdsraw            IoJdsraw;
+
+typedef union _IoRawRctl0           IoRawRctl0;
+typedef union _IoRawRctl1           IoRawRctl1;
+typedef union _IoRawCond            IoRawCond;
+typedef union _IoRawRintf           IoRawRintf;
+typedef union _IoRawRinte           IoRawRinte;
+typedef union _IoRawHsize           IoRawHsize;
+typedef union _IoRawVsize           IoRawVsize;
+typedef union _IoRawDsize           IoRawDsize;
+typedef union _IoRawMsa             IoRawMsa;
+typedef union _IoRawMda             IoRawMda;
+typedef union _IoRawDefinit         IoRawDefinit;
+typedef union _IoRawClmt            IoRawClmt;
+typedef union _IoRawCcnt            IoRawCcnt;
+typedef union _IoRawTblaen          IoRawTblaen;
+typedef union _IoRawMraxctl         IoRawMraxctl;
+typedef union _IoRawMwaxctl         IoRawMwaxctl;
+typedef union _IoRawMraxsts         IoRawMraxsts;
+typedef union _IoRawMwaxsts         IoRawMwaxsts;
+typedef union _IoRawCode1           IoRawCode1;
+typedef union _IoRawCode2           IoRawCode2;
+typedef union _IoRawCode3           IoRawCode3;
+typedef union _IoRawCode4           IoRawCode4;
+typedef union _IoRawCode5           IoRawCode5;
+typedef union _IoRawCode6           IoRawCode6;
+typedef union _IoRawCode7           IoRawCode7;
+typedef union _IoRawCode8           IoRawCode8;
+typedef union _IoRawLen1            IoRawLen1;
+typedef union _IoRawLen2            IoRawLen2;
+typedef union _IoRawLen3            IoRawLen3;
+typedef union _IoRawLen4            IoRawLen4;
+typedef union _IoRawLen5            IoRawLen5;
+typedef union _IoRawLen6            IoRawLen6;
+typedef union _IoRawLen7            IoRawLen7;
+typedef union _IoRawLen8            IoRawLen8;
+typedef union _IoRawLut1            IoRawLut1;
+typedef union _IoRawLut2            IoRawLut2;
+typedef union _IoRawLut3            IoRawLut3;
+typedef union _IoRawLut4            IoRawLut4;
+typedef union _IoRawLut5            IoRawLut5;
+typedef union _IoRawLut6            IoRawLut6;
+typedef union _IoRawLut7            IoRawLut7;
+typedef union _IoRawLut8            IoRawLut8;
+typedef union _IoRawLut9            IoRawLut9;
+typedef union _IoRawLut10           IoRawLut10;
+typedef union _IoRawLut11           IoRawLut11;
+typedef union _IoRawLut12           IoRawLut12;
+typedef union _IoRawLut13           IoRawLut13;
+typedef union _IoRawLut14           IoRawLut14;
+typedef union _IoRawLut15           IoRawLut15;
+typedef union _IoRawLut16           IoRawLut16;
+typedef union _IoRawLut17           IoRawLut17;
+typedef union _IoRawLut18           IoRawLut18;
+typedef union _IoRawLut19           IoRawLut19;
+typedef union _IoRawLut20           IoRawLut20;
+typedef union _IoRawLut21           IoRawLut21;
+typedef union _IoRawLut22           IoRawLut22;
+typedef union _IoRawLut23           IoRawLut23;
+typedef union _IoRawLut24           IoRawLut24;
+typedef union _IoRawLut25           IoRawLut25;
+typedef union _IoRawLut26           IoRawLut26;
+typedef union _IoRawLut27           IoRawLut27;
+typedef union _IoRawLut28           IoRawLut28;
+typedef union _IoRawLut29           IoRawLut29;
+typedef union _IoRawLut30           IoRawLut30;
+typedef union _IoRawLut31           IoRawLut31;
+typedef union _IoRawLut32           IoRawLut32;
+typedef union _IoRawLut33           IoRawLut33;
+typedef union _IoRawLut34           IoRawLut34;
+typedef union _IoRawLut35           IoRawLut35;
+typedef union _IoRawLut36           IoRawLut36;
+typedef union _IoRawLut37           IoRawLut37;
+typedef union _IoRawLut38           IoRawLut38;
+typedef union _IoRawLut39           IoRawLut39;
+typedef union _IoRawLut40           IoRawLut40;
+typedef union _IoRawLut41           IoRawLut41;
+typedef union _IoRawLut42           IoRawLut42;
+typedef union _IoRawLut43           IoRawLut43;
+typedef union _IoRawLut44           IoRawLut44;
+typedef union _IoRawLut45           IoRawLut45;
+typedef union _IoRawLut46           IoRawLut46;
+typedef union _IoRawLut47           IoRawLut47;
+typedef union _IoRawLut48           IoRawLut48;
+typedef union _IoRawLut49           IoRawLut49;
+typedef union _IoRawLut50           IoRawLut50;
+typedef union _IoRawLut51           IoRawLut51;
+typedef union _IoRawLut52           IoRawLut52;
+typedef union _IoRawLut53           IoRawLut53;
+typedef union _IoRawLut54           IoRawLut54;
+typedef union _IoRawLut55           IoRawLut55;
+typedef union _IoRawLut56           IoRawLut56;
+typedef union _IoRawLut57           IoRawLut57;
+typedef union _IoRawLut58           IoRawLut58;
+typedef union _IoRawLut59           IoRawLut59;
+typedef union _IoRawLut60           IoRawLut60;
+typedef union _IoRawLut61           IoRawLut61;
+typedef union _IoRawLut62           IoRawLut62;
+typedef union _IoRawLut63           IoRawLut63;
+typedef union _IoRawLut64           IoRawLut64;
+
 
 struct _KJdsraw3a
 {
     KObject parent;
 };
+
+
 union _IoRawLut26
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut100 :8;
-        unsigned long lut101 :8;
-        unsigned long lut102 :8;
-        unsigned long lut103 :8;
+        kulong lut100 :8;
+        kulong lut101 :8;
+        kulong lut102 :8;
+        kulong lut103 :8;
     } bit;
 };
+
 union _IoRawLut27
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut104 :8;
-        unsigned long lut105 :8;
-        unsigned long lut106 :8;
-        unsigned long lut107 :8;
+        kulong lut104 :8;
+        kulong lut105 :8;
+        kulong lut106 :8;
+        kulong lut107 :8;
     } bit;
 };
+
 union _IoRawLut28
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut108 :8;
-        unsigned long lut109 :8;
-        unsigned long lut110 :8;
-        unsigned long lut111 :8;
+        kulong lut108 :8;
+        kulong lut109 :8;
+        kulong lut110 :8;
+        kulong lut111 :8;
     } bit;
 };
+
 union _IoRawLut29
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut112 :8;
-        unsigned long lut113 :8;
-        unsigned long lut114 :8;
-        unsigned long lut115 :8;
+        kulong lut112 :8;
+        kulong lut113 :8;
+        kulong lut114 :8;
+        kulong lut115 :8;
     } bit;
 };
+
 union _IoRawLut30
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut116 :8;
-        unsigned long lut117 :8;
-        unsigned long lut118 :8;
-        unsigned long lut119 :8;
+        kulong lut116 :8;
+        kulong lut117 :8;
+        kulong lut118 :8;
+        kulong lut119 :8;
     } bit;
 };
+
 union _IoRawLut31
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut120 :8;
-        unsigned long lut121 :8;
-        unsigned long lut122 :8;
-        unsigned long lut123 :8;
+        kulong lut120 :8;
+        kulong lut121 :8;
+        kulong lut122 :8;
+        kulong lut123 :8;
     } bit;
 };
+
 union _IoRawLut32
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut124 :8;
-        unsigned long lut125 :8;
-        unsigned long lut126 :8;
-        unsigned long lut127 :8;
+        kulong lut124 :8;
+        kulong lut125 :8;
+        kulong lut126 :8;
+        kulong lut127 :8;
     } bit;
 };
+
 union _IoRawLut33
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut128 :8;
-        unsigned long lut129 :8;
-        unsigned long lut130 :8;
-        unsigned long lut131 :8;
+        kulong lut128 :8;
+        kulong lut129 :8;
+        kulong lut130 :8;
+        kulong lut131 :8;
     } bit;
 };
+
 union _IoRawLut34
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut132 :8;
-        unsigned long lut133 :8;
-        unsigned long lut134 :8;
-        unsigned long lut135 :8;
+        kulong lut132 :8;
+        kulong lut133 :8;
+        kulong lut134 :8;
+        kulong lut135 :8;
     } bit;
 };
+
 union _IoRawLut35
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut136 :8;
-        unsigned long lut137 :8;
-        unsigned long lut138 :8;
-        unsigned long lut139 :8;
+        kulong lut136 :8;
+        kulong lut137 :8;
+        kulong lut138 :8;
+        kulong lut139 :8;
     } bit;
 };
+
 union _IoRawLut36
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut140 :8;
-        unsigned long lut141 :8;
-        unsigned long lut142 :8;
-        unsigned long lut143 :8;
+        kulong lut140 :8;
+        kulong lut141 :8;
+        kulong lut142 :8;
+        kulong lut143 :8;
     } bit;
 };
+
 union _IoRawLut37
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut144 :8;
-        unsigned long lut145 :8;
-        unsigned long lut146 :8;
-        unsigned long lut147 :8;
+        kulong lut144 :8;
+        kulong lut145 :8;
+        kulong lut146 :8;
+        kulong lut147 :8;
     } bit;
 };
+
 union _IoRawLut38
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut148 :8;
-        unsigned long lut149 :8;
-        unsigned long lut150 :8;
-        unsigned long lut151 :8;
+        kulong lut148 :8;
+        kulong lut149 :8;
+        kulong lut150 :8;
+        kulong lut151 :8;
     } bit;
 };
+
 union _IoRawLut39
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut152 :8;
-        unsigned long lut153 :8;
-        unsigned long lut154 :8;
-        unsigned long lut155 :8;
+        kulong lut152 :8;
+        kulong lut153 :8;
+        kulong lut154 :8;
+        kulong lut155 :8;
     } bit;
 };
+
 union _IoRawLut40
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut156 :8;
-        unsigned long lut157 :8;
-        unsigned long lut158 :8;
-        unsigned long lut159 :8;
+        kulong lut156 :8;
+        kulong lut157 :8;
+        kulong lut158 :8;
+        kulong lut159 :8;
     } bit;
 };
+
 union _IoRawLut41
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut160 :8;
-        unsigned long lut161 :8;
-        unsigned long lut162 :8;
-        unsigned long lut163 :8;
+        kulong lut160 :8;
+        kulong lut161 :8;
+        kulong lut162 :8;
+        kulong lut163 :8;
     } bit;
 };
+
 union _IoRawLut42
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut164 :8;
-        unsigned long lut165 :8;
-        unsigned long lut166 :8;
-        unsigned long lut167 :8;
+        kulong lut164 :8;
+        kulong lut165 :8;
+        kulong lut166 :8;
+        kulong lut167 :8;
     } bit;
 };
+
 union _IoRawLut43
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut168 :8;
-        unsigned long lut169 :8;
-        unsigned long lut170 :8;
-        unsigned long lut171 :8;
+        kulong lut168 :8;
+        kulong lut169 :8;
+        kulong lut170 :8;
+        kulong lut171 :8;
     } bit;
 };
+
 union _IoRawLut44
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut172 :8;
-        unsigned long lut173 :8;
-        unsigned long lut174 :8;
-        unsigned long lut175 :8;
+        kulong lut172 :8;
+        kulong lut173 :8;
+        kulong lut174 :8;
+        kulong lut175 :8;
     } bit;
 };
+
 union _IoRawLut45
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut176 :8;
-        unsigned long lut177 :8;
-        unsigned long lut178 :8;
-        unsigned long lut179 :8;
+        kulong lut176 :8;
+        kulong lut177 :8;
+        kulong lut178 :8;
+        kulong lut179 :8;
     } bit;
 };
+
 union _IoRawLut46
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut180 :8;
-        unsigned long lut181 :8;
-        unsigned long lut182 :8;
-        unsigned long lut183 :8;
+        kulong lut180 :8;
+        kulong lut181 :8;
+        kulong lut182 :8;
+        kulong lut183 :8;
     } bit;
 };
+
 union _IoRawLut47
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut184 :8;
-        unsigned long lut185 :8;
-        unsigned long lut186 :8;
-        unsigned long lut187 :8;
+        kulong lut184 :8;
+        kulong lut185 :8;
+        kulong lut186 :8;
+        kulong lut187 :8;
     } bit;
 };
+
 union _IoRawLut48
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut188 :8;
-        unsigned long lut189 :8;
-        unsigned long lut190 :8;
-        unsigned long lut191 :8;
+        kulong lut188 :8;
+        kulong lut189 :8;
+        kulong lut190 :8;
+        kulong lut191 :8;
     } bit;
 };
+
 union _IoRawLut49
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut192 :8;
-        unsigned long lut193 :8;
-        unsigned long lut194 :8;
-        unsigned long lut195 :8;
+        kulong lut192 :8;
+        kulong lut193 :8;
+        kulong lut194 :8;
+        kulong lut195 :8;
     } bit;
 };
+
 union _IoRawLut50
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut196 :8;
-        unsigned long lut197 :8;
-        unsigned long lut198 :8;
-        unsigned long lut199 :8;
+        kulong lut196 :8;
+        kulong lut197 :8;
+        kulong lut198 :8;
+        kulong lut199 :8;
     } bit;
 };
+
 union _IoRawLut51
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut200 :8;
-        unsigned long lut201 :8;
-        unsigned long lut202 :8;
-        unsigned long lut203 :8;
+        kulong lut200 :8;
+        kulong lut201 :8;
+        kulong lut202 :8;
+        kulong lut203 :8;
     } bit;
 };
+
 union _IoRawLut52
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut204 :8;
-        unsigned long lut205 :8;
-        unsigned long lut206 :8;
-        unsigned long lut207 :8;
+        kulong lut204 :8;
+        kulong lut205 :8;
+        kulong lut206 :8;
+        kulong lut207 :8;
     } bit;
 };
+
 union _IoRawLut53
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut208 :8;
-        unsigned long lut209 :8;
-        unsigned long lut210 :8;
-        unsigned long lut211 :8;
+        kulong lut208 :8;
+        kulong lut209 :8;
+        kulong lut210 :8;
+        kulong lut211 :8;
     } bit;
 };
+
 union _IoRawLut54
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut212 :8;
-        unsigned long lut213 :8;
-        unsigned long lut214 :8;
-        unsigned long lut215 :8;
+        kulong lut212 :8;
+        kulong lut213 :8;
+        kulong lut214 :8;
+        kulong lut215 :8;
     } bit;
 };
+
 union _IoRawLut55
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut216 :8;
-        unsigned long lut217 :8;
-        unsigned long lut218 :8;
-        unsigned long lut219 :8;
+        kulong lut216 :8;
+        kulong lut217 :8;
+        kulong lut218 :8;
+        kulong lut219 :8;
     } bit;
 };
+
 union _IoRawLut56
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut220 :8;
-        unsigned long lut221 :8;
-        unsigned long lut222 :8;
-        unsigned long lut223 :8;
+        kulong lut220 :8;
+        kulong lut221 :8;
+        kulong lut222 :8;
+        kulong lut223 :8;
     } bit;
 };
+
 union _IoRawLut57
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut224 :8;
-        unsigned long lut225 :8;
-        unsigned long lut226 :8;
-        unsigned long lut227 :8;
+        kulong lut224 :8;
+        kulong lut225 :8;
+        kulong lut226 :8;
+        kulong lut227 :8;
     } bit;
 };
+
 union _IoRawLut58
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut228 :8;
-        unsigned long lut229 :8;
-        unsigned long lut230 :8;
-        unsigned long lut231 :8;
+        kulong lut228 :8;
+        kulong lut229 :8;
+        kulong lut230 :8;
+        kulong lut231 :8;
     } bit;
 };
+
 union _IoRawLut59
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut232 :8;
-        unsigned long lut233 :8;
-        unsigned long lut234 :8;
-        unsigned long lut235 :8;
+        kulong lut232 :8;
+        kulong lut233 :8;
+        kulong lut234 :8;
+        kulong lut235 :8;
     } bit;
 };
+
 union _IoRawLut60
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut236 :8;
-        unsigned long lut237 :8;
-        unsigned long lut238 :8;
-        unsigned long lut239 :8;
+        kulong lut236 :8;
+        kulong lut237 :8;
+        kulong lut238 :8;
+        kulong lut239 :8;
     } bit;
 };
+
 union _IoRawLut61
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut240 :8;
-        unsigned long lut241 :8;
-        unsigned long lut242 :8;
-        unsigned long lut243 :8;
+        kulong lut240 :8;
+        kulong lut241 :8;
+        kulong lut242 :8;
+        kulong lut243 :8;
     } bit;
 };
+
 union _IoRawLut62
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut244 :8;
-        unsigned long lut245 :8;
-        unsigned long lut246 :8;
-        unsigned long lut247 :8;
+        kulong lut244 :8;
+        kulong lut245 :8;
+        kulong lut246 :8;
+        kulong lut247 :8;
     } bit;
 };
+
 union _IoRawLut63
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut248 :8;
-        unsigned long lut249 :8;
-        unsigned long lut250 :8;
-        unsigned long lut251 :8;
+        kulong lut248 :8;
+        kulong lut249 :8;
+        kulong lut250 :8;
+        kulong lut251 :8;
     } bit;
 };
+
 union _IoRawLut64
 {
-    unsigned long word;
+    kulong word;
     struct
     {
-        unsigned long lut252 :8;
-        unsigned long lut253 :8;
-        unsigned long lut254 :8;
-        unsigned long lut255 :8;
+        kulong lut252 :8;
+        kulong lut253 :8;
+        kulong lut254 :8;
+        kulong lut255 :8;
     } bit;
 };
+
 
 struct _IoRawCode
 {
@@ -664,7 +710,7 @@ struct _IoJdsraw
     IoRawCond cond; /* 288A_(0008 - 000Bh) */
     IoRawRintf rintf; /* 288A_(000C - 000Fh) */
 
-    unsigned char dmy0010003f[0x0040 - 0x0010]; /* 288A_(0010 - 003Fh) */
+    kuchar dmy0010003f[0x0040 - 0x0010]; /* 288A_(0010 - 003Fh) */
 
     IoRawRinte rinte; /* 288A_(0040 - 0043h) */
     IoRawHsize hsize; /* 288A_(0044 - 0047h) */
@@ -681,23 +727,25 @@ struct _IoJdsraw
     IoRawMraxsts mraxsts; /* 288A_(0070 - 0073h) */
     IoRawMwaxsts mwaxsts; /* 288A_(0074 - 0077h) */
 
-    unsigned char dmy0078007f[0x0080 - 0x0078]; /* 288A_(0078 - 007Fh) */
+    kuchar dmy0078007f[0x0080 - 0x0078]; /* 288A_(0078 - 007Fh) */
 
     IoRawCode code; /* 288A_(0080 - 009Fh) */
     IoRawLen len; /* 288A_(00A0 - 00BFh) */
 
-    unsigned char dmy00c000ff[0x0100 - 0x00C0]; /* 288A_(00C0 - 00FFh) */
+    kuchar dmy00c000ff[0x0100 - 0x00C0]; /* 288A_(00C0 - 00FFh) */
 
     IoRawLut lut; /* 288A_(0100 - 01FFh) */
 
-    unsigned char dmy288a0200288affff[0x288B0000 - 0x288A0200]; /* 288A_0200 - 288A_FFFFh */
+    kuchar dmy288a0200288affff[0x288B0000 - 0x288A0200]; /* 288A_0200 - 288A_FFFFh */
 
 };
 
+
 extern volatile IoJdsraw ioRaw;
+
 
 KConstType k_jdsraw3a_get_type(void);
 KJdsraw3a* k_jdsraw3a_new(void);
 
-#endif/*__K_JDSRAW3A_H__*/
 
+#endif/*__K_JDSRAW3A_H__*/

@@ -36,28 +36,28 @@ static void im_disp5_destructor(ImDisp5 *self)
 
 /* Set face frame data.
 */
-INT32 Im_DISP_Set_Face_Frame(E_IM_DISP_SEL block, UINT32 frame_count, T_IM_DISP_FACE_FRAME const *const face)
+INT32 im_disp5_set_face_frame(ImDisp5 * self, ImDispEImDispSel block, UINT32 frame_count, T_IM_DISP_FACE_FRAME const *const face)
 {
 	INT32 ret = D_DDIM_OK;
 	INT32 loop;
 
 #ifdef CO_PARAM_CHECK
 	if (face == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Face_Frame: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_set_face_frame: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (frame_count > D_IM_DISP_FACE_FRAME_COUNT) {
-		Ddim_Print(("E:Im_DISP_Set_Face_Frame: frame_count parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_face_frame: frame_count parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	for(loop = frame_count - 1; loop >= 0 ; loop--) {
 		if (im_disp_param_check_face_frame(&(face->param[loop])) != D_DDIM_OK) {
-			Ddim_Print(("E:Im_DISP_Set_Face_Frame: FFDSTA/FFSIZE/FFWIDTH parameter error\n"));
+			Ddim_Print(("E:im_disp5_set_face_frame: FFDSTA/FFSIZE/FFWIDTH parameter error\n"));
 			return D_IM_DISP_INPUT_PARAM_ERROR;
 		}
 	}
 	if (im_disp_param_check_top_face(face->msff) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Face_Frame: FFDISPEN.MSFF parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_face_frame: FFDISPEN.MSFF parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -80,14 +80,14 @@ INT32 Im_DISP_Set_Face_Frame(E_IM_DISP_SEL block, UINT32 frame_count, T_IM_DISP_
 
 /* Get face frame data.
 */
-INT32 Im_DISP_Get_Face_Frame(E_IM_DISP_SEL block, T_IM_DISP_FACE_FRAME *const face)
+INT32 im_disp5_get_face_frame(ImDisp5 * self, ImDispEImDispSel block, T_IM_DISP_FACE_FRAME *const face)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (face == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Face_Frame: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_face_frame: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -110,13 +110,13 @@ INT32 Im_DISP_Get_Face_Frame(E_IM_DISP_SEL block, T_IM_DISP_FACE_FRAME *const fa
 
 /* Set face frame display enable.
 */
-INT32 Im_DISP_Set_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 ffden, BYTE msff)
+INT32 im_disp5_set_face_frame_enable(ImDisp5 * self, ImDispEImDispSel block, UINT64 ffden, BYTE msff)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (im_disp_param_check_top_face(msff) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Face_Frame_Enable: FFDISPEN.MSFF parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_face_frame_enable: FFDISPEN.MSFF parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -133,13 +133,13 @@ INT32 Im_DISP_Set_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 ffden, BYTE msff
 
 /* Get face frame display enable.
 */
-INT32 Im_DISP_Get_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 *ffden, BYTE *msff)
+INT32 im_disp5_get_face_frame_enable(ImDisp5 * self, ImDispEImDispSel block, UINT64 *ffden, BYTE *msff)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((ffden == NULL) || (msff == NULL)) {
-		Ddim_Print(("E:Im_DISP_Get_Face_Frame_Enable: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_face_frame_enable: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -156,14 +156,14 @@ INT32 Im_DISP_Get_Face_Frame_Enable(E_IM_DISP_SEL block, UINT64 *ffden, BYTE *ms
 
 /* Set parameter reflect timing of a OSD layer.
 */
-INT32 Im_DISP_Set_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG timing)
+INT32 im_disp5_set_osd_parameter_reflect_timing(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg timing)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Parameter_Reflect_Timing: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_parameter_reflect_timing: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -172,12 +172,12 @@ INT32 Im_DISP_Set_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SE
 	for (loop = 0; loop < 2; loop++) {
 		if ((layer & osd_layer_id[loop]) == osd_layer_id[loop]) {
 			// check trigger
-			if (IO_DISP.MAIN[block].GRCH[loop].GRTRG.word == E_IM_DISP_TRG_READ_NO_ACT) {
+			if (IO_DISP.MAIN[block].GRCH[loop].GRTRG.word == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) {
 				// Set GRRPGCTL
 				IO_DISP.MAIN[block].GRCH[loop].GRRPGCTL.bit.RPGTMG = timing;
 			}
 			else {
-				Ddim_Print(("E:Im_DISP_Set_OSD_Parameter_Reflect_Timing: OSD-%d layer busy\n", loop));
+				Ddim_Print(("E:im_disp5_set_osd_parameter_reflect_timing: OSD-%d layer busy\n", loop));
 				ret = D_IM_DISP_MACRO_BUSY_NG;
 			}
 		}
@@ -189,18 +189,18 @@ INT32 Im_DISP_Set_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SE
 
 /* Get parameter reflect timing of a OSD layer.
 */
-INT32 Im_DISP_Get_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG *timing)
+INT32 im_disp5_get_osd_parameter_reflect_timing(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg *timing)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (timing == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Parameter_Reflect_Timing: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_parameter_reflect_timing: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Parameter_Reflect_Timing: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_parameter_reflect_timing: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -215,7 +215,7 @@ INT32 Im_DISP_Get_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SE
 	}
 
 	// Get RPGTMG
-	*timing = (E_IM_DISP_RPGTMG)IO_DISP.MAIN[block].GRCH[layer_index].GRRPGCTL.bit.RPGTMG;
+	*timing = (ImDispEImDispRpgtmg)IO_DISP.MAIN[block].GRCH[layer_index].GRRPGCTL.bit.RPGTMG;
 	im_disp_pclk_off(im_disp_new());
 
 	return ret;
@@ -223,18 +223,18 @@ INT32 Im_DISP_Get_OSD_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_SE
 
 /* Set input data transfer of a OSD layer.
 */
-INT32 Im_DISP_Set_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT gridt)
+INT32 im_disp5_set_osd_input_data_transfer(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT gridt)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Input_Data_Transfer: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_input_data_transfer: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_gridt(gridt) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_OSD_Input_Data_Transfer: GRIDT parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_input_data_transfer: GRIDT parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -253,18 +253,18 @@ INT32 Im_DISP_Set_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAY
 
 /* Get input data transfer of a OSD layer.
 */
-INT32 Im_DISP_Get_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT *gridt)
+INT32 im_disp5_get_osd_input_data_transfer(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIDT *gridt)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (gridt == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Input_Data_Transfer: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_input_data_transfer: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Input_Data_Transfer: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_input_data_transfer: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -287,18 +287,18 @@ INT32 Im_DISP_Get_OSD_Input_Data_Transfer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAY
 
 /* Set OSD data territory size.
 */
-INT32 Im_DISP_Set_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE territory_size)
+INT32 im_disp5_set_osd_territory_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE territory_size)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Territory_Size: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_territory_size: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grtisize(territory_size) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_OSD_Territory_Size: GRTISIZE parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_territory_size: GRTISIZE parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -317,18 +317,18 @@ INT32 Im_DISP_Set_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER la
 
 /* Get OSD data territory size.
 */
-INT32 Im_DISP_Get_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE *territory_size)
+INT32 im_disp5_get_osd_territory_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE *territory_size)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (territory_size == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Territory_Size: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_territory_size: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Territory_Size: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_territory_size: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -351,18 +351,18 @@ INT32 Im_DISP_Get_OSD_Territory_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER la
 
 /* Set display position for OSD.
 */
-INT32 Im_DISP_Set_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA position)
+INT32 im_disp5_set_osd_territory_position(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA position)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Territory_Position: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_territory_position: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grtdsta(position) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Get_OSD_Territory_Position: GRTDSTA parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_territory_position: GRTDSTA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -381,18 +381,18 @@ INT32 Im_DISP_Set_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYE
 
 /* Get display position for OSD.
 */
-INT32 Im_DISP_Get_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA* position)
+INT32 im_disp5_get_osd_territory_position(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_DSTA* position)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (position == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Territory_Position: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_territory_position: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Territory_Position: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_territory_position: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -415,18 +415,18 @@ INT32 Im_DISP_Get_OSD_Territory_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYE
 
 /* Set input data's order.
 */
-INT32 Im_DISP_Set_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,  U_IM_DISP_GRIPO ipo)
+INT32 im_disp5_set_osd_ipo(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer,  U_IM_DISP_GRIPO ipo)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_IPO: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_ipo: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_gripo(ipo) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_OSD_IPO: GRIPO parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_ipo: GRIPO parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -449,18 +449,18 @@ INT32 Im_DISP_Set_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,  U_IM_
 
 /* Get input data's order.
 */
-INT32 Im_DISP_Get_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,  U_IM_DISP_GRIPO* ipo)
+INT32 im_disp5_get_osd_ipo(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer,  U_IM_DISP_GRIPO* ipo)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ipo == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_IPO: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_ipo: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_IPO: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_ipo: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -483,14 +483,14 @@ INT32 Im_DISP_Get_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,  U_IM_
 
 /* Set input data area to access.
 */
-INT32 Im_DISP_Set_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA area)
+INT32 im_disp5_set_osd_area0_switch(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea area)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area0_Switch: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area0_switch: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -509,18 +509,18 @@ INT32 Im_DISP_Set_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER laye
 
 /* Get input data area to access.
 */
-INT32 Im_DISP_Get_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA *area)
+INT32 im_disp5_get_osd_area0_switch(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea *area)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (area == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area0_Switch: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area0_switch: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area0_Switch: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area0_switch: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -535,7 +535,7 @@ INT32 Im_DISP_Get_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER laye
 	}
 
 	// Get GRSCCTL.IDSET
-	*area = (E_IM_DISP_INPUT_DATA_AREA)IO_DISP.MAIN[block].GRCH[layer_index].GRSCCTL.bit.IDSET;
+	*area = (ImDispEImDispInputDataArea)IO_DISP.MAIN[block].GRCH[layer_index].GRSCCTL.bit.IDSET;
 	im_disp_pclk_off(im_disp_new());
 
 	return ret;
@@ -543,18 +543,18 @@ INT32 Im_DISP_Get_OSD_Area0_Switch(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER laye
 
 /* Get input data area inder processing.
 */
-INT32 Im_DISP_Get_OSD_Area0_Monitor(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_INPUT_DATA_AREA *area)
+INT32 im_disp5_get_osd_area0_monitor(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispInputDataArea *area)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (area == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area0_Monitor: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area0_monitor: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area0_Monitor: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area0_monitor: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -569,7 +569,7 @@ INT32 Im_DISP_Get_OSD_Area0_Monitor(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER lay
 	}
 
 	// Get GRSCCTL.IDM
-	*area = (E_IM_DISP_INPUT_DATA_AREA)IO_DISP.MAIN[block].GRCH[layer_index].GRSCCTL.bit.IDM;
+	*area = (ImDispEImDispInputDataArea)IO_DISP.MAIN[block].GRCH[layer_index].GRSCCTL.bit.IDM;
 	im_disp_pclk_off(im_disp_new());
 
 	return ret;
@@ -577,8 +577,8 @@ INT32 Im_DISP_Get_OSD_Area0_Monitor(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER lay
 
 /* Set input data size of OSD.
 */
-INT32 Im_DISP_Set_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,
-								U_IM_DISP_SIZE input_size[D_IM_DISP_OSD_DISPLAY_AREA_COUNT],
+INT32 im_disp5_set_osd_area_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer,
+								U_IM_DISP_SIZE input_size[ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT],
 								UINT32 input_size_count)
 {
 	INT32 loop1;
@@ -587,19 +587,19 @@ INT32 Im_DISP_Set_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,
 
 #ifdef CO_PARAM_CHECK
 	if (input_size == NULL) {
-		 Ddim_Print(("E:Im_DISP_Set_OSD_Area_Size: NULL check error\n"));
+		 Ddim_Print(("E:im_disp5_set_osd_area_size: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Size: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_size: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (input_size_count > D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Size: input_size_count parameter error\n"));
+	if (input_size_count > ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_set_osd_area_size: input_size_count parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grisize(input_size, input_size_count) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Size: input_size parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_size: input_size parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -620,7 +620,7 @@ INT32 Im_DISP_Set_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer,
 
 /* Get input data size of OSD.
 */
-INT32 Im_DISP_Get_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE input_size[D_IM_DISP_OSD_DISPLAY_AREA_COUNT])
+INT32 im_disp5_get_osd_area_size(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_SIZE input_size[ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT])
 {
 	INT32 layer_index;
 	INT32 loop;
@@ -628,11 +628,11 @@ INT32 Im_DISP_Get_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 #ifdef CO_PARAM_CHECK
 	if (input_size == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Size: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_size: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Size: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_size: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -647,7 +647,7 @@ INT32 Im_DISP_Get_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 	}
 
 	// Get GRISIZE
-	for (loop = D_IM_DISP_OSD_DISPLAY_AREA_COUNT - 1; loop >= 0; loop--) {
+	for (loop = ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT - 1; loop >= 0; loop--) {
 		input_size[loop].word = IO_DISP.MAIN[block].GRCH[layer_index].GRISIZE[loop].word;
 	}
 	im_disp_pclk_off(im_disp_new());
@@ -657,7 +657,7 @@ INT32 Im_DISP_Get_OSD_Area_Size(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 /* Connect OSD input data address with the bank index.
 */
-INT32 Im_DISP_Set_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG address)
+INT32 im_disp5_set_osd_area_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG address)
 {
 	INT32 index;
 	INT32 loop;
@@ -665,11 +665,11 @@ INT32 Im_DISP_Set_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Addr: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_addr: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grsa(address) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Addr: GRSA0/GRSA parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_addr: GRSA0/GRSA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -695,7 +695,7 @@ INT32 Im_DISP_Set_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 /* Get OSD input data address of the bank index specified.
 */
-INT32 Im_DISP_Get_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG *address)
+INT32 im_disp5_get_osd_area_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_OSD_SA_BANK_NO bank_no, ULONG *address)
 {
 	INT32 layer_index;
 	INT32 index;
@@ -703,11 +703,11 @@ INT32 Im_DISP_Get_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 #ifdef CO_PARAM_CHECK
 	if (address == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Addr: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_addr: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Addr: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_addr: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -738,22 +738,22 @@ INT32 Im_DISP_Get_OSD_Area_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 /* Connect OSD input A data address with the bank index.
 */
-INT32 Im_DISP_Set_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG address)
+INT32 im_disp5_set_osd_area_adata_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG address)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Adata_Addr: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_adata_addr: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Adata_Addr: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_set_osd_area_adata_addr: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grsa(address) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_OSD_Area_Adata_Addr: GRASA parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_area_adata_addr: GRASA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -772,22 +772,22 @@ INT32 Im_DISP_Set_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER l
 
 /* Get OSD input A data address of the bank index specified.
 */
-INT32 Im_DISP_Get_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *address)
+INT32 im_disp5_get_osd_area_adata_addr(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *address)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (address == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Adata_Addr: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_adata_addr: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Adata_Addr: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_get_osd_area_adata_addr: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Area_Adata_Addr: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_area_adata_addr: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -810,22 +810,22 @@ INT32 Im_DISP_Get_OSD_Area_Adata_Addr(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER l
 
 /* Set the horizontal global area width.
 */
-INT32 Im_DISP_Set_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width)
+INT32 im_disp5_set_osd_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Lfd: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_lfd: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Lfd: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_set_osd_lfd: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grhga(width) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Lfd: GRHGA parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_lfd: GRHGA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -844,22 +844,22 @@ INT32 Im_DISP_Set_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32
 
 /* Get the horizontal global area width.
 */
-INT32 Im_DISP_Get_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width)
+INT32 im_disp5_get_osd_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (width == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Lfd: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_lfd: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Lfd: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_get_osd_lfd: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Lfd: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_lfd: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -882,22 +882,22 @@ INT32 Im_DISP_Get_OSD_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32
 
 /* Set the A data horizontal global area width.
 */
-INT32 Im_DISP_Set_OSD_Adata_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width)
+INT32 im_disp5_set_osd_adata_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG width)
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_OSD_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Adata_Lfd: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_adata_lfd: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Adata_Lfd: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_set_osd_adata_lfd: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_grhga(width) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_OSD_Adata_Lfd: GRAHGA parameter error\n"));
+		Ddim_Print(("E:im_disp5_set_osd_adata_lfd: GRAHGA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -916,22 +916,22 @@ INT32 Im_DISP_Set_OSD_Adata_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 /* Get the A data horizontal global area width.
 */
-INT32 Im_DISP_Get_OSD_Adata_Lfd(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width)
+INT32 im_disp5_get_osd_adata_lfd(ImDisp5 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, ULONG *width)
 {
 	INT32 layer_index;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (width == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Adata_Lfd: NULL check error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_adata_lfd: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (bank_no >= D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Adata_Lfd: bank_no parameter error\n"));
+	if (bank_no >= ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT) {
+		Ddim_Print(("E:im_disp5_get_osd_adata_lfd: bank_no parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((layer != E_IM_DISP_SEL_LAYER_OSD_0) && (layer != E_IM_DISP_SEL_LAYER_OSD_1)) {
-		Ddim_Print(("E:Im_DISP_Get_OSD_Adata_Lfd: layer parameter error\n"));
+		Ddim_Print(("E:im_disp5_get_osd_adata_lfd: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK

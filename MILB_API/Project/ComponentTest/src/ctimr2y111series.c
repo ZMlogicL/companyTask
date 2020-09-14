@@ -31,12 +31,24 @@ struct _CtImR2y111seriesPrivate
  */
 static void ct_im_r2y_111series_constructor(CtImR2y111series *self)
 {
-	//CtImR2y111seriesPrivate *priv = CT_IM_R2Y_111SERIES_GET_PRIVATE(self);
+	CtImR2y111seriesPrivate *priv = CT_IM_R2Y_111SERIES_GET_PRIVATE(self);
+	self->imR2yUtility = im_r2y_utility_new();
+	self->imR2yUtility2 = im_r2y_utility2_new();
 }
 
 static void ct_im_r2y_111series_destructor(CtImR2y111series *self)
 {
-	//CtImR2y111seriesPrivate *priv = CT_IM_R2Y_111SERIES_GET_PRIVATE(self);
+	CtImR2y111seriesPrivate *priv = CT_IM_R2Y_111SERIES_GET_PRIVATE(self);
+	if(self->imR2yUtility){
+				k_object_unref(self->imR2yUtility);
+				self->imR2yUtility=NULL;
+			}
+
+	if(self->imR2yUtility2){
+		k_object_unref(self->imR2yUtility2);
+		self->imR2yUtility2=NULL;
+	}
+
 }
 
 
@@ -56,7 +68,7 @@ kint32 ct_im_r2y_111series_0(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_Tone_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_tone_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaToneAddr) / sizeof(kulong); loopcnt++) {
@@ -81,7 +93,7 @@ kint32 ct_im_r2y_111series_1(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_Gamma_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_gamma_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaGammaAddr) / sizeof(kulong); loopcnt++) {
@@ -106,7 +118,7 @@ kint32 ct_im_r2y_111series_2(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_CC1_Matrix_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_cc1_matrix_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaCc1Addr) / sizeof(kulong); loopcnt++) {
@@ -131,7 +143,7 @@ kint32 ct_im_r2y_111series_3(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_CC1_Matrix_Coefficient_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_cc1_matrix_coefficient_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaCc1CoefAddr) / sizeof(kulong); loopcnt++) {
@@ -156,7 +168,7 @@ kint32 ct_im_r2y_111series_4(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_YCC_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_ycc_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaYccAddr) / sizeof(kulong); loopcnt++) {
@@ -181,7 +193,7 @@ kint32 ct_im_r2y_111series_5(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_YNR_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility_get_rdma_addr_ynr_cntl(self->imR2yUtility, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaYnrAddr) / sizeof(kulong); loopcnt++) {
@@ -206,7 +218,7 @@ kint32 ct_im_r2y_111series_6(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_EENR_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility2_get_rdma_addr_eenr_cntl(self->imR2yUtility2, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaEenrAddr) / sizeof(kulong); loopcnt++) {
@@ -231,7 +243,7 @@ kint32 ct_im_r2y_111series_7(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_EGHW_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility2_get_rdma_addr_eghw_cntl(self->imR2yUtility2, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaEghwAddr) / sizeof(kulong); loopcnt++) {
@@ -256,7 +268,7 @@ kint32 ct_im_r2y_111series_8(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_EGMW_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility2_get_rdma_addr_egmw_cntl(self->imR2yUtility2, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaEgmwAddr) / sizeof(kulong); loopcnt++) {
@@ -281,7 +293,7 @@ kint32 ct_im_r2y_111series_9(CtImR2y111series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y111series_FUNC_NAME));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Get_RdmaAddr_EGLW_Cntl(pipeNo, &addr);
+	ercd = im_r2y_utility2_get_rdma_addr_eglw_cntl(self->imR2yUtility2, pipeNo, &addr);
 	DriverCommon_DDIM_PRINT((CtImR2y111series_FUNC_NAME "0x%x\n", ercd));
 	ptAddr = (kulong*)addr;
 	for(loopcnt = 0; loopcnt < sizeof(TImR2yCtrlRdmaEglwAddr) / sizeof(kulong); loopcnt++) {

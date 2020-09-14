@@ -53,7 +53,7 @@ This function set the movement position after the master process.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_set_master_priority( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR priority );
+kint32	mxic_master_set_master_priority( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar priority );
 
 /**
 This function get the movement position after the master process.<br>
@@ -80,7 +80,7 @@ This function get the movement position after the master process.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_priority( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR* const priority );
+kint32	mxic_master_get_master_priority( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar* const priority );
 
 /**
 This function set the master transfer mask and mask period.<br>
@@ -92,7 +92,7 @@ This function set the master transfer mask and mask period.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting mask ranges are from 4 to 4096.
 */
-INT32	mxic_master_set_master_mask( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
+kint32	mxic_master_set_master_mask( MxicMaster *self, ImMxicUnit unit, kuchar master, 
 									const ImMxicMasterMask* const mask );
 
 /**
@@ -104,7 +104,7 @@ This function get the master transfer mask and mask period.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_mask( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
+kint32	mxic_master_get_master_mask( MxicMaster *self, ImMxicUnit unit, kuchar master, 
 									ImMxicMasterMask* const mask );
 
 /**
@@ -120,8 +120,8 @@ This function set factor of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_set_master_mask_factor( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR enable );
+kint32	mxic_master_set_master_mask_factor( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar enable );
 
 /**
 This function get factor of transfer demand mask.<br>
@@ -136,8 +136,8 @@ This function get factor of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_mask_factor( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR* const enable );
+kint32	mxic_master_get_master_mask_factor( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar* const enable );
 
 /**
 This function set target of transfer demand mask.<br>
@@ -152,8 +152,8 @@ This function set target of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_set_master_mask_target( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR enable );
+kint32	mxic_master_set_master_mask_target( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar enable );
 
 /**
 This function get target of transfer demand mask.<br>
@@ -168,8 +168,8 @@ This function get target of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_mask_target( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR* const enable );
+kint32	mxic_master_get_master_mask_target( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar* const enable );
 
 /**
 This function set the mask factor master state.<br>
@@ -182,7 +182,7 @@ This function set the mask factor master state.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_set_master_mask_select( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR select );
+kint32	mxic_master_set_master_mask_select( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar select );
 
 /**
 This function get the mask factor master state.<br>
@@ -195,7 +195,7 @@ This function get the mask factor master state.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_mask_select( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR* const select );
+kint32	mxic_master_get_master_mask_select( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar* const select );
 
 /**
 This function set the max number of master transaction.<br>
@@ -206,7 +206,7 @@ This function set the max number of master transaction.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_set_master_transaction( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR transaction );
+kint32	mxic_master_set_master_transaction( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar transaction );
 
 /**
 This function get the max number of master transaction.<br>
@@ -217,7 +217,7 @@ This function get the max number of master transaction.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_get_master_transaction( MxicMaster *self, ImMxicUnit unit, 
-											UCHAR master, UCHAR* const transaction );
+kint32	mxic_master_get_master_transaction( MxicMaster *self, ImMxicUnit unit, 
+											kuchar master, kuchar* const transaction );
 
 #endif	// __MXIC_MASTER_H__

@@ -172,62 +172,62 @@ void im_pro_1_0_print_4(ImPro10Print *self,const char* string, TImProSentopCtrl*
 void im_pro_1_0_print_5(ImPro10Print *self,const char* string, TImProSentopBsCtrl* sentopCtrl)
 {
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt0!= sentopCtrl->shiftValue[0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bsamnt0 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bsamnt0 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt0, sentopCtrl->shiftValue[0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt1!= sentopCtrl->shiftValue[1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bsamnt1 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bsamnt1 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt1, sentopCtrl->shiftValue[1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt2!= sentopCtrl->shiftValue[2]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bsamnt2 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bsamnt2 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt2, sentopCtrl->shiftValue[2]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt3!= sentopCtrl->shiftValue[3]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bsamnt3 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bsamnt3 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bsamnt3, sentopCtrl->shiftValue[3]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd0 != sentopCtrl->satCompensation[0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslmd0 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslmd0 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd0, sentopCtrl->satCompensation[0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd1 != sentopCtrl->satCompensation[1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslmd1 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslmd1 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd1, sentopCtrl->satCompensation[1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd2 != sentopCtrl->satCompensation[2]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslmd2 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslmd2 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd2, sentopCtrl->satCompensation[2]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd3 != sentopCtrl->satCompensation[3]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslmd3 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslmd3 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl1.bit.bslmd3, sentopCtrl->satCompensation[3]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr0 != sentopCtrl->shiftDir[0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslr0 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslr0 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr0, sentopCtrl->shiftDir[0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr1 != sentopCtrl->shiftDir[1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslr1 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslr1 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr1, sentopCtrl->shiftDir[1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr2 != sentopCtrl->shiftDir[2]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslr2 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslr2 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr2, sentopCtrl->shiftDir[2]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr3 != sentopCtrl->shiftDir[3]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_BS_Ctrl() %s result:bslr3 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_bs_ctrl() %s result:bslr3 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.bsctl.bsctl2.bit.bslr3, sentopCtrl->shiftDir[3]))
     }; 
 }
@@ -235,7 +235,7 @@ void im_pro_1_0_print_5(ImPro10Print *self,const char* string, TImProSentopBsCtr
 void im_pro_1_0_print_6(ImPro10Print *self,const char* string, TImProSentopObtCtrl* sentopCtrl)
 {
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.btcdcctl1.bit.OBTCPAT != sentopCtrl->obtCommPerttern) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Ctrl() %s result:OBTCPAT (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_ctrl() %s result:OBTCPAT (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.btcdcctl1.bit.OBTCPAT, sentopCtrl->obtCommPerttern))
     }; 
 }
@@ -243,42 +243,42 @@ void im_pro_1_0_print_6(ImPro10Print *self,const char* string, TImProSentopObtCt
 void im_pro_1_0_print_7(ImPro10Print *self,const char* string, TImProSentopObtWeightCoeff* sentopCtrl)
 {
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc00 != sentopCtrl->coeff[0][0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc00 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc00 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc00, sentopCtrl->coeff[0][0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc01 != sentopCtrl->coeff[0][1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc01 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc01 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc01, sentopCtrl->coeff[0][1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc10 != sentopCtrl->coeff[1][0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc10 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc10 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc10, sentopCtrl->coeff[1][0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc11 != sentopCtrl->coeff[1][1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc11 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc11 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.obtcdcctl2_1.bit.obtdwc11, sentopCtrl->coeff[1][1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc20 != sentopCtrl->coeff[2][0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc20 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc20 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc20, sentopCtrl->coeff[2][0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc21 != sentopCtrl->coeff[2][1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc21 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc21 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc21, sentopCtrl->coeff[2][1]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc30 != sentopCtrl->coeff[3][0]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc30 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc30 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc30, sentopCtrl->coeff[3][0]))
     }; 
         
     if(((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc31 != sentopCtrl->coeff[3][1]) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SENTOP_OBT_Set_Weight_Coeff() %s result:obtdwc31 (%d) in(%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sentop_obt_set_weight_coeff() %s result:obtdwc31 (%d) in(%d)\n", string, 
         ((AbsImProPrint*)self)->ioPro->sen.sentop.obtcdcctl2.btcdcctl2_2.bit.obtdwc31, sentopCtrl->coeff[3][1]))
     }; 
 }

@@ -81,15 +81,15 @@ static void impro_passpt_destructor(ImproPasspt *self)
 /**
 SPT macro start
 @retval		D_DDIM_OK				: Processing OK
-@retval		D_IM_PRO_MACRO_BUSY_NG	: PWCH not running NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG	: PWCH not running NG
 */
 INT32 impro_passpt_start( VOID )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 	ioPro.pas.spt.spttrg.bit.spttrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 
 	ImproPaspt_SET_START_STATUS(ImproPaspt_D_IM_PAS_STATUS_SPT, 0);
 
@@ -100,22 +100,22 @@ INT32 impro_passpt_start( VOID )
 SPT macro stop
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PWCH not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PWCH not stopped NG
 */
 INT32 impro_passpt_stop( UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 	if (force == 0){
 		// frame stop
-		ioPro.pas.spt.SPTTRG.bit.SPTTRG = D_IM_PRO_TRG_FRAME_STOP;
+		ioPro.pas.spt.spttrg.bit.spttrg = D_IM_PRO_TRG_FRAME_STOP;
 	}
 	else{
 		// force stop
-		ioPro.pas.spt.SPTTRG.bit.SPTTRG = D_IM_PRO_TRG_FORCE_STOP;
+		ioPro.pas.spt.spttrg.bit.spttrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 
 	ImproPaspt_SET_STOP_STATUS(ImproPaspt_D_IM_PAS_STATUS_SPT, 0);
 
@@ -126,51 +126,51 @@ INT32 impro_passpt_stop( UCHAR force )
 Setup of SPT control parameter.
 @param[in]	sptCtrl : SPT Information @ref TimproSptCtrl
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_passpt_ctrl( TimproSptCtrl* sptCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (sptCtrl == NULL){
 		Ddim_Assertion(("I:impro_passpt_ctrl error. sptCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTBSH_MIN,
 					ImproPasspt_D_IM_PRO_SPT_SPTBSH_MAX,
 					sptCtrl->horizontalPixel, "impro_passpt_ctrl : horizontalPixel" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTBSV_MIN,
 					ImproPasspt_D_IM_PRO_SPT_SPTBSV_MAX,
 					sptCtrl->verticalPixel, "impro_passpt_ctrl : verticalPixel" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTBDE_MIN,
 			ImproPasspt_D_IM_PRO_SPT_SPTBDE_MAX,sptCtrl->InverseExponent,
 			"impro_passpt_ctrl : InverseExponent" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTV_MIN,
 			ImproPasspt_D_IM_PRO_SPT_SPTV_MAX,sptCtrl->posY, "impro_passpt_ctrl : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTH_MIN,
 					ImproPasspt_D_IM_PRO_SPT_SPTH_MAX, sptCtrl->posX, "impro_passpt_ctrl : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTVBC_MIN,
 					ImproPasspt_D_IM_PRO_SPT_SPTVBC_MAX, sptCtrl->vBlockSize,
 					"impro_passpt_ctrl : vBlockSize" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproPasspt_D_IM_PRO_SPT_SPTHBC_MIN,
 					ImproPasspt_D_IM_PRO_SPT_SPTHBC_MAX, sptCtrl->hBlockSize,
 					"impro_passpt_ctrl : hBlockSize" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 	ioPro.pas.spt.spttbl.bit.spttbl	= sptCtrl->tableSel;
 	ioPro.pas.spt.sptbs.bit.sptbsh		= sptCtrl->horizontalPixel;
 	ioPro.pas.spt.sptbs.bit.sptbsv		= sptCtrl->verticalPixel;
@@ -183,7 +183,7 @@ INT32 impro_passpt_ctrl( TimproSptCtrl* sptCtrl )
 	im_pro_set_reg_signed( ioPro.pas.spt.sptclp, union IoSptclp, sptclph, sptCtrl->upperClipValue );
 	im_pro_set_reg_signed( ioPro.pas.spt.sptclp, union IoSptclp, sptclpl, sptCtrl->lowerClipValue );
 	im_pro_set_reg_signed( ioPro.pas.spt.sptnopv, union IoSptnopv, sptnopv, sptCtrl->correctionThroughVal );
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );	// Dd_Top_Start_Clock
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );	// Dd_Top_Start_Clock
 
 	return D_DDIM_OK;
 }
@@ -193,21 +193,21 @@ A setup of enable access to the built-in RAM of SPT.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_passpt_set_paen( UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
-	if( ( paenTrg == 0 ) && ( ioPro.pas.spt.SPTTRG.bit.SPTTRG != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
+	if( ( paenTrg == 0 ) && ( ioPro.pas.spt.spttrg.bit.spttrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_passpt_set_paen. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
-	ioPro.pas.spt.SPTPAEN.bit.PAEN	= paenTrg;
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	ioPro.pas.spt.sptpaen.bit.paen	= paenTrg;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 
 	return D_DDIM_OK;
 }
@@ -217,37 +217,37 @@ shading compensation table is registered.
 @param[in]	tblSel : table select.
 @param[in]	shdTbl		: Shading table info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 @note		None
 */
-INT32 impro_passpt_set_table( E_IM_PRO_SPT_TBL_SEL tblSel, TimproSptTable* shdTbl )
+INT32 impro_passpt_set_table( EimproSptTblSel tblSel, TimproSptTable* shdTbl )
 {
 	UCHAR* pDstTable;
 
 #ifdef CO_PARAM_CHECK
 	if (shdTbl == NULL){
 		Ddim_Assertion(("I:impro_passpt_set_table error. sptCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( ( shdTbl->pshdTbl == NULL ) || ( shdTbl->size == 0 ) ) {
 		Ddim_Assertion(("I:impro_passpt_set_table error. shdTbl->pshdTbl=%lx shdTbl->size=%u \n",
 										(ULONG)shdTbl->pshdTbl, shdTbl->size));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	if( tblSel == E_IM_PRO_SPT_TBL_SEL_SPTTBL0 ) {
-		pDstTable = (UCHAR*)IO_PRO_TBL.PAS_TBL.SPTTBL0.word;
+	if( tblSel == ImproBase_E_IM_PRO_SPT_TBL_SEL_SPTTBL0 ) {
+		pDstTable = (UCHAR*)ioProTbl.pasTbl.spttbl0.word;
 	}
 	else {
-		pDstTable = (UCHAR*)IO_PRO_TBL.PAS_TBL.SPTTBL1.word;
+		pDstTable = (UCHAR*)ioProTbl.pasTbl.spttbl1.word;
 	}
 
 	// Dd_Top_Start_Clock
-	im_pro_on_hclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
-	im_pro_memcpy( pDstTable, shdTbl->pshdTbl, shdTbl->size );
+	im_pro_common_fig_im_pro_on_hclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_common_fig_im_pro_memcpy( pDstTable, shdTbl->pshdTbl, shdTbl->size );
 	// Dd_Top_Start_Clock
-	im_pro_off_hclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_PAS );
+	im_pro_off_hclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_PAS );
 
 	return D_DDIM_OK;
 }
@@ -259,12 +259,12 @@ Get the top address of the address array of FSHD control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 impro_passpt_get_rdma_addr_spt_shd_tbl( E_IM_PRO_SPT_TBL_SEL tblSel, const TimproRdmaSptShdTblAddr** addr )
+INT32 impro_passpt_get_rdma_addr_spt_shd_tbl( EimproSptTblSel tblSel, const TimproRdmaSptShdTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_passpt_get_rdma_addr_spt_shd_tbl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 

@@ -14,12 +14,12 @@
 #include <MILB_Header/Project/Image/src/kjdsfpt.h>
 #include "ddarm.h"
 #include "ddtop.h"
-#include "ddimusercustom.h"
+#include "ddimusercustomtest.h"
 #include "imfpt.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImFpt, im_fpt);
-#define IM_FPT_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImFptPrivate, IM_TYPE_FPT))
+G_DEFINE_TYPE(ImFpt, im_fpt, G_TYPE_OBJECT);
+#define IM_FPT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_FPT, ImFptPrivate));
 
 
 // NULL
@@ -39,8 +39,9 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImFpt, im_fpt);
 #endif
 struct _ImFptPrivate
 {
-	kulong lock;
-	kulong dummy[(64 / 4) - 1];
+	gulong lock;
+	gulong dummy[(64 / 4) - 1];
+	ImFpt *fpt;
 };
 
 
@@ -68,18 +69,18 @@ struct _ImFptPrivate
 /* Global variables															*/
 /*----------------------------------------------------------------------	*/
 #ifdef ImFptCommon_CO_ACT_FPT_CLOCK
-volatile kuchar GFptImFptclkCounter[2] = {0, 0};
+volatile guchar GFptImFptclkCounter[2] = {0, 0};
 #endif	// ImFptCommon_CO_ACT_FPT_CLOCK
 #ifdef ImFptCommon_CO_ACT_FPT_PCLOCK
-volatile kuchar GFptPclkCounter[2] = {0, 0};
+volatile guchar GFptPclkCounter[2] = {0, 0};
 #endif	// ImFptCommon_CO_ACT_FPT_PCLOCK
 #ifdef ImFptCommon_CO_ACT_FPT_HCLOCK
-volatile kuchar GFptHclkCounter[2] = {0, 0};
+volatile guchar GFptHclkCounter[2] = {0, 0};
 #endif	// ImFptCommon_CO_ACT_FPT_HCLOCK
 #ifdef ImFptCommon_CO_ACT_FPT_ICLOCK
-volatile kuchar GFptIclkCounter[2] = {0, 0};
+volatile guchar GFptIclkCounter[2] = {0, 0};
 #endif	// ImFptCommon_CO_ACT_FPT_ICLOCK
-volatile kuint32 GFptRamslpCounter[2] = { 0, 0 };
+volatile guint32 GFptRamslpCounter[2] = { 0, 0 };
 
 
 /*----------------------------------------------------------------------	*/
@@ -91,23 +92,60 @@ static ImFptPrivate S_GIMFPT_SPIN_LOCK_TBL[2] __attribute__((section(".LOCK_SECT
 /**
  *DECLS
  */
-static void 		imFptManagerInit( kuchar ch);
-static void 		imFptOnFptclk( kuchar ch);
-static void 		imFptOffFptclk( kuchar ch);
-static void 		imFptStartRam( kuchar ch);
-static void 		imFptStopRam( kuchar ch);
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+static void 		imFptManagerInit( guchar ch);
+static void 		imFptOnFptclk( guchar ch);
+static void 		imFptOffFptclk( guchar ch);
+static void 		imFptStartRam( guchar ch);
+static void 		imFptStopRam( guchar ch);
 /**
  *IMPL
  */
-static void im_fpt_constructor(ImFpt *self)
+static void 		im_fpt_class_init(ImFptClass *klass)
 {
-//	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
-
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImFptPrivate));
 }
 
-static void im_fpt_destructor(ImFpt *self)
+static void 		im_fpt_init(ImFpt *self)
 {
-//	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
+	priv->fpt = im_fpt_new();
+	self->fptaxictl0 = im_fpt_new();
+	self->ddimUserCustomTest = ddim_user_custom_new();
+	self->fptctl2 =  im_fpt_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(object);
+	ImFpt *self = im_fpt_new();
+	if(priv->fpt){
+		g_object_unref(priv->fpt);
+		priv->fpt = NULL;
+		}
+		if(self->fptaxictl0){
+		g_object_unref(self->fptaxictl0);
+		self->fptaxictl0 = NULL;
+		}
+		if(self->ddimUserCustomTest){
+			g_object_unref(self->ddimUserCustomTest);
+			self->ddimUserCustomTest = NULL;
+		}
+		if(self->fptctl2){
+			g_object_unref(self->fptctl2);
+			self->fptctl2 = NULL;
+		}
+	G_OBJECT_CLASS(im_fpt_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_fpt_parent_class) -> dispose(object);
 }
 
 /*----------------------------------------------------------------------	*/
@@ -116,7 +154,7 @@ static void im_fpt_destructor(ImFpt *self)
 /**
  Initalize of Managemnet information
  */
-static void imFptManagerInit( kuchar ch)
+static void imFptManagerInit( guchar ch)
 {
 	// Initialize of PCLK/HCLK/CLK control information
 #ifdef ImFptCommon_CO_ACT_FPT_CLOCK
@@ -138,38 +176,38 @@ static void imFptManagerInit( kuchar ch)
 /**
  Start FPTCLK.
  */
-static void imFptOnFptclk( kuchar ch)
+static void imFptOnFptclk( guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_CLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Start_Clock((kuchar*)&GFptImFptclkCounter[0], ImFptCommon_D_IM_FPT0_CLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_CLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptImFptclkCounter[0], ImFptCommon_D_IM_FPT0_CLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_CLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Start_Clock((kuchar*)&GFptImFptclkCounter[1], ImFptCommon_D_IM_FPT1_CLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_CLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptImFptclkCounter[1], ImFptCommon_D_IM_FPT1_CLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_CLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_CLOCK
 }
 
 /**
  Stop FPTCLK.
  */
-static void imFptOffFptclk( kuchar ch)
+static void imFptOffFptclk( guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_CLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Stop_Clock((kuchar*)&GFptImFptclkCounter[0], ImFptCommon_D_IM_FPT0_CLK_REG_ADDR, ImFptCommon_D_IM_FPT0_CLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptImFptclkCounter[0], ImFptCommon_D_IM_FPT0_CLK_REG_ADDR, ImFptCommon_D_IM_FPT0_CLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Stop_Clock((kuchar*)&GFptImFptclkCounter[1], ImFptCommon_D_IM_FPT1_CLK_REG_ADDR, ImFptCommon_D_IM_FPT1_CLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptImFptclkCounter[1], ImFptCommon_D_IM_FPT1_CLK_REG_ADDR, ImFptCommon_D_IM_FPT1_CLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_CLOCK
 }
 
@@ -177,11 +215,11 @@ static void imFptOffFptclk( kuchar ch)
 /**
  Start RAM.
  */
-static void imFptStartRam( kuchar ch)
+static void imFptStartRam( guchar ch)
 {
 	IoFptFptctl2 fptctl2;
 
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	GFptRamslpCounter[ch]++;
 	if(GFptRamslpCounter[ch] == 1) {
@@ -193,10 +231,10 @@ static void imFptStartRam( kuchar ch)
 		ImFptCommon_IM_FPT_DUMMY_READ( ch );
 
 		// wait 1usec
-		Im_FPTAsm_Wait_CpuCyc((660 >> 1));
+		im_fptasm_wait_cpucyc((660 >> 1));
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	im_fpt_off_pclk(NULL, ch);
 }
@@ -204,11 +242,11 @@ static void imFptStartRam( kuchar ch)
 /**
  Stop RAM.
  */
-static void imFptStopRam( kuchar ch)
+static void imFptStopRam( guchar ch)
 {
 	IoFptFptctl2 fptctl2;
 
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if(GFptRamslpCounter[ch] > 0) {
 		GFptRamslpCounter[ch]--;
@@ -222,7 +260,7 @@ static void imFptStopRam( kuchar ch)
 		ImFptCommon_IM_FPT_DUMMY_READ( ch );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	im_fpt_off_pclk(NULL, ch);
 }
@@ -240,114 +278,114 @@ static void imFptStopRam( kuchar ch)
 /**
  Start HCLK.
  */
-void im_fpt_on_hclk(ImFpt*self, kuchar ch)
+void im_fpt_on_hclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_HCLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Start_Clock((kuchar*)&GFptHclkCounter[0], ImFptCommon_D_IM_FPT0_HCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_HCLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptHclkCounter[0], ImFptCommon_D_IM_FPT0_HCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_HCLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Start_Clock((kuchar*)&GFptHclkCounter[1], ImFptCommon_D_IM_FPT1_HCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_HCLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptHclkCounter[1], ImFptCommon_D_IM_FPT1_HCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_HCLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_HCLOCK
 }
 
 /**
  Stop HCLK.
  */
-void im_fpt_off_hclk(ImFpt*self, kuchar ch)
+void im_fpt_off_hclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_HCLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Stop_Clock((kuchar*)&GFptHclkCounter[0], ImFptCommon_D_IM_FPT0_HCLK_REG_ADDR, ImFptCommon_D_IM_FPT0_HCLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptHclkCounter[0], ImFptCommon_D_IM_FPT0_HCLK_REG_ADDR, ImFptCommon_D_IM_FPT0_HCLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Stop_Clock((kuchar*)&GFptHclkCounter[1], ImFptCommon_D_IM_FPT1_HCLK_REG_ADDR, ImFptCommon_D_IM_FPT1_HCLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptHclkCounter[1], ImFptCommon_D_IM_FPT1_HCLK_REG_ADDR, ImFptCommon_D_IM_FPT1_HCLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_HCLOCK
 }
 
 /**
  Start ICLK.
  */
-void im_fpt_on_iclk(ImFpt*self, kuchar ch)
+void im_fpt_on_iclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_ICLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Start_Clock((kuchar*)&GFptIclkCounter[0], ImFptCommon_D_IM_FPT0_ICLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_ICLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptIclkCounter[0], ImFptCommon_D_IM_FPT0_ICLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_ICLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Start_Clock((kuchar*)&GFptIclkCounter[1], ImFptCommon_D_IM_FPT1_ICLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_ICLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptIclkCounter[1], ImFptCommon_D_IM_FPT1_ICLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_ICLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_ICLOCK
 }
 
 /**
  Stop ICLK.
  */
-void im_fpt_off_iclk(ImFpt*self, kuchar ch)
+void im_fpt_off_iclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_ICLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Stop_Clock((kuchar*)&GFptIclkCounter[0], ImFptCommon_D_IM_FPT0_ICLK_REG_ADDR, ImFptCommon_D_IM_FPT0_ICLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptIclkCounter[0], ImFptCommon_D_IM_FPT0_ICLK_REG_ADDR, ImFptCommon_D_IM_FPT0_ICLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Stop_Clock((kuchar*)&GFptIclkCounter[1], ImFptCommon_D_IM_FPT1_ICLK_REG_ADDR, ImFptCommon_D_IM_FPT1_ICLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptIclkCounter[1], ImFptCommon_D_IM_FPT1_ICLK_REG_ADDR, ImFptCommon_D_IM_FPT1_ICLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_ICLOCK
 }
 
 /**
  Start PCLK.
  */
-void im_fpt_on_pclk(ImFpt*self, kuchar ch)
+void im_fpt_on_pclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_PCLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Start_Clock((kuchar*)&GFptPclkCounter[0], ImFptCommon_D_IM_FPT0_PCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_PCLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptPclkCounter[0], ImFptCommon_D_IM_FPT0_PCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT0_PCLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Start_Clock((kuchar*)&GFptPclkCounter[1], ImFptCommon_D_IM_FPT1_PCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_PCLK_REG_BIT );
+		Dd_Top_Start_Clock((guchar*)&GFptPclkCounter[1], ImFptCommon_D_IM_FPT1_PCLK_REG_ADDR, ~ImFptCommon_D_IM_FPT1_PCLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_PCLOCK
 }
 
 /**
  Stop PCLK.
  */
-void im_fpt_off_pclk(ImFpt*self, kuchar ch)
+void im_fpt_off_pclk(ImFpt*self, guchar ch)
 {
 #ifdef ImFptCommon_CO_ACT_FPT_PCLOCK
-	Dd_ARM_Critical_Section_Start(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_START(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 
 	if( ch == 0 ) {
-		Dd_Top_Stop_Clock((kuchar*)&GFptPclkCounter[0], ImFptCommon_D_IM_FPT0_PCLK_REG_ADDR, ImFptCommon_D_IM_FPT0_PCLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptPclkCounter[0], ImFptCommon_D_IM_FPT0_PCLK_REG_ADDR, ImFptCommon_D_IM_FPT0_PCLK_REG_BIT );
 	}
 	else {
-		Dd_Top_Stop_Clock((kuchar*)&GFptPclkCounter[1], ImFptCommon_D_IM_FPT1_PCLK_REG_ADDR, ImFptCommon_D_IM_FPT1_PCLK_REG_BIT );
+		Dd_Top_Stop_Clock((guchar*)&GFptPclkCounter[1], ImFptCommon_D_IM_FPT1_PCLK_REG_ADDR, ImFptCommon_D_IM_FPT1_PCLK_REG_BIT );
 	}
 
-	Dd_ARM_Critical_Section_End(S_GIMFPT_SPIN_LOCK_TBL[ch]);
+	DD_ARM_CRITICAL_SECTION_END(S_GIMFPT_SPIN_LOCK_TBL[ch]);
 #endif	// ImFptCommon_CO_ACT_FPT_PCLOCK
 }
 /*----------------------------------------------------------------------	*/
@@ -357,36 +395,37 @@ void im_fpt_off_pclk(ImFpt*self, kuchar ch)
 /**
  Initialize driver.
  */
-kint32 im_fpt_im_fpt_init(ImFpt*self, kuchar ch)
+gint32 im_fpt_im_fpt_init(ImFpt*self, guchar ch)
 {
-	IoFptFptaxictl0 fptaxictl0;
-	kint32 retval;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
+	//	IoFptFptaxictl0 fptaxictl0;
+	gint32 retval;
 
 	// Initalize of Managemnet information
 	imFptManagerInit(ch);
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_STOPPED) {
 		// Software-reset.
 		ioFpt[ch].fptctl0.word = 0x1;
 
-		Dd_ARM_Dsb_Pou();
+		DD_ARM_DSB_POU();
 
 		ImFptCommon_IM_FPT_DUMMY_READ( ch );
 
 		// wait 2usec
-		Im_FPTAsm_Wait_CpuCyc(660);
+		im_fptasm_wait_cpucyc(660);
 
 		// Relase reset.
 		ioFpt[ch].fptctl0.word = 0x0;
 
-		Dd_ARM_Dsb_Pou();
+		DD_ARM_DSB_POU();
 
-		fptaxictl0.word = ioFpt[ch].fptaxictl0.word;
-		fptaxictl0.bit.arcache = 0x0;
-		fptaxictl0.bit.awcache = 0x0;
-		ioFpt[ch].fptaxictl0.word = fptaxictl0.word;
+		self->fptaxictl0.word = ioFpt[ch].fptaxictl0.word;
+		self->fptaxictl0.bit.arcache = 0x0;
+		self->fptaxictl0.bit.awcache = 0x0;
+		ioFpt[ch].fptaxictl0.word = self->fptaxictl0.word;
 
 		retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
 	}
@@ -394,7 +433,7 @@ kint32 im_fpt_im_fpt_init(ImFpt*self, kuchar ch)
 		retval = ImFptCommon_D_IM_FPT_RETVAL_ERR;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	return retval;
 }
@@ -402,21 +441,21 @@ kint32 im_fpt_im_fpt_init(ImFpt*self, kuchar ch)
 /**
  Opend driver.
  */
-kint32 im_fpt_open(ImFpt*self, kuchar ch, kint32 waitTime)
+gint32 im_fpt_open(ImFpt*self, guchar ch, gint32 waitTime)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 	if(waitTime < -1) {
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 	else if(0 == waitTime) {
-		ercd = DDIM_User_Pol_Sem(SID_IM_FPT(ch));
+		ercd = ddim_user_custom_pol_sem(self->ddimUserCustomTest, SID_IM_FPT(ch));
 	}
 	else {
-		ercd = DDIM_User_Twai_Sem(SID_IM_FPT(ch), waitTime);
+		ercd = ddim_user_custom_twai_sem(self->ddimUserCustomTest, SID_IM_FPT(ch), waitTime);
 	}
 
-	if( D_DDIM_USER_E_OK != ercd) {
+	if( DdimUserCustom_E_OK != ercd) {
 		return ImFptCommon_D_IM_FPT_RETVAL_SYSTEM_CALL_ERR;
 	}
 
@@ -430,26 +469,27 @@ kint32 im_fpt_open(ImFpt*self, kuchar ch, kint32 waitTime)
 /**
  Close driver.
  */
-kint32 im_fpt_close(ImFpt*self, kuchar ch)
+gint32 im_fpt_close(ImFpt*self, guchar ch)
 {
-	DDIM_USER_ER ercd;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
+	DdimUserCustom_ER ercd;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_RUNNING) {
 		im_fpt_off_pclk(NULL, ch);
 		return ImFptCommon_D_IM_FPT_RETVAL_ERR;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	// Stop FPTCLK and RAMSLEEP.
 	imFptStopRam(ch);
 	imFptOffFptclk(ch);
 
-	ercd = DDIM_User_Sig_Sem(SID_IM_FPT(ch));
+	ercd = ddim_user_custom_sig_sem(self->ddimUserCustomTest, SID_IM_FPT(ch));
 
-	if( D_DDIM_USER_E_OK == ercd) {
+	if( DdimUserCustom_E_OK == ercd) {
 		return ImFptCommon_D_IM_FPT_RETVAL_OK;
 	}
 	else {
@@ -460,9 +500,9 @@ kint32 im_fpt_close(ImFpt*self, kuchar ch)
 /**
  Configure the mode, "Calculate Feature Amount".
  */
-kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param)
+gint32 im_fpt_ctrl_mode0(ImFpt*self, guchar ch, const TfptMode0* const param)
 {
-	IoFptFptctl2 fptctl2;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
 	IoFptFptfqctl1 fptfqctl1;
 	IoFptFptfqctl2 fptfqctl2;
 	IoFptFptfqctl9 fptfqctl9;
@@ -478,7 +518,7 @@ kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param)
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	switch(param->lutsel) {
 		case ImFptCommon_E_IM_FPT_LUTSEL_OFF:
@@ -494,9 +534,9 @@ kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param)
 			return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	fptctl2.word = ioFpt[ch].fptctl2.word;
-	fptctl2.bit.mode = 0;
-	ioFpt[ch].fptctl2.word = fptctl2.word;
+	self->fptctl2.word = ioFpt[ch].fptctl2.word;
+	self->fptctl2.bit.mode = 0;
+	ioFpt[ch].fptctl2.word = self->fptctl2.word;
 
 	ioFpt[ch].fptfqctl0.word = param->globalWidth;
 
@@ -521,7 +561,7 @@ kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param)
 		ioFpt[ch].fptfqctl9.word = fptfqctl9.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -529,9 +569,9 @@ kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param)
 /**
  Configure the mode, "Re-calculate Feature Amount".
  */
-kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
+gint32 im_fpt_ctrl_mode1(ImFpt*self, guchar ch, const TfptMode1* const param)
 {
-	IoFptFptctl2 fptctl2;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
 	IoFptFptfqctl1 fptfqctl1;
 	IoFptFptfqctl2 fptfqctl2;
 	IoFptFptfqctl9 fptfqctl9;
@@ -547,7 +587,7 @@ kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	switch(param->lutsel) {
 		case ImFptCommon_E_IM_FPT_LUTSEL_OFF:
@@ -563,9 +603,9 @@ kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
 			return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	fptctl2.word = ioFpt[ch].fptctl2.word;
-	fptctl2.bit.mode = 1;
-	ioFpt[ch].fptctl2.word = fptctl2.word;
+	self->fptctl2.word = ioFpt[ch].fptctl2.word;
+	self->fptctl2.bit.mode = 1;
+	ioFpt[ch].fptctl2.word = self->fptctl2.word;
 	ioFpt[ch].fptfqctl0.word = param->globalWidth;
 
 	fptfqctl1.word = 0;
@@ -581,7 +621,7 @@ kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
 	ioFpt[ch].fptfqctl2.word = fptfqctl2.word;
 	ioFpt[ch].fptfqctl3.word = param->imgAddr;
 
-	if(fptctl2.bit.ioMode != 1) { /* pgr0872 */
+	if(self->fptctl2.bit.ioMode != 1) { /* pgr0872 */
 		ioFpt[ch].fptfqctl6.word = param->inputCoordAddr;
 		ioFpt[ch].fptfqctl7.word = param->outputAddr;
 	}
@@ -593,7 +633,7 @@ kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
 		ioFpt[ch].fptfqctl9.word = fptfqctl9.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -601,9 +641,9 @@ kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param)
 /**
  Configure the mode, "Feature Point Tracking".
  */
-kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
+gint32 im_fpt_ctrl_mode2(ImFpt*self, guchar ch, const TfptMode2* const param)
 {
-	IoFptFptctl2 fptctl2;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
 	IoFptFptftctl0 fptftctl0;
 	IoFptFptftctl1 fptftctl1;
 	IoFptFptftctl2 fptftctl2;
@@ -615,7 +655,7 @@ kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	switch(param->lutcfg) {
 		case ImFptCommon_E_IM_FPT_LUTCFG_OFF:
@@ -637,9 +677,9 @@ kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
 			return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	fptctl2.word = ioFpt[ch].fptctl2.word;
-	fptctl2.bit.mode = 2;
-	ioFpt[ch].fptctl2.word = fptctl2.word;
+	self->fptctl2.word = ioFpt[ch].fptctl2.word;
+	self->fptctl2.bit.mode = 2;
+	ioFpt[ch].fptctl2.word = self->fptctl2.word;
 
 	fptftctl0.word = 0;
 	fptftctl0.bit.ghbsize = param->baseGlobalWidth;
@@ -669,7 +709,7 @@ kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
 	ioFpt[ch].fptftctl5.word = param->baseImgAddr;
 	ioFpt[ch].fptftctl6.word = param->targetImgAddr;
 
-	if(fptctl2.bit.ioMode != 1) { /* pgr0872 */
+	if(self->fptctl2.bit.ioMode != 1) { /* pgr0872 */
 		ioFpt[ch].fptftctl7.word = param->baseCoordAddr;
 		ioFpt[ch].fptftctl8.word = param->targetCoordAddr;
 		ioFpt[ch].fptftctl9.word = param->trackingResultAddr;
@@ -682,7 +722,7 @@ kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
 		ioFpt[ch].fptftctl10.word = fptftctl10.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -690,9 +730,9 @@ kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param)
 /**
  Configure the mode, "Re-calculate Feature Amount and Feature Point Tracking".
  */
-kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
+gint32 im_fpt_ctrl_mode3(ImFpt*self, guchar ch, const TfptMode3* const param)
 {
-	IoFptFptctl2 fptctl2;
+	ImFptPrivate *priv = IM_FPT_GET_PRIVATE(self);
 	IoFptFptfqctl1 fptfqctl1;
 	IoFptFptfqctl2 fptfqctl2;
 	IoFptFptfqctl9 fptfqctl9;
@@ -714,7 +754,7 @@ kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(priv->fpt, ch);
 
 	switch(param->lutcfg) {
 		case ImFptCommon_E_IM_FPT_LUTCFG_OFF:
@@ -736,9 +776,9 @@ kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
 			return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	fptctl2.word = ioFpt[ch].fptctl2.word;
-	fptctl2.bit.mode = 3;
-	ioFpt[ch].fptctl2.word = fptctl2.word;
+	self->fptctl2.word = ioFpt[ch].fptctl2.word;
+	self->fptctl2.bit.mode = 3;
+	ioFpt[ch].fptctl2.word = self->fptctl2.word;
 
 	fptfqctl1.word = 0;
 	fptfqctl1.bit.hsize = param->width;
@@ -750,7 +790,7 @@ kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
 	fptfqctl2.bit.fpmax = param->numFeaturePoint;
 	ioFpt[ch].fptfqctl2.word = fptfqctl2.word;
 
-	if(!(fptctl2.bit.mode == 0 || fptctl2.bit.ioMode == 1)) { /* pgr0872 */
+	if(!(self->fptctl2.bit.mode == 0 || self->fptctl2.bit.ioMode == 1)) { /* pgr0872 */
 		ioFpt[ch].fptfqctl7.word = param->outputAddr;
 	}
 
@@ -787,7 +827,7 @@ kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
 	ioFpt[ch].fptftctl5.word = param->baseImgAddr;
 	ioFpt[ch].fptftctl6.word = param->targetImgAddr;
 
-	if(fptctl2.bit.ioMode != 1) { /* pgr0872 */
+	if(self->fptctl2.bit.ioMode != 1) { /* pgr0872 */
 		ioFpt[ch].fptftctl7.word = param->baseCoordAddr;
 		ioFpt[ch].fptftctl8.word = param->targetCoordAddr;
 		ioFpt[ch].fptftctl9.word = param->trackingResultAddr;
@@ -800,7 +840,7 @@ kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param)
 		ioFpt[ch].fptftctl10.word = fptftctl10.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(priv->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }

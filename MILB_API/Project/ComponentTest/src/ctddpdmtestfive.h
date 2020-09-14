@@ -27,9 +27,9 @@ typedef struct 														_CtDdPdmTestfivePrivate CtDdPdmTestfivePrivate;
 struct _CtDdPdmTestfive
 {
 	KObject parent;
-	T_DD_PDM_CORE_CFG pdmCfg;
-	T_DD_PDM_DMA_CFG pdmDmaCfg;
-	T_DD_PDM_DMA_LEN pdmLen;
+	DdPdmCoreCfg pdmCfg;
+	DdPdmDmaCfg pdmDmaCfg;
+	DdPdmDmaLen pdmLen;
 };
 
 KConstType 					ct_dd_pdm_testfive_get_type(void);

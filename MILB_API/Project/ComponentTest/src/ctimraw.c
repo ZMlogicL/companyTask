@@ -15,7 +15,7 @@
 #include <string.h>
 
 #include "jdsraw.h"
-#include "im_raw.h"
+#include "imraw.h"
 #include "driver_common.h"
 #include "ctimrawconfig.h"
 #include "ctimrawvarify.h"
@@ -54,7 +54,27 @@ static void ct_im_raw_constructor(CtImRaw *self)
 
 static void ct_im_raw_destructor(CtImRaw *self)
 {
-//	CtImRawPrivate *priv = CT_IM_RAW_GET_PRIVATE(self);
+	CtImRawPrivate *priv = CT_IM_RAW_GET_PRIVATE(self);
+
+	if (priv->ctImRawConfig) {
+		k_object_unref(priv->ctImRawConfig);
+		priv->ctImRawConfig = NULL;
+	}
+
+	if (priv->ctImRawVarify) {
+		k_object_unref(priv->ctImRawVarify);
+		priv->ctImRawVarify = NULL;
+	}
+
+	if (priv->ctImRawTest1) {
+		k_object_unref(priv->ctImRawTest1);
+		priv->ctImRawTest1 = NULL;
+	}
+
+	if (priv->ctImRawTest2) {
+		k_object_unref(priv->ctImRawTest2);
+		priv->ctImRawTest2 = NULL;
+	}
 }
 
 

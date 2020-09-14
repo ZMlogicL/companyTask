@@ -20,8 +20,8 @@
  */
 #include "palladium_test.h"
 
-#include "dd_gic.h"
-#include "dd_top.h"
+#include "ddgic.h"
+#include "ddtop.h"
 #include "palladiumtesttmr64.h"
 
 
@@ -37,7 +37,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(PalladiumTestTmr64, palladium_test_tmr64)
 
 struct _PalladiumTestTmr64Private
 {
-
+	int a;
 };
 
 /*----------------------------------------------------------------------*/
@@ -48,27 +48,29 @@ static char* S_G_ARGV[PalladiumTestTmr64_TFR_PTEST_CMD_TOKEN_NUM];
 /*----------------------------------------------------------------------*/
 /* Function																*/
 /*----------------------------------------------------------------------*/
-extern VOID Ct_Dd_TMR64_Main( int argc, char** argv );
+extern void Ct_Dd_TMR64_Main( int argc, char** argv );
 
 
 /*
  * DECLS
  */
 static void 	ptDdTmr64ExecuteCmd(int cmdArgc, char* cmdArgv);
-static VOID 	ptDdTmr64StartClock( VOID );
-static VOID 	ptDdTmr64EnableGic( VOID );
+static void 	ptDdTmr64StartClock( void );
+static void 	ptDdTmr64EnableGic( void );
 
 /*
  * IMPL
  */
 static void palladium_test_tmr64_constructor(PalladiumTestTmr64 *self)
 {
-//	PalladiumTestTmr64Private *priv = PALLADIUM_TEST_TMR64_GET_PRIVATE(self);
+	PalladiumTestTmr64Private *priv = PALLADIUM_TEST_TMR64_GET_PRIVATE(self);
+	priv->a = 0;
 }
 
 static void palladium_test_tmr64_destructor(PalladiumTestTmr64 *self)
 {
-//	PalladiumTestTmr64Private *priv = PALLADIUM_TEST_TMR64_GET_PRIVATE(self);
+	PalladiumTestTmr64Private *priv = PALLADIUM_TEST_TMR64_GET_PRIVATE(self);
+	priv->a = 0;
 }
 
 
@@ -84,16 +86,16 @@ static void ptDdTmr64ExecuteCmd(int cmdArgc, char* cmdArgv)
     Ct_Dd_TMR64_Main(cmdArgc, S_G_ARGV);
 }
 
-static VOID ptDdTmr64StartClock( VOID )
+static void ptDdTmr64StartClock( void )
 {
-	UCHAR imTmr64RclkCounter = 0;
-	UCHAR imTmr64ApbclkCounter = 0;
+	kuchar imTmr64RclkCounter = 0;
+	kuchar imTmr64ApbclkCounter = 0;
 
 	Dd_Top_Start_Clock(&imTmr64RclkCounter, &Dd_Top_Get_CLKSTOP2(), ~D_DD_TOP_RCK_BIT);
 	Dd_Top_Start_Clock(&imTmr64ApbclkCounter, &Dd_Top_Get_CLKSTOP14(), ~D_DD_TOP_PERIAP_BIT);
 }
 
-static VOID ptDdTmr64EnableGic( VOID )
+static void ptDdTmr64EnableGic( void )
 {
 //	Dd_GIC_Init();
 //	Dd_GIC_Ctrl( E_DD_GIC_INTID_NULL132,  1, D_DD_GIC_PRI30, 1 );		// intid=INT_TMR64_CH, enable, pri=30, cpu=1
@@ -102,9 +104,9 @@ static VOID ptDdTmr64EnableGic( VOID )
 /*
  * PUBLIC
  */
-void palladium_test_tmr64_pt_dd_main(void)
+void palladium_test_tmr64_pt_dd_main(PalladiumTestTmr64* self)
 {
-	ULONG	time = 50; // 10ms wait (PTで妥当な時間設定か？)      50 msになっていたが試験ではTime = 10 ms???	10 msでOK????
+	kulong	time = 50; // 10ms wait (PTで妥当な時間設定か？)      50 msになっていたが試験ではTime = 10 ms???	10 msでOK????
 
 	// GIC interrupt enable
 	ptDdTmr64EnableGic();
@@ -117,7 +119,7 @@ void palladium_test_tmr64_pt_dd_main(void)
 		 2 div = 10ms Timer */
 
 	// テストパラメータ取得(RSファイルに紐付く)
-	UCHAR testno = gDDIM_Info.com._6a;
+	kuchar testno = gDDIM_Info.com._6a;
 
 	/******************************************************************/
 	if ( testno == 1 ) {	// 1-1
@@ -240,9 +242,9 @@ void palladium_test_tmr64_pt_dd_main(void)
 		char tmrArgv05[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
 		char tmrArgv06[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_counter"};
 		char tmrArgv07[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
-		char tmr_argv_08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_counter"};
-		char tmr_argv_09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
-		char tmr_argv_10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
+		char tmrArgv08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_counter"};
+		char tmrArgv09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
+		char tmrArgv10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
 
 		Ddim_Print(("TMR64 1-4 S\n"));
 		Ddim_Print(("TMR64 1-4 Open S\n"));
@@ -271,13 +273,13 @@ void palladium_test_tmr64_pt_dd_main(void)
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-4 Get_counter S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_08);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv08);
 		Ddim_Print(("TMR64 1-4 Get_counter E\n"));
 		Ddim_Print(("TMR64 1-4 Stop S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_09);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv09);
 		Ddim_Print(("TMR64 1-4 Stop E\n"));
 		Ddim_Print(("TMR64 1-4 Close S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_10);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv10);
 		Ddim_Print(("TMR64 1-4 Close E\n"));
 		Ddim_Print(("TMR64 1-4 E\n"));
 
@@ -293,9 +295,9 @@ void palladium_test_tmr64_pt_dd_main(void)
 		char tmrArgv05[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
 		char tmrArgv06[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_gyro"};
 		char tmrArgv07[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
-		char tmr_argv_08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_gyro"};
-		char tmr_argv_09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
-		char tmr_argv_10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
+		char tmrArgv08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_gyro"};
+		char tmrArgv09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
+		char tmrArgv10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
 
 		Ddim_Print(("TMR64 1-5 S\n"));
 		Ddim_Print(("TMR64 1-5 Open S\n"));
@@ -324,13 +326,13 @@ void palladium_test_tmr64_pt_dd_main(void)
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-5 Get_gyro S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_08);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv08);
 		Ddim_Print(("TMR64 1-5 Get_gyro E\n"));
 		Ddim_Print(("TMR64 1-5 Stop S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_09);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv09);
 		Ddim_Print(("TMR64 1-5 Stop E\n"));
 		Ddim_Print(("TMR64 1-5 Close S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_10);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv10);
 		Ddim_Print(("TMR64 1-5 Close E\n"));
 		Ddim_Print(("TMR64 1-5 E\n"));
 
@@ -346,19 +348,19 @@ void palladium_test_tmr64_pt_dd_main(void)
 		char tmrArgv06[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
 		char tmrArgv07[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
-		char tmr_argv_09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
-		char tmr_argv_10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
-		char tmr_argv_11[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
+		char tmrArgv08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
+		char tmrArgv09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
+		char tmrArgv10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
+		char tmrArgv11[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_12[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
-		char tmr_argv_13[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
-		char tmr_argv_14[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
-		char tmr_argv_15[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
+		char tmrArgv12[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
+		char tmrArgv13[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
+		char tmrArgv14[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
+		char tmrArgv15[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_16[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
-		char tmr_argv_17[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
-		char tmr_argv_18[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
+		char tmrArgv16[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_start"};
+		char tmrArgv17[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
+		char tmrArgv18[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
 
 		Ddim_Print(("TMR64 1-6 S\n"));
 		Ddim_Print(("TMR64 1-6 Open S\n"));
@@ -387,41 +389,41 @@ void palladium_test_tmr64_pt_dd_main(void)
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_08);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv08);
 		Ddim_Print(("TMR64 1-6 Get_start E\n"));
 		Ddim_Print(("TMR64 1-6 Pause S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_09);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv09);
 		Ddim_Print(("TMR64 1-6 Pause E\n"));
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_10);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv10);
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
 		Ddim_Print(("TMR64 1-6 Start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_11) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_11);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv11) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv11);
 		Ddim_Print(("TMR64 1-6 Start E\n"));
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_12) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_12);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv12) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv12);
 		Ddim_Print(("TMR64 1-6 Get_start E\n"));
 		Ddim_Print(("TMR64 1-6 Pause S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_13) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_13);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv13) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv13);
 		Ddim_Print(("TMR64 1-6 Pause E\n"));
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_14) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_14);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv14) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv14);
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
 		Ddim_Print(("TMR64 1-6 Start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_15) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_15);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv15) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv15);
 		Ddim_Print(("TMR64 1-6 Start E\n"));
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-6 Get_start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_16) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_16);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv16) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv16);
 		Ddim_Print(("TMR64 1-6 Get_start E\n"));
 		Ddim_Print(("TMR64 1-6 Stop S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_17) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_17);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv17) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv17);
 		Ddim_Print(("TMR64 1-6 Stop E\n"));
 		Ddim_Print(("TMR64 1-6 Close S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_18) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_18);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv18) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv18);
 		Ddim_Print(("TMR64 1-6 Close E\n"));
 		Ddim_Print(("TMR64 1-6 E\n"));
 
@@ -438,19 +440,19 @@ void palladium_test_tmr64_pt_dd_main(void)
 		char tmrArgv06[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
 		char tmrArgv07[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
-		char tmr_argv_09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
-		char tmr_argv_10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
-		char tmr_argv_11[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
+		char tmrArgv08[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
+		char tmrArgv09[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
+		char tmrArgv10[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
+		char tmrArgv11[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_12[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
-		char tmr_argv_13[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
-		char tmr_argv_14[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
-		char tmr_argv_15[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
+		char tmrArgv12[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
+		char tmrArgv13[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "pause"};
+		char tmrArgv14[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
+		char tmrArgv15[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "start"};
 
-		char tmr_argv_16[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
-		char tmr_argv_17[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
-		char tmr_argv_18[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
+		char tmrArgv16[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "get_end"};
+		char tmrArgv17[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "stop"};
+		char tmrArgv18[][PalladiumTestTmr64_CMD_PRM_LEN] = {"tmr64", "close"};
 
 		Ddim_Print(("TMR64 1-7 S\n"));
 		Ddim_Print(("TMR64 1-7 Open S\n"));
@@ -479,41 +481,41 @@ void palladium_test_tmr64_pt_dd_main(void)
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_08);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv08) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv08);
 		Ddim_Print(("TMR64 1-7 Get_end E\n"));
 		Ddim_Print(("TMR64 1-7 Pause S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_09);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv09) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv09);
 		Ddim_Print(("TMR64 1-7 Pause E\n"));
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_10);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv10) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv10);
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
 		Ddim_Print(("TMR64 1-7 Start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_11) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_11);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv11) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv11);
 		Ddim_Print(("TMR64 1-7 Start E\n"));
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_12) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_12);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv12) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv12);
 		Ddim_Print(("TMR64 1-7 Get_end E\n"));
 		Ddim_Print(("TMR64 1-7 Pause S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_13) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_13);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv13) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv13);
 		Ddim_Print(("TMR64 1-7 Pause E\n"));
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_14) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_14);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv14) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv14);
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
 		Ddim_Print(("TMR64 1-7 Start S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_15) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_15);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv15) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv15);
 		Ddim_Print(("TMR64 1-7 Start E\n"));
 		DDIM_User_Dly_Tsk(time);
 		Ddim_Print( ("Time wait = %lu (ms) \n", time) );
 		Ddim_Print(("TMR64 1-7 Get_end S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_16) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_16);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv16) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv16);
 		Ddim_Print(("TMR64 1-7 Get_end E\n"));
 		Ddim_Print(("TMR64 1-7 Stop S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_17) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_17);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv17) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv17);
 		Ddim_Print(("TMR64 1-7 Stop E\n"));
 		Ddim_Print(("TMR64 1-7 Close S\n"));
-		ptDdTmr64ExecuteCmd((sizeof(tmr_argv_18) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmr_argv_18);
+		ptDdTmr64ExecuteCmd((sizeof(tmrArgv18) / PalladiumTestTmr64_CMD_PRM_LEN), (char*)tmrArgv18);
 		Ddim_Print(("TMR64 1-7 Close E\n"));
 		Ddim_Print(("TMR64 1-7 E\n"));
 
@@ -703,17 +705,6 @@ void palladium_test_tmr64_pt_dd_main(void)
 PalladiumTestTmr64* palladium_test_tmr64_new(void)
 {
 	PalladiumTestTmr64* self = k_object_new_with_private(PALLADIUM_TYPE_TEST_TMR64, sizeof(PalladiumTestTmr64Private));
-
-	return self;
-}
-
-PalladiumTestTmr64* palladium_test_tmr64_get(void)
-{
-	static PalladiumTestTmr64* self = NULL;
-
-	if (!self) {
-		self = k_object_new_with_private(PALLADIUM_TYPE_TEST_TMR64, sizeof(PalladiumTestTmr64Private));
-	}
 
 	return self;
 }

@@ -31,7 +31,7 @@
 
 // ### REMOVE_RELEASE END
 // im_iip header
-#include "im_iip.h"
+#include "imiipdefine.h"
 
 // MILB register header 
 #include "jdsiip.h"
@@ -54,17 +54,17 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImIipLut, ct_im_iip_lut);
 #define CT_IM_IIP_LUT_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImIipLutPrivate,CT_TYPE_IM_IIP_LUT))
 
 struct _CtImIipLutPrivate {
-    CtImIipLut *					ciIipLut;
-	T_IM_IIP_PIXFMTTBL				pixfmtTbl0;		// 1DL Unit input
-	T_IM_IIP_PIXFMTTBL				pixfmtTbl1;		// SL Unit output
-	T_IM_IIP_UNIT_CFG				onedCfg;
-	T_IM_IIP_UNIT_CFG				lutCfg;
-	T_IM_IIP_PARAM_1DL*				onedUnitInf;
+    CtImIipLut *	ciIipLut;
+	TImIipPixfmttbl	pixfmtTbl0;		// 1DL Unit input
+	TImIipPixfmttbl	pixfmtTbl1;		// SL Unit output
+	TImIipUnitCfg	onedCfg;
+	TImIipUnitCfg	lutCfg;
+	Tim1dl*			onedUnitInf;
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	T_IM_IIP_PARAM_LUT*				lutUnitInf;
+	TimLut*			lutUnitInf;
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	T_IM_IIP_PARAM_STS*				slUnitInf;
-	T_IM_IIP_UNIT_CFG				slCfg;
+	TimSts*			slUnitInf;
+	TImIipUnitCfg	slCfg;
 };
 
 /*----------------------------------------------------------------------*/
@@ -94,141 +94,141 @@ struct _CtImIipLutPrivate {
 /*----------------------------------------------------------------------*/
 
 #if !defined(CO_CT_IM_IIP_5_1_1_DISABLE_LUT) || !defined(CO_CT_IM_IIP_5_1_2_DISABLE_LUT)
-static const T_IM_IIP_PARAM_LUT S_G_CT_IM_IIP_PARAM_LUT_BASE = {
+static const TimLut S_G_CT_IM_IIP_PARAM_LUT_BASE = {
 	.header0.bit.BeginningAddress = 0x0000,
 	.header0.bit.WordLength = 57,
-	.header0.bit.CtrlCode = E_IM_IIP_PARAM_CTL_CODE_EXE_LAST_PACKET,
+	.header0.bit.CtrlCode = ImIipParamEnum_E_IM_IIP_PARAM_CTL_CODE_EXE_LAST_PACKET,
 	.luttopcnf = {
 //		[0] = {
-//				.bit.WAITCONF,						// set later
-//				.bit.DATACONF,						// set later
+//				.bit.waitconf,						// set later
+//				.bit.dataconf,						// set later
 //		},
 		[1] = {
-				.bit.WAITCONF = E_IM_IIP_PARAM_PORTID_NONE,
-				.bit.DATACONF = E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.waitconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.dataconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
 		},
 		[2] = {
-				.bit.WAITCONF = E_IM_IIP_PARAM_PORTID_NONE,
-				.bit.DATACONF = E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.waitconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.dataconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
 		},
 		[3] = {
-				.bit.WAITCONF = E_IM_IIP_PARAM_PORTID_NONE,
-				.bit.DATACONF = E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.waitconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
+				.bit.dataconf = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_NONE,
 		},
 	},
-	.lutunitctl.bit.PORTEN = 3,		// D0=LUTA, D1=LUTB, D2=LUTC D3=through
-	.lutunitctl.bit.PORT3SELI = 0,
-	.lutunitctl.bit.PORT3SELO = 0,
-	.lutunitctl.bit.BRANCH = 0,
-	.lutunitctl.bit.PORT2SELI = 0,
-	.lutunitctl.bit.PORT2SELO = 0,
-	.lutunitctl.bit.OUTMD0 = 0,
-	.lutunitctl.bit.OUTMD1 = 0,
-	.lutunitctl.bit.OUTMD2 = 0,
-	.lutunitctl.bit.OUTMD3 = 0,
+	.lutunitctl.bit.porten = 3,		// D0=LUTA, D1=LUTB, D2=LUTC D3=through
+	.lutunitctl.bit.port3seli = 0,
+	.lutunitctl.bit.port3selo = 0,
+	.lutunitctl.bit.branch = 0,
+	.lutunitctl.bit.port2seli = 0,
+	.lutunitctl.bit.port2selo = 0,
+	.lutunitctl.bit.outmd0 = 0,
+	.lutunitctl.bit.outmd1 = 0,
+	.lutunitctl.bit.outmd2 = 0,
+	.lutunitctl.bit.outmd3 = 0,
 	.lutctlA.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalA.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift 	 = 0,
+		.ofset 	 = 0,
+		.clpmax  = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin  = 0x4000,
+		.thmin 	 = 0x4000,
+		.abs 	 = 1,
+		.lutadrs = 0,
 	},
 	.lutctlB.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalB.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift	 = 0,
+		.ofset	 = 0,
+		.clpmax	 = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin	 = 0x4000,
+		.thmin	 = 0x4000,
+		.abs	 = 1,
+		.lutadrs = 0,
 	},
 	.lutctlC.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalC.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift	 = 0,
+		.ofset	 = 0,
+		.clpmax	 = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin	 = 0x4000,
+		.thmin	 = 0x4000,
+		.abs	 = 1,
+		.lutadrs = 0,
 	},
 	.lutctlD.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalD.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift	 = 0,
+		.ofset	 = 0,
+		.clpmax	 = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin	 = 0x4000,
+		.thmin	 = 0x4000,
+		.abs	 = 1,
+		.lutadrs = 0,
 	},
 	.lutctlE.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalE.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift	 = 0,
+		.ofset	 = 0,
+		.clpmax	 = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin	 = 0x4000,
+		.thmin	 = 0x4000,
+		.abs	 = 1,
+		.lutadrs = 0,
 	},
 	.lutctlF.bit = {
-		.LUTBIT = 8,
-		.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
-		.SGN = E_IM_IIP_PARAM_LUTSGN_UNSIGN,
-		.SPLBIT = 0,
+		.lutbit = 8,
+		.use	= ImIipParamEnum_E_IM_IIP_PARAM_LUTUSE_LUT_OUT,
+		.sgn 	= ImIipParamEnum_E_IM_IIP_PARAM_LUTSGN_UNSIGN,
+		.splbit = 0,
 	},
 	.lutprecalF.bit = {
-		.SHIFT = 0,
-		.OFSET = 0,
-		.CLPMAX = 0x3fff,
-		.THMAX = 0x3fff,
-		.CLPMIN = 0x4000,
-		.THMIN = 0x4000,
-		.ABS = 1,
-		.LUTADRS = 0,
+		.shift	 = 0,
+		.ofset	 = 0,
+		.clpmax	 = 0x3fff,
+		.thmax	 = 0x3fff,
+		.clpmin	 = 0x4000,
+		.thmin	 = 0x4000,
+		.abs	 = 1,
+		.lutadrs = 0,
 	},
 };
 #endif //!CO_CT_IM_IIP_5_1_1_DISABLE_LUT && !CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 
 #ifdef __GNUC__
-static T_IM_IIP_PARAM_LUT	S_G_CT_IM_IIP_UNIT_PARAM_LUT __attribute__((aligned(8)));	// Needs 8bytes align
+static TimLut	S_G_CT_IM_IIP_UNIT_PARAM_LUT __attribute__((aligned(8)));	// Needs 8bytes align
 #else
-static __align(8) T_IM_IIP_PARAM_LUT	S_G_CT_IM_IIP_UNIT_PARAM_LUT;					// Needs 8bytes align
+static __align(8) TimLut	S_G_CT_IM_IIP_UNIT_PARAM_LUT;					// Needs 8bytes align
 #endif
 
 #if !defined(CO_CT_IM_IIP_5_1_1_DISABLE_LUT)
@@ -277,11 +277,11 @@ static void ct_im_iip_lut_constructor(CtImIipLut *self)
 {
 	CtImIipLutPrivate *priv = CT_IM_IIP_LUT_GET_PRIVATE(self);
 	priv->ciIipLut = ct_im_iip_lut_new();
-	priv->onedUnitInf = &g_ct_im_iip_unit_param_1dl0;
+	priv->onedUnitInf = &gCtImIipUnitParam1dl0;
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 	priv->lutUnitInf = &S_G_CT_IM_IIP_UNIT_PARAM_LUT;
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	priv->slUnitInf = &g_ct_im_iip_unit_param_sl0;
+	priv->slUnitInf = &gCtImIipUnitParamSl0;
 }
 
 static void ct_im_iip_lut_destructor(CtImIipLut *self)
@@ -292,9 +292,9 @@ static void ct_im_iip_lut_destructor(CtImIipLut *self)
 	}
 	priv->ciIipLut = NULL;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Function																*/
 /*----------------------------------------------------------------------*/
@@ -304,150 +304,154 @@ static void ct_im_iip_lut_destructor(CtImIipLut *self)
 #define CtImIipLut_D_IM_IIP_FUNC_NAME "ct_im_iip_lut_5_1_1: "
 kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 {
-	CtImIipLutPrivate *				priv = CT_IM_IIP_LUT_GET_PRIVATE(self);
+	CtImIipLutPrivate *	priv = CT_IM_IIP_LUT_GET_PRIVATE(self);
 
-	kint32							ercd;
+	kint32				ercd;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	T_IM_IIP_LUT					lutCtrl;
+	TImIipLut			lutCtrl;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	kuint32							waitFactorResult = 0;
-	const kuint32					waitFactor = D_IM_IIP_INT_FACTOR_AXIERR | D_IM_IIP_INT_FACTOR_SL2END;
+	kuint32				waitFactorResult = 0;
+	const kuint32		waitFactor = ImIipDefine_D_IM_IIP_INT_FACTOR_AXIERR 
+							| ImIipDefine_D_IM_IIP_INT_FACTOR_SL2END;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const kuint32					unitidBitmask = D_IM_IIP_PARAM_PLDUNIT_LD1 | D_IM_IIP_PARAM_PLDUNIT_LUT 
-                                        | D_IM_IIP_PARAM_PLDUNIT_SL2;
+	const kuint32		unitidBitmask = ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LD1 
+							| ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LUT | ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL2;
 #else //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const kuint32					unitidBitmask = D_IM_IIP_PARAM_PLDUNIT_LD1 | D_IM_IIP_PARAM_PLDUNIT_SL2;
+	const kuint32		unitidBitmask = ImIipParamEnum_D_IM_IIP_PARAM_PLDUNIT_LD1 | 
+							ImIipParamEnum_D_IM_IIP_PARAM_PLDUNIT_SL2;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const kuint32					pixidBitmask = E_IM_IIP_PIXID_4 | E_IM_IIP_PIXID_5;
-	const E_IM_IIP_UNIT_ID			srcUnitid = E_IM_IIP_UNIT_ID_LD1;
+	const kuint32		pixidBitmask = ImIipStruct_E_IM_IIP_PIXID_4 | ImIipStruct_E_IM_IIP_PIXID_5;
+	const EImIipUnitId	srcUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD1;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const E_IM_IIP_UNIT_ID			filterUnitid = E_IM_IIP_UNIT_ID_LUT;
+	const EImIipUnitId	filterUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LUT;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const E_IM_IIP_UNIT_ID			dstUnitid = E_IM_IIP_UNIT_ID_SL2;
-	const E_IM_IIP_PARAM_PORTID		srcPortid = E_IM_IIP_PARAM_PORTID_LD1;
+	const EImIipUnitId	dstUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL2;
+	const EimPortid		srcPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LD1;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const E_IM_IIP_PARAM_PORTID		filterPortid = E_IM_IIP_PARAM_PORTID_LUT_P0;
+	const EimPortid		filterPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LUT_P0;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const E_IM_IIP_PARAM_PORTID		dstPortid = E_IM_IIP_PARAM_PORTID_SL2;
-	const kuint32					srcPixid = 4;
-	const kuint32					dstPixid = 5;
+	const EimPortid		dstPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_SL2;
+	const kuint32		srcPixid = 4;
+	const kuint32		dstPixid = 5;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const kuint32					openResBitmask = E_IM_IIP_OPEN_RES_CACHE0 | E_IM_IIP_OPEN_RES_LUT_A 
-                                        | E_IM_IIP_OPEN_RES_LUT_B | E_IM_IIP_OPEN_RES_LUT_C | E_IM_IIP_OPEN_RES_LUT_D
-                                        | E_IM_IIP_OPEN_RES_LUT_E | E_IM_IIP_OPEN_RES_LUT_F;
+	const kuint32		openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0 | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_A 
+                        	| ImIipStruct_E_IM_IIP_OPEN_RES_LUT_B | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_C 
+							| ImIipStruct_E_IM_IIP_OPEN_RES_LUT_D | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_E 
+							| ImIipStruct_E_IM_IIP_OPEN_RES_LUT_F;
 #else //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	const kuint32					openResBitmask = E_IM_IIP_OPEN_RES_CACHE0;
+	const kuint32		openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "\n"));
 
-	ercd = Im_IIP_Open_SWTRG(unitidBitmask, pixidBitmask, openResBitmask, D_CT_IM_IIP_OPEN_TIMEOUT_MSEC);
+	ercd = Im_IIP_Open_SWTRG(unitidBitmask, pixidBitmask, openResBitmask, 
+		CtImIip_D_CT_IM_IIP_OPEN_TIMEOUT_MSEC);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
-	if(ercd != D_IM_IIP_OK) {
+	if(ercd != ImIipDefine_D_IM_IIP_OK) {
 		return ercd;
 	}
 
-	priv->pixfmtTbl0 = g_ct_im_iip_pixfmttbl_base;
-	priv->pixfmtTbl0.line_bytes.Y_G = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Cb_B = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Cr_R = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.addr.Y_G = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
-	priv->pixfmtTbl0.addr.Cb_B = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
-	priv->pixfmtTbl0.addr.Cr_R = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
-	priv->pixfmtTbl0.addr.Alpha = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A;
+	priv->pixfmtTbl0 = gCtImIipPixfmttblBase;
+	priv->pixfmtTbl0.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
+	priv->pixfmtTbl0.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	priv->pixfmtTbl0.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	priv->pixfmtTbl0.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A;
 
-	priv->pixfmtTbl1 = g_ct_im_iip_pixfmttbl_base;
-	priv->pixfmtTbl1.line_bytes.Y_G = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Cb_B = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Cr_R = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.addr.Y_G = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
-	priv->pixfmtTbl1.addr.Cb_B = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
-	priv->pixfmtTbl1.addr.Cr_R = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
-	priv->pixfmtTbl1.addr.Alpha = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A;
+	priv->pixfmtTbl1 = gCtImIipPixfmttblBase;
+	priv->pixfmtTbl1.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
+	priv->pixfmtTbl1.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	priv->pixfmtTbl1.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	priv->pixfmtTbl1.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A;
 
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "lutram = 0x%x 0x%x\n", 
         (kuint32)S_G_CT_IM_IIP_LUTRAM, sizeof(S_G_CT_IM_IIP_LUTRAM)));
 
-	lutCtrl.buffer_bytes = sizeof(S_G_CT_IM_IIP_LUTRAM);
-	lutCtrl.buffer_addr = S_G_CT_IM_IIP_LUTRAM;
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_A;
+	lutCtrl.bufferBytes = sizeof(S_G_CT_IM_IIP_LUTRAM);
+	lutCtrl.bufferAddr = S_G_CT_IM_IIP_LUTRAM;
+	lutCtrl.lutramType = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", 
-		ercd, lutCtrl.lutram_type));
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_B;
+		ercd, lutCtrl.lutramType));
+	lutCtrl.lutram_type = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", 
-		ercd, lutCtrl.lutram_type));
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_C;
+		ercd, lutCtrl.lutramType));
+	lutCtrl.lutram_type = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", 
-		ercd, lutCtrl.lutram_type));
+		ercd, lutCtrl.lutramType));
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "onedUnitInf = 0x%x 0x%x\n",  
-        (kuint32)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL)));
+        (kuint32)priv->onedUnitInf, sizeof(Tim1dl)));
 
 	memset(priv->onedUnitInf, '\0', sizeof(*priv->onedUnitInf));
-	*priv->onedUnitInf = g_ct_im_iip_param_1dl_base;
+	*priv->onedUnitInf = gCtImIipParam1dlBase;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->onedUnitInf->ldTopcnf0.bit.WAITCONF = filterPortid;
+	priv->onedUnitInf->ldTopcnf0.bit.waitconf = filterPortid;
 #else //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->onedUnitInf->ldTopcnf0.bit.WAITCONF = dstPortid;
+	priv->onedUnitInf->ldTopcnf0.bit.waitconf = dstPortid;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->onedUnitInf->pixiddef.bit.IPIXID = srcPixid;
+	priv->onedUnitInf->pixiddef.bit.ipixid = srcPixid;
 
-	priv->onedCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->onedCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->onedCfg.unit_param_addr = (kulong)priv->onedUnitInf;
-	priv->onedCfg.load_unit_param_flag = 0;
+	priv->onedCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->onedCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->onedCfg.unitParamAddr = (kulong)priv->onedUnitInf;
+	priv->onedCfg.loadUnitParamFlag = 0;
 
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "lutUnitInf = 0x%x 0x%x\n", 
-        (kuint32)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT)));
+        (kuint32)priv->lutUnitInf, sizeof(TimLut)));
 
 	memset(priv->lutUnitInf, '\0', sizeof(*priv->lutUnitInf));
 	*priv->lutUnitInf = S_G_CT_IM_IIP_PARAM_LUT_BASE;
-	priv->lutUnitInf->luttopcnf[0].bit.DATACONF = srcPortid;
-	priv->lutUnitInf->luttopcnf[0].bit.WAITCONF = dstPortid;
+	priv->lutUnitInf->luttopcnf[0].bit.dataconf = srcPortid;
+	priv->lutUnitInf->luttopcnf[0].bit.waitconf = dstPortid;
 
-	priv->lutCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->lutCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->lutCfg.unit_param_addr = (kulong)priv->lutUnitInf;
-	priv->lutCfg.load_unit_param_flag = 0;
+	priv->lutCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->lutCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->lutCfg.unitParamAddr = (kulong)priv->lutUnitInf;
+	priv->lutCfg.loadUnitParamFlag = 0;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "slUnitInf = 0x%x 0x%x\n", 
-        (kuint32)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS)));
+        (kuint32)priv->slUnitInf, sizeof(TimSts)));
 
 	memset(priv->slUnitInf, '\0', sizeof(*priv->slUnitInf));
-	*priv->slUnitInf = g_ct_im_iip_param_sts_base;
+	*priv->slUnitInf = gCtImIipParamStsBase;
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->slUnitInf->BASE.slTopcnf0.bit.DATACONF = filterPortid;
+	priv->slUnitInf->base.slTopcnf0.bit.dataconf = filterPortid;
 #else //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->slUnitInf->BASE.slTopcnf0.bit.DATACONF = srcPortid;
+	priv->slUnitInf->base.slTopcnf0.bit.dataconf = srcPortid;
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
-	priv->slUnitInf->BASE.pixiddef.bit.OPIXID = dstPixid;
+	priv->slUnitInf->base.pixiddef.bit.opixid = dstPixid;
 
 
-	priv->slCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->slCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->slCfg.unit_param_addr = (kulong)priv->slUnitInf;
-	priv->slCfg.load_unit_param_flag = unitidBitmask;
+	priv->slCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->slCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->slCfg.unitParamAddr = (kulong)priv->slUnitInf;
+	priv->slCfg.loadUnitParamFlag = unitidBitmask;
 
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->onedUnitInf, sizeof(Tim1dl));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->lutUnitInf, sizeof(TimLut));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->slUnitInf, sizeof(TimSts));
 
 // ### REMOVE_RELEASE BEGIN
 #ifdef CO_PT_ENABLE
 #if 0
-	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
-	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
-	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(Tim1dl));
+	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(TimLut));
+	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(TimSts));
 #endif
 #endif //CO_PT_ENABLE
 // ### REMOVE_RELEASE END
@@ -469,58 +473,58 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 	ercd = Im_IIP_Ctrl_SWTRG_Unit(dstUnitid, &priv->slCfg);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
-	ercd = Im_IIP_Set_Interrupt(waitFactor, D_IM_IIP_ENABLE_ON);
+	ercd = Im_IIP_Set_Interrupt(waitFactor, ImIipDefine_D_IM_IIP_ENABLE_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
-	Im_IIP_On_Pclk();
+	im_iip_struct_on_pclk();
 	CtImIipLut_DDIM_PRINT(("ONED[1]: PADRS=0x%x HWEN=%u\n",
-				(kuint32)IO_IIP.UNITINFTBL_LD1.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_LD1.UNITINFTBL0.bit.HWEN));
+				(kuint32)ioIip.unitinftblLd1.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblLd1.unitinftbl0.bit.hwen));
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT(("LUT: PADRS=0x%x HWEN=%u\n",
-				(kuint32)IO_IIP.UNITINFTBL_LUT.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_LUT.UNITINFTBL0.bit.HWEN));
+				(kuint32)ioIip.unitinftblLut.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblLut.unitinftbl0.bit.hwen));
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT(("SL[2]: PADRS=0x%x HWEN=%u PLDUNIT=0x%08x%08x\n",
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL0.bit.HWEN,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL1.bit.PLDUNIT_HI,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL1.bit.PLDUNIT_LO));
-	Im_IIP_Off_Pclk();
+				(kuint32)ioIip.unitinftblSl2.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl0.bit.hwen,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl1.bit.pldunitHi,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl1.bit.pldunitLo));
+	im_iip_struct_off_pclk();
 
-	Dd_ARM_Dmb_Pou();
+	DD_ARM_DMB_POU();
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start1\n"));
-	ercd = Im_IIP_Start_SWTRG(dstUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(dstUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
 #ifndef CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start2\n"));
-	ercd = Im_IIP_Start_SWTRG(filterUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(filterUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 #endif //CO_CT_IM_IIP_5_1_1_DISABLE_LUT
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start3\n"));
-	ercd = Im_IIP_Start_SWTRG(srcUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(srcUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
 #if 0
 	for(kuint32 loopcnt = 0; loopcnt < 10; loopcnt++) {
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME " SLALE=%u INTIZ0=0x%lx INTIZ1=0x%lx\n",
-					IO_IIP.IZACTL1.bit.SLALE,
-					IO_IIP.INTIZ0.word,
-					IO_IIP.INTIZ1.word));
+					ioIip.IZACTL1.bit.SLALE,
+					ioIip.INTIZ0.word,
+					ioIip.INTIZ1.word));
 		DDIM_User_Dly_Tsk(1);
 	}
 #endif
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "WaitEnd\n"));
-	ercd = Im_IIP_Wait_End(&waitFactorResult, waitFactor, D_IM_IIP_OR_WAIT, 30);
+	ercd = Im_IIP_Wait_End(&waitFactorResult, waitFactor, ImIipDefine_D_IM_IIP_OR_WAIT, 30);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", 
 		ercd, waitFactorResult));
 	if(ercd != D_DDIM_OK) {
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Stop\n"));
-		ercd = Im_IIP_Stop(D_IM_IIP_ABORT);
+		ercd = im_iip_main_stop(ImIipDefine_D_IM_IIP_ABORT);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", 
 			ercd, waitFactorResult));
 	}
@@ -529,9 +533,9 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 #ifdef CO_PT_ENABLE
 #if 1
 	// UnitINFダンプ
-	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
-	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
-	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(Tim1dl));
+	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(TimLut));
+	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(TimSts));
 #endif
 
 
@@ -541,9 +545,9 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(srcUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF ONED[1] %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -556,9 +560,9 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(filterUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF LUT %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -571,9 +575,9 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(dstUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF SL[2] %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -582,12 +586,12 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 
 #if 0
 #ifndef CO_DEBUG_ON_PC
-	// dump IO_IIP
+	// dump ioIip
 	{
 		kulong regdump_addr = D_IM_IIP_REGDUMP_ADDR;
-		kulong regdump_bytes = sizeof(IO_IIP);
-		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump IO_IIP %u\n", regdump_bytes));
-		memcpy((void*)regdump_addr, (void*)&IO_IIP, regdump_bytes);
+		kulong regdump_bytes = sizeof(ioIip);
+		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump ioIip %u\n", regdump_bytes));
+		memcpy((void*)regdump_addr, (void*)&ioIip, regdump_bytes);
 		Palladium_Set_Out_Localstack(regdump_addr, regdump_bytes);
 	}
 #endif //!CO_DEBUG_ON_PC
@@ -608,130 +612,130 @@ kint32 ct_im_iip_lut_5_1_1(CtImIipLut *self)
 #define CtImIipLut_D_IM_IIP_FUNC_NAME "ct_im_iip_lut_5_1_2: "
 kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 {
-	CtImIipLutPrivate *priv = CT_IM_IIP_LUT_GET_PRIVATE(self);
+	CtImIipLutPrivate *	priv = CT_IM_IIP_LUT_GET_PRIVATE(self);
 
-	kint32							ercd;
+	kint32				ercd;
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	T_IM_IIP_LUT					lutCtrl;
+	TImIipLut			lutCtrl;
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	kuint32							waitFactorResult = 0;
-	const kuint32					waitFactor = D_IM_IIP_INT_FACTOR_AXIERR | D_IM_IIP_INT_FACTOR_SL2END;
-	const kuint32					unitidBitmask = D_IM_IIP_PARAM_PLDUNIT_LD1 | D_IM_IIP_PARAM_PLDUNIT_LUT 
-                                        | D_IM_IIP_PARAM_PLDUNIT_SL2;
-	const kuint32					pixidBitmask = E_IM_IIP_PIXID_4 | E_IM_IIP_PIXID_5;
-	const E_IM_IIP_UNIT_ID			srcUnitid = E_IM_IIP_UNIT_ID_LD1;
-	const E_IM_IIP_UNIT_ID			filterUnitid = E_IM_IIP_UNIT_ID_LUT;
-	const E_IM_IIP_UNIT_ID			dstUnitid = E_IM_IIP_UNIT_ID_SL2;
-	const E_IM_IIP_PARAM_PORTID		filterPortid = E_IM_IIP_PARAM_PORTID_LUT_P0;
+	kuint32				waitFactorResult = 0;
+	const kuint32		waitFactor = ImIipDefine_D_IM_IIP_INT_FACTOR_AXIERR | ImIipDefine_D_IM_IIP_INT_FACTOR_SL2END;
+	const kuint32		unitidBitmask = ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LD1 
+							| ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_LUT | ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL2;
+	const kuint32		pixidBitmask = ImIipStruct_E_IM_IIP_PIXID_4 | ImIipStruct_E_IM_IIP_PIXID_5;
+	const EImIipUnitId	srcUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LD1;
+	const EImIipUnitId	filterUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_LUT;
+	const EImIipUnitId	dstUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL2;
+	const EimPortid		filterPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LUT_P0;
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	const E_IM_IIP_PARAM_PORTID		srcPortid = E_IM_IIP_PARAM_PORTID_LD1;
-	const E_IM_IIP_PARAM_PORTID		dstPortid = E_IM_IIP_PARAM_PORTID_SL2;
+	const EimPortid		srcPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_LD1;
+	const EimPortid		dstPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_SL2;
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	const kuint32					srcPixid = 4;
-	const kuint32					dstPixid = 5;
-	const kuint32					openResBitmask = E_IM_IIP_OPEN_RES_CACHE0 | E_IM_IIP_OPEN_RES_LUT_A 
-                                        | E_IM_IIP_OPEN_RES_LUT_B | E_IM_IIP_OPEN_RES_LUT_C;
+	const kuint32		srcPixid = 4;
+	const kuint32		dstPixid = 5;
+	const kuint32		openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0 | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_A 
+                            | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_B | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_C;
 
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "\n"));
 
-	ercd = Im_IIP_Open_SWTRG(unitidBitmask, pixidBitmask, openResBitmask, D_CT_IM_IIP_OPEN_TIMEOUT_MSEC);
+	ercd = Im_IIP_Open_SWTRG(unitidBitmask, pixidBitmask, openResBitmask, CtImIip_D_CT_IM_IIP_OPEN_TIMEOUT_MSEC);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
-	if(ercd != D_IM_IIP_OK) {
+	if(ercd != ImIipDefine_D_IM_IIP_OK) {
 		return ercd;
 	}
 
-	priv->pixfmtTbl0 = g_ct_im_iip_pixfmttbl_base;
-	priv->pixfmtTbl0.line_bytes.Y_G = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Cb_B = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Cr_R = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.line_bytes.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	priv->pixfmtTbl0.addr.Y_G = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
-	priv->pixfmtTbl0.addr.Cb_B = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
-	priv->pixfmtTbl0.addr.Cr_R = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
-	priv->pixfmtTbl0.addr.Alpha = D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A;
+	priv->pixfmtTbl0 = gCtImIipPixfmttblBase;
+	priv->pixfmtTbl0.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
+	priv->pixfmtTbl0.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
+	priv->pixfmtTbl0.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	priv->pixfmtTbl0.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	priv->pixfmtTbl0.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A;
 
-	priv->pixfmtTbl1 = g_ct_im_iip_pixfmttbl_base;
-	priv->pixfmtTbl1.line_bytes.Y_G = D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Cb_B = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Cr_R = D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.line_bytes.Alpha = D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	priv->pixfmtTbl1.addr.Y_G = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
-	priv->pixfmtTbl1.addr.Cb_B = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
-	priv->pixfmtTbl1.addr.Cr_R = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
-	priv->pixfmtTbl1.addr.Alpha = D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A;
+	priv->pixfmtTbl1 = gCtImIipPixfmttblBase;
+	priv->pixfmtTbl1.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
+	priv->pixfmtTbl1.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
+	priv->pixfmtTbl1.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	priv->pixfmtTbl1.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	priv->pixfmtTbl1.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A;
 
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "lutram = 0x%x 0x%x\n", 
 		(kuint32)S_G_CT_IM_IIP_LUTRAM_INVERT, sizeof(S_G_CT_IM_IIP_LUTRAM_INVERT)));
 
-	lutCtrl.buffer_bytes = sizeof(S_G_CT_IM_IIP_LUTRAM_INVERT);
-	lutCtrl.buffer_addr = S_G_CT_IM_IIP_LUTRAM_INVERT;
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_A;
+	lutCtrl.bufferBytes = sizeof(S_G_CT_IM_IIP_LUTRAM_INVERT);
+	lutCtrl.bufferAddr = S_G_CT_IM_IIP_LUTRAM_INVERT;
+	lutCtrl.lutramType = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
-	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutram_type));
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_B;
+	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutramType));
+	lutCtrl.lutram_type = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_B;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
-	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutram_type));
-	lutCtrl.lutram_type = E_IM_IIP_LUTRAM_TYPE_C;
+	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutramType));
+	lutCtrl.lutram_type = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_C;
 	ercd = Im_IIP_Ctrl_LUT(&lutCtrl);
-	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutram_type));
+	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x lutram_type=%u\n", ercd, lutCtrl.lutramType));
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "onedUnitInf = 0x%x 0x%x\n", 
-        (kuint32)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL)));
+        (kuint32)priv->onedUnitInf, sizeof(Tim1dl)));
 
 	memset(priv->onedUnitInf, '\0', sizeof(*priv->onedUnitInf));
-	*priv->onedUnitInf = g_ct_im_iip_param_1dl_base;
-	priv->onedUnitInf->ldTopcnf0.bit.WAITCONF = filterPortid;
-	priv->onedUnitInf->pixiddef.bit.IPIXID = srcPixid;
+	*priv->onedUnitInf = gCtImIipParam1dlBase;
+	priv->onedUnitInf->ldTopcnf0.bit.waitconf = filterPortid;
+	priv->onedUnitInf->pixiddef.bit.ipixid = srcPixid;
 
-	priv->onedCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->onedCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->onedCfg.unit_param_addr = (kulong)priv->onedUnitInf;
-	priv->onedCfg.load_unit_param_flag = 0;
+	priv->onedCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->onedCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->onedCfg.unitParamAddr = (kulong)priv->onedUnitInf;
+	priv->onedCfg.loadUnitParamFlag = 0;
 
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "lutUnitInf = 0x%x 0x%x\n", 
-        (kuint32)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT)));
+        (kuint32)priv->lutUnitInf, sizeof(TimLut)));
 
 	memset(priv->lutUnitInf, '\0', sizeof(*priv->lutUnitInf));
 	*priv->lutUnitInf = S_G_CT_IM_IIP_PARAM_LUT_BASE;
-	priv->lutUnitInf->luttopcnf[0].bit.DATACONF = srcPortid;
-	priv->lutUnitInf->luttopcnf[0].bit.WAITCONF = dstPortid;
+	priv->lutUnitInf->luttopcnf[0].bit.dataconf = srcPortid;
+	priv->lutUnitInf->luttopcnf[0].bit.waitconf = dstPortid;
 
-	priv->lutCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->lutCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->lutCfg.unit_param_addr = (kulong)priv->lutUnitInf;
-	priv->lutCfg.load_unit_param_flag = 0;
+	priv->lutCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->lutCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->lutCfg.unitParamAddr = (kulong)priv->lutUnitInf;
+	priv->lutCfg.loadUnitParamFlag = 0;
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "slUnitInf = 0x%x 0x%x\n", 
-        (kuint32)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS)));
+        (kuint32)priv->slUnitInf, sizeof(TimSts)));
 
 	memset(priv->slUnitInf, '\0', sizeof(*priv->slUnitInf));
-	*priv->slUnitInf = g_ct_im_iip_param_sts_base;
-	priv->slUnitInf->BASE.slTopcnf0.bit.DATACONF = filterPortid;
-	priv->slUnitInf->BASE.pixiddef.bit.OPIXID = dstPixid;
+	*priv->slUnitInf = gCtImIipParamStsBase;
+	priv->slUnitInf->base.slTopcnf0.bit.dataconf = filterPortid;
+	priv->slUnitInf->base.pixiddef.bit.opixid = dstPixid;
 
 
-	priv->slCfg.unit_ctrl = D_IM_IIP_HW_CTRL_SWTRG;
-	priv->slCfg.chain_enable = D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
-	priv->slCfg.unit_param_addr = (kulong)priv->slUnitInf;
-	priv->slCfg.load_unit_param_flag = unitidBitmask;
+	priv->slCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	priv->slCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	priv->slCfg.unitParamAddr = (kulong)priv->slUnitInf;
+	priv->slCfg.loadUnitParamFlag = unitidBitmask;
 
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->onedUnitInf, sizeof(Tim1dl));
 #ifndef CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->lutUnitInf, sizeof(TimLut));
 #endif //CO_CT_IM_IIP_5_1_2_DISABLE_LUT
-	ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)priv->slUnitInf, sizeof(TimSts));
 
 // ### REMOVE_RELEASE BEGIN
 #ifdef CO_PT_ENABLE
 #if 0
-	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
-	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
-	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(Tim1dl));
+	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(TimLut));
+	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(TimSts));
 #endif
 #endif //CO_PT_ENABLE
 // ### REMOVE_RELEASE END
@@ -751,53 +755,53 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 	ercd = Im_IIP_Ctrl_SWTRG_Unit(dstUnitid, &priv->slCfg);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
-	ercd = Im_IIP_Set_Interrupt(waitFactor, D_IM_IIP_ENABLE_ON);
+	ercd = Im_IIP_Set_Interrupt(waitFactor, ImIipDefine_D_IM_IIP_ENABLE_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
-	Im_IIP_On_Pclk();
+	im_iip_struct_on_pclk();
 	CtImIipLut_DDIM_PRINT(("ONED[1]: PADRS=0x%x HWEN=%u\n",
-				(kuint32)IO_IIP.UNITINFTBL_LD1.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_LD1.UNITINFTBL0.bit.HWEN));
+				(kuint32)ioIip.unitinftblLd1.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblLd1.unitinftbl0.bit.hwen));
 	CtImIipLut_DDIM_PRINT(("LUT: PADRS=0x%x HWEN=%u\n",
-				(kuint32)IO_IIP.UNITINFTBL_LUT.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_LUT.UNITINFTBL0.bit.HWEN));
+				(kuint32)ioIip.unitinftblLut.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblLut.unitinftbl0.bit.hwen));
 	CtImIipLut_DDIM_PRINT(("SL[2]: PADRS=0x%x HWEN=%u PLDUNIT=0x%08x%08x\n",
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL2.bit.PADRS,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL0.bit.HWEN,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL1.bit.PLDUNIT_HI,
-				(kuint32)IO_IIP.UNITINFTBL_SL2.UNITINFTBL1.bit.PLDUNIT_LO));
-	Im_IIP_Off_Pclk();
+				(kuint32)ioIip.unitinftblSl2.unitinftbl2.bit.padrs,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl0.bit.hwen,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl1.bit.pldunitHi,
+				(kuint32)ioIip.unitinftblSl2.unitinftbl1.bit.pldunitLo));
+	im_iip_struct_off_pclk();
 
-	Dd_ARM_Dmb_Pou();
+	DD_ARM_DMB_POU();
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start1\n"));
-	ercd = Im_IIP_Start_SWTRG(dstUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(dstUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start2\n"));
-	ercd = Im_IIP_Start_SWTRG(filterUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(filterUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Start3\n"));
-	ercd = Im_IIP_Start_SWTRG(srcUnitid, D_IM_IIP_SWTRG_ON);
+	ercd = Im_IIP_Start_SWTRG(srcUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd));
 
 #if 0
 	for(kuint32 loopcnt = 0; loopcnt < 10; loopcnt++) {
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME " SLALE=%u INTIZ0=0x%lx INTIZ1=0x%lx\n",
-					IO_IIP.IZACTL1.bit.SLALE,
-					IO_IIP.INTIZ0.word,
-					IO_IIP.INTIZ1.word));
+					ioIip.IZACTL1.bit.SLALE,
+					ioIip.INTIZ0.word,
+					ioIip.INTIZ1.word));
 		DDIM_User_Dly_Tsk(1);
 	}
 #endif
 
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "WaitEnd\n"));
-	ercd = Im_IIP_Wait_End(&waitFactorResult, waitFactor, D_IM_IIP_OR_WAIT, 30);
+	ercd = Im_IIP_Wait_End(&waitFactorResult, waitFactor, ImIipDefine_D_IM_IIP_OR_WAIT, 30);
 	CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", ercd, waitFactorResult));
 	if(ercd != D_DDIM_OK) {
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "Stop\n"));
-		ercd = Im_IIP_Stop(D_IM_IIP_ABORT);
+		ercd = im_iip_main_stop(ImIipDefine_D_IM_IIP_ABORT);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", ercd, waitFactorResult));
 	}
 
@@ -805,9 +809,9 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 #ifdef CO_PT_ENABLE
 #if 0
 	// UnitINFダンプ
-	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(T_IM_IIP_PARAM_1DL));
-	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(T_IM_IIP_PARAM_LUT));
-	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(T_IM_IIP_PARAM_STS));
+	Palladium_Set_Out_Localstack((kulong)priv->onedUnitInf, sizeof(Tim1dl));
+	Palladium_Set_Out_Localstack((kulong)priv->lutUnitInf, sizeof(TimLut));
+	Palladium_Set_Out_Localstack((kulong)priv->slUnitInf, sizeof(TimSts));
 #endif
 
 
@@ -817,9 +821,9 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(srcUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF ONED[1] %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -832,9 +836,9 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(filterUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF ONED[1] %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -847,9 +851,9 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 		kuint32 param_bytes;
 		ercd = Im_IIP_Get_UNIT_PARAM(dstUnitid, gCtImIIP_Get_Unit_Param, &param_bytes);
 		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, param_bytes));
-		if(ercd == D_IM_IIP_OK) {
+		if(ercd == ImIipDefine_D_IM_IIP_OK) {
 			CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump UNITINF SL[2] %u\n", param_bytes));
-			ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
+			CtImIip_ct_im_iip_clean_l1l2_dcache_addr((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 			Palladium_Set_Out_Localstack((kulong)gCtImIIP_Get_Unit_Param, param_bytes);
 		}
 	}
@@ -858,12 +862,12 @@ kint32 ct_im_iip_lut_5_1_2(CtImIipLut *self)
 
 #if 0
 #ifndef CO_DEBUG_ON_PC
-	// dump IO_IIP
+	// dump ioIip
 	{
 		kulong regdump_addr = D_IM_IIP_REGDUMP_ADDR;
-		kulong regdump_bytes = sizeof(IO_IIP);
-		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump IO_IIP %u\n", regdump_bytes));
-		memcpy((void*)regdump_addr, (void*)&IO_IIP, regdump_bytes);
+		kulong regdump_bytes = sizeof(ioIip);
+		CtImIipLut_DDIM_PRINT((CtImIipLut_D_IM_IIP_FUNC_NAME "dump ioIip %u\n", regdump_bytes));
+		memcpy((void*)regdump_addr, (void*)&ioIip, regdump_bytes);
 		Palladium_Set_Out_Localstack(regdump_addr, regdump_bytes);
 	}
 #endif //!CO_DEBUG_ON_PC

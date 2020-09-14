@@ -15,7 +15,8 @@
 #include <string.h>
 #include "ctddxdmasnap.h"
 #include "driver_common.h"
-#include "dd_xdmasnap.h"
+// #include "dd_xdmasnap.h"
+#include "../../DeviceDriver/ARM/src/ddxdmasnap.h"
 
 #include "ctddxdmasnap.h"
 #include "ctddxdmasnap1.h"
@@ -44,7 +45,7 @@ struct _CtDdXdmasnapPrivate
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
-static T_DD_XDMASNAP_COMMON			S_GXDMASNAP_COMMON;
+static TDdXdmasnapCommon			S_GXDMASNAP_COMMON;
 
 /*
 DECLS
@@ -82,218 +83,218 @@ static void ctXdmacSnapResultOut(kint32 expect, kint32 ret)
 static void ctXdmaSnapTest( void )
 {	
 	kint32 ret;
-	T_DD_XDMASNAP_CTRL dma_ctrl_trans;
-	T_DD_XDMASNAP_TRNS_SIZE dma_trns_size;
+	TDdXdmasnapCtrl dma_ctrl_trans;
+	DdXdmasnapTrnsSize dma_trns_size;
 	USHORT status;
 	VP_CALLBACK intHandler = 0;
 	
 	printf("<Dd_XDMASNAP>\n");
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Open]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Open(D_DD_XDMASNAP_CH_NUM_MAX, D_DDIM_USER_SEM_WAIT_FEVR);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_open]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_open(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, D_DDIM_USER_SEM_WAIT_FEVR);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("tmout < D_DDIM_USER_SEM_WAIT_FEVR:\n");
-	ret = Dd_XDMASNAP_Open(0, D_DDIM_USER_SEM_WAIT_FEVR - 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_open(0, D_DDIM_USER_SEM_WAIT_FEVR - 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("tmout = D_DDIM_USER_SEM_WAIT_POL, pol_sem = D_DDIM_USER_E_TMOUT:\n");
-	ret = Dd_XDMASNAP_Open(0, D_DDIM_USER_SEM_WAIT_POL);
-	ret = Dd_XDMASNAP_Open(0, D_DDIM_USER_SEM_WAIT_POL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_SEM_TIMEOUT, ret);
+	ret = dd_xdmasnap_open(0, D_DDIM_USER_SEM_WAIT_POL);
+	ret = dd_xdmasnap_open(0, D_DDIM_USER_SEM_WAIT_POL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_SEM_TIMEOUT, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Close]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Close(D_DD_XDMASNAP_CH_NUM_MAX);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_close]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_close(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Ctrl_Common]\n");
+	printf("[dd_xdmasnap_ctrl_common]\n");
 	printf("dma_common is NULL:\n");
-	ret = Dd_XDMASNAP_Ctrl_Common(NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_ctrl_common(NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Ctrl_Trns]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Ctrl_Trns(D_DD_XDMASNAP_CH_NUM_MAX, NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_ctrl_trns]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_ctrl_trns(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dma_ctrl_trans is NULL:\n");
-	ret = Dd_XDMASNAP_Ctrl_Trns(0, NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_ctrl_trns(0, NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dma_ctrl_trans->trns_size = 0:\n");
 	dma_ctrl_trans.trns_size = 0;
-	ret = Dd_XDMASNAP_Ctrl_Trns(0, &dma_ctrl_trans);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_ctrl_trns(0, &dma_ctrl_trans);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_Trns_Size]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Set_Trns_Size(D_DD_XDMASNAP_CH_NUM_MAX, NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_set_trns_size]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_set_trns_size(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dma_trns_size is NULL:\n");
-	ret = Dd_XDMASNAP_Set_Trns_Size(0, NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_set_trns_size(0, NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dma_trns_size->trns_size = 0:\n");
 	dma_trns_size.trns_size = 0;
-	ret = Dd_XDMASNAP_Set_Trns_Size(0, &dma_trns_size);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_set_trns_size(0, &dma_trns_size);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Start_Sync]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Start_Sync(D_DD_XDMASNAP_CH_NUM_MAX, NULL, D_DD_XDMASNAP_WAITMODE_CPU);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("[Dd_XDMASNAP_Start_Sync]\n");
+	printf("[dd_xdmasnap_start_sync]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_start_sync(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, NULL, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_start_sync]\n");
 	printf("status is NULL:\n");
-	ret = Dd_XDMASNAP_Start_Sync(0, NULL, D_DD_XDMASNAP_WAITMODE_CPU);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMASNAP_WAITMODE_CPU, D_DD_XDMASNAP_WAITMODE_EVENT):\n");
-	ret = Dd_XDMASNAP_Start_Sync(0, &status, D_DD_XDMASNAP_WAITMODE_EVENT + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("wait_mode = D_DD_XDMASNAP_WAITMODE_EVENT, twai_flg <> D_DDIM_USER_E_TMOUT:\n");
-	ret = Dd_XDMASNAP_Start_Sync(0, &status, D_DD_XDMASNAP_WAITMODE_EVENT);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_SYSTEM_ERR, ret);
+	ret = dd_xdmasnap_start_sync(0, NULL, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT):\n");
+	ret = dd_xdmasnap_start_sync(0, &status, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("wait_mode = DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT, twai_flg <> D_DDIM_USER_E_TMOUT:\n");
+	ret = dd_xdmasnap_start_sync(0, &status, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_SYSTEM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Start_Async]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Start_Async(D_DD_XDMASNAP_CH_NUM_MAX);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_start_async]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_start_async(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Stop]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Stop(D_DD_XDMASNAP_CH_NUM_MAX);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_stop]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_stop(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_Wait_Time]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Set_Wait_Time(D_DD_XDMASNAP_CH_NUM_MAX, D_DDIM_WAIT_END_FOREVER);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_set_wait_time]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_set_wait_time(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, D_DDIM_WAIT_END_FOREVER);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("waitTime < D_DDIM_WAIT_END_FOREVER:\n");
-	ret = Dd_XDMASNAP_Set_Wait_Time(0, D_DDIM_WAIT_END_FOREVER - 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_set_wait_time(0, D_DDIM_WAIT_END_FOREVER - 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Wait_End]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Wait_End(D_DD_XDMASNAP_CH_NUM_MAX, &status, D_DD_XDMASNAP_WAITMODE_CPU);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_wait_end]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_wait_end(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, &status, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("status is NULL:\n");
-	ret = Dd_XDMASNAP_Wait_End(0, NULL, D_DD_XDMASNAP_WAITMODE_CPU);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMASNAP_WAITMODE_CPU, D_DD_XDMASNAP_WAITMODE_EVENT):\n");
-	ret = Dd_XDMASNAP_Wait_End(0, &status, D_DD_XDMASNAP_WAITMODE_EVENT + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_wait_end(0, NULL, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT):\n");
+	ret = dd_xdmasnap_wait_end(0, &status, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Clear_Status]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Clear_Status(D_DD_XDMASNAP_CH_NUM_MAX);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_clear_status]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_clear_status(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Get_Status]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Get_Status(D_DD_XDMASNAP_CH_NUM_MAX, &status, &status, &status);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_get_status]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_get_status(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, &status, &status, &status);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("xdmac_status is NULL:\n");
-	ret = Dd_XDMASNAP_Get_Status(0, NULL, &status, &status);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_get_status(0, NULL, &status, &status);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("transfer_status is NULL:\n");
-	ret = Dd_XDMASNAP_Get_Status(0, &status, NULL, &status);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_get_status(0, &status, NULL, &status);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("interrupt_status is NULL:\n");
-	ret = Dd_XDMASNAP_Get_Status(0, &status, &status, NULL);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_get_status(0, &status, &status, NULL);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Get_Trns_Size]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Get_Trns_Size(D_DD_XDMASNAP_CH_NUM_MAX);
+	printf("[dd_xdmasnap_get_trns_size]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_get_trns_size(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
 	ctXdmacSnapResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Get_Src_Addr]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Get_Src_Addr(D_DD_XDMASNAP_CH_NUM_MAX);
+	printf("[dd_xdmasnap_get_src_addr]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_get_src_addr(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
 	ctXdmacSnapResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Get_Dst_Addr]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Get_Dst_Addr(D_DD_XDMASNAP_CH_NUM_MAX);
+	printf("[dd_xdmasnap_get_dst_addr]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_get_dst_addr(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
 	ctXdmacSnapResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_LowPower]\n");
-	printf("lowpower > D_DD_XDMASNAP_XDACS_LP_ENABLE:\n");
-	ret = Dd_XDMASNAP_Set_LowPower(D_DD_XDMASNAP_XDACS_LP_ENABLE + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_set_low_power]\n");
+	printf("lowpower > DdXdmasnap_D_DD_XDMASNAP_XDACS_LP_ENABLE:\n");
+	ret = dd_xdmasnap_set_low_power(DdXdmasnap_D_DD_XDMASNAP_XDACS_LP_ENABLE + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_Source_Protect]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Set_Source_Protect(D_DD_XDMASNAP_CH_NUM_MAX, D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("protect_code > D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE:\n");
-	ret = Dd_XDMASNAP_Set_Source_Protect(0, D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_set_source_protect]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_set_source_protect(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, DdXdmasnap_D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("protect_code > DdXdmasnap_D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE:\n");
+	ret = dd_xdmasnap_set_source_protect(0, DdXdmasnap_D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_Destination_Protect]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Set_Destination_Protect(D_DD_XDMASNAP_CH_NUM_MAX, D_DD_XDMASNAP_XDDPC_DP_PRIVILEGED_SECURE);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("protect_code > D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE:\n");
-	ret = Dd_XDMASNAP_Set_Destination_Protect(0, D_DD_XDMASNAP_XDDPC_DP_PRIVILEGED_SECURE + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_set_destination_protect]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_set_destination_protect(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, DdXdmasnap_D_DD_XDMASNAP_XDDPC_DP_PRIVILEGED_SECURE);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("protect_code > DdXdmasnap_D_DD_XDMASNAP_XDDPC_SP_PRIVILEGED_SECURE:\n");
+	ret = dd_xdmasnap_set_destination_protect(0, DdXdmasnap_D_DD_XDMASNAP_XDDPC_DP_PRIVILEGED_SECURE + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Set_Int_Handler]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	Dd_XDMASNAP_Set_Int_Handler(D_DD_XDMASNAP_CH_NUM_MAX, NULL);
+	printf("[dd_xdmasnap_set_int_handler]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	dd_xdmasnap_set_int_handler(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, NULL);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Int_Handler]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	Dd_XDMASNAP_Int_Handler(D_DD_XDMASNAP_CH_NUM_MAX);
+	printf("[dd_xdmasnap_int_handler]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	dd_xdmasnap_int_handler(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Copy_SDRAM_Sync]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Sync(D_DD_XDMASNAP_CH_NUM_MAX, 1, 1, 1, D_DD_XDMASNAP_WAITMODE_EVENT);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_copy_sdram_sync]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_copy_sdram_sync(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, 1, 1, 1, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("src_addr = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Sync(0, 0, 1, 1, D_DD_XDMASNAP_WAITMODE_EVENT);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_sync(0, 0, 1, 1, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dst_addr = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Sync(1, 1, 0, 1, D_DD_XDMASNAP_WAITMODE_EVENT);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_sync(1, 1, 0, 1, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("size = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Sync(2, 1, 1, 0, D_DD_XDMASNAP_WAITMODE_EVENT);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMASNAP_WAITMODE_CPU, D_DD_XDMASNAP_WAITMODE_EVENT):\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Sync(3, 1, 1, 1, D_DD_XDMASNAP_WAITMODE_EVENT + 1);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_sync(2, 1, 1, 0, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmasnap_D_DD_XDMASNAP_WAITMODE_CPU, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT):\n");
+	ret = dd_xdmasnap_copy_sdram_sync(3, 1, 1, 1, DdXdmasnap_D_DD_XDMASNAP_WAITMODE_EVENT + 1);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMASNAP_Copy_SDRAM_Async]\n");
-	printf("ch >= D_DD_XDMASNAP_CH_NUM_MAX:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Async(D_DD_XDMASNAP_CH_NUM_MAX, 1, 1, 1, intHandler);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmasnap_copy_sdram_async]\n");
+	printf("ch >= DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX:\n");
+	ret = dd_xdmasnap_copy_sdram_async(DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX, 1, 1, 1, intHandler);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("src_addr = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Async(0, 0, 1, 1, intHandler);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_async(0, 0, 1, 1, intHandler);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("dst_addr = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Async(1, 1, 0, 1, intHandler);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_async(1, 1, 0, 1, intHandler);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("size = 0:\n");
-	ret = Dd_XDMASNAP_Copy_SDRAM_Async(2, 1, 1, 0, intHandler);
-	ctXdmacSnapResultOut(D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmasnap_copy_sdram_async(2, 1, 1, 0, intHandler);
+	ctXdmacSnapResultOut(DdXdmasnap_D_DD_XDMASNAP_INPUT_PARAM_ERR, ret);
 	printf("\n");
 }	
 
@@ -345,15 +346,15 @@ void ct_dd_xdmasnap_callback_cb(void)
  *
  * @return void
  */
-void ct_dd_xdmasnap_main(int argc, char** argv)
+void ct_dd_xdmasnap_main(CtDdXdmasnap* self,int argc, char** argv)
 {
 	// kint32				ret;
 	// kuchar				ch;
 	// kuchar				num;
 	// kint32				waitTime;
 	
-	CtDdXdmasnap* self = ct_dd_xdmasnap_new();
-	CtDdXdmasnapPrivate *priv = CT_DD_XDMASNAP_GET_PRIVATE(self);
+	CtDdXdmasnap* ctDdXdmasnap = ct_dd_xdmasnap_new();
+	CtDdXdmasnapPrivate *priv = CT_DD_XDMASNAP_GET_PRIVATE(ctDdXdmasnap);
 
 	// check number of parameter
 	if (argc > 12) {
@@ -366,7 +367,7 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 		priv->ch = atoi(argv[2]);
 		priv->waitTime = atoi(argv[3]);
 		
-		priv->ret = Dd_XDMASNAP_Open(priv->ch, priv->waitTime);
+		priv->ret = dd_xdmasnap_open(priv->ch, priv->waitTime);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMASNAP Open OK\n"));
 		}
@@ -378,7 +379,7 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 		/* ch number */
 		priv->ch = atoi(argv[2]);
 		
-		priv->ret = Dd_XDMASNAP_Close(priv->ch);
+		priv->ret = dd_xdmasnap_close(priv->ch);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMASNAP Close OK\n"));
 		}
@@ -389,10 +390,10 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 	else if (strcmp(argv[1], "ctrl_cmm") == 0) {
 		// Set XE
 		if (strcmp(argv[2], "0") == 0) {
-			S_GXDMASNAP_COMMON.common_config.bit.XE = D_DD_XDMASNAP_XDACS_XE_DISABLE;
+			S_GXDMASNAP_COMMON.common_config.bit.XE = DdXdmasnap_D_DD_XDMASNAP_XDACS_XE_DISABLE;
 		}
 		else if (strcmp(argv[2], "1") == 0) {
-			S_GXDMASNAP_COMMON.common_config.bit.XE = D_DD_XDMASNAP_XDACS_XE_ENABLE;
+			S_GXDMASNAP_COMMON.common_config.bit.XE = DdXdmasnap_D_DD_XDMASNAP_XDACS_XE_ENABLE;
 		}
 		else {
 			Ddim_Print(("Parameter ERR. P3 \n"));
@@ -401,17 +402,17 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 		
 		// Set CP
 		if (strcmp(argv[3], "0") == 0) {
-			S_GXDMASNAP_COMMON.common_config.bit.CP = D_DD_XDMASNAP_XDACS_CP_FIXED;
+			S_GXDMASNAP_COMMON.common_config.bit.CP = DdXdmasnap_D_DD_XDMASNAP_XDACS_CP_FIXED;
 		}
 		else if (strcmp(argv[3], "1") == 0) {
-			S_GXDMASNAP_COMMON.common_config.bit.CP = D_DD_XDMASNAP_XDACS_CP_ROTATED;
+			S_GXDMASNAP_COMMON.common_config.bit.CP = DdXdmasnap_D_DD_XDMASNAP_XDACS_CP_ROTATED;
 		}
 		else {
 			Ddim_Print(("Parameter ERR. P4 \n"));
 			return;
 		}
 		
-		priv->ret = Dd_XDMASNAP_Ctrl_Common(&S_GXDMASNAP_COMMON);
+		priv->ret = dd_xdmasnap_ctrl_common(&S_GXDMASNAP_COMMON);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMASNAP Ctrl_Common OK\n"));
 		}
@@ -423,17 +424,17 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 		/* ch number */
 		priv->ch = atoi(argv[2]);
 		
-		Dd_XDMASNAP_Set_Int_Handler(priv->ch, ct_dd_xdmasnap_callback_cb);
+		dd_xdmasnap_set_int_handler(priv->ch, ct_dd_xdmasnap_callback_cb);
 	}
 	else if (strcmp(argv[1], "auto") == 0) {
 		/* ch number */
 		priv->num = atoi(argv[2]);
 		
-		CtDdXdmasnap1* ctddxdmasnap1 = ct_dd_xdmasnap1_new();
-		ct_dd_xdmasnap1_set_ctddxdmasnap(ctddxdmasnap1,self);
+		CtDdXdmasnap1* ctDdXdmasnap1 = ct_dd_xdmasnap1_new();
+		ct_dd_xdmasnap1_set_ctddxdmasnap(ctDdXdmasnap1,ctDdXdmasnap);
 
-		priv->ret = ct_dd_xdmasnap1_process(ctddxdmasnap1);
-		k_object_unref(ctddxdmasnap1);
+		priv->ret = ct_dd_xdmasnap1_process(ctDdXdmasnap1);
+		k_object_unref(ctDdXdmasnap1);
 		if (priv->ret == 0) {
 			Ddim_Print(("ct_dd_xdmasnap1_process OK\n"));
 		}
@@ -442,8 +443,8 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 		}
 	}
 	else if (strcmp(argv[1], "prm_chk") == 0) {
-		T_DD_XDMASNAP_CTRL    dma_ctrl_trns;
-		T_DD_XDMASNAP_TRNS_SIZE dma_trns_size;
+		TDdXdmasnapCtrl    dma_ctrl_trns;
+		DdXdmasnapTrnsSize dma_trns_size;
 		
 		if(strcmp(argv[2], "0") == 0){
 			dma_ctrl_trns.trns_size       = 0;
@@ -451,9 +452,9 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 			dma_ctrl_trns.dst_addr        = 0;
 			dma_ctrl_trns.int_handler     = NULL;
 			
-			priv->ret = Dd_XDMASNAP_Ctrl_Trns(0, &dma_ctrl_trns);
+			priv->ret = dd_xdmasnap_ctrl_trns(0, &dma_ctrl_trns);
 			if(priv->ret != D_DDIM_OK){
-				Ddim_Print(("Dd_XDMASNAP_Ctrl_Trns ERR : priv->ret=0x%x\n", priv->ret));
+				Ddim_Print(("dd_xdmasnap_ctrl_trns ERR : priv->ret=0x%x\n", priv->ret));
 			}
 		}
 		else if(strcmp(argv[2], "1") == 0){
@@ -461,9 +462,9 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 			dma_trns_size.src_addr        = 0;
 			dma_trns_size.dst_addr        = 0;
 			
-			priv->ret = Dd_XDMASNAP_Set_Trns_Size(0,&dma_trns_size);
+			priv->ret = dd_xdmasnap_set_trns_size(0,&dma_trns_size);
 			if(priv->ret != D_DDIM_OK){
-				Ddim_Print(("Dd_XDMASNAP_Set_Trns_Size ERR : priv->ret=0x%x\n", priv->ret));
+				Ddim_Print(("dd_xdmasnap_set_trns_size ERR : priv->ret=0x%x\n", priv->ret));
 			}
 		}
 		else{
@@ -476,7 +477,7 @@ void ct_dd_xdmasnap_main(int argc, char** argv)
 	else {
 		Ddim_Print(("please check 1st parameter!!\n"));
 	}
-	k_object_unref(self);
+	k_object_unref(ctDdXdmasnap);
 	return;
 }
 

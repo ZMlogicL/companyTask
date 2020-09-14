@@ -12,16 +12,20 @@
 *
 */
 
-#include "ct_im_b2r.h"
+#include "ctimb2r.h"
 
-#include "im_b2r.h"
+// #include "im_b2r.h"
+#include "../../ImageMacro/src/imb2r.h"
 #include "im_pro.h"
-#include "im_pro_common.h"
+// #include "im_pro_common.h"
+#include "../../ImageMacro/src/improcommon.h"
 
 #include "driver_common.h"
-#include "ddim_user_custom.h"
+// #include "ddim_user_custom.h"
+#include "../../../../milb_api_usercustom/src/ddimusercustom.h"
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #endif
 
 #include "jdsb2r.h"
@@ -41,8 +45,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImB2r4, ct_im_b2r4);
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
-#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (D_IM_B2R_PIPE1+1))
-#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (D_IM_B2R_PIPE2+1))
+#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE1+1))
+#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE2+1))
 
 
 struct _CtImB2r4Private
@@ -89,28 +93,28 @@ kint32 ct_im_b2r4_1_38( CtImB2r4 *self )
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
 #ifdef CO_MSG_PRINT_ON
-	Im_B2R_Init( D_IM_B2R_PIPE12 );
+	Im_B2R_Init( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( "Initial value\n" ));
-	Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.word                = 0x%lx\n", IO_B2R_P1.B2R_CMN.RAMAEN.word ));
 	Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE = %u\n",    IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE ));
 	Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.word                = 0x%lx\n", IO_B2R_P2.B2R_CMN.RAMAEN.word ));
 	Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE = %u\n",    IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE ));
-	Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 
 	for( loopcnt = 0; loopcnt < (sizeof(access_enable) / sizeof(access_enable[0])); loopcnt++ ) {
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, access_enable[loopcnt], D_IM_B2R_WAIT_ON );
+		ercd = Im_B2R_Set_RGB_KneeAccessEnable( self->pipeNo, access_enable[loopcnt], ImB2r_D_IM_B2R_WAIT_ON );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.word                = 0x%lx\n", IO_B2R_P1.B2R_CMN.RAMAEN.word ));
 		Ddim_Print(( "IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE = %u\n",    IO_B2R_P1.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE ));
 		Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.word                = 0x%lx\n", IO_B2R_P2.B2R_CMN.RAMAEN.word ));
 		Ddim_Print(( "IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE = %u\n",    IO_B2R_P2.B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -162,7 +166,7 @@ kint32 ct_im_b2r4_1_39( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Set_Offset( self->pipeNo, &ofs[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( "IO_B2R_P1.F_B2R.OFSTRB.word       = 0x%lx\n", IO_B2R_P1.F_B2R.OFG.OFSTRB.word ));
 		Ddim_Print(( "IO_B2R_P1.F_B2R.OFSTRB.bit.OFSTRR = 0x%x\n",  IO_B2R_P1.F_B2R.OFG.OFSTRB.bit.OFSTRR ));
 		Ddim_Print(( "IO_B2R_P1.F_B2R.OFSTRB.bit.OFSTBB = 0x%x\n",  IO_B2R_P1.F_B2R.OFG.OFSTRB.bit.OFSTBB ));
@@ -175,7 +179,7 @@ kint32 ct_im_b2r4_1_39( CtImB2r4 *self )
 		Ddim_Print(( "IO_B2R_P2.F_B2R.OFSTG.word        = 0x%lx\n", IO_B2R_P2.F_B2R.OFG.OFSTG.word ));
 		Ddim_Print(( "IO_B2R_P2.F_B2R.OFSTG.bit.OFSTGR  = 0x%x\n",  IO_B2R_P2.F_B2R.OFG.OFSTG.bit.OFSTGR ));
 		Ddim_Print(( "IO_B2R_P2.F_B2R.OFSTG.bit.OFSTGB  = 0x%x\n",  IO_B2R_P2.F_B2R.OFG.OFSTG.bit.OFSTGB ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -192,8 +196,8 @@ kint32 ct_im_b2r4_1_40( CtImB2r4 *self )
 		[1] = 0,	// min
 	};
 	UCHAR saturation_mode[] = {
-		[0] = D_IM_B2R_ENABLE_ON,
-		[1] = D_IM_B2R_ENABLE_OFF,
+		[0] = ImB2r_D_IM_B2R_ENABLE_ON,
+		[1] = ImB2r_D_IM_B2R_ENABLE_OFF,
 	};
 	kuint32 loopcnt;
 #ifdef CO_MSG_PRINT_ON
@@ -209,12 +213,12 @@ kint32 ct_im_b2r4_1_40( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Ctrl_Left_Shift( self->pipeNo, bayer_left_shift[loopcnt], saturation_mode[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.BLSFT.bit.BLSFT  = %u\n", IO_B2R_P1.F_B2R.OFG.BLSFT.bit.BLSFT ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.BLSFT.bit.BLSFT  = %u\n", IO_B2R_P2.F_B2R.OFG.BLSFT.bit.BLSFT ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.BLSFT.bit.BLSFMD = %u\n", IO_B2R_P1.F_B2R.OFG.BLSFT.bit.BLSFMD ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.BLSFT.bit.BLSFMD = %u\n", IO_B2R_P2.F_B2R.OFG.BLSFT.bit.BLSFMD ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -260,7 +264,7 @@ kint32 ct_im_b2r4_1_41( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Set_WB_Gain( self->pipeNo, &b2r_bay_color[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBGARB.bit.WBGARR = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBGARB.bit.WBGARR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBGARB.bit.WBGABB = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBGARB.bit.WBGABB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBGAGR.bit.WBGAGR = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBGAGR.bit.WBGAGR ));
@@ -269,7 +273,7 @@ kint32 ct_im_b2r4_1_41( CtImB2r4 *self )
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBGARB.bit.WBGABB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBGARB.bit.WBGABB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBGAGR.bit.WBGAGR = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBGAGR.bit.WBGAGR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBGAGR.bit.WBGAGB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBGAGR.bit.WBGAGB ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -315,7 +319,7 @@ kint32 ct_im_b2r4_1_42( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Set_WB_Slope_Gain( self->pipeNo, (loopcnt & 1), &b2r_bay_color[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBHCTL.bit.WBHCEN = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBHCTL.bit.WBHCEN ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBSLP.bit.WBSLPRR = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBSLP.bit.WBSLPRR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBSLP.bit.WBSLPBB = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBSLP.bit.WBSLPBB ));
@@ -326,7 +330,7 @@ kint32 ct_im_b2r4_1_42( CtImB2r4 *self )
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPBB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPBB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPGR = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPGR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPGB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBSLP.bit.WBSLPGB ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -372,7 +376,7 @@ kint32 ct_im_b2r4_1_43( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Set_WB_Clip_Level( self->pipeNo, &b2r_bay_color[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBLVRB.bit.WBLVRR = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBLVRB.bit.WBLVRR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBLVRB.bit.WBLVBB = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBLVRB.bit.WBLVBB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.OFG.WBLVGR.bit.WBLVGR = 0x%x\n", IO_B2R_P1.F_B2R.OFG.WBLVGR.bit.WBLVGR ));
@@ -381,7 +385,7 @@ kint32 ct_im_b2r4_1_43( CtImB2r4 *self )
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBLVRB.bit.WBLVBB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBLVRB.bit.WBLVBB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBLVGR.bit.WBLVGR = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBLVGR.bit.WBLVGR ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.OFG.WBLVGR.bit.WBLVGB = 0x%x\n", IO_B2R_P2.F_B2R.OFG.WBLVGR.bit.WBLVGB ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -446,7 +450,7 @@ kint32 ct_im_b2r4_1_44( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Ctrl_Sensitivity( self->pipeNo, &b2r_ctrl_adip[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPA      = 0x%x\n", IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPA ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPB      = 0x%x\n", IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPB ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPC      = 0x%x\n", IO_B2R_P1.F_B2R.CIA.SHARP.bit.SHARPC ));
@@ -467,7 +471,7 @@ kint32 ct_im_b2r4_1_44( CtImB2r4 *self )
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.CIA.CMC.bit.CMCSCL        = 0x%x\n", IO_B2R_P2.F_B2R.CIA.CMC.bit.CMCSCL ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.CIA.CMC.bit.CMCLMT        = 0x%x\n", IO_B2R_P2.F_B2R.CIA.CMC.bit.CMCLMT ));
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "IO_B2R_P2.F_B2R.CIA.DIRRLITH.bit.DIRRLITH = 0x%x\n", IO_B2R_P2.F_B2R.CIA.DIRRLITH.bit.DIRRLITH ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 
@@ -773,7 +777,7 @@ kint32 ct_im_b2r4_1_45( CtImB2r4 *self )
 #ifdef CO_MSG_PRINT_ON
 		ercd = Im_B2R_Ctrl_HighPassFilter( self->pipeNo, &b2r_ctrl_hpf[loopcnt] );
 		Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
-		Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 		Ddim_Print(( "IO_B2R_P1.HFEEN          = 0x%x\n",    IO_B2R_P1.F_B2R.HFA.HFACTL.bit.HFEEN ));
 		Ddim_Print(( "IO_B2R_P1.HFAFEN         = 0x%x\n",    IO_B2R_P1.F_B2R.HFA.HFACTL.bit.HFAFEN ));
 		Ddim_Print(( "IO_B2R_P1.HFAYEN         = 0x%x\n",    IO_B2R_P1.F_B2R.HFA.HFACTL.bit.HFAYEN ));
@@ -970,7 +974,7 @@ kint32 ct_im_b2r4_1_45( CtImB2r4 *self )
 		Ddim_Print(( "IO_B2R_P2.HFAYBSCLBD_1   = 0x%x\n",    IO_B2R_P2.F_B2R.HFA.HFAYBSCLBD.bit.HFAYBSCLBD_1 ));
 		Ddim_Print(( "IO_B2R_P2.HFAYBSCLCLPL   = 0x%x\n",    IO_B2R_P2.F_B2R.HFA.HFAYBSCLCLP.bit.HFAYBSCLCLPL ));
 		Ddim_Print(( "IO_B2R_P2.HFAYBSCLCLPH   = 0x%x\n",    IO_B2R_P2.F_B2R.HFA.HFAYBSCLCLP.bit.HFAYBSCLCLPH ));
-		Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+		Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 #endif
 	}
 

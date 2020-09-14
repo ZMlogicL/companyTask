@@ -36,14 +36,14 @@ ImR2yUtility3*		        im_r2y_utility3_new(void);
 
 /**
 Get the top address of the address array of Gamma Table(Diff).
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		tbl_index				: Selection of setting table<br>
 										  0 : RGB common / 1 : R / 2 : G / 3 : B / 4 : Yb
 @param[out]		addr					: Top address of the address array of Gamma Table(Diff).
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility3_get_rdma_addr_gmdf_table(ImR2yUtility3 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR** addr );
+INT32 im_r2y_utility3_get_rdma_addr_gmdf_table(ImR2yUtility3 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaGmdfTblAddr** addr );
 
 
 #endif /* __IM_R2Y_UTILITY3_H__ */

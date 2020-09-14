@@ -148,8 +148,8 @@ static volatile UCHAR				S_G_IM_ME_PCLK_COUNTER		= 0;
 #endif
 
 static volatile ULONG				S_G_IM_ME_AXI_ERR			= ImMe_D_IM_ME_AXI_NORMAL_END;
-static volatile T_IM_ME_CALLBACK	S_G_IM_ME_CALL_BACK_FUNC	= NULL;
-static volatile T_IM_ME_CTRL		S_G_IM_ME_CTRL;
+static volatile ImMeCallback	S_G_IM_ME_CALL_BACK_FUNC	= NULL;
+static volatile ImMeCtrl		S_G_IM_ME_CTRL;
 static volatile UCHAR				S_G_IM_ME_INT_CNT			= 0;
 static volatile ULONG				S_G_IM_ME_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64)));
 
@@ -242,7 +242,7 @@ INT32 Im_ME_Init( VOID )
 
 	S_G_IM_ME_INT_CNT = 0;
 
-	memset( (VOID*)&S_G_IM_ME_CTRL, 0, sizeof(T_IM_ME_CTRL) );
+	memset( (VOID*)&S_G_IM_ME_CTRL, 0, sizeof(ImMeCtrl) );
 
 	// Software reset (APBBRG).
 	IO_ME.SRESET.bit.CMDR	= ImMe_D_IM_ME_SR_RESET;
@@ -252,7 +252,7 @@ INT32 Im_ME_Init( VOID )
 
 	ImMe_IM_ME_DSB();
 
-	for ( int i = 0; i < E_IM_ME_PPNUM_MAX; i++ ) {
+	for ( int i = 0; i < ImMe_E_IM_ME_PPNUM_MAX; i++ ) {
 
 		// Software reset (PTCONT/PABT).
 		IO_ME.PME[ i ].CR.bit.CMDR				= ImMe_D_IM_ME_SR_RESET;
@@ -379,96 +379,96 @@ INT32 Im_ME_Close( VOID )
 
 /**
 ME control parameters set.<br>
-@param[in]		me_ctrl							ME control parameters. See @ref T_IM_ME_CTRL.<br>
+@param[in]		me_ctrl							ME control parameters. See @ref ImMeCtrl.<br>
 @retval			D_DDIM_OK						Success.
 @retval			ImMe_D_IM_ME_INPUT_PARAM_ERROR		Parameter error.
 */
-INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
+INT32 Im_ME_Ctrl( const ImMeCtrl* const me_ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if ( me_ctrl == NULL ) {
 		Ddim_Assertion(("Im_ME_Ctrl() error. me_ctrl = NULL.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( me_ctrl->apbbrg.int_mode > ImMe_D_IM_ME_INTMODE_LOGICAL_OR ) {
+	if ( me_ctrl->apbbrg.intMode > ImMe_D_IM_ME_INTMODE_LOGICAL_OR ) {
 		Ddim_Assertion(("Im_ME_Ctrl() error. int_mod is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	for ( int i = 0; i < E_IM_ME_PPNUM_MAX; i++ ) {
-		if ( me_ctrl->apbbrg.pp_enable[ i ] > ImMe_D_IM_ME_ENABLE ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. pp_enable[ %d ] is invalid.\n", i));
+	for ( int i = 0; i < ImMe_E_IM_ME_PPNUM_MAX; i++ ) {
+		if ( me_ctrl->apbbrg.ppEnable[ i ] > ImMe_D_IM_ME_ENABLE ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. ppEnable[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].input_mode > ImMe_D_IM_ME_INPUTMODE_PROGRESSIVE ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. input_mode[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].inputMode > ImMe_D_IM_ME_INPUTMODE_PROGRESSIVE ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. inputMode[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].ref_txb > ImMe_D_IM_ME_REFTXB_BOTTOM ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. ref_txb[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].refTxb > ImMe_D_IM_ME_REFTXB_BOTTOM ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. refTxb[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].out_limit > ImMe_D_IM_ME_OUTLIMIT_TOP ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. out_limit[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].outLimit > ImMe_D_IM_ME_OUTLIMIT_TOP ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. outLimit[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( ( me_ctrl->pme[ i ].bank_num == 0 ) ||
-			 ( me_ctrl->pme[ i ].bank_num > ImMe_D_IM_ME_BANKNUM_4 ) ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. bank_num[ %d ] is invalid.\n", i));
+		if ( ( me_ctrl->pme[ i ].bankNum == 0 ) ||
+			 ( me_ctrl->pme[ i ].bankNum > ImMe_D_IM_ME_BANKNUM_4 ) ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. bankNum[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		for ( int j = 0; j < E_IM_ME_BANKNUM_MAX; j++ ) {
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].direction > ImMe_D_IM_ME_M1ORG_DIR_BWD ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].direction is invalid.\n", i, j));
+		for ( int j = 0; j < ImMe_E_IM_ME_BANKNUM_MAX; j++ ) {
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].direction > ImMe_D_IM_ME_M1ORG_DIR_BWD ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].direction is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].parity > ImMe_D_IM_ME_M1ORG_PARI_BOTTOM ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].parity is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].parity > ImMe_D_IM_ME_M1ORG_PARI_BOTTOM ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].parity is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].read_mode > ImMe_D_IM_ME_M1ORG_READ_SDRAM ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].read_mode is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].readMode > ImMe_D_IM_ME_M1ORG_READ_SDRAM ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].readMode is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].sad0_mode > ImMe_D_IM_ME_M1ORG_SAD_MIN1 ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].sad0_mode is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].sad0Mode > ImMe_D_IM_ME_M1ORG_SAD_MIN1 ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].sad0Mode is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].sad1_mode > ImMe_D_IM_ME_M1ORG_SAD_MIN1 ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].sad1_mode is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].sad1Mode > ImMe_D_IM_ME_M1ORG_SAD_MIN1 ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].sad1Mode is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].vec_mode > ImMe_D_IM_ME_M1ORG_VECM_WRITE1 ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].vec_mode is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].vecMode > ImMe_D_IM_ME_M1ORG_VECM_WRITE1 ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].vecMode is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( ( me_ctrl->pme[ i ].m1org_mode[ j ].vec_select != ImMe_D_IM_ME_M1ORG_VECS_SAVE  ) &&
-				 ( me_ctrl->pme[ i ].m1org_mode[ j ].vec_select != ImMe_D_IM_ME_M1ORG_VECS_COPY0 ) &&
-				 ( me_ctrl->pme[ i ].m1org_mode[ j ].vec_select != ImMe_D_IM_ME_M1ORG_VECS_COPY1 ) ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].vec_select is invalid.\n", i, j));
+			if ( ( me_ctrl->pme[ i ].m1orgMode[ j ].vecSelect != ImMe_D_IM_ME_M1ORG_VECS_SAVE  ) &&
+				 ( me_ctrl->pme[ i ].m1orgMode[ j ].vecSelect != ImMe_D_IM_ME_M1ORG_VECS_COPY0 ) &&
+				 ( me_ctrl->pme[ i ].m1orgMode[ j ].vecSelect != ImMe_D_IM_ME_M1ORG_VECS_COPY1 ) ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].vecSelect is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
-			if ( me_ctrl->pme[ i ].m1org_mode[ j ].pic_type > ImMe_D_IM_ME_M1ORG_PICT_I ) {
-				Ddim_Assertion(("Im_ME_Ctrl() error. m1org_mode[ %d ][ %d ].pic_type is invalid.\n", i, j));
+			if ( me_ctrl->pme[ i ].m1orgMode[ j ].picType > ImMe_D_IM_ME_M1ORG_PICT_I ) {
+				Ddim_Assertion(("Im_ME_Ctrl() error. m1orgMode[ %d ][ %d ].picType is invalid.\n", i, j));
 				return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 			}
 		}
-		if ( me_ctrl->pme[ i ].m1correct.front_ky > D_IM_ME_M1CRCT_KY_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.front_ky[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1correct.frontKy > ImMe_D_IM_ME_M1CRCT_KY_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.frontKy[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1correct.back_ky > D_IM_ME_M1CRCT_KY_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.back_ky[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1correct.backKy > ImMe_D_IM_ME_M1CRCT_KY_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.backKy[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1correct.front_kx > D_IM_ME_M1CRCT_KX_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.front_kx[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1correct.frontKx > ImMe_D_IM_ME_M1CRCT_KX_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.frontKx[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1correct.back_kx > D_IM_ME_M1CRCT_KX_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.back_kx[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1correct.backKx > ImMe_D_IM_ME_M1CRCT_KX_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1correct.backKx[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1splt.mode > D_IM_ME_SPLITMODE_VERTICAL ) {
+		if ( me_ctrl->pme[ i ].m1splt.mode > ImMe_D_IM_ME_SPLITMODE_VERTICAL ) {
 			Ddim_Assertion(("Im_ME_Ctrl() error. m1splt.mode[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
@@ -476,41 +476,41 @@ INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
 			Ddim_Assertion(("Im_ME_Ctrl() error. m1skip[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1adjust.wait_onoff > ImMe_D_IM_ME_ON ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1adjust.wait_onoff[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1adjust.waitOnoff > ImMe_D_IM_ME_ON ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1adjust.waitOnoff[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1pause.pause_onoff > ImMe_D_IM_ME_ON ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1pause.pause_onoff[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1pause.pauseOnoff > ImMe_D_IM_ME_ON ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1pause.pauseOnoff[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1limit.v_plus > D_IM_ME_VEC_LIMITV_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.v_plus[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1limit.vPlus > ImMe_D_IM_ME_VEC_LIMITV_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.vPlus[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1limit.v_minus > D_IM_ME_VEC_LIMITV_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.v_minus[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1limit.vMinus > ImMe_D_IM_ME_VEC_LIMITV_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.vMinus[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1limit.h_plus > D_IM_ME_VEC_LIMITH_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.h_plus[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1limit.hPlus > ImMe_D_IM_ME_VEC_LIMITH_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.hPlus[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].m1limit.h_minus > D_IM_ME_VEC_LIMITH_MAX ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.h_minus[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].m1limit.hMinus > ImMe_D_IM_ME_VEC_LIMITH_MAX ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. m1limit.hMinus[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_ctrl->pme[ i ].core_mode.line_interval > D_IM_ME_LINEINTV_3QMB ) {
-			Ddim_Assertion(("Im_ME_Ctrl() error. core_mode.line_interval[ %d ] is invalid.\n", i));
+		if ( me_ctrl->pme[ i ].coreMode.lineInterval > ImMe_D_IM_ME_LINEINTV_3QMB ) {
+			Ddim_Assertion(("Im_ME_Ctrl() error. coreMode.lineInterval[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
 	}
-	if ( me_ctrl->rmcif.pme_num > ( E_IM_ME_PPNUM_MAX - 1 ) ) {
-		Ddim_Assertion(("Im_ME_Ctrl() error. pme_num is invalid.\n"));
+	if ( me_ctrl->rmcif.pmeNum > ( ImMe_E_IM_ME_PPNUM_MAX - 1 ) ) {
+		Ddim_Assertion(("Im_ME_Ctrl() error. pmeNum is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( me_ctrl->rmcif.abt_type > ImMe_D_IM_ME_ABT_ROUND ) {
-		Ddim_Assertion(("Im_ME_Ctrl() error. abt_type is invalid.\n"));
+	if ( me_ctrl->rmcif.abtType > ImMe_D_IM_ME_ABT_ROUND ) {
+		Ddim_Assertion(("Im_ME_Ctrl() error. abtType is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
 #endif
@@ -521,9 +521,9 @@ INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
 	ImMe_IM_ME_DSB();
 
 	// Wait ME Stop.
-	while ( ( IO_ME.PME[ E_IM_ME_PPNUM_PPA ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
-			( IO_ME.PME[ E_IM_ME_PPNUM_PPB ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
-			( IO_ME.PME[ E_IM_ME_PPNUM_PPC ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+	while ( ( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPA ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+			( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPB ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+			( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPC ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
 			( IO_ME.PF1_START.bit.STR != ImMe_D_IM_ME_STR_STOP ) ) {
 
 		DDIM_User_Dly_Tsk( 1 );
@@ -539,59 +539,59 @@ INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
 	S_G_IM_ME_CTRL = *me_ctrl;
 
 	// Interrupt enable.
-	IO_ME.INTMODE.bit.PPAVALID	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPA ];	// PPA.
-	IO_ME.INTMODE.bit.PPBVALID	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPB ];	// PPB.
-	IO_ME.INTMODE.bit.PPCVALID	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPC ];	// PPC.
-	IO_ME.INTSTATE.bit.PPAINT	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPA ];	// PPA.
-	IO_ME.INTSTATE.bit.PPBINT	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPB ];	// PPB.
-	IO_ME.INTSTATE.bit.PPCINT	= me_ctrl->apbbrg.pp_enable[ E_IM_ME_PPNUM_PPC ];	// PPC.
-	IO_ME.INTMODE.bit.INTMODE	= me_ctrl->apbbrg.int_mode;							// Interrupt mode.
+	IO_ME.INTMODE.bit.PPAVALID	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPA ];	// PPA.
+	IO_ME.INTMODE.bit.PPBVALID	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPB ];	// PPB.
+	IO_ME.INTMODE.bit.PPCVALID	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPC ];	// PPC.
+	IO_ME.INTSTATE.bit.PPAINT	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPA ];	// PPA.
+	IO_ME.INTSTATE.bit.PPBINT	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPB ];	// PPB.
+	IO_ME.INTSTATE.bit.PPCINT	= me_ctrl->apbbrg.ppEnable[ ImMe_E_IM_ME_PPNUM_PPC ];	// PPC.
+	IO_ME.INTMODE.bit.INTMODE	= me_ctrl->apbbrg.intMode;							// Interrupt mode.
 	IO_ME.INTCNTR.bit.INTERVAL	= me_ctrl->apbbrg.interval;							// Interval.
 
-	for ( int i = 0; i < E_IM_ME_PPNUM_MAX; i++ ) {
+	for ( int i = 0; i < ImMe_E_IM_ME_PPNUM_MAX; i++ ) {
 
-		if ( me_ctrl->apbbrg.pp_enable[ i ] == ImMe_D_IM_ME_ON ) {
+		if ( me_ctrl->apbbrg.ppEnable[ i ] == ImMe_D_IM_ME_ON ) {
 			// Input mode.
-			IO_ME.PME[ i ].INPUTMODE.bit.INPUTMODE	= me_ctrl->pme[ i ].input_mode;
-			IO_ME.PME[ i ].INPUTMODE.bit.REF_TXB	= me_ctrl->pme[ i ].ref_txb;
+			IO_ME.PME[ i ].INPUTMODE.bit.INPUTMODE	= me_ctrl->pme[ i ].inputMode;
+			IO_ME.PME[ i ].INPUTMODE.bit.REF_TXB	= me_ctrl->pme[ i ].refTxb;
 
 			// The limit of the use of off-screen as a reference pixel.
-			IO_ME.PME[ i ].OUTLIMIT.bit.LIMIT		= me_ctrl->pme[ i ].out_limit;
+			IO_ME.PME[ i ].OUTLIMIT.bit.LIMIT		= me_ctrl->pme[ i ].outLimit;
 
 			// PME processing target number of screens.
-			IO_ME.PME[ i ].M1BANKNUM.bit.BANKNUM	= me_ctrl->pme[ i ].bank_num;
+			IO_ME.PME[ i ].M1BANKNUM.bit.BANKNUM	= me_ctrl->pme[ i ].bankNum;
 
 			// M1 original image mode.
-			for ( int j = 0; j < E_IM_ME_BANKNUM_MAX; j++ ) {
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.DIRECTION	= me_ctrl->pme[ i ].m1org_mode[ j ].direction;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.PARITY	= me_ctrl->pme[ i ].m1org_mode[ j ].parity;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.READMODE	= me_ctrl->pme[ i ].m1org_mode[ j ].read_mode;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.SAD0MODE	= me_ctrl->pme[ i ].m1org_mode[ j ].sad0_mode;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.SAD1MODE	= me_ctrl->pme[ i ].m1org_mode[ j ].sad1_mode;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.VECMODE	= me_ctrl->pme[ i ].m1org_mode[ j ].vec_mode;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.VECSEL	= me_ctrl->pme[ i ].m1org_mode[ j ].vec_select;
-				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.PICTYPE	= me_ctrl->pme[ i ].m1org_mode[ j ].pic_type;
+			for ( int j = 0; j < ImMe_E_IM_ME_BANKNUM_MAX; j++ ) {
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.DIRECTION	= me_ctrl->pme[ i ].m1orgMode[ j ].direction;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.PARITY	= me_ctrl->pme[ i ].m1orgMode[ j ].parity;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.READMODE	= me_ctrl->pme[ i ].m1orgMode[ j ].readMode;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.SAD0MODE	= me_ctrl->pme[ i ].m1orgMode[ j ].sad0Mode;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.SAD1MODE	= me_ctrl->pme[ i ].m1orgMode[ j ].sad1Mode;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.VECMODE	= me_ctrl->pme[ i ].m1orgMode[ j ].vecMode;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.VECSEL	= me_ctrl->pme[ i ].m1orgMode[ j ].vecSelect;
+				IO_ME.PME[ i ].M1ORGMODE[ j ].bit.PICTYPE	= me_ctrl->pme[ i ].m1orgMode[ j ].picType;
 			}
 
 			// M1 correct.
-			IO_ME.PME[ i ].M1CORRECT.bit.FKY		= me_ctrl->pme[ i ].m1correct.front_ky;
-			IO_ME.PME[ i ].M1CORRECT.bit.BKY		= me_ctrl->pme[ i ].m1correct.back_ky;
-			IO_ME.PME[ i ].M1CORRECT.bit.FKX		= me_ctrl->pme[ i ].m1correct.front_kx;
-			IO_ME.PME[ i ].M1CORRECT.bit.BKX		= me_ctrl->pme[ i ].m1correct.back_kx;
+			IO_ME.PME[ i ].M1CORRECT.bit.FKY		= me_ctrl->pme[ i ].m1correct.frontKy;
+			IO_ME.PME[ i ].M1CORRECT.bit.BKY		= me_ctrl->pme[ i ].m1correct.backKy;
+			IO_ME.PME[ i ].M1CORRECT.bit.FKX		= me_ctrl->pme[ i ].m1correct.frontKx;
+			IO_ME.PME[ i ].M1CORRECT.bit.BKX		= me_ctrl->pme[ i ].m1correct.backKx;
 			IO_ME.PME[ i ].M1CORRECT.bit.MODE		= me_ctrl->pme[ i ].m1correct.mode;
-			IO_ME.PME[ i ].M1CORRECT.bit.FH			= me_ctrl->pme[ i ].m1correct.front_h;
-			IO_ME.PME[ i ].M1CORRECT.bit.FV			= me_ctrl->pme[ i ].m1correct.front_v;
-			IO_ME.PME[ i ].M1CORRECT.bit.BH			= me_ctrl->pme[ i ].m1correct.back_h;
-			IO_ME.PME[ i ].M1CORRECT.bit.BV			= me_ctrl->pme[ i ].m1correct.back_v;
+			IO_ME.PME[ i ].M1CORRECT.bit.FH			= me_ctrl->pme[ i ].m1correct.frontH;
+			IO_ME.PME[ i ].M1CORRECT.bit.FV			= me_ctrl->pme[ i ].m1correct.frontV;
+			IO_ME.PME[ i ].M1CORRECT.bit.BH			= me_ctrl->pme[ i ].m1correct.backH;
+			IO_ME.PME[ i ].M1CORRECT.bit.BV			= me_ctrl->pme[ i ].m1correct.backV;
 
 			// M1 MC on/off.
-			IO_ME.PME[ i ].M1MC.bit.P				= me_ctrl->pme[ i ].m1mc.p_pic;
-			IO_ME.PME[ i ].M1MC.bit.B				= me_ctrl->pme[ i ].m1mc.b_pic;
+			IO_ME.PME[ i ].M1MC.bit.P				= me_ctrl->pme[ i ].m1mc.pPic;
+			IO_ME.PME[ i ].M1MC.bit.B				= me_ctrl->pme[ i ].m1mc.bPic;
 
 			// M1 Split.
 			IO_ME.PME[ i ].M1SPLT.bit.MODE			= me_ctrl->pme[ i ].m1splt.mode;
-			IO_ME.PME[ i ].M1SPLT.bit.TH			= me_ctrl->pme[ i ].m1splt.th_h;
-			IO_ME.PME[ i ].M1SPLT.bit.TV			= me_ctrl->pme[ i ].m1splt.th_v;
+			IO_ME.PME[ i ].M1SPLT.bit.TH			= me_ctrl->pme[ i ].m1splt.thH;
+			IO_ME.PME[ i ].M1SPLT.bit.TV			= me_ctrl->pme[ i ].m1splt.thV;
 
 			// M1 Skip.
 			IO_ME.PME[ i ].M1SKIP.bit.SKIP			= me_ctrl->pme[ i ].m1skip;
@@ -601,43 +601,43 @@ INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
 			IO_ME.PME[ i ].M1SADSUM.bit.L			= me_ctrl->pme[ i ].m1sad.lower;
 
 			// M1 Adjust.
-			IO_ME.PME[ i ].M1ADJUST.bit.CYCLE		= me_ctrl->pme[ i ].m1adjust.wait_cycle;
-			IO_ME.PME[ i ].M1ADJUST.bit.ON			= me_ctrl->pme[ i ].m1adjust.wait_onoff;
+			IO_ME.PME[ i ].M1ADJUST.bit.CYCLE		= me_ctrl->pme[ i ].m1adjust.waitCycle;
+			IO_ME.PME[ i ].M1ADJUST.bit.ON			= me_ctrl->pme[ i ].m1adjust.waitOnoff;
 
 			// M1 Pause.
-			IO_ME.PME[ i ].M1PAUSE.bit.LINE			= me_ctrl->pme[ i ].m1pause.pause_line;
-			IO_ME.PME[ i ].M1PAUSE.bit.ON			= me_ctrl->pme[ i ].m1pause.pause_onoff;
+			IO_ME.PME[ i ].M1PAUSE.bit.LINE			= me_ctrl->pme[ i ].m1pause.pauseLine;
+			IO_ME.PME[ i ].M1PAUSE.bit.ON			= me_ctrl->pme[ i ].m1pause.pauseOnoff;
 
 			// Vector search limit parameter (vertical).
-			IO_ME.PME[ i ].M1LIMITMV[ E_IM_ME_BANKNUM_0 ].bit.P	= me_ctrl->pme[ i ].m1limit.v_plus;
-			IO_ME.PME[ i ].M1LIMITMV[ E_IM_ME_BANKNUM_0 ].bit.M	= me_ctrl->pme[ i ].m1limit.v_minus;
+			IO_ME.PME[ i ].M1LIMITMV[ ImMe_E_IM_ME_BANKNUM_0 ].bit.P	= me_ctrl->pme[ i ].m1limit.vPlus;
+			IO_ME.PME[ i ].M1LIMITMV[ ImMe_E_IM_ME_BANKNUM_0 ].bit.M	= me_ctrl->pme[ i ].m1limit.vMinus;
 
 			// Vector search limit parameter (horizon).
-			IO_ME.PME[ i ].M1LIMITMH[ E_IM_ME_BANKNUM_0 ].bit.P	= me_ctrl->pme[ i ].m1limit.h_plus;
-			IO_ME.PME[ i ].M1LIMITMH[ E_IM_ME_BANKNUM_0 ].bit.M	= me_ctrl->pme[ i ].m1limit.h_minus;
+			IO_ME.PME[ i ].M1LIMITMH[ ImMe_E_IM_ME_BANKNUM_0 ].bit.P	= me_ctrl->pme[ i ].m1limit.hPlus;
+			IO_ME.PME[ i ].M1LIMITMH[ ImMe_E_IM_ME_BANKNUM_0 ].bit.M	= me_ctrl->pme[ i ].m1limit.hMinus;
 
 			// PME Core mode.
-			IO_ME.PME[ i ].COREMODE.bit.LINEINTV	= me_ctrl->pme[ i ].core_mode.line_interval;
-			IO_ME.PME[ i ].COREMODE.bit.INITPOSY	= me_ctrl->pme[ i ].core_mode.init_pos_y;
+			IO_ME.PME[ i ].COREMODE.bit.LINEINTV	= me_ctrl->pme[ i ].coreMode.lineInterval;
+			IO_ME.PME[ i ].COREMODE.bit.INITPOSY	= me_ctrl->pme[ i ].coreMode.initPosY;
 		}
 	}
 
 	// PME number.
-	IO_ME.PF1_PMENUM.bit.PMENUM			= me_ctrl->rmcif.pme_num;
+	IO_ME.PF1_PMENUM.bit.PMENUM			= me_ctrl->rmcif.pmeNum;
 
 	// Request arbitration method selection.
-	IO_ME.ABT_TYPE.bit.ABT_TYPE			= me_ctrl->rmcif.abt_type;
+	IO_ME.ABT_TYPE.bit.ABT_TYPE			= me_ctrl->rmcif.abtType;
 
 	// Bank table parameter.
-	IO_ME.BANK_TBL_PVEC.bit.FWD_PVEC	= me_ctrl->rmcif.bank_tbl.fwd_pvec;
-	IO_ME.BANK_TBL_8PELREF.bit.TOP		= me_ctrl->rmcif.bank_tbl.top;
-	IO_ME.BANK_TBL_8PEL.bit.FWD_8PEL	= me_ctrl->rmcif.bank_tbl.fwd_8pel;
+	IO_ME.BANK_TBL_PVEC.bit.FWD_PVEC	= me_ctrl->rmcif.bankTbl.fwdPvec;
+	IO_ME.BANK_TBL_8PELREF.bit.TOP		= me_ctrl->rmcif.bankTbl.top;
+	IO_ME.BANK_TBL_8PEL.bit.FWD_8PEL	= me_ctrl->rmcif.bankTbl.fwd8pel;
 
 	// AXI setting.
-	IO_ME.AXI_CNTL_SET.bit.ARCACHE		= me_ctrl->rmcif.axi_if.r_cache_type;
-	IO_ME.AXI_CNTL_SET.bit.ARPROT		= me_ctrl->rmcif.axi_if.r_protect_type;
-	IO_ME.AXI_CNTL_SET.bit.AWCACHE		= me_ctrl->rmcif.axi_if.w_cache_type;
-	IO_ME.AXI_CNTL_SET.bit.AWPROT		= me_ctrl->rmcif.axi_if.w_protect_type;
+	IO_ME.AXI_CNTL_SET.bit.ARCACHE		= me_ctrl->rmcif.axiIf.rCacheType;
+	IO_ME.AXI_CNTL_SET.bit.ARPROT		= me_ctrl->rmcif.axiIf.rProtectType;
+	IO_ME.AXI_CNTL_SET.bit.AWCACHE		= me_ctrl->rmcif.axiIf.wCacheType;
+	IO_ME.AXI_CNTL_SET.bit.AWPROT		= me_ctrl->rmcif.axiIf.wProtectType;
 
 	// Fidxed value.
 	IO_ME.PF1_ON.bit.PF1_ON				= ImMe_D_IM_ME_ON;
@@ -654,11 +654,11 @@ INT32 Im_ME_Ctrl( const T_IM_ME_CTRL* const me_ctrl )
 
 /**
 ME start.<br>
-@param[in]		me_start					ME start parameters. See @ref T_IM_ME_START.<br>
+@param[in]		me_start					ME start parameters. See @ref ImMeStart.<br>
 @retval			D_DDIM_OK					Success.
 @retval			ImMe_D_IM_ME_INPUT_PARAM_ERROR	Parameter error.
 */
-INT32 Im_ME_Start( const T_IM_ME_START* const me_start )
+INT32 Im_ME_Start( const ImMeStart* const me_start )
 {
 	union io_me_irqsc	meint;
 
@@ -667,64 +667,64 @@ INT32 Im_ME_Start( const T_IM_ME_START* const me_start )
 		Ddim_Assertion(("Im_ME_Start() error. me_start = NULL.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.search_width < D_IM_ME_SRCH_WIDTH_MIN ) ||
-		 ( me_start->rmcif.search_width > D_IM_ME_SRCH_WIDTH_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. search_width is invalid.\n"));
+	if ( ( me_start->rmcif.searchWidth < ImMe_D_IM_ME_SRCH_WIDTH_MIN ) ||
+		 ( me_start->rmcif.searchWidth > ImMe_D_IM_ME_SRCH_WIDTH_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. searchWidth is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.pre_width < D_IM_ME_PRE_WIDTH_MIN ) ||
-		 ( me_start->rmcif.pre_width > D_IM_ME_PRE_WIDTH_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. pre_width is invalid.\n"));
+	if ( ( me_start->rmcif.preWidth < ImMe_D_IM_ME_PRE_WIDTH_MIN ) ||
+		 ( me_start->rmcif.preWidth > ImMe_D_IM_ME_PRE_WIDTH_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. preWidth is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.pre_height < D_IM_ME_PRE_HEIGHT_MIN ) ||
-		 ( me_start->rmcif.pre_height > D_IM_ME_PRE_HEIGHT_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. pre_height is invalid.\n"));
+	if ( ( me_start->rmcif.preHeight < ImMe_D_IM_ME_PRE_HEIGHT_MIN ) ||
+		 ( me_start->rmcif.preHeight > ImMe_D_IM_ME_PRE_HEIGHT_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. preHeight is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.cur_margin_width != ImMe_D_IM_ME_CUR_MARGIN_0 ) &&
-		 ( me_start->rmcif.cur_margin_width != ImMe_D_IM_ME_CUR_MARGIN_4 ) &&
-		 ( me_start->rmcif.cur_margin_width != ImMe_D_IM_ME_CUR_MARGIN_8 ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. cur_margin_width is invalid.\n"));
+	if ( ( me_start->rmcif.curMarginWidth != ImMe_D_IM_ME_CUR_MARGIN_0 ) &&
+		 ( me_start->rmcif.curMarginWidth != ImMe_D_IM_ME_CUR_MARGIN_4 ) &&
+		 ( me_start->rmcif.curMarginWidth != ImMe_D_IM_ME_CUR_MARGIN_8 ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. curMarginWidth is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.cur_margin_height != ImMe_D_IM_ME_CUR_MARGIN_0 ) &&
-		 ( me_start->rmcif.cur_margin_height != ImMe_D_IM_ME_CUR_MARGIN_4 ) &&
-		 ( me_start->rmcif.cur_margin_height != ImMe_D_IM_ME_CUR_MARGIN_8 ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. cur_margin_height is invalid.\n"));
+	if ( ( me_start->rmcif.curMarginHeight != ImMe_D_IM_ME_CUR_MARGIN_0 ) &&
+		 ( me_start->rmcif.curMarginHeight != ImMe_D_IM_ME_CUR_MARGIN_4 ) &&
+		 ( me_start->rmcif.curMarginHeight != ImMe_D_IM_ME_CUR_MARGIN_8 ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. curMarginHeight is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.prefetch_width < D_IM_ME_PREF_WIDTH_MIN ) ||
-		 ( me_start->rmcif.prefetch_width > D_IM_ME_PREF_WIDTH_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. prefetch_width is invalid.\n"));
+	if ( ( me_start->rmcif.prefetchWidth < ImMe_D_IM_ME_PREF_WIDTH_MIN ) ||
+		 ( me_start->rmcif.prefetchWidth > ImMe_D_IM_ME_PREF_WIDTH_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. prefetchWidth is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.prefetch_height < D_IM_ME_PREF_HEIGHT_MIN ) ||
-		 ( me_start->rmcif.prefetch_height > D_IM_ME_PREF_HEIGHT_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. prefetch_height is invalid.\n"));
+	if ( ( me_start->rmcif.prefetchHeight < ImMe_D_IM_ME_PREF_HEIGHT_MIN ) ||
+		 ( me_start->rmcif.prefetchHeight > ImMe_D_IM_ME_PREF_HEIGHT_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. prefetchHeight is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	if ( ( me_start->rmcif.search_height < D_IM_ME_SRCH_HEIGHT_MIN ) ||
-		 ( me_start->rmcif.search_height > D_IM_ME_SRCH_HEIGHT_MAX ) ) {
-		Ddim_Assertion(("Im_ME_Start() error. search_height is invalid.\n"));
+	if ( ( me_start->rmcif.searchHeight < ImMe_D_IM_ME_SRCH_HEIGHT_MIN ) ||
+		 ( me_start->rmcif.searchHeight > ImMe_D_IM_ME_SRCH_HEIGHT_MAX ) ) {
+		Ddim_Assertion(("Im_ME_Start() error. searchHeight is invalid.\n"));
 		return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 	}
-	for ( int i = 0; i < E_IM_ME_PPNUM_MAX; i++ ) {
-		if ( me_start->pme[ i ].mbnum_h > ImMe_D_IM_ME_MBNUM_H_MAX ) {
-			Ddim_Assertion(("Im_ME_Start() error. mbnum_h[ %d ] is invalid.\n", i));
+	for ( int i = 0; i < ImMe_E_IM_ME_PPNUM_MAX; i++ ) {
+		if ( me_start->pme[ i ].mbnumH > ImMe_D_IM_ME_MBNUM_H_MAX ) {
+			Ddim_Assertion(("Im_ME_Start() error. mbnumH[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_start->pme[ i ].mbnum_v > ImMe_D_IM_ME_MBNUM_V_MAX ) {
-			Ddim_Assertion(("Im_ME_Start() error. mbnum_v[ %d ] is invalid.\n", i));
+		if ( me_start->pme[ i ].mbnumV > ImMe_D_IM_ME_MBNUM_V_MAX ) {
+			Ddim_Assertion(("Im_ME_Start() error. mbnumV[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( me_start->pme[ i ].cancel_mode > ImMe_D_IM_ME_VEC_CANCEL_MODE_CUR2 ) {
-			Ddim_Assertion(("Im_ME_Start() error. pme[ %d ].cancel_mode is invalid.\n", i ));
+		if ( me_start->pme[ i ].cancelMode > ImMe_D_IM_ME_VEC_CANCEL_MODE_CUR2 ) {
+			Ddim_Assertion(("Im_ME_Start() error. pme[ %d ].cancelMode is invalid.\n", i ));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
-		if ( ( me_start->pme[ i ].vec_hsize != ImMe_D_IM_ME_PRE_VEC_HSIZE_512  ) &&
-			 ( me_start->pme[ i ].vec_hsize != ImMe_D_IM_ME_PRE_VEC_HSIZE_1024 ) ) {
-			Ddim_Assertion(("Im_ME_Start() error. vec_hsize[ %d ] is invalid.\n", i));
+		if ( ( me_start->pme[ i ].vecHsize != ImMe_D_IM_ME_PRE_VEC_HSIZE_512  ) &&
+			 ( me_start->pme[ i ].vecHsize != ImMe_D_IM_ME_PRE_VEC_HSIZE_1024 ) ) {
+			Ddim_Assertion(("Im_ME_Start() error. vecHsize[ %d ] is invalid.\n", i));
 			return ImMe_D_IM_ME_INPUT_PARAM_ERROR;
 		}
 	}
@@ -738,9 +738,9 @@ INT32 Im_ME_Start( const T_IM_ME_START* const me_start )
 	ImMe_IM_ME_LOCK();
 
 	// Wait ME Stop.
-	while ( ( IO_ME.PME[ E_IM_ME_PPNUM_PPA ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
-			( IO_ME.PME[ E_IM_ME_PPNUM_PPB ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
-			( IO_ME.PME[ E_IM_ME_PPNUM_PPC ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+	while ( ( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPA ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+			( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPB ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
+			( IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPC ].STATE.bit.ME1_STATE != ImMe_D_IM_ME_ME1_STATE_STOP ) ||
 			( IO_ME.PF1_START.bit.STR != ImMe_D_IM_ME_STR_STOP ) ) {
 
 		DDIM_User_Dly_Tsk( 1 );
@@ -761,65 +761,65 @@ INT32 Im_ME_Start( const T_IM_ME_START* const me_start )
 	meint.bit.__IRQ6	= ImMe_D_IM_ME_ON;
 	meint.bit.__IRQ7	= ImMe_D_IM_ME_ON;
 	meint.bit.__IRQ8	= ImMe_D_IM_ME_ON;
-	IO_ME.PME[ E_IM_ME_PPNUM_PPA ].IRQSC.word	= meint.word;
-	IO_ME.PME[ E_IM_ME_PPNUM_PPB ].IRQSC.word	= meint.word;
-	IO_ME.PME[ E_IM_ME_PPNUM_PPC ].IRQSC.word	= meint.word;
+	IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPA ].IRQSC.word	= meint.word;
+	IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPB ].IRQSC.word	= meint.word;
+	IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPC ].IRQSC.word	= meint.word;
 
 	S_G_IM_ME_INT_CNT = 0;
 
 	// Previous shift.
-	ImMe_IM_ME_SET_REG_SIGNED_A( IO_ME.SHIFT_3DNRME, union io_me_shift3dnrme, X, me_start->rmcif.pre_shift_x );
-	ImMe_IM_ME_SET_REG_SIGNED_A( IO_ME.SHIFT_3DNRME, union io_me_shift3dnrme, Y, me_start->rmcif.pre_shift_y );
+	ImMe_IM_ME_SET_REG_SIGNED_A( IO_ME.SHIFT_3DNRME, union io_me_shift3dnrme, X, me_start->rmcif.preShiftX );
+	ImMe_IM_ME_SET_REG_SIGNED_A( IO_ME.SHIFT_3DNRME, union io_me_shift3dnrme, Y, me_start->rmcif.preShiftY );
 
 	// Previous image read address.
-	IO_ME.PREV_GBO.bit.H			= me_start->rmcif.pre_r_addr_hi;
-	IO_ME.PREV_GBO.bit.L			= me_start->rmcif.pre_r_addr_lo;
+	IO_ME.PREV_GBO.bit.H			= me_start->rmcif.preRAddrHi;
+	IO_ME.PREV_GBO.bit.L			= me_start->rmcif.preRAddrLo;
 
 	// Current image read address.
-	IO_ME.M1_GBO.bit.H				= me_start->rmcif.cur_r_addr_hi;
-	IO_ME.M1_GBO.bit.L				= me_start->rmcif.cur_r_addr_lo;
+	IO_ME.M1_GBO.bit.H				= me_start->rmcif.curRAddrHi;
+	IO_ME.M1_GBO.bit.L				= me_start->rmcif.curRAddrLo;
 
 	// Vector image write address.
-	IO_ME.PVEC_GBO.bit.H			= me_start->rmcif.vec_w_addr_hi;
-	IO_ME.PVEC_GBO.bit.L			= me_start->rmcif.vec_w_addr_lo;
+	IO_ME.PVEC_GBO.bit.H			= me_start->rmcif.vecWAddrHi;
+	IO_ME.PVEC_GBO.bit.L			= me_start->rmcif.vecWAddrLo;
 
 	// Previous image size (1/4 size).
-	IO_ME.PREV_GLSS.bit.GLSS		= me_start->rmcif.pre_gwidth;
-	IO_ME.PREVSZ_3DNRME.bit.H		= me_start->rmcif.pre_width;
-	IO_ME.PREVSZ_3DNRME.bit.V		= me_start->rmcif.pre_height;
+	IO_ME.PREV_GLSS.bit.GLSS		= me_start->rmcif.preGwidth;
+	IO_ME.PREVSZ_3DNRME.bit.H		= me_start->rmcif.preWidth;
+	IO_ME.PREVSZ_3DNRME.bit.V		= me_start->rmcif.preHeight;
 
 	// Current image size (1/4 size).
-	IO_ME.M1_GLSS.bit.GLSS			= me_start->rmcif.cur_gwidth;
+	IO_ME.M1_GLSS.bit.GLSS			= me_start->rmcif.curGwidth;
 
 	// Current image margin size.
-	IO_ME.MRGN_3DNRME.bit.H			= me_start->rmcif.cur_margin_width;
-	IO_ME.MRGN_3DNRME.bit.V			= me_start->rmcif.cur_margin_height;
+	IO_ME.MRGN_3DNRME.bit.H			= me_start->rmcif.curMarginWidth;
+	IO_ME.MRGN_3DNRME.bit.V			= me_start->rmcif.curMarginHeight;
 
 	// Prefetch size.
-	IO_ME.PF_SIZE.bit.H				= me_start->rmcif.prefetch_width;
-	IO_ME.PF_SIZE.bit.V				= me_start->rmcif.prefetch_height;
+	IO_ME.PF_SIZE.bit.H				= me_start->rmcif.prefetchWidth;
+	IO_ME.PF_SIZE.bit.V				= me_start->rmcif.prefetchHeight;
 
 	// ME1 initialize search size.
-	IO_ME.PF1_INISIZE.bit.SIZE_X	= me_start->rmcif.search_width;
-	IO_ME.PF1_INISIZE.bit.SIZE_Y	= me_start->rmcif.search_height;
+	IO_ME.PF1_INISIZE.bit.SIZE_X	= me_start->rmcif.searchWidth;
+	IO_ME.PF1_INISIZE.bit.SIZE_Y	= me_start->rmcif.searchHeight;
 
 	// Prefetch start.
 	IO_ME.PF1_START.bit.STR			= ImMe_D_IM_ME_STR_START;
 
-	for ( int i = 0; i < E_IM_ME_PPNUM_MAX; i++ ) {
+	for ( int i = 0; i < ImMe_E_IM_ME_PPNUM_MAX; i++ ) {
 
-		if ( S_G_IM_ME_CTRL.apbbrg.pp_enable[ i ] == ImMe_D_IM_ME_ON ) {
+		if ( S_G_IM_ME_CTRL.apbbrg.ppEnable[ i ] == ImMe_D_IM_ME_ON ) {
 			// MB number.
-			IO_ME.PME[ i ].MBNUM.bit.H				= me_start->pme[ i ].mbnum_h;
-			IO_ME.PME[ i ].MBNUM.bit.V				= me_start->pme[ i ].mbnum_v;
+			IO_ME.PME[ i ].MBNUM.bit.H				= me_start->pme[ i ].mbnumH;
+			IO_ME.PME[ i ].MBNUM.bit.V				= me_start->pme[ i ].mbnumV;
 
 			// Vector cancel function.
-			IO_ME.PME[ i ].CNCL.bit.MODE			= me_start->pme[ i ].cancel_mode;
-			IO_ME.PME[ i ].CNCL.bit.THH				= me_start->pme[ i ].cancel_threshold_hi;
-			IO_ME.PME[ i ].CNCL.bit.THL				= me_start->pme[ i ].cancel_threshold_lo;
+			IO_ME.PME[ i ].CNCL.bit.MODE			= me_start->pme[ i ].cancelMode;
+			IO_ME.PME[ i ].CNCL.bit.THH				= me_start->pme[ i ].cancelThresholdHi;
+			IO_ME.PME[ i ].CNCL.bit.THL				= me_start->pme[ i ].cancelThresholdLo;
 
 			// Vector output.
-			IO_ME.PME[ i ].VOUT_FMT.bit.HSIZE		= me_start->pme[ i ].vec_hsize;
+			IO_ME.PME[ i ].VOUT_FMT.bit.HSIZE		= me_start->pme[ i ].vecHsize;
 
 			// PME start.
 			IO_ME.PME[ i ].M1START.bit.M1PIC_STR	= ImMe_D_IM_ME_ON;
@@ -949,22 +949,22 @@ VOID Im_ME_Int_Handler( VOID )
 	imMeOnPclk();
 	ImMe_IM_ME_DSB();
 
-	meint.word = IO_ME.PME[ E_IM_ME_PPNUM_PPA ].IRQSC.word;
+	meint.word = IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPA ].IRQSC.word;
 	if( meint.bit.__IRQ6 == ImMe_D_IM_ME_ON ) {		/* pgr0872 */
 		S_G_IM_ME_INT_CNT++;
-		IO_ME.PME[ E_IM_ME_PPNUM_PPA ].IRQSC.word = meint.word;
+		IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPA ].IRQSC.word = meint.word;
 	}
 
-	meint.word = IO_ME.PME[ E_IM_ME_PPNUM_PPB ].IRQSC.word;
+	meint.word = IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPB ].IRQSC.word;
 	if( meint.bit.__IRQ6 == ImMe_D_IM_ME_ON ) {		/* pgr0872 */
 		S_G_IM_ME_INT_CNT++;
-		IO_ME.PME[ E_IM_ME_PPNUM_PPB ].IRQSC.word = meint.word;
+		IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPB ].IRQSC.word = meint.word;
 	}
 
-	meint.word = IO_ME.PME[ E_IM_ME_PPNUM_PPC ].IRQSC.word;
+	meint.word = IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPC ].IRQSC.word;
 	if( meint.bit.__IRQ6 == ImMe_D_IM_ME_ON ) {		/* pgr0872 */
 		S_G_IM_ME_INT_CNT++;
-		IO_ME.PME[ E_IM_ME_PPNUM_PPC ].IRQSC.word = meint.word;
+		IO_ME.PME[ ImMe_E_IM_ME_PPNUM_PPC ].IRQSC.word = meint.word;
 	}
 
 	if ( S_G_IM_ME_INT_CNT >= 3 ) {

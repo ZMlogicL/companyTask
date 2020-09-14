@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "jdsrdmatopreg.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(JdsrdmaTopReg, jdsrdma_top_reg);
+
 #define JDSRDMA_TOP_REG_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), JdsrdmaTopRegPrivate, JDSRDMA_TYPE_TOP_REG))
+
 
 struct _JdsrdmaTopRegPrivate
 {
@@ -41,4 +45,3 @@ JdsrdmaTopReg* jdsrdma_top_reg_new(void)
     JdsrdmaTopReg* self = k_object_new_with_private(JDSRDMA_TYPE_TOP_REG, sizeof(JdsrdmaTopRegPrivate));
     return self;
 }
-

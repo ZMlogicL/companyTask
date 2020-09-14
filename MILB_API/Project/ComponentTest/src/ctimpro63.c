@@ -20,6 +20,12 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro63, ct_impro_6_3)
 
 struct _CtImpro63Private
 {
+    T_IM_PRO_PG_CTRL    pgCtrlMax;
+    T_IM_PRO_PG_CTRL    pgCtrlMin;
+    T_IM_PRO_MONI_CTRL  moniCtrlMax;
+    T_IM_PRO_MONI_CTRL  moniCtrlMin;
+    T_IM_PRO_M2P_CTRL   m2pCtrlMax;
+    T_IM_PRO_M2P_CTRL   m2pCtrlMin;
 
 };
 
@@ -30,6 +36,71 @@ struct _CtImpro63Private
 static void ct_impro_6_3_constructor(CtImpro63 *self)
 {
 	CtImpro63Private *priv = CT_IMPRO_6_3_GET_PRIVATE(self);
+
+        priv->pgCtrlMax.mode                   = E_IM_PRO_PG_MODE_2LINE;
+        priv->pgCtrlMax.inputImgLines        = 8192;
+        priv->pgCtrlMax.inputImgWidth        = 12288;
+        priv->pgCtrlMax.verticalBlanking      = 8192;
+        priv->pgCtrlMax.horizontalBlanking    = 8192;
+        priv->pgCtrlMax.startBlanking         = 16383;
+
+        priv->pgCtrlMin.mode                   = E_IM_PRO_PG_MODE_1LINE;
+        priv->pgCtrlMin.inputImgLines        = 2;
+        priv->pgCtrlMin.inputImgWidth        = 2;
+        priv->pgCtrlMin.verticalBlanking      = 1;
+        priv->pgCtrlMin.horizontalBlanking    = 0;
+        priv->pgCtrlMin.startBlanking         = 0;
+
+        priv->moniCtrlMax.monitorMode                       = E_IM_PRO_MONI_MODE_8POINT_INPUT;
+        priv->moniCtrlMax.hdCntExpectVal                  = 0xFFFF;
+        priv->moniCtrlMax.validPixelExpectCntIn1frame   = 0xFFFFFFFF;
+        priv->moniCtrlMax.lowerLimitExceptHBlank         = 0xFFFFFFFF;
+        priv->moniCtrlMax.upperLimitExceptHBlank         = 0xFFFFFFFF;
+        priv->moniCtrlMax.additionalHdCnt                  = 4095;
+        priv->moniCtrlMax.additionalHdGapCnt              = 0xFFFFFFFFFFFF;
+
+        priv->monitorMode.monitorMode                       = E_IM_PRO_MONI_MODE_2POINT_INPUT;
+        priv->monitorMode.hdCntExpectVal                  = 0;
+        priv->monitorMode.validPixelExpectCntIn1frame   = 0;
+        priv->monitorMode.lowerLimitExceptHBlank         = 0;
+        priv->monitorMode.upperLimitExceptHBlank         = 0;
+        priv->monitorMode.additionalHdCnt                  = 0;
+        priv->monitorMode.additionalHdGapCnt              = 0;
+
+        priv->m2pCtrlMax.dataType              = E_IM_PRO_M2P_DATA_TYPE_16BIT;
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#ifdef CO_ES1_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES1_HARDWARE BEGIN ---
+        priv->m2pCtrlMax.dekneeEnable          = E_IM_PRO_M2P_DEKNEE_EN_8BIT_TO_12BIT;
+// --- REMOVE_ES1_HARDWARE END ---
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif // CO_ES1_HARDWARE
+#ifdef CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+// --- REMOVE_ES3_HARDWARE BEGIN ---
+        priv->m2pCtrlMax.dekneeEnable          = E_IM_PRO_M2P_DEKNEE_EN_10BIT_TO_12BIT;
+// --- REMOVE_ES3_HARDWARE END --
+// --- REMOVE_ES_COMPILE_OPT BEGIN ---
+#endif	// CO_ES3_HARDWARE
+// --- REMOVE_ES_COMPILE_OPT END ---
+        priv->m2pCtrlMax.shiftBit              = E_IM_PRO_M2P_SHIFT_8BIT;
+        priv->m2pCtrlMax.shiftSat              = E_IM_PRO_M2P_SAT_COMP;
+        priv->m2pCtrlMax.bitShift              = E_IM_PRO_M2P_BIT_SHIFT_R;
+        priv->m2pCtrlMax.validBitCount        = 16;
+        priv->m2pCtrlMax.shiftValue            = 16383;
+        priv->m2pCtrlMax.lowerLimitClipValue = 32767;
+        priv->m2pCtrlMax.upperLimitClipValue = 65535;
+
+        priv->m2pCtrlMin.dataType              = E_IM_PRO_M2P_DATA_TYPE_8BIT;
+        priv->m2pCtrlMin.dekneeEnable          = E_IM_PRO_M2P_DEKNEE_DIS;
+        priv->m2pCtrlMin.shiftBit              = E_IM_PRO_M2P_SHIFT_0BIT;
+        priv->m2pCtrlMin.shiftSat              = E_IM_PRO_M2P_SAT_NOCOMP;
+        priv->m2pCtrlMin.bitShift              = E_IM_PRO_M2P_BIT_SHIFT_L;
+        priv->m2pCtrlMin.validBitCount        = 8;
+        priv->m2pCtrlMin.shiftValue            = -16384;
+        priv->m2pCtrlMin.lowerLimitClipValue = -32768;
+        priv->m2pCtrlMin.upperLimitClipValue = 0;
 }
 
 static void ct_impro_6_3_destructor(CtImpro63 *self)
@@ -42,42 +113,26 @@ static void ct_impro_6_3_destructor(CtImpro63 *self)
  * PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_6_0_30(const kuint32 idx)
+void ct_im_pro_6_3_0(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM   unitNo;
     E_IM_PRO_BLOCK_TYPE blockType;
-    T_IM_PRO_PG_CTRL    pgCtrlMax = {
-        .mode                   = E_IM_PRO_PG_MODE_2LINE,
-        .inputImgLines        = 8192,
-        .inputImgWidth        = 12288,
-        .verticalBlanking      = 8192,
-        .horizontalBlanking    = 8192,
-        .startBlanking         = 16383,
-    };
-    T_IM_PRO_PG_CTRL    pgCtrlMin = {
-        .mode                   = E_IM_PRO_PG_MODE_1LINE,
-        .inputImgLines        = 2,
-        .inputImgWidth        = 2,
-        .verticalBlanking      = 1,
-        .horizontalBlanking    = 0,
-        .startBlanking         = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
-                ercd = Im_PRO_PG_Ctrl(unitNo, blockType, &pgCtrlMax);
-                im_pro_6_3_print_0(NULL,"max_para", unitNo, blockType, ercd, &pgCtrlMax);
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+                ercd = Im_PRO_PG_Ctrl(unitNo, blockType, &priv->pgCtrlMax);
+                im_pro_6_3_print_0(im_pro_6_3_print_get(),"max_para", unitNo, blockType, ercd, &priv->pgCtrlMax);
 
-                ercd = Im_PRO_PG_Ctrl(unitNo, blockType, &pgCtrlMin);
-                im_pro_6_3_print_0(NULL,"min_para", unitNo, blockType, ercd, &pgCtrlMin);
+                ercd = Im_PRO_PG_Ctrl(unitNo, blockType, &priv->pgCtrlMin);
+                im_pro_6_3_print_0(im_pro_6_3_print_get(),"min_para", unitNo, blockType, ercd, &priv->pgCtrlMin);
             }
         }
     }
 }
 
-void ct_im_pro_6_0_31(const kuint32 idx)
+void ct_im_pro_6_3_1(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM unitNo;
@@ -85,18 +140,18 @@ void ct_im_pro_6_0_31(const kuint32 idx)
     kuchar ch;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_MONI_CH_0; ch < D_IM_PRO_SEN_MONI_CH_NUM; ch++) {
                     ercd = Im_PRO_MONI_Start(unitNo, blockType, ch);
-                    im_pro_6_3_print_1(NULL,unitNo, blockType, ch, ercd);
+                    im_pro_6_3_print_1(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_32(const kuint32 idx)
+void ct_im_pro_6_3_2(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM unitNo;
@@ -105,60 +160,41 @@ void ct_im_pro_6_0_32(const kuint32 idx)
     kuchar               force = 0;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 force = blockType % 2;
                 for(ch = E_IM_PRO_MONI_CH_0; ch < D_IM_PRO_SEN_MONI_CH_NUM; ch++) {
                     ercd = Im_PRO_MONI_Stop(unitNo, blockType, ch, force);
-                    im_pro_6_3_print_2(NULL,unitNo, blockType, ch, ercd, force);
+                    im_pro_6_3_print_2(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd, force);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_33(const kuint32 idx)
+void ct_im_pro_6_3_3(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM   unitNo;
     E_IM_PRO_BLOCK_TYPE blockType;
     kuchar               ch;
-    T_IM_PRO_MONI_CTRL  moniCtrlMax = {
-        .monitorMode                       = E_IM_PRO_MONI_MODE_8POINT_INPUT,
-        .hdCntExpectVal                  = 0xFFFF,
-        .validPixelExpectCntIn1frame   = 0xFFFFFFFF,
-        .lowerLimitExceptHBlank         = 0xFFFFFFFF,
-        .upperLimitExceptHBlank         = 0xFFFFFFFF,
-        .additionalHdCnt                  = 4095,
-        .additionalHdGapCnt              = 0xFFFFFFFFFFFF,
-    };
-
-    T_IM_PRO_MONI_CTRL  moniCtrlMin = {
-        .monitorMode                       = E_IM_PRO_MONI_MODE_2POINT_INPUT,
-        .hdCntExpectVal                  = 0,
-        .validPixelExpectCntIn1frame   = 0,
-        .lowerLimitExceptHBlank         = 0,
-        .upperLimitExceptHBlank         = 0,
-        .additionalHdCnt                  = 0,
-        .additionalHdGapCnt              = 0,
-    };
-
+    
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_MONI_CH_0; ch < D_IM_PRO_SEN_MONI_CH_NUM; ch++) {
-                    ercd = Im_PRO_MONI_Ctrl(unitNo, blockType, ch, &moniCtrlMax);
-                    im_pro_6_3_print_3(NULL,"max_para", unitNo, blockType, ch, ercd, &moniCtrlMax);
+                    ercd = Im_PRO_MONI_Ctrl(unitNo, blockType, ch, &priv->moniCtrlMax);
+                    im_pro_6_3_print_3(im_pro_6_3_print_get(),"max_para", unitNo, blockType, ch, ercd, &priv->moniCtrlMax);
 
-                    ercd = Im_PRO_MONI_Ctrl(unitNo, blockType, ch, &moniCtrlMin);
-                    im_pro_6_3_print_3(NULL,"min_para", unitNo, blockType, ch, ercd, &moniCtrlMin);
+                    ercd = Im_PRO_MONI_Ctrl(unitNo, blockType, ch, &priv->moniCtrlMin);
+                    im_pro_6_3_print_3(im_pro_6_3_print_get(),"min_para", unitNo, blockType, ch, ercd, &priv->moniCtrlMin);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_34(const kuint32 idx)
+void ct_im_pro_6_3_4(CtImpro63* self, const kuint32 idx)
 {
     kint32                   ercd;
     E_IM_PRO_UNIT_NUM       unitNo;
@@ -167,14 +203,14 @@ void ct_im_pro_6_0_34(const kuint32 idx)
     T_IM_PRO_MONI_RESULT    moniResult;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_MONI_CH_0; ch < D_IM_PRO_SEN_MONI_CH_NUM; ch++) {
                     ercd = Im_PRO_MONI_Get_Monitor_Count(unitNo, blockType, ch, &moniResult);
-                    im_pro_6_3_print_4(NULL,"max_para", unitNo, blockType, ch, ercd, &moniResult);
+                    im_pro_6_3_print_4(im_pro_6_3_print_get(),"max_para", unitNo, blockType, ch, ercd, &moniResult);
 
                     ercd = Im_PRO_MONI_Get_Monitor_Count(unitNo, blockType, ch, &moniResult);
-                    im_pro_6_3_print_4(NULL,"min_para", unitNo, blockType, ch, ercd, &moniResult);
+                    im_pro_6_3_print_4(im_pro_6_3_print_get(),"min_para", unitNo, blockType, ch, ercd, &moniResult);
                 }
             }
         }
@@ -182,7 +218,7 @@ void ct_im_pro_6_0_34(const kuint32 idx)
     
 }
 
-void ct_im_pro_6_0_35(const kuint32 idx)
+void ct_im_pro_6_3_5(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM unitNo;
@@ -190,18 +226,18 @@ void ct_im_pro_6_0_35(const kuint32 idx)
     kuchar           ch;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_M2P_0; ch < E_IM_PRO_M2P_MAX; ch++) {
                     ercd = Im_PRO_M2P_Start(unitNo, blockType, ch);
-                    im_pro_6_3_print_5(NULL,unitNo, blockType, ch, ercd);
+                    im_pro_6_3_print_5(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_36(const kuint32 idx)
+void ct_im_pro_6_3_6(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM unitNo;
@@ -210,79 +246,41 @@ void ct_im_pro_6_0_36(const kuint32 idx)
     kuchar               force = 0;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 force = blockType % 2;
                 for(ch = E_IM_PRO_M2P_0; ch < E_IM_PRO_M2P_MAX; ch++) {
                     ercd = Im_PRO_M2P_Stop(unitNo, blockType, ch, force);
-                    im_pro_6_3_print_6(NULL,unitNo, blockType, ch, ercd, force);
+                    im_pro_6_3_print_6(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd, force);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_37(const kuint32 idx)
+void ct_im_pro_6_3_7(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM   unitNo;
     E_IM_PRO_BLOCK_TYPE blockType;
     kuchar               ch;
-    T_IM_PRO_M2P_CTRL   m2pCtrlMax = {
-        .dataType              = E_IM_PRO_M2P_DATA_TYPE_16BIT,
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#ifdef CO_ES1_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-// --- REMOVE_ES1_HARDWARE BEGIN ---
-        .dekneeEnable          = E_IM_PRO_M2P_DEKNEE_EN_8BIT_TO_12BIT,
-// --- REMOVE_ES1_HARDWARE END ---
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#endif // CO_ES1_HARDWARE
-#ifdef CO_ES3_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-// --- REMOVE_ES3_HARDWARE BEGIN ---
-        .dekneeEnable          = E_IM_PRO_M2P_DEKNEE_EN_10BIT_TO_12BIT,
-// --- REMOVE_ES3_HARDWARE END --
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#endif	// CO_ES3_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-        .shiftBit              = E_IM_PRO_M2P_SHIFT_8BIT,
-        .shiftSat              = E_IM_PRO_M2P_SAT_COMP,
-        .bitShift              = E_IM_PRO_M2P_BIT_SHIFT_R,
-        .validBitCount        = 16,
-        .shiftValue            = 16383,
-        .lowerLimitClipValue = 32767,
-        .upperLimitClipValue = 65535,
-    };
-
-    T_IM_PRO_M2P_CTRL   m2pCtrlMin = {
-        .dataType              = E_IM_PRO_M2P_DATA_TYPE_8BIT,
-        .dekneeEnable          = E_IM_PRO_M2P_DEKNEE_DIS,
-        .shiftBit              = E_IM_PRO_M2P_SHIFT_0BIT,
-        .shiftSat              = E_IM_PRO_M2P_SAT_NOCOMP,
-        .bitShift              = E_IM_PRO_M2P_BIT_SHIFT_L,
-        .validBitCount        = 8,
-        .shiftValue            = -16384,
-        .lowerLimitClipValue = -32768,
-        .upperLimitClipValue = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_M2P_0; ch < E_IM_PRO_M2P_MAX; ch++) {
-                    ercd = Im_PRO_M2P_Ctrl(unitNo, blockType, ch, &m2pCtrlMax);
-                    im_pro_6_3_print_7(NULL,"max_para", unitNo, blockType, ch, ercd, &m2pCtrlMax);
+                    ercd = Im_PRO_M2P_Ctrl(unitNo, blockType, ch, &priv->m2pCtrlMax);
+                    im_pro_6_3_print_7(im_pro_6_3_print_get(),"max_para", unitNo, blockType, ch, ercd, &priv->m2pCtrlMax);
 
-                    ercd = Im_PRO_M2P_Ctrl(unitNo, blockType, ch, &m2pCtrlMin);
-                    im_pro_6_3_print_7(NULL,"min_para", unitNo, blockType, ch, ercd, &m2pCtrlMin);
+                    ercd = Im_PRO_M2P_Ctrl(unitNo, blockType, ch, &priv->m2pCtrlMin);
+                    im_pro_6_3_print_7(im_pro_6_3_print_get(),"min_para", unitNo, blockType, ch, ercd, &priv->m2pCtrlMin);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_38(const kuint32 idx)
+void ct_im_pro_6_3_8(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     E_IM_PRO_UNIT_NUM   unitNo;
@@ -291,23 +289,23 @@ void ct_im_pro_6_0_38(const kuint32 idx)
     kuchar               paenTrg;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_M2P_0; ch < E_IM_PRO_M2P_MAX; ch++) {
                     paenTrg = 1;
                     ercd = Im_PRO_M2P_Set_PAEN(unitNo, blockType, ch, paenTrg);
-                    im_pro_6_3_print_8(NULL,unitNo, blockType, ch, ercd, paenTrg);
+                    im_pro_6_3_print_8(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd, paenTrg);
 
                     paenTrg = 0;
                     ercd = Im_PRO_M2P_Set_PAEN(unitNo, blockType, ch, paenTrg);
-                    im_pro_6_3_print_8(NULL,unitNo, blockType, ch, ercd, paenTrg);
+                    im_pro_6_3_print_8(im_pro_6_3_print_get(),unitNo, blockType, ch, ercd, paenTrg);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_6_0_39(const kuint32 idx)
+void ct_im_pro_6_3_9(CtImpro63* self, const kuint32 idx)
 {
     kint32               ercd;
     kint32               cmpErcd;
@@ -321,8 +319,8 @@ void ct_im_pro_6_0_39(const kuint32 idx)
     m2pTbl.pm2pTbl    = dekneeTbl;
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(blockType = E_IM_PRO_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(blockType = ImPro_BLOCK_TYPE_SEN; blockType < E_IM_PRO_BLOCK_TYPE_MAX; blockType++) {
                 for(ch = E_IM_PRO_M2P_0; ch < E_IM_PRO_M2P_MAX; ch++) {
                     im_pro_comm_get_m2p_reg_info(unitNo, blockType, ch, &m2pInfo);
 
@@ -334,7 +332,7 @@ void ct_im_pro_6_0_39(const kuint32 idx)
                     } else {
                         cmpErcd = -1;
                     }
-                    im_pro_6_3_print_9(NULL,"max_para", unitNo, blockType, ch, ercd, cmpErcd);	/* pgr0539 */
+                    im_pro_6_3_print_9(im_pro_6_3_print_get(),"max_para", unitNo, blockType, ch, ercd, cmpErcd);	/* pgr0539 */
 
                     m2pTbl.size    = 1;
                     memset(dekneeTbl, 0, sizeof(dekneeTbl));
@@ -344,7 +342,7 @@ void ct_im_pro_6_0_39(const kuint32 idx)
                     }  else {
                         cmpErcd = -1;
                     }
-                    im_pro_6_3_print_9(NULL,"min_para", unitNo, blockType, ch, ercd, cmpErcd);	/* pgr0539 */
+                    im_pro_6_3_print_9(im_pro_6_3_print_get(),"min_para", unitNo, blockType, ch, ercd, cmpErcd);	/* pgr0539 */
                 }
             }
         }

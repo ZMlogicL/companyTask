@@ -27,8 +27,8 @@
 #define K_IS_HDMAC(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_HDMAC))
 
 
-typedef struct _KHdmac KHdmac;
-typedef struct _KHdmacPrivate KHdmacPrivate;
+typedef struct _KHdmac 				KHdmac;
+typedef struct _KHdmacPrivate 	KHdmacPrivate;
 
 struct _KHdmac
 {
@@ -37,52 +37,52 @@ struct _KHdmac
 
 typedef union _IoHdmacDmacr
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long :24;
-		unsigned long dh :4;
-		unsigned long pr :1;
-		unsigned long :1;
-		unsigned long ds :1;
-		unsigned long de :1;
+		kulong :24;
+		kulong dh :4;
+		kulong pr :1;
+		kulong :1;
+		kulong ds :1;
+		kulong de :1;
 	} bit;
 } IoHdmacDmacr;
 
 typedef union _IoHdmacDmaca
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long tc :16;
-		unsigned long bc :4;
-		unsigned long bt :4;
-		unsigned long is :5;
-		unsigned long st :1;
-		unsigned long pb :1;
-		unsigned long eb :1;
+		kulong tc :16;
+		kulong bc :4;
+		kulong bt :4;
+		kulong is :5;
+		kulong st :1;
+		kulong pb :1;
+		kulong eb :1;
 	} bit;
 } IoHdmacDmaca;
 
 typedef union _IoHdmacDmacb
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long :8;
-		unsigned long dp :4;
-		unsigned long sp :4;
-		unsigned long ss :3;
-		unsigned long ci :1;
-		unsigned long ei :1;
-		unsigned long rd :1;
-		unsigned long rs :1;
-		unsigned long rc :1;
-		unsigned long fd :1;
-		unsigned long fs :1;
-		unsigned long tw :2;
-		unsigned long ms :2;
-		unsigned long tt :2;
+		kulong :8;
+		kulong dp :4;
+		kulong sp :4;
+		kulong ss :3;
+		kulong ci :1;
+		kulong ei :1;
+		kulong rd :1;
+		kulong rs :1;
+		kulong rc :1;
+		kulong fd :1;
+		kulong fs :1;
+		kulong tw :2;
+		kulong ms :2;
+		kulong tt :2;
 	} bit;
 } IoHdmacDmacb;
 
@@ -93,9 +93,9 @@ typedef struct _IoHdmacElement
 	/* 0-7ch 14,24,34,44,54,64,74,84 */
 	IoHdmacDmacb dmacb;
 	/* 0-7ch 18,28,38,48,58,68,78,88 */
-	unsigned long dmacsa;
+	kulong dmacsa;
 	/* 0-7ch 1C,2C,3C,4C,5C,6C,7C,8C */
-	unsigned long dmacda;
+	kulong dmacda;
 } IoHdmacElement;
 
 typedef struct _IoHdmac
@@ -103,7 +103,7 @@ typedef struct _IoHdmac
 	/* 1E10_(0000 - 0003h) */
 	IoHdmacDmacr dmacr;
 	/* 1E10_(0004 - 000Fh) */
-	unsigned char dmy040f[0x10 - 0x04];
+	kuchar dmy040f[0x10 - 0x04];
 	/* 1E10_(0010 - 008Fh) */
 	IoHdmacElement dmac[8];
 } IoHdmac;

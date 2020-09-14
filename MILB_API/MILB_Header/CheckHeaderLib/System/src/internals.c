@@ -14,7 +14,7 @@
 */
 
 
-#include "internals.h"
+#include "checkheadermaindefs.h"
 
 
 K_TYPE_DEFINE_WITH_PRIVATE(IntErnals, int_ernals);

@@ -199,17 +199,17 @@ typedef struct {
 	/**< upper limit to calculate the limit value of GrGb gradient correction
 	 * amount. value range		:[0 - 16383] This value must be set to maintain
 	 *  the relationship: BFGLMTL<=BFGLMTH. target registor	:@@BFGLMTH	*/
-	USHORT	gradientULimit;
+	USHORT						gradientULimit;
 	/**< lower limit to calculate the limit value of GrGb gradient correction
 	 * amount. value range		:[0 - 16383] This value must be set to maintain
 	 * the relationship: BFGLMTL<=BFGLMTH. target registor	:@@BFGLMTL	*/
-	USHORT	gradientLLimit;
+	USHORT						gradientLLimit;
 	/**< threshold to calculate the limit value of GrGb gradient correction
 	 *  amount. value range		:[0 - 16383] target registor	:@@BFGTHA	*/
-	USHORT	gradientThreshold;
+	USHORT						gradientThreshold;
 	/**< gain value to calculate the limit value of GrGb gradient correction
 	 * amount. value range		:[0x00 - 0xFF(=3.984375)] target registor	:@@BFGTHK	*/
-	UCHAR	gradientThresholdGain;
+	UCHAR							gradientThresholdGain;
 } TimproCagCtrlGlevelDiff;
 
 /** Optical Color aberration control
@@ -418,8 +418,8 @@ A setup of enable access to the built-in RAM of CAG.
 @param[in]	paenTrg :  control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srocag_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 /**
@@ -427,7 +427,7 @@ Set CAG area
 @param[in]	unitNo : Unit number.
 @param[in]	cagArea	: CAG area.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srocag_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproCagArea* cagArea );
 /**
@@ -441,7 +441,7 @@ Set CAG G level difference information
 @param[in]	unitNo : Unit number.
 @param[in]	cagCtrlGlevelDiff	: CAG G level difference Information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srocag_ctrl_glv_diff( E_IM_PRO_UNIT_NUM unitNo, TimproCagCtrlGlevelDiff* cagCtrlGlevelDiff );
 /**

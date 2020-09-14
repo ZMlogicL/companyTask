@@ -221,7 +221,7 @@ typedef struct {
 													target registor  :@@FFSHHW<br><br>
 													value range  :lines[4 - 8960] 2pixel boundary<br>
 													target registor  :@@FFSHVW */
-	T_IM_PRO_AREA_INFO		ffshArea;
+	TimproAreaInfo		ffshArea;
 } TimproFfshArea;
 
 /*类型定义区域*/
@@ -244,8 +244,8 @@ FFSH start
 @param[in]	unitNo : Unit number.
 @param[in]	ch : FFSH channel
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
 */
 extern	INT32			impro_sroffsh_start( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch );
 /**
@@ -254,8 +254,8 @@ FFSH stop
 @param[in]	ch : FFSH channel
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
 */
 extern	INT32			impro_sroffsh_stop( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, UCHAR force );
 /**
@@ -264,7 +264,7 @@ FFSH control setup
 @param[in]	ch : FFSH channel
 @param[in]	ffshCtrl : FFSH control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffsh_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, TimproFfshCtrl* ffshCtrl );
 /**
@@ -273,7 +273,7 @@ A setup of FFSH blend ratio.
 @param[in]	ch : FFSH channel
 @param[in]	blendCtrl : FFSH blend control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffsh_set_blend( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, TimproFfshBlendCtrl* blendCtrl );
 /**
@@ -282,7 +282,7 @@ A setup of FFSH effective area
 @param[in]	ch : FFSH channel
 @param[in]	ffshArea : FFSH area information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffsh_set_area( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, TimproFfshArea* ffshArea );
 /**
@@ -292,8 +292,8 @@ A setup of enable access to the built-in RAM of FFSH.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_sroffsh_set_paen( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, UCHAR paenTrg );
 /**
@@ -306,7 +306,7 @@ set the request issue interval when reading the coefficients from PRCH/M2P macro
 			(FFSHWRIC < ((Input horizontal size - (4* FFSHSUBPRH)) - 10)/3)<br>
 			target registor	:@@FFSHWRIC
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffsh_set_coeff_read_line_wait( E_IM_PRO_UNIT_NUM unitNo, EimproFfshCh ch, USHORT reqIntervalClk );
 /**

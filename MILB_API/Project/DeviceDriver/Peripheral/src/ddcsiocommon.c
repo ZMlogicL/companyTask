@@ -29,18 +29,18 @@ struct _DdCsioCommonPrivate
 {
 #ifdef CO_DDIM_UTILITY_USE
 /* CSIO HDMAC channel information. */
-volatile kuchar gddCsioDmaChInfo[D_DD_HDMAC1_CH_NUM_MAX];
+volatile kuchar gddCsioDmaChInfo[DdHdmac1_CH_NUM_MAX];
 #endif
 };
 
 
 /* CSIO send/receive data information. */
-volatile DdCsioInfo gddCsioInfo[D_DD_USIO_CH_NUM_MAX];
+volatile DdCsioInfo gddCsioInfo[DdUart_D_DD_USIO_CH_NUM_MAX];
 #ifdef CO_DDIM_UTILITY_USE
 /* CSIO DMA transfer information */
-volatile DdCsioDmaInfo gddCsioDmaInfo[D_DD_USIO_CH_NUM_MAX][2];
+volatile DdCsioDmaInfo gddCsioDmaInfo[DdUart_D_DD_USIO_CH_NUM_MAX][2];
 /* CSIO HDMAC channel information. */
-//volatile kuchar gddCsioDmaChInfo[D_DD_HDMAC1_CH_NUM_MAX];
+//volatile kuchar gddCsioDmaChInfo[DdHdmac1_CH_NUM_MAX];
 #endif
 
 /**
@@ -65,32 +65,32 @@ PUBLIC
 void dd_csio_common_end (DdCsioCommon *self, kuchar ch)
 {
 	// Disable send and receive permission
-//	IO_USIO.CSIO[ch].SMR.bit.SOE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 0;
+//	ioUsio.csio[ch].smr.bit.soe = 0;
+	ioUsio.csio[ch].scr.bit.rxe = 0;
+	ioUsio.csio[ch].scr.bit.txe = 0;
 
 	// Disable interrupt
-	IO_USIO.CSIO[ch].SCR.bit.TIE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TBIE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FTIE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.RIE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FRIIE = 0;
+	ioUsio.csio[ch].scr.bit.tie = 0;
+	ioUsio.csio[ch].scr.bit.tbie = 0;
+	ioUsio.csio[ch].fcr.bit.ftie = 0;
+	ioUsio.csio[ch].scr.bit.rie = 0;
+	ioUsio.csio[ch].fcr.bit.friie = 0;
 
 	// Clear buffer overrun error
-	IO_USIO.CSIO[ch].SSR.byte |= C_CSIO_SSR_REC_BIT;
+	ioUsio.csio[ch].ssr.byte |= C_CSIO_SSR_REC_BIT;
 
 	// FIFO reset
-//	IO_USIO.CSIO[ch].FCR.hword |= 0x000C;
+//	ioUsio.csio[ch].fcr.hword |= 0x000C;
 
 	// Disable full duplex
 	gddCsioInfo[ch].fullDuplex = 0;
 
 	// Disable DMA wait
 	if (gddCsioInfo[ch].dmaWait == 1) {
-		Dd_HDMAC1_Stop(gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
-		Dd_HDMAC1_Close(gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
-		Dd_HDMAC1_Stop(gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
-		Dd_HDMAC1_Close(gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
+		dd_hdmac1_stop(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
+		dd_hdmac1_close(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
+		dd_hdmac1_stop(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
+		dd_hdmac1_close(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
 	}
 	gddCsioInfo[ch].dmaWait = 0;
 	gddCsioInfo[ch].forceStopFlg = 0;
@@ -109,9 +109,9 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 	kint32 recvFifoNum = 0;
 
 	// Check for receive buffer overrun error
-	if (IO_USIO.CSIO[ch].SSR.bit.__ORE == 1) {
+	if (ioUsio.csio[ch].ssr.bit.__ore == 1) {
 		// Clear buffer overrun error
-		IO_USIO.CSIO[ch].SSR.byte |= C_CSIO_SSR_REC_BIT;
+		ioUsio.csio[ch].ssr.byte |= C_CSIO_SSR_REC_BIT;
 
 		// End csio communication
 		dd_csio_common_end(dd_csio_common_get(), ch);
@@ -123,19 +123,19 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 	}
 
 	// Select receive fifo
-	if (IO_USIO.CSIO[ch].FCR.bit.FSEL == 0) {
+	if (ioUsio.csio[ch].fcr.bit.fsel == 0) {
 		recvFifoNum = 1;
 	}
 
 	// Receive data
-	if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
-		while (IO_USIO.CSIO[ch].FBYTE.byte[recvFifoNum] > 0) {
-			*(gddCsioInfo[ch].recvAddr16 + gddCsioInfo[ch].recvPos) = IO_USIO.CSIO[ch].DR.hword;
+	if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+		while (ioUsio.csio[ch].fbyte.byte[recvFifoNum] > 0) {
+			*(gddCsioInfo[ch].recvAddr16 + gddCsioInfo[ch].recvPos) = ioUsio.csio[ch].dr.hword;
 			gddCsioInfo[ch].recvPos++;
 		}
 	} else {
-		while (IO_USIO.CSIO[ch].FBYTE.byte[recvFifoNum] > 0) {
-			*(gddCsioInfo[ch].recvAddr8 + gddCsioInfo[ch].recvPos) = IO_USIO.CSIO[ch].DR.byte[0];
+		while (ioUsio.csio[ch].fbyte.byte[recvFifoNum] > 0) {
+			*(gddCsioInfo[ch].recvAddr8 + gddCsioInfo[ch].recvPos) = ioUsio.csio[ch].dr.byte[0];
 			gddCsioInfo[ch].recvPos++;
 		}
 	}
@@ -149,14 +149,14 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 	}
 
 	// Send data
-	if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+	if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 		while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-			IO_USIO.CSIO[ch].DR.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
+			ioUsio.csio[ch].dr.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
 			DdCsioCommon_DD_CSIO_DSB();
 			gddCsioInfo[ch].sendPos++;
 			sendCnt++;
 
-			if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+			if (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 				//FIFO is full (0:full, 1:empty)
 				break;
 			} else {
@@ -166,12 +166,12 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 		}
 	} else {
 		while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-			IO_USIO.CSIO[ch].DR.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
+			ioUsio.csio[ch].dr.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
 			DdCsioCommon_DD_CSIO_DSB();
 			gddCsioInfo[ch].sendPos++;
 			sendCnt++;
 
-			if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+			if (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 				//FIFO is full (0:full, 1:empty)
 				break;
 			} else {
@@ -182,14 +182,14 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 	}
 
 	if (sendCnt > 0) {		// Send data was written?
-		IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
+		ioUsio.csio[ch].fcr.bit.fdrq = 0;
 		DdCsioCommon_DD_CSIO_DSB();
 	} else {
-		IO_USIO.CSIO[ch].FCR.bit.FTIE = 0;
-		IO_USIO.CSIO[ch].SCR.bit.TBIE = 1;
+		ioUsio.csio[ch].fcr.bit.ftie = 0;
+		ioUsio.csio[ch].scr.bit.tbie = 1;
 	}
 
-	if (IO_USIO.CSIO[ch].SSR.bit.__TBI == 0) {
+	if (ioUsio.csio[ch].ssr.bit.__tbi == 0) {
 		// bus not idle
 		return;
 	}
@@ -213,7 +213,7 @@ void dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch )
 
 kint32 dd_csio_common_check_stopping_conditions(DdCsioCommon *self, kuchar ch, kuint32 waitCnt)
 {
-	if (IO_USIO.CSIO[ch].SCR.bit.MS == DdCsio_DD_CSIO_TYPE_MASTER) {
+	if (ioUsio.csio[ch].scr.bit.ms == DdCsio_DD_CSIO_TYPE_MASTER) {
 		if (waitCnt >= C_CSIO_WAIT_COUNT) {
 			dd_csio_common_end(dd_csio_common_get(), ch);
 			Ddim_Print(("CSIO Time Out err.\n"));
@@ -229,21 +229,21 @@ kint32 dd_csio_common_check_stopping_conditions(DdCsioCommon *self, kuchar ch, k
 }
 
 #ifdef CO_DDIM_UTILITY_USE
-kint32 dd_csio_common_start_dma(DdCsioCommon *self, kuchar dmaCh, T_DD_HDMAC1_CTRL* hdmac1Ctrl)
+kint32 dd_csio_common_start_dma(DdCsioCommon *self, kuchar dmaCh, Hdmac1Ctrl* hdmac1Ctrl)
 {
 	kint32 ret;
 
-	ret = Dd_HDMAC1_Ctrl_Common(dmaCh, hdmac1Ctrl);
+	ret = dd_hdmac1_ctrl_common(dd_hdmac1_get(), dmaCh, hdmac1Ctrl);
 	if (ret == D_DDIM_OK) {
-		ret = Dd_HDMAC1_Start_Async(dmaCh);
+		ret = dd_hdmac1_start_async(dd_hdmac1_get(), dmaCh);
 		if (ret != D_DDIM_OK) {
-			Dd_HDMAC1_Close(dmaCh);
-			Ddim_Print(("Dd_HDMAC1_Start_Async() error. ret=0x%x\n", ret));
+			dd_hdmac1_close(dd_hdmac1_get(), dmaCh);
+			Ddim_Print(("Dd_HDMAC1_Start_Async () error. ret=0x%x\n", ret));
 			return ret;
 		}
 	} else {
-		Dd_HDMAC1_Close(dmaCh);
-		Ddim_Print(("Dd_HDMAC1_Ctrl_Common() error. ret=0x%x\n", ret));
+		dd_hdmac1_close(dd_hdmac1_get(), dmaCh);
+		Ddim_Print(("Dd_HDMAC1_Ctrl_Common () error. ret=0x%x\n", ret));
 		return ret;
 	}
 
@@ -260,20 +260,20 @@ void dd_csio_common_send_dma_callback( kuchar dmaCh, kuint16* const status )
 	csioCh = priv->gddCsioDmaChInfo[dmaCh];
 	index = gddCsioDmaInfo[csioCh][C_CSIO_SEND].index;
 
-	if (*status == D_DD_HDMAC1_SS_NORMAL_END) {
+	if (*status == DdHdmac1_SS_NORMAL_END) {
 		gddCsioDmaInfo[csioCh][C_CSIO_SEND].index2++;
 
 		if (gddCsioDmaInfo[csioCh][C_CSIO_SEND].index2
 				< gddCsioDmaInfo[csioCh][C_CSIO_SEND].countInfo[index].dmaCount) {
-			IO_USIO.CSIO[csioCh].FCR.bit.FTIE = 0;
-			IO_USIO.CSIO[csioCh].FCR.bit.FDRQ = 0;
+			ioUsio.csio[csioCh].fcr.bit.ftie = 0;
+			ioUsio.csio[csioCh].fcr.bit.fdrq = 0;
 			DdCsioCommon_DD_CSIO_DSB();
 
 			// Resume DMA
-			ret = Dd_HDMAC1_Resume(dmaCh);
+			ret = dd_hdmac1_resume(dd_hdmac1_get(), dmaCh);
 
 			// Resume DMA by CSIO FIFO interrupt.
-			IO_USIO.CSIO[csioCh].FCR.bit.FTIE = 1;
+			ioUsio.csio[csioCh].fcr.bit.ftie = 1;
 			DdCsioCommon_DD_CSIO_DSB();
 			return;
 		}
@@ -285,32 +285,32 @@ void dd_csio_common_send_dma_callback( kuchar dmaCh, kuint16* const status )
 			index = gddCsioDmaInfo[csioCh][C_CSIO_SEND].index;
 
 			// Update source address
-			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.src_addr =
-					Dd_HDMAC1_Get_Src_Addr(dmaCh);
-			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.config_a.bit.tc =
+			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.srcAddr =
+					dd_hdmac1_get_src_addr(dd_hdmac1_get(), dmaCh);
+			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.configA.bit.tc =
 					gddCsioDmaInfo[csioCh][C_CSIO_SEND].countInfo[index].transCount - 1;
-			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.config_a.bit.bt =
+			gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.configA.bit.bt =
 					gddCsioDmaInfo[csioCh][C_CSIO_SEND].countInfo[index].beatType;
 
 			if (gddCsioDmaInfo[csioCh][C_CSIO_SEND].countInfo[index].dmaCount > 1) {
 				// Enable reload counter
-				gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_ENABLE;
+				gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_ENABLE;
 			} else {
 				// Disable reload counter
-				gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_DISABLE;
+				gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_DISABLE;
 			}
 
-			IO_USIO.CSIO[csioCh].FCR.bit.FTIE = 0;
-			IO_USIO.CSIO[csioCh].FCR.bit.FDRQ = 0;
+			ioUsio.csio[csioCh].fcr.bit.ftie = 0;
+			ioUsio.csio[csioCh].fcr.bit.fdrq = 0;
 			DdCsioCommon_DD_CSIO_DSB();
 
 			// Start DMA
 			ret = dd_csio_common_start_dma(dd_csio_common_get(), dmaCh,
-							(T_DD_HDMAC1_CTRL*) &gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl);
+							(Hdmac1Ctrl*) &gddCsioDmaInfo[csioCh][C_CSIO_SEND].hdmac1Ctrl);
 
 			if (ret == D_DDIM_OK) {
 				// Start DMA by CSIO FIFO interrupt.
-				IO_USIO.CSIO[csioCh].FCR.bit.FTIE = 1;
+				ioUsio.csio[csioCh].fcr.bit.ftie = 1;
 				DdCsioCommon_DD_CSIO_DSB();
 				return;
 			} else {
@@ -322,32 +322,32 @@ void dd_csio_common_send_dma_callback( kuchar dmaCh, kuint16* const status )
 			gddCsioDmaInfo[csioCh][C_CSIO_SEND].result = C_CSIO_NORMAL_COMPLETE;
 		}
 	} else {	// DMA status error
-		Ddim_Print(("Dd_HDMAC1_Wait_End() stop status error. status=%d\n", *status));
+		Ddim_Print(("Dd_HDMAC1_Wait_End () stop status error. status=%d\n", *status));
 
 		// Set result
 		gddCsioDmaInfo[csioCh][C_CSIO_SEND].result = C_CSIO_DMA_SS_ERROR;
 	}
 
 	// End DMA transfer process.
-	IO_USIO.CSIO[csioCh].FCR.bit.FTIE = 0;
+	ioUsio.csio[csioCh].fcr.bit.ftie = 0;
 	DdCsioCommon_DD_CSIO_DSB();
 
 	if (!gddCsioInfo[csioCh].fullDuplex) {
-		if (IO_USIO.CSIO[csioCh].SSR.bit.__TBI == 0) {
+		if (ioUsio.csio[csioCh].ssr.bit.__tbi == 0) {
 			// Wait bus idle interrupt
 			gddCsioInfo[csioCh].dmaWait = 2;
 			// Enable CSIO interrupt
 #ifdef CO_PT_ENABLE
 			dd_gic_ctrl(NULL, (DdGicIntid)(DdGic_INTID_UART_CH0_TRANSMISSION_INT + csioCh), 1, -1, -1);
 #else
-			DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_UART_CH0_TRANSMISSION_INT + csioCh),
-					(DDIM_USER_INTLV)C_PRI14);
+			ddim_user_custom_enableInt(NULL, (DdimUserCustom_INTID)(DdGic_INTID_UART_CH0_TRANSMISSION_INT + csioCh),
+					(DdimUserCustom_INTLV)C_PRI14);
 #endif
-			IO_USIO.CSIO[csioCh].SCR.bit.TBIE = 1;
+			ioUsio.csio[csioCh].scr.bit.tbie = 1;
 			DdCsioCommon_DD_CSIO_DSB();
 		} else {
 			dd_csio_common_end(dd_csio_common_get(), csioCh);
-			Dd_HDMAC1_Close(dmaCh);
+			dd_hdmac1_close(dd_hdmac1_get(), dmaCh);
 
 			if (gddCsioInfo[csioCh].pcallback != NULL) {
 				((void (*)()) gddCsioInfo[csioCh].pcallback)(gddCsioDmaInfo[csioCh][C_CSIO_SEND].result);
@@ -370,32 +370,32 @@ void dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status )
 	index = gddCsioDmaInfo[csioCh][C_CSIO_RECV].index;
 
 	// Set send/recv fifo
-	if (IO_USIO.CSIO[csioCh].FCR.bit.FSEL == 1) {
+	if (ioUsio.csio[csioCh].fcr.bit.fsel == 1) {
 		sendFifoNum = 1;
 		recvFifoNum = 0;
 	}
 
-	if (*status == D_DD_HDMAC1_SS_NORMAL_END) {
+	if (*status == DdHdmac1_SS_NORMAL_END) {
 		gddCsioDmaInfo[csioCh][C_CSIO_RECV].index2++;
 
-		if (IO_USIO.CSIO[csioCh].SCR.bit.MS == 0) {	// Master receiving
+		if (ioUsio.csio[csioCh].scr.bit.ms == 0) {	// Master receiving
 			if (gddCsioDmaInfo[csioCh][C_CSIO_RECV].index2
 					< gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].dmaCount) {
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 0;
+				ioUsio.csio[csioCh].scr.bit.rie = 0;
 				DdCsioCommon_DD_CSIO_DSB();
 
 				// Resume DMA
-				ret = Dd_HDMAC1_Resume(dmaCh);
+				ret = dd_hdmac1_resume(dd_hdmac1_get(), dmaCh);
 
-				// Update FBYTE
-				IO_USIO.CSIO[csioCh].FBYTE.byte[sendFifoNum] =
+				// Update fbyte
+				ioUsio.csio[csioCh].fbyte.byte[sendFifoNum] =
 						gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].sFbyte;
 
 				// Resume DMA by CSIO FIFO interrupt.
 				if (!gddCsioInfo[csioCh].fullDuplex) {
-					IO_USIO.CSIO[csioCh].FCR.bit.FDRQ = 0;
+					ioUsio.csio[csioCh].fcr.bit.fdrq = 0;
 				}
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 1;// Enable receive interrupt
+				ioUsio.csio[csioCh].scr.bit.rie = 1;// Enable receive interrupt
 				DdCsioCommon_DD_CSIO_DSB();
 				return;
 			}
@@ -406,53 +406,54 @@ void dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status )
 			if (gddCsioDmaInfo[csioCh][C_CSIO_RECV].index < gddCsioDmaInfo[csioCh][C_CSIO_RECV].count) {
 				index = gddCsioDmaInfo[csioCh][C_CSIO_RECV].index;
 
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 0;// Disable receive interrupt
+				ioUsio.csio[csioCh].scr.bit.rie = 0;// Disable receive interrupt
 				if (!gddCsioInfo[csioCh].fullDuplex) {
-					IO_USIO.CSIO[csioCh].SCR.bit.RXE = 0;// Disable receive permission
-					IO_USIO.CSIO[csioCh].FCR.bit.FE1 = 0;		// Disable FIFO1
-					IO_USIO.CSIO[csioCh].FCR.bit.FE2 = 0;		// Disable FIFO2
-					IO_USIO.CSIO[csioCh].SCR.bit.TXE = 0;// Disable transmit permission
+					ioUsio.csio[csioCh].scr.bit.rxe = 0;// Disable receive permission
+					ioUsio.csio[csioCh].fcr.bit.fe1 = 0;		// Disable FIFO1
+					ioUsio.csio[csioCh].fcr.bit.fe2 = 0;		// Disable FIFO2
+					ioUsio.csio[csioCh].scr.bit.txe = 0;// Disable transmit permission
 				}
 				DdCsioCommon_DD_CSIO_DSB();
 
 				// Update destination address
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.dst_addr = Dd_HDMAC1_Get_Dst_Addr(dmaCh);
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_a.bit.tc =
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.dstAddr =
+						dd_hdmac1_get_dst_addr(dd_hdmac1_get(), dmaCh);
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configA.bit.tc =
 						gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].transCount - 1;
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_a.bit.bt =
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configA.bit.bt =
 						gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].beatType;
 
 				if (gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].dmaCount > 1) {
 					// Enable reload counter
-					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_ENABLE;
+					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_ENABLE;
 				} else {
 					// Disable reload counter
-					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_DISABLE;
+					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_DISABLE;
 				}
 
 				// Start DMA
 				ret = dd_csio_common_start_dma(dd_csio_common_get(), dmaCh,
-								(T_DD_HDMAC1_CTRL*) &gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl);
+								(Hdmac1Ctrl*) &gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl);
 
 				if (ret == D_DDIM_OK) {
 					// Start DMA by CSIO FIFO interrupt.
 					if (!gddCsioInfo[csioCh].fullDuplex) {
-						IO_USIO.CSIO[csioCh].FBYTE.byte[recvFifoNum] =
+						ioUsio.csio[csioCh].fbyte.byte[recvFifoNum] =
 								gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].rFbyte;
-						IO_USIO.CSIO[csioCh].FBYTE.byte[sendFifoNum] =
+						ioUsio.csio[csioCh].fbyte.byte[sendFifoNum] =
 								gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].sFbyte;
 
-						IO_USIO.CSIO[csioCh].FCR.bit.FE1 = 1;	// Enable FIFO1
-						IO_USIO.CSIO[csioCh].FCR.bit.FE2 = 1;	// Enable FIFO2
+						ioUsio.csio[csioCh].fcr.bit.fe1 = 1;	// Enable FIFO1
+						ioUsio.csio[csioCh].fcr.bit.fe2 = 1;	// Enable FIFO2
 
 						// Start DMA by CSIO FIFO interrupt.
-						IO_USIO.CSIO[csioCh].FCR.bit.FDRQ = 0;
+						ioUsio.csio[csioCh].fcr.bit.fdrq = 0;
 					}
-					IO_USIO.CSIO[csioCh].SCR.bit.RIE = 1;// Enable receive interrupt
+					ioUsio.csio[csioCh].scr.bit.rie = 1;// Enable receive interrupt
 
 					if (!gddCsioInfo[csioCh].fullDuplex) {
-						IO_USIO.CSIO[csioCh].SCR.bit.RXE = 1;// Enable receive permission
-						IO_USIO.CSIO[csioCh].SCR.bit.TXE = 1;// Enable transmit permission(Start SCK output)
+						ioUsio.csio[csioCh].scr.bit.rxe = 1;// Enable receive permission
+						ioUsio.csio[csioCh].scr.bit.txe = 1;// Enable transmit permission(Start SCK output)
 					}
 					DdCsioCommon_DD_CSIO_DSB();
 					return;
@@ -467,14 +468,14 @@ void dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status )
 		} else {	// Slave receiving
 			if (gddCsioDmaInfo[csioCh][C_CSIO_RECV].index2
 					< gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].dmaCount) {
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 0;
+				ioUsio.csio[csioCh].scr.bit.rie = 0;
 				DdCsioCommon_DD_CSIO_DSB();
 
 				// Resume DMA
-				ret = Dd_HDMAC1_Resume(dmaCh);
+				ret = dd_hdmac1_resume(dd_hdmac1_get(), dmaCh);
 
 				// Resume DMA by CSIO FIFO interrupt.
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 1;// Enable receive interrupt
+				ioUsio.csio[csioCh].scr.bit.rie = 1;// Enable receive interrupt
 				DdCsioCommon_DD_CSIO_DSB();
 				return;
 			}
@@ -486,30 +487,31 @@ void dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status )
 				index = gddCsioDmaInfo[csioCh][C_CSIO_RECV].index;
 
 				// Update destination address
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.dst_addr = Dd_HDMAC1_Get_Dst_Addr(dmaCh);
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.dstAddr =
+						dd_hdmac1_get_dst_addr(dd_hdmac1_get(), dmaCh);
 
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_a.bit.tc =
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configA.bit.tc =
 						gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].transCount - 1;
-				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_a.bit.bt =
+				gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configA.bit.bt =
 						gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].beatType;
 
 				if (gddCsioDmaInfo[csioCh][C_CSIO_RECV].countInfo[index].dmaCount > 1) {
 					// Enable reload counter
-					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_ENABLE;
+					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_ENABLE;
 				} else {
 					// Disable reload counter
-					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.config_b.bit.rc = D_DD_HDMAC1_RC_DISABLE;
+					gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl.configB.bit.rc = DdHdmac1_RC_DISABLE;
 				}
 
-				IO_USIO.CSIO[csioCh].SCR.bit.RIE = 0;		// Disable receive interrupt
+				ioUsio.csio[csioCh].scr.bit.rie = 0;		// Disable receive interrupt
 
 				// Start DMA
 				ret = dd_csio_common_start_dma(dd_csio_common_get(), dmaCh,
-								(T_DD_HDMAC1_CTRL*) &gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl);
+								(Hdmac1Ctrl*) &gddCsioDmaInfo[csioCh][C_CSIO_RECV].hdmac1Ctrl);
 
 				if (ret == D_DDIM_OK) {
 					// Start DMA by CSIO FIFO interrupt.
-					IO_USIO.CSIO[csioCh].SCR.bit.RIE = 1;// Enable receive interrupt
+					ioUsio.csio[csioCh].scr.bit.rie = 1;// Enable receive interrupt
 					DdCsioCommon_DD_CSIO_DSB();
 					return;
 				} else {
@@ -522,32 +524,33 @@ void dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status )
 			}
 		}
 	} else {	// DMA status error
-		Ddim_Print(("Dd_HDMAC1_Wait_End() stop status error. status=%d\n", *status));
+		Ddim_Print(("Dd_HDMAC1_Wait_End () stop status error. status=%d\n", *status));
 
 		// Set result
 		gddCsioDmaInfo[csioCh][C_CSIO_RECV].result = C_CSIO_DMA_SS_ERROR;
 	}
 
 	// Check for buffer overrun error
-	if (IO_USIO.CSIO[csioCh].SSR.bit.__ORE == 1) {
+	if (ioUsio.csio[csioCh].ssr.bit.__ore == 1) {
 		// Clear buffer overrun error
-		IO_USIO.CSIO[csioCh].SSR.byte |= C_CSIO_SSR_REC_BIT;
+		ioUsio.csio[csioCh].ssr.byte |= C_CSIO_SSR_REC_BIT;
 		gddCsioDmaInfo[csioCh][C_CSIO_RECV].result = C_CSIO_RECV_OVERRUN_ERROR;
 	}
 
 	// End DMA transfer process.
-	IO_USIO.CSIO[csioCh].FCR.bit.FE1 = 0;
-	IO_USIO.CSIO[csioCh].FCR.bit.FE2 = 0;
+	ioUsio.csio[csioCh].fcr.bit.fe1 = 0;
+	ioUsio.csio[csioCh].fcr.bit.fe2 = 0;
 	DdCsioCommon_DD_CSIO_DSB();
 
 	dd_csio_common_end(dd_csio_common_get(), csioCh);
-	Dd_HDMAC1_Close(dmaCh);
+	dd_hdmac1_close(dd_hdmac1_get(), dmaCh);
 
 	if (gddCsioInfo[csioCh].pcallback != NULL) {
 		((void (*)()) gddCsioInfo[csioCh].pcallback)(gddCsioDmaInfo[csioCh][C_CSIO_RECV].result);
 	}
 }
 #endif
+
 #ifdef CO_DDIM_UTILITY_USE
 kuchar dd_csio_common_get_gdd_csio_dma_ch_info(DdCsioCommon *self, kint32 num)
 {

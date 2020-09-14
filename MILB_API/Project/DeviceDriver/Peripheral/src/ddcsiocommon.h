@@ -18,7 +18,7 @@
 #include <klib.h>
 #include <string.h>
 #include "uart_csio.h"
-#include "dd_uart.h"
+#include "dduart.h"
 #include "ddhdmac1.h"
 #include "ddtop.h"
 #include "ddgic.h"
@@ -57,7 +57,7 @@ struct _DdCsioInfo
 	kuint32 num; /* Number of data */
 	kuint32 sendPos; /* Send data position */
 	kuint32 recvPos; /* Receive data position */
-	VpCallback pcallback; /* Callback function pointer */
+	VpCallbackFunc pcallback; /* Callback function pointer */
 	kuint32 recvWait; /* Wait count of recive data */
 	kuchar fullDuplex; /* full duplex enable bit */
 	kuchar dmaWait; /* DMA Waiting Flag */
@@ -79,7 +79,7 @@ struct _DdCsioDmaCountInfo
 struct _DdCsioDmaInfo
 {
 	DdCsioDmaCountInfo countInfo[3];
-	T_DD_HDMAC1_CTRL hdmac1Ctrl;
+	Hdmac1Ctrl hdmac1Ctrl;
 	kuint32 count;
 	kuint32 index;
 	kuint32 index2;
@@ -98,12 +98,12 @@ struct _DdCsioCommon
 };
 
 
-extern volatile DdCsioInfo gddCsioInfo[D_DD_USIO_CH_NUM_MAX];
+extern volatile DdCsioInfo gddCsioInfo[DdUart_D_DD_USIO_CH_NUM_MAX];
 #ifdef CO_DDIM_UTILITY_USE
 /* CSIO DMA transfer information */
-extern volatile DdCsioDmaInfo gddCsioDmaInfo[D_DD_USIO_CH_NUM_MAX][2];
+extern volatile DdCsioDmaInfo gddCsioDmaInfo[DdUart_D_DD_USIO_CH_NUM_MAX][2];
 /* CSIO HDMAC channel information. */
-//extern volatile kuchar gddCsioDmaChInfo[D_DD_HDMAC1_CH_NUM_MAX];
+//extern volatile kuchar gddCsioDmaChInfo[DdHdmac1_CH_NUM_MAX];
 #endif
 
 
@@ -113,7 +113,7 @@ void						dd_csio_common_end (DdCsioCommon *self, kuchar ch);
 void						dd_csio_common_int_handler_full_duplex(DdCsioCommon *self, kuchar ch );
 kint32						dd_csio_common_check_stopping_conditions(DdCsioCommon *self, kuchar ch, kuint32 waitCnt);
 #ifdef CO_DDIM_UTILITY_USE
-kint32						dd_csio_common_start_dma(DdCsioCommon *self, kuchar dmaCh, T_DD_HDMAC1_CTRL* hdmac1Ctrl);
+kint32						dd_csio_common_start_dma(DdCsioCommon *self, kuchar dmaCh, Hdmac1Ctrl* hdmac1Ctrl);
 void						dd_csio_common_send_dma_callback( kuchar dmaCh, kuint16* const status );
 void						dd_csio_common_recv_dma_callback( kuchar dmaCh, kuint16* const status );
 #endif

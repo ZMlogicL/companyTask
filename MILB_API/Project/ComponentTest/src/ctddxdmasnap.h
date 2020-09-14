@@ -15,7 +15,8 @@
 #ifndef __CT_DD_XDMASNAP_H_
 #define __CT_DD_XDMASNAP_H_
 
-#include "ddim_typedef.h"
+// #include "ddim_typedef.h"
+#include "../../DeviceDriver/ARM/src/ddimtypedef.h"
 #include <klib.h>
 
 #define CT_TYPE_DD_XDMASNAP					(ct_dd_xdmasnap_get_type())
@@ -51,7 +52,7 @@ void 				ct_dd_xdmasnap_callback_cb(void);
 /*----------------------------------------------------------------------*/
 /* Function Prototype Definition										*/
 /*----------------------------------------------------------------------*/
-void 				ct_dd_xdmasnap_main(int argc, char** argv);
+void 				ct_dd_xdmasnap_main(CtDdXdmasnap* self,int argc, char** argv);
 kuchar 				ct_dd_xdmasnap_get_num(CtDdXdmasnap *self);
 
 #endif /* __CT_DD_XDMASNAP_H_ */

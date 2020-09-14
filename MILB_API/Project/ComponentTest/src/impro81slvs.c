@@ -870,7 +870,7 @@ void im_pro_8_1_slvs_mode_change(ImPro81Slvs* self)
 	T_IM_PRO_SLVS_PMA_PD	pmaPd;
 
 	DriverCommon_DDIM_PRINT(("mode_change_slvs() start.\n"));
-	for(E_IM_PRO_SLVS_STREAM_TYPE type = E_IM_PRO_SLVS_STREAM_TYPE_A; type < E_IM_PRO_SLVS_STREAM_TYPE_BOTH; type++) {
+	for(E_IM_PRO_SLVS_STREAM_TYPE type = ImPro_SLVS_STREAM_TYPE_A; type < E_IM_PRO_SLVS_STREAM_TYPE_BOTH; type++) {
 		slvsCtrl.ramPdState = E_IM_PRO_SLVS_PD_STATE_NORMAL;
 		slvsCtrl.vdoutCtrl = E_IM_PRO_SLVS_VDOUT_CTRL_OUTPUT;
 		slvsCtrl.ecccrcOpt = E_IM_PRO_SLVS_ECCCRC_OPT_WO_ECC_CRC;
@@ -919,7 +919,7 @@ void im_pro_8_1_slvs_mode_change(ImPro81Slvs* self)
             im_pro_1_2_print_5(im_pro_1_2_print_get(), "", type, &trimCtrl);
         }
 
-		Im_PRO_SLVS_Update_Cfg(E_IM_PRO_SLVS_STREAM_TYPE_A);
+		Im_PRO_SLVS_Update_Cfg(ImPro_SLVS_STREAM_TYPE_A);
 
 		intCfg.permissionFlg = 1;
 		intCfg.interruptBit = (	D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE7_BIT | D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE6_BIT |
@@ -939,18 +939,18 @@ void im_pro_8_1_slvs_mode_change(ImPro81Slvs* self)
 		intCfg.interruptBit = (	D_IM_PRO_SLVS_INTST_FSI_BIT	 | D_IM_PRO_SLVS_INTST_FSO_BIT	 |
 								D_IM_PRO_SLVS_INTST_FEI_BIT	 | D_IM_PRO_SLVS_INTST_FEO_BIT	 |
 								D_IM_PRO_SLVS_INTST_RDY_BIT	 | D_IM_PRO_SLVS_INTST_STBY_BIT	);
-		Im_PRO_SLVS_Set_Interrupt(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_INTN_O, &intCfg);
+		Im_PRO_SLVS_Set_Interrupt(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_INTN_O, &intCfg);
 
 		intCfg.interruptBit = (	D_IM_PRO_SLVS_LEINTST_LBOVF_BIT	 | D_IM_PRO_SLVS_LEINTST_LNE_BIT	 |
 								D_IM_PRO_SLVS_LEINTST_ECCE_BIT	 | D_IM_PRO_SLVS_LEINTST_ECC2C_BIT	 |
 								D_IM_PRO_SLVS_LEINTST_ECC1C_BIT	 | D_IM_PRO_SLVS_LEINTST_HCRCE_BIT	 |
 								D_IM_PRO_SLVS_LEINTST_HCRC2C_BIT | D_IM_PRO_SLVS_LEINTST_HCRC1C_BIT |
 								D_IM_PRO_SLVS_LEINTST_PCRCE_BIT	 | D_IM_PRO_SLVS_LEINTST_LLE_BIT		);
-		Im_PRO_SLVS_Set_Interrupt(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_LINK_ERR, &intCfg);
+		Im_PRO_SLVS_Set_Interrupt(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_LINK_ERR, &intCfg);
 
 		intCfg.interruptBit = (	D_IM_PRO_SLVS_MEINTST0_DSD_BIT | D_IM_PRO_SLVS_MEINTST0_DCL_BIT |
 								D_IM_PRO_SLVS_MEINTST0_SCL_BIT | D_IM_PRO_SLVS_MEINTST0_ECL_BIT	);
-		Im_PRO_SLVS_Set_Interrupt(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR1, &intCfg);
+		Im_PRO_SLVS_Set_Interrupt(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR1, &intCfg);
 
 		intCfg.interruptBit = (	D_IM_PRO_SLVS_MEINTST1_FUNF_LANE7_BIT | D_IM_PRO_SLVS_MEINTST1_FUNF_LANE6_BIT |
 								D_IM_PRO_SLVS_MEINTST1_FUNF_LANE5_BIT | D_IM_PRO_SLVS_MEINTST1_FUNF_LANE4_BIT |
@@ -960,23 +960,23 @@ void im_pro_8_1_slvs_mode_change(ImPro81Slvs* self)
 								D_IM_PRO_SLVS_MEINTST1_FOVF_LANE5_BIT | D_IM_PRO_SLVS_MEINTST1_FOVF_LANE4_BIT |
 								D_IM_PRO_SLVS_MEINTST1_FOVF_LANE3_BIT | D_IM_PRO_SLVS_MEINTST1_FOVF_LANE2_BIT |
 								D_IM_PRO_SLVS_MEINTST1_FOVF_LANE1_BIT | D_IM_PRO_SLVS_MEINTST1_FOVF_LANE0_BIT	);
-		Im_PRO_SLVS_Set_Interrupt(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR2, &intCfg);
+		Im_PRO_SLVS_Set_Interrupt(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR2, &intCfg);
 
 		callbackCfg.inthandler = im_pro_8_1_slvs_common_cb;
 		callbackCfg.userParam = 0;	// tentative
 		Im_PRO_SLVS_Set_Common_Int_Handler(&callbackCfg);
 
 		callbackCfg.inthandler = im_pro_8_1_slvs_normal_cb;
-		Im_PRO_SLVS_Set_Int_Handler(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_INTN_O, &callbackCfg);
+		Im_PRO_SLVS_Set_Int_Handler(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_INTN_O, &callbackCfg);
 
 		callbackCfg.inthandler = im_pro_8_1_slvs_link_err_cb;
-		Im_PRO_SLVS_Set_Int_Handler(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_LINK_ERR, &callbackCfg);
+		Im_PRO_SLVS_Set_Int_Handler(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_LINK_ERR, &callbackCfg);
 
 		callbackCfg.inthandler = im_pro_8_1_slvs_mac_err1_cb;
-		Im_PRO_SLVS_Set_Int_Handler(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR1, &callbackCfg);
+		Im_PRO_SLVS_Set_Int_Handler(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR1, &callbackCfg);
 
 		callbackCfg.inthandler = im_pro_8_1_slvs_mac_err2_cb;
-		Im_PRO_SLVS_Set_Int_Handler(E_IM_PRO_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR2, &callbackCfg);
+		Im_PRO_SLVS_Set_Int_Handler(ImPro_SLVS_STREAM_TYPE_A, E_IM_PRO_SLVS_INT_TYPE_MAC_ERR2, &callbackCfg);
 
 		pmaPd.lane0PdState = E_IM_PRO_SLVS_PD_STATE_NORMAL;
 		pmaPd.lane1PdState = E_IM_PRO_SLVS_PD_STATE_NORMAL;
@@ -1061,17 +1061,17 @@ void im_pro_8_1_slvs_init(ImPro81Slvs* self)
 
 	im_pro_8_1_slvs_mode_change(NULL);
 
-	Im_PRO_SLVS_SR_Rlease(E_IM_PRO_SLVS_STREAM_TYPE_A);
+	Im_PRO_SLVS_SR_Rlease(ImPro_SLVS_STREAM_TYPE_A);
 
 	DriverCommon_DDIM_PRINT(("init_slvs() end.\n"));
 }
 
 void im_pro_8_1_slvs_raw_output(ImPro81Slvs* self)
 {
-	E_IM_PRO_P2M_CH		p2mOddCh = E_IM_PRO_P2M_CH0;
-	E_IM_PRO_P2M_CH		p2mEvenCh = E_IM_PRO_P2M_CH1;
-	E_IM_PRO_PWCH		pwchOddCh = E_IM_PRO_PWCH_0;
-	E_IM_PRO_PWCH		pwchEvenCh = E_IM_PRO_PWCH_1;
+	EImProP2mCh		p2mOddCh = ImProP2m_CH0;
+	EImProP2mCh		p2mEvenCh = ImProP2m_CH1;
+	EImProPwch		pwchOddCh = ImProPwch_0;
+	EImProPwch		pwchEvenCh = ImProPwch_1;
 	T_IM_PRO_P2M_CTRL	p2mCtrl;
 	T_IM_PRO_PWCH_CTRL	pwchCtrl;
 	kulong				lineFeed;
@@ -1091,77 +1091,77 @@ void im_pro_8_1_slvs_raw_output(ImPro81Slvs* self)
 	DriverCommon_DDIM_PRINT(("raw_output() start.\n"));
 
 	// P2M
-	p2mCtrl.kneeEnable = E_IM_PRO_P2M_KNEE_DIS;
-	p2mCtrl.lpfMode = E_IM_PRO_P2M_LPF_MODE_OFF;
+	p2mCtrl.kneeEnable = ImProP2m_KNEE_DIS;
+	p2mCtrl.lpfMode = ImProP2m_LPF_MODE_OFF;
 
 	p2mCtrl.startY = 18 >> 1;
 	p2mCtrl.height = 2160 >> 1;
 	p2mCtrl.startX = 26;
 	p2mCtrl.width = (4152 >> 1) - p2mCtrl.startX;
-	p2mCtrl.recMode = E_IM_PRO_P2M_REC_MODE_12BIT;
+	p2mCtrl.recMode = ImProP2m_REC_MODE_12BIT;
 	lineFeed = M_ROUNDUP_64(4096 * 3);
 
 	p2mCtrl.shiftValue = 0;
-	p2mCtrl.shiftBit = E_IM_PRO_P2M_SHIFT_0BIT;
+	p2mCtrl.shiftBit = ImProP2m_SHIFT_0BIT;
 	p2mCtrl.clipValue = 0;
 	p2mCtrl.verticalThin = 1;
 	p2mCtrl.horizonThin = 1;
 	p2mCtrl.sampleLine = 0x8000000000000000;
 	p2mCtrl.sampleWidth = 0x8000000000000000;
 	p2mCtrl.enableMirror = 0;
-	p2mCtrl.inputMode = E_IM_PRO_P2M_INPUT_MODE_1POINT;
+	p2mCtrl.inputMode = ImProP2m_INPUT_MODE_1POINT;
 
 	// PWCH
-	pwchCtrl.transTo = E_IM_PRO_PWCH_TRANS_IO_0;
-	pwchCtrl.reqThreshold = E_IM_PRO_PWCH_CNT_NOLIMIT;
-	pwchCtrl.writeMask = E_IM_PRO_PWCH_WRITE_MASK_EN;
-	pwchCtrl.outputFormat = E_IM_PRO_PWCH_OUTPUT_FORMAT_NORMAL;
+	pwchCtrl.transTo = ImProPwch_TRANS_IO_0;
+	pwchCtrl.reqThreshold = ImProPwch_CNT_NOLIMIT;
+	pwchCtrl.writeMask = ImProPwch_WRITE_MASK_EN;
+	pwchCtrl.outputFormat = ImProPwch_OUTPUT_FORMAT_NORMAL;
 
-	p2mOddCh = E_IM_PRO_P2M_CH0;
-	p2mEvenCh = E_IM_PRO_P2M_CH1;
-	pwchOddCh = E_IM_PRO_PWCH_0;
-	pwchEvenCh = E_IM_PRO_PWCH_1;
+	p2mOddCh = ImProP2m_CH0;
+	p2mEvenCh = ImProP2m_CH1;
+	pwchOddCh = ImProPwch_0;
+	pwchEvenCh = ImProPwch_1;
 
-	Im_PRO_P2M_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh,  &p2mCtrl);
-	Im_PRO_PWch_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &pwchCtrl);
-	Im_PRO_PWch_Set_LineFeed(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  lineFeed);
+	im_pro_pommon_list_p2m_ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh,  &p2mCtrl);
+	Im_PRO_PWch_Ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &pwchCtrl);
+	Im_PRO_PWch_Set_LineFeed(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  lineFeed);
 
-	Im_PRO_P2M_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh, &p2mCtrl);
-	Im_PRO_PWch_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &pwchCtrl);
-	Im_PRO_PWch_Set_LineFeed(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, lineFeed);
+	im_pro_pommon_list_p2m_ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh, &p2mCtrl);
+	Im_PRO_PWch_Ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &pwchCtrl);
+	Im_PRO_PWch_Set_LineFeed(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, lineFeed);
 
-	Im_PRO_PWch_Set_Buf_Addr(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh, &pwchInfo);
+	Im_PRO_PWch_Set_Buf_Addr(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh, &pwchInfo);
 	pwchInfo.buffAddr[0] += lineFeed;
-	Im_PRO_PWch_Set_Buf_Addr(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &pwchInfo);
+	Im_PRO_PWch_Set_Buf_Addr(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &pwchInfo);
 
-	Im_PRO_PWch_Set_Interrupt(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &intCfg);
-	Im_PRO_PWch_Set_Interrupt(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &intCfg);
-	Im_PRO_PWch_Set_Int_Handler(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &callbackCfg);
-	Im_PRO_PWch_Set_Int_Handler(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &callbackCfg);
+	Im_PRO_PWch_Set_Interrupt(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &intCfg);
+	Im_PRO_PWch_Set_Interrupt(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &intCfg);
+	Im_PRO_PWch_Set_Int_Handler(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &callbackCfg);
+	Im_PRO_PWch_Set_Int_Handler(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &callbackCfg);
 
-	p2mOddCh = E_IM_PRO_P2M_CH2;
-	p2mEvenCh = E_IM_PRO_P2M_CH3;
-	pwchOddCh = E_IM_PRO_PWCH_2;
-	pwchEvenCh = E_IM_PRO_PWCH_3;
+	p2mOddCh = ImProP2m_CH2;
+	p2mEvenCh = ImProP2m_CH3;
+	pwchOddCh = ImProPwch_2;
+	pwchEvenCh = ImProPwch_3;
 
 	p2mCtrl.startX = 0;
-	Im_PRO_P2M_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh,  &p2mCtrl);
-	Im_PRO_PWch_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &pwchCtrl);
-	Im_PRO_PWch_Set_LineFeed(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  lineFeed);
+	im_pro_pommon_list_p2m_ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh,  &p2mCtrl);
+	Im_PRO_PWch_Ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &pwchCtrl);
+	Im_PRO_PWch_Set_LineFeed(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  lineFeed);
 
-	Im_PRO_P2M_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh, &p2mCtrl);
-	Im_PRO_PWch_Ctrl(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &pwchCtrl);
-	Im_PRO_PWch_Set_LineFeed(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, lineFeed);
+	im_pro_pommon_list_p2m_ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh, &p2mCtrl);
+	Im_PRO_PWch_Ctrl(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &pwchCtrl);
+	Im_PRO_PWch_Set_LineFeed(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, lineFeed);
 
 	pwchInfo.buffAddr[0] += M_ROUNDUP_64(p2mCtrl.width * 3);
-	Im_PRO_PWch_Set_Buf_Addr(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh, &pwchInfo);
+	Im_PRO_PWch_Set_Buf_Addr(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh, &pwchInfo);
 	pwchInfo.buffAddr[0] += lineFeed;
-	Im_PRO_PWch_Set_Buf_Addr(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &pwchInfo);
+	Im_PRO_PWch_Set_Buf_Addr(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &pwchInfo);
 
-	Im_PRO_PWch_Set_Interrupt(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &intCfg);
-	Im_PRO_PWch_Set_Interrupt(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &intCfg);
-	Im_PRO_PWch_Set_Int_Handler(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh,  &callbackCfg);
-	Im_PRO_PWch_Set_Int_Handler(E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh, &callbackCfg);
+	Im_PRO_PWch_Set_Interrupt(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &intCfg);
+	Im_PRO_PWch_Set_Interrupt(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &intCfg);
+	Im_PRO_PWch_Set_Int_Handler(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh,  &callbackCfg);
+	Im_PRO_PWch_Set_Int_Handler(ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh, &callbackCfg);
 
 	DriverCommon_DDIM_PRINT(("raw_output() end.\n"));
 }
@@ -1175,9 +1175,9 @@ void im_pro_8_1_slvs_pwch_cb(T_CALLBACK_ID* id, kulong result, kulong userParam)
 {
 	DriverCommon_DDIM_PRINT(("PWCH_CB %u %u %u %lx %lx\n", id->unitNo, id->blockType, id->channel, result, userParam));
 
-	Im_PRO_PWch_Stop(id->unitNo, id->blockType, id->channel, 0);
-	Im_PRO_P2M_Stop(id->unitNo, id->blockType, id->channel, 0);
-	Im_PRO_P2M_Set_PAEN(id->unitNo, id->blockType, id->channel, 0);
+	im_pro_pommon_list_pwch_stop(id->unitNo, id->blockType, id->channel, 0);
+	im_pro_pommon_list_p2m_stop(id->unitNo, id->blockType, id->channel, 0);
+	im_pro_pommon_list_p2m_set_paen(id->unitNo, id->blockType, id->channel, 0);
 }
 #endif
 

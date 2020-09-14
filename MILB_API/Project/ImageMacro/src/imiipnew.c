@@ -58,405 +58,405 @@
 static VOID imIipUtilCleanDcache( const ULONG addr, const ULONG bytes )
 {
 	DDIM_User_L1l2cache_Clean_Addr( addr, bytes );
-	Im_IIP_Dmb();
+	ImIipDefine_IM_IIP_DMD();
 }
 
 // Enable Interrupt
-static UINT32 imIipUtilSetIntFact( const ULLONG unitid_bitmask )
+static UINT32 imIipUtilSetIntFact( const ULLONG unitidBitmask )
 {
-	UINT32 int_fact = D_IM_IIP_INT_FACTOR_AXIERR;
+	UINT32 intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_AXIERR;
 
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL0 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL0END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL0 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL0END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL1 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL1END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL1 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL1END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL2 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL2END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL2 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL2END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL3 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL3END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL3 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL3END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL4 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL4END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL4 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL4END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL5 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL5END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL5 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL5END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL6 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL6END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL6 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL6END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL7 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL7END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL7 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL7END;
 	}
-	if( unitid_bitmask & D_IM_IIP_PARAM_PLDUNIT_SL8 ) {
-		int_fact = D_IM_IIP_INT_FACTOR_SL8END;
+	if( unitidBitmask & ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL8 ) {
+		intFact = ImIipDefine_D_IM_IIP_INT_FACTOR_SL8END;
 	}
 
-	return int_fact;
+	return intFact;
 }
 
-VOID im_iip_set_axi_param( const E_IM_IIP_UNIT_ID unitid, E_IM_IIP_AXI_ID* const axi_id, T_IM_IIP_CTRL_AXI* const axi_cfg, const UCHAR master_IF )
+VOID im_iip_new_set_axi_param(  ImIipDefine* self,const EImIipUnitId unitid, EImIipAxiId* const axi_id, TIMIipCtrlAxi* const axi_cfg, const UCHAR master_IF )
 {
 	switch( unitid ) {
-		case E_IM_IIP_UNIT_ID_AFN0:
-			*axi_id = E_IM_IIP_AXI_ID_AFN0;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN0:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_AFN0;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN1:
-			*axi_id = E_IM_IIP_AXI_ID_AFN1;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN1:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_AFN1;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN2:
-			*axi_id = E_IM_IIP_AXI_ID_AFN2;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN2:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_AFN2;
 			break;
-		case E_IM_IIP_UNIT_ID_AFN3:
-			*axi_id = E_IM_IIP_AXI_ID_AFN3;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_AFN3:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_AFN3;
 			break;
-		case E_IM_IIP_UNIT_ID_FRECT0:
-			*axi_id = E_IM_IIP_AXI_ID_FRECT0;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_FRECT0:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_FRECT0;
 			break;
-		case E_IM_IIP_UNIT_ID_FRECT1:
-			*axi_id = E_IM_IIP_AXI_ID_FRECT1;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_FRECT1:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_FRECT1;
 			break;
-		case E_IM_IIP_UNIT_ID_GPC:
-			*axi_id = E_IM_IIP_AXI_ID_GPC;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_GPC:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_GPC;
 			break;
-		case E_IM_IIP_UNIT_ID_SL0:
-			*axi_id = E_IM_IIP_AXI_ID_SL0;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL0:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL0;
 			break;
-		case E_IM_IIP_UNIT_ID_SL1:
-			*axi_id = E_IM_IIP_AXI_ID_SL1;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL1:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL1;
 			break;
-		case E_IM_IIP_UNIT_ID_SL2:
-			*axi_id = E_IM_IIP_AXI_ID_SL2;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL2:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL2;
 			break;
-		case E_IM_IIP_UNIT_ID_SL3:
-			*axi_id = E_IM_IIP_AXI_ID_SL3;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL3:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL3;
 			break;
-		case E_IM_IIP_UNIT_ID_SL4:
-			*axi_id = E_IM_IIP_AXI_ID_SL4;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL4:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL4;
 			break;
-		case E_IM_IIP_UNIT_ID_SL5:
-			*axi_id = E_IM_IIP_AXI_ID_SL5;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL5:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL5;
 			break;
-		case E_IM_IIP_UNIT_ID_SL6:
-			*axi_id = E_IM_IIP_AXI_ID_SL6;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL6:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL6;
 			break;
-		case E_IM_IIP_UNIT_ID_SL7:
-			*axi_id = E_IM_IIP_AXI_ID_SL7;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL7:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL7;
 			break;
-		case E_IM_IIP_UNIT_ID_SL8:
-			*axi_id = E_IM_IIP_AXI_ID_SL8;
+		case ImIipStruct_E_IM_IIP_UNIT_ID_SL8:
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_SL8;
 			break;
 		default:
-			*axi_id = E_IM_IIP_AXI_ID_MAX;		// mean "None"
+			*axi_id = ImIipStruct_E_IM_IIP_AXI_ID_MAX;		// mean "None"
 			return;	// Do nothing
 	}
 
-	axi_cfg->trans_req_ctrl = 0;	// register default
-	axi_cfg->cache_type = 1;		// register default
-	axi_cfg->protection_type = 0;	// register default
+	axi_cfg->transReqCtrl = 0;	// register default
+	axi_cfg->cacheType = 1;		// register default
+	axi_cfg->protectionType = 0;	// register default
 }
 
-INT32 im_iip_util_exec_rotate( T_IM_IIP_UTIL_PARAM_RESIZE_ROTATE* const rr_param, const T_IM_IIP_UTIL_RR* const cfg )
+INT32 im_iip_new_util_exec_rotate( TImIipUtilParamResizeRotate* const rr_param, const TImIipUtilRr* const cfg )
 {
 	INT32	retval;
 	UINT32	loopcnt;
 
 	for ( loopcnt = 0; loopcnt < 2; loopcnt++ ) {
 		retval = Im_IIP_Ctrl_PIXFMTTBL( rr_param->pixid[loopcnt], &rr_param->pixfmttbl[loopcnt] );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 		}
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->afn_unitid, &rr_param->unit_cfg_afn );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->afnUnitid, &rr_param->unitCfgAfn );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->sl_unitid, &rr_param->unit_cfg_sl );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->slUnitid, &rr_param->unitCfgSl );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	if( rr_param->axi_id_afn != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( rr_param->axi_id_afn, &rr_param->axi_cfg_afn );
-		if( retval != D_IM_IIP_OK ) {
+	if( rr_param->axiIdAfn != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( rr_param->axiIdAfn, &rr_param->axiCfgAfn );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	if( rr_param->axi_id_sl != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( rr_param->axi_id_sl, &rr_param->axi_cfg_sl );
-		if( retval != D_IM_IIP_OK ) {
+	if( rr_param->axiIdSl != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( rr_param->axiIdSl, &rr_param->axiCfgSl );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	rr_param->wait_param.int_fact = imIipUtilSetIntFact( rr_param->open_param.unitid_bitmask );
+	rr_param->waitParam.intFact = imIipUtilSetIntFact( rr_param->openParam.unitidBitmask );
 
-	retval = Im_IIP_Set_Interrupt( rr_param->wait_param.int_fact, 1 );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Set_Interrupt( rr_param->waitParam.intFact, 1 );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
 
-	imIipUtilCleanDcache( rr_param->param_buffer_addr -D_IM_IIP_UTIL_RR_BUF_BYTES, D_IM_IIP_UTIL_RR_BUF_BYTES );
+	imIipUtilCleanDcache( rr_param->paramBufferAddr -ImIipDefine_D_IM_IIP_UTIL_RR_BUF_BYTES, ImIipDefine_D_IM_IIP_UTIL_RR_BUF_BYTES );
 
 
-	retval = Im_IIP_Start_SWTRG( cfg->sl_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->slUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->afn_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->afnUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
-INT32 im_iip_util_exec_csc( T_IM_IIP_UTIL_PARAM_CSC* const csc_param, const T_IM_IIP_UTIL_CSC* const cfg )
+INT32 im_iip_new_util_exec_csc( TImIipUtilParamCsc* const csc_param, const TImIipUtilCsc* const cfg )
 {
 	INT32	retval;
 	UINT32	loopcnt;
 
 	for ( loopcnt = 0; loopcnt < 2; loopcnt++ ) {
 		retval = Im_IIP_Ctrl_PIXFMTTBL( csc_param->pixid[loopcnt], &csc_param->pixfmttbl[loopcnt] );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 		}
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ld_unitid, &csc_param->unit_cfg_1d );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ldUnitid, &csc_param->unitCfg1D );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->csc_unitid, &csc_param->unit_cfg_csc );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->cscUnitid, &csc_param->unitCfgCsc );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->sl_unitid, &csc_param->unit_cfg_sl );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->slUnitid, &csc_param->unitCfgSl );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	if( csc_param->axi_id_ld != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( csc_param->axi_id_ld, &csc_param->axi_cfg_1d );
-		if( retval != D_IM_IIP_OK ) {
+	if( csc_param->axiIdLd != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( csc_param->axiIdLd, &csc_param->axiCfg1D );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	if( csc_param->axi_id_sl != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( csc_param->axi_id_sl, &csc_param->axi_cfg_sl );
-		if( retval != D_IM_IIP_OK ) {
+	if( csc_param->axiIdSl != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( csc_param->axiIdSl, &csc_param->axiCfgSl );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	csc_param->wait_param.int_fact = imIipUtilSetIntFact( csc_param->open_param.unitid_bitmask );
+	csc_param->waitParam.intFact = imIipUtilSetIntFact( csc_param->openParam.unitidBitmask );
 
-	retval = Im_IIP_Set_Interrupt( csc_param->wait_param.int_fact, 1 );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Set_Interrupt( csc_param->waitParam.intFact, 1 );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
 
-	imIipUtilCleanDcache( csc_param->param_buffer_addr -D_IM_IIP_UTIL_CSC_BUF_BYTES, D_IM_IIP_UTIL_CSC_BUF_BYTES );
+	imIipUtilCleanDcache( csc_param->paramBufferAddr -ImIipDefine_D_IM_IIP_UTIL_CSC_BUF_BYTES, ImIipDefine_D_IM_IIP_UTIL_CSC_BUF_BYTES );
 
 
-	retval = Im_IIP_Start_SWTRG( cfg->sl_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->slUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->csc_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->cscUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->ld_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->ldUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
-static INT32 im_iip_util_exec_lut( T_IM_IIP_UTIL_PARAM_LUT* const lut_param, const T_IM_IIP_UTIL_LUT* const cfg )
+static INT32 im_iip_util_exec_lut( TImIipUtilParamLut* const lut_param, const TImIipUtilLut* const cfg )
 {
 	INT32	retval;
 	UINT32	loopcnt;
 
 	for ( loopcnt = 0; loopcnt < 2; loopcnt++ ) {
 		retval = Im_IIP_Ctrl_PIXFMTTBL( lut_param->pixid[loopcnt], &lut_param->pixfmttbl[loopcnt] );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 		}
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ld_unitid, &lut_param->unit_cfg_1d );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ldUnitid, &lut_param->unitCfg1D );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->lut_unitid, &lut_param->unit_cfg_lut );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->lutUnitid, &lut_param->unitCfgLut );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->sl_unitid, &lut_param->unit_cfg_sl );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->slUnitid, &lut_param->unitCfgSl );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	if( lut_param->axi_id_ld != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( lut_param->axi_id_ld, &lut_param->axi_cfg_1d );
-		if( retval != D_IM_IIP_OK ) {
+	if( lut_param->axiIdLd != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( lut_param->axiIdLd, &lut_param->axiCfg1D );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	if( lut_param->axi_id_sl != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( lut_param->axi_id_sl, &lut_param->axi_cfg_sl );
-		if( retval != D_IM_IIP_OK ) {
+	if( lut_param->axiIdSl != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( lut_param->axiIdSl, &lut_param->axiCfgSl );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	lut_param->wait_param.int_fact = imIipUtilSetIntFact( lut_param->open_param.unitid_bitmask );
+	lut_param->waitParam.intFact = imIipUtilSetIntFact( lut_param->openParam.unitidBitmask );
 
-	retval = Im_IIP_Set_Interrupt( lut_param->wait_param.int_fact, 1 );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Set_Interrupt( lut_param->waitParam.intFact, 1 );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
 
-	imIipUtilCleanDcache( lut_param->param_buffer_addr -D_IM_IIP_UTIL_LUT_BUF_BYTES, D_IM_IIP_UTIL_LUT_BUF_BYTES );
+	imIipUtilCleanDcache( lut_param->paramBufferAddr -ImIipDefine_D_IM_IIP_UTIL_LUT_BUF_BYTES, ImIipDefine_D_IM_IIP_UTIL_LUT_BUF_BYTES );
 
 #if 0
 	{	// Print register for debug.
-		extern VOID CT_Im_IIP_Print_Unitcfg_Byid( const E_IM_IIP_UNIT_ID unitid );
-		extern VOID CT_Im_IIP_Print_Pixfmttbl_Byid( const E_IM_IIP_PIXID pixid );
+		extern VOID CT_Im_IIP_Print_Unitcfg_Byid( const EImIipUnitId unitid );
+		extern VOID CT_Im_IIP_Print_Pixfmttbl_Byid( const EImIipPixid pixid );
 
-		CT_Im_IIP_Print_Unitcfg_Byid( cfg->ld_unitid );
-		CT_Im_IIP_Print_Unitcfg_Byid( cfg->lut_unitid );
-		CT_Im_IIP_Print_Unitcfg_Byid( cfg->sl_unitid );
-		CT_Im_IIP_Print_Pixfmttbl_Byid( cfg->src_pixid );
-		CT_Im_IIP_Print_Pixfmttbl_Byid( cfg->dst_pixid );
+		CT_Im_IIP_Print_Unitcfg_Byid( cfg->ldUnitid );
+		CT_Im_IIP_Print_Unitcfg_Byid( cfg->lutUnitid );
+		CT_Im_IIP_Print_Unitcfg_Byid( cfg->slUnitid );
+		CT_Im_IIP_Print_Pixfmttbl_Byid( cfg->srcPixid );
+		CT_Im_IIP_Print_Pixfmttbl_Byid( cfg->dstPixid );
 	}
 #endif
 
-	retval = Im_IIP_Start_SWTRG( cfg->sl_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->slUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->lut_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->lutUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->ld_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->ldUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 /**
 @brief		Execute Utility function
 */
-static INT32 im_iip_util_exec_alpha( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param, const T_IM_IIP_UTIL_ALPHABLEND* const cfg )
+static INT32 im_iip_util_exec_alpha( TImIipUtilParamAlpha* const alp_param, const TImIipUtilAlphablend* const cfg )
 {
 	INT32	retval;
 	UINT32	loopcnt;
 
 	for ( loopcnt = 0; loopcnt < 3; loopcnt++ ) {
 		retval = Im_IIP_Ctrl_PIXFMTTBL( alp_param->pixid[loopcnt], &alp_param->pixfmttbl[loopcnt] );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 		}
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ld_unitid[0], &alp_param->unit_cfg_1d[0] );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ldUnitid[0], &alp_param->unitCfg1D[0] );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ld_unitid[1], &alp_param->unit_cfg_1d[1] );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->ldUnitid[1], &alp_param->unitCfg1D[1] );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->blend_unitid, &alp_param->unit_cfg_alp );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->blendUnitid, &alp_param->unitCfgAlp );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->sl_unitid, &alp_param->unit_cfg_sl );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Ctrl_SWTRG_Unit( cfg->slUnitid, &alp_param->unitCfgSl );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	if( alp_param->axi_id_ld[0] != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( alp_param->axi_id_ld[0], &alp_param->axi_cfg_1d[0] );
-		if( retval != D_IM_IIP_OK ) {
+	if( alp_param->axiIdLd[0] != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( alp_param->axiIdLd[0], &alp_param->axiCfg1D[0] );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	if( alp_param->axi_id_ld[1] != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( alp_param->axi_id_ld[1], &alp_param->axi_cfg_1d[1] );
-		if( retval != D_IM_IIP_OK ) {
+	if( alp_param->axiIdLd[1] != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( alp_param->axiIdLd[1], &alp_param->axiCfg1D[1] );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	if( alp_param->axi_id_sl != E_IM_IIP_AXI_ID_MAX ) {
-		retval = Im_IIP_Ctrl_AXI( alp_param->axi_id_sl, &alp_param->axi_cfg_sl );
-		if( retval != D_IM_IIP_OK ) {
+	if( alp_param->axiIdSl != ImIipStruct_E_IM_IIP_AXI_ID_MAX ) {
+		retval = im_iip_sub_ctrl_axi( alp_param->axiIdSl, &alp_param->axiCfgSl );
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 				return retval;
 		}
 	}
 
-	alp_param->wait_param.int_fact = imIipUtilSetIntFact( alp_param->open_param.unitid_bitmask );
+	alp_param->waitParam.intFact = imIipUtilSetIntFact( alp_param->openParam.unitidBitmask );
 
-	retval = Im_IIP_Set_Interrupt( alp_param->wait_param.int_fact, 1 );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Set_Interrupt( alp_param->waitParam.intFact, 1 );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
 
-	imIipUtilCleanDcache( alp_param->param_buffer_addr -D_IM_IIP_UTIL_ALPHABLEND_BUF_BYTES, D_IM_IIP_UTIL_ALPHABLEND_BUF_BYTES );
+	imIipUtilCleanDcache( alp_param->paramBufferAddr -ImIipDefine_D_IM_IIP_UTIL_ALPHABLEND_BUF_BYTES, ImIipDefine_D_IM_IIP_UTIL_ALPHABLEND_BUF_BYTES );
 
 
-	retval = Im_IIP_Start_SWTRG( cfg->sl_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->slUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->blend_unitid, D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->blendUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->ld_unitid[1], D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->ldUnitid[1], ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	retval = Im_IIP_Start_SWTRG( cfg->ld_unitid[0], D_IM_IIP_SWTRG_ON );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Start_SWTRG( cfg->ldUnitid[0], ImIipDefine_D_IM_IIP_SWTRG_ON );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 	}
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
@@ -465,7 +465,7 @@ static INT32 im_iip_util_exec_alpha( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param,
 @param[in]	cfg				Pointer of Alpha parameter
 */
 static VOID im_iip_set_alpha_unit_param( T_IM_IIP_PARAM_BLEND* const alpha,
-										 const T_IM_IIP_UTIL_ALPHABLEND* const cfg )
+										 const TImIipUtilAlphablend* const cfg )
 {
 	memset( alpha, '\0', sizeof(*alpha) );
 
@@ -483,7 +483,7 @@ static VOID im_iip_set_alpha_unit_param( T_IM_IIP_PARAM_BLEND* const alpha,
 	alpha->header1.bit.CtrlCode = E_IM_IIP_PARAM_CTL_CODE_EXE_LAST_PACKET;
 	alpha->BLENDCTL.bit.BLD_MD = E_IM_IIP_PARAM_BLD_MD_ALPHA_BLEND;
 	alpha->BLENDCTL.bit.CLP_MD = E_IM_IIP_PARAM_CLP_MD_NO_CLIP;
-	if( cfg->dst.gbl.alpha == D_IM_IIP_ALPHA_TRUE ) {
+	if( cfg->dst.gbl.alpha == ImIipDefine_D_IM_IIP_ALPHA_TRUE ) {
 		alpha->BLENDCTL.bit.ALPHA_OUT = cfg->alpha.out;
 	}
 	else {
@@ -492,10 +492,10 @@ static VOID im_iip_set_alpha_unit_param( T_IM_IIP_PARAM_BLEND* const alpha,
 
 	alpha->ALPHACTL0.bit.ALPHA_STEP = cfg->alpha.step;
 	alpha->ALPHACTL0.bit.ALPHA_SEL = cfg->alpha.sel;
-	alpha->ALPHACTL1.bit.ALPHA_VAL0 = cfg->alpha.ALPHA_VAL[0];
-	alpha->ALPHACTL1.bit.ALPHA_VAL1 = cfg->alpha.ALPHA_VAL[1];
-	alpha->ALPHACTL2.bit.ALPHA_VAL2 = cfg->alpha.ALPHA_VAL[2];
-	alpha->ALPHACTL2.bit.ALPHA_VAL3 = cfg->alpha.ALPHA_VAL[3];
+	alpha->ALPHACTL1.bit.ALPHA_VAL0 = cfg->alpha.alphaVal[0];
+	alpha->ALPHACTL1.bit.ALPHA_VAL1 = cfg->alpha.alphaVal[1];
+	alpha->ALPHACTL2.bit.ALPHA_VAL2 = cfg->alpha.alphaVal[2];
+	alpha->ALPHACTL2.bit.ALPHA_VAL3 = cfg->alpha.alphaVal[3];
 
 // alpha->WADCTl[0].bit.WADD_KA = 0;	// not used
 // alpha->WADCTl[0].bit.WADD_KB = 0;	// not used
@@ -529,150 +529,150 @@ static VOID im_iip_set_alpha_unit_param( T_IM_IIP_PARAM_BLEND* const alpha,
 /**
 @brief		Set Parameters of Alpha Blend Utility
 */
-static VOID im_iip_util_set_param_alpha( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param, const T_IM_IIP_UTIL_ALPHABLEND* const cfg )
+static VOID im_iip_util_set_param_alpha( TImIipUtilParamAlpha* const alp_param, const TImIipUtilAlphablend* const cfg )
 {
 	T_IM_IIP_PARAM_1DL*			oned[2];
 	T_IM_IIP_PARAM_BLEND*		alpha;
 	T_IM_IIP_PARAM_STS*			sl;
-	T_IM_IIP_UTIL_PHVSZ			phvsz;
+	TImIipUtilPhvsz			phvsz;
 
 	/// Set Pointer of SDRAM parameter
 
-	oned[0] = (T_IM_IIP_PARAM_1DL*)alp_param->param_buffer_addr;
-	alp_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_1DL) );
+	oned[0] = (T_IM_IIP_PARAM_1DL*)alp_param->paramBufferAddr;
+	alp_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_1DL) );
 
-	oned[1] = (T_IM_IIP_PARAM_1DL*)alp_param->param_buffer_addr;
-	alp_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_1DL) );
+	oned[1] = (T_IM_IIP_PARAM_1DL*)alp_param->paramBufferAddr;
+	alp_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_1DL) );
 
-	alpha = (T_IM_IIP_PARAM_BLEND*)alp_param->param_buffer_addr;
-	alp_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_BLEND) );
+	alpha = (T_IM_IIP_PARAM_BLEND*)alp_param->paramBufferAddr;
+	alp_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_BLEND) );
 
-	sl = (T_IM_IIP_PARAM_STS*)alp_param->param_buffer_addr;
-	alp_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_STS) );
+	sl = (T_IM_IIP_PARAM_STS*)alp_param->paramBufferAddr;
+	alp_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_STS) );
 
 
 
 	/// Set SDRAM paramter
-	im_iip_set_phvsz_1d_sl( &phvsz, &cfg->dst );
+	im_iip_sub_set_phvsz_1d_sl( NULL,&phvsz, &cfg->dst );
 
-	im_iip_set_1d_unit_param( oned[0], &phvsz, &cfg->src[0], cfg->pix_depth, cfg->ld_cache_select[0] );
-	im_iip_set_1d_unit_param( oned[1], &phvsz, &cfg->src[1], cfg->pix_depth, cfg->ld_cache_select[1] );
+	im_iip_define_set_1d_unit_param(NULL, oned[0], &phvsz, &cfg->src[0], cfg->pixDepth, cfg->ldCacheSelect[0] );
+	im_iip_define_set_1d_unit_param( NULL,oned[1], &phvsz, &cfg->src[1], cfg->pixDepth, cfg->ldCacheSelect[1] );
 
 	im_iip_set_alpha_unit_param( alpha, cfg );
 
-	im_iip_set_sl_unit_param( sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pix_depth );
+	im_iip_define_set_sl_unit_param( NULL,sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pixDepth );
 
 	oned[0]->PIXIDDEF.bit.IPIXID = alp_param->pixid[0];
-	oned[0]->LD_TOPCNF0.bit.WAITCONF = im_iip_util_conv_portid( cfg->blend_unitid );
+	oned[0]->LD_TOPCNF0.bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->blendUnitid );
 
 	oned[1]->PIXIDDEF.bit.IPIXID = alp_param->pixid[1];
-	oned[1]->LD_TOPCNF0.bit.WAITCONF = im_iip_util_conv_portid_1( cfg->blend_unitid );
+	oned[1]->LD_TOPCNF0.bit.WAITCONF = im_iip_new_util_conv_portid_1( cfg->blendUnitid );
 
-	alpha->BLENDTOPCNF0.bit.DATACONF_0 = im_iip_util_conv_portid( cfg->ld_unitid[0] );
-	alpha->BLENDTOPCNF1.bit.DATACONF_1 = im_iip_util_conv_portid( cfg->ld_unitid[1] );
-	alpha->BLENDTOPCNF0.bit.WAITCONF_0 = im_iip_util_conv_portid( cfg->sl_unitid );
+	alpha->BLENDTOPCNF0.bit.DATACONF_0 = im_iip_sub_util_conv_portid( cfg->ldUnitid[0] );
+	alpha->BLENDTOPCNF1.bit.DATACONF_1 = im_iip_sub_util_conv_portid( cfg->ldUnitid[1] );
+	alpha->BLENDTOPCNF0.bit.WAITCONF_0 = im_iip_sub_util_conv_portid( cfg->slUnitid );
 
 	sl->BASE.PIXIDDEF.bit.OPIXID = alp_param->pixid[2];
-	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_util_conv_portid( cfg->blend_unitid );
+	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_sub_util_conv_portid( cfg->blendUnitid );
 
-	alp_param->p_param_1d[0] = oned[0];
-	alp_param->p_param_1d[0] = oned[1];
-	alp_param->p_param_alp = alpha;
-	alp_param->p_param_sl = sl;
+	alp_param->pParam1D[0] = oned[0];
+	alp_param->pParam1D[0] = oned[1];
+	alp_param->pParamAlp = alpha;
+	alp_param->pParamSl = sl;
 
 	/// Set UNITINFTBL parameter
-	im_iip_set_unitinftbl_param( &alp_param->unit_cfg_1d[0], cfg->ld_unitid[0], oned[0], 0ULL );
-	im_iip_set_unitinftbl_param( &alp_param->unit_cfg_1d[1], cfg->ld_unitid[1], oned[1], 0ULL );
-	im_iip_set_unitinftbl_param( &alp_param->unit_cfg_alp, cfg->blend_unitid, alpha, 0ULL );
-	im_iip_set_unitinftbl_param( &alp_param->unit_cfg_sl, cfg->sl_unitid, sl, alp_param->open_param.unitid_bitmask );
+	im_iip_sub_set_unitinftbl_param( NULL, &alp_param->unitCfg1D[0], cfg->ldUnitid[0], oned[0], 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &alp_param->unitCfg1D[1], cfg->ldUnitid[1], oned[1], 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &alp_param->unitCfgAlp, cfg->blendUnitid, alpha, 0ULL );
+	im_iip_sub_set_unitinftbl_param(NULL,  &alp_param->unitCfgSl, cfg->slUnitid, sl, alp_param->openParam.unitidBitmask );
 }
 
-ULONG im_iip_util_conv_portid_1( const E_IM_IIP_UNIT_ID unitid )
+ULONG im_iip_new_util_conv_portid_1( const EImIipUnitId unitid )
 {
 	switch( unitid ) {
-		case E_IM_IIP_UNIT_ID_FLT:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_FLT:
 			return E_IM_IIP_PARAM_PORTID_FLT_P1;
-		case E_IM_IIP_UNIT_ID_LUT:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_LUT:
 			return E_IM_IIP_PARAM_PORTID_LUT_P1;
-		case E_IM_IIP_UNIT_ID_GPC:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_GPC:
 			return E_IM_IIP_PARAM_PORTID_GPC_P1;
-		case E_IM_IIP_UNIT_ID_BLEND0:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_BLEND0:
 			return E_IM_IIP_PARAM_PORTID_BLEND0_P1;
-		case E_IM_IIP_UNIT_ID_CFL0:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_CFL0:
 			return E_IM_IIP_PARAM_PORTID_CFL0_P1;
-		case E_IM_IIP_UNIT_ID_BLEND1:
+		case ImIipStruct_E_IM_IIP_UNIT_ID_BLEND1:
 			return E_IM_IIP_PARAM_PORTID_BLEND1_P1;
 		default:
 			return E_IM_IIP_PARAM_PORTID_NONE;	// Other unit
 	}
 }
-static INT32 im_iip_set_LUTRAM( const T_IM_IIP_LUTRAM* const lutram,
+static INT32 im_iip_set_LUTRAM( const TImIipLutram* const lutram,
 							    const UINT32 alpha )
 {
-	T_IM_IIP_LUT			lut;
-	INT32					retval = D_IM_IIP_ERR;
-	E_IM_IIP_LUTRAM_TYPE	loopcnt;
+	TImIipLut			lut;
+	INT32					retval = ImIipDefine_D_IM_IIP_ERR;
+	EImIipLutramType	loopcnt;
 
-	for ( loopcnt = E_IM_IIP_LUTRAM_TYPE_A; loopcnt < E_IM_IIP_LUTRAM_TYPE_MAX; loopcnt++ ) {
-		lut.buffer_bytes = lutram->buffer_bytes[loopcnt];
-		lut.buffer_addr = lutram->buffer_addr[loopcnt];
-		lut.lutram_type = loopcnt;
+	for ( loopcnt = ImIipStruct_E_IM_IIP_LUTRAM_TYPE_A; loopcnt < ImIipStruct_E_IM_IIP_LUTRAM_TYPE_MAX; loopcnt++ ) {
+		lut.bufferBytes = lutram->bufferBytes[loopcnt];
+		lut.bufferAddr = lutram->bufferAddr[loopcnt];
+		lut.lutramType = loopcnt;
 		retval = Im_IIP_Ctrl_LUT( &lut );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			return retval;
 		}
 	}
 	return retval;
 }
 
-static VOID im_iip_util_set_param_lut( T_IM_IIP_UTIL_PARAM_LUT* const lut_param, const T_IM_IIP_UTIL_LUT* const cfg )
+static VOID im_iip_util_set_param_lut( TImIipUtilParamLut* const lut_param, const TImIipUtilLut* const cfg )
 {
 	T_IM_IIP_PARAM_1DL*			oned;
 	T_IM_IIP_PARAM_LUT*			lut;
 	T_IM_IIP_PARAM_STS*			sl;
-	T_IM_IIP_UTIL_PHVSZ			phvsz;
+	TImIipUtilPhvsz			phvsz;
 
 	/// Set Pointer of SDRAM parameter
 
-	oned = (T_IM_IIP_PARAM_1DL*)lut_param->param_buffer_addr;
-	lut_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_1DL) );
+	oned = (T_IM_IIP_PARAM_1DL*)lut_param->paramBufferAddr;
+	lut_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_1DL) );
 
-	lut = (T_IM_IIP_PARAM_LUT*)lut_param->param_buffer_addr;
-	lut_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_LUT) );
+	lut = (T_IM_IIP_PARAM_LUT*)lut_param->paramBufferAddr;
+	lut_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_LUT) );
 
-	sl = (T_IM_IIP_PARAM_STS*)lut_param->param_buffer_addr;
-	lut_param->param_buffer_addr += im_iip_roundup_8( sizeof(T_IM_IIP_PARAM_STS) );
+	sl = (T_IM_IIP_PARAM_STS*)lut_param->paramBufferAddr;
+	lut_param->paramBufferAddr += ImIipDefine_IM_IIP_ROUNDUN_8( sizeof(T_IM_IIP_PARAM_STS) );
 
 
 	/// Set SDRAM paramter
-	im_iip_set_phvsz_1d_sl( &phvsz, &cfg->dst );
+	im_iip_sub_set_phvsz_1d_sl( NULL,&phvsz, &cfg->dst );
 
-	im_iip_set_1d_unit_param( oned, &phvsz, &cfg->src, cfg->pix_depth, cfg->ld_cache_select );
+	im_iip_define_set_1d_unit_param(NULL, oned, &phvsz, &cfg->src, cfg->pixDepth, cfg->ldCacheSelect );
 
-	im_iip_util_set_lut_unit_param( lut, cfg );
+	im_iip_new_util_set_lut_unit_param(NULL, lut, cfg );
 
-	im_iip_set_sl_unit_param( sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pix_depth );
+	im_iip_define_set_sl_unit_param(NULL, sl, &phvsz, &cfg->dst.rect, &cfg->dst.gbl, cfg->pixDepth );
 
 	oned->PIXIDDEF.bit.IPIXID = lut_param->pixid[0];
-	oned->LD_TOPCNF0.bit.WAITCONF = im_iip_util_conv_portid( cfg->lut_unitid );
+	oned->LD_TOPCNF0.bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->lutUnitid );
 
-	lut->LUTTOPCNF[0].bit.DATACONF = im_iip_util_conv_portid( cfg->ld_unitid );
-	lut->LUTTOPCNF[0].bit.WAITCONF = im_iip_util_conv_portid( cfg->sl_unitid );
+	lut->LUTTOPCNF[0].bit.DATACONF = im_iip_sub_util_conv_portid( cfg->ldUnitid );
+	lut->LUTTOPCNF[0].bit.WAITCONF = im_iip_sub_util_conv_portid( cfg->slUnitid );
 
 	sl->BASE.PIXIDDEF.bit.OPIXID = lut_param->pixid[1];
-	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_util_conv_portid( cfg->lut_unitid );
+	sl->BASE.SL_TOPCNF0.bit.DATACONF = im_iip_sub_util_conv_portid( cfg->lutUnitid );
 
-	lut_param->p_param_1d = oned;
-	lut_param->p_param_lut = lut;
-	lut_param->p_param_sl = sl;
+	lut_param->pParam1D = oned;
+	lut_param->pParamLut = lut;
+	lut_param->pParamSl = sl;
 
-	im_iip_set_unitinftbl_param( &lut_param->unit_cfg_1d, cfg->ld_unitid, oned, 0ULL );
-	im_iip_set_unitinftbl_param( &lut_param->unit_cfg_lut, cfg->lut_unitid, lut, 0ULL );
-	im_iip_set_unitinftbl_param( &lut_param->unit_cfg_sl, cfg->sl_unitid, sl, lut_param->open_param.unitid_bitmask );
+	im_iip_sub_set_unitinftbl_param(NULL, &lut_param->unitCfg1D, cfg->ldUnitid, oned, 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &lut_param->unitCfgLut, cfg->lutUnitid, lut, 0ULL );
+	im_iip_sub_set_unitinftbl_param( NULL, &lut_param->unitCfgSl, cfg->slUnitid, sl, lut_param->openParam.unitidBitmask );
 }
 
-VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
-									   const T_IM_IIP_UTIL_LUT* const cfg )
+VOID im_iip_new_util_set_lut_unit_param( ImIipDefine* self,T_IM_IIP_PARAM_LUT* const lut,
+									   const TImIipUtilLut* const cfg )
 {
 	INT32	loopcnt;
 
@@ -699,9 +699,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTUNITCTL.bit.OUTMD3 = 0;
 
 	// LUT A
-	lut->LUTCTL_A.bit.LUTBIT = cfg->lut_pix_depth[0];
+	lut->LUTCTL_A.bit.LUTBIT = cfg->lutPixDepth[0];
 	lut->LUTCTL_A.bit.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT;
-	lut->LUTCTL_A.bit.SGN = cfg->src.gbl.sign_Y_G;
+	lut->LUTCTL_A.bit.SGN = cfg->src.gbl.signYG;
 	lut->LUTCTL_A.bit.SPLBIT = cfg->splbit[0];
 	lut->LUTPRECAL_A.bit.SHIFT = 0;
 	lut->LUTPRECAL_A.bit.OFSET = 0;
@@ -713,9 +713,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTPRECAL_A.bit.LUTADRS = 0x0000;
 
 	// LUT B
-	lut->LUTCTL_B.bit.LUTBIT = cfg->lut_pix_depth[1];
+	lut->LUTCTL_B.bit.LUTBIT = cfg->lutPixDepth[1];
 	lut->LUTCTL_B.bit.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT;
-	lut->LUTCTL_B.bit.SGN = cfg->src.gbl.sign_Cb_B;
+	lut->LUTCTL_B.bit.SGN = cfg->src.gbl.signCbB;
 	lut->LUTCTL_B.bit.SPLBIT = cfg->splbit[1];
 	lut->LUTPRECAL_B.bit.SHIFT = 0;
 	lut->LUTPRECAL_B.bit.OFSET = 0;
@@ -727,9 +727,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTPRECAL_B.bit.LUTADRS = 0x2000;
 
 	// LUT C
-	lut->LUTCTL_C.bit.LUTBIT = cfg->lut_pix_depth[2];
+	lut->LUTCTL_C.bit.LUTBIT = cfg->lutPixDepth[2];
 	lut->LUTCTL_C.bit.USE = E_IM_IIP_PARAM_LUTUSE_LUT_OUT;
-	lut->LUTCTL_C.bit.SGN = cfg->src.gbl.sign_Cr_R;
+	lut->LUTCTL_C.bit.SGN = cfg->src.gbl.signCrR;
 	lut->LUTCTL_C.bit.SPLBIT = cfg->splbit[2];
 	lut->LUTPRECAL_C.bit.SHIFT = 0;
 	lut->LUTPRECAL_C.bit.OFSET = 0;
@@ -741,9 +741,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTPRECAL_C.bit.LUTADRS = 0x4000;
 
 	// LUT D
-	lut->LUTCTL_D.bit.LUTBIT = cfg->lut_pix_depth[3];
+	lut->LUTCTL_D.bit.LUTBIT = cfg->lutPixDepth[3];
 	lut->LUTCTL_D.bit.USE = E_IM_IIP_PARAM_LUTUSE_PRECALC;
-	lut->LUTCTL_D.bit.SGN = cfg->src.gbl.sign_D3;
+	lut->LUTCTL_D.bit.SGN = cfg->src.gbl.signD3;
 	lut->LUTCTL_D.bit.SPLBIT = cfg->splbit[3];
 	lut->LUTPRECAL_D.bit.SHIFT = 0;
 	lut->LUTPRECAL_D.bit.OFSET = 0;
@@ -755,9 +755,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTPRECAL_D.bit.LUTADRS = 0x1000;
 
 	// LUT E
-	lut->LUTCTL_E.bit.LUTBIT = cfg->lut_pix_depth[0];
+	lut->LUTCTL_E.bit.LUTBIT = cfg->lutPixDepth[0];
 	lut->LUTCTL_E.bit.USE = E_IM_IIP_PARAM_LUTUSE_PRECALC;
-	lut->LUTCTL_E.bit.SGN = cfg->src.gbl.sign_Y_G;
+	lut->LUTCTL_E.bit.SGN = cfg->src.gbl.signYG;
 	lut->LUTCTL_E.bit.SPLBIT = 0;
 	lut->LUTPRECAL_E.bit.SHIFT = 0;
 	lut->LUTPRECAL_E.bit.OFSET = 0;
@@ -769,9 +769,9 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 	lut->LUTPRECAL_E.bit.LUTADRS = 0x3000;
 
 	// LUT F
-	lut->LUTCTL_F.bit.LUTBIT = cfg->lut_pix_depth[1];
+	lut->LUTCTL_F.bit.LUTBIT = cfg->lutPixDepth[1];
 	lut->LUTCTL_F.bit.USE = E_IM_IIP_PARAM_LUTUSE_PRECALC;
-	lut->LUTCTL_F.bit.SGN = cfg->src.gbl.sign_Cb_B;
+	lut->LUTCTL_F.bit.SGN = cfg->src.gbl.signCbB;
 	lut->LUTCTL_F.bit.SPLBIT = 0;
 	lut->LUTPRECAL_F.bit.SHIFT = 0;
 	lut->LUTPRECAL_F.bit.OFSET = 0;
@@ -786,61 +786,61 @@ VOID im_iip_util_set_lut_unit_param( T_IM_IIP_PARAM_LUT* const lut,
 /**
 @brief		Set Parameters of Alpha Blend Utility
 */
-INT32 im_iip_util_alpha_main( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param, const T_IM_IIP_UTIL_ALPHABLEND* const cfg )
+INT32 im_iip_new_util_alpha_main( TImIipUtilParamAlpha* const alp_param, const TImIipUtilAlphablend* const cfg )
 {
 	INT32						retval;
-	T_IM_IIP_UTIL_ALPHA_INFO	alpha_info;
+	TImIipUtilAlphaInfo	alpha_info;
 
-	alp_param->open_param.unitid_bitmask = im_iip_util_conv_unitid_to_pldunit(cfg->ld_unitid[0])
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->ld_unitid[1])
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->blend_unitid)
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->sl_unitid);
-	alp_param->open_param.pixid_bitmask = cfg->src_pixid[0] | cfg->src_pixid[1] | cfg->dst_pixid;
-	alp_param->open_param.open_res_bitmask = E_IM_IIP_OPEN_RES_NONE;
+	alp_param->openParam.unitidBitmask = ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->ldUnitid[0])
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->ldUnitid[1])
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->blendUnitid)
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->slUnitid);
+	alp_param->openParam.pixidBitmask = cfg->srcPixid[0] | cfg->srcPixid[1] | cfg->dstPixid;
+	alp_param->openParam.openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_NONE;
 
-	switch( cfg->ld_cache_select[0] ) {
+	switch( cfg->ldCacheSelect[0] ) {
 		case E_IM_IIP_PARAM_CSEL_0:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE0;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 			break;
 		case E_IM_IIP_PARAM_CSEL_1:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE1;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE1;
 			break;
 		case E_IM_IIP_PARAM_CSEL_2:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE2;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	switch( cfg->ld_cache_select[1] ) {
+	switch( cfg->ldCacheSelect[1] ) {
 		case E_IM_IIP_PARAM_CSEL_0:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE0;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 			break;
 		case E_IM_IIP_PARAM_CSEL_1:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE1;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE1;
 			break;
 		case E_IM_IIP_PARAM_CSEL_2:
-			alp_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE2;
+			alp_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	alp_param->pixid[0] = im_iip_util_conv_pixid( cfg->src_pixid[0] );
-	if( alp_param->pixid[0] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	alp_param->pixid[0] = im_iip_sub_util_conv_pixid( cfg->srcPixid[0] );
+	if( alp_param->pixid[0] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
-	alp_param->pixid[1] = im_iip_util_conv_pixid( cfg->src_pixid[1] );
-	if( alp_param->pixid[1] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	alp_param->pixid[1] = im_iip_sub_util_conv_pixid( cfg->srcPixid[1] );
+	if( alp_param->pixid[1] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
-	alp_param->pixid[2] = im_iip_util_conv_pixid( cfg->dst_pixid );
-	if( alp_param->pixid[2] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	alp_param->pixid[2] = im_iip_sub_util_conv_pixid( cfg->dstPixid );
+	if( alp_param->pixid[2] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	retval = Im_IIP_Open_SWTRG( alp_param->open_param.unitid_bitmask, alp_param->open_param.pixid_bitmask, alp_param->open_param.open_res_bitmask, alp_param->wait_param.wait_time );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Open_SWTRG( alp_param->openParam.unitidBitmask, alp_param->openParam.pixidBitmask, alp_param->openParam.openResBitmask, alp_param->waitParam.waitTime );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 		return retval;
 	}
 
@@ -850,19 +850,19 @@ INT32 im_iip_util_alpha_main( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param, const 
 		im_iip_util_set_param_alpha( alp_param, cfg );
 
 		/// Set IIP driver parameter
-		alpha_info.alpha_depth = cfg->alpha_depth;
-		alpha_info.alpha_subsampling = cfg->alpha_subsampling;
-		im_iip_set_pixfmttbl_param( &alp_param->pixfmttbl[0], &cfg->src[0].gbl, cfg->pix_depth, &alpha_info );
-		im_iip_set_pixfmttbl_param( &alp_param->pixfmttbl[1], &cfg->src[1].gbl, cfg->pix_depth, &alpha_info );
-		im_iip_set_pixfmttbl_param( &alp_param->pixfmttbl[2], &cfg->dst.gbl,    cfg->pix_depth, &alpha_info );
+		alpha_info.alphaDepth = cfg->alphaDepth;
+		alpha_info.alphaSubsampling = cfg->alphaSubsampling;
+		im_iip_sub_set_pixfmttbl_param( NULL,&alp_param->pixfmttbl[0], &cfg->src[0].gbl, cfg->pixDepth, &alpha_info );
+		im_iip_sub_set_pixfmttbl_param( NULL,&alp_param->pixfmttbl[1], &cfg->src[1].gbl, cfg->pixDepth, &alpha_info );
+		im_iip_sub_set_pixfmttbl_param(NULL, &alp_param->pixfmttbl[2], &cfg->dst.gbl,    cfg->pixDepth, &alpha_info );
 
-		im_iip_set_axi_param( cfg->ld_unitid[0], &alp_param->axi_id_ld[0], &alp_param->axi_cfg_1d[0], alp_param->param_master_IF );
-		im_iip_set_axi_param( cfg->ld_unitid[1], &alp_param->axi_id_ld[1], &alp_param->axi_cfg_1d[1], alp_param->param_master_IF );
-		im_iip_set_axi_param( cfg->sl_unitid, &alp_param->axi_id_sl, &alp_param->axi_cfg_sl, alp_param->param_master_IF );
+		im_iip_new_set_axi_param(  NULL,cfg->ldUnitid[0], &alp_param->axiIdLd[0], &alp_param->axiCfg1D[0], alp_param->paramMasterIf );
+		im_iip_new_set_axi_param(  NULL,cfg->ldUnitid[1], &alp_param->axiIdLd[1], &alp_param->axiCfg1D[1], alp_param->paramMasterIf );
+		im_iip_new_set_axi_param(  NULL,cfg->slUnitid, &alp_param->axiIdSl, &alp_param->axiCfgSl, alp_param->paramMasterIf );
 
 		/// Execute IIP
 		retval = im_iip_util_exec_alpha( alp_param, cfg );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			break;
 		}
 
@@ -872,47 +872,47 @@ INT32 im_iip_util_alpha_main( T_IM_IIP_UTIL_PARAM_ALPHA* const alp_param, const 
 
 
 	// Error route
-	(VOID)Im_IIP_Close_SWTRG( alp_param->open_param.unitid_bitmask, alp_param->open_param.pixid_bitmask, alp_param->open_param.open_res_bitmask );
+	(VOID)Im_IIP_Close_SWTRG( alp_param->openParam.unitidBitmask, alp_param->openParam.pixidBitmask, alp_param->openParam.openResBitmask );
 
 	return retval;
 }
 
-INT32 im_iip_util_lut_main( T_IM_IIP_UTIL_PARAM_LUT* const lut_param, const T_IM_IIP_UTIL_LUT* const cfg )
+INT32 im_iip_new_util_lut_main( TImIipUtilParamLut* const lut_param, const TImIipUtilLut* const cfg )
 {
 	INT32						retval;
-	T_IM_IIP_UTIL_ALPHA_INFO	alpha_info;
+	TImIipUtilAlphaInfo	alpha_info;
 
-	lut_param->open_param.unitid_bitmask = im_iip_util_conv_unitid_to_pldunit(cfg->ld_unitid)
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->lut_unitid)
-										 | im_iip_util_conv_unitid_to_pldunit(cfg->sl_unitid);
-	lut_param->open_param.pixid_bitmask = cfg->src_pixid | cfg->dst_pixid;
-	lut_param->open_param.open_res_bitmask = E_IM_IIP_OPEN_RES_NONE | E_IM_IIP_OPEN_RES_LUT_A | E_IM_IIP_OPEN_RES_LUT_B | E_IM_IIP_OPEN_RES_LUT_C | E_IM_IIP_OPEN_RES_LUT_D | E_IM_IIP_OPEN_RES_LUT_E | E_IM_IIP_OPEN_RES_LUT_F;
+	lut_param->openParam.unitidBitmask = ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->ldUnitid)
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->lutUnitid)
+										 | ImIipDefine_IM_IIP_UTIL_CONV_UNITID_TO_PLDUNIT(cfg->slUnitid);
+	lut_param->openParam.pixidBitmask = cfg->srcPixid | cfg->dstPixid;
+	lut_param->openParam.openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_NONE | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_A | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_B | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_C | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_D | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_E | ImIipStruct_E_IM_IIP_OPEN_RES_LUT_F;
 
-	switch( cfg->ld_cache_select ) {
+	switch( cfg->ldCacheSelect ) {
 		case E_IM_IIP_PARAM_CSEL_0:
-			lut_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE0;
+			lut_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 			break;
 		case E_IM_IIP_PARAM_CSEL_1:
-			lut_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE1;
+			lut_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE1;
 			break;
 		case E_IM_IIP_PARAM_CSEL_2:
-			lut_param->open_param.open_res_bitmask |= E_IM_IIP_OPEN_RES_CACHE2;
+			lut_param->openParam.openResBitmask |= ImIipStruct_E_IM_IIP_OPEN_RES_CACHE2;
 			break;
 		default:
-			return D_IM_IIP_INVALID_ARG_ERR;
+			return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	lut_param->pixid[0] = im_iip_util_conv_pixid( cfg->src_pixid );
-	if( lut_param->pixid[0] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	lut_param->pixid[0] = im_iip_sub_util_conv_pixid( cfg->srcPixid );
+	if( lut_param->pixid[0] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
-	lut_param->pixid[1] = im_iip_util_conv_pixid( cfg->dst_pixid );
-	if( lut_param->pixid[1] == E_IM_IIP_PIXID_INVALID ) {
-		return D_IM_IIP_INVALID_ARG_ERR;
+	lut_param->pixid[1] = im_iip_sub_util_conv_pixid( cfg->dstPixid );
+	if( lut_param->pixid[1] == ImIipStruct_E_IM_IIP_PIXID_INVALID ) {
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 
-	retval = Im_IIP_Open_SWTRG( lut_param->open_param.unitid_bitmask, lut_param->open_param.pixid_bitmask, lut_param->open_param.open_res_bitmask, lut_param->wait_param.wait_time );
-	if( retval != D_IM_IIP_OK ) {
+	retval = Im_IIP_Open_SWTRG( lut_param->openParam.unitidBitmask, lut_param->openParam.pixidBitmask, lut_param->openParam.openResBitmask, lut_param->waitParam.waitTime );
+	if( retval != ImIipDefine_D_IM_IIP_OK ) {
 		return retval;
 	}
 
@@ -923,22 +923,22 @@ INT32 im_iip_util_lut_main( T_IM_IIP_UTIL_PARAM_LUT* const lut_param, const T_IM
 
 		/// Set LUTRAM
 		retval = im_iip_set_LUTRAM( &cfg->lutram, cfg->src.gbl.alpha );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			break;
 		}
 
 		/// Set IIP driver parameter
-		alpha_info.alpha_depth = cfg->alpha_depth;
-		alpha_info.alpha_subsampling = cfg->alpha_subsampling;
-		im_iip_set_pixfmttbl_param( &lut_param->pixfmttbl[0], &cfg->src.gbl, cfg->pix_depth, &alpha_info );
-		im_iip_set_pixfmttbl_param( &lut_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pix_depth, &alpha_info );
+		alpha_info.alphaDepth = cfg->alphaDepth;
+		alpha_info.alphaSubsampling = cfg->alphaSubsampling;
+		im_iip_sub_set_pixfmttbl_param(NULL, &lut_param->pixfmttbl[0], &cfg->src.gbl, cfg->pixDepth, &alpha_info );
+		im_iip_sub_set_pixfmttbl_param(NULL, &lut_param->pixfmttbl[1], &cfg->dst.gbl, cfg->pixDepth, &alpha_info );
 
-		im_iip_set_axi_param( cfg->ld_unitid, &lut_param->axi_id_ld, &lut_param->axi_cfg_1d, lut_param->param_master_IF );
-		im_iip_set_axi_param( cfg->sl_unitid, &lut_param->axi_id_sl, &lut_param->axi_cfg_sl, lut_param->param_master_IF );
+		im_iip_new_set_axi_param(  NULL,cfg->ldUnitid, &lut_param->axiIdLd, &lut_param->axiCfg1D, lut_param->paramMasterIf );
+		im_iip_new_set_axi_param( NULL, cfg->slUnitid, &lut_param->axiIdSl, &lut_param->axiCfgSl, lut_param->paramMasterIf );
 
 		/// Execute IIP
 		retval = im_iip_util_exec_lut( lut_param, cfg );
-		if( retval != D_IM_IIP_OK ) {
+		if( retval != ImIipDefine_D_IM_IIP_OK ) {
 			break;
 		}
 
@@ -947,7 +947,7 @@ INT32 im_iip_util_lut_main( T_IM_IIP_UTIL_PARAM_LUT* const lut_param, const T_IM
 	}
 
 	// Error route
-	(VOID)Im_IIP_Close_SWTRG( lut_param->open_param.unitid_bitmask, lut_param->open_param.pixid_bitmask, lut_param->open_param.open_res_bitmask );
+	(VOID)Im_IIP_Close_SWTRG( lut_param->openParam.unitidBitmask, lut_param->openParam.pixidBitmask, lut_param->openParam.openResBitmask );
 
 	return retval;
 }

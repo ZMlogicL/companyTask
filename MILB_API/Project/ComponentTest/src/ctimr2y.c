@@ -841,7 +841,7 @@ VOID ct_im_r2y_set_gamma_on( UCHAR pipeNo )
 	};
 	INT32 ercd;
 
-	ercd = Im_R2Y_Ctrl_Gamma( pipeNo, &r2yCtrlGamma );
+	ercd = im_r2y_ctrl2_gamma(self->imR2yCtrl2, pipeNo, &r2yCtrlGamma );
 	if( ercd != D_DDIM_OK ) {
 		Ddim_Print(( "im_r2y_set_gamma Im_R2Y_Ctrl_Gamma ercd=%d\n", ercd ));
 	}

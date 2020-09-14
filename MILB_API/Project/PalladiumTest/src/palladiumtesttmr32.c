@@ -122,7 +122,7 @@ static VOID pt_dd_tmr32_enable_gic( VOID )
 
 void palladium_test_tmr32_pt_dd_tmr32_main(void)
 {
-	ULONG	time = 10; // 10ms wait				ULONG	time = 50; // 50ms wait        //50 ms or 10 ms ???????
+	kulong	time = 10; // 10ms wait				ULONG	time = 50; // 50ms wait        //50 ms or 10 ms ???????
 
 	// GIC interrupt enable
 	pt_dd_tmr32_enable_gic();

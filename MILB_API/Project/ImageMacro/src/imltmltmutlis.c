@@ -14,7 +14,7 @@
 
 #include "im_ltm.h"
 #include <string.h>
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "jdsltm.h"
 #include "imltmltmutlis.h"
 
@@ -52,19 +52,19 @@ static volatile struct io_ltm_ltm_sram* S_GIM_IO_LTM_LTM_TBL_PTR[D_IM_LTM_PIPE_M
 static const TImLtmLtmIntflgTbl S_GIM_LTM_LTM_INTTBL[ImLtmLtmUtlis_D_IM_LTM_PIPE_COUNT][6] = {
 	{
 		{ 0x00000001, 0x00000001, D_IM_LTM_LTM1_INT_STATE_LTM_END,   D_IM_LTM_LTM1_INT_FLG_LTM_END  },	// FINEN
-		{ 0x00000010, 0x00000010, D_IM_LTM_LTM1_INT_STATE_EXIP_END,  D_IM_LTM_LTM1_INT_FLG_EXIP_END },	// EXIPEN
-		{ 0x00001000, 0x00001000, D_IM_LTM_LTM1_INT_STATE_LINE_END,  D_IM_LTM_LTM1_INT_FLG_LINE_END },	// LCNTEN
-		{ 0x00100000, 0x00100000, D_IM_LTM_LTM1_INT_STATE_AXR_ERR,   D_IM_LTM_LTM1_INT_FLG_AXR_ERR  },	// AXREEN
-		{ 0x00200000, 0x00200000, D_IM_LTM_LTM1_INT_STATE_AXW_ERR,   D_IM_LTM_LTM1_INT_FLG_AXW_ERR  },	// AXWEEN
-		{ 0x02000000, 0x02000000, D_IM_LTM_LTM1_INT_STATE_YLOG_ERR,  D_IM_LTM_LTM1_INT_FLG_YLOG_ERR },	// RAMEEN
+		{ 0x00000010, 0x00000010, D_IM_LTM_LTM1_INT_STATE_EXIP_END,  ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_EXIP_END },	// EXIPEN
+		{ 0x00001000, 0x00001000, D_IM_LTM_LTM1_INT_STATE_LINE_END,  ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_LINE_END },	// LCNTEN
+		{ 0x00100000, 0x00100000, D_IM_LTM_LTM1_INT_STATE_AXR_ERR,   ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_AXR_ERR  },	// AXREEN
+		{ 0x00200000, 0x00200000, D_IM_LTM_LTM1_INT_STATE_AXW_ERR,   ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_AXW_ERR  },	// AXWEEN
+		{ 0x02000000, 0x02000000, D_IM_LTM_LTM1_INT_STATE_YLOG_ERR,  ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_YLOG_ERR },	// RAMEEN
 	},
 	{
 		{ 0x00000001, 0x00000001, D_IM_LTM_LTM2_INT_STATE_LTM_END,   D_IM_LTM_LTM2_INT_FLG_LTM_END  },	// FINEN
-		{ 0x00000010, 0x00000010, D_IM_LTM_LTM2_INT_STATE_EXIP_END,  D_IM_LTM_LTM2_INT_FLG_EXIP_END },	// EXIPEN
-		{ 0x00001000, 0x00001000, D_IM_LTM_LTM2_INT_STATE_LINE_END,  D_IM_LTM_LTM2_INT_FLG_LINE_END },	// LCNTEN
-		{ 0x00100000, 0x00100000, D_IM_LTM_LTM2_INT_STATE_AXR_ERR,   D_IM_LTM_LTM2_INT_FLG_AXR_ERR  },	// AXREEN
-		{ 0x00200000, 0x00200000, D_IM_LTM_LTM2_INT_STATE_AXW_ERR,   D_IM_LTM_LTM2_INT_FLG_AXW_ERR  },	// AXWEEN
-		{ 0x02000000, 0x02000000, D_IM_LTM_LTM2_INT_STATE_YLOG_ERR,  D_IM_LTM_LTM2_INT_FLG_YLOG_ERR },	// RAMEEN
+		{ 0x00000010, 0x00000010, D_IM_LTM_LTM2_INT_STATE_EXIP_END,  ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_EXIP_END },	// EXIPEN
+		{ 0x00001000, 0x00001000, D_IM_LTM_LTM2_INT_STATE_LINE_END,  ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_LINE_END },	// LCNTEN
+		{ 0x00100000, 0x00100000, D_IM_LTM_LTM2_INT_STATE_AXR_ERR,   ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_AXR_ERR  },	// AXREEN
+		{ 0x00200000, 0x00200000, D_IM_LTM_LTM2_INT_STATE_AXW_ERR,   ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_AXW_ERR  },	// AXWEEN
+		{ 0x02000000, 0x02000000, D_IM_LTM_LTM2_INT_STATE_YLOG_ERR,  ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_YLOG_ERR },	// RAMEEN
 	},
 };
 
@@ -93,7 +93,6 @@ static const TImLtmLtmIntflgTbl S_GIM_LTM_LTM_INTTBL[ImLtmLtmUtlis_D_IM_LTM_PIPE
 // Nothing Special
 #endif	// CO_DDIM_UTILITY_USE
 
-
 //---------------------- driver  section -------------------------------
 #ifdef CO_DDIM_UTILITY_USE
 //---------------------- utility section -------------------------------
@@ -115,7 +114,7 @@ static void im_ltm_ltm_utlis_destructor(ImLtmLtmUtlis *self)
 /*
  PUBLIC
 */
- VOID im_ltm_ltm_get_loop_val( UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
+ VOID im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(ImLtmLtmUtlis*self,UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
 {
 	switch( pipe_no ){
 		case D_IM_LTM_PIPE1:
@@ -321,7 +320,7 @@ INT32 Im_LTM_LTM_Start( UCHAR pipe_no )
 	Ddim_Print(( "Im_LTM_LTM_Start on pclk\n" ));
 #endif
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -361,10 +360,10 @@ INT32 Im_LTM_LTM_Start( UCHAR pipe_no )
 
 		// Clear of Event Flag
 		if( ImLtmLtmUtlis_IM_LTM_LTM_CHECK_TARGET_PIPE_NO_1( pipe_no ) ){
-			flgptn |= D_IM_LTM_LTM1_INT_FLG_ALL;
+			flgptn |= ImLtmLtmUtlis_D_IM_LTM_LTM1_INT_FLG_ALL;
 		}
 		if( ImLtmLtmUtlis_IM_LTM_LTM_CHECK_TARGET_PIPE_NO_2( pipe_no ) ){
-			flgptn |= D_IM_LTM_LTM2_INT_FLG_ALL;
+			flgptn |= ImLtmLtmUtlis_D_IM_LTM_LTM2_INT_FLG_ALL;
 		}
 
 		ercd = DDIM_User_Clr_Flg( FID_IM_LTM_LTM, ~flgptn );
@@ -429,7 +428,7 @@ INT32 Im_LTM_LTM_Stop( UCHAR pipe_no )
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -473,7 +472,7 @@ INT32 Im_LTM_LTM_WaitEnd( DDIM_USER_FLGPTN* const p_flgptn, DDIM_USER_FLGPTN wai
 #endif
 
 #ifdef CO_PARAM_CHECK
-	if( (waiptn & D_IM_LTM_LTM_INT_FLG_ALL) != waiptn ) {
+	if( (waiptn & ImLtmLtmUtlis_D_IM_LTM_LTM_INT_FLG_ALL) != waiptn ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_LTM_LTM_WaitEnd error. waiptn\n"));
 		return D_IM_LTM_PARAM_ERROR;
@@ -572,7 +571,6 @@ VOID Im_LTM_LTM_Int_Handler( UCHAR pipe_no )
 
 	// Clear interrupt
 	im_ltm_ltm_utlis_get_gIM_Io_Ltm_Ltm_Reg_Ptr(imLtmLtmUtlis,pipe_no)->LINT1.word = lint1_clr;
-
 
 #ifdef CO_DEBUG_PRINT_IM_LTM_LTM
 	Ddim_Print(( "Im_LTM_LTM_Int_Handler lint1=0x%lx\n", im_ltm_ltm_utlis_get_gIM_Io_Ltm_Ltm_Reg_Ptr(imLtmLtmUtlis,pipe_no)->LINT1.word ));
@@ -733,7 +731,7 @@ INT32 Im_LTM_LTM_Set_RCG_Table( UCHAR pipe_no, const USHORT* const src_tbl )
 
 	Im_LTM_On_Pclk( pipe_no );
 
-	for( loop_cnt = 0; loop_cnt < D_IM_LTM_TABLE_MAX_RCG; loop_cnt++ ) {
+	for( loop_cnt = 0; loop_cnt < ImLtmLtmUtlis_D_IM_LTM_TABLE_MAX_RCG; loop_cnt++ ) {
 		im_ltm_ltm_utlis_get_gIM_Io_Ltm_Ltm_Reg_Ptr(imLtmLtmUtlis,pipe_no)->RCGTBL.hword[loop_cnt] = src_tbl[loop_cnt];
 	}
 
@@ -917,7 +915,7 @@ INT32 Im_LTM_LTM_Set_YLOG_Table( UCHAR pipe_no, UCHAR tbl_sel, const USHORT* con
 }
 
 #ifdef IM_LTM_LTM_STATUS_PRINT
-VOID Im_LTM_LTM_Print_Status( VOID )
+im_ltm_ltm_utlis_im_ltm_ltm_print_status(ImLtmLtmUtlis*self)
 {
 	ImLtmLtmUtlis*imLtmLtmUtlis=im_ltm_ltm_utlis_get( );
 
@@ -941,7 +939,7 @@ VOID Im_LTM_LTM_Print_Status( VOID )
 	}
 }
 
-VOID Im_LTM_LTM_Print_AccEnStatus( VOID )
+VOID im_ltm_ltm_utlis_im_ltm_ltm_print_accenstatus(ImLtmLtmUtlis*self)
 {
 	UINT32 loopcnt;
 

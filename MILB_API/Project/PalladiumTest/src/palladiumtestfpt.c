@@ -157,14 +157,14 @@ static VOID ptImFptStartClock( VOID )
 {
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_PCLOCK) || defined(CO_ACT_HCLOCK)
 #else
-	UCHAR im_fpt0_clk_ctrl_cnt = 0;
-	UCHAR im_fpt0_hclk_ctrl_cnt = 0;
-	UCHAR im_fpt0_pclk_ctrl_cnt = 0;
-	UCHAR im_fpt0_iclk_ctrl_cnt = 0;
-	UCHAR im_fpt1_clk_ctrl_cnt = 0;
-	UCHAR im_fpt1_hclk_ctrl_cnt = 0;
-	UCHAR im_fpt1_pclk_ctrl_cnt = 0;
-	UCHAR im_fpt1_iclk_ctrl_cnt = 0;
+	kuchar im_fpt0_clk_ctrl_cnt = 0;
+	kuchar im_fpt0_hclk_ctrl_cnt = 0;
+	kuchar im_fpt0_pclk_ctrl_cnt = 0;
+	kuchar im_fpt0_iclk_ctrl_cnt = 0;
+	kuchar im_fpt1_clk_ctrl_cnt = 0;
+	kuchar im_fpt1_hclk_ctrl_cnt = 0;
+	kuchar im_fpt1_pclk_ctrl_cnt = 0;
+	kuchar im_fpt1_iclk_ctrl_cnt = 0;
 
 	Dd_Top_Start_Clock( &im_fpt0_pclk_ctrl_cnt, D_IM_FPT0_PCLK_REG_ADDR, ~D_IM_FPT0_PCLK_REG_BIT );
 	Dd_Top_Start_Clock( &im_fpt0_hclk_ctrl_cnt, D_IM_FPT0_HCLK_REG_ADDR, ~D_IM_FPT0_HCLK_REG_BIT );
@@ -183,7 +183,7 @@ static VOID ptImFptDoTest11( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		1, 2, 3, 4, 5, 6,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -210,7 +210,7 @@ static VOID ptImFptDoTest17( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		7, 8, 9, 10, 11,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -234,7 +234,7 @@ static VOID ptImFptDoTest17( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 
 static VOID ptImFptRun1( const UINT32 type1 )
 {
-	UCHAR			type2;
+	kuchar			type2;
 
 	type2	= gDDIM_Info.com._6b;
 
@@ -256,7 +256,7 @@ static VOID ptImFptDoTest21( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		1, 2, 3, 4, 5, 6,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -283,7 +283,7 @@ static VOID ptImFptDoTest27( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		7, 8, 9, 10, 11, 12,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -307,7 +307,7 @@ static VOID ptImFptDoTest27( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 
 static VOID ptImFptRun2( const UINT32 type1 )
 {
-	UCHAR			type2;
+	kuchar			type2;
 
 	type2	= gDDIM_Info.com._6b;
 
@@ -329,7 +329,7 @@ static VOID ptImFptDoTest31( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -356,7 +356,7 @@ static VOID ptImFptDoTest311( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -383,7 +383,7 @@ static VOID ptImFptDoTest321( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 	static const UCHAR	no_2nd_tbl[] = {
 		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
 	};
-	UINT32				loopcnt;
+	kuint32				loopcnt;
 
 	Ddim_Print(( "*** FPT test " PalladiumTestFpt_NO " begin\n" ));
 
@@ -407,7 +407,7 @@ static VOID ptImFptDoTest321( const UINT32 ctIdx1st, const UINT32 ctIdx2nd )
 
 static VOID ptImFptRun3( const UINT32 type1 )
 {
-	UCHAR			type2;
+	kuchar			type2;
 
 	type2	= gDDIM_Info.com._6b;
 
@@ -838,8 +838,8 @@ static VOID ptImFptDoTest414( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, cons
 
 static VOID ptImFptRun4( const UINT32 type1 )
 {
-	UCHAR			type2;
-	UCHAR			type3;
+	kuchar			type2;
+	kuchar			type3;
 
 	type2	= gDDIM_Info.com._6b;
 	type3	= gDDIM_Info.com._6c;
@@ -890,7 +890,7 @@ static VOID ptImFptRun4( const UINT32 type1 )
 
 VOID palladium_test_fpt_pt_im_fpt_main( VOID )
 {
-	UCHAR			type1;
+	kuchar			type1;
 
 	// �J�n...
 	Ddim_Print(( "****** FPT begin palladium_test_fpt_pt_im_fpt_main\n" ));

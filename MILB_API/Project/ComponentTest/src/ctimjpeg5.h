@@ -67,7 +67,7 @@ struct _CtImJpeg5
 	gushort		cutHSize;
 	gushort		cutVSize;
 	gulonglong		limitSize;
-	EImJpegResizeExt	ext;
+	EimgResizeExt		ext;
 	guchar			corrFlg;
 	guchar			pauseFlg;
 };

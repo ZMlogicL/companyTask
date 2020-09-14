@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtMxicCheckErr1类
 *@rely                :klib
@@ -11,9 +11,8 @@
 *@version
 *
 */
-
 #include "im_mxic.h"
-#include "ct_im_mxic.h"
+//#include "ct_im_mxic.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -24,24 +23,50 @@
 #include "ctimmxiccreate.h"
 #include "ctmxiccheckerr1.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtMxicCheckErr1, ct_mxic_check_err1);
-#define CT_MXIC_CHECK_ERR1_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtMxicCheckErr1Private,CT_TYPE_MXIC_CHECK_ERR1))
+
+G_DEFINE_TYPE(CtMxicCheckErr1, ct_mxic_check_err1, G_TYPE_OBJECT);
+#define CT_MXIC_CHECK_ERR1_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_MXIC_CHECK_ERR1, CtMxicCheckErr1Private))
 
 struct _CtMxicCheckErr1Private
 {
 
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_mxic_check_err1_constructor(CtMxicCheckErr1 *self) 
+
+static void ct_mxic_check_err1_class_init(CtMxicCheckErr1Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtMxicCheckErr1Private));
 }
 
-static void ct_mxic_check_err1_destructor(CtMxicCheckErr1 *self) 
+static void ct_mxic_check_err1_init(CtMxicCheckErr1 *self)
 {
+//	CtMxicCheckErr1Private *priv = CT_MXIC_CHECK_ERR1_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+//	CtMxicCheckErr1 *self = (CtMxicCheckErr1*)object;
+//	CtMxicCheckErr1Private *priv = CT_MXIC_CHECK_ERR1_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtMxicCheckErr1 *self = (CtMxicCheckErr1*)object;
+//	CtMxicCheckErr1Private *priv = CT_MXIC_CHECK_ERR1_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
@@ -49,7 +74,7 @@ static void ct_mxic_check_err1_destructor(CtMxicCheckErr1 *self)
 // Error test of Im_MXIC_Start_Config function.
 void ct_mxic_check_err1_start_config(void)
 {
-	kint32						result;
+	gint32						result;
 	T_IM_MXIC_CONFIG_ARBITER	config;
 
 	// unit check
@@ -67,7 +92,7 @@ void ct_mxic_check_err1_start_config(void)
 // Error test of Im_MXIC_Set_Clock_Enable and Im_MXIC_Get_Clock_Enable function.
 void ct_mxic_check_err1_clock_enable(void)
 {
-	kint32			result;
+	gint32			result;
 	T_IM_MXIC_CLOCK	clockCtrl;
 
 	// unit check
@@ -96,8 +121,8 @@ void ct_mxic_check_err1_clock_enable(void)
 // Error test of Im_MXIC_Set_Acceptance_Capability and Im_MXIC_Get_Acceptance_Capability function.
 void ct_mxic_check_err1_acceptance_capability(void)
 {
-	kint32 result;
-	kuchar capability;
+	gint32 result;
+	guchar capability;
 
 	// --- Im_MXIC_Set_Acceptance_Capability ---
 	// unit range error check
@@ -173,8 +198,8 @@ void ct_mxic_check_err1_acceptance_capability(void)
 // Error test of Im_MXIC_Set_Acceptance_Capability_Group and Im_MXIC_Get_Acceptance_Capability_Group function.
 void ct_mxic_check_err1_acceptance_capability_group(void)
 {
-	kint32 result;
-	kuchar capability;
+	gint32 result;
+	guchar capability;
 
 	// --- Im_MXIC_Set_Acceptance_Capability ---
 	// write or read arbiter range error check
@@ -238,7 +263,7 @@ void ct_mxic_check_err1_acceptance_capability_group(void)
 // Error test of Im_MXIC_Set_Acceptance_Capability_All_Port and Im_MXIC_Get_Acceptance_Capability_All_Port function.
 void ct_mxic_check_err1_acceptance_capability_all_port(void)
 {
-	kint32								result;
+	gint32								result;
 	T_IM_MXIC_ALL_ACCEPTANCE_CAPABILITY	allCapability;
 
 	// --- Im_MXIC_Set_Acceptance_Capability_All_Port ---
@@ -269,7 +294,7 @@ void ct_mxic_check_err1_acceptance_capability_all_port(void)
 // Error test of Im_MXIC_Set_Slave_Area and Im_MXIC_Get_Slave_Area function.
 void ct_mxic_check_err1_slave_area(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_SLAVE_AREA slaveArea;
 
 	// --- Im_MXIC_Set_Slave_Area ---
@@ -310,7 +335,7 @@ void ct_mxic_check_err1_slave_area(void)
 // Error test of Im_MXIC_Set_Slave_Area_All and Im_MXIC_Get_Slave_Area_All function.
 void ct_mxic_check_err1_slave_area_all(void)
 {
-	kint32						result;
+	gint32						result;
 	T_IM_MXIC_ALL_SLAVE_AREA	allSlaveArea;
 
 	// --- Im_MXIC_Set_Slave_Area_All ---
@@ -341,7 +366,7 @@ void ct_mxic_check_err1_slave_area_all(void)
 // Error test of Im_MXIC_Set_Decode_Error_Int and Im_MXIC_Get_Decode_Error_Int and Im_MXIC_Get_Decode_Error function.
 void ct_mxic_check_err1_decode_error(void)
 {
-	kint32					result;
+	gint32					result;
 	T_IM_MXIC_DEC_ERR_INT	decErrInt;
 	T_IM_MXIC_DEC_ERR		decErr;
 
@@ -384,7 +409,7 @@ void ct_mxic_check_err1_decode_error(void)
 // Error test of Im_MXIC_Set_LevelPort_Level and Im_MXIC_Get_LevelPort_Level function.
 void ct_mxic_check_err1_levelport_level(void)
 {
-	kint32 result;
+	gint32 result;
 	E_IM_MXIC_LEVEL level;
 
 	// --- Im_MXIC_Set_LevelPort_Level ---
@@ -443,7 +468,7 @@ void ct_mxic_check_err1_levelport_level(void)
 // Error test of Im_MXIC_Set_LevelPort_Port and Im_MXIC_Get_LevelPort_Port function.
 void ct_mxic_check_err1_levelport_port(void)
 {
-	kint32 result;
+	gint32 result;
 	E_IM_MXIC_PORT port;
 
 	// --- Im_MXIC_Set_LevelPort_Port ---
@@ -502,7 +527,7 @@ void ct_mxic_check_err1_levelport_port(void)
 // Error test of Im_MXIC_Set_LevelPort_All and Im_MXIC_Get_LevelPort_All function.
 void ct_mxic_check_err1_levelport_all(void)
 {
-	kint32					result;
+	gint32					result;
 	T_IM_MXIC_ALL_LEVELPORT	allLevelport;
 
 	// --- Im_MXIC_Set_LevelPort_All ---
@@ -533,7 +558,7 @@ void ct_mxic_check_err1_levelport_all(void)
 // Error test of Im_MXIC_Set_Output_Port and Im_MXIC_Get_Output_Port function.
 void ct_mxic_check_err1_port_assign(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Set_Output_Port ---
 	// assign range error check
@@ -553,7 +578,7 @@ void ct_mxic_check_err1_port_assign(void)
 // Error test of Im_MXIC_Set_Output_Port_All and Im_MXIC_Get_Output_Port_All function.
 void ct_mxic_check_err1_port_assign_all(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Set_Output_Port_All ---
 	// all_assign NULL check
@@ -573,8 +598,8 @@ void ct_mxic_check_err1_port_assign_all(void)
 // Error test of Im_MXIC_Set_Master_W_Arbiter and Im_MXIC_Get_Master_W_Arbiter function.
 void ct_mxic_check_err1_master_w_arbiter(void)
 {
-	kint32 result;
-	kint32 i;
+	gint32 result;
+	gint32 i;
 	T_IM_MXIC_W_ARBITER_ASSIGN_PORT wAssign;
 
 	// Initialize
@@ -634,8 +659,8 @@ void ct_mxic_check_err1_master_w_arbiter(void)
 // Error test of Im_MXIC_Set_Master_R_Arbiter and Im_MXIC_Get_Master_R_Arbiter function.
 void ct_mxic_check_err1_master_r_arbiter(void)
 {
-	kint32 result;
-	kint32 i;
+	gint32 result;
+	gint32 i;
 	T_IM_MXIC_R_ARBITER_ASSIGN_PORT rAssign;
 
 	// Initialize
@@ -688,7 +713,7 @@ void ct_mxic_check_err1_master_r_arbiter(void)
 // Error test of Im_MXIC_Set_Master_All_Arbiter and Im_MXIC_Get_Master_All_Arbiter function.
 void ct_mxic_check_err1_master_all_arbiter(void)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_ALL_ARBITER_ASSIGN	allArbiterAssign;
 
 	// --- Im_MXIC_Set_Master_All_Arbiter ---
@@ -718,7 +743,7 @@ void ct_mxic_check_err1_master_all_arbiter(void)
 
 void ct_mxic_check_err1_master_overlap( void )
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_W_ARBITER_ASSIGN_PORT wArbiterAssign;
 	T_IM_MXIC_R_ARBITER_ASSIGN_PORT rArbiterAssign;
 
@@ -742,7 +767,7 @@ void ct_mxic_check_err1_master_overlap( void )
 // Error test of Im_MXIC_Set_Slot_Priority and Im_MXIC_Get_Slot_Priority function.
 void ct_mxic_check_err1_slot_priority(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_SLOT_PRIORITY_LEVEL priority;
 
 	// Initialize
@@ -827,8 +852,8 @@ void ct_mxic_check_err1_slot_priority(void)
 	return;
 }
 
-CtMxicCheckErr1* ct_mxic_check_err1_new(void) 
+CtMxicCheckErr1 *ct_mxic_check_err1_new(void) 
 {
-    CtMxicCheckErr1 *self = k_object_new_with_private(CT_TYPE_MXIC_CHECK_ERR1, sizeof(CtMxicCheckErr1Private));
+    CtMxicCheckErr1 *self = g_object_new(CT_TYPE_MXIC_CHECK_ERR1, NULL);
     return self;
 }

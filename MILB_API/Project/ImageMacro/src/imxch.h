@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -117,9 +117,9 @@
 
 // Synchronous mode when Xch is executed
 typedef enum {
-	E_IM_XCH_SYNC_TYPE_SYNC = 0,	// Sync Processing
-	E_IM_XCH_SYNC_TYPE_ASYNC		// Async Processing
-} E_IM_XCH_SYNC_TYPE;
+	ImXch_SYNC_TYPE_SYNC = 0,	// Sync Processing
+	ImXch_SYNC_TYPE_ASYNC		// Async Processing
+} ImXchSyncType;
 
 /*----------------------------------------------------------------------*/
 /* Enumeration															*/
@@ -127,16 +127,16 @@ typedef enum {
 /** Xch0 or Xch1 select
 */
 typedef enum {
-	E_IM_XCH_CH_SEL_0		= 0,		/**< Select X0ch */
-	E_IM_XCH_CH_SEL_1					/**< Select X1ch */
-} E_IM_XCH_CH_SEL;
+	ImXch_XCH_CH_SEL_0		= 0,		/**< Select X0ch */
+	ImXch_XCH_CH_SEL_1					/**< Select X1ch */
+} ImXchChSel;
 
 /** Xch0 or Xch1 transfer status
 */
 typedef enum {
-	E_IM_XCH_ST_STOPPED	= 0,			/**< Xch stopped */
-	E_IM_XCH_ST_RUNNING					/**< Xch running */
-} E_IM_XCH_ST;
+	ImXch_XCH_ST_STOPPED	= 0,			/**< Xch stopped */
+	ImXch_XCH_ST_RUNNING					/**< Xch running */
+} ImXchSt;
 
 #ifdef CO_DDIM_UTILITY_USE
 /**
@@ -148,9 +148,9 @@ typedef enum {
 /** Copy mode select
 */
 typedef enum {
-	E_IM_XCH_COPY_SEL_HI		= 0,	/**< Select hi-speed copy */
-	E_IM_XCH_COPY_SEL_NORMAL			/**< Select normal copy */
-} E_IM_XCH_COPY_SEL;
+	ImXch_XCH_COPY_SEL_HI		= 0,	/**< Select hi-speed copy */
+	ImXch_XCH_COPY_SEL_NORMAL			/**< Select normal copy */
+} ImXchCopySel;
 
 //---------------------- colabo  section -------------------------------
 
@@ -340,13 +340,13 @@ typedef struct {
 /** Xch driver copy structure
 */
 typedef struct {
-	E_IM_XCH_CH_SEL		xch;					/**< Channel select.<br>
+	ImXchChSel		xch;					/**< Channel select.<br>
 													<ul>
 														<li>@ref E_IM_XCH_CH_SEL_0
 														<li>@ref E_IM_XCH_CH_SEL_1
 													</ul>
 												 */
-	E_IM_XCH_COPY_SEL	copyType;				/**< Copy type select. <br>
+	ImXchCopySel	copyType;				/**< Copy type select. <br>
 													<ul>
 														<li>@ref E_IM_XCH_COPY_SEL_HI
 														<li>@ref E_IM_XCH_COPY_SEL_NORMAL
@@ -390,7 +390,7 @@ typedef struct {
 /** Xch driver fill structure
 */
 typedef struct {
-	E_IM_XCH_CH_SEL		xch;					/**< Channel select.<br>
+	ImXchChSel		xch;					/**< Channel select.<br>
 													<ul>
 														<li>@ref E_IM_XCH_CH_SEL_0
 														<li>@ref E_IM_XCH_CH_SEL_1
@@ -430,7 +430,7 @@ typedef struct {
 /** Xch driver downsampling structure
 */
 typedef struct {
-	E_IM_XCH_CH_SEL		xch;					/**< Channel select.<br>
+	ImXchChSel		xch;					/**< Channel select.<br>
 													<ul>
 														<li>@ref E_IM_XCH_CH_SEL_0
 														<li>@ref E_IM_XCH_CH_SEL_1
@@ -504,7 +504,7 @@ typedef struct {
 
 
 typedef struct {
-	E_IM_XCH_SYNC_TYPE	syncType;	// Synchronous mode
+	ImXchSyncType 	syncType;	// Synchronous mode
 	UCHAR				xdtype;		// @XDTYPE	: Input data width
 	UCHAR				xmd;		// @XMD		: Operation mode
 	UCHAR				xfdt;		// @XFDT	: Fill data
@@ -537,16 +537,16 @@ ImXch* im_xch_get(void);
 VOID im_xch_off_pclk( ImXch*self );
 VOID im_xch_on_pclk( ImXch*self );
 INT32 im_xch_softreset( ImXch*self );
-INT32 im_xch_open( ImXch*self,E_IM_XCH_CH_SEL xch, INT32 tmout );
+INT32 im_xch_open( ImXch*self,ImXchChSel xch, INT32 tmout );
 VOID im_xch_init( ImXch*self );
-INT32 im_xch_start_sync( ImXch*self,E_IM_XCH_CH_SEL xch );
-INT32 im_xch_start_async( ImXch*self,E_IM_XCH_CH_SEL xch );
+INT32 im_xch_start_sync( ImXch*self,ImXchChSel xch );
+INT32 im_xch_start_async( ImXch*self,ImXchChSel xch );
 INT32 im_xch_get_histogram( ImXch*self,ULONG* histogram_buf );
-INT32 im_xch_wait_end( ImXch*self,E_IM_XCH_CH_SEL xch );
-INT32 im_xch_close( ImXch*self,E_IM_XCH_CH_SEL xch );
+INT32 im_xch_wait_end( ImXch*self,ImXchChSel xch );
+INT32 im_xch_close( ImXch*self,ImXchChSel xch );
 INT32 im_xch_stop( ImXch*self );
 VOID im_xch_int_handler( VOID );
-INT32 im_xch_fill( ImXch*self,E_IM_XCH_CH_SEL xch, UCHAR fill_data, USHORT gl_width, UINT32 dst_addr, USHORT width, USHORT lines );
+INT32 im_xch_fill( ImXch*self,ImXchChSel xch, UCHAR fill_data, USHORT gl_width, UINT32 dst_addr, USHORT width, USHORT lines );
 INT32 im_xch_fill_ex_sync( ImXch*self,ImXchFillEx* fill_param );
 INT32 im_xch_fill_ex_async( ImXch*self,ImXchFillEx* fill_param, VP_CALLBACK pCallBack );
 

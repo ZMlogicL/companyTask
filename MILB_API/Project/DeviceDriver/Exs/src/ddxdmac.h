@@ -24,6 +24,7 @@
 #define __DD_XDMAC_H__
 
 #include <klib.h>
+#include "ddimusercustom.h"
 #include "driver_common.h"
 
 #define DD_TYPE_XDMAC     (dd_xdmac_get_type())
@@ -264,8 +265,8 @@ union _UDdXdmacCommon
 struct _CommonBit
 {
 	kulong					:30;		/**< Reserved */
-	kulong	cP				:1;			/**< Channel Priority (0 or 1) */
-	kulong	xE				:1;			/**< XDMAC Enable (0 or 1) */
+	kulong	cP			:1;			/**< Channel Priority (0 or 1) */
+	kulong	xE			:1;			/**< XDMAC Enable (0 or 1) */
 };									/**< for bit access */
 
 /** DMA Control Trns */
@@ -293,9 +294,9 @@ struct _CtrlOneBit
 	kulong	dBS			:2;			/**< Destination Access Burst Size (0 or 3) */
 	kulong	tI				:1;			/**< Termination Interupt (0 or 1) */
 	kulong	eI				:1;			/**< Error Interrupt (0 or 1) */
-	kulong	aT				:1;			/**< DACK Assert Timing (0 or 1) */
+	kulong	aT			:1;			/**< DACK Assert Timing (0 or 1) */
 	kulong	bR			:1;			/**< Transfer Byte Count Reload (0 or 1) */
-	kulong	bT				:1;			/**< Block transfer (0 or 1) */
+	kulong	bT			:1;			/**< Block transfer (0 or 1) */
 	kulong	sA			:1;			/**< Serial Access (0 or 1) */
 	kulong	tF				:4;			/**< Transfer Factor (0 to 15) */
 	kulong	sE			:1;			/**< Software Enable (0 or 1) */
@@ -330,14 +331,14 @@ struct _TDdXdmacCtrl
 /** DMA Transfer size */
 struct _TDdXdmacTrnsSize
 {
-	kulong				srcAddr;			/**< Source Address */
-	kulong				dstAddr;			/**< Destination Address */
-	kulong				trnsSize;			/**< Transfer Size (Please specify one or more) */
+	kulong		srcAddr;			/**< Source Address */
+	kulong		dstAddr;			/**< Destination Address */
+	kulong		trnsSize;			/**< Transfer Size (Please specify one or more) */
 };
 
 struct _DdXdmac
 {
-	KObject parent;
+	KObject 		parent;
 };
 
 KConstType 	dd_xdmac_get_type(void);
@@ -512,14 +513,14 @@ kint32	dd_xdmac_close(DdXdmac *self, kuchar ch);
 /**
 The content of the dmacb register is acquired.
 @param [in]	ch							: Channel number (0 to @ref DdXdmac_CH_NUM_MAX - 1)
-@param [out]	xdmac_status			: XDMAC Status Register pointer
-@param [out]	transfer_status			: Channel Transfer Status Register pointer
-@param [out]	interrupt_status		: Channel Interrupt Status Register pointer
+@param [out]	xdmacStatus			: XDMAC Status Register pointer
+@param [out]	transferStatus			: Channel Transfer Status Register pointer
+@param [out]	interruptStatus		: Channel Interrupt Status Register pointer
 @retval	DriverCommon_DDIM_OK						: Normal end
 @retval	DdXdmac_INPUT_PARAM_ERR		: Input Parameter Error
 */
-kint32	dd_xdmac_get_status(DdXdmac *self, kuchar ch, kushort *const xdmac_status,\
-		kushort *const transfer_status, kushort *const interrupt_status);
+kint32	dd_xdmac_get_status(DdXdmac *self, kuchar ch, kushort *const xdmacStatus,\
+		kushort *const transferStatus, kushort *const interruptStatus);
 
 /**
 The value of the transferd size of the specified channel is acquired.

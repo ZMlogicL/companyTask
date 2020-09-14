@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_HDMAC_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_HDMAC		(jctpmc_hdmac_get_type())
-#define JCTPMC_HDMAC(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcHdmac))
-#define JCTPMC_IS_HDMAC(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_HDMAC))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcHdmacDmacr IoPmcHdmacDmacr;
@@ -31,56 +27,54 @@ typedef union 				_IoPmcHdmacDmaca IoPmcHdmacDmaca;
 typedef union 				_IoPmcHdmacDmacb IoPmcHdmacDmacb;
 typedef struct 				_IoPmcHdmacElement IoPmcHdmacElement;
 typedef struct 				_IoPmcHdmac IoPmcHdmac;
-typedef struct 				_JctpmcHdmac JctpmcHdmac;
-typedef struct 				_JctpmcHdmacPrivate JctpmcHdmacPrivate;
 
 /* HDMAC */
 
 /* DMACR */
 union _IoPmcHdmacDmacr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong					:24;
-		kulong	dh				:4;
-		kulong	pr				:1;
-		kulong					:1;
-		kulong	ds				:1;
-		kulong	de				:1;
+		gulong					:24;
+		gulong	dh				:4;
+		gulong	pr				:1;
+		gulong					:1;
+		gulong	ds				:1;
+		gulong	de				:1;
 	}bit;
 };
 
 /* DMACA */
 union _IoPmcHdmacDmaca {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	tc				:16;
-		kulong	bc				:4;
-		kulong	bt				:4;
-		kulong	is				:5;
-		kulong	st				:1;
-		kulong	pb				:1;
-		kulong	eb				:1;
+		gulong	tc				:16;
+		gulong	bc				:4;
+		gulong	bt				:4;
+		gulong	is				:5;
+		gulong	st				:1;
+		gulong	pb				:1;
+		gulong	eb				:1;
 	}bit;
 };
 
 /* DMACB */
 union _IoPmcHdmacDmacb {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong					:8;
-		kulong	dp				:4;
-		kulong	sp				:4;
-		kulong	ss				:3;
-		kulong	ci				:1;
-		kulong	ei				:1;
-		kulong	rd				:1;
-		kulong	rs				:1;
-		kulong	rc				:1;
-		kulong	fd				:1;
-		kulong	fs				:1;
-		kulong	tw				:2;
-		kulong	ms				:2;
-		kulong	tt				:2;
+		gulong					:8;
+		gulong	dp				:4;
+		gulong	sp				:4;
+		gulong	ss				:3;
+		gulong	ci				:1;
+		gulong	ei				:1;
+		gulong	rd				:1;
+		gulong	rs				:1;
+		gulong	rc				:1;
+		gulong	fd				:1;
+		gulong	fs				:1;
+		gulong	tw				:2;
+		gulong	ms				:2;
+		gulong	tt				:2;
 	}bit;
 };
 
@@ -88,8 +82,8 @@ union _IoPmcHdmacDmacb {
 struct _IoPmcHdmacElement {
 	IoPmcHdmacDmaca	dmaca;
 	IoPmcHdmacDmacb	dmacb;
-	kulong				dmacsa;
-	kulong				dmacda;
+	gulong				dmacsa;
+	gulong				dmacda;
 };
 
 /* HDMAC */
@@ -97,20 +91,12 @@ struct _IoPmcHdmac {
 	/* 1DC0_(0000 - 0003h) */
 	IoPmcHdmacDmacr		dmacr;
 	/* 1DC0_(0004 - 000Fh) */
-	kuchar					dmyPmcHdmac0004000f[0x0010 - 0x0004];
+	guchar					dmyPmcHdmac0004000f[0x0010 - 0x0004];
 	/* 1DC0_(0010 - 008Fh) */
 	IoPmcHdmacElement	dmac[8];
 	/* 1DC0_0090 - 1DCF_FFFFh */
-	kuchar					dmyPmcHdmac00090Fffff[0x1DD00000 - 0x1DC00090];
+	guchar					dmyPmcHdmac00090Fffff[0x1DD00000 - 0x1DC00090];
 };
-
-struct _JctpmcHdmac {
-	KObject parent;
-};
-
-
-KConstType 					jctpmc_hdmac_get_type(void);
-JctpmcHdmac*		        jctpmc_hdmac_new(void);
 
 
 #endif /* __JCTPMC_HDMAC_H__ */

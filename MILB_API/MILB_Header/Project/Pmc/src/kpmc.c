@@ -3,7 +3,7 @@
 *@date                :2020-09-07
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -14,42 +14,62 @@
 */
 
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "kpmc.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(KPmc, k_pmc);
-#define K_PMC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KPmcPrivate, K_TYPE_PMC))
+G_DEFINE_TYPE(KPmc, k_pmc, G_TYPE_OBJECT);
+
+#define K_PMC_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), K_TYPE_PMC, KPmcPrivate));
 
 
 struct _KPmcPrivate
 {
-	kint a;
+	 gint preserved;
 };
 
 
 volatile IoPmc		ioPmc			__attribute__((section(".PMC")));
-/*
+/**
+ * DECLS
+ */
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+/**
  * IMPL
  */
-static void k_pmc_constructor(KPmc *self)
+static void k_pmc_class_init(KPmcClass *klass)
 {
-	KPmcPrivate *priv = K_PMC_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-	priv->a = 0;
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(KPmcPrivate));
 }
 
-static void k_pmc_destructor(KPmc *self)
+static void k_pmc_init(KPmc *self)
 {
 	KPmcPrivate *priv = K_PMC_GET_PRIVATE(self);
 
-	priv->a = 0;
+	priv->preserved = 0;
+}
+
+static void dispose_od(GObject *object)
+{
+	G_OBJECT_CLASS(k_pmc_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+	G_OBJECT_CLASS(k_pmc_parent_class)->finalize(object);
 }
 /**
  * PUBLIC
  */
-KPmc *k_pmc_new(void)
+KPmc *k_pmc_new()
 {
-	KPmc* self = k_object_new_with_private(K_TYPE_PMC,sizeof(KPmcPrivate));
+	KPmc *self = g_object_new(K_TYPE_PMC, NULL);
 
 	return self;
 }

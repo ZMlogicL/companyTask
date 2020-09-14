@@ -14,6 +14,7 @@
 #include "ctimr2ytool.h"
 #include "imr2yclk.h"
 #include "imr2yctrl3.h"
+#include "imr2yctrl.h"
 #include "ctimr2y18series1.h"
 
 
@@ -33,12 +34,29 @@ struct _CtImR2y18series1Private
  */
 static void ct_im_r2y_18series1_constructor(CtImR2y18series1 *self)
 {
-	//CtImR2y18series1Private *priv = CT_IM_R2Y_18SERIES1_GET_PRIVATE(self);
+	CtImR2y18series1Private *priv = CT_IM_R2Y_18SERIES1_GET_PRIVATE(self);
+	self->imR2yCtrl3 = im_r2y_ctrl3_new();
+	self->imR2yClk = im_r2y_clk_new();
+	self->imR2yCtrl = im_r2y_ctrl_new();
 }
 
 static void ct_im_r2y_18series1_destructor(CtImR2y18series1 *self)
 {
-	//CtImR2y18series1Private *priv = CT_IM_R2Y_18SERIES1_GET_PRIVATE(self);
+	CtImR2y18series1Private *priv = CT_IM_R2Y_18SERIES1_GET_PRIVATE(self);
+	if(self->imR2yCtrl3){
+				k_object_unref(self->imR2yCtrl3);
+				self->imR2yCtrl3=NULL;
+			}
+
+			if(self->imR2yCtrl){
+				k_object_unref(self->imR2yCtrl);
+				self->imR2yCtrl3=NULL;
+			}
+
+			if(self->imR2yClk){
+					k_object_unref(self->imR2yClk);
+					self->imR2yClk=NULL;
+				}
 }
 
 
@@ -175,7 +193,7 @@ kint32 ct_im_r2y_18series1_6(CtImR2y18series1 *self, kuchar pipeNo)
 	for(loopcnt = 0; loopcnt < (sizeof(r2yCtrlCRefYbBlend) / sizeof(r2yCtrlCRefYbBlend[0])); loopcnt++) {
 		DriverCommon_DDIM_PRINT(("** %u\n", loopcnt));
 #ifdef CO_MSG_PRINT_ON
-		ercd = im_r2y_ctrl3_cref_yb_blend(pipeNo, &r2yCtrlCRefYbBlend[loopcnt]);
+		ercd = im_r2y_ctrl3_cref_yb_blend(self->imR2yCtrl3, pipeNo, &r2yCtrlCRefYbBlend[loopcnt]);
 		DriverCommon_DDIM_PRINT((CtImR2y18series1_FUNC_NAME "0x%x\n", ercd));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo);
 		DriverCommon_DDIM_PRINT(("PIPE1\n"));
@@ -331,7 +349,7 @@ kint32 ct_im_r2y_18series1_7(CtImR2y18series1 *self, kuchar pipeNo)
 	for(loopcnt = 0; loopcnt < (sizeof(r2yCtrlClpf) / sizeof(r2yCtrlClpf[0])); loopcnt++) {
 		DriverCommon_DDIM_PRINT(("** %u\n", loopcnt));
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Ctrl_Color_NR(pipeNo, &r2yCtrlClpf[loopcnt]);
+		ercd = im_r2y_ctrl3_color_nr(self->imR2yCtrl3, pipeNo, &r2yCtrlClpf[loopcnt]);
 		DriverCommon_DDIM_PRINT((CtImR2y18series1_FUNC_NAME "0x%x\n", ercd));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo);
 		DriverCommon_DDIM_PRINT(("PIPE1\n"));
@@ -497,7 +515,7 @@ kint32 ct_im_r2y_18series1_8(CtImR2y18series1 *self, kuchar pipeNo)
 	for(loopcnt = 0; loopcnt < (sizeof(r2yCtrlCs) / sizeof(r2yCtrlCs[0])); loopcnt++) {
 		DriverCommon_DDIM_PRINT(("** %u\n", loopcnt));
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Ctrl_Chroma_Suppress(pipeNo, &r2yCtrlCs[loopcnt]);
+		ercd = im_r2y_ctrl3_chroma_suppress(self->imR2yCtrl3, pipeNo, &r2yCtrlCs[loopcnt]);
 		DriverCommon_DDIM_PRINT((CtImR2y18series1_FUNC_NAME "0x%x\n", ercd));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo);
 		DriverCommon_DDIM_PRINT(("PIPE1\n"));
@@ -629,10 +647,10 @@ kint32 ct_im_r2y_18series1_9(CtImR2y18series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_Tone_Control_Table(pipeNo, tbl->srcTbl, 0, D_IM_R2Y_TABLE_MAX_TONE);
+		ercd = im_r2y_ctrl3_set_tone_control_table(self->imR2yCtrl3, pipeNo, tbl->srcTbl, 0, D_IM_R2Y_TABLE_MAX_TONE);
 		DriverCommon_DDIM_PRINT((CtImR2y18series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
-		Im_R2Y_Set_ToneControlTblAccessEnable(pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
+		im_r2y_set_tone_control_tbl_access_enable(self->imR2yCtrl, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
 			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_TONE; loopcnt2 += 2) {
 				// Force word read access
@@ -669,8 +687,8 @@ kint32 ct_im_r2y_18series1_9(CtImR2y18series1 *self, kuchar pipeNo)
 				}
 			}
 		}
-		Im_R2Y_Set_ToneControlTblAccessEnable(pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_set_tone_control_tbl_access_enable(self->imR2yCtrl, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 

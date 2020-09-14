@@ -26,7 +26,7 @@ struct _ImR2yUtility4Private
 };
 
 #ifdef CO_DDIM_UTILITY_USE
-static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMYBDF_Tbl_Addr[3] = {
+static const RdmaGmdfTblAddr	gIM_R2Y_GMYBDF_Tbl_Addr[3] = {
 	{
 		{
 			0x294AA000, 0x294AA004, 0x294AA008, 0x294AA00C, 0x294AA010, 0x294AA014, 0x294AA018, 0x294AA01C,
@@ -233,7 +233,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR	gIM_R2Y_GMYBDF_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMRGBFL_Tbl_Addr[3] = {
+static const RdmaGmflTblAddr	gIM_R2Y_GMRGBFL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AA800, 0x294AA804, 0x294AA808, 0x294AA80C, 0x294AA810, 0x294AA814, 0x294AA818, 0x294AA81C,
@@ -296,7 +296,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMRGBFL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMRFL_Tbl_Addr[3] = {
+static const RdmaGmflTblAddr	gIM_R2Y_GMRFL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AAA00, 0x294AAA04, 0x294AAA08, 0x294AAA0C, 0x294AAA10, 0x294AAA14, 0x294AAA18, 0x294AAA1C,
@@ -359,7 +359,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMRFL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMGFL_Tbl_Addr[3] = {
+static const RdmaGmflTblAddr	gIM_R2Y_GMGFL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AAC00, 0x294AAC04, 0x294AAC08, 0x294AAC0C, 0x294AAC10, 0x294AAC14, 0x294AAC18, 0x294AAC1C,
@@ -422,7 +422,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMGFL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMBFL_Tbl_Addr[3] = {
+static const RdmaGmflTblAddr	gIM_R2Y_GMBFL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AAE00, 0x294AAE04, 0x294AAE08, 0x294AAE0C, 0x294AAE10, 0x294AAE14, 0x294AAE18, 0x294AAE1C,
@@ -485,7 +485,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMBFL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMYBFL_Tbl_Addr[3] = {
+static const RdmaGmflTblAddr	gIM_R2Y_GMYBFL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AB000, 0x294AB004, 0x294AB008, 0x294AB00C, 0x294AB010, 0x294AB014, 0x294AB018, 0x294AB01C,
@@ -548,7 +548,7 @@ static const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR	gIM_R2Y_GMYBFL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR	gIM_R2Y_EGHWSCL_Tbl_Addr[3] = {
+static const RdmaEgwsclTblAddr	gIM_R2Y_EGHWSCL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AC000, 0x294AC004, 0x294AC008, 0x294AC00C, 0x294AC010, 0x294AC014, 0x294AC018, 0x294AC01C,
@@ -611,7 +611,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR	gIM_R2Y_EGHWSCL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR	gIM_R2Y_EGMWSCL_Tbl_Addr[3] = {
+static const RdmaEgwsclTblAddr	gIM_R2Y_EGMWSCL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AC400, 0x294AC404, 0x294AC408, 0x294AC40C, 0x294AC410, 0x294AC414, 0x294AC418, 0x294AC41C,
@@ -674,7 +674,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR	gIM_R2Y_EGMWSCL_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR	gIM_R2Y_EGLWSCL_Tbl_Addr[3] = {
+static const RdmaEgwsclTblAddr	gIM_R2Y_EGLWSCL_Tbl_Addr[3] = {
 	{
 		{
 			0x294AC800, 0x294AC804, 0x294AC808, 0x294AC80C, 0x294AC810, 0x294AC814, 0x294AC818, 0x294AC81C,
@@ -762,40 +762,40 @@ static void im_r2y_utility4_destructor(ImR2yUtility4 *self)
 *PUBLIC
 */
 #ifdef CO_DDIM_UTILITY_USE
-INT32 im_r2y_utility4_get_rdmaaddr_gmdf_table(ImR2yUtility4 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR** addr )
+INT32 im_r2y_utility4_get_rdmaaddr_gmdf_table(ImR2yUtility4 *self, kuint16 pipeNo, const RdmaGmdfTblAddr** addr )
 {
-	*addr = &(gIM_R2Y_GMYBDF_Tbl_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_GMYBDF_Tbl_Addr[pipeNo]);
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility4_get_rdma_addr_gmfl_table(ImR2yUtility4 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR** addr )
+INT32 im_r2y_utility4_get_rdma_addr_gmfl_table(ImR2yUtility4 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaGmflTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( tbl_index > 4 ){
 		Ddim_Assertion(("im_r2y_utility4_get_rdma_addr_gmfl_table error. tbl_index > 4\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility4_get_rdma_addr_gmfl_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility4_get_rdma_addr_gmfl_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
 	switch( tbl_index ){
 		case 0:
-			*addr = &(gIM_R2Y_GMRGBFL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMRGBFL_Tbl_Addr[pipeNo]);
 			break;
 		case 1:
-			*addr = &(gIM_R2Y_GMRFL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMRFL_Tbl_Addr[pipeNo]);
 			break;
 		case 2:
-			*addr = &(gIM_R2Y_GMGFL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMGFL_Tbl_Addr[pipeNo]);
 			break;
 		case 3:
-			*addr = &(gIM_R2Y_GMBFL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMBFL_Tbl_Addr[pipeNo]);
 			break;
 		case 4:
-			*addr = &(gIM_R2Y_GMYBFL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_GMYBFL_Tbl_Addr[pipeNo]);
 			break;
 		default:
 			break;
@@ -804,28 +804,28 @@ INT32 im_r2y_utility4_get_rdma_addr_gmfl_table(ImR2yUtility4 *self, UCHAR pipe_n
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility4_get_rdma_addr_egwscl_table(ImR2yUtility4 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR** addr )
+INT32 im_r2y_utility4_get_rdma_addr_egwscl_table(ImR2yUtility4 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaEgwsclTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( tbl_index > 2 ){
 		Ddim_Assertion(("im_r2y_utility4_get_rdma_addr_egwscl_table error. tbl_index > 2\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility4_get_rdma_addr_egwscl_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility4_get_rdma_addr_egwscl_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
 	switch( tbl_index ){
 		case 0:
-			*addr = &(gIM_R2Y_EGHWSCL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGHWSCL_Tbl_Addr[pipeNo]);
 			break;
 		case 1:
-			*addr = &(gIM_R2Y_EGMWSCL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGMWSCL_Tbl_Addr[pipeNo]);
 			break;
 		case 2:
-			*addr = &(gIM_R2Y_EGLWSCL_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGLWSCL_Tbl_Addr[pipeNo]);
 			break;
 		default:
 			break;

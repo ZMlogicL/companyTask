@@ -25,19 +25,23 @@ typedef struct _CtImR2yClassfPrivate CtImR2yClassfPrivate;
 struct _CtImR2yClassf
 {
 	KObject parent;
+	ImR2yCtrl*imR2yCtrl;
+	ImR2yClk*imR2yClk;
+	ImR2y3 *imR2y3;
+	ImR2yCtrl2*imR2yCtrl2;
 };
 
 KConstType ct_im_r2y_classf_get_type(void);
 CtImR2yClassf* ct_im_r2y_classf_new(void);
 CtImR2yClassf* ct_im_r2y_classf_get(void);
 
-INT32 ct_im_r2y_classf_1_46(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_47(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_48(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_49(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_50(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_51(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_52(UCHAR pipeNo);
-INT32 ct_im_r2y_classf_1_53(UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_46(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_47(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_48(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_49(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_50(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_51(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_52(CtImR2yClassf *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classf_1_53(CtImR2yClassf *self,UCHAR pipeNo);
 
 #endif /* __CT_IM_R2Y_CLASSF_H__ */

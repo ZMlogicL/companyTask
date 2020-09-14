@@ -35,25 +35,25 @@ typedef struct                          _CtDdUdc1Private CtDdUdc1Private;
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
-#define CtDdUdc1_D_CT_DD_UDC_TMR_OBS_CH	(2)	// Timer32 ch for UDCR observer
-#define CtDdUdc1_D_CT_DD_UDC_TMR_AIN_CH	(3)	// Timer32 ch for virtual AIN
-#define CtDdUdc1_D_CT_DD_UDC_TMR_BIN_CH	(4)	// Timer32 ch for virtual BIN
+#define CtDdUdc1_TMR_OBS_CH	(2)	// Timer32 ch for UDCR observer
+#define CtDdUdc1_TMR_AIN_CH	(3)	// Timer32 ch for virtual AIN
+#define CtDdUdc1_TMR_BIN_CH	(4)	// Timer32 ch for virtual BIN
 
 struct _CtDdUdc1 {
-    KObject 			parent;
-	kint32				ercd;
-	T_DD_UDC_CTRL_CMN	udcCrl;
-	DD_UDC_CALLBACK		callback;
-	kuchar				tmrAinCh;
-	kuchar				tmrBinCh;
-	kuchar				prescaler;
-	kuchar				edge;
-	kulong				usec;
-	kuchar				periClock;
+    KObject 		parent;
+	kint32			ercd;
+	DdUdcCtrlCmn	udcCrl;
+	DdUdcCallback	callback;
+	kuchar			tmrAinCh;
+	kuchar			tmrBinCh;
+	kuchar			prescaler;
+	kuchar			edge;
+	kulong			usec;
+	kuchar			periClock;
 	// Control data of UDCR observer
-    kuchar				gctDdUdcObsCh;		// Target UDC channel number
+    kuchar			gctDdUdcObsCh;		// Target UDC channel number
     //Save system time for UDC utility function
-    kulonglong			gctDdUdcTimUtilSta;
+    kulonglong		gctDdUdcTimUtilSta;
 };
 
 KConstType 		ct_dd_udc1_get_type(void);

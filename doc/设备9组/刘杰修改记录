@@ -546,3 +546,7 @@
     将struct inv_icm20948_serif（Icm20948Serif.h没人改）替换为InvIcm20948Serif
     将enum SMARTSENSOR_SERIAL_INTERFACE（Icm20948Defs.h没人改）替换为SmartsensorSerialInterface
     修改类型和变量
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    规范类RctExt
+    a.公有属性修改如下：
+            结构体变量：YEAR、MONTH、DAY、HOUR、MINUTE、SECOND、WEEKDAY全部替换为小写

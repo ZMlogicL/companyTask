@@ -154,39 +154,39 @@ ImproSensldiv*		impro_sensldiv_new();
 LDIV macro start.
 @param[in]	ch : Channel No.
 */
-extern	INT32			impro_sensldiv_start( E_IM_PRO_LDIV_CH ch );
+extern	INT32			impro_sensldiv_start( EimproLdivCh ch );
 /**
 Stop LDIV information
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 */
-extern	INT32			impro_sensldiv_stop( E_IM_PRO_LDIV_CH ch, UCHAR force );
+extern	INT32			impro_sensldiv_stop( EimproLdivCh ch, UCHAR force );
 /**
 LDIV macro control parameter is set.
 @param[in]	ch : Channel No.
 @param[in]	ldivCtrl : LDIV control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_sensldiv_ctrl( E_IM_PRO_LDIV_CH ch, TimproLdivCtrl* ldivCtrl );
+extern	INT32			impro_sensldiv_ctrl( EimproLdivCh ch, TimproLdivCtrl* ldivCtrl );
 /**
 The area for Top OB detection is set up.
 @param[in]	ch : Channel No.
 @param[in]	ldivArea	:The area of LDIV processing. See @ref TimproLdivArea.
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
-extern	INT32			impro_sensldiv_set_area( E_IM_PRO_LDIV_CH ch, TimproLdivArea* ldivArea );
+extern	INT32			impro_sensldiv_set_area( EimproLdivCh ch, TimproLdivArea* ldivArea );
 /**
 A setup of enable access to the built-in RAM of LDIV.
 @param[in]	ch : Channel No.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
-extern	INT32			impro_sensldiv_set_paen( E_IM_PRO_LDIV_CH ch, UCHAR paenTrg );
+extern	INT32			impro_sensldiv_set_paen( EimproLdivCh ch, UCHAR paenTrg );
 
 
 

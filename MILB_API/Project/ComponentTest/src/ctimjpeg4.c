@@ -37,7 +37,7 @@ G_DEFINE_TYPE(CtImJpeg4, ct_im_jpeg4, G_TYPE_OBJECT);
 
 struct _CtImJpeg4Private
 {
-	TImJpegDecMng 	*gJpegDecMng;
+	TimgDecMng 	*gJpegDecMng;
 	CtImJpeg1 *jpeg1;
 	CtImJpeg2 *jpeg2;
 	CtImJpeg5 *jpeg5;
@@ -53,10 +53,10 @@ static void 	ctImJpeg211(void);
 static void 	ctImJpeg221(void);
 static void 	ctImJpegCheckHandler(gint32 ptn);
 #ifdef CO_PT_ENABLE
-static void 	ctJpegDecodePalladiumIn(const TImJpegDecMng* const decMng,
-						const TImJpegDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam);
-static void 	ctJpegDecodePalladiumOut(const TImJpegDecMng* const decMng,
-						const TImJpegDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam);
+static void 	ctJpegDecodePalladiumIn(const TimgDecMng* const decMng,
+						const TimgDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam);
+static void 	ctJpegDecodePalladiumOut(const TimgDecMng* const decMng,
+						const TimgDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam);
 #endif
 #ifdef CO_DEBUG_ON_PC
 static void 	ctJpegDecodeIntHandler(guchar ptn);
@@ -85,37 +85,36 @@ static void ct_im_jpeg4_init(CtImJpeg4 *self)
  * */
 static void dispose_od(GObject *object)
 {
-	//	CtImJpeg4 *self = (CtImJpeg4*)object;
-	//	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
+		CtImJpeg4 *self = (CtImJpeg4*)object;
+		CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
 		G_OBJECT_CLASS(ct_im_jpeg4_parent_class)->dispose(object);
+
+		if(priv->jpeg2){
+			g_object_unref(priv->jpeg2);
+			priv->jpeg2=NULL;
+		}
+
+		if(priv->jpeg5){
+			g_object_unref(priv->jpeg5);
+			priv->jpeg5=NULL;
+		}
 }
 
 static void finalize_od(GObject *object)
 {
-	CtImJpeg4 *self = (CtImJpeg4*)object;
-	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
+//	CtImJpeg4 *self = (CtImJpeg4*)object;
+//	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg4_parent_class)->finalize(object);
-
-	if(priv->jpeg2)
-	{
-		g_object_unref(priv->jpeg2);
-		priv->jpeg2=NULL;
-	}
-	if(priv->jpeg5)
-	{
-		g_object_unref(priv->jpeg5);
-		priv->jpeg5=NULL;
-	}
 }
 
 static void ctImJpeg211(void)
 {
 	gint32 ret;
-	ret = Im_JPEG_Open(100);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(100);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 
-	ret = Im_JPEG_Open(20);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(20);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 
 	return;
 }
@@ -124,68 +123,68 @@ static void ctImJpeg221(void)
 {
 	gint32 ret;
 
-	ret = Im_JPEG_Open(-2);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(-2);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Set_Quality(0x40000, 0);
-	Ddim_Print(("Im_JPEG_Set_Quality ret=0x%X\n", ret));
+	ret = im_jpeg_set_quality(0x40000, 0);
+	Ddim_Print(("im_jpeg_set_quality ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Set_Down_Sampling_Rate(4);
-	Ddim_Print(("Im_JPEG_Set_Down_Sampling_Rate ret=0x%X\n", ret));
+	ret = im_jpeg_set_down_sampling_rate(4);
+	Ddim_Print(("im_jpeg_set_down_sampling_rate ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Ctrl_Enc(NULL);
-	Ddim_Print(("Im_JPEG_Ctrl_Enc ret=0x%X\n", ret));
+	ret = im_jpeg_ctrl_enc(NULL);
+	Ddim_Print(("im_jpeg_ctrl_enc ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Ctrl_Enc_Frame(NULL);
-	Ddim_Print(("Im_JPEG_Ctrl_Enc_Frame ret=0x%X\n", ret));
+	ret = im_jpeg_get_ctrl_enc_frame(NULL);
+	Ddim_Print(("im_jpeg_get_ctrl_enc_frame ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Get_Ctrl_Enc(NULL);
-	Ddim_Print(("Im_JPEG_Get_Ctrl_Enc ret=0x%X\n", ret));
+	ret = im_jpeg_get_ctrl_enc(NULL);
+	Ddim_Print(("im_jpeg_get_ctrl_enc ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Get_Ctrl_Enc_Frame(NULL);
-	Ddim_Print(("Im_JPEG_Get_Ctrl_Enc_Frame ret=0x%X\n", ret));
+	ret = im_jpeg_get_ctrl_enc_frame(NULL);
+	Ddim_Print(("im_jpeg_get_ctrl_enc_frame ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Wait_End_Enc(NULL , 100);
-	Ddim_Print(("Im_JPEG_Wait_End_Enc ret=0x%X\n", ret));
+	ret = im_jpeg_wait_end_enc(NULL , 100);
+	Ddim_Print(("im_jpeg_wait_end_enc ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Restart_Enc(NULL);
-	Ddim_Print(("Im_JPEG_Restart_Enc ret=0x%X\n", ret));
+	ret = im_jpeg_restart_enc(NULL);
+	Ddim_Print(("im_jpeg_restart_enc ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Ctrl_Dec(NULL);
-	Ddim_Print(("Im_JPEG_Ctrl_Dec ret=0x%X\n", ret));
+	ret = im_jpeg_ctrl_dec(NULL);
+	Ddim_Print(("im_jpeg_ctrl_dec ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Ctrl_Dec_Frame(NULL);
-	Ddim_Print(("Im_JPEG_Ctrl_Dec_Frame ret=0x%X\n", ret));
+	ret = im_jpeg_ctrl_dec_frame(NULL);
+	Ddim_Print(("im_jpeg_ctrl_dec_frame ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
 	ret = Im_JPEG_Get_Ctrl_Dec(NULL);
 	Ddim_Print(("Im_JPEG_Get_Ctrl_Dec ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Get_Ctrl_Dec_Frame(NULL);
-	Ddim_Print(("Im_JPEG_Get_Ctrl_Dec_Frame ret=0x%X\n", ret));
+	ret = im_jpeg_get_ctrl_dec_frame(NULL);
+	Ddim_Print(("im_jpeg_get_ctrl_dec_frame ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Wait_End_Dec(NULL , 100);
-	Ddim_Print(("Im_JPEG_Wait_End_Dec ret=0x%X\n", ret));
+	ret = im_jpeg_wait_end_dec(NULL , 100);
+	Ddim_Print(("im_jpeg_wait_end_dec ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Get_Axi_State(NULL);
-	Ddim_Print(("Im_JPEG_Get_Axi_State ret=0x%X\n", ret));
+	ret = im_jpeg_get_axi_state(NULL);
+	Ddim_Print(("im_jpeg_get_axi_state ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
-	ret = Im_JPEG_Restart_Dec(NULL);
-	Ddim_Print(("Im_JPEG_Restart_Dec ret=0x%X\n", ret));
+	ret = im_jpeg_restart_dec(NULL);
+	Ddim_Print(("im_jpeg_restart_dec ret=0x%X\n", ret));
 	Ddim_Print(("\n"));
 
 	ret = Im_JPEG_Decode_Sync(NULL, NULL);
@@ -283,7 +282,7 @@ static void ctImJpegCheckHandler(gint32 ptn)
 
 	IO_JPG7.JPSTATUS.bit.JPSTATUS = 1;
 
-	Im_JPEG_Int_Handler();
+	im_jpeg_int_handler();
 
 	Ddim_Print(("IO_JPG7.JINT     = [0x%lX]\n", IO_JPG7.JINT.word));
 	Ddim_Print(("IO_JPG7.JPINTSTA = [0x%lX]\n", IO_JPG7.JPINTSTA.word));
@@ -293,8 +292,8 @@ static void ctImJpegCheckHandler(gint32 ptn)
 }
 // ### REMOVE_RELEASE BEGIN
 #ifdef CO_PT_ENABLE
-static void ctJpegDecodePalladiumIn(const TImJpegDecMng* const decMng,
-		const TImJpegDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam)
+static void ctJpegDecodePalladiumIn(const TimgDecMng* const decMng,
+		const TimgDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam)
 {
 	gulong inDataSizY;	// Maximum data bytes of Y. (Compression ratio=x1.0)
 	gulong inDataSizC;	// Maximum data bytes of C. (Compression ratio=x1.0)
@@ -319,13 +318,14 @@ static void ctJpegDecodePalladiumIn(const TImJpegDecMng* const decMng,
 	}
 
 
-	Ddim_Print(("%s() Palladium_Set_In_Localstack(0x%lx, %lu)\n", __func__, ((gulong)decFrmMng->codeAddr), inDataSizY + inDataSizC));
+	Ddim_Print(("%s() Palladium_Set_In_Localstack(0x%lx, %lu)\n", __func__,
+			((gulong)decFrmMng->codeAddr), inDataSizY + inDataSizC));
 	Palladium_Set_In_Localstack(((gulong)decFrmMng->codeAddr), inDataSizY + inDataSizC);
 	Palladium_Set_Out_Localstack(((gulong)decFrmMng->codeAddr), inDataSizY + inDataSizC);	// for Input file check.
 }
 
-static void ctJpegDecodePalladiumOut(const TImJpegDecMng* const decMng,
-		const TImJpegDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam)
+static void ctJpegDecodePalladiumOut(const TimgDecMng* const decMng,
+		const TimgDecFrameMng* const decFrmMng, const CtImJpeg5* const decParam)
 {
 	gulong outDataSizY;
 	gulong outDataSizC;
@@ -368,13 +368,13 @@ static void ctJpegDecodeIntHandler(guchar ptn)
 			IO_JPG7.JPINTSTA.word	= 0x00000008;
 			IO_JPG7.JPSUSPEND.bit.JPSUSPEND = 1;
 
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 			// JIF
 			IO_JPG7.JINT.word		= 0x8000;
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 			// JCF
 			IO_JPG7.JINT.word		= 0x4000;
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 
 			IO_JPG7.JINT.word		= 0x0C000000;
 			IO_JPG7.JPINTSTA.word	= 0x80000000;
@@ -386,7 +386,7 @@ static void ctJpegDecodeIntHandler(guchar ptn)
 			IO_JPG7.JPINTSTA.word	= 0x00000008;
 			IO_JPG7.JPSUSPEND.bit.JPSUSPEND = 1;
 
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 
 			IO_JPG7.JINT.word		= 0x00001000;
 			IO_JPG7.JPINTSTA.word	= 0x00000000;
@@ -395,10 +395,10 @@ static void ctJpegDecodeIntHandler(guchar ptn)
 		case 3:
 		// Pause 2
 			IO_JPG7.JINT.word		= 0x8000;
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 
 			IO_JPG7.JINT.word		= 0x4000;
-			Im_JPEG_Int_Handler();
+			im_jpeg_int_handler();
 
 			IO_JPG7.JINT.word		= 0x0C000000;
 			IO_JPG7.JPINTSTA.word	= 0x80000000;
@@ -410,19 +410,18 @@ static void ctJpegDecodeIntHandler(guchar ptn)
 
 	}
 	IO_JPG7.JPSTATUS.bit.JPSTATUS = 1;
-	Im_JPEG_Int_Handler();
+	im_jpeg_int_handler();
 	return;
 }
 #endif
 /*
  *PUBLIC
  * */
-
 void ct_im_jpeg4_run2(CtImJpeg4 *self,gint32 ctParam1, gint32 ctParam2)
 {
 	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
 	Ddim_Print(("*** Jpeg begin Im_Jpeg_Init\n"));
-	Im_JPEG_Init();
+	im_jpeg_init();
 	Ddim_Print(("*** Jpeg end Im_Jpeg_Init\n"));
 
 	switch (ctParam1) {
@@ -477,12 +476,12 @@ void ct_im_jpeg4_run2(CtImJpeg4 *self,gint32 ctParam1, gint32 ctParam2)
 	}
 }
 //变公有
-void ct_im_jpeg4_decode_cb(TImJpegDecMng* pJpgDecMng)
+void ct_im_jpeg4_decode_cb(TimgDecMng* pJpgDecMng)
 {
 	CtImJpeg4 *self=ct_im_jpeg4_new();
 	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
 	Ddim_Print(("***** Decode Callback function *****\n"));
-	memcpy(&priv->gJpegDecMng, pJpgDecMng, sizeof(TImJpegDecMng));
+	memcpy(&priv->gJpegDecMng, pJpgDecMng, sizeof(TimgDecMng));
 	S_GJPEG_DEC_END_FLG = 1;
 //	ct_im_jpeg1_measure_time_print();
 	return;
@@ -492,15 +491,15 @@ void ct_im_jpeg4_decode_cb(TImJpegDecMng* pJpgDecMng)
 void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 {
 	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
-	TImJpegDecMng decMng;
-	TImJpegDecFrameMng decFrmMng;
+	TimgDecMng decMng;
+	TimgDecFrameMng decFrmMng;
 	gint32		ret=0;
 	gulonglong	pauseSize;
 	gulong		sectorCnt;
 	gint32		i;
 
-	memset(&decMng, 0, sizeof(TImJpegDecMng));
-	memset(&decFrmMng, 0, sizeof(TImJpegDecFrameMng));
+	memset(&decMng, 0, sizeof(TimgDecMng));
+	memset(&decFrmMng, 0, sizeof(TimgDecFrameMng));
 
 	switch(decParam->format) {
 		case CtImJpeg6_E_CT_JPEG_FORMAT_444P:
@@ -539,9 +538,9 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 	decMng.pintSect		= 0;
 	decMng.corrMode	= decParam->corrFlg;
 
-	decMng.color_band.yBand		= 0x01;
-	decMng.color_band.cbBand	= 0x01;
-	decMng.color_band.crBand		= 0x01;
+	decMng.colorBand.yBand		= 0x01;
+	decMng.colorBand.cbBand	= 0x01;
+	decMng.colorBand.crBand		= 0x01;
 
 	decMng.pbufCtrl.endian					= ImJpegCommon_E_IM_JPEG_ENDIAN_LITTLE;
 	decMng.pbufCtrl.issueTranNum	= ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_8;
@@ -558,7 +557,7 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 		decMng.pcallback = NULL;
 	}
 	else {
-		decMng.pcallback = (VP_CALLBACK)ct_im_jpeg4_decode_cb;
+		decMng.pcallback = (VpCallback)ct_im_jpeg4_decode_cb;
 	}
 
 	// Frame memory
@@ -618,17 +617,17 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 // ### REMOVE_RELEASE END
 //	ct_im_jpeg1_measure_time_start();
 
-	ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return;
 	}
 
-	ret = Im_JPEG_Ctrl_Dec(&decMng);
-	Ddim_Print(("Im_JPEG_Ctrl_Dec ret=0x%X\n", ret));
+	ret = im_jpeg_ctrl_dec(&decMng);
+	Ddim_Print(("im_jpeg_ctrl_dec ret=0x%X\n", ret));
 	ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_BASE, (gpointer)&decMng);
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-		Im_JPEG_Close();
+		im_jpeg_close();
 		return;
 	}
 
@@ -637,19 +636,19 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 		// limit size
 		decFrmMng.codeSize		= decParam->limitSize;
 
-		ret = Im_JPEG_Ctrl_Dec_Frame(&decFrmMng);
-		Ddim_Print(("Im_JPEG_Ctrl_Dec_Frame ret=0x%X\n", ret));
+		ret = im_jpeg_ctrl_dec_frame(&decFrmMng);
+		Ddim_Print(("im_jpeg_ctrl_dec_frame ret=0x%X\n", ret));
 		// Ctrl Print
 		ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_FRAME, (gpointer)&decFrmMng);
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Im_JPEG_Close();
+			im_jpeg_close();
 			return;
 		}
 
-		ret = Im_JPEG_Start_Dec();
-		Ddim_Print(("Im_JPEG_Start_Dec ret=0x%X\n", ret));
+		ret = im_jpeg_start_dec();
+		Ddim_Print(("im_jpeg_start_dec ret=0x%X\n", ret));
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Im_JPEG_Close();
+			im_jpeg_close();
 			return;
 		}
 
@@ -663,14 +662,14 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 
 #endif	// CO_DEBUG_ON_PC
 
-			ret = Im_JPEG_Wait_End_Dec(&decMng, 5000);
-			Ddim_Print(("Im_JPEG_Wait_End_Dec ret=0x%X\n", ret));
+			ret = im_jpeg_wait_end_dec(&decMng, 5000);
+			Ddim_Print(("im_jpeg_wait_end_dec ret=0x%X\n", ret));
 
-			memcpy(&priv->gJpegDecMng, &decMng, sizeof(TImJpegDecMng));
+			memcpy(&priv->gJpegDecMng, &decMng, sizeof(TimgDecMng));
 
 			if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 				ct_im_jpeg1_stop();
-				Im_JPEG_Close();
+				im_jpeg_close();
 				Ddim_Print(("***** Decode Error result=[0x%X] *****\n", priv->gJpegDecMng->result));
 				Ddim_Print(("***** Decode Error Code=[0x%X] *****\n", priv->gJpegDecMng->errCode));
 				Ddim_Print(("***** Decode Sampling type[%d] *****\n", priv->gJpegDecMng->smplType));
@@ -693,9 +692,9 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 			}
 			S_GJPEG_DEC_END_FLG = 0;
 
-			if ((priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PROC_END) != ImJpegCommon_D_IM_JPEG_PROC_END) {
+			if ((priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PROC_END) != ImJpegCommon_D_IM_JPEG_PROC_END){
 					ct_im_jpeg1_stop();
-					Im_JPEG_Close();
+					im_jpeg_close();
 					Ddim_Print(("***** Decode Error result=[0x%X] *****\n", priv->gJpegDecMng->result));
 					Ddim_Print(("***** Decode Error Code=[0x%X] *****\n", priv->gJpegDecMng->errCode));
 					Ddim_Print(("***** Decode Sampling type[%d] *****\n", priv->gJpegDecMng->smplType));
@@ -708,8 +707,7 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 		Ddim_Print(("***** Decode Sampling type[%d] *****\n", priv->gJpegDecMng->smplType));
 		Ddim_Print(("***** Decode Width[%d], Height[%d] *****\n", priv->gJpegDecMng->orgWidth, priv->gJpegDecMng->orgLines));
 
-	}
-	else {
+	}else {
 		pauseSize = decParam->limitSize / 2;
 		sectorCnt = (gulong)(pauseSize / 512) + 1;
 		decFrmMng.codeSize = pauseSize;
@@ -726,27 +724,27 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 #ifdef CO_DEBUG_ON_PC
 				IO_JPG7.JCCTL.bit.JCTRG = 2;
 #endif	// CO_DEBUG_ON_PC
-				ret = Im_JPEG_Restart_Dec(&decFrmMng);
-				Ddim_Print(("Im_JPEG_Restart_Dec ret=0x%X\n", ret));
+				ret = im_jpeg_restart_dec(&decFrmMng);
+				Ddim_Print(("im_jpeg_restart_dec ret=0x%X\n", ret));
 				ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_FRAME, (gpointer)&decFrmMng);
 				if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 					ct_im_jpeg1_stop();
-					Im_JPEG_Close();
+					im_jpeg_close();
 					return;
 				}
 			}else {
-				ret = Im_JPEG_Ctrl_Dec_Frame(&decFrmMng);
-				Ddim_Print(("Im_JPEG_Ctrl_Dec_Frame ret=0x%X\n", ret));
+				ret = im_jpeg_ctrl_dec_frame(&decFrmMng);
+				Ddim_Print(("im_jpeg_ctrl_dec_frame ret=0x%X\n", ret));
 				ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_FRAME, (gpointer)&decFrmMng);
 				if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-					Im_JPEG_Close();
+					im_jpeg_close();
 					return;
 				}
 
-				ret = Im_JPEG_Start_Dec();
-				Ddim_Print(("Im_JPEG_Start_Dec ret=0x%X\n", ret));
+				ret = im_jpeg_start_dec();
+				Ddim_Print(("im_jpeg_start_dec ret=0x%X\n", ret));
 				if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-					Im_JPEG_Close();
+					im_jpeg_close();
 					return;
 				}
 			}
@@ -768,31 +766,28 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 					Ddim_Print(("IO_JPG7.JIMGSHDG.bit.JIMGSHDG =%d\n", IO_JPG7.JIMGSHDG.bit.JIMGSHDG));
 					Ddim_Print(("IO_JPG7.JHOFFSET.bit.JHOFFSET =%d\n", IO_JPG7.JHOFFSET.bit.JHOFFSET));
 					Ddim_Print(("IO_JPG7.JVOFFSET.bit.JVOFFSET =%d\n", IO_JPG7.JVOFFSET.bit.JVOFFSET));
-				}
-				else {
+				}else {
 					ctJpegDecodeIntHandler(3);
 				}
 #endif	// CO_DEBUG_ON_PC
-				ret = Im_JPEG_Wait_End_Dec(&decMng, D_DDIM_WAIT_END_TIME);
-				Ddim_Print(("Im_JPEG_Wait_End_Dec ret=0x%X\n", ret));
+				ret = im_jpeg_wait_end_dec(&decMng, D_DDIM_WAIT_END_TIME);
+				Ddim_Print(("im_jpeg_wait_end_dec ret=0x%X\n", ret));
 
-				memcpy(&priv->gJpegDecMng, &decMng, sizeof(TImJpegDecMng));
+				memcpy(&priv->gJpegDecMng, &decMng, sizeof(TimgDecMng));
 
 				if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 					if (i == 0 && ret == ImJpegCommon_D_IM_JPEG_DECODE_PAUSE) {
 						Ddim_Print(("Decode Pause \n"));
-					}
-					else {
+					}else {
 						ct_im_jpeg1_stop();
-						Im_JPEG_Close();
+						im_jpeg_close();
 						Ddim_Print(("***** Decode Error result=[0x%X] *****\n", priv->gJpegDecMng->result));
 						Ddim_Print(("***** Decode Error Code=[0x%X] *****\n", priv->gJpegDecMng->errCode));
 						Ddim_Print(("***** Decode Sampling type[%d] *****\n", priv->gJpegDecMng->smplType));
 						return;
 					}
 				}
-			}
-			else {
+			}else {
 
 #ifdef CO_DEBUG_ON_PC
 				if (i == 0) {
@@ -809,8 +804,7 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 					Ddim_Print(("IO_JPG7.JIMGSHDG.bit.JIMGSHDG=%d\n", IO_JPG7.JIMGSHDG.bit.JIMGSHDG));
 					Ddim_Print(("IO_JPG7.JHOFFSET.bit.JHOFFSET=%d\n", IO_JPG7.JHOFFSET.bit.JHOFFSET));
 					Ddim_Print(("IO_JPG7.JVOFFSET.bit.JVOFFSET=%d\n", IO_JPG7.JVOFFSET.bit.JVOFFSET));
-				}
-				else {
+				}else {
 					ctJpegDecodeIntHandler(3);
 				}
 #endif	// CO_DEBUG_ON_PC
@@ -819,13 +813,13 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 				}
 				S_GJPEG_DEC_END_FLG = 0;
 
-				if ((priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PROC_END) != ImJpegCommon_D_IM_JPEG_PROC_END) {
-					if (i == 0 && (priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PAUSE) == ImJpegCommon_D_IM_JPEG_PAUSE) {
+				if ((priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PROC_END) != ImJpegCommon_D_IM_JPEG_PROC_END){
+					if (i == 0 && (priv->gJpegDecMng->result & ImJpegCommon_D_IM_JPEG_PAUSE) \
+							== ImJpegCommon_D_IM_JPEG_PAUSE) {
 						Ddim_Print(("Decode Pause\n"));
-					}
-					else {
+					}else {
 						ct_im_jpeg1_stop();
-						Im_JPEG_Close();
+						im_jpeg_close();
 						Ddim_Print(("***** Decode Error result=[0x%X] *****\n", priv->gJpegDecMng->result));
 						Ddim_Print(("***** Decode Error Code=[0x%X] *****\n", priv->gJpegDecMng->errCode));
 						Ddim_Print(("***** Decode Sampling type[%d] *****\n", priv->gJpegDecMng->smplType));
@@ -850,14 +844,14 @@ void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam)
 	ctJpegDecodePalladiumOut(&decMng, &decFrmMng, decParam);
 #endif
 // ### REMOVE_RELEASE END
-	ret = Im_JPEG_Close();
-	Ddim_Print(("Im_JPEG_Close ret=0x%X\n", ret));
+	ret = im_jpeg_close();
+	Ddim_Print(("im_jpeg_close ret=0x%X\n", ret));
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return;
 	}
 }
 
-TImJpegDecMng *ct_im_jpeg4_get1(CtImJpeg4 *self)
+TimgDecMng *ct_im_jpeg4_get1(CtImJpeg4 *self)
 {
 	CtImJpeg4Private *priv = CT_IM_JPEG_4_GET_PRIVATE(self);
 	return priv->gJpegDecMng;

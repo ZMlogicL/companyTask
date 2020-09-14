@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_CALENDAR_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_CALENDAR		(jctpmc_calendar_get_type())
-#define JCTPMC_CALENDAR(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcCalendar))
-#define JCTPMC_IS_CALENDAR(obj)	(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_CALENDAR))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcCalendarCac IoPmcCalendarCac;
@@ -40,131 +36,129 @@ typedef union 				_IoPmcCalendarAl3 IoPmcCalendarAl3;
 typedef union 				_IoPmcCalendarAl4 IoPmcCalendarAl4;
 typedef union 				_IoPmcCalendarTst IoPmcCalendarTst;
 typedef struct 				_IoPmcCalendar IoPmcCalendar;
-typedef struct 				_JctpmcCalendar JctpmcCalendar;
-typedef struct 				_JctpmcCalendarPrivate JctpmcCalendarPrivate;
 
 /* Calendar */
 
 /* CAC */
 union _IoPmcCalendarCac {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	mode			:2;
-		kulong	alen			:1;
-		kulong	out1hzen		:1;
-		kulong	alrst			:1;
-		kulong	scpurst			:1;
-		kulong					:1;
-		kulong	irst			:1;
-		kulong					:24;
+		gulong	mode			:2;
+		gulong	alen			:1;
+		gulong	out1hzen		:1;
+		gulong	alrst			:1;
+		gulong	scpurst			:1;
+		gulong					:1;
+		gulong	irst			:1;
+		gulong					:24;
 	}bit;
 };
 
 /* CA1 */
 union _IoPmcCalendarCa1 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	sec				:6;
-		kulong					:26;
+		gulong	sec				:6;
+		gulong					:26;
 	}bit;
 };
 
 /* CA2 */
 union _IoPmcCalendarCa2 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	min				:6;
-		kulong					:26;
+		gulong	min				:6;
+		gulong					:26;
 	}bit;
 };
 
 /* CA3 */
 union _IoPmcCalendarCa3 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	hour			:5;
-		kulong					:27;
+		gulong	hour			:5;
+		gulong					:27;
 	}bit;
 };
 
 /* CA4 */
 union _IoPmcCalendarCa4 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	day				:5;
-		kulong					:27;
+		gulong	day				:5;
+		gulong					:27;
 	}bit;
 };
 
 /* CA5 */
 union _IoPmcCalendarCa5 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	week			:3;
-		kulong					:29;
+		gulong	week			:3;
+		gulong					:29;
 	}bit;
 };
 
 /* CA6 */
 union _IoPmcCalendarCa6 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	month			:4;
-		kulong					:28;
+		gulong	month			:4;
+		gulong					:28;
 	}bit;
 };
 
 /* CA7 */
 union _IoPmcCalendarCa7 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	year			:7;
-		kulong					:25;
+		gulong	year			:7;
+		gulong					:25;
 	}bit;
 };
 
 /* AL1 */
 union _IoPmcCalendarAl1 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	amin			:6;
-		kulong					:26;
+		gulong	amin			:6;
+		gulong					:26;
 	}bit;
 };
 
 /* AL2 */
 union _IoPmcCalendarAl2 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	ahour			:5;
-		kulong					:27;
+		gulong	ahour			:5;
+		gulong					:27;
 	}bit;
 };
 
 /* AL3 */
 union _IoPmcCalendarAl3 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	aday			:5;
-		kulong					:27;
+		gulong	aday			:5;
+		gulong					:27;
 	}bit;
 };
 
 /* AL4 */
 union _IoPmcCalendarAl4 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	aweek			:3;
-		kulong					:29;
+		gulong	aweek			:3;
+		gulong					:29;
 	}bit;
 };
 
 /* TST */
 union _IoPmcCalendarTst {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	test			:4;
-		kulong					:28;
+		gulong	test			:4;
+		gulong					:28;
 	}bit;
 };
 
@@ -197,16 +191,8 @@ struct _IoPmcCalendar {
 	/* 1DFF_(C030 - C033h)	*/
 	IoPmcCalendarTst		tst;
 	/* 1DFF_(C034 - CFFFh)	*/
-	kuchar					dmyPmcCalendar034Fff[0x1000 - 0x034];
+	guchar					dmyPmcCalendar034Fff[0x1000 - 0x034];
 };
-
-struct _JctpmcCalendar {
-	KObject parent;
-};
-
-
-KConstType 						jctpmc_calendar_get_type(void);
-JctpmcCalendar*		        jctpmc_calendar_new(void);
 
 
 #endif /* __JCTPMC_CALENDAR_H__ */

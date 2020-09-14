@@ -17,7 +17,7 @@
 
 
 #include <klib.h>
-#include "internals.h"
+#include "checkheadermaindefs.h"
 
 #define PRO_TYPE_TEST2                  (pro_test2_get_type())
 #define PRO_TEST2(obj)                    (K_TYPE_CHECK_INSTANCE_CAST (obj, ProTest2)) 

@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -90,13 +90,13 @@
 /** Code Table */
 typedef struct {
 	USHORT	code[D_IM_RAW_NUM_CATEGORY];			/**< CODEx (x = 0x0, 0x1, ... 0xE) */
-	UCHAR	code_length[D_IM_RAW_NUM_CATEGORY];		/**< LENx  (x = 0x0, 0x1, ... 0xE) */
-} T_IM_RAW_CTRL_CODE_TBL;
+	UCHAR	codeLength[D_IM_RAW_NUM_CATEGORY];		/**< LENx  (x = 0x0, 0x1, ... 0xE) */
+} ImRawCtrlCodeTbl;
 
 
 /** Im_RAW_Ctrl_Axi() parameter structure */
 typedef struct {
-	UINT32	r_cache_type;			/**< Read ch cache type<br>
+	UINT32	rCacheType;			/**< Read ch cache type<br>
 											<ul>
 												<li>@ref D_IM_RAW_NON_CACHE_NON_BUF
 												<li>@ref D_IM_RAW_ON_BUF
@@ -110,7 +110,7 @@ typedef struct {
 												<li>@ref D_IM_RAW_ON_CACHE_RW_WRITE_BACK
 											</ul>
 									 */
-	UINT32	r_protection_type;		/**< Read ch protect type <br>
+	UINT32	rProtectionType;		/**< Read ch protect type <br>
 											<ul>
 												<li>@ref D_IM_RAW_D_SEC_NORMAL_ACCESS
 												<li>@ref D_IM_RAW_D_SEC_PRIVILEGED_ACCESS
@@ -122,7 +122,7 @@ typedef struct {
 												<li>@ref D_IM_RAW_I_NSEC_PRIVILEGED_ACCESS
 											</ul>
 									 */
-	UINT32	w_cache_type;			/**< Write ch cache type<br>
+	UINT32	wCacheType;			/**< Write ch cache type<br>
 											<ul>
 												<li>@ref D_IM_RAW_NON_CACHE_NON_BUF
 												<li>@ref D_IM_RAW_ON_BUF
@@ -136,7 +136,7 @@ typedef struct {
 												<li>@ref D_IM_RAW_ON_CACHE_RW_WRITE_BACK
 											</ul>
 									 */
-	UINT32	w_protection_type;		/**< Write ch protect type <br>
+	UINT32	wProtectionType;		/**< Write ch protect type <br>
 											<ul>
 												<li>@ref D_IM_RAW_D_SEC_NORMAL_ACCESS
 												<li>@ref D_IM_RAW_D_SEC_PRIVILEGED_ACCESS
@@ -148,37 +148,37 @@ typedef struct {
 												<li>@ref D_IM_RAW_I_NSEC_PRIVILEGED_ACCESS
 											</ul>
 									 */
-} T_IM_RAW_AXI;
+} ImRawAxi;
 
 /** Im_RAW_Get_AXI_Status() parameter structure */
 typedef struct {
-	UCHAR	r_ch_resp;		/**< Read Channel Response */
-	UCHAR	w_ch_resp;		/**< Write Channel Response */
-} T_IM_RAW_AXI_STATUS;
+	UCHAR	rChResp;		/**< Read Channel Response */
+	UCHAR	wChResp;		/**< Write Channel Response */
+} ImRawAxiStatus;
 
 /** Parameters of Im_RAW_Ctrl_Enc() and Im_RAW_Ctrl_Dec() */
 typedef struct {
 
 	// Common (16/14/12/8 bit)
-	UINT32		src_addr;				/**< MSA.<br>
+	UINT32		srcAddr;				/**< MSA.<br>
 											 Source address.<br>
 											 Should be aligned on 16.
 										 */
-	UINT32		dst_addr;				/**< MDA.<br>
+	UINT32		dstAddr;				/**< MDA.<br>
 											 Destination address.<br>
 											 Should be aligned on 16.
 										 */
-	UINT32		diff_fixed_value;		/**< DEFINIT.<br>
+	UINT32		diffFixedValue;		/**< DEFINIT.<br>
 										   	 Fixed value of subtraction. [0~16383].
 										 */
-	UCHAR		byte_stuffing;			/**< RCTL1.BYTS<br>
+	UCHAR		byteStuffing;			/**< RCTL1.BYTS<br>
 											 Byte stuffing.<br>
 											 <ul>
 												<li>@ref D_IM_RAW_OFF		Byte stuffing OFF [RCTL1.BYTS = 0b]
 												<li>@ref D_IM_RAW_ON		Byte stuffing ON  [RCTL1.BYTS = 1b]
 											 </ul>
 										 */
-	UCHAR		data_format;			/**< RCTL1.RFMT<br>
+	UCHAR		dataFormat;			/**< RCTL1.RFMT<br>
 											 Data format<br>
 											 <ul>
 												<li>@ref D_IM_RAW_RFMT_14_OR_16_BIT	14/16 bit   [RCTL1.RFMT = 00b]
@@ -186,7 +186,7 @@ typedef struct {
 												<li>@ref D_IM_RAW_RFMT_8_BIT		8 bit       [RCTL1.RFMT = 10b]
 											 </ul>
 										 */
-	T_IM_RAW_AXI	axi_param;			/**< RAW AXI parameter. */
+	ImRawAxi	axiParam;			/**< RAW AXI parameter. */
 	VOID		(*callback)(UINT32);	/**< The pointer of callback function. The callback function can be called in Im_RAW_Int_Handler.
 											 If this parameter is set to NULL, Im_RAW_Int_Handler does not call callback function. <br><br>
 											 Sample of callback function.<br>
@@ -219,17 +219,17 @@ typedef struct {
 											 @endcode
 										   */
 	// Only 12/14/16 bits
-	UCHAR		mcu_size;			/**< RCTL1.DEFFC<br>
+	UCHAR		mcuSize;			/**< RCTL1.DEFFC<br>
 										 MCU size.<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
 											 <ul>
 												<li>@ref D_IM_RAW_DEFFC_MCU_2x2		MCU 2x2 [RCTL1.DEFFC = 0b]
 												<li>@ref D_IM_RAW_DEFFC_MCU_2x1		MCU 2x1 [RCTL1.DEFFC = 1b]
 											 </ul>
 										 */
-	UCHAR		bit_select;			/**< RCTL1.BITSEL<br>
+	UCHAR		bitSelect;			/**< RCTL1.BITSEL<br>
 										 Select whether 16 bits or except 16 bits RAW data.<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
 											 <ul>
 												<li>@ref D_IM_RAW_BITSEL_EXCEPT_16_BIT	Except 16 bit RAW [RCTL1.BITSEL = 0b]
 												<li>@ref D_IM_RAW_BITSEL_16_BIT			16 bit RAW [RCTL1.BITSEL = 1b]
@@ -237,17 +237,17 @@ typedef struct {
 									 */
 	USHORT		width;				/**< HSIZE<br>
 										 Width (pixels) [0~16383]. Should be aligned on 32.<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
 									 */
 	USHORT		lines;				/**< VSIZE<br>
 										 Lines (pixels) [0~16383]. Should be aligned on 2.<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_14_or_16_BIT.<br>
 									 */
 
 	// Only 8bit data.
-	UCHAR		diff_mode;			/**< RCTL1.DEFOP<br>
+	UCHAR		diffMode;			/**< RCTL1.DEFOP<br>
 										 The mode of subtraction.<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
 											 <ul>
 												<li>@ref D_IM_RAW_DEFOP_DIFF_PREV_VALUE		[RCTL1.DEFOP = 0b]
 												<li>@ref D_IM_RAW_DEFOP_DIFF_FIXED_VALUE	[RCTL1.DEFOP = 1b]
@@ -257,13 +257,13 @@ typedef struct {
 										 LUTx (x = 0, 1, ..., 255)<br>
 										 If it is set to NULL, LUT is not used. [RCTL1.LUTEN = 0b]<br>
 										 If it is set to the address of LUT table (UCHAR user_lut_table[256]), LUT is used. [RCTL1.LUTEN = 1b]<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
 									 */
-	UINT32		data_size;			/**< DSIZE<br>
+	UINT32		dataSize;			/**< DSIZE<br>
 										 Data size (bytes)<br>
-										 This parameter is valid only when T_IM_RAW_CTRL_PARAM::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
+										 This parameter is valid only when ImRawCtrlParam::data_format is set to D_IM_RAW_RFMT_8_BIT.<br>
 									 */
-} T_IM_RAW_CTRL_PARAM;
+} ImRawCtrlParam;
 
 typedef struct _imRaw  imRaw;
 typedef struct _imRawPrivate imRawPrivate;
@@ -276,20 +276,20 @@ KObject parent;
 KConstType  im_raw_get_type(void);
 imRaw* im_raw_new(void);
 
-VOID Im_RAW_On_Pclk( VOID );
-VOID Im_RAW_Off_Pclk( VOID );
-INT32 Im_RAW_Init( VOID );
-INT32 Im_RAW_Open( INT32 wait_time );
-INT32 Im_RAW_Close( VOID );
-INT32 Im_RAW_Ctrl_CodeTbl( const T_IM_RAW_CTRL_CODE_TBL* const tbl, UCHAR data_format );
-INT32 Im_RAW_Ctrl_Enc( const T_IM_RAW_CTRL_PARAM* const cfg, UINT32 code_limit );
-INT32 Im_RAW_Ctrl_Dec( const T_IM_RAW_CTRL_PARAM* const cfg );
-INT32 Im_RAW_Start( VOID );
-INT32 Im_RAW_Wait_End_Enc( UINT32* const condition, UINT32* const byte, INT32 wait_time );
-INT32 Im_RAW_Wait_End_Dec( UINT32* const condition, INT32 wait_time );
-INT32 Im_RAW_Stop( VOID );
-INT32 Im_RAW_Get_AXI_Status( T_IM_RAW_AXI_STATUS* const sts );
-VOID Im_RAW_Int_Handler( VOID );
+VOID im_raw_on_pclk( imRaw*self );
+VOID im_raw_off_pclk( imRaw*self );
+INT32 im_raw_init( imRaw*self );
+INT32 im_raw_open( imRaw*self,INT32 wait_time );
+INT32 im_raw_close( imRaw*self );
+INT32 im_raw_ctrl_code_tbl(  imRaw*self,const ImRawCtrlCodeTbl* const tbl, UCHAR data_format );
+INT32 im_raw_ctrl_enc( imRaw*self,const ImRawCtrlParam* const cfg, UINT32 code_limit );
+INT32 im_raw_ctrl_dec( imRaw*self,const ImRawCtrlParam* const cfg );
+INT32 im_raw_start( imRaw*self );
+INT32 im_raw_wait_end_enc( imRaw*self,UINT32* const condition, UINT32* const byte, INT32 wait_time );
+INT32 im_raw_wait_end_dec( imRaw*self,UINT32* const condition, INT32 wait_time );
+INT32 im_raw_stop( imRaw*self );
+INT32 im_raw_get_axi_status( imRaw*self,ImRawAxiStatus* const sts );
+VOID im_raw_int_handler( VOID );
 
 
 #endif /* __IM_RAW_H__ */

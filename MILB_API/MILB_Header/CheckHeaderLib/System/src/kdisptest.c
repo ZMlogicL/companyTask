@@ -51,6 +51,7 @@
 
 
 K_TYPE_DEFINE_WITH_PRIVATE(KDispTest, k_disp_test);
+
 #define K_DISP_TEST_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KDispTestPrivate, K_TYPE_DISP_TEST))
 
 #define K_DISP_TEST_RS_PRINTF printf
@@ -61,306 +62,304 @@ struct  _KDispTestPrivate
 
 };
 /**
- IMPL
-*/
+ *IMPL
+ */
 static void k_disp_test_constructor(KDispTest *self)
 {
-	KDispTestPrivate *priv = K_DISP_TEST_GET_PRIVATE(self);
+//	KDispTestPrivate *priv = K_DISP_TEST_GET_PRIVATE(self);
 }
 
 static void k_disp_test_destructor(KDispTest *self)
 {
-	KDispTestPrivate *priv = K_DISP_TEST_GET_PRIVATE(self);
+//	KDispTestPrivate *priv = K_DISP_TEST_GET_PRIVATE(self);
 }
 /**
- PUBLIC
-*/
+ *PUBLIC
+ */
 void k_disp_test_disp_test(KDispTest *self)
 {
 // for PC debug
 #if 0
-#define IO_DISP     (*IO_DISP2)
-#define IO_DISP_TBL (*IO_DISP2_TBL)
-    volatile IoJdsdisp* IO_DISP2 = (kpointer)0x200F0000;
-    volatile IoJdsdispTbl* IO_DISP2_TBL = (kpointer)0x24080000;
+#define ioDisp     (*ioDisp2)
+#define ioDispTbl (*ioDisp2Tbl)
+    volatile IoJdsdisp* ioDisp2 = (kpointer)0x200F0000;
+    volatile IoJdsdispTbl* ioDisp2Tbl = (kpointer)0x24080000;
 #endif
     K_DISP_TEST_RS_PRINTF("DISP\n");
 #if 0
     /* io_jdslch */
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LRST           = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LRST);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LTRG           = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LTRG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LRPGCTL        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LRPGCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LIDT           = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LIDT);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LISIZE         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LISIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYSA[0]        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYSA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYSA[3]        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYSA[3]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LCSA0[0]       = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LCSA0[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LCSA0[3]       = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LCSA0[3]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYHGA          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYHGA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LCHGA          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LCHGA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LIBCTL         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LIBCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LERCV          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LERCV);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LHRSZ0         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LHRSZ0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LHRSZ1         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LHRSZ1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LVRSZ          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LVRSZ);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYWTH          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYWTH);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYWHS0         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYWHS0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYWHS1         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYWHS1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYWLS0         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYWLS0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LYWLS1         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LYWLS1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LBLTMR         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LBLTMR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDRECTL        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDRECTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDREYCAL       = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDREYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDRECBCAL      = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDRECBCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDRECRCAL      = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDRECRCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LY2R[0]        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LY2R[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LY2R[2]        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LY2R[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LTBLASET       = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LTBLASET);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LCC[0]         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LCC[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LCC[2]         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LCC[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LTCYCAL        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LTCYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LTCCTL         = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LTCCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDISPEN        = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDISPEN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LDSTA          = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LDSTA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.LCH.LREVDISP       = %lx\n", (kulong)&IO_DISP.MAIN.LCH.LREVDISP);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lrst           = %lx\n", (kulong)&ioDisp.main.lch.lrst);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ltrg           = %lx\n", (kulong)&ioDisp.main.lch.ltrg);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lrpgctl        = %lx\n", (kulong)&ioDisp.main.lch.lrpgctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lidt           = %lx\n", (kulong)&ioDisp.main.lch.lidt);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lisize         = %lx\n", (kulong)&ioDisp.main.lch.lisize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lysa[0]        = %lx\n", (kulong)&ioDisp.main.lch.lysa[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lysa[3]        = %lx\n", (kulong)&ioDisp.main.lch.lysa[3]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lcsa0[0]       = %lx\n", (kulong)&ioDisp.main.lch.lcsa0[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lcsa0[3]       = %lx\n", (kulong)&ioDisp.main.lch.lcsa0[3]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lyhga          = %lx\n", (kulong)&ioDisp.main.lch.lyhga);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lchga          = %lx\n", (kulong)&ioDisp.main.lch.lchga);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.libctl         = %lx\n", (kulong)&ioDisp.main.lch.libctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lercv          = %lx\n", (kulong)&ioDisp.main.lch.lercv);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lhrsz0         = %lx\n", (kulong)&ioDisp.main.lch.lhrsz0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lhrsz1         = %lx\n", (kulong)&ioDisp.main.lch.lhrsz1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lvrsz          = %lx\n", (kulong)&ioDisp.main.lch.lvrsz);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lywth          = %lx\n", (kulong)&ioDisp.main.lch.lywth);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lywhs0         = %lx\n", (kulong)&ioDisp.main.lch.lywhs0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lywhs1         = %lx\n", (kulong)&ioDisp.main.lch.lywhs1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lywls0         = %lx\n", (kulong)&ioDisp.main.lch.lywls0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lywls1         = %lx\n", (kulong)&ioDisp.main.lch.lywls1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lbltmr         = %lx\n", (kulong)&ioDisp.main.lch.lbltmr);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldrectl        = %lx\n", (kulong)&ioDisp.main.lch.ldrectl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldreycal       = %lx\n", (kulong)&ioDisp.main.lch.ldreycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldrecbcal      = %lx\n", (kulong)&ioDisp.main.lch.ldrecbcaL);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldrecrcal      = %lx\n", (kulong)&ioDisp.main.lch.ldrecrcaL);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ly2r[0]        = %lx\n", (kulong)&ioDisp.main.lch.ly2r[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ly2r[2]        = %lx\n", (kulong)&ioDisp.main.lch.ly2r[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ltblaset       = %lx\n", (kulong)&ioDisp.main.lch.ltblaset);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lcc[0]         = %lx\n", (kulong)&ioDisp.main.lch.lcc[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lcc[2]         = %lx\n", (kulong)&ioDisp.main.lch.lcc[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ltcycal        = %lx\n", (kulong)&ioDisp.main.lch.ltcycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ltcctl         = %lx\n", (kulong)&ioDisp.main.lch.ltcctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldispen        = %lx\n", (kulong)&ioDisp.main.lch.ldispen);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.ldsta          = %lx\n", (kulong)&ioDisp.main.lch.ldsta);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.lch.lrevdisp       = %lx\n", (kulong)&ioDisp.main.lch.lrevdisp);
 
     /* io_jdsdcore */
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.RESET        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.RESET);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.IFS          = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.IFS);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.TRG          = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.TRG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.TOCTL        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.TOCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.INTC         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.INTC);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.INTE         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.INTE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.INTF         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.INTF);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.AXISTS       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.AXISTS);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.RPGCTL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.RPGCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.RPGEN        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.RPGEN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.POLSEL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.POLSEL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.TSL          = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.TSL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.VCYC         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.VCYC);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.HCYC         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.HCYC);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.OVPW         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.OVPW);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.HPW          = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.HPW);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.VBLK         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.VBLK);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.HBLK         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.HBLK);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.VDLY         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.VDLY);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.HDLY         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.HDLY);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.OVSIZE       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.OVSIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.OHSIZE       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.OHSIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.VRFCTL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.VRFCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.HRFCTL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.HRFCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.DOMD         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.DOMD);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FDOEN        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FDOEN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FODATA       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FODATA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.BLANKDT      = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.BLANKDT);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CLBHSIZE     = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CLBHSIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CLBDT[0]     = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CLBDT[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CLBDT[15]    = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CLBDT[15]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.BLDCTL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.BLDCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.R2RCTL       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.R2RCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.R2Y[0]       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.R2Y[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.R2Y[2]       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.R2Y[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.YCTL         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.YCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.YCAL         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.YCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.YCLIP        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.YCLIP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CBCAL        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CBCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CBCLIP       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CBCLIP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CRCAL        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CRCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.CRCLIP       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.CRCLIP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.DOCTL0       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.DOCTL0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.DOCTL1       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.DOCTL1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.DOCTL2       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.DOCTL2);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.TRSCODE[0]   = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.TRSCODE[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.TRSCODE[1]   = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.TRSCODE[1]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GHDSTA       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GHDSTA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GVDSTA       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GVDSTA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GLENGTH      = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GLENGTH);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GWIDTH       = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GWIDTH);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GITVL        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GITVL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GNUM         = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GNUM);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GDCTL        = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GDCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.GDISPEN      = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.GDISPEN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFDSTA[0]    = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFDSTA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFDSTA[15]   = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFDSTA[15]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFSIZE[0]    = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFSIZE[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFSIZE[15]   = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFSIZE[15]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFWIDTH[0]   = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFWIDTH[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFWIDTH[15]  = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFWIDTH[15]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFCLR[0]     = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFCLR[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFCLR[15]    = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFCLR[15]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.DCORE.FFDISPEN     = %lx\n", (kulong)&IO_DISP.MAIN.DCORE.FFDISPEN);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.reset        = %lx\n", (kulong)&ioDisp.main.dcore.reset);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ifs          = %lx\n", (kulong)&ioDisp.main.dcore.ifs);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.trg          = %lx\n", (kulong)&ioDisp.main.dcore.trg);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.toctl        = %lx\n", (kulong)&ioDisp.main.dcore.toctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.intc         = %lx\n", (kulong)&ioDisp.main.dcore.intc);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.inte         = %lx\n", (kulong)&ioDisp.main.dcore.inte);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.intf         = %lx\n", (kulong)&ioDisp.main.dcore.intf);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.axists       = %lx\n", (kulong)&ioDisp.main.dcore.axists);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.rpgctl       = %lx\n", (kulong)&ioDisp.main.dcore.rpgctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.rpgen        = %lx\n", (kulong)&ioDisp.main.dcore.rpgen);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.polsel       = %lx\n", (kulong)&ioDisp.main.dcore.polsel);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.tsl          = %lx\n", (kulong)&ioDisp.main.dcore.tsl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.vcyc         = %lx\n", (kulong)&ioDisp.main.dcore.vcyc);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.hcyc         = %lx\n", (kulong)&ioDisp.main.dcore.hcyc);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ovpw         = %lx\n", (kulong)&ioDisp.main.dcore.ovpw);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.hpw          = %lx\n", (kulong)&ioDisp.main.dcore.hpw);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.vblk         = %lx\n", (kulong)&ioDisp.main.dcore.vblk);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.hblk         = %lx\n", (kulong)&ioDisp.main.dcore.hblk);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.vdly         = %lx\n", (kulong)&ioDisp.main.dcore.vdly);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.hdly         = %lx\n", (kulong)&ioDisp.main.dcore.hdly);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ovsize       = %lx\n", (kulong)&ioDisp.main.dcore.ovsize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ohsize       = %lx\n", (kulong)&ioDisp.main.dcore.ohsize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.vrfctl       = %lx\n", (kulong)&ioDisp.main.dcore.vrfctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.hrfctl       = %lx\n", (kulong)&ioDisp.main.dcore.hrfctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.domd         = %lx\n", (kulong)&ioDisp.main.dcore.domd);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.fdoen        = %lx\n", (kulong)&ioDisp.main.dcore.fdoen);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.fodata       = %lx\n", (kulong)&ioDisp.main.dcore.fodata);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.blankdt      = %lx\n", (kulong)&ioDisp.main.dcore.blankdt);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.clbhsize     = %lx\n", (kulong)&ioDisp.main.dcore.clbhsize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.clbdt[0]     = %lx\n", (kulong)&ioDisp.main.dcore.clbdt[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.clbdt[15]    = %lx\n", (kulong)&ioDisp.main.dcore.clbdt[15]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.bldctl       = %lx\n", (kulong)&ioDisp.main.dcore.bldctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.r2rctl       = %lx\n", (kulong)&ioDisp.main.dcore.r2rctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.r2y[0]       = %lx\n", (kulong)&ioDisp.main.dcore.r2y[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.r2y[2]       = %lx\n", (kulong)&ioDisp.main.dcore.r2y[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.yctl         = %lx\n", (kulong)&ioDisp.main.dcore.yctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ycal         = %lx\n", (kulong)&ioDisp.main.dcore.ycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.yclip        = %lx\n", (kulong)&ioDisp.main.dcore.yclip);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.cbcal        = %lx\n", (kulong)&ioDisp.main.dcore.cbcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.cbclip       = %lx\n", (kulong)&ioDisp.main.dcore.cbclip);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.crcal        = %lx\n", (kulong)&ioDisp.main.dcore.crcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.crclip       = %lx\n", (kulong)&ioDisp.main.dcore.crclip);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.doctl0       = %lx\n", (kulong)&ioDisp.main.dcore.doctl0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.doctl1       = %lx\n", (kulong)&ioDisp.main.dcore.doctl1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.doctl2       = %lx\n", (kulong)&ioDisp.main.dcore.doctl2);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.trscode[0]   = %lx\n", (kulong)&ioDisp.main.dcore.trscode[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.trscode[1]   = %lx\n", (kulong)&ioDisp.main.dcore.trscode[1]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ghdsta       = %lx\n", (kulong)&ioDisp.main.dcore.ghdsta);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gvdsta       = %lx\n", (kulong)&ioDisp.main.dcore.gvdsta);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.glength      = %lx\n", (kulong)&ioDisp.main.dcore.glength);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gwidth       = %lx\n", (kulong)&ioDisp.main.dcore.gwidth);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gitvl        = %lx\n", (kulong)&ioDisp.main.dcore.gitvl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gnum         = %lx\n", (kulong)&ioDisp.main.dcore.gnum);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gdctl        = %lx\n", (kulong)&ioDisp.main.dcore.gdctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.gdispen      = %lx\n", (kulong)&ioDisp.main.dcore.gdispen);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffdsta[0]    = %lx\n", (kulong)&ioDisp.main.dcore.ffdsta[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffdsta[15]   = %lx\n", (kulong)&ioDisp.main.dcore.ffdsta[15]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffsize[0]    = %lx\n", (kulong)&ioDisp.main.dcore.ffsize[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffsize[15]   = %lx\n", (kulong)&ioDisp.main.dcore.ffsize[15]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffwidth[0]   = %lx\n", (kulong)&ioDisp.main.dcore.ffwidth[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffwidth[15]  = %lx\n", (kulong)&ioDisp.main.dcore.ffwidth[15]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffclr[0]     = %lx\n", (kulong)&ioDisp.main.dcore.ffclr[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffclr[15]    = %lx\n", (kulong)&ioDisp.main.dcore.ffclr[15]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.dcore.ffdispen     = %lx\n", (kulong)&ioDisp.main.dcore.ffdispen);
 
     /* io_jdsgrch */
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRRST      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRRST);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTRG      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTRG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRRPGCTL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRRPGCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRIDT      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRIDT);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTISIZE   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTISIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTDSTA    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTDSTA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRIPO      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRIPO);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRSCCTL    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRSCCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRERCV     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRERCV);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRISIZE[0] = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRISIZE[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRISIZE[9] = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRISIZE[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRSA0[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRSA0[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRSA0[3]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRSA0[3]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRSA[0]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRSA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRSA[8]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRSA[8]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRHGA[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRHGA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRHGA[9]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRHGA[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDSTA[0]  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDSTA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDSTA[9]  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDSTA[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRAREN     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRAREN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRBSL      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRBSL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRBLINK    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRBLINK);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRHRSZ0    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRHRSZ0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRHRSZ1    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRHRSZ1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRVRSZ     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRVRSZ);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRR2Y[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRR2Y[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRR2Y[2]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRR2Y[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDRECTL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDRECTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDREYCAL  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDREYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDRECBCAL = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDRECBCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRDRECRCAL = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRDRECRCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRY2R[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRY2R[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRY2R[2]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRY2R[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTBLASET  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTBLASET);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRCC[0]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRCC[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRCC[2]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRCC[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTCYCAL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTCYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRTCCTL    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRTCCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[0].GRALP      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[0].GRALP);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grrst      = %lx\n", (kulong)&ioDisp.main.grch[0].grrst);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtrg      = %lx\n", (kulong)&ioDisp.main.grch[0].grtrg);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grrpgctl   = %lx\n", (kulong)&ioDisp.main.grch[0].grrpgctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].gridt      = %lx\n", (kulong)&ioDisp.main.grch[0].gridt);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtisize   = %lx\n", (kulong)&ioDisp.main.grch[0].grtisize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtdsta    = %lx\n", (kulong)&ioDisp.main.grch[0].grtdsta);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].gripo      = %lx\n", (kulong)&ioDisp.main.grch[0].gripo);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grscctl    = %lx\n", (kulong)&ioDisp.main.grch[0].grscctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grercv     = %lx\n", (kulong)&ioDisp.main.grch[0].grercv);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grisize[0] = %lx\n", (kulong)&ioDisp.main.grch[0].grisize[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grisize[9] = %lx\n", (kulong)&ioDisp.main.grch[0].grisize[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grsa0[0]   = %lx\n", (kulong)&ioDisp.main.grch[0].grsa0[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grsa0[3]   = %lx\n", (kulong)&ioDisp.main.grch[0].grsa0[3]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grsa[0]    = %lx\n", (kulong)&ioDisp.main.grch[0].grsa[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grsa[8]    = %lx\n", (kulong)&ioDisp.main.grch[0].grsa[8]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grhga[0]   = %lx\n", (kulong)&ioDisp.main.grch[0].grhga[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grhga[9]   = %lx\n", (kulong)&ioDisp.main.grch[0].grhga[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdsta[0]  = %lx\n", (kulong)&ioDisp.main.grch[0].grdsta[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdsta[9]  = %lx\n", (kulong)&ioDisp.main.grch[0].grdsta[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].graren     = %lx\n", (kulong)&ioDisp.main.grch[0].graren);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grbsl      = %lx\n", (kulong)&ioDisp.main.grch[0].grbsl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grblink    = %lx\n", (kulong)&ioDisp.main.grch[0].grblink);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grhrsz0    = %lx\n", (kulong)&ioDisp.main.grch[0].grhrsz0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grhrsz1    = %lx\n", (kulong)&ioDisp.main.grch[0].grhrsz1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grvrsz     = %lx\n", (kulong)&ioDisp.main.grch[0].grvrsz);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grr2y[0]   = %lx\n", (kulong)&ioDisp.main.grch[0].grr2y[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grr2y[2]   = %lx\n", (kulong)&ioDisp.main.grch[0].grr2y[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdrectl   = %lx\n", (kulong)&ioDisp.main.grch[0].grdrectl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdreycal  = %lx\n", (kulong)&ioDisp.main.grch[0].grdreycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdrecbcal = %lx\n", (kulong)&ioDisp.main.grch[0].grdrecbcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grdrecrcal = %lx\n", (kulong)&ioDisp.main.grch[0].grdrecrcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].gry2r[0]   = %lx\n", (kulong)&ioDisp.main.grch[0].gry2r[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].gry2r[2]   = %lx\n", (kulong)&ioDisp.main.grch[0].gry2r[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtblaset  = %lx\n", (kulong)&ioDisp.main.grch[0].grtblaset);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grcc[0]    = %lx\n", (kulong)&ioDisp.main.grch[0].grcc[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grcc[2]    = %lx\n", (kulong)&ioDisp.main.grch[0].grcc[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtcycal   = %lx\n", (kulong)&ioDisp.main.grch[0].grtcycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].grtcctl    = %lx\n", (kulong)&ioDisp.main.grch[0].grtcctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[0].gralp      = %lx\n", (kulong)&ioDisp.main.grch[0].gralp);
 
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRRST      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRRST);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTRG      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTRG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRRPGCTL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRRPGCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRIDT      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRIDT);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTISIZE   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTISIZE);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTDSTA    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTDSTA);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRIPO      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRIPO);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRSCCTL    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRSCCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRERCV     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRERCV);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRISIZE[0] = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRISIZE[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRISIZE[9] = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRISIZE[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRSA0[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRSA0[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRSA0[3]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRSA0[3]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRSA[0]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRSA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRSA[8]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRSA[8]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRHGA[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRHGA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRHGA[9]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRHGA[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDSTA[0]  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDSTA[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDSTA[9]  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDSTA[9]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRAREN     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRAREN);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRBSL      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRBSL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRBLINK    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRBLINK);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRHRSZ0    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRHRSZ0);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRHRSZ1    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRHRSZ1);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRVRSZ     = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRVRSZ);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRR2Y[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRR2Y[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRR2Y[2]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRR2Y[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDRECTL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDRECTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDREYCAL  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDREYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDRECBCAL = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDRECBCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRDRECRCAL = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRDRECRCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRY2R[0]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRY2R[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRY2R[2]   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRY2R[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTBLASET  = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTBLASET);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRCC[0]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRCC[0]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRCC[2]    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRCC[2]);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTCYCAL   = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTCYCAL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRTCCTL    = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRTCCTL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP.MAIN.GRCH[1].GRALP      = %lx\n", (kulong)&IO_DISP.MAIN.GRCH[1].GRALP);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grrst      = %lx\n", (kulong)&ioDisp.main.grch[1].grrst);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtrg      = %lx\n", (kulong)&ioDisp.main.grch[1].grtrg);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grrpgctl   = %lx\n", (kulong)&ioDisp.main.grch[1].grrpgctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].gridt      = %lx\n", (kulong)&ioDisp.main.grch[1].gridt);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtisize   = %lx\n", (kulong)&ioDisp.main.grch[1].grtisize);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtdsta    = %lx\n", (kulong)&ioDisp.main.grch[1].grtdsta);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].gripo      = %lx\n", (kulong)&ioDisp.main.grch[1].gripo);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grscctl    = %lx\n", (kulong)&ioDisp.main.grch[1].grscctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grercv     = %lx\n", (kulong)&ioDisp.main.grch[1].grercv);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grisize[0] = %lx\n", (kulong)&ioDisp.main.grch[1].grisize[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grisize[9] = %lx\n", (kulong)&ioDisp.main.grch[1].grisize[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grsa0[0]   = %lx\n", (kulong)&ioDisp.main.grch[1].grsa0[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grsa0[3]   = %lx\n", (kulong)&ioDisp.main.grch[1].grsa0[3]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grsa[0]    = %lx\n", (kulong)&ioDisp.main.grch[1].grsa[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grsa[8]    = %lx\n", (kulong)&ioDisp.main.grch[1].grsa[8]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grhga[0]   = %lx\n", (kulong)&ioDisp.main.grch[1].grhga[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grhga[9]   = %lx\n", (kulong)&ioDisp.main.grch[1].grhga[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdsta[0]  = %lx\n", (kulong)&ioDisp.main.grch[1].grdsta[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdsta[9]  = %lx\n", (kulong)&ioDisp.main.grch[1].grdsta[9]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].graren     = %lx\n", (kulong)&ioDisp.main.grch[1].graren);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grbsl      = %lx\n", (kulong)&ioDisp.main.grch[1].grbsl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grblink    = %lx\n", (kulong)&ioDisp.main.grch[1].grblink);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grhrsz0    = %lx\n", (kulong)&ioDisp.main.grch[1].grhrsz0);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grhrsz1    = %lx\n", (kulong)&ioDisp.main.grch[1].grhrsz1);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grvrsz     = %lx\n", (kulong)&ioDisp.main.grch[1].grvrsz);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grr2y[0]   = %lx\n", (kulong)&ioDisp.main.grch[1].grr2y[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grr2y[2]   = %lx\n", (kulong)&ioDisp.main.grch[1].grr2y[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdrectl   = %lx\n", (kulong)&ioDisp.main.grch[1].grdrectl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdreycal  = %lx\n", (kulong)&ioDisp.main.grch[1].grdreycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdrecbcal = %lx\n", (kulong)&ioDisp.main.grch[1].grdrecbcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grdrecrcal = %lx\n", (kulong)&ioDisp.main.grch[1].grdrecrcal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].gry2r[0]   = %lx\n", (kulong)&ioDisp.main.grch[1].gry2r[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].gry2r[2]   = %lx\n", (kulong)&ioDisp.main.grch[1].gry2r[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtblaset  = %lx\n", (kulong)&ioDisp.main.grch[1].grtblaset);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grcc[0]    = %lx\n", (kulong)&ioDisp.main.grch[1].grcc[0]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grcc[2]    = %lx\n", (kulong)&ioDisp.main.grch[1].grcc[2]);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtcycal   = %lx\n", (kulong)&ioDisp.main.grch[1].grtcycal);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].grtcctl    = %lx\n", (kulong)&ioDisp.main.grch[1].grtcctl);
+    K_DISP_TEST_RS_PRINTF("ioDisp.main.grch[1].gralp      = %lx\n", (kulong)&ioDisp.main.grch[1].gralp);
 
     /* io_jdsdisp_tbl */
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL\n");
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.IGTBLR         = %lx\n", (kulong)&IO_DISP_TBL.LCH0.IGTBLR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.IGTBLG         = %lx\n", (kulong)&IO_DISP_TBL.LCH0.IGTBLG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.IGTBLB         = %lx\n", (kulong)&IO_DISP_TBL.LCH0.IGTBLB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.TCTBL          = %lx\n", (kulong)&IO_DISP_TBL.LCH0.TCTBL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.TCEP           = %lx\n", (kulong)&IO_DISP_TBL.LCH0.TCEP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLFR        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLFR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLFG        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLFG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLFB        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLFB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLDR        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLDR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLDG        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLDG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.LCH0.DGTBLDB        = %lx\n", (kulong)&IO_DISP_TBL.LCH0.DGTBLDB);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl\n");
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.igtblr         = %lx\n", (kulong)&ioDispTbl.lch0.igtblr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.igtblg         = %lx\n", (kulong)&ioDispTbl.lch0.igtblg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.igtblb         = %lx\n", (kulong)&ioDispTbl.lch0.igtblb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.tctbl          = %lx\n", (kulong)&ioDispTbl.lch0.tctbl);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.tcep           = %lx\n", (kulong)&ioDispTbl.lch0.tcep);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtblfr        = %lx\n", (kulong)&ioDispTbl.lch0.dgtblfr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtblfg        = %lx\n", (kulong)&ioDispTbl.lch0.dgtblfg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtblfb        = %lx\n", (kulong)&ioDispTbl.lch0.dgtblfb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtbldr        = %lx\n", (kulong)&ioDispTbl.lch0.dgtbldr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtbldg        = %lx\n", (kulong)&ioDispTbl.lch0.dgtbldg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.lch0.dgtbldb        = %lx\n", (kulong)&ioDispTbl.lch0.dgtbldb);
 
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].IGTBLR     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].IGTBLR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].IGTBLG     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].IGTBLG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].IGTBLB     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].IGTBLB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].TCTBL      = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].TCTBL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].TCEP       = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].TCEP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLFR    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLFR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLFG    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLFG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLFB    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLFB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLDR    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLDR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLDG    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLDG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[0].DGTBLDB    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[0].DGTBLDB);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].igtblr     = %lx\n", (kulong)&ioDispTbl.grch0[0].igtblr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].igtblg     = %lx\n", (kulong)&ioDispTbl.grch0[0].igtblg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].igtblb     = %lx\n", (kulong)&ioDispTbl.grch0[0].igtblb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].tctbl      = %lx\n", (kulong)&ioDispTbl.grch0[0].tctbl);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].tcep       = %lx\n", (kulong)&ioDispTbl.grch0[0].tcep);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtblfr    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtblfr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtblfg    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtblfg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtblfb    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtblfb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtbldr    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtbldr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtbldg    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtbldg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[0].dgtbldb    = %lx\n", (kulong)&ioDispTbl.grch0[0].dgtbldb);
 
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].IGTBLR     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].IGTBLR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].IGTBLG     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].IGTBLG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].IGTBLB     = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].IGTBLB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].TCTBL      = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].TCTBL);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].TCEP       = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].TCEP);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLFR    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLFR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLFG    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLFG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLFB    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLFB);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLDR    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLDR);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLDG    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLDG);
-    K_DISP_TEST_RS_PRINTF("IO_DISP_TBL.GRCH0[1].DGTBLDB    = %lx\n", (kulong)&IO_DISP_TBL.GRCH0[1].DGTBLDB);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].igtblr     = %lx\n", (kulong)&ioDispTbl.grch0[1].igtblr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].igtblg     = %lx\n", (kulong)&ioDispTbl.grch0[1].igtblg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].igtblb     = %lx\n", (kulong)&ioDispTbl.grch0[1].igtblb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].tctbl      = %lx\n", (kulong)&ioDispTbl.grch0[1].tctbl);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].tcep       = %lx\n", (kulong)&ioDispTbl.grch0[1].tcep);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtblfr    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtblfr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtblfg    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtblfg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtblfb    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtblfb);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtbldr    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtbldr);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtbldg    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtbldg);
+    K_DISP_TEST_RS_PRINTF("ioDispTbl.grch0[1].dgtbldb    = %lx\n", (kulong)&ioDispTbl.grch0[1].dgtbldb);
 
     K_DISP_TEST_RS_PRINTF(" \n");
 #endif
 }
 
-/*************************************************************************/
-
 void k_disp_test_xch_test(KDispTest *self)
 {
 // for PC debug
 #if 0
-#define IO_XCH      (*IO_XCH2)
-    volatile IoJdsxch* IO_XCH2 = (kpointer)0x288C0000;
+#define ioXch      (*ioXch2)
+    volatile IoJdsxch* ioXch2 = (kpointer)0x288C0000;
 #endif
     K_DISP_TEST_RS_PRINTF("Xch\n");
 #if 0
-    K_DISP_TEST_RS_PRINTF("IO_XCH.sr              = 0x%lX\n", (kulong)&IO_XCH.sr);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHICE          = 0x%lX\n", (kulong)&IO_XCH.XCHICE);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHICF          = 0x%lX\n", (kulong)&IO_XCH.XCHICF);
-    // XCHCTL0
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XTRG    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XTRG);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XDTYPE  = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XDTYPE);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XMD     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XMD);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XFDT    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XFDT);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XCYC    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XCYC);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XVEN    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XVEN);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XHEN    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XHEN);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XSHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XSHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XGHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XGHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XDVW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XDVW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XDHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XDHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XSA     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XSA);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL0.XDA     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL0.XDA);
+    K_DISP_TEST_RS_PRINTF("ioXch.sr              = 0x%lX\n", (kulong)&ioXch.sr);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchice          = 0x%lX\n", (kulong)&ioXch.xchice);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchicf          = 0x%lX\n", (kulong)&ioXch.xchicf);
+    // xchctl0
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xtrg    = 0x%lX\n", (kulong)&ioXch.xchctl0.xtrg);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xdtype  = 0x%lX\n", (kulong)&ioXch.xchctl0.xdtype);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xmd     = 0x%lX\n", (kulong)&ioXch.xchctl0.xmd);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xfdt    = 0x%lX\n", (kulong)&ioXch.xchctl0.xfdt);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xcyc    = 0x%lX\n", (kulong)&ioXch.xchctl0.xcyc);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xven    = 0x%lX\n", (kulong)&ioXch.xchctl0.xven);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xhen    = 0x%lX\n", (kulong)&ioXch.xchctl0.xhen);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xshw    = 0x%lX\n", (kulong)&ioXch.xchctl0.xshw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xghw    = 0x%lX\n", (kulong)&ioXch.xchctl0.xghw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xdvw    = 0x%lX\n", (kulong)&ioXch.xchctl0.xdvw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xdhw    = 0x%lX\n", (kulong)&ioXch.xchctl0.xdhw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xsa     = 0x%lX\n", (kulong)&ioXch.xchctl0.xsa);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl0.xda     = 0x%lX\n", (kulong)&ioXch.xchctl0.xda);
 
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XHISTG0         = 0x%lX\n", (kulong)&IO_XCH.XHISTG0);
-    // XCHCTL1
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XTRG    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XTRG);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XDTYPE  = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XDTYPE);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XMD     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XMD);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XFDT    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XFDT);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XCYC    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XCYC);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XVEN    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XVEN);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XHEN    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XHEN);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XSHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XSHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XGHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XGHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XDVW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XDVW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XDHW    = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XDHW);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XSA     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XSA);
-    K_DISP_TEST_RS_PRINTF("IO_XCH.XCHCTL1.XDA     = 0x%lX\n", (kulong)&IO_XCH.XCHCTL1.XDA);
+    K_DISP_TEST_RS_PRINTF("ioXch.xhistg0         = 0x%lX\n", (kulong)&ioXch.xhistg0);
+    // xchctl1
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xtrg    = 0x%lX\n", (kulong)&ioXch.xchctl1.xtrg);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xdtype  = 0x%lX\n", (kulong)&ioXch.xchctl1.xdtype);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xmd     = 0x%lX\n", (kulong)&ioXch.xchctl1.xmd);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xfdt    = 0x%lX\n", (kulong)&ioXch.xchctl1.xfdt);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xcyc    = 0x%lX\n", (kulong)&ioXch.xchctl1.xcyc);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xven    = 0x%lX\n", (kulong)&ioXch.xchctl1.xven);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xhen    = 0x%lX\n", (kulong)&ioXch.xchctl1.xhen);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xshw    = 0x%lX\n", (kulong)&ioXch.xchctl1.xshw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xghw    = 0x%lX\n", (kulong)&ioXch.xchctl1.xghw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xdvw    = 0x%lX\n", (kulong)&ioXch.xchctl1.xdvw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xdhw    = 0x%lX\n", (kulong)&ioXch.xchctl1.xdhw);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xsa     = 0x%lX\n", (kulong)&ioXch.xchctl1.xsa);
+    K_DISP_TEST_RS_PRINTF("ioXch.xchctl1.xda     = 0x%lX\n", (kulong)&ioXch.xchctl1.xda);
     // Hist Buffer
-    int i;
+    kint i;
     for ( i = 0; i <= 255; i++ ) {
-        K_DISP_TEST_RS_PRINTF("IO_XCH.XHBF[%d]    = 0x%lX\n", i, (kulong)&IO_XCH.XHBF[i]);
+        K_DISP_TEST_RS_PRINTF("ioXch.xhbf[%d]    = 0x%lX\n", i, (kulong)&ioXch.xhbf[i]);
     }
     K_DISP_TEST_RS_PRINTF(" \n");
 #endif
@@ -371,88 +370,88 @@ void k_disp_test_ela_test(KDispTest *self)
     K_DISP_TEST_RS_PRINTF("ELA\n");
 #if 0
     {
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EARCACHE              = %lx\n", (kulong)&IO_ELA.EARCACHE);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EAWCACHE              = %lx\n", (kulong)&IO_ELA.EAWCACHE);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EARPROT               = %lx\n", (kulong)&IO_ELA.EARPROT);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EAWPROT               = %lx\n", (kulong)&IO_ELA.EAWPROT);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EARAXSTS              = %lx\n", (kulong)&IO_ELA.EARAXSTS);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EAWAXSTS              = %lx\n", (kulong)&IO_ELA.EAWAXSTS);
+        K_DISP_TEST_RS_PRINTF("ioEla.earcache              = %lx\n", (kulong)&ioEla.earcache);
+        K_DISP_TEST_RS_PRINTF("ioEla.eawcache              = %lx\n", (kulong)&ioEla.eawcache);
+        K_DISP_TEST_RS_PRINTF("ioEla.earprot               = %lx\n", (kulong)&ioEla.earprot);
+        K_DISP_TEST_RS_PRINTF("ioEla.eawprot               = %lx\n", (kulong)&ioEla.eawprot);
+        K_DISP_TEST_RS_PRINTF("ioEla.earaxsts              = %lx\n", (kulong)&ioEla.earaxsts);
+        K_DISP_TEST_RS_PRINTF("ioEla.eawaxsts              = %lx\n", (kulong)&ioEla.eawaxsts);
 
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EARREQMSK.EARREQMSK1  = %lx\n", (kulong)&IO_ELA.EARREQMSK.EARREQMSK1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EARREQMSK.EARREQMSK2  = %lx\n", (kulong)&IO_ELA.EARREQMSK.EARREQMSK2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EAWREQMSK.EAWREQMSK1  = %lx\n", (kulong)&IO_ELA.EAWREQMSK.EAWREQMSK1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EAWREQMSK.EAWREQMSK2  = %lx\n", (kulong)&IO_ELA.EAWREQMSK.EAWREQMSK2);
+        K_DISP_TEST_RS_PRINTF("ioEla.earreqmsk.earreqmsk1  = %lx\n", (kulong)&ioEla.earreqmsk.earreqmsk1);
+        K_DISP_TEST_RS_PRINTF("ioEla.earreqmsk.earreqmsk2  = %lx\n", (kulong)&ioEla.earreqmsk.earreqmsk2);
+        K_DISP_TEST_RS_PRINTF("ioEla.EAWREQMSK.eawreqmsk1  = %lx\n", (kulong)&ioEla.EAWREQMSK.eawreqmsk1);
+        K_DISP_TEST_RS_PRINTF("ioEla.EAWREQMSK.eawreqmsk2  = %lx\n", (kulong)&ioEla.EAWREQMSK.eawreqmsk2);
 
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELAINTE               = %lx\n", (kulong)&IO_ELA.ELAINTE);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELAINTF               = %lx\n", (kulong)&IO_ELA.ELAINTF);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.SRAMACT               = %lx\n", (kulong)&IO_ELA.SRAMACT);
+        K_DISP_TEST_RS_PRINTF("ioEla.elainte               = %lx\n", (kulong)&ioEla.elainte);
+        K_DISP_TEST_RS_PRINTF("ioEla.elaintf               = %lx\n", (kulong)&ioEla.elaintf);
+        K_DISP_TEST_RS_PRINTF("ioEla.sramact               = %lx\n", (kulong)&ioEla.sramact);
 
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELATRG                = %lx\n", (kulong)&IO_ELA.ELATRG);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELACTL                = %lx\n", (kulong)&IO_ELA.ELACTL);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELABYR                = %lx\n", (kulong)&IO_ELA.ELABYR);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.NSLMD                 = %lx\n", (kulong)&IO_ELA.NSLMD);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.OBOF.OBOF1            = %lx\n", (kulong)&IO_ELA.OBOF.OBOF1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.OBOF.OBOF2            = %lx\n", (kulong)&IO_ELA.OBOF.OBOF2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EZSFTA1               = %lx\n", (kulong)&IO_ELA.EZSFTA1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.NSLNGLMT              = %lx\n", (kulong)&IO_ELA.NSLNGLMT);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIRA                  = %lx\n", (kulong)&IO_ELA.EIRA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIROFS                = %lx\n", (kulong)&IO_ELA.EIROFS);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIRDEF                = %lx\n", (kulong)&IO_ELA.EIRDEF);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIRHSIZ               = %lx\n", (kulong)&IO_ELA.EIRHSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIRVSIZ               = %lx\n", (kulong)&IO_ELA.EIRVSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIWA                  = %lx\n", (kulong)&IO_ELA.EIWA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EIWDEF                = %lx\n", (kulong)&IO_ELA.EIWDEF);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENWA                  = %lx\n", (kulong)&IO_ELA.ENWA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENWDEF                = %lx\n", (kulong)&IO_ELA.ENWDEF);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENRA                  = %lx\n", (kulong)&IO_ELA.ENRA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENRHSIZ               = %lx\n", (kulong)&IO_ELA.ENRHSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENRVSIZ               = %lx\n", (kulong)&IO_ELA.ENRVSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENSA                  = %lx\n", (kulong)&IO_ELA.ENSA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENSDEF                = %lx\n", (kulong)&IO_ELA.ENSDEF);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENSHSIZ               = %lx\n", (kulong)&IO_ELA.ENSHSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ENSVSIZ               = %lx\n", (kulong)&IO_ELA.ENSVSIZ);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.BYRTYP                = %lx\n", (kulong)&IO_ELA.BYRTYP);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELFZP                 = %lx\n", (kulong)&IO_ELA.ELFZP);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELFL.ELFL1            = %lx\n", (kulong)&IO_ELA.ELFL.ELFL1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ELFL.ELFL2            = %lx\n", (kulong)&IO_ELA.ELFL.ELFL2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOR.ANBOR1          = %lx\n", (kulong)&IO_ELA.ANBOR.ANBOR1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOR.ANBOR2          = %lx\n", (kulong)&IO_ELA.ANBOR.ANBOR2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKR.ANBKR1          = %lx\n", (kulong)&IO_ELA.ANBKR.ANBKR1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKR.ANBKR2          = %lx\n", (kulong)&IO_ELA.ANBKR.ANBKR2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDR.ANBDR1          = %lx\n", (kulong)&IO_ELA.ANBDR.ANBDR1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDR.ANBDR2          = %lx\n", (kulong)&IO_ELA.ANBDR.ANBDR2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOG.ANBOG1          = %lx\n", (kulong)&IO_ELA.ANBOG.ANBOG1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOG.ANBOG2          = %lx\n", (kulong)&IO_ELA.ANBOG.ANBOG2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKG.ANBKG1          = %lx\n", (kulong)&IO_ELA.ANBKG.ANBKG1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKG.ANBKG2          = %lx\n", (kulong)&IO_ELA.ANBKG.ANBKG2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDG.ANBDG1          = %lx\n", (kulong)&IO_ELA.ANBDG.ANBDG1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDG.ANBDG2          = %lx\n", (kulong)&IO_ELA.ANBDG.ANBDG2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOB.ANBOB1          = %lx\n", (kulong)&IO_ELA.ANBOB.ANBOB1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBOB.ANBOB2          = %lx\n", (kulong)&IO_ELA.ANBOB.ANBOB2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKB.ANBKB1          = %lx\n", (kulong)&IO_ELA.ANBKB.ANBKB1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBKB.ANBKB2          = %lx\n", (kulong)&IO_ELA.ANBKB.ANBKB2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDB.ANBDB1          = %lx\n", (kulong)&IO_ELA.ANBDB.ANBDB1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ANBDB.ANBDB2          = %lx\n", (kulong)&IO_ELA.ANBDB.ANBDB2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LGTW.LGTW1            = %lx\n", (kulong)&IO_ELA.LGTW.LGTW1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LGTW.LGTW2            = %lx\n", (kulong)&IO_ELA.LGTW.LGTW2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LGT                   = %lx\n", (kulong)&IO_ELA.LGT);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LGTE                  = %lx\n", (kulong)&IO_ELA.LGTE);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EDG2ANBA              = %lx\n", (kulong)&IO_ELA.EDG2ANBA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EDGSCLA               = %lx\n", (kulong)&IO_ELA.EDGSCLA);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EDG2ANBB              = %lx\n", (kulong)&IO_ELA.EDG2ANBB);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.EDGSCLB               = %lx\n", (kulong)&IO_ELA.EDGSCLB);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNGE.ALNGE1          = %lx\n", (kulong)&IO_ELA.ALNGE.ALNGE1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNGE.ALNGE2          = %lx\n", (kulong)&IO_ELA.ALNGE.ALNGE2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG1            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG1);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG2            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG2);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG3            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG3);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG4            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG4);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG5            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG5);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.ALNG.ALNG6            = %lx\n", (kulong)&IO_ELA.ALNG.ALNG6);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LFTH                  = %lx\n", (kulong)&IO_ELA.LFTH);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LCOME                 = %lx\n", (kulong)&IO_ELA.LCOME);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.LCOMEN                = %lx\n", (kulong)&IO_ELA.LCOMEN);
-        K_DISP_TEST_RS_PRINTF("IO_ELA.DKNTBL                = %lx\n", (kulong)&IO_ELA.DKNTBL);
+        K_DISP_TEST_RS_PRINTF("ioEla.elatrg                = %lx\n", (kulong)&ioEla.elatrg);
+        K_DISP_TEST_RS_PRINTF("ioEla.elactl                = %lx\n", (kulong)&ioEla.elactl);
+        K_DISP_TEST_RS_PRINTF("ioEla.elabyr                = %lx\n", (kulong)&ioEla.elabyr);
+        K_DISP_TEST_RS_PRINTF("ioEla.nslmd                 = %lx\n", (kulong)&ioEla.nslmd);
+        K_DISP_TEST_RS_PRINTF("ioEla.obof.obof1            = %lx\n", (kulong)&ioEla.obof.obof1);
+        K_DISP_TEST_RS_PRINTF("ioEla.obof.obof2            = %lx\n", (kulong)&ioEla.obof.obof2);
+        K_DISP_TEST_RS_PRINTF("ioEla.ezsfta1               = %lx\n", (kulong)&ioEla.ezsfta1);
+        K_DISP_TEST_RS_PRINTF("ioEla.nslnglmt              = %lx\n", (kulong)&ioEla.nslnglmt);
+        K_DISP_TEST_RS_PRINTF("ioEla.eira                  = %lx\n", (kulong)&ioEla.eira);
+        K_DISP_TEST_RS_PRINTF("ioEla.eirofs                = %lx\n", (kulong)&ioEla.eirofs);
+        K_DISP_TEST_RS_PRINTF("ioEla.eirdef                = %lx\n", (kulong)&ioEla.eirdef);
+        K_DISP_TEST_RS_PRINTF("ioEla.eirhsiz               = %lx\n", (kulong)&ioEla.eirhsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.eirvsiz               = %lx\n", (kulong)&ioEla.eirvsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.eiwa                  = %lx\n", (kulong)&ioEla.eiwa);
+        K_DISP_TEST_RS_PRINTF("ioEla.eiwdef                = %lx\n", (kulong)&ioEla.eiwdef);
+        K_DISP_TEST_RS_PRINTF("ioEla.enwa                  = %lx\n", (kulong)&ioEla.enwa);
+        K_DISP_TEST_RS_PRINTF("ioEla.enwdef                = %lx\n", (kulong)&ioEla.enwdef);
+        K_DISP_TEST_RS_PRINTF("ioEla.enra                  = %lx\n", (kulong)&ioEla.enra);
+        K_DISP_TEST_RS_PRINTF("ioEla.enrhsiz               = %lx\n", (kulong)&ioEla.enrhsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.enrvsiz               = %lx\n", (kulong)&ioEla.enrvsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.ensa                  = %lx\n", (kulong)&ioEla.ensa);
+        K_DISP_TEST_RS_PRINTF("ioEla.ensdef                = %lx\n", (kulong)&ioEla.ensdef);
+        K_DISP_TEST_RS_PRINTF("ioEla.enshsiz               = %lx\n", (kulong)&ioEla.enshsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.ensvsiz               = %lx\n", (kulong)&ioEla.ensvsiz);
+        K_DISP_TEST_RS_PRINTF("ioEla.byrtyp                = %lx\n", (kulong)&ioEla.byrtyp);
+        K_DISP_TEST_RS_PRINTF("ioEla.elfzp                 = %lx\n", (kulong)&ioEla.elfzp);
+        K_DISP_TEST_RS_PRINTF("ioEla.elfl.elfl1            = %lx\n", (kulong)&ioEla.elfl.elfl1);
+        K_DISP_TEST_RS_PRINTF("ioEla.elfl.elfl2            = %lx\n", (kulong)&ioEla.elfl.elfl2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbor.anbor1          = %lx\n", (kulong)&ioEla.anbor.anbor1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbor.anbor2          = %lx\n", (kulong)&ioEla.anbor.anbor2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkr.anbkr1          = %lx\n", (kulong)&ioEla.anbkr.anbkr1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkr.anbkr2          = %lx\n", (kulong)&ioEla.anbkr.anbkr2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdr.anbdr1          = %lx\n", (kulong)&ioEla.anbdr.anbdr1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdr.anbdr2          = %lx\n", (kulong)&ioEla.anbdr.anbdr2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbog.anbog1          = %lx\n", (kulong)&ioEla.anbog.anbog1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbog.anbog2          = %lx\n", (kulong)&ioEla.anbog.anbog2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkg.anbkg1          = %lx\n", (kulong)&ioEla.anbkg.anbkg1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkg.anbkg2          = %lx\n", (kulong)&ioEla.anbkg.anbkg2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdg.anbdg1          = %lx\n", (kulong)&ioEla.anbdg.anbdg1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdg.anbdg2          = %lx\n", (kulong)&ioEla.anbdg.anbdg2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbob.anbob1          = %lx\n", (kulong)&ioEla.anbob.anbob1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbob.anbob2          = %lx\n", (kulong)&ioEla.anbob.anbob2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkb.anbkb1          = %lx\n", (kulong)&ioEla.anbkb.anbkb1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbkb.anbkb2          = %lx\n", (kulong)&ioEla.anbkb.anbkb2);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdb.anbdb1          = %lx\n", (kulong)&ioEla.anbdb.anbdb1);
+        K_DISP_TEST_RS_PRINTF("ioEla.anbdb.anbdb2          = %lx\n", (kulong)&ioEla.anbdb.anbdb2);
+        K_DISP_TEST_RS_PRINTF("ioEla.lgtw.lgtw1            = %lx\n", (kulong)&ioEla.lgtw.lgtw1);
+        K_DISP_TEST_RS_PRINTF("ioEla.lgtw.lgtw2            = %lx\n", (kulong)&ioEla.lgtw.lgtw2);
+        K_DISP_TEST_RS_PRINTF("ioEla.lgt                   = %lx\n", (kulong)&ioEla.lgt);
+        K_DISP_TEST_RS_PRINTF("ioEla.lgte                  = %lx\n", (kulong)&ioEla.lgte);
+        K_DISP_TEST_RS_PRINTF("ioEla.edg2anba              = %lx\n", (kulong)&ioEla.edg2anba);
+        K_DISP_TEST_RS_PRINTF("ioEla.edgscla               = %lx\n", (kulong)&ioEla.edgscla);
+        K_DISP_TEST_RS_PRINTF("ioEla.edg2anbb              = %lx\n", (kulong)&ioEla.edg2anbb);
+        K_DISP_TEST_RS_PRINTF("ioEla.edgsclb               = %lx\n", (kulong)&ioEla.edgsclb);
+        K_DISP_TEST_RS_PRINTF("ioEla.alnge.alnge1          = %lx\n", (kulong)&ioEla.alnge.alnge1);
+        K_DISP_TEST_RS_PRINTF("ioEla.alnge.alnge2          = %lx\n", (kulong)&ioEla.alnge.alnge2);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng1            = %lx\n", (kulong)&ioEla.alng.alng1);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng2            = %lx\n", (kulong)&ioEla.alng.alng2);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng3            = %lx\n", (kulong)&ioEla.alng.alng3);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng4            = %lx\n", (kulong)&ioEla.alng.alng4);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng5            = %lx\n", (kulong)&ioEla.alng.alng5);
+        K_DISP_TEST_RS_PRINTF("ioEla.alng.alng6            = %lx\n", (kulong)&ioEla.alng.alng6);
+        K_DISP_TEST_RS_PRINTF("ioEla.lfth                  = %lx\n", (kulong)&ioEla.lfth);
+        K_DISP_TEST_RS_PRINTF("ioEla.lcome                 = %lx\n", (kulong)&ioEla.lcome);
+        K_DISP_TEST_RS_PRINTF("ioEla.lcomen                = %lx\n", (kulong)&ioEla.lcomen);
+        K_DISP_TEST_RS_PRINTF("ioEla.dkntbl                = %lx\n", (kulong)&ioEla.dkntbl);
 
         K_DISP_TEST_RS_PRINTF(" \n");
     }
@@ -463,55 +462,55 @@ void k_disp_test_jpeg_enc_test(KDispTest *self)
 {
 // for PC debug
 #if 0
-#define IO_JPEG_ENC     (*IO_JPEG_ENC2)
-    volatile IoJdsjpg1aenc* IO_JPEG_ENC2 = (kpointer)0x24131000;
+#define ioJpegEnc     (*ioJpegEnc2)
+    volatile IoJdsjpg1aenc* ioJpegEnc2 = (kpointer)0x24131000;
 #endif
     K_DISP_TEST_RS_PRINTF("JPEG ENC\n");
 #if 0
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.START                = 0x%lX\n", (kulong)&IO_JPEG_ENC.START);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.STRMODE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.STRMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.ESTATUS              = 0x%lX\n", (kulong)&IO_JPEG_ENC.ESTATUS);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.EINTMSK              = 0x%lX\n", (kulong)&IO_JPEG_ENC.EINTMSK);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SETMODE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.SETMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SETSIZE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.SETSIZE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SETRSTM              = 0x%lX\n", (kulong)&IO_JPEG_ENC.SETRSTM);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SETTBL               = 0x%lX\n", (kulong)&IO_JPEG_ENC.SETTBL);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.TBLMODE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.TBLMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.QTBLWRT              = 0x%lX\n", (kulong)&IO_JPEG_ENC.QTBLWRT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.HTBLWRT              = 0x%lX\n", (kulong)&IO_JPEG_ENC.HTBLWRT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.ENCSIZE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.ENCSIZE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.PENC                 = 0x%lX\n", (kulong)&IO_JPEG_ENC.PENC);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.ENCSIZE_P            = 0x%lX\n", (kulong)&IO_JPEG_ENC.ENCSIZE_P);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.PUTBSY               = 0x%lX\n", (kulong)&IO_JPEG_ENC.PUTBSY);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.PUTBYT               = 0x%lX\n", (kulong)&IO_JPEG_ENC.PUTBYT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.PUTDAT               = 0x%lX\n", (kulong)&IO_JPEG_ENC.PUTDAT);
-//  K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SWSTRON              = 0x%lX\n", (kulong)&IO_JPEG_ENC.SWSTRON);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.JCKGOFF              = 0x%lX\n", (kulong)&IO_JPEG_ENC.JCKGOFF);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.SLPMODE              = 0x%lX\n", (kulong)&IO_JPEG_ENC.SLPMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.CORE_REVS            = 0x%lX\n", (kulong)&IO_JPEG_ENC.CORE_REVS);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_BAR_P1           = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_BAR_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_SIZE_P1          = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_SIZE_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_RP_P1            = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_RP_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_BAR_P2           = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_BAR_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_SIZE_P2          = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_SIZE_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_RP_P2            = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_RP_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_BAR_P3           = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_BAR_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_SIZE_P3          = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_SIZE_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.IMG_RP_P3            = 0x%lX\n", (kulong)&IO_JPEG_ENC.IMG_RP_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.BS_BAR               = 0x%lX\n", (kulong)&IO_JPEG_ENC.BS_BAR);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.BS_MAX_SIZE          = 0x%lX\n", (kulong)&IO_JPEG_ENC.BS_MAX_SIZE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.BS_WP                = 0x%lX\n", (kulong)&IO_JPEG_ENC.BS_WP);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.LINE_OFS_P1          = 0x%lX\n", (kulong)&IO_JPEG_ENC.LINE_OFS_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.LINE_OFS_P2          = 0x%lX\n", (kulong)&IO_JPEG_ENC.LINE_OFS_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.LINE_OFS_P3          = 0x%lX\n", (kulong)&IO_JPEG_ENC.LINE_OFS_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.AXI_CMD              = 0x%lX\n", (kulong)&IO_JPEG_ENC.AXI_CMD);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.AXI_CFG              = 0x%lX\n", (kulong)&IO_JPEG_ENC.AXI_CFG);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.LEN_MAX              = 0x%lX\n", (kulong)&IO_JPEG_ENC.LEN_MAX);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.TRANS_MAX            = 0x%lX\n", (kulong)&IO_JPEG_ENC.TRANS_MAX);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.ACKGOFF              = 0x%lX\n", (kulong)&IO_JPEG_ENC.ACKGOFF);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.AXIMST               = 0x%lX\n", (kulong)&IO_JPEG_ENC.AXIMST);
-//  K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.RSMODE               = 0x%lX\n", (kulong)&IO_JPEG_ENC.RSMODE);
-//  K_DISP_TEST_RS_PRINTF("IO_JPEG_ENC.TRMODE               = 0x%lX\n", (kulong)&IO_JPEG_ENC.TRMODE);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.start                = 0x%lX\n", (kulong)&ioJpegEnc.start);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.strmode              = 0x%lX\n", (kulong)&ioJpegEnc.strmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.estatus              = 0x%lX\n", (kulong)&ioJpegEnc.estatus);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.eintmsk              = 0x%lX\n", (kulong)&ioJpegEnc.eintmsk);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.setmode              = 0x%lX\n", (kulong)&ioJpegEnc.setmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.setsize              = 0x%lX\n", (kulong)&ioJpegEnc.setsize);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.setrstm              = 0x%lX\n", (kulong)&ioJpegEnc.setrstm);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.settbl               = 0x%lX\n", (kulong)&ioJpegEnc.settbl);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.tblmode              = 0x%lX\n", (kulong)&ioJpegEnc.tblmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.qtblwrt              = 0x%lX\n", (kulong)&ioJpegEnc.qtblwrt);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.htblwrt              = 0x%lX\n", (kulong)&ioJpegEnc.htblwrt);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.encsize              = 0x%lX\n", (kulong)&ioJpegEnc.encsize);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.penc                 = 0x%lX\n", (kulong)&ioJpegEnc.penc);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.encsizeP            = 0x%lX\n", (kulong)&ioJpegEnc.encsizeP);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.putbsy               = 0x%lX\n", (kulong)&ioJpegEnc.putbsy);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.putbyt               = 0x%lX\n", (kulong)&ioJpegEnc.putbyt);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.putdat               = 0x%lX\n", (kulong)&ioJpegEnc.putdat);
+//  K_DISP_TEST_RS_PRINTF("ioJpegEnc.swstron              = 0x%lX\n", (kulong)&ioJpegEnc.swstron);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.jckgoff              = 0x%lX\n", (kulong)&ioJpegEnc.jckgoff);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.slpmode              = 0x%lX\n", (kulong)&ioJpegEnc.slpmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.coreRevs            = 0x%lX\n", (kulong)&ioJpegEnc.coreRevs);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgBarP1           = 0x%lX\n", (kulong)&ioJpegEnc.imgBarP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgSizeP1          = 0x%lX\n", (kulong)&ioJpegEnc.imgSizeP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgRpP1            = 0x%lX\n", (kulong)&ioJpegEnc.imgRpP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgBarP2           = 0x%lX\n", (kulong)&ioJpegEnc.imgBarP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgSizeP2          = 0x%lX\n", (kulong)&ioJpegEnc.imgSizeP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgRpP2            = 0x%lX\n", (kulong)&ioJpegEnc.imgRpP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgBarP3           = 0x%lX\n", (kulong)&ioJpegEnc.imgBarP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgSizeP3          = 0x%lX\n", (kulong)&ioJpegEnc.imgSizeP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.imgRpP3            = 0x%lX\n", (kulong)&ioJpegEnc.imgRpP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.bsBar               = 0x%lX\n", (kulong)&ioJpegEnc.bsBar);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.bsMaxSize          = 0x%lX\n", (kulong)&ioJpegEnc.bsMaxSize);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.bsWp                = 0x%lX\n", (kulong)&ioJpegEnc.bsWp);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.lineOfsP1          = 0x%lX\n", (kulong)&ioJpegEnc.lineOfsP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.lineOfsP2          = 0x%lX\n", (kulong)&ioJpegEnc.lineOfsP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.lineOfsP3          = 0x%lX\n", (kulong)&ioJpegEnc.lineOfsP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.axiCmd              = 0x%lX\n", (kulong)&ioJpegEnc.axiCmd);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.axiCfg              = 0x%lX\n", (kulong)&ioJpegEnc.axiCfg);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.lenMax              = 0x%lX\n", (kulong)&ioJpegEnc.lenMax);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.transMax            = 0x%lX\n", (kulong)&ioJpegEnc.transMax);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.ackgoff              = 0x%lX\n", (kulong)&ioJpegEnc.ackgoff);
+    K_DISP_TEST_RS_PRINTF("ioJpegEnc.aximst               = 0x%lX\n", (kulong)&ioJpegEnc.aximst);
+//  K_DISP_TEST_RS_PRINTF("ioJpegEnc.rsmode               = 0x%lX\n", (kulong)&ioJpegEnc.rsmode);
+//  K_DISP_TEST_RS_PRINTF("ioJpegEnc.trmode               = 0x%lX\n", (kulong)&ioJpegEnc.trmode);
 
     K_DISP_TEST_RS_PRINTF(" \n");
 #endif
@@ -521,55 +520,55 @@ void k_disp_test_jpeg_dec_test(KDispTest *self)
 {
 // for PC debug
 #if 0
-#define IO_JPEG_DEC     (*IO_JPEG_DEC2)
-    volatile IoJdsjpg1adec* IO_JPEG_DEC2 = (kpointer)0x24131200;
+#define ioJpegDec     (*ioJpegDec2)
+    volatile IoJdsjpg1adec* ioJpegDec2 = (kpointer)0x24131200;
 #endif
     K_DISP_TEST_RS_PRINTF("JPEG DEC\n");
 #if 0
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.START                   = 0x%lX\n", (kulong)&IO_JPEG_DEC.START);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.DSTATUS                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.DSTATUS);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.DINTMSK                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.DINTMSK);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.STRMODE                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.STRMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.STATUSD0                = 0x%lX\n", (kulong)&IO_JPEG_DEC.STATUSD0);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.STATUSD1                = 0x%lX\n", (kulong)&IO_JPEG_DEC.STATUSD1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMGSIZED                = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMGSIZED);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.PARAMD                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.PARAMD);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.GETRDY                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.GETRDY);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.GETBYT                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.GETBYT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.GETDAT                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.GETDAT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CRP_HORZ                = 0x%lX\n", (kulong)&IO_JPEG_DEC.CRP_HORZ);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CRP_VERT                = 0x%lX\n", (kulong)&IO_JPEG_DEC.CRP_VERT);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.JCKGOFF                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.JCKGOFF);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.SLPMODE                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.SLPMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CORE_REVS               = 0x%lX\n", (kulong)&IO_JPEG_DEC.CORE_REVS);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_BAR_P1              = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_BAR_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_MAX_SIZE_P1         = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_MAX_SIZE_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_WP_P1               = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_WP_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_BAR_P2              = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_BAR_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_MAX_SIZE_P2         = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_MAX_SIZE_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_WP_P2               = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_WP_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_BAR_P3              = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_BAR_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_MAX_SIZE_P3         = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_MAX_SIZE_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.IMG_WP_P3               = 0x%lX\n", (kulong)&IO_JPEG_DEC.IMG_WP_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.BS_BAR                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.BS_BAR);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.BS_SIZE                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.BS_SIZE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.BS_RP                   = 0x%lX\n", (kulong)&IO_JPEG_DEC.BS_RP);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.LINE_OFS_P1             = 0x%lX\n", (kulong)&IO_JPEG_DEC.LINE_OFS_P1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.LINE_OFS_P2             = 0x%lX\n", (kulong)&IO_JPEG_DEC.LINE_OFS_P2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.LINE_OFS_P3             = 0x%lX\n", (kulong)&IO_JPEG_DEC.LINE_OFS_P3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.AXI_CMD                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.AXI_CMD);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.AXI_CFG                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.AXI_CFG);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.WRSTATE                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.WRSTATE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.LEN_MAX                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.LEN_MAX);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.PADDATA                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.PADDATA);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.TRANS_MAX               = 0x%lX\n", (kulong)&IO_JPEG_DEC.TRANS_MAX);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.ACKGOFF                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.ACKGOFF);
-//  K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.TRMODE                  = 0x%lX\n", (kulong)&IO_JPEG_DEC.TRMODE);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CCMTRX0                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.CCMTRX0);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CCMTRX1                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.CCMTRX1);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CCMTRX2                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.CCMTRX2);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CCMTRX3                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.CCMTRX3);
-    K_DISP_TEST_RS_PRINTF("IO_JPEG_DEC.CCMTRX4                 = 0x%lX\n", (kulong)&IO_JPEG_DEC.CCMTRX4);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.start                   = 0x%lX\n", (kulong)&ioJpegDec.start);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.dstatus                 = 0x%lX\n", (kulong)&ioJpegDec.dstatus);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.dintmsk                 = 0x%lX\n", (kulong)&ioJpegDec.dintmsk);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.strmode                 = 0x%lX\n", (kulong)&ioJpegDec.strmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.statusd0                = 0x%lX\n", (kulong)&ioJpegDec.statusd0);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.statusd1                = 0x%lX\n", (kulong)&ioJpegDec.statusd1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgsized                = 0x%lX\n", (kulong)&ioJpegDec.imgsized);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.paramd                  = 0x%lX\n", (kulong)&ioJpegDec.paramd);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.getrdy                  = 0x%lX\n", (kulong)&ioJpegDec.getrdy);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.getbyt                  = 0x%lX\n", (kulong)&ioJpegDec.getbyt);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.getdat                  = 0x%lX\n", (kulong)&ioJpegDec.getdat);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.crpHorz                = 0x%lX\n", (kulong)&ioJpegDec.crpHorz);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.crpVert                = 0x%lX\n", (kulong)&ioJpegDec.crpVert);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.jckgoff                 = 0x%lX\n", (kulong)&ioJpegDec.jckgoff);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.slpmode                 = 0x%lX\n", (kulong)&ioJpegDec.slpmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.corerevs               = 0x%lX\n", (kulong)&ioJpegDec.corerevs);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgbarp1              = 0x%lX\n", (kulong)&ioJpegDec.imgbarp1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgMaxSizeP1         = 0x%lX\n", (kulong)&ioJpegDec.imgMaxSizeP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgWpP1               = 0x%lX\n", (kulong)&ioJpegDec.imgWpP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgBarP2              = 0x%lX\n", (kulong)&ioJpegDec.imgBarP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgMaxSizeP2         = 0x%lX\n", (kulong)&ioJpegDec.imgMaxSizeP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgWpP2               = 0x%lX\n", (kulong)&ioJpegDec.imgWpP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgBarP3              = 0x%lX\n", (kulong)&ioJpegDec.imgBarP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgMaxSizeP3         = 0x%lX\n", (kulong)&ioJpegDec.imgMaxSizeP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.imgWpP3               = 0x%lX\n", (kulong)&ioJpegDec.imgWpP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.bsBar                  = 0x%lX\n", (kulong)&ioJpegDec.bsBar);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.bsSize                 = 0x%lX\n", (kulong)&ioJpegDec.bsSize);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.bsRp                   = 0x%lX\n", (kulong)&ioJpegDec.bsRp);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.lineOfsP1             = 0x%lX\n", (kulong)&ioJpegDec.lineOfsP1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.lineOfsP2             = 0x%lX\n", (kulong)&ioJpegDec.lineOfsP2);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.lineOfsP3             = 0x%lX\n", (kulong)&ioJpegDec.lineOfsP3);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.axiCmd                 = 0x%lX\n", (kulong)&ioJpegDec.axiCmd);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.axiCfg                 = 0x%lX\n", (kulong)&ioJpegDec.axiCfg);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.wrstate                 = 0x%lX\n", (kulong)&ioJpegDec.wrstate);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.lenMax                 = 0x%lX\n", (kulong)&ioJpegDec.lenMax);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.paddata                 = 0x%lX\n", (kulong)&ioJpegDec.paddata);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.transMax               = 0x%lX\n", (kulong)&ioJpegDec.transMax);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ackgoff                 = 0x%lX\n", (kulong)&ioJpegDec.ackgoff);
+//  K_DISP_TEST_RS_PRINTF("ioJpegDec.trmode                  = 0x%lX\n", (kulong)&ioJpegDec.trmode);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ccmtrx0                 = 0x%lX\n", (kulong)&ioJpegDec.ccmtrx0);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ccmtrx1                 = 0x%lX\n", (kulong)&ioJpegDec.ccmtrx1);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ccmtrx2                 = 0x%lX\n", (kulong)&ioJpegDec.ccmtrx2);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ccmtrx3                 = 0x%lX\n", (kulong)&ioJpegDec.ccmtrx3);
+    K_DISP_TEST_RS_PRINTF("ioJpegDec.ccmtrx4                 = 0x%lX\n", (kulong)&ioJpegDec.ccmtrx4);
 
     K_DISP_TEST_RS_PRINTF(" \n");
 #endif

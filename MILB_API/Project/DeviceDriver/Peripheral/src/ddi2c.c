@@ -9,11 +9,11 @@
  *
  */
 
-#include "ddim_user_custom.h"
 #include "driver_common.h"
 #include "peripheral.h"
-#include "dd_top.h"
-#include "dd_arm.h"
+#include "ddimusercustom.h"
+#include "ddtop.h"
+#include "ddarm.h"
 #include "ddi2c.h"
 
 
@@ -27,77 +27,110 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdI2c, dd_i2c);
 struct _DdI2cPrivate
 {
 	DdI2cCtrl *i2cCtrl;
-	volatile DdI2cState gDD_I2C_State[DdI2c_CH_MAX];
-	volatile DdI2cEvent gDD_I2C_Next_Event[DdI2c_CH_MAX];
-	volatile UINT32 gDD_I2C_Error[DdI2c_CH_MAX];
-	volatile UINT32 gDD_I2C_Data_Count[DdI2c_CH_MAX];
-	volatile UCHAR* gDD_I2C_Data[DdI2c_CH_MAX];
-	volatile UINT32 gDD_I2C_Data_Num[DdI2c_CH_MAX];
-	volatile UINT32 gDD_I2C_PEC_Byte_Num[DdI2c_CH_MAX];
+	volatile DdI2cState state[DdI2c_CH_MAX];
+	volatile DdI2cEvent nextEvent[DdI2c_CH_MAX];
+	volatile kuint32 error[DdI2c_CH_MAX];
+	volatile kuint32 dataCount[DdI2c_CH_MAX];
+	volatile kuchar* data[DdI2c_CH_MAX];
+	volatile kuint32 dataNum[DdI2c_CH_MAX];
+	volatile kuint32 pecByteNum[DdI2c_CH_MAX];
 };
 
-/*----------------------------------------------------------------------*/
-/* Enumeration															*/
-/*----------------------------------------------------------------------*/
 // I2C ST.MODE register code
 typedef enum {
-	E_DD_I2C_ST_MODE_IDLE		= 0x00,		// No mode Information Available
-	E_DD_I2C_ST_MODE_STDONE		= 0x01,		// Start condition generated
-	E_DD_I2C_ST_MODE_RSDONE		= 0x02,		// Repeated start condition generated
-	E_DD_I2C_ST_MODE_IDLARL		= 0x03,		// Arbitrationlost, unaddressed slave mode entered
-	E_DD_I2C_ST_MODE_MTADPA		= 0x04,		// Slave address sent, positive ACK
-	E_DD_I2C_ST_MODE_MTADNA		= 0x05,		// Slave address sent, negative ACK
-	E_DD_I2C_ST_MODE_MTDAPA		= 0x06,		// Data byte sent, positive ACK
-	E_DD_I2C_ST_MODE_MTDANA		= 0x07,		// Data byte sent, negative ACK
-	E_DD_I2C_ST_MODE_MRADPA		= 0x08,		// Slave address sent, positive ACK
-	E_DD_I2C_ST_MODE_MRADNA		= 0x09,		// Slave address sent, negative ACK
-	E_DD_I2C_ST_MODE_MRDAPA		= 0x0A,		// Data byte received, positive ACK
-	E_DD_I2C_ST_MODE_MRDANA		= 0x0B,		// Data byte received, negative ACK
-	E_DD_I2C_ST_MODE_SRADPA		= 0x10,		// Slave address received, positive ACK
-	E_DD_I2C_ST_MODE_SRAAPA		= 0x11,		// Slave address received after arbitration loss, positive ACK
-	E_DD_I2C_ST_MODE_SRDAPA		= 0x12,		// Data byte received, positive ACK
-	E_DD_I2C_ST_MODE_SRDANA		= 0x13,		// Data byte received, negative ACK
-	E_DD_I2C_ST_MODE_SSTOP		= 0x1C,		// Slave mode stop condition detected
-	E_DD_I2C_ST_MODE_SGADPA		= 0x1D,		// Slave address received after arbitration loss, positive ACK
-	E_DD_I2C_ST_MODE_SGAAPA		= 0x1E,		// Slave address received after arbitration loss, positive ACK
-	E_DD_I2C_ST_MODE_BERROR		= 0x1F,		// Invalid start or stop condition detected
-	E_DD_I2C_ST_MODE_STADPA		= 0x14,		// Slave address received, positive ACK
-	E_DD_I2C_ST_MODE_STAAPA		= 0x15,		// Slave address received after arbitration loss, positive ACK
-	E_DD_I2C_ST_MODE_STDAPA		= 0x16,		// Data byte received, positive ACK
-	E_DD_I2C_ST_MODE_STDANA		= 0x17,		// Data byte received, negative ACK
-	E_DD_I2C_ST_MODE_SATADP		= 0x18,		// Alart response address received, positive ACK
-	E_DD_I2C_ST_MODE_SATAAP		= 0x19,		// Alart response address received after arbitration loss, positive ACK
-	E_DD_I2C_ST_MODE_SATDAP		= 0x1A,		// Addressed With Alart response address, data byte send, positive ACK
-	E_DD_I2C_ST_MODE_SATDAN		= 0x1B,		// Addressed With Alart response address, data byte send, negative ACK
+	DdI2c_ST_MODE_IDLE	 = 0x00,		// No mode Information Available
+	DdI2c_ST_MODE_STDONE	 = 0x01,		// Start condition generated
+	DdI2c_ST_MODE_RSDONE	 = 0x02,		// Repeated start condition generated
+	DdI2c_ST_MODE_IDLARL	 = 0x03,		// Arbitrationlost, unaddressed slave mode entered
+	DdI2c_ST_MODE_MTADPA	 = 0x04,		// Slave address sent, positive ACK
+	DdI2c_ST_MODE_MTADNA	 = 0x05,		// Slave address sent, negative ACK
+	DdI2c_ST_MODE_MTDAPA	 = 0x06,		// Data byte sent, positive ACK
+	DdI2c_ST_MODE_MTDANA	 = 0x07,		// Data byte sent, negative ACK
+	DdI2c_ST_MODE_MRADPA	 = 0x08,		// Slave address sent, positive ACK
+	DdI2c_ST_MODE_MRADNA	 = 0x09,		// Slave address sent, negative ACK
+	DdI2c_ST_MODE_MRDAPA	 = 0x0A,		// Data byte received, positive ACK
+	DdI2c_ST_MODE_MRDANA	 = 0x0B,		// Data byte received, negative ACK
+	DdI2c_ST_MODE_SRADPA	 = 0x10,		// Slave address received, positive ACK
+	DdI2c_ST_MODE_SRAAPA	 = 0x11,		// Slave address received after arbitration loss, positive ACK
+	DdI2c_ST_MODE_SRDAPA	 = 0x12,		// Data byte received, positive ACK
+	DdI2c_ST_MODE_SRDANA	 = 0x13,		// Data byte received, negative ACK
+	DdI2c_ST_MODE_SSTOP	 = 0x1C,		// Slave mode stop condition detected
+	DdI2c_ST_MODE_SGADPA	 = 0x1D,		// Slave address received after arbitration loss, positive ACK
+	DdI2c_ST_MODE_SGAAPA	 = 0x1E,		// Slave address received after arbitration loss, positive ACK
+	DdI2c_ST_MODE_BERROR	 = 0x1F,		// Invalid start or stop condition detected
+	DdI2c_ST_MODE_STADPA	 = 0x14,		// Slave address received, positive ACK
+	DdI2c_ST_MODE_STAAPA	 = 0x15,		// Slave address received after arbitration loss, positive ACK
+	DdI2c_ST_MODE_STDAPA	 = 0x16,		// Data byte received, positive ACK
+	DdI2c_ST_MODE_STDANA	 = 0x17,		// Data byte received, negative ACK
+	DdI2c_ST_MODE_SATADP	 = 0x18,		// Alart response address received, positive ACK
+	DdI2c_ST_MODE_SATAAP	 = 0x19,		// Alart response address received after arbitration loss, positive ACK
+	DdI2c_ST_MODE_SATDAP	 = 0x1A,		// Addressed With Alart response address, data byte send, positive ACK
+	DdI2c_ST_MODE_SATDAN	 = 0x1B,		// Addressed With Alart response address, data byte send, negative ACK
 #if 0	// Hs Mode
-	E_DD_I2C_ST_MODE_MTMCER		= 0x0C,		// Master code transmitted error detected (pos. ACK)
-	E_DD_I2C_ST_MODE_MTMCOK		= 0x21,		// Master code transmitted OK – switched to Hs mode
-	E_DD_I2C_ST_MODE_HRSDONE	= 0x22,		// Repeated start condition generated
-	E_DD_I2C_ST_MODE_HIDLARL	= 0x23,		// Arbitration lost, high-speed unaddressed slave mode enterd
-	E_DD_I2C_ST_MODE_HMTADPA	= 0x24,		// Slave address sent, positive ACK
-	E_DD_I2C_ST_MODE_HMTADNA	= 0x25,		// Slave address sent, negative ACK
-	E_DD_I2C_ST_MODE_HMTDAPA	= 0x26,		// Data byte sent, positive ACK
-	E_DD_I2C_ST_MODE_HMTDANA	= 0x27,		// Data byte sent, negative ACK
-	E_DD_I2C_ST_MODE_HMRADPA	= 0x28,		// Slave address sent, positive ACK
-	E_DD_I2C_ST_MODE_HMRADNA	= 0x29,		// Slave address sent, negative ACK
-	E_DD_I2C_ST_MODE_HMRDAPA	= 0x2A,		// Data byte received, positive ACK
-	E_DD_I2C_ST_MODE_HMRDANA	= 0x2B,		// Data byte received, negative ACK
-	E_DD_I2C_ST_MODE_HSRADPA	= 0x30,		// Slave address received, positive ACK
-	E_DD_I2C_ST_MODE_HSRDAPA	= 0x32,		// Data byte received, positive ACK
-	E_DD_I2C_ST_MODE_HSRDANA	= 0x33,		// Data byte received, negative ACK
-	E_DD_I2C_ST_MODE_HSTADTA	= 0x34,		// Slave address received, positive ACK
-	E_DD_I2C_ST_MODE_HSTDAPA	= 0x36,		// Data byte send, positive ACK
-	E_DD_I2C_ST_MODE_HSTDANA	= 0x37,		// Data byte send, negative ACK
+	DdI2c_ST_MODE_MTMCER	 = 0x0C,		// Master code transmitted error detected (pos. ACK)
+	DdI2c_ST_MODE_MTMCOK	 = 0x21,		// Master code transmitted OK – switched to Hs mode
+	DdI2c_ST_MODE_HRSDONE = 0x22,		// Repeated start condition generated
+	DdI2c_ST_MODE_HIDLARL = 0x23,		// Arbitration lost, high-speed unaddressed slave mode enterd
+	DdI2c_ST_MODE_HMTADPA = 0x24,		// Slave address sent, positive ACK
+	DdI2c_ST_MODE_HMTADNA = 0x25,		// Slave address sent, negative ACK
+	DdI2c_ST_MODE_HMTDAPA = 0x26,		// Data byte sent, positive ACK
+	DdI2c_ST_MODE_HMTDANA = 0x27,		// Data byte sent, negative ACK
+	DdI2c_ST_MODE_HMRADPA = 0x28,		// Slave address sent, positive ACK
+	DdI2c_ST_MODE_HMRADNA = 0x29,		// Slave address sent, negative ACK
+	DdI2c_ST_MODE_HMRDAPA = 0x2A,		// Data byte received, positive ACK
+	DdI2c_ST_MODE_HMRDANA = 0x2B,		// Data byte received, negative ACK
+	DdI2c_ST_MODE_HSRADPA = 0x30,		// Slave address received, positive ACK
+	DdI2c_ST_MODE_HSRDAPA = 0x32,		// Data byte received, positive ACK
+	DdI2c_ST_MODE_HSRDANA = 0x33,		// Data byte received, negative ACK
+	DdI2c_ST_MODE_HSTADTA = 0x34,		// Slave address received, positive ACK
+	DdI2c_ST_MODE_HSTDAPA = 0x36,		// Data byte send, positive ACK
+	DdI2c_ST_MODE_HSTDANA = 0x37,		// Data byte send, negative ACK
 #endif
-} E_DD_I2C_ST_MODE;
+} I2cStMode;
 
 // I2C Communication Error information
 typedef enum {
-	E_DD_I2C_ERROR_NOT = 0,				// Error nothing
-	E_DD_I2C_ERROR_BER ,				// Bus Error
-	E_DD_I2C_ERROR_AL ,					// Arbitration lost
-	E_DD_I2C_ERROR_COMM					// Communication error
-} E_DD_I2C_ERROR;
+	DdI2c_ERROR_NOT = 0,				// Error nothing
+	DdI2c_ERROR_BER ,				// Bus Error
+	DdI2c_ERROR_AL ,					// Arbitration lost
+	DdI2c_ERROR_COMM					// Communication error
+} I2cError;
+
+
+static void ddI2cErrorOccur(DdI2c *self, kuchar ch);
+static void ddI2cStModeIDLARLProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMTADNAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMRADNAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMTDANAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeBERRORProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeTERRProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSTDONEProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeRSDONEProc(DdI2c *self, kuchar ch);
+static void ddI2cSendDataToSlave(DdI2c *self, kuchar ch);
+static void ddI2cStModeMTADPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMTDAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cReceiveDataFromSlave(DdI2c *self, kuchar ch);
+static void ddI2cStModeMRADPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMRDAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeMRDANAProc(DdI2c *self, kuchar ch);
+static void ddI2cNotifySlaveAddressSpecified(DdI2c *self, kuchar ch);
+static void ddI2cStModeSRADPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSRAAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cReceiveDataFromMaster(DdI2c *self, kuchar ch);
+static void ddI2cStModeSRDAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSRDANAProc(kuchar ch);
+static void ddI2cStModeSSTOPProc(kuchar ch);
+static void ddI2cStModeSGADPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSGAAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cSendDataToMaster(DdI2c *self, kuchar ch);
+static void ddI2cStModeSTADPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSTAAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSTDAPAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSTDANAProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSATADPProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSATAAPProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSATDAPProc(DdI2c *self, kuchar ch);
+static void ddI2cStModeSATDANProc(DdI2c *self, kuchar ch);
 
 
 static void dd_i2c_constructor(DdI2c *self)
@@ -107,13 +140,13 @@ static void dd_i2c_constructor(DdI2c *self)
 
 	for(i = 0; i < DdI2c_CH_MAX; i++)
 	{
-		priv->gDD_I2C_State[i] = DdI2c_STATE_IDLE;
-		priv->gDD_I2C_Next_Event[i] = DdI2c_EVENT_START_WRITE;
-		priv->gDD_I2C_Error[i] = D_DDIM_OK;
-		priv->gDD_I2C_Data_Count[i] = 0;
-		priv->gDD_I2C_Data[i] = NULL;
-		priv->gDD_I2C_Data_Num[i] = 0;
-		priv->gDD_I2C_PEC_Byte_Num[i] = 0;
+		priv->state[i] = DdI2c_STATE_IDLE;
+		priv->nextEvent[i] = DdI2c_EVENT_START_WRITE;
+		priv->error[i] = D_DDIM_OK;
+		priv->dataCount[i] = 0;
+		priv->data[i] = NULL;
+		priv->dataNum[i] = 0;
+		priv->pecByteNum[i] = 0;
 	}
 
 	priv->i2cCtrl = dd_i2c_ctrl_new();
@@ -134,159 +167,160 @@ static void dd_i2c_destructor(DdI2c *self)
 ///// Error /////
 /////////////////
 // Error occur process
-static VOID dd_i2c_error_occur(DdI2c *self, UCHAR ch)
+static void ddI2cErrorOccur(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
-	priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_ERROR;
+	priv->nextEvent[ch] = DdI2c_EVENT_ERROR;
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 
 	if(dd_i2c_ctrl_get_side(priv->i2cCtrl, ch) == DdI2cCtrl_SIDE_MASTER){
 		// Master
-		IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+		ioPeri.i2c[ch].ctl1.bit.inten = 0;
 
-		priv->gDD_I2C_State[ch] = DdI2c_STATE_ERROR;
-		priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_END_RW;
+		priv->state[ch] = DdI2c_STATE_ERROR;
+		priv->nextEvent[ch] = DdI2c_EVENT_END_RW;
 
 		ret = DDIM_User_Set_Flg(FID_DD_I2C, dd_i2c_get_event_flg(self, ch));
-		if(ret != D_DDIM_USER_E_OK){
+		if(ret != DdimUserCustom_E_OK){
 			Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 		}
 	}
 	else {
 		// Slave
 		if(dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch) != NULL){
-			(*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ERROR, DdI2c_DONT_CARE);
+			(*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch,
+					DdI2cCtrl_RECV_FROM_MASTER_ERROR, DdI2c_DONT_CARE);
 		}
 	}
 }
 
 // 0x03:Arbitrationlost, unaddressed slave mode entered
-static VOID dd_i2c_st_mode_IDLARL_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeIDLARLProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_ARBITRATION_LOST;
+	priv->error[ch] = DdI2c_ARBITRATION_LOST;
 
 	Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 // 0x05:Slave address sent, negative ACK
-static VOID dd_i2c_st_mode_MTADNA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMTADNAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_COMM_ERROR;
+	priv->error[ch] = DdI2c_COMM_ERROR;
 
 	/* Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__)); */
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 // 0x09:Slave address sent, negative ACK
-static VOID dd_i2c_st_mode_MRADNA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMRADNAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_COMM_ERROR;
+	priv->error[ch] = DdI2c_COMM_ERROR;
 
 	Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 // 0x07:Data byte sent, negative ACK
-static VOID dd_i2c_st_mode_MTDANA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMTDANAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_COMM_ERROR;
+	priv->error[ch] = DdI2c_COMM_ERROR;
 
 	Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 // 0x1F:Invalid start or stop condition detected
-static VOID dd_i2c_st_mode_BERROR_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeBERRORProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_BUS_ERROR;
+	priv->error[ch] = DdI2c_BUS_ERROR;
 
 	Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 // Timeout Error
-static VOID dd_i2c_st_mode_TERR_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeTERRProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = DdI2c_TIMEOUT;
+	priv->error[ch] = DdI2c_TIMEOUT;
 
 	Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 
-	dd_i2c_error_occur(self, ch);
+	ddI2cErrorOccur(self, ch);
 }
 
 //////////////////////////////////
 ///// Master Start condition /////
 //////////////////////////////////
 // 0x01:Start condition generated
-static VOID dd_i2c_st_mode_STDONE_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSTDONEProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_IDLE){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_IDLE){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_START_READ:		// FALL THROUGH
 			case DdI2c_EVENT_START_WRITE:
 				// check START bit (Start condition send)
-				if (IO_PERI.I2C[ch].CTL1.bit.START == 1) {
-					priv->gDD_I2C_Error[ch] = DdI2c_COMM_ERROR;
+				if (ioPeri.i2c[ch].ctl1.bit.start == 1) {
+					priv->error[ch] = DdI2c_COMM_ERROR;
 					Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
-					dd_i2c_error_occur(self, ch);
+					ddI2cErrorOccur(self, ch);
 					break;
 				}
 				
 				// Send slave address
 				if(dd_i2c_ctrl_get_master_dest_slave_addr_len(priv->i2cCtrl, ch) == DdI2cCtrl_ADDR_LEN_7){
 					// 7 bit address
-					IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
-					if(priv->gDD_I2C_Next_Event[ch] == DdI2c_EVENT_START_READ){
+					ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
+					if(priv->nextEvent[ch] == DdI2c_EVENT_START_READ){
 						// Read
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_RECEIVING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_RECEIVE;
+						priv->state[ch] = DdI2c_STATE_RECEIVING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_RECEIVE;
 					}
 					else{
 						// Write
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_SEND;
+						priv->state[ch] = DdI2c_STATE_SENDING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_SEND;
 					}
 				}
 				else {	// DdI2cCtrl_ADDR_LEN_10
 					// 10 bit upper address
-					IO_PERI.I2C[ch].SDAT.word = (dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST) & 0xFE);
-					priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_ADDRESS;
+					ioPeri.i2c[ch].sdat.word = (dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST) & 0xFE);
+					priv->state[ch] = DdI2c_STATE_SENDING_ADDRESS;
 				}
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -295,106 +329,106 @@ static VOID dd_i2c_st_mode_STDONE_proc(DdI2c *self, UCHAR ch)
 }
 
 // 0x02:Repeated start condition generated
-static VOID dd_i2c_st_mode_RSDONE_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeRSDONEProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_END){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_END){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_START_READ:		// FALL THROUGH
 			case DdI2c_EVENT_START_WRITE:
 				// check START bit (Start condition send)
-				if (IO_PERI.I2C[ch].CTL1.bit.START == 1) {
-					priv->gDD_I2C_Error[ch] = DdI2c_COMM_ERROR;
+				if (ioPeri.i2c[ch].ctl1.bit.start == 1) {
+					priv->error[ch] = DdI2c_COMM_ERROR;
 					Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
-					dd_i2c_error_occur(self, ch);
+					ddI2cErrorOccur(self, ch);
 					break;
 				}
 				
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
 
 				if(dd_i2c_ctrl_get_master_dest_slave_addr_len(priv->i2cCtrl, ch) == DdI2cCtrl_ADDR_LEN_7){
 					// 7 bit address
-					if(priv->gDD_I2C_Next_Event[ch] == DdI2c_EVENT_START_READ){
+					if(priv->nextEvent[ch] == DdI2c_EVENT_START_READ){
 						// Read
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_RECEIVING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_RECEIVE;
+						priv->state[ch] = DdI2c_STATE_RECEIVING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_RECEIVE;
 					}
 					else {
 						// Write
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_SEND;
+						priv->state[ch] = DdI2c_STATE_SENDING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_SEND;
 					}
 				}
 				else {	// DdI2cCtrl_ADDR_LEN_10
 					// 10 bit address
-					if(priv->gDD_I2C_Next_Event[ch] == DdI2c_EVENT_START_READ){
+					if(priv->nextEvent[ch] == DdI2c_EVENT_START_READ){
 						// Read
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_RECEIVING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_RECEIVE;
+						priv->state[ch] = DdI2c_STATE_RECEIVING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_RECEIVE;
 					}
 					else {
 						// Write
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_ADDRESS;
+						priv->state[ch] = DdI2c_STATE_SENDING_ADDRESS;
 					}
 				}
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
 	}
-	else if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_ADDRESS){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	else if(priv->state[ch] == DdI2c_STATE_SENDING_ADDRESS){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_RECEIVE:		// FALL THROUGH
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
 
 				if(dd_i2c_ctrl_get_master_dest_slave_addr_len(priv->i2cCtrl, ch) == DdI2cCtrl_ADDR_LEN_10){
 					// 10 bit address
-					priv->gDD_I2C_State[ch] = DdI2c_STATE_RECEIVING_DATA;
-					priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_RECEIVE;
+					priv->state[ch] = DdI2c_STATE_RECEIVING_DATA;
+					priv->nextEvent[ch] = DdI2c_EVENT_RECEIVE;
 				}
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
 	}
-	else if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	else if(priv->state[ch] == DdI2c_STATE_SENDING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_SEND:
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
 
 				if(dd_i2c_ctrl_get_master_dest_slave_addr_len(priv->i2cCtrl, ch) == DdI2cCtrl_ADDR_LEN_7){
 						// Write
-						priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_DATA;
-						priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_SEND;
+						priv->state[ch] = DdI2c_STATE_SENDING_DATA;
+						priv->nextEvent[ch] = DdI2c_EVENT_SEND;
 				}
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -405,115 +439,115 @@ static VOID dd_i2c_st_mode_RSDONE_proc(DdI2c *self, UCHAR ch)
 ///// Master Transmit Mode /////
 ////////////////////////////////
 // Send data to slave
-static VOID dd_i2c_send_data_to_slave(DdI2c *self, UCHAR ch)
+static void ddI2cSendDataToSlave(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
-	UCHAR* sendData;
-	UINT32 send_count;
+	kuchar* sendData;
+	kuint32 sendCount;
 
-	sendData = (UCHAR*)priv->gDD_I2C_Data[ch];
-	send_count = priv->gDD_I2C_Data_Count[ch];
+	sendData = (kuchar*)priv->data[ch];
+	sendCount = priv->dataCount[ch];
 
-	if(send_count < priv->gDD_I2C_Data_Num[ch]){
+	if(sendCount < priv->dataNum[ch]){
 		// Start send
-		IO_PERI.I2C[ch].SDAT.word = sendData[send_count];
-		send_count++;
+		ioPeri.i2c[ch].sdat.word = sendData[sendCount];
+		sendCount++;
 
-		priv->gDD_I2C_Data_Count[ch] = send_count;
+		priv->dataCount[ch] = sendCount;
 
 		// Check end of send
-		if(send_count == priv->gDD_I2C_Data_Num[ch]){
+		if(sendCount == priv->dataNum[ch]){
 			// Check PEC enable
-			if((send_count + 1) == priv->gDD_I2C_PEC_Byte_Num[ch]){
+			if((sendCount + 1) == priv->pecByteNum[ch]){
 				// Set PEC Next
-				IO_PERI.I2C[ch].CST.bit.PECNEXT = 1;
+				ioPeri.i2c[ch].cst.bit.pecnext = 1;
 				Dd_ARM_Dsb_Pou();
 
 				// Sending PEC byte
-				priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_SEND_PEC;
+				priv->nextEvent[ch] = DdI2c_EVENT_SEND_PEC;
 			}
 			else {
 				// End of send
-				priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_END_RW;
+				priv->nextEvent[ch] = DdI2c_EVENT_END_RW;
 			}
 		}
 
 		// Clear ST.INT (release SCK)
-		IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+		ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 		Dd_ARM_Dsb_Pou();
 	}
 	else{
 		// Clear ST.INT (release SCK)
-//		IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+//		ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 //		Dd_ARM_Dsb_Pou();
 	}
 }
 
 // 0x04:Slave address sent, positive ACK
-static VOID dd_i2c_st_mode_MTADPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMTADPAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_SENDING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_SEND:
 				// Send Data
-				dd_i2c_send_data_to_slave(self, ch);
+				ddI2cSendDataToSlave(self, ch);
 				break;
 
 			case DdI2c_EVENT_SEND_PEC:
 				// End of send
-				priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_END_RW;
+				priv->nextEvent[ch] = DdI2c_EVENT_END_RW;
 
 				// Clear PEC Next
-				IO_PERI.I2C[ch].CST.bit.PECNEXT = 0;
+				ioPeri.i2c[ch].cst.bit.pecnext = 0;
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
 	}
-	else if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_ADDRESS){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	else if(priv->state[ch] == DdI2c_STATE_SENDING_ADDRESS){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_START_WRITE:
 				// Send 10 bit lower address
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_2ND);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_2ND);
 				Dd_ARM_Dsb_Pou();
 
 				// Go to send data state
-				priv->gDD_I2C_State[ch] = DdI2c_STATE_SENDING_DATA;
-				priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_SEND;
+				priv->state[ch] = DdI2c_STATE_SENDING_DATA;
+				priv->nextEvent[ch] = DdI2c_EVENT_SEND;
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			case DdI2c_EVENT_START_READ:
 				// Send 10 bit lower address
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_2ND);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_2ND);
 				Dd_ARM_Dsb_Pou();
 
 				// Keep state
-				priv->gDD_I2C_Next_Event[ch] = DdI2c_EVENT_RECEIVE;
+				priv->nextEvent[ch] = DdI2c_EVENT_RECEIVE;
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -521,61 +555,61 @@ static VOID dd_i2c_st_mode_MTADPA_proc(DdI2c *self, UCHAR ch)
 }
 
 // 0x06:Data byte sent, positive ACK
-static VOID dd_i2c_st_mode_MTDAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMTDAPAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_SENDING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_SEND:
 				// Send Data
-				dd_i2c_send_data_to_slave(self, ch);
+				ddI2cSendDataToSlave(self, ch);
 				break;
 
 			case DdI2c_EVENT_END_RW:
 				// End send
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;	// Pause interrupt because INT has not been cleared
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;	// Pause interrupt because INT has not been cleared
 				// Clear ST.INT (release SCK)
-//				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+//				ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 				Dd_ARM_Dsb_Pou();
 
-				priv->gDD_I2C_State[ch] = DdI2c_STATE_END;
+				priv->state[ch] = DdI2c_STATE_END;
 
 				ret = DDIM_User_Set_Flg(FID_DD_I2C, dd_i2c_get_event_flg(self, ch));
-				if(ret != D_DDIM_USER_E_OK){
+				if(ret != DdimUserCustom_E_OK){
 					Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 				}
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
 	}
-	else if(priv->gDD_I2C_State[ch] == DdI2c_STATE_SENDING_ADDRESS){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	else if(priv->state[ch] == DdI2c_STATE_SENDING_ADDRESS){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_RECEIVE:
 				// Resend 10 bit upper address and Read indicator
-				IO_PERI.I2C[ch].SDAT.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
+				ioPeri.i2c[ch].sdat.word = dd_i2c_ctrl_get_slave_addr_byte(priv->i2cCtrl, ch, DdI2cCtrl_ADDR_BYTE_1ST);
 				Dd_ARM_Dsb_Pou();
 
 				// Generate the Restart condition
-				IO_PERI.I2C[ch].CTL1.bit.START	= 1;
+				ioPeri.i2c[ch].ctl1.bit.start = 1;
 				Dd_ARM_Dsb_Pou();
 
 				// Clear ST.INT (release SCK)
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -586,97 +620,97 @@ static VOID dd_i2c_st_mode_MTDAPA_proc(DdI2c *self, UCHAR ch)
 ///// Master Receive Mode /////
 ///////////////////////////////
 // Receive data from slave
-static VOID dd_i2c_receive_data_from_slave(DdI2c *self, UCHAR ch)
+static void ddI2cReceiveDataFromSlave(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
-	UCHAR* recv_data;
-	UINT32 recv_count;
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	kuchar* recvData;
+	kuint32 recvCount;
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	recv_data = (UCHAR*)priv->gDD_I2C_Data[ch];
-	recv_count = priv->gDD_I2C_Data_Count[ch];
+	recvData = (kuchar*)priv->data[ch];
+	recvCount = priv->dataCount[ch];
 
-	if(recv_count < priv->gDD_I2C_Data_Num[ch]){
+	if(recvCount < priv->dataNum[ch]){
 		// Continue receive
-		if(recv_count != 0){
-			recv_data[recv_count-1] = (UCHAR)IO_PERI.I2C[ch].SDAT.word;		// ToDo
+		if(recvCount != 0){
+			recvData[recvCount-1] = (kuchar)ioPeri.i2c[ch].sdat.word;
 		}
-		recv_count++;
-		priv->gDD_I2C_Data_Count[ch] = recv_count;
+		recvCount++;
+		priv->dataCount[ch] = recvCount;
 
-		if(recv_count < priv->gDD_I2C_Data_Num[ch]){
-			if((recv_count + 1) == priv->gDD_I2C_Data_Num[ch]){
+		if(recvCount < priv->dataNum[ch]){
+			if((recvCount + 1) == priv->dataNum[ch]){
 				// next receive data is last. send no ack
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 1;
+				ioPeri.i2c[ch].ctl1.bit.ack = 1;
 
 				// Check PEC enable
-				if(recv_count == priv->gDD_I2C_PEC_Byte_Num[ch]){
+				if(recvCount == priv->pecByteNum[ch]){
 					// Set PEC Next
-					IO_PERI.I2C[ch].CST.bit.PECNEXT = 1;
+					ioPeri.i2c[ch].cst.bit.pecnext = 1;
 					Dd_ARM_Dsb_Pou();
 				}
 			}
 			else {
 				// send ack
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 0;
+				ioPeri.i2c[ch].ctl1.bit.ack = 0;
 			}
 
 			// Clear ST.INT (release SCK)
-			IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+			ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 			Dd_ARM_Dsb_Pou();
 		}
 		else {
 			// End of receive
-			if (priv->gDD_I2C_Data_Count[ch] == (priv->gDD_I2C_PEC_Byte_Num[ch] + 1)){
+			if (priv->dataCount[ch] == (priv->pecByteNum[ch] + 1)){
 				// Check PEC Fault Error
-				if(IO_PERI.I2C[ch].CST.bit.PECFAULT != 0){
-					priv->gDD_I2C_Error[ch] = DdI2c_PEC_ERROR;
+				if(ioPeri.i2c[ch].cst.bit.pecfault != 0){
+					priv->error[ch] = DdI2c_PEC_ERROR;
 					Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
-					dd_i2c_error_occur(self, ch);
+					ddI2cErrorOccur(self, ch);
 				}
 			}
 			else {
-				priv->gDD_I2C_Next_Event[ch]	= DdI2c_EVENT_END_RW;
-				priv->gDD_I2C_State[ch]		= DdI2c_STATE_END;
+				priv->nextEvent[ch] = DdI2c_EVENT_END_RW;
+				priv->state[ch]	 = DdI2c_STATE_END;
 
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;	// Pause interrupt because INT has not been cleared
-//				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;	// Pause interrupt because INT has not been cleared
+//				ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 				Dd_ARM_Dsb_Pou();
 
 				ret = DDIM_User_Set_Flg(FID_DD_I2C, dd_i2c_get_event_flg(self, ch));
-				if(ret != D_DDIM_USER_E_OK){
+				if(ret != DdimUserCustom_E_OK){
 					Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 				}
 			}
 
 			// Clear ST.INT (release SCK)
-//			IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+//			ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 //			Dd_ARM_Dsb_Pou();
 		}
 	}
 	else{
 		// Clear ST.INT (release SCK)
-//		IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+//		ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 //		Dd_ARM_Dsb_Pou();
 	}
 }
 
 // 0x08:Slave address sent, positive ACK
-static VOID dd_i2c_st_mode_MRADPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMRADPAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_RECEIVING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_RECEIVING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_RECEIVE:
 				// Receive Data
-				dd_i2c_receive_data_from_slave(self, ch);
+				ddI2cReceiveDataFromSlave(self, ch);
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -684,21 +718,21 @@ static VOID dd_i2c_st_mode_MRADPA_proc(DdI2c *self, UCHAR ch)
 }
 
 // 0x0A:Data byte received, positive ACK
-static VOID dd_i2c_st_mode_MRDAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMRDAPAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_RECEIVING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_RECEIVING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_RECEIVE:
 				// Receive Data
-				dd_i2c_receive_data_from_slave(self, ch);
+				ddI2cReceiveDataFromSlave(self, ch);
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -706,30 +740,30 @@ static VOID dd_i2c_st_mode_MRDAPA_proc(DdI2c *self, UCHAR ch)
 }
 
 // 0x0B:Data byte received, negative ACK
-static VOID dd_i2c_st_mode_MRDANA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeMRDANAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	if(priv->gDD_I2C_State[ch] == DdI2c_STATE_RECEIVING_DATA){
-		switch(priv->gDD_I2C_Next_Event[ch]){
+	if(priv->state[ch] == DdI2c_STATE_RECEIVING_DATA){
+		switch(priv->nextEvent[ch]){
 			case DdI2c_EVENT_RECEIVE:
 				// Receive Data
-				dd_i2c_receive_data_from_slave(self, ch);
+				ddI2cReceiveDataFromSlave(self, ch);
 				break;
 
 			case DdI2c_EVENT_END_RW:
 				// End receive
-				priv->gDD_I2C_State[ch] = DdI2c_STATE_END;
+				priv->state[ch] = DdI2c_STATE_END;
 
 				// Clear ST.INT (release SCK)
-//				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;		// Not clear for the Repeat Start Condition or Stop Condition
+//				ioPeri.i2c[ch].ctl1.bit.clrst = 1;		// Not clear for the Repeat Start Condition or Stop Condition
 //				Dd_ARM_Dsb_Pou();
 				break;
 
 			default:
 				// fail safe
-				IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-				IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+				ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+				ioPeri.i2c[ch].ctl1.bit.inten = 0;
 				Dd_ARM_Dsb_Pou();
 				break;
 		}
@@ -740,7 +774,7 @@ static VOID dd_i2c_st_mode_MRDANA_proc(DdI2c *self, UCHAR ch)
 ///// Slave Receive Mode /////
 //////////////////////////////
 // Notify slave address specified
-static VOID dd_i2c_notify_slave_address_specified(DdI2c *self, UCHAR ch)
+static void ddI2cNotifySlaveAddressSpecified(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 //	DdI2cSlaveAction action;
@@ -748,78 +782,81 @@ static VOID dd_i2c_notify_slave_address_specified(DdI2c *self, UCHAR ch)
 	if(dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch) != NULL){
 		// Notify slave address specified to Callback function
 #if 0
-		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ADDRESS, (UCHAR)IO_PERI.I2C[ch].SDAT.word);
+		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ADDRESS,
+				(kuchar)ioPeri.i2c[ch].sdat.word);
 
 		switch(action.actionMode){
 			case DdI2c_SEND_ACK_MASTER:
 				// send ack
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 0;
+				ioPeri.i2c[ch].ctl1.bit.ack = 0;
 				break;
 			case DdI2c_SEND_NO_ACK_MASTER:
 				// send no ack
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 1;
+				ioPeri.i2c[ch].ctl1.bit.ack = 1;
 				break;
 			default:
 				break;
 		}
 #else
-		(*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ADDRESS, (UCHAR)IO_PERI.I2C[ch].SDAT.word);
+		(*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ADDRESS,
+				(kuchar)ioPeri.i2c[ch].sdat.word);
 #endif
 	}
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x10:Slave address received, positive ACK
-static VOID dd_i2c_st_mode_SRADPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSRADPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_notify_slave_address_specified(self, ch);
+	ddI2cNotifySlaveAddressSpecified(self, ch);
 }
 
 // 0x11:Slave address received after arbitration loss, positive ACK
-static VOID dd_i2c_st_mode_SRAAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSRAAPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_notify_slave_address_specified(self, ch);
+	ddI2cNotifySlaveAddressSpecified(self, ch);
 }
 
-static VOID dd_i2c_receive_data_from_master(DdI2c *self, UCHAR ch)
+static void ddI2cReceiveDataFromMaster(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 	DdI2cSlaveAction action;
-	I2cRecvFromMaster receive_sig = DdI2cCtrl_RECV_FROM_MASTER_DATA;
+	I2cRecvFromMaster receiveSig = DdI2cCtrl_RECV_FROM_MASTER_DATA;
 
 	if(dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch) != NULL){
-		priv->gDD_I2C_Data_Count[ch]++;
+		priv->dataCount[ch]++;
 
 		// Check PEC enable
-		if(priv->gDD_I2C_Data_Count[ch] == priv->gDD_I2C_PEC_Byte_Num[ch]){
+		if(priv->dataCount[ch] == priv->pecByteNum[ch]){
 			// Set PEC Next
-			IO_PERI.I2C[ch].CST.bit.PECNEXT = 1;
+			ioPeri.i2c[ch].cst.bit.pecnext = 1;
 			Dd_ARM_Dsb_Pou();
 		}
-		else if (priv->gDD_I2C_Data_Count[ch] == (priv->gDD_I2C_PEC_Byte_Num[ch] + 1)){
+		else if (priv->dataCount[ch] == (priv->pecByteNum[ch] + 1)){
 			// Check PEC Fault Error
-			if(IO_PERI.I2C[ch].CST.bit.PECFAULT != 0){
-				receive_sig = DdI2cCtrl_RECV_FROM_MASTER_ERROR;
-				priv->gDD_I2C_Error[ch] = DdI2c_PEC_ERROR;
+			if(ioPeri.i2c[ch].cst.bit.pecfault != 0){
+				receiveSig = DdI2cCtrl_RECV_FROM_MASTER_ERROR;
+				priv->error[ch] = DdI2c_PEC_ERROR;
 
 				Ddim_Print(("DD_I2C ERR:ch=%d, line=%d\n", ch, __LINE__));
 			}
 		}
 
 		// Receive data from master
-		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, receive_sig, (UCHAR)IO_PERI.I2C[ch].SDAT.word);
+		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, receiveSig,
+				(kuchar)ioPeri.i2c[ch].sdat.word);
 
 		switch(action.actionMode){
 			case DdI2c_SEND_ACK_MASTER:
 				// Continue receive data
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 0;
+				ioPeri.i2c[ch].ctl1.bit.ack = 0;
 				break;
 			case DdI2c_SEND_NO_ACK_MASTER:
 				// End receive data
-				IO_PERI.I2C[ch].CTL1.bit.ACK = 1;
+				ioPeri.i2c[ch].ctl1.bit.ack = 1;
 				break;
 			default:
 				break;
@@ -827,49 +864,49 @@ static VOID dd_i2c_receive_data_from_master(DdI2c *self, UCHAR ch)
 	}
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x12:Data byte received, positive ACK
-static VOID dd_i2c_st_mode_SRDAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSRDAPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_receive_data_from_master(self, ch);
+	ddI2cReceiveDataFromMaster(self, ch);
 }
 
 // 0x13:Data byte received, negative ACK
-static VOID dd_i2c_st_mode_SRDANA_proc(UCHAR ch)
+static void ddI2cStModeSRDANAProc(kuchar ch)
 {
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x1C:Slave mode stop condition detected
-static VOID dd_i2c_st_mode_SSTOP_proc(UCHAR ch)
+static void ddI2cStModeSSTOPProc(kuchar ch)
 {
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x1D:Slave address received after arbitration loss, positive ACK
-static VOID dd_i2c_st_mode_SGADPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSGADPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_notify_slave_address_specified(self, ch);
+	ddI2cNotifySlaveAddressSpecified(self, ch);
 }
 
 // 0x1E:Slave address received after arbitration loss, positive ACK
-static VOID dd_i2c_st_mode_SGAAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSGAAPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_notify_slave_address_specified(self, ch);
+	ddI2cNotifySlaveAddressSpecified(self, ch);
 }
 
 ///////////////////////////////
 ///// Slave Transmit Mode /////
 ///////////////////////////////
 // Send data to master
-static VOID dd_i2c_send_data_to_master(DdI2c *self, UCHAR ch)
+static void ddI2cSendDataToMaster(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 	DdI2cSlaveAction action;
@@ -877,18 +914,19 @@ static VOID dd_i2c_send_data_to_master(DdI2c *self, UCHAR ch)
 	if(dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch) != NULL){
 		// Detect ACK
 		// Send data to master
-		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch, DdI2cCtrl_RECV_FROM_MASTER_ACK, DdI2c_DONT_CARE);
+		action = (*dd_i2c_ctrl_get_slave_callback(priv->i2cCtrl, ch))(ch,
+				DdI2cCtrl_RECV_FROM_MASTER_ACK, DdI2c_DONT_CARE);
 
 		if(action.actionMode == DdI2c_SEND_DATA_2_MASTER){
 			// Send data
-			IO_PERI.I2C[ch].SDAT.word = action.sendData;
+			ioPeri.i2c[ch].sdat.word = action.sendData;
 			Dd_ARM_Dsb_Pou();
 
-			priv->gDD_I2C_Data_Count[ch]++;
+			priv->dataCount[ch]++;
 
-			if(priv->gDD_I2C_Data_Count[ch] == priv->gDD_I2C_PEC_Byte_Num[ch]){
+			if(priv->dataCount[ch] == priv->pecByteNum[ch]){
 				// Set PEC Next
-				IO_PERI.I2C[ch].CST.bit.PECNEXT = 1;
+				ioPeri.i2c[ch].cst.bit.pecnext = 1;
 				Dd_ARM_Dsb_Pou();
 			}
 		}
@@ -899,34 +937,34 @@ static VOID dd_i2c_send_data_to_master(DdI2c *self, UCHAR ch)
 	}
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x14:Slave address received, positive ACK
-static VOID dd_i2c_st_mode_STADPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSTADPAProc(DdI2c *self, kuchar ch)
 {
 	dd_i2c_init_pec_info(self, ch);
 
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x15:Slave address received after arbitration loss, positive ACK
-static VOID dd_i2c_st_mode_STAAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSTAAPAProc(DdI2c *self, kuchar ch)
 {
 	dd_i2c_init_pec_info(self, ch);
 
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x16:Data byte received, positive ACK
-static VOID dd_i2c_st_mode_STDAPA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSTDAPAProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x17:Data byte received, negative ACK
-static VOID dd_i2c_st_mode_STDANA_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSTDANAProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
@@ -936,34 +974,34 @@ static VOID dd_i2c_st_mode_STDANA_proc(DdI2c *self, UCHAR ch)
 	}
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // 0x18:Alart response address received, positive ACK
-static VOID dd_i2c_st_mode_SATADP_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSATADPProc(DdI2c *self, kuchar ch)
 {
 	dd_i2c_init_pec_info(self, ch);
 
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x19:Alart response address received after arbitration loss, positive ACK
-static VOID dd_i2c_st_mode_SATAAP_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSATAAPProc(DdI2c *self, kuchar ch)
 {
 	dd_i2c_init_pec_info(self, ch);
 
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x1A:Addressed With Alart response address, data byte send, positive ACK
-static VOID dd_i2c_st_mode_SATDAP_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSATDAPProc(DdI2c *self, kuchar ch)
 {
-	dd_i2c_send_data_to_master(self, ch);
+	ddI2cSendDataToMaster(self, ch);
 }
 
 // 0x1B:Addressed With Alart response address, data byte send, negative ACK
-static VOID dd_i2c_st_mode_SATDAN_proc(DdI2c *self, UCHAR ch)
+static void ddI2cStModeSATDANProc(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
@@ -973,14 +1011,14 @@ static VOID dd_i2c_st_mode_SATDAN_proc(DdI2c *self, UCHAR ch)
 	}
 
 	// Clear ST.INT (release SCK)
-	IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
+	ioPeri.i2c[ch].ctl1.bit.clrst = 1;
 	Dd_ARM_Dsb_Pou();
 }
 
 // Get event flag of the ch specified
-UINT32 dd_i2c_get_event_flg(DdI2c *self, UCHAR ch)
+kuint32 dd_i2c_get_event_flg(DdI2c *self, kuchar ch)
 {
-	UINT32 ret;
+	kuint32 ret;
 
 	if(ch == DdI2c_CH_00) {
 		ret = DdI2c_FLG_0;
@@ -995,28 +1033,28 @@ UINT32 dd_i2c_get_event_flg(DdI2c *self, UCHAR ch)
 }
 
 // Init PEC-info and Timeout error
-VOID dd_i2c_init_pec_info(DdI2c *self, UCHAR ch)
+void dd_i2c_init_pec_info(DdI2c *self, kuchar ch)
 {
 	// Init PEC info
-	IO_PERI.I2C[ch].CST.bit.PECNEXT = 0;
+	ioPeri.i2c[ch].cst.bit.pecnext = 0;
 }
 
 // Terminate the I2C.
-VOID dd_i2c_terminate(DdI2c *self, UCHAR ch)
+void dd_i2c_terminate(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_State[ch] = DdI2c_STATE_IDLE;
+	priv->state[ch] = DdI2c_STATE_IDLE;
 
 	// Clear EN
-	IO_PERI.I2C[ch].CTL2.bit.ENABLE = 0;
+	ioPeri.i2c[ch].ctl2.bit.enable = 0;
 	Dd_ARM_Dsb_Pou();
 }
 
 // Get Test SDA.
-INT32 dd_i2c_get_test_sda(DdI2c *self, UCHAR ch, UCHAR* sda)
+kint32 dd_i2c_get_test_sda(DdI2c *self, kuchar ch, kuchar* sda)
 {
-	INT32 ret = D_DDIM_OK;
+	kint32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if((ch >= DdI2c_CH_MAX) || (sda == NULL)){
@@ -1025,13 +1063,13 @@ INT32 dd_i2c_get_test_sda(DdI2c *self, UCHAR ch, UCHAR* sda)
 	}
 #endif
 
-	*sda = IO_PERI.I2C[ch].CST.bit.TSDA;
+	*sda = ioPeri.i2c[ch].cst.bit.tsda;
 
 	return ret;
 }
 
 // Get Error Cause.
-UINT32 dd_i2c_get_error_cause(DdI2c *self, UCHAR ch)
+kuint32 dd_i2c_get_error_cause(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
@@ -1042,13 +1080,13 @@ UINT32 dd_i2c_get_error_cause(DdI2c *self, UCHAR ch)
 	}
 #endif
 
-	return priv->gDD_I2C_Error[ch];
+	return priv->error[ch];
 }
 
 // Set Toggle SCL.
-INT32 dd_i2c_set_toggle_scl(DdI2c *self, UCHAR ch)
+kint32 dd_i2c_set_toggle_scl(DdI2c *self, kuchar ch)
 {
-	INT32 ret = D_DDIM_OK;
+	kint32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if(ch >= DdI2c_CH_MAX){
@@ -1057,14 +1095,14 @@ INT32 dd_i2c_set_toggle_scl(DdI2c *self, UCHAR ch)
 	}
 #endif
 
-	IO_PERI.I2C[ch].CST.bit.TGSCL = 1;
+	ioPeri.i2c[ch].cst.bit.tgscl = 1;
 	Dd_ARM_Dsb_Pou();
 
 	return ret;
 }
 
 // Intterupt handler.
-VOID dd_i2c_int_handler(DdI2c *self, UCHAR ch)
+void dd_i2c_int_handler(DdI2c *self, kuchar ch)
 {
 #ifdef CO_PARAM_CHECK
 	if(ch >= DdI2c_CH_MAX){
@@ -1074,221 +1112,221 @@ VOID dd_i2c_int_handler(DdI2c *self, UCHAR ch)
 #endif
 
 #ifdef DdI2c_DEBUG
-	printf("IN:I2C[%d].ST.MODE=0x%02X, priv->gDD_I2C_State=%d, priv->gDD_I2C_Next_Event=%d\n", ch, IO_PERI.I2C[ch].ST.bit.MODE, priv->gDD_I2C_State[ch], priv->gDD_I2C_Next_Event[ch]);
+	printf("IN:I2C[%d].ST.MODE=0x%02X, priv->state=%d, priv->nextEvent=%d\n", ch, ioPeri.i2c[ch].st.bit.mode, priv->state[ch], priv->nextEvent[ch]);
 #endif
 
-	if(IO_PERI.I2C[ch].CST.bit.TERR == 1){
+	if(ioPeri.i2c[ch].cst.bit.terr == 1){
 		// Timeout Error
-		dd_i2c_st_mode_TERR_proc(self, ch);
+		ddI2cStModeTERRProc(self, ch);
 	}
 
-	switch(IO_PERI.I2C[ch].ST.bit.MODE){
+	switch(ioPeri.i2c[ch].st.bit.mode){
 		//////////////////////////////////
 		///// Master Start condition /////
 		//////////////////////////////////
-		case E_DD_I2C_ST_MODE_STDONE:		// 0x01:Start condition generated
-			dd_i2c_st_mode_STDONE_proc(self, ch);
+		case DdI2c_ST_MODE_STDONE:		// 0x01:Start condition generated
+			ddI2cStModeSTDONEProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_RSDONE:		// 0x02:Repeated start condition generated
-			dd_i2c_st_mode_RSDONE_proc(self, ch);
+		case DdI2c_ST_MODE_RSDONE:		// 0x02:Repeated start condition generated
+			ddI2cStModeRSDONEProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_IDLARL:		// 0x03:Arbitrationlost, unaddressed slave mode entered
-			dd_i2c_st_mode_IDLARL_proc(self, ch);
+		case DdI2c_ST_MODE_IDLARL:		// 0x03:Arbitrationlost, unaddressed slave mode entered
+			ddI2cStModeIDLARLProc(self, ch);
 			break;
 
 		////////////////////////////////
 		///// Master Transmit Mode /////
 		////////////////////////////////
-		case E_DD_I2C_ST_MODE_MTADPA:		// 0x04:Slave address sent, positive ACK
-			dd_i2c_st_mode_MTADPA_proc(self, ch);
+		case DdI2c_ST_MODE_MTADPA:		// 0x04:Slave address sent, positive ACK
+			ddI2cStModeMTADPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MTADNA:		// 0x05:Slave address sent, negative ACK
-			dd_i2c_st_mode_MTADNA_proc(self, ch);
+		case DdI2c_ST_MODE_MTADNA:		// 0x05:Slave address sent, negative ACK
+			ddI2cStModeMTADNAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MTDAPA:		// 0x06:Data byte sent, positive ACK
-			dd_i2c_st_mode_MTDAPA_proc(self, ch);
+		case DdI2c_ST_MODE_MTDAPA:		// 0x06:Data byte sent, positive ACK
+			ddI2cStModeMTDAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MTDANA:		// 0x07:Data byte sent, negative ACK
-			dd_i2c_st_mode_MTDANA_proc(self, ch);
+		case DdI2c_ST_MODE_MTDANA:		// 0x07:Data byte sent, negative ACK
+			ddI2cStModeMTDANAProc(self, ch);
 			break;
 
 		///////////////////////////////
 		///// Master Receive Mode /////
 		///////////////////////////////
-		case E_DD_I2C_ST_MODE_MRADPA:		// 0x08:Slave address sent, positive ACK
-			dd_i2c_st_mode_MRADPA_proc(self, ch);
+		case DdI2c_ST_MODE_MRADPA:		// 0x08:Slave address sent, positive ACK
+			ddI2cStModeMRADPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MRADNA:		// 0x09:Slave address sent, negative ACK
-			dd_i2c_st_mode_MRADNA_proc(self, ch);
+		case DdI2c_ST_MODE_MRADNA:		// 0x09:Slave address sent, negative ACK
+			ddI2cStModeMRADNAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MRDAPA:		// 0x0A:Data byte received, positive ACK
-			dd_i2c_st_mode_MRDAPA_proc(self, ch);
+		case DdI2c_ST_MODE_MRDAPA:		// 0x0A:Data byte received, positive ACK
+			ddI2cStModeMRDAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_MRDANA:		// 0x0B:Data byte received, negative ACK
-			dd_i2c_st_mode_MRDANA_proc(self, ch);
+		case DdI2c_ST_MODE_MRDANA:		// 0x0B:Data byte received, negative ACK
+			ddI2cStModeMRDANAProc(self, ch);
 			break;
 
 		//////////////////////////////
 		///// Slave Receive Mode /////
 		//////////////////////////////
-		case E_DD_I2C_ST_MODE_SRADPA:		// 0x10:Slave address received, positive ACK
-			dd_i2c_st_mode_SRADPA_proc(self, ch);
+		case DdI2c_ST_MODE_SRADPA:		// 0x10:Slave address received, positive ACK
+			ddI2cStModeSRADPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SRAAPA:		// 0x11:Slave address received after arbitration loss, positive ACK
-			dd_i2c_st_mode_SRAAPA_proc(self, ch);
+		case DdI2c_ST_MODE_SRAAPA:		// 0x11:Slave address received after arbitration loss, positive ACK
+			ddI2cStModeSRAAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SRDAPA:		// 0x12:Data byte received, positive ACK
-			dd_i2c_st_mode_SRDAPA_proc(self, ch);
+		case DdI2c_ST_MODE_SRDAPA:		// 0x12:Data byte received, positive ACK
+			ddI2cStModeSRDAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SRDANA:		// 0x13:Data byte received, negative ACK
-			dd_i2c_st_mode_SRDANA_proc(ch);
+		case DdI2c_ST_MODE_SRDANA:		// 0x13:Data byte received, negative ACK
+			ddI2cStModeSRDANAProc(ch);
 			break;
-		case E_DD_I2C_ST_MODE_SSTOP:		// 0x1C:Slave mode stop condition detected
-			dd_i2c_st_mode_SSTOP_proc(ch);
+		case DdI2c_ST_MODE_SSTOP:		// 0x1C:Slave mode stop condition detected
+			ddI2cStModeSSTOPProc(ch);
 			break;
-		case E_DD_I2C_ST_MODE_SGADPA:		// 0x1D:Slave address received after arbitration loss, positive ACK
-			dd_i2c_st_mode_SGADPA_proc(self, ch);
+		case DdI2c_ST_MODE_SGADPA:		// 0x1D:Slave address received after arbitration loss, positive ACK
+			ddI2cStModeSGADPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SGAAPA:		// 0x1E:Slave address received after arbitration loss, positive ACK
-			dd_i2c_st_mode_SGAAPA_proc(self, ch);
+		case DdI2c_ST_MODE_SGAAPA:		// 0x1E:Slave address received after arbitration loss, positive ACK
+			ddI2cStModeSGAAPAProc(self, ch);
 			break;
 
 		///////////////////////////////
 		///// Slave Transmit Mode /////
 		///////////////////////////////
-		case E_DD_I2C_ST_MODE_STADPA:		// 0x14:Slave address received, positive ACK
-			dd_i2c_st_mode_STADPA_proc(self, ch);
+		case DdI2c_ST_MODE_STADPA:		// 0x14:Slave address received, positive ACK
+			ddI2cStModeSTADPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_STAAPA:		// 0x15:Slave address received after arbitration loss, positive ACK
-			dd_i2c_st_mode_STAAPA_proc(self, ch);
+		case DdI2c_ST_MODE_STAAPA:		// 0x15:Slave address received after arbitration loss, positive ACK
+			ddI2cStModeSTAAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_STDAPA:		// 0x16:Data byte received, positive ACK
-			dd_i2c_st_mode_STDAPA_proc(self, ch);
+		case DdI2c_ST_MODE_STDAPA:		// 0x16:Data byte received, positive ACK
+			ddI2cStModeSTDAPAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_STDANA:		// 0x17:Data byte received, negative ACK
-			dd_i2c_st_mode_STDANA_proc(self, ch);
+		case DdI2c_ST_MODE_STDANA:		// 0x17:Data byte received, negative ACK
+			ddI2cStModeSTDANAProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SATADP:		// 0x18:Alart response address received, positive ACK
-			dd_i2c_st_mode_SATADP_proc(self, ch);
+		case DdI2c_ST_MODE_SATADP:		// 0x18:Alart response address received, positive ACK
+			ddI2cStModeSATADPProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SATAAP:		// 0x19:Alart response address received after arbitration loss, positive ACK
-			dd_i2c_st_mode_SATAAP_proc(self, ch);
+		case DdI2c_ST_MODE_SATAAP:		// 0x19:Alart response address received after arbitration loss, positive ACK
+			ddI2cStModeSATAAPProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SATDAP:		// 0x1A:Addressed With Alart response address, data byte send, positive ACK
-			dd_i2c_st_mode_SATDAP_proc(self, ch);
+		case DdI2c_ST_MODE_SATDAP:		// 0x1A:Addressed With Alart response address, data byte send, positive ACK
+			ddI2cStModeSATDAPProc(self, ch);
 			break;
-		case E_DD_I2C_ST_MODE_SATDAN:		// 0x1B:Addressed With Alart response address, data byte send, negative ACK
-			dd_i2c_st_mode_SATDAN_proc(self, ch);
+		case DdI2c_ST_MODE_SATDAN:		// 0x1B:Addressed With Alart response address, data byte send, negative ACK
+			ddI2cStModeSATDANProc(self, ch);
 			break;
 
 		/////////////////
 		///// Error /////
 		/////////////////
-		case E_DD_I2C_ST_MODE_BERROR:		// 0x1F:Invalid start or stop condition detected
-			dd_i2c_st_mode_BERROR_proc(self, ch);
+		case DdI2c_ST_MODE_BERROR:		// 0x1F:Invalid start or stop condition detected
+			ddI2cStModeBERRORProc(self, ch);
 			break;
 		default:
 			// fail safe
-			IO_PERI.I2C[ch].CTL1.bit.CLRST = 1;
-			IO_PERI.I2C[ch].CTL1.bit.INTEN	= 0;
+			ioPeri.i2c[ch].ctl1.bit.clrst = 1;
+			ioPeri.i2c[ch].ctl1.bit.inten = 0;
 			Dd_ARM_Dsb_Pou();
 			break;
 	}
 }
 
-INT32 dd_i2c_open(DdI2c *self, UCHAR ch, INT32 timeout)
+kint32 dd_i2c_open(DdI2c *self, kuchar ch, kint32 timeout)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_open(priv->i2cCtrl, ch, timeout);
 }
 
-INT32 dd_i2c_close(DdI2c *self, UCHAR ch)
+kint32 dd_i2c_close(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_close(priv->i2cCtrl, ch);
 }
 
-INT32 dd_i2c_start_master(DdI2c *self, UCHAR ch, const DdI2cStartInfo* const start_info)
+kint32 dd_i2c_start_master(DdI2c *self, kuchar ch, const DdI2cStartInfo* const startInfo)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_start_master(priv->i2cCtrl, ch, start_info);
+	return dd_i2c_ctrl_start_master(priv->i2cCtrl, ch, startInfo);
 }
 
-INT32 dd_i2c_stop_master(DdI2c *self, UCHAR ch)
+kint32 dd_i2c_stop_master(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_stop_master(priv->i2cCtrl, ch);
 }
 
-INT32 dd_i2c_start_slave(DdI2c *self, UCHAR ch)
+kint32 dd_i2c_start_slave(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_start_slave(priv->i2cCtrl, ch);
 }
 
-INT32 dd_i2c_stop_slave(DdI2c *self, UCHAR ch)
+kint32 dd_i2c_stop_slave(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_stop_slave(priv->i2cCtrl, ch);
 }
 
-INT32 dd_i2c_ctrl_master(DdI2c *self, UCHAR ch, const DdI2cCtrlMaster* const ctrl_master)
+kint32 dd_i2c_ctrl_master(DdI2c *self, kuchar ch, const DdI2cCtrlMaster* const ctrlMaster)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_ctrl_master(priv->i2cCtrl, ch, ctrl_master);
+	return dd_i2c_ctrl_ctrl_master(priv->i2cCtrl, ch, ctrlMaster);
 }
 
-INT32 dd_i2c_get_ctrl_master(DdI2c *self, UCHAR ch, DdI2cCtrlMaster* const ctrl_master)
+kint32 dd_i2c_get_ctrl_master(DdI2c *self, kuchar ch, DdI2cCtrlMaster* const ctrlMaster)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_get_ctrl_master(priv->i2cCtrl, ch, ctrl_master);
+	return dd_i2c_ctrl_get_ctrl_master(priv->i2cCtrl, ch, ctrlMaster);
 }
 
-INT32 dd_i2c_ctrl_slave(DdI2c *self, UCHAR ch, const DdI2cCtrlSlave* const ctrl_slave)
+kint32 dd_i2c_ctrl_slave(DdI2c *self, kuchar ch, const DdI2cCtrlSlave* const ctrlSlave)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_ctrl_slave(priv->i2cCtrl, ch, ctrl_slave);
+	return dd_i2c_ctrl_ctrl_slave(priv->i2cCtrl, ch, ctrlSlave);
 }
 
-INT32 dd_i2c_get_ctrl_slave(DdI2c *self, UCHAR ch, DdI2cCtrlSlave* const ctrl_slave)
+kint32 dd_i2c_get_ctrl_slave(DdI2c *self, kuchar ch, DdI2cCtrlSlave* const ctrlSlave)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_get_ctrl_slave(priv->i2cCtrl, ch, ctrl_slave);
+	return dd_i2c_ctrl_get_ctrl_slave(priv->i2cCtrl, ch, ctrlSlave);
 }
 
-INT32 dd_i2c_ctrl_smbus(DdI2c *self, UCHAR ch, const DdI2cCtrlSmbus* const ctrl_smbus)
+kint32 dd_i2c_ctrl_smbus(DdI2c *self, kuchar ch, const DdI2cCtrlSmbus* const ctrlSmbus)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_ctrl_smbus(priv->i2cCtrl, ch, ctrl_smbus);
+	return dd_i2c_ctrl_ctrl_smbus(priv->i2cCtrl, ch, ctrlSmbus);
 }
 
-INT32 dd_i2c_get_ctrl_smbus(DdI2c *self, UCHAR ch, DdI2cCtrlSmbus* const ctrl_smbus)
+kint32 dd_i2c_get_ctrl_smbus(DdI2c *self, kuchar ch, DdI2cCtrlSmbus* const ctrlSmbus)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return dd_i2c_ctrl_get_ctrl_smbus(priv->i2cCtrl, ch, ctrl_smbus);
+	return dd_i2c_ctrl_get_ctrl_smbus(priv->i2cCtrl, ch, ctrlSmbus);
 }
 
 #ifdef CO_DDIM_UTILITY_USE
-INT32 dd_i2c_set_scl(DdI2c *self, UCHAR ch, UCHAR scl)
+kint32 dd_i2c_set_scl(DdI2c *self, kuchar ch, kuchar scl)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
 	return dd_i2c_ctrl_set_scl(priv->i2cCtrl, ch, scl);
 }
 
-INT32 dd_i2c_get_scl(DdI2c *self, UCHAR ch, UCHAR* scl)
+kint32 dd_i2c_get_scl(DdI2c *self, kuchar ch, kuchar* scl)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
@@ -1297,75 +1335,75 @@ INT32 dd_i2c_get_scl(DdI2c *self, UCHAR ch, UCHAR* scl)
 
 #endif
 
-DdI2cState dd_i2c_get_state(DdI2c *self, UCHAR ch)
+DdI2cState dd_i2c_get_state(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return priv->gDD_I2C_State[ch];
+	return priv->state[ch];
 }
 
-void dd_i2c_set_state(DdI2c *self, UCHAR ch, DdI2cState state)
+void dd_i2c_set_state(DdI2c *self, kuchar ch, DdI2cState state)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_State[ch] = state;
+	priv->state[ch] = state;
 }
 
-void dd_i2c_set_next_event(DdI2c *self, UCHAR ch, DdI2cEvent nextEvent)
+void dd_i2c_set_next_event(DdI2c *self, kuchar ch, DdI2cEvent nextEvent)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Next_Event[ch] = nextEvent;
+	priv->nextEvent[ch] = nextEvent;
 }
 
-UINT32 dd_i2c_get_error(DdI2c *self, UCHAR ch)
+kuint32 dd_i2c_get_error(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return priv->gDD_I2C_Error[ch];
+	return priv->error[ch];
 }
 
-void dd_i2c_set_error(DdI2c *self, UCHAR ch, UINT32 err)
+void dd_i2c_set_error(DdI2c *self, kuchar ch, kuint32 err)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Error[ch] = err;
+	priv->error[ch] = err;
 }
 
-void dd_i2c_set_data_count(DdI2c *self, UCHAR ch, UINT32 dataCount)
+void dd_i2c_set_data_count(DdI2c *self, kuchar ch, kuint32 dataCount)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Data_Count[ch] = dataCount;
+	priv->dataCount[ch] = dataCount;
 }
 
-void dd_i2c_set_data(DdI2c *self, UCHAR ch, UCHAR* data)
+void dd_i2c_set_data(DdI2c *self, kuchar ch, kuchar* data)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Data[ch] = data;
+	priv->data[ch] = data;
 }
 
-void dd_i2c_set_data_num(DdI2c *self, UCHAR ch, UINT32 dataNum)
+void dd_i2c_set_data_num(DdI2c *self, kuchar ch, kuint32 dataNum)
 
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_Data_Num[ch] = dataNum;
+	priv->dataNum[ch] = dataNum;
 }
 
-UINT32 dd_i2c_get_pec_byte_num(DdI2c *self, UCHAR ch)
+kuint32 dd_i2c_get_pec_byte_num(DdI2c *self, kuchar ch)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	return priv->gDD_I2C_PEC_Byte_Num[ch];
+	return priv->pecByteNum[ch];
 }
 
-void dd_i2c_set_pec_byte_num(DdI2c *self, UCHAR ch, UINT32 pecByteNum)
+void dd_i2c_set_pec_byte_num(DdI2c *self, kuchar ch, kuint32 pecByteNum)
 {
 	DdI2cPrivate *priv = DD_I2C_GET_PRIVATE(self);
 
-	priv->gDD_I2C_PEC_Byte_Num[ch] = pecByteNum;
+	priv->pecByteNum[ch] = pecByteNum;
 }
 
 DdI2c* dd_i2c_get(void)

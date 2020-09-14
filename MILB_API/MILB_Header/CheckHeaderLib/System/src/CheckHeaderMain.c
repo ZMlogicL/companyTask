@@ -33,7 +33,7 @@
 #include "uart_csio.h"
 #include "jdsme.h"
 #endif
-#include "internals.h"
+#include "checkheadermaindefs.h"
 #include "protest1.h"
 #include "protest2.h"
 #include "protest3.h"
@@ -63,33 +63,33 @@
 //#define		D_ENABLE_IO_PRO_PAS
 //#define		D_ENABLE_IO_PRO_TABLE
 
-void pro_test( EProBlockType type )
+void pro_test(EProBlockType type)
 {
+
 #if 0	// for PC debug
-#define IO_PRO		(*IO_PRO2)
-	volatile struct io_pro*			IO_PRO2		= (void*)0x28008000;
+#define CheckHeaderMain_IO_PRO		(*ioPro2)
+	volatile IoPro*			ioPro2		= (kpointer)0x28008000;
 #endif	// for PC debug
 
 #ifdef D_ENABLE_IO_PRO_TABLE	// for PC debug
-#define IO_PRO_TBL	(*IO_PRO2_TBL)
-	volatile struct io_pro_tbl*		IO_PRO2_TBL	= (void*)0x29000000;
+#define CheckHeaderMain_IO_PRO_TBL	(*ioPro2Tbl)
+	volatile IoProTbl*		ioPro2Tbl	= (kpointer)0x29000000;
 #endif	// for PC debug
 
 	RS_printf("Pro\n");
-	pro_test1(NULL, type, IO_PRO);
-	pro_test2(NULL, type, IO_PRO);
-	pro_test3(NULL, type, IO_PRO);
-	pro_test4(NULL, type, IO_PRO);
-	pro_test5(NULL, type, IO_PRO);
-	pro_test6(NULL, type, IO_PRO);
-	pro_test7(NULL, type, IO_PRO);
-	pro_test8(NULL, type, IO_PRO);
+	pro_test1(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test2(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test3(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test4(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test5(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test6(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test7(NULL, type, CheckHeaderMain_IO_PRO);
+	pro_test8(NULL, type, CheckHeaderMain_IO_PRO);
 
 #if 0
 
-	k_io_test_pas_table_test(NULL, type, IO_PRO, IO_PRO_TBL)
+	k_io_test_pas_table_test(NULL, type, CheckHeaderMain_IO_PRO, CheckHeaderMain_IO_PRO_TBL);
 	RS_printf(" \n");
 
 #endif
 }
-

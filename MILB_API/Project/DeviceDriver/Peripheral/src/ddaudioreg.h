@@ -23,7 +23,7 @@
 
 typedef struct _DdAudioReg 			DdAudioReg;
 typedef struct _DdAudioRegPrivate 	DdAudioRegPrivate;
-typedef VOID (*DdAudioRegFunc)(DdAudioReg *audioReg);	/**< Callback function pointer	*/
+typedef void (*DdAudioRegFunc)(DdAudioReg *audioReg);	/**< Callback function pointer	*/
 
 struct  _DdAudioReg {
 	KObject parent;
@@ -38,16 +38,16 @@ extern "C" {
 KConstType 		dd_audio_reg_get_type(void);
 DdAudioReg* 	dd_audio_reg_new(void);
 
-INT32 			dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
-INT32 			dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
-BOOL 			dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, UINT8 ch);
-BOOL 			dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, UINT8 ch);
-INT32 			dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, UINT8 ch);
-INT32 			dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
-INT32 			dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
-INT32 			dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
-INT32 			dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, UINT8 ch);
-INT32 			dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 enable);
+kint32 			dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
+kint32 			dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
+kboolean 		dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, kuint8 ch);
+kboolean 		dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, kuint8 ch);
+kint32 			dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, kuint8 ch);
+kint32 			dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
+kint32 			dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
+kint32 			dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
+kint32 			dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, kuint8 ch);
+kint32 			dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, kuint8 ch, kuint8 enable);
 
 /**
 Get address of register AUIDLR<br>
@@ -59,7 +59,7 @@ Get address of register AUIDLR<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval Adress of register AUIDLR
 */
-UINT32			dd_audio_reg_get_addr_reg_auidlr(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auidlr(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUODLR<br>
@@ -70,7 +70,7 @@ Get address of register AUODLR<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval Adress of register AUODLR
 */
-UINT32			dd_audio_reg_get_addr_reg_auodlr(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auodlr(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUIDL<br>
@@ -82,7 +82,7 @@ Get address of register AUIDL<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval Adress of register AUIDL
 */
-UINT32			dd_audio_reg_get_addr_reg_auidl(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auidl(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUIDR<br>
@@ -94,7 +94,7 @@ Get address of register AUIDR<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval Adress of register AUIDR
 */
-UINT32			dd_audio_reg_get_addr_reg_auidr(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auidr(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUODL<br>
@@ -105,7 +105,7 @@ Get address of register AUODL<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval Adress of register AUODL
 */
-UINT32			dd_audio_reg_get_addr_reg_auodl(DdAudioReg* self, UCHAR ch);
+kuint32			dd_audio_reg_get_addr_reg_auodl(DdAudioReg* self, kuchar ch);
 
 /**
 Get address of register AUODR<br>
@@ -116,7 +116,7 @@ Get address of register AUODR<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval Adress of register AUODR
 */
-UINT32			dd_audio_reg_get_addr_reg_auodr(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auodr(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUIDDMAPT<br>
@@ -128,7 +128,7 @@ Get address of register AUIDDMAPT<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval Adress of register AUIDDMAPT
 */
-UINT32			dd_audio_reg_get_addr_reg_auiddmapt(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auiddmapt(DdAudioReg* self, kuint8 ch);
 
 /**
 Get address of register AUODDMAPT<br>
@@ -139,7 +139,7 @@ Get address of register AUODDMAPT<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval Adress of register AUODDMAPT
 */
-UINT32			dd_audio_reg_get_addr_reg_auoddmapt(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_addr_reg_auoddmapt(DdAudioReg* self, kuint8 ch);
 
 /**
 Set enable the interrupt request caused by input register full<br>
@@ -154,7 +154,7 @@ Set enable the interrupt request caused by input register full<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_reg_set_enable_input_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback);
+kint32 			dd_audio_reg_set_enable_input_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback);
 
 /**
 Set enable the interrupt request caused by output register empty<br>
@@ -168,7 +168,7 @@ Set enable the interrupt request caused by output register empty<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_reg_set_enable_output_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback);
+kint32 			dd_audio_reg_set_enable_output_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback);
 
 /**
 Set enable the interrupt request caused by data input register overflow<br>
@@ -183,8 +183,8 @@ Set enable the interrupt request caused by data input register overflow<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32			dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, UINT8 ch,
-						UINT8 enable, DdAudioRegFunc callback);
+kint32			dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, kuint8 ch,
+						kuint8 enable, DdAudioRegFunc callback);
 
 /**
 Set enable the interrupt request caused by data output register underflow<br>
@@ -198,8 +198,8 @@ Set enable the interrupt request caused by data output register underflow<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32			dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, UINT8 ch,
-						UINT8 enable, DdAudioRegFunc callback);
+kint32			dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, kuint8 ch,
+						kuint8 enable, DdAudioRegFunc callback);
 
 /**
 Get the operation status of FIFO stages 15-0 of input register<br>
@@ -211,7 +211,7 @@ Get the operation status of FIFO stages 15-0 of input register<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval Value of register AUIFST
 */
-UINT32			dd_audio_reg_get_input_fifo_status(DdAudioReg* self, UINT8 ch);
+kuint32			dd_audio_reg_get_input_fifo_status(DdAudioReg* self, kuint8 ch);
 
 /**
 Get the operation status of FIFO stages 15-0 of output register<br>
@@ -222,7 +222,7 @@ Get the operation status of FIFO stages 15-0 of output register<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval Value of register AUOFST
 */
-UINT32 			dd_audio_reg_get_output_fifo_status(DdAudioReg* self, UINT8 ch);
+kuint32 		dd_audio_reg_get_output_fifo_status(DdAudioReg* self, kuint8 ch);
 
 void 			dd_audio_reg_set_under_flow_func(DdAudioReg* self, DdAudioRegFunc underFlowFunc, int index);
 DdAudioRegFunc 	dd_audio_reg_get_under_flow_func(DdAudioReg* self, int index);

@@ -139,7 +139,7 @@ VRB control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	vrb_ctrl : VRB control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srovrb_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproVrbCtrl* vrb_ctrl );
 /**
@@ -148,8 +148,8 @@ A setup of enable access to the built-in RAM of vrb.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srovrb_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 

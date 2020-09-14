@@ -1,9 +1,15 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-02
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMipiMain类
 *@rely                :klib
+*@function
+*
+*设计的主要功能:
+*1、
+*@version
+*
 */
 
 #include <stdlib.h>
@@ -12,14 +18,16 @@
 #include "im_mipi.h"
 #include "im_disp.h"
 
-#include "ctimmipimain.h"
 #include "ctimmipi.h"
+#include "ctimmipimain.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMipiMain, ct_im_mipi_main);
-#define CT_IM_MIPI_MAIN_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMipiMainPrivate,CT_TYPE_IM_MIPI_MAIN))
+
+G_DEFINE_TYPE(CtImMipiMain, ct_im_mipi_main, G_TYPE_OBJECT);
+#define CT_IM_MIPI_MAIN_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MIPI_MAIN, CtImMipiMainPrivate))
 
 struct _CtImMipiMainPrivate
 {
+
 };
 
 /*----------------------------------------------------------------------*/
@@ -31,7 +39,7 @@ static const U_IM_MIPI_GEN_HDR S_GCT_IM_MIPI_HEADER[D_IM_MIPI_PACKET_NUM_MAX] = 
 	{0x00BB0C00}, {0x000DEECF}, {0x00F0F055}, {0x00111183},
 	{0x000101AC}, {0x000101E2}, {0x00010144}, {0x00010101}
 };
-static const kulong S_GCT_IM_MIPI_PAYLOAD[D_IM_MIPI_PACKET_NUM_MAX] = {
+static const gulong S_GCT_IM_MIPI_PAYLOAD[D_IM_MIPI_PACKET_NUM_MAX] = {
 	0x00000001, 0x00000020, 0x00000300, 0x00004000,
 	0x000F000E, 0x00D000C0, 0x0B000A00, 0x90008000,
 	0x00664422, 0x13579B00, 0x0888AAA0, 0xFEF00212,
@@ -39,14 +47,37 @@ static const kulong S_GCT_IM_MIPI_PAYLOAD[D_IM_MIPI_PACKET_NUM_MAX] = {
 };
 
 /*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+/*
 *IMPL
 */
-static void ct_im_mipi_main_constructor(CtImMipiMain *self) 
+
+static void ct_im_mipi_main_class_init(CtImMipiMainClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMipiMainPrivate));
 }
 
-static void ct_im_mipi_main_destructor(CtImMipiMain *self) 
+static void ct_im_mipi_main_init(CtImMipiMain *self)
 {
+//	CtImMipiMainPrivate *priv = CT_IM_MIPI_MAIN_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+//	CtImMipiMain *self = (CtImMipiMain*)object;
+//	CtImMipiMainPrivate *priv = CT_IM_MIPI_MAIN_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImMipiMain *self = (CtImMipiMain*)object;
+//	CtImMipiMainPrivate *priv = CT_IM_MIPI_MAIN_GET_PRIVATE(self);
 }
 
 /*
@@ -54,25 +85,25 @@ static void ct_im_mipi_main_destructor(CtImMipiMain *self)
 */
 /**
  * @brief       Command processing of MIPI.
- * @param[in]   kint32 argc
- * @param[in]   kchar** argv
+ * @param[in]   gint32 argc
+ * @param[in]   gchar** argv
  * @return      void
  */
-void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
+void Ct_Im_Mipi_Main(gint32 argc, gchar** argv)
 {
-	kint32						ret;
-	kint32						param2;
-	kint32						param3;
-	kint32						param4;
+	gint32						ret;
+	gint32						param2;
+	gint32						param3;
+	gint32						param4;
 	E_IM_MIPI_ACTIVE_DATA_LANE	lane;
 	E_IM_MIPI_PHY_SHUTDOWNZ		power;
 	E_IM_MIPI_SHUTDOWNZ			reset;
 	T_IM_MIPI_DPI_LANE_INFO		laneInfo;
 	T_IM_MIPI_DPI_RESOLUTION	dpi;
 	T_IM_MIPI_TRANS_CONFIG		config;
-	kuchar						headerNum;
-	kuchar						payloadNum;
-	kuchar						count;
+	guchar						headerNum;
+	guchar						payloadNum;
+	guchar						count;
 	E_IM_MIPI_INT_TYPE			interruptType;
 	VP_CALLBACK					vpCallback;
 	U_IM_MIPI_INT_MSK1			intMsk1;
@@ -85,11 +116,8 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 
 	// 1st param check
 	if( strcmp(argv[1], "init") == 0 ) {
-		// Init
-		// 2nd param check
 		param2 = atoi((const char *)argv[2]);
 		if ((param2 >= E_IM_MIPI_ACTIVE_DATA_LANE_1) && (param2 <= E_IM_MIPI_ACTIVE_DATA_LANE_4)) {
-			// set paramter
 			lane = (E_IM_MIPI_ACTIVE_DATA_LANE)param2;
 		}
 		else {
@@ -145,15 +173,11 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 		ct_im_mipi_pclk_off();
 	}
 	else if ( strcmp(argv[1], "ulps") == 0 ) {
-		// 2nd param check
 		if( strcmp(argv[2], "enter") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 == 0) {
-				// 4th param check
 				param4 = atoi((const char *)argv[4]);
 				if (param4 == 0) {
-					// register setting
 					ct_im_mipi_pclk_on();
 					IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txrequlpsclk		= 0;
 					IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txexitulpsclk	= 0;
@@ -171,7 +195,6 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 				}
 			}
 			else if (param3 == 1) {
-				// Invalid setting (Status NG)
 				ct_im_mipi_pclk_on();
 				IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txrequlpsclk		= 1;
 				IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txexitulpsclk	= 1;
@@ -183,7 +206,6 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 				ct_im_mipi_pclk_off();
 			}
 			else if (param3 == 2) {
-				// Invalid setting (Data lane setting unmatch)
 				ct_im_mipi_pclk_on();
 				IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txrequlpsclk		= 0;
 				IO_DISP.MIPI_DSI.PHY_ULPS_CTRL.bit.phy_txexitulpsclk	= 0;
@@ -201,7 +223,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Enter_Ulps();
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Enter_Ulps() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -219,10 +241,8 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 		}
 		else if( strcmp(argv[2], "exit") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 == 0) {
-				// 4th param check
 				param4 = atoi((const char *)argv[4]);
 				if (param4 == 0) {
 					// register setting
@@ -258,7 +278,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Exit_Ulps();
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Exit_Ulps() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -281,12 +301,9 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 		}
 	}
 	else if ( strcmp(argv[1], "lane") == 0 ) {
-		// 2nd param check
 		if( strcmp(argv[2], "set") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 != 0) {
-				// Invalid parameter (laneInfo = NULL)
 				ret = Im_MIPI_Set_Lane_Info(NULL);
 				Ddim_Print(("Im_MIPI_Set_Lane_Info() : Error  err_code=0x%x\n", ret));
 				// end
@@ -326,10 +343,9 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Set_Lane_Info(&laneInfo);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Set_Lane_Info() : Normal end\n"));
 				ct_im_mipi_pclk_on();
-				// check get data
 				Ddim_Print( ("----------\n") );
 				Ddim_Print( ("register:\n") );
 				Ddim_Print( ("PHY_SETUP_CL = 0x%lx\n", IO_DISP.MIPI_DSI.PHY_SETUP_CL.word) );
@@ -343,14 +359,11 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 		}
 		else if( strcmp(argv[2], "get") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 == 0) {
-				// table clear.
 				memset( &laneInfo, 0, sizeof( T_IM_MIPI_DPI_LANE_INFO ) );
 			}
 			else {
-				// Invalid parameter (laneInfo = NULL)
 				ret = Im_MIPI_Get_Lane_Info(NULL);
 				Ddim_Print(("Im_MIPI_Get_Lane_Info() : Error  err_code=0x%x\n", ret));
 				// end
@@ -358,7 +371,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Get_Lane_Info(&laneInfo);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Get_Lane_Info() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -385,22 +398,16 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 		}
 	}
 	else if ( strcmp(argv[1], "dpi") == 0 ) {
-		// 2nd param check
 		if( strcmp(argv[2], "set") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 != 0) {
-				// Invalid parameter (dpi = NULL)
 				ret = Im_MIPI_Set_DPI_Resolution(NULL);
 				Ddim_Print(("Im_MIPI_Set_DPI_Resolution() : Error  err_code=0x%x\n", ret));
-				// end
 				return;
 			}
 
-			// 4th param check
 			param4 = atoi((const char *)argv[4]);
 			if (param4 == 0) {
-				// set paramter.
 				dpi.lane								= E_IM_MIPI_ACTIVE_DATA_LANE_1;
 				dpi.vcid								= 0;
 				dpi.color_coding						= D_IM_MIPI_COLOR_CODING_16BIT_CONFIG1;
@@ -482,16 +489,14 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 				dpi.cmd_mode_cfg.bit.dcs_lw_tx			= 1;
 			}
 			else {
-				// end
 				Ddim_Print(("!! 4th parameter fraud : %d\n", param4));
 				return;
 			}
 
 			ret = Im_MIPI_Set_DPI_Resolution(&dpi);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Set_DPI_Resolution() : Normal end\n"));
 				ct_im_mipi_pclk_on();
-				// check get data
 				Ddim_Print( ("----------\n") );
 				Ddim_Print( ("register:\n") );
 				Ddim_Print( ("PHY_IF_CFG        = 0x%lx\n", IO_DISP.MIPI_DSI.PHY_IF_CFG.word) );
@@ -519,14 +524,12 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 		}
 		else if( strcmp(argv[2], "get") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 == 0) {
 				// table clear.
 				memset( &dpi, 0, sizeof( T_IM_MIPI_DPI_RESOLUTION ) );
 			}
 			else {
-				// Invalid parameter (dpi = NULL)
 				ret = Im_MIPI_Get_DPI_Resolution(NULL);
 				Ddim_Print(("Im_MIPI_Get_DPI_Resolution() : Error  err_code=0x%x\n", ret));
 				// end
@@ -534,7 +537,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Get_DPI_Resolution(&dpi);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Get_DPI_Resolution() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -584,24 +587,20 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 		}
 		else if( strcmp(argv[2], "update") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 == 0) {
-				// Set register
 				ct_im_mipi_pclk_on();
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_en	= D_IM_MIPI_ENABLE_ON;
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_req	= D_IM_MIPI_ENABLE_OFF;
 				ct_im_mipi_pclk_off();
 			}
 			else if (param3 == 1) {
-				// Invalid register (Update disable)
 				ct_im_mipi_pclk_on();
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_en	= D_IM_MIPI_ENABLE_OFF;
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_req	= D_IM_MIPI_ENABLE_OFF;
 				ct_im_mipi_pclk_off();
 			}
 			else if (param3 == 2) {
-				// Invalid register (Updateing now)
 				ct_im_mipi_pclk_on();
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_en	= D_IM_MIPI_ENABLE_ON;
 				IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.bit.vid_shadow_req	= D_IM_MIPI_ENABLE_ON;
@@ -614,10 +613,9 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Update_Dpi();
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Update_Dpi() : Normal end\n"));
 				ct_im_mipi_pclk_on();
-				// check get data
 				Ddim_Print( ("----------\n") );
 				Ddim_Print( ("register:\n") );
 				Ddim_Print( ("VID_SHADOW_CTRL = 0x%lx\n", IO_DISP.MIPI_DSI.VID_SHADOW_CTRL.word) );
@@ -629,25 +627,20 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 		}
 		else {
-			// end
 			Ddim_Print(("!! 2nd parameter fraud\n"));
 			return;
 		}
 	}
 	else if ( strcmp(argv[1], "tc") == 0 ) {
-		// 2nd param check
 		if( strcmp(argv[2], "set") == 0 ) {
-			// 3rd param check
 			param3 = atoi((const char *)argv[3]);
 			if (param3 != 0) {
-				// Invalid parameter (config = NULL)
 				ret = Im_MIPI_Set_Transmission_Configuration(NULL);
 				Ddim_Print(("Im_MIPI_Set_Transmission_Configuration() : Error  err_code=0x%x\n", ret));
 				// end
 				return;
 			}
 
-			// 4th param check
 			param4 = atoi((const char *)argv[4]);
 			if (param4 == 0) {
 				// set paramter.
@@ -670,16 +663,14 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 				config.phy_tmr_cfg.bit.phy_hs2lp_time			= 255;
 			}
 			else {
-				// end
 				Ddim_Print(("!! 4th parameter fraud : %d\n", param4));
 				return;
 			}
 
 			ret = Im_MIPI_Set_Transmission_Configuration(&config);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Set_Transmission_Configuration() : Normal end\n"));
 				ct_im_mipi_pclk_on();
-				// check register
 				Ddim_Print( ("----------\n") );
 				Ddim_Print( ("CLKMGR_CFG     = 0x%lx\n", IO_DISP.MIPI_DSI.CLKMGR_CFG.word) );
 				Ddim_Print( ("DPI_LP_CMD_TIM = 0x%lx\n", IO_DISP.MIPI_DSI.DPI_LP_CMD_TIM.word) );
@@ -708,7 +699,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Get_Transmission_Configuration(&config);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Get_Transmission_Configuration() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -785,7 +776,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 		headerNum	= 1;
 		payloadNum	= 1;
 		ret = Im_MIPI_Packet_Transmission(headerNum, payloadNum, S_GCT_IM_MIPI_HEADER, S_GCT_IM_MIPI_PAYLOAD);
-		if (ret == D_DDIM_OK) {
+		if (ret == DriverCommon_D_DDIM_OK) {
 			Ddim_Print(("Im_MIPI_Packet_Transmission() : Normal end\n"));
 			ct_im_mipi_pclk_on();
 			// check register
@@ -890,7 +881,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Get_Int_Mask(&intMsk1);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Get_Int_Mask() : Normal end\n"));
 				ct_im_mipi_pclk_on();
 				// check get data
@@ -940,7 +931,7 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			}
 
 			ret = Im_MIPI_Set_Int_Callback(interruptType, vpCallback);
-			if (ret == D_DDIM_OK) {
+			if (ret == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MIPI_Set_Int_Callback() : Normal end\n"));
 			}
 			else {
@@ -974,20 +965,17 @@ void Ct_Im_Mipi_Main(kint32 argc, kchar** argv)
 			Ddim_Print(("!! 2nd parameter fraud : %d\n", param2));
 			return;
 		}
-
-		// Interrupt Handler.
 		Im_MIPI_Int_Handler();
 		Ddim_Print(("Im_MIPI_Int_Handler() : Normal end\n"));
 	}
 	else{
 		Ddim_Print( ("please check 1st parameter!\n") );
 	}
-
 	return ;
 }
 
-CtImMipiMain* ct_im_mipi_main_new(void) 
+CtImMipiMain *ct_im_mipi_main_new(void) 
 {
-    CtImMipiMain *self = k_object_new_with_private(CT_TYPE_IM_MIPI_MAIN, sizeof(CtImMipiMainPrivate));
+    CtImMipiMain *self = g_object_new(CT_TYPE_IM_MIPI_MAIN, NULL);
     return self;
 }

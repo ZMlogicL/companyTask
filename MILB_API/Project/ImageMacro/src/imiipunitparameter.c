@@ -14,33 +14,55 @@
 #include "imiipunitparameter.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipUnitParameter, im_iip_unit_parameter);
-#define IM_IIP_UNIT_PARAMETER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipUnitParameterPrivate, IM_TYPE_IIP_UNIT_PARAMETER))
+G_DEFINE_TYPE(ImIipUnitParameter, im_iip_unit_parameter, G_TYPE_OBJECT);
+#define IM_IIP_UNIT_PARAMETER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_UNIT_PARAMETER, ImIipUnitParameterPrivate));
 
 
 struct _ImIipUnitParameterPrivate
 {
-	kint a;
+	gint a;
 };
 
 
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_unit_parameter_constructor(ImIipUnitParameter *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_unit_parameter_class_init(ImIipUnitParameterClass *klass)
 {
-//	ImIipUnitParameterPrivate *priv = IM_IIP_UNIT_PARAMETER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipUnitParameterPrivate));
 }
 
-static void im_iip_unit_parameter_destructor(ImIipUnitParameter *self)
+static void 		im_iip_unit_parameter_init(ImIipUnitParameter *self)
 {
-//	ImIipUnitParameterPrivate *priv = IM_IIP_UNIT_PARAMETER_GET_PRIVATE(self);
+	ImIipUnitParameterPrivate *priv = IM_IIP_UNIT_PARAMETER_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipUnitParameterPrivate *priv = IM_IIP_UNIT_PARAMETER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_unit_parameter_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipUnitParameterPrivate *priv = IM_IIP_UNIT_PARAMETER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_unit_parameter_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipUnitParameter* im_iip_unit_parameter_new(void)
+ImIipUnitParameter* 		im_iip_unit_parameter_new(void)
 {
-	ImIipUnitParameter *self = k_object_new_with_private(IM_TYPE_IIP_UNIT_PARAMETER, sizeof(ImIipUnitParameterPrivate));
+	ImIipUnitParameter *self = g_object_new(IM_TYPE_IIP_UNIT_PARAMETER, NULL);
 	return self;
 }
+
+

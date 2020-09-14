@@ -113,7 +113,7 @@ struct _DdIpcu
 	kulong maskChBit; /**< Mask ch bit (Bit position is equal to ch No.)	*/
 	kulong sendData[9]; /**< Send data		*/
 	kulong dataSize; /**< Send data size */
-//	VpCallback			ack_func;			/**< ACK function pointer */
+//	VpCallbackFunc			ack_func;			/**< ACK function pointer */
 };
 
 
@@ -126,7 +126,7 @@ Execute exclusive control for designated IPCU unit and Mailbox.<br>
 @param [in]	mbNum 	Mailbox No.(0 to 15)
 @param [in] tmout	Time of timeout<br>
 					<ul><li>Positive Value(Time of timeout)
-						<li>@ref D_DDIM_USER_SEM_WAIT_POL
+						<li>@ref DdimUserCustom_SEM_WAIT_POL
 						<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
 @param [out] id		IPCU ID(0 to 15)
 @retval		D_DDIM_OK					: OK
@@ -168,8 +168,8 @@ Start sending data.
 @param [in]  id		IPCU ID(0 to 17)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
-@remarks	This API uses DDIM_User_Clr_Flg().
-@remarks	This API uses DDIM_User_Twai_Flg().
+@remarks	This API uses DDIM_User_Clr_Flg ().
+@remarks	This API uses DDIM_User_Twai_Flg ().
 */
 kint32				dd_ipcu_start(DdIpcu *self, kuchar id );
 
@@ -187,7 +187,7 @@ Get Request data to global variable.
 @param [in] intCh	Interrupt CH number(0 to 15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
-@remarks	This API uses DDIM_User_Set_Flg().
+@remarks	This API uses DDIM_User_Set_Flg ().
 */
 kint32				dd_ipcu_start_ack_proc(DdIpcu *self, kulong mbNum, kulong intCh );
 
@@ -349,12 +349,12 @@ kint32				dd_ipcu_clr_mb_dst(DdIpcu *self, kuchar id, kulong dst );
 /**
 Set Transfer data
 @param [in] id		IPCU ID(0 to 17)
-@param [in] dat_num	Transfer data No.
+@param [in] datNum	Transfer data No.
 @param [in] data 	Transfer data
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_set_mb_data(DdIpcu *self, kuchar id, kuchar dat_num, kulong data );
+kint32				dd_ipcu_mb_set_mb_data(DdIpcu *self, kuchar id, kuchar datNum, kulong data );
 
 /**
 Get MailBox status

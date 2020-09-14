@@ -55,14 +55,14 @@ static void ct_im_pro_8_constructor(CtImPro8 *self)
     priv->sentopCtrl.sencoreHmaxSizeCtrl = ImproSentop_E_IM_PRO_SENTOP_SENCORE_MAX_HSIZE_CTRL_1;
     priv->sentopCtrl.ldivHmaxSizeCtrl = ImproSentop_E_IM_PRO_SENTOP_LDIV_MAX_HSIZE_CTRL_1;
     priv->sentopCtrl.ldivMultiChInputCtrl = ImproSentop_E_IM_PRO_SENTOP_LDIV_MULTI_INPUT_CTRL_DISABLE;
-    priv->sentopCtrl.firstPixel[0][0] = E_IM_PRO_ORG_R;
-    priv->sentopCtrl.firstPixel[0][1] = E_IM_PRO_ORG_GB;
-    priv->sentopCtrl.firstPixel[1][0] = E_IM_PRO_ORG_R;
-    priv->sentopCtrl.firstPixel[1][1] = E_IM_PRO_ORG_GB;
-    priv->sentopCtrl.firstPixel[2][0] = E_IM_PRO_ORG_R;
-    priv->sentopCtrl.firstPixel[2][1] = E_IM_PRO_ORG_GB;
-    priv->sentopCtrl.firstPixel[3][0] = E_IM_PRO_ORG_R;
-    priv->sentopCtrl.firstPixel[3][1] = E_IM_PRO_ORG_GB;
+    priv->sentopCtrl.firstPixel[0][0] = ImPro_ORG_R;
+    priv->sentopCtrl.firstPixel[0][1] = ImPro_ORG_GB;
+    priv->sentopCtrl.firstPixel[1][0] = ImPro_ORG_R;
+    priv->sentopCtrl.firstPixel[1][1] = ImPro_ORG_GB;
+    priv->sentopCtrl.firstPixel[2][0] = ImPro_ORG_R;
+    priv->sentopCtrl.firstPixel[2][1] = ImPro_ORG_GB;
+    priv->sentopCtrl.firstPixel[3][0] = ImPro_ORG_R;
+    priv->sentopCtrl.firstPixel[3][1] = ImPro_ORG_GB;
 
     priv->bsCtrl.shiftValue[0] = ImproSentop_E_IM_PRO_SENTOP_BS_SHIFT_2BIT;
     priv->bsCtrl.shiftValue[1] = ImproSentop_E_IM_PRO_SENTOP_BS_SHIFT_2BIT;
@@ -104,8 +104,8 @@ static void ct_im_pro_8_constructor(CtImPro8 *self)
     priv->ldivArea.outWidth[2] = 0;
     priv->ldivArea.outWidth[3] = 0;
 
-    priv->intCtrl.intMode = E_IM_PRO_INT_INTMD_OR;
-    priv->intCtrl.vdEnable.interruptBit = D_IM_PRO_INT_VDF00;
+    priv->intCtrl.intMode = ImPro_INT_INTMD_OR;
+    priv->intCtrl.vdEnable.interruptBit = ImPro_INT_VDF00;
     priv->intCtrl.vdEnable.permissionFlg = 1;
     priv->intCtrl.hdEnable.interruptBit = 0;
     priv->intCtrl.hdEnable.permissionFlg = 0;
@@ -150,36 +150,38 @@ void ct_im_pro_8_1(CtImPro8 *self, const kuint32 idx )
     };
 
     // Initialization of sen macro
-    ercd = Im_PRO_SENTOP_SW_Reset();
+    ercd = impro_sentop_sw_reset();
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "Im_PRO_SENTOP_SW_Reset() Error ercd=0x%x\n", ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_sw_reset() Error ercd=0x%x\n", ercd ));
         return;
     } else {
     }
     impro_sentop_init();
 
     clkType    = ImproSentop_E_IM_PRO_SENTOP_CLK_TYPE_SENSORCLK;
-    onOff      = D_IM_PRO_CLOCK_ON;
+    onOff      = ImPro_CLOCK_ON;
     waitSkip   = 0;
     ercd = impro_sentop_control_clock( clkType, onOff, waitSkip );
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "impro_sentop_control_clock( %u, %u, %u ) Error ercd=0x%x\n", clkType, onOff, waitSkip, ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_control_clock( %u, %u, %u ) Error ercd=0x%x\n", 
+        clkType, onOff, waitSkip, ercd ));
         return;
     } else {
     }
 
     clkType    = ImproSentop_E_IM_PRO_SENTOP_CLK_TYPE_APCLK0;
-    onOff      = D_IM_PRO_CLOCK_ON;
+    onOff      = ImPro_CLOCK_ON;
     waitSkip   = 0;
     ercd = impro_sentop_control_clock( clkType, onOff, waitSkip );
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "impro_sentop_control_clock( %u, %u, %u ) Error ercd=0x%x\n", clkType, onOff, waitSkip, ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_control_clock( %u, %u, %u ) Error ercd=0x%x\n", 
+        clkType, onOff, waitSkip, ercd ));
         return;
     } else {
     }
 
     clkType    = ImproSentop_E_IM_PRO_SENTOP_CLK_TYPE_APCLK2;
-    onOff      = D_IM_PRO_CLOCK_ON;
+    onOff      = ImPro_CLOCK_ON;
     waitSkip   = 0;
     ercd = impro_sentop_control_clock( clkType, onOff, waitSkip );
     if( ercd != DdimUserCustom_E_OK ) {
@@ -196,98 +198,98 @@ void ct_im_pro_8_1(CtImPro8 *self, const kuint32 idx )
         return;
     } else {
     }
-    im_pro_1_0_print_4(NULL,"", &priv->sentopCtrl);
+    im_pro_1_0_print_4(im_pro_1_0_print_get(), "", &priv->sentopCtrl);
 
-    ercd = Im_PRO_SENTOP_BS_Ctrl( &priv->bsCtrl );
+    ercd = impro_sentop_bs_ctrl( &priv->bsCtrl );
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "Im_PRO_SENTOP_BS_Ctrl() Error ercd=0x%x\n", ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_bs_ctrl() Error ercd=0x%x\n", ercd ));
         return;
     } else {
     }
-    im_pro_1_0_print_5(NULL, "", &priv->bsCtrl );
+    im_pro_1_0_print_5(im_pro_1_0_print_get(), "", &priv->bsCtrl );
 
-    ercd = Im_PRO_SENTOP_OBT_Ctrl( &obtCtrl );
+    ercd = impro_sentop_obt_ctrl( &obtCtrl );
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "Im_PRO_SENTOP_OBT_Ctrl() min_para Error ercd=0x%x\n", ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_obt_ctrl() min_para Error ercd=0x%x\n", ercd ));
         return;
     } else {
     }
-    im_pro_1_0_print_6(NULL, "", &obtCtrl );
+    im_pro_1_0_print_6(im_pro_1_0_print_get(), "", &obtCtrl );
 
-    ercd = Im_PRO_SENTOP_OBT_Set_Weight_Coeff( &priv->obtWeightCoeff );
+    ercd = impro_sentop_obt_set_weight_coeff( &priv->obtWeightCoeff );
     if( ercd != DdimUserCustom_E_OK ) {
-        DriverCommon_DDIM_PRINT(( "Im_PRO_SENTOP_OBT_Set_Weight_Coeff() min_para Error ercd=0x%x\n", ercd ));
+        DriverCommon_DDIM_PRINT(( "impro_sentop_obt_set_weight_coeff() min_para Error ercd=0x%x\n", ercd ));
         return;
     } else {
     }
-    im_pro_1_0_print_7(NULL, "", &priv->obtWeightCoeff );
+    im_pro_1_0_print_7(im_pro_1_0_print_get(), "", &priv->obtWeightCoeff );
 
 	// VD interrupt configuration
 	interrupt_clear1_sentop_interrupt_ctrl( &priv->intCtrl );
 	interrupt_sen_set_vd_int_handler( &priv->callbackCfg );
 
 	// SLVS-EC configuration
-	im_pro_8_1_slvs_init_combo_phy(NULL);
-	im_pro_8_1_slvs_init(NULL);
+	im_pro_8_1_slvs_init_combo_phy(im_pro_8_1_slvs_get());
+	im_pro_8_1_slvs_init(im_pro_8_1_slvs_get());
 
 	// ldiv configuration
     ercd = impro_sensldiv_ctrl( ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivCtrl );
     if( ercd != DdimUserCustom_E_OK ) {
         DriverCommon_DDIM_PRINT(( "impro_sensldiv_ctrl() max_para Error ercd=0x%x\n", ercd ));
     } else {
-        im_pro_1_3_print_2(NULL, "", ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivCtrl );
+        im_pro_1_3_print_2(im_pro_1_3_print_get(), "", ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivCtrl );
     }
 
     ercd = impro_sensldiv_set_area( ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivArea );
     if( ercd != DdimUserCustom_E_OK ) {
         DriverCommon_DDIM_PRINT(( "impro_sensldiv_set_area() min_para Error ercd=0x%x\n", ercd ));
     } else {
-        im_pro_1_3_print_3(NULL, "", ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivArea );
+        im_pro_1_3_print_3(im_pro_1_3_print_get(), "", ImproSensldiv_E_IM_PRO_LDIV_CH_0, &priv->ldivArea );
     }
 
 	// P2M/PWCH configuration
-    im_pro_8_1_slvs_raw_output(NULL);
+    im_pro_8_1_slvs_raw_output(im_pro_8_1_slvs_get());
 
 	//sg configuration
-	Im_PRO_SG_Ctrl( 0, &priv->sgCtrl );
+	impro_sensg_ctrl( 0, &priv->sgCtrl );
 }
 
 void ct_im_pro_8_2(CtImPro8 *self, const kuint32 idx )
 {
-    E_IM_PRO_P2M_CH		p2mOddCh	 = E_IM_PRO_P2M_CH0;
-	E_IM_PRO_P2M_CH		p2mEvenCh	 = E_IM_PRO_P2M_CH1;
-	E_IM_PRO_PWCH		pwchOddCh	 = E_IM_PRO_PWCH_0;
-	E_IM_PRO_PWCH		pwchEvenCh = E_IM_PRO_PWCH_1;
+    EImProP2mCh		p2mOddCh	 = ImProP2m_CH0;
+	EImProP2mCh		p2mEvenCh	 = ImProP2m_CH1;
+	EImProPwch		pwchOddCh	 = ImProPwch_0;
+	EImProPwch		pwchEvenCh = ImProPwch_1;
 
 	// sg
-	Im_PRO_SG_Start( 0 );
+	impro_sensg_start( 0 );
 
 	// P2M/PWCH
-	Im_PRO_PWch_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh );
-	Im_PRO_P2M_Set_PAEN( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh, 1 );
-	Im_PRO_P2M_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh );
-	Im_PRO_PWch_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh );
-	Im_PRO_P2M_Set_PAEN( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh, 1 );
-	Im_PRO_P2M_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh );
+	im_pro_pommon_list_pwch_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh );
+	im_pro_pommon_list_p2m_set_paen( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh, 1 );
+	im_pro_pommon_list_p2m_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh );
+	im_pro_pommon_list_pwch_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh );
+	im_pro_pommon_list_p2m_set_paen( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh, 1 );
+	im_pro_pommon_list_p2m_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh );
 
-	p2mOddCh	 = E_IM_PRO_P2M_CH2;
-	p2mEvenCh	 = E_IM_PRO_P2M_CH3;
-	pwchOddCh	 = E_IM_PRO_PWCH_2;
-	pwchEvenCh	    = E_IM_PRO_PWCH_3;
+	p2mOddCh	 = ImProP2m_CH2;
+	p2mEvenCh	 = ImProP2m_CH3;
+	pwchOddCh	 = ImProPwch_2;
+	pwchEvenCh	 = ImProPwch_3;
 
-	Im_PRO_PWch_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchOddCh );
-	Im_PRO_P2M_Set_PAEN( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh, 1 );
-	Im_PRO_P2M_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mOddCh );
-	Im_PRO_PWch_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, pwchEvenCh );
-	Im_PRO_P2M_Set_PAEN( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh, 1 );
-	Im_PRO_P2M_Start( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_BLOCK_TYPE_SEN, p2mEvenCh );
+	im_pro_pommon_list_pwch_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchOddCh );
+	im_pro_pommon_list_p2m_set_paen( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh, 1 );
+	im_pro_pommon_list_p2m_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mOddCh );
+	im_pro_pommon_list_pwch_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, pwchEvenCh );
+	im_pro_pommon_list_p2m_set_paen( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh, 1 );
+	im_pro_pommon_list_p2m_start( ImPro_UNIT_NUM_1, ImPro_BLOCK_TYPE_SEN, p2mEvenCh );
 
 	// ldiv
-	Im_PRO_LDIV_Set_PAEN( ImproSensldiv_E_IM_PRO_LDIV_CH_0, 1 );
-	Im_PRO_LDIV_Start( ImproSensldiv_E_IM_PRO_LDIV_CH_0 );
+	impro_sensldiv_set_paen( ImproSensldiv_E_IM_PRO_LDIV_CH_0, 1 );
+	impro_sensldiv_start( ImproSensldiv_E_IM_PRO_LDIV_CH_0 );
 
 	// SLVS-EC
-	Im_PRO_SLVS_Start( E_IM_PRO_SLVS_STREAM_TYPE_A );
+	impro_senslvs_status( ImPro_SLVS_STREAM_TYPE_A );
 }
 
 void ct_im_pro_8_3(CtImPro8 *self, const kuint32 idx )

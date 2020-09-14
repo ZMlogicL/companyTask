@@ -15,7 +15,7 @@
 
 #include "klib.h"
 #include "pmc.h"
-#include "dd_arm.h"
+#include "ddarm.h"
 
 
 #define DD_TYPE_PMU				(dd_pmu_get_type())
@@ -56,7 +56,7 @@ Get status of PMU PD.
 @retval	D_DDIM_OK					: Normal end
 @retval	DdPmu_INPUT_PARAM_ERR	: Input Parameter Error
 */
-INT32 		dd_pmu_get_status(DdPmu *self, DdPmuPdType pdType, ULONG* value);
+INT32 		dd_pmu_get_status(DdPmu *self, DdPmuPdType pdType, kulong* value);
 
 /**
 Power Management Controller .<br>

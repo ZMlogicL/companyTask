@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-04
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMxicMain类
 *@rely                :klib
@@ -13,7 +13,7 @@
 */
 
 #include "im_mxic.h"
-#include "ct_im_mxic.h"
+//#include "ct_im_mxic.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -30,54 +30,77 @@
 
 #include "ctimmxicmain1.h"
 #include "ctimmxicmain2.h"
+
 #include "ctimmxicmain.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicMain, ct_im_mxic_main);
-#define CT_IM_MXIC_MAIN_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicMainPrivate,CT_TYPE_IM_MXIC_MAIN))
+
+G_DEFINE_TYPE(CtImMxicMain, ct_im_mxic_main, G_TYPE_OBJECT);
+#define CT_IM_MXIC_MAIN_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_MAIN, CtImMxicMainPrivate))
 
 struct _CtImMxicMainPrivate
 {
 	CtImMxicMain2* ctImMxicMain2;
 };
 
-
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
 #ifdef CO_ACT_MXIC_HCLOCK
-extern volatile kuchar gIM_MXIC_Hclk_Ctrl_Cnt;
+extern volatile guchar gIM_MXIC_Hclk_Ctrl_Cnt;
 #endif // CO_ACT_MXIC_HCLOCK
 #ifdef CO_ACT_MXIC_PCLOCK
-extern volatile kuchar gIM_MXIC_Pclk_Ctrl_Cnt;
+extern volatile guchar gIM_MXIC_Pclk_Ctrl_Cnt;
 #endif // CO_ACT_MXIC_PCLOCK
 
 /*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+/*
 *IMPL
 */
-static void ct_im_mxic_main_constructor(CtImMxicMain *self) 
+
+static void ct_im_mxic_main_class_init(CtImMxicMainClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicMainPrivate));
+}
+
+static void ct_im_mxic_main_init(CtImMxicMain *self)
 {
 	CtImMxicMainPrivate *priv = CT_IM_MXIC_MAIN_GET_PRIVATE(self);
 	priv->ctImMxicMain2 = ct_im_mxic_main2_new();
-
 }
 
-static void ct_im_mxic_main_destructor(CtImMxicMain *self) 
+static void dispose_od(GObject *object)
 {
+	CtImMxicMain *self = (CtImMxicMain*)object;
 	CtImMxicMainPrivate *priv = CT_IM_MXIC_MAIN_GET_PRIVATE(self);
 	if(priv->ctImMxicMain2){
-		k_object_unref(priv->ctImMxicMain2);
+		g_object_unref(priv->ctImMxicMain2);
+		priv->ctImMxicMain2=NULL;
 	}
-	priv->ctImMxicMain2=NULL;
+	G_OBJECT_CLASS(ct_im_mxic_main_parent_class)->dispose(object);
 }
+
+static void finalize_od(GObject *object)
+{
+	CtImMxicMain *self = (CtImMxicMain*)object;
+	CtImMxicMainPrivate *priv = CT_IM_MXIC_MAIN_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
 */
-void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
+void Ct_Im_MXIC_Main(gint32 argc, gchar** argv)
 {
-	kuchar	thstopEnable;
-	kuchar	monState;
-	kuint32	monResult;
+	guchar	thstopEnable;
+	guchar	monState;
+	guint32	monResult;
 
 	T_IM_MXIC_HISTORY_MONITOR				history;
 	T_IM_MXIC_ALL_HISTORY_MONITOR			allHistory;
@@ -113,8 +136,8 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						//           P1: THSTOP enable (0:Disable, 1:Enable)
 						if(argc >= 6) {
 							priv->ctImMxicMain2->ctImMxicMain1->result =
-									Im_MXIC_Set_History_Monitor_Stop_Enable((kuchar)atoi((const char *)argv[5]));
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+									Im_MXIC_Set_History_Monitor_Stop_Enable((guchar)atoi((const char *)argv[5]));
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								Ddim_Print(("Im_MXIC_Set_History_Monitor_Stop_Enable OK.\n"));
 							}
 							else {
@@ -130,7 +153,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						// [command] immxic monitor hist thstop get
 						priv->ctImMxicMain2->ctImMxicMain1->result =
 								Im_MXIC_Get_History_Monitor_Stop_Enable(&thstopEnable);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("thstopEnable = %d\n", thstopEnable));
 							Ddim_Print(("Im_MXIC_Get_History_Monitor_Stop_Enable OK.\n"));
 						}
@@ -154,7 +177,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 															(E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[5]),
 															(E_IM_MXIC_PORT)atoi((const char *)argv[6]),
 															&history);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							ct_im_mxic_print_history_monitor(&history);
 							Ddim_Print(("Im_MXIC_Get_History_Monitor OK.\n"));
 						}
@@ -170,7 +193,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 				else if (strcmp((const char *)argv[3], "all") == 0) {
 					// [command] immxic monitor hist all
 					priv->ctImMxicMain2->ctImMxicMain1->result = Im_MXIC_Get_History_Monitor_All_Port(&allHistory);
-					if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+					if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_all_history_monitor(&allHistory);
 						Ddim_Print(("Im_MXIC_Get_History_Monitor_All_Port OK.\n"));
 					}
@@ -192,7 +215,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						priv->ctImMxicMain2->ctImMxicMain1->result =
 								Im_MXIC_Get_Slot_Status_Monitor_All_Arbiter(priv->ctImMxicMain2->ctImMxicMain1->unit,
 										&allSlotStatus);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							ct_im_mxic_print_all_slot_status_monitor( &allSlotStatus);
 							Ddim_Print(("Im_MXIC_Get_Slot_Status_Monitor_All_Arbiter OK.\n"));
 						}
@@ -211,7 +234,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 									Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter(priv->ctImMxicMain2->ctImMxicMain1->unit,
 											(E_IM_MXIC_W_ARBITER)atoi((const char *)argv[6]),
 											&priv->ctImMxicMain2->ctImMxicMain1->wSlotStatus);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								ct_im_mxic_print_w_arbiter_assign(
 										&priv->ctImMxicMain2->ctImMxicMain1->wSlotStatus);
 								Ddim_Print(("Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter OK.\n"));
@@ -235,7 +258,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 									Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter(priv->ctImMxicMain2->ctImMxicMain1->unit,
 											(E_IM_MXIC_R_ARBITER)atoi((const char *)argv[6]),
 											&priv->ctImMxicMain2->ctImMxicMain1->rSlotStatus);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								ct_im_mxic_print_r_arbiter_assign(
 										&priv->ctImMxicMain2->ctImMxicMain1->rSlotStatus);
 								Ddim_Print(("Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter OK.\n"));
@@ -256,7 +279,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 							priv->ctImMxicMain2->ctImMxicMain1->result =
 									Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter_Group(
 											(E_IM_MXIC_W_ARBITER_GR)atoi((const char *)argv[5]), &wGrSlotStatus);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								ct_im_mxic_print_w_arbiter_assign_group( &wGrSlotStatus);
 								Ddim_Print(("Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter_Group OK.\n"));
 							}
@@ -276,7 +299,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 							priv->ctImMxicMain2->ctImMxicMain1->result =
 									Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter_Group(
 											(E_IM_MXIC_R_ARBITER_GR)atoi((const char *)argv[5]), &rGrSlotStatus);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								ct_im_mxic_print_r_arbiter_assign_group( &rGrSlotStatus);
 								Ddim_Print(("Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter_Group OK.\n"));
 							}
@@ -299,7 +322,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 					priv->ctImMxicMain2->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					priv->ctImMxicMain2->ctImMxicMain1->result =
 						Im_MXIC_Get_Master_Status_Monitor(priv->ctImMxicMain2->ctImMxicMain1->unit, &masterStatus);
-					if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+					if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_master_status_monitor( &masterStatus);
 						Ddim_Print(("Im_MXIC_Get_Master_Status_Monitor OK.\n"));
 					}
@@ -321,12 +344,12 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 							// Get parameter for Im_MXIC_Set_Access_Or_Trans_Monitor_Parameter function.
 							priv->ctImMxicMain2->ctImMxicMain1->result =
 									ct_im_mxic_create_access_or_trans_monitor_param(
-											(kuchar)atoi((const char *)argv[5]), &monParam);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+											(guchar)atoi((const char *)argv[5]), &monParam);
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								// Execute function.
 								priv->ctImMxicMain2->ctImMxicMain1->result =
 										Im_MXIC_Set_Access_Or_Trans_Monitor_Parameter(&monParam);
-								if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+								if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 									Ddim_Print(("Im_MXIC_Set_Access_Or_Trans_Monitor_Parameter OK.\n"));
 								}
 								else {
@@ -346,7 +369,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						// [command] immxic monitor acc param get
 						priv->ctImMxicMain2->ctImMxicMain1->result =
 								Im_MXIC_Get_Access_Or_Trans_Monitor_Parameter(&monParam);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							ct_im_mxic_print_monitor_parameter( &monParam);
 							Ddim_Print(("Im_MXIC_Get_Access_Or_Trans_Monitor_Parameter OK.\n"));
 						}
@@ -364,7 +387,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						// [command] immxic monitor acc priv->ctImMxicMain2->ctImMxicMain1->result all
 						priv->ctImMxicMain2->ctImMxicMain1->result =
 								Im_MXIC_Get_Access_Or_Trans_Monitor_All_Entry(&allAccTrans);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							ct_im_mxic_print_all_access_or_trans_monitor( &allAccTrans);
 							Ddim_Print(("Im_MXIC_Get_Access_Or_Trans_Monitor_All_Entry OK.\n"));
 						}
@@ -378,8 +401,8 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 						//           P1: Monitor number (0~3)
 						if(argc >= 6) {
 							priv->ctImMxicMain2->ctImMxicMain1->result =
-								Im_MXIC_Get_Access_Or_Trans_Monitor((kuchar)atoi((const char *)argv[5]), &monResult);
-							if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+								Im_MXIC_Get_Access_Or_Trans_Monitor((guchar)atoi((const char *)argv[5]), &monResult);
+							if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								Ddim_Print(("monResult = %d\n", monResult));
 								Ddim_Print(("Im_MXIC_Get_Access_Or_Trans_Monitor OK.\n"));
 							}
@@ -400,7 +423,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 					// [command] immxic monitor acc state
 					priv->ctImMxicMain2->ctImMxicMain1->result =
 							Im_MXIC_Get_Access_Or_Trans_Monitor_Limit_End_State(&monState);
-					if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+					if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("monState = %d\n", monState));
 						Ddim_Print(("Im_MXIC_Get_Access_Or_Trans_Monitor_Limit_End_State OK.\n"));
 					}
@@ -425,12 +448,12 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 				if (argc >= 5) {
 					priv->ctImMxicMain2->ctImMxicMain1->result =
 						ct_im_mxic_create_memory_access_start_trigger( atoi((const char *)argv[4]), &memoryAccess);
-					if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+					if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						priv->ctImMxicMain2->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 						priv->ctImMxicMain2->ctImMxicMain1->result =
 								Im_MXIC_Start_Memory_Access_Detect(priv->ctImMxicMain2->ctImMxicMain1->unit,
 										&memoryAccess);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Start_Memory_Access_Detect OK.\n"));
 						}
 						else {
@@ -462,10 +485,10 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 					priv->ctImMxicMain2->ctImMxicMain1->result =
 							ct_im_mxic_create_memory_access_param(
 									atoi((const char *)argv[4]), atoi((const char *)argv[5]), &memoryAccess);
-					if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+					if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						priv->ctImMxicMain2->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 						Im_MXIC_Set_Memory_Access_Detect(priv->ctImMxicMain2->ctImMxicMain1->unit, &memoryAccess);
-						if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+						if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Memory_Access_Detect OK.\n"));
 						}
 						else {
@@ -487,7 +510,7 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 				priv->ctImMxicMain2->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 				priv->ctImMxicMain2->ctImMxicMain1->result =
 						Im_MXIC_Get_Memory_Access_Detect(priv->ctImMxicMain2->ctImMxicMain1->unit, &memoryAccess);
-				if (priv->ctImMxicMain2->ctImMxicMain1->result == D_DDIM_OK) {
+				if (priv->ctImMxicMain2->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 					ct_im_mxic_print_memory_access_param(&memoryAccess);
 					Ddim_Print(("Im_MXIC_Get_Memory_Access_Detect OK.\n"));
 				}
@@ -859,8 +882,8 @@ void Ct_Im_MXIC_Main(kint32 argc, kchar** argv)
 		return;
 }
 
-CtImMxicMain* ct_im_mxic_main_new(void) 
+CtImMxicMain *ct_im_mxic_main_new(void) 
 {
-    CtImMxicMain *self = k_object_new_with_private(CT_TYPE_IM_MXIC_MAIN, sizeof(CtImMxicMainPrivate));
+    CtImMxicMain *self = g_object_new(CT_TYPE_IM_MXIC_MAIN, NULL);
     return self;
 }

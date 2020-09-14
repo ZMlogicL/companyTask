@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtMxicCheckErr1类
 *@rely                :klib
@@ -15,23 +15,36 @@
 #ifndef __CT_MXIC_CHECK_ERR1_H_
 #define __CT_MXIC_CHECK_ERR1_H_
 
-#include <klib.h>
+#include "./../../../fj/glib/src/gobject.h"
 
-#define CT_TYPE_MXIC_CHECK_ERR1					(ct_mxic_check_err1_get_type())
-#define CT_MXIC_CHECK_ERR1(obj)					(K_TYPE_CHECK_INSTANCE_CAST (obj, CtMxicCheckErr1)) 
-#define CT_IS_MXIC_CHECK_ERR1(obj)					(K_TYPE_CHECK_INSTANCE_TYPE (obj, CT_TYPE_MXIC_CHECK_ERR1)) 
+
+G_BEGIN_DECLS
+
+#define CT_TYPE_MXIC_CHECK_ERR1						(ct_mxic_check_err1_get_type())
+#define CT_MXIC_CHECK_ERR1(obj)						(G_TYPE_CHECK_INSTANCE_CAST (obj, CtMxicCheckErr1))
+#define CT_MXIC_CHECK_ERR1_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST ((klass), CT_TYPE_MXIC_CHECK_ERR1, CtMxicCheckErr1Class))
+#define CT_IS_MXIC_CHECK_ERR1(obj)					(G_TYPE_CHECK_INSTANCE_TYPE ((obj), CT_TYPE_MXIC_CHECK_ERR1)) 
+#define CT_IS_MXIC_CHECK_ERR1_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), CT_TYPE_MXIC_CHECK_ERR1))
+#define CT_MXIC_CHECK_ERR1_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), CT_TYPE_MXIC_CHECK_ERR1, CtMxicCheckErr1Class))
+
 
 typedef struct 			_CtMxicCheckErr1 CtMxicCheckErr1;
+typedef struct 			_CtMxicCheckErr1Class CtMxicCheckErr1Class;
 typedef struct 			_CtMxicCheckErr1Private CtMxicCheckErr1Private;
 
 struct _CtMxicCheckErr1
 {
-	KObject parent;
-
+	GObject parent;
 };
 
-KConstType 			ct_mxic_check_err1_get_type(void);
-CtMxicCheckErr1* 	ct_mxic_check_err1_new(void);
+struct _CtMxicCheckErr1Class
+{
+	GObjectClass parentclass;
+};
+
+
+GType 						ct_mxic_check_err1_get_type(void);
+CtMxicCheckErr1 *	ct_mxic_check_err1_new(void);
 
 void 						ct_mxic_check_err1_start_config(void);
 void 						ct_mxic_check_err1_clock_enable(void);
@@ -51,5 +64,7 @@ void 						ct_mxic_check_err1_master_r_arbiter(void);
 void 						ct_mxic_check_err1_master_all_arbiter(void);
 void 						ct_mxic_check_err1_master_overlap( void );
 void 						ct_mxic_check_err1_slot_priority(void);
+
+G_END_DECLS
 
 #endif /* __CT_MXIC_CHECK_ERR1_H_ */

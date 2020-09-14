@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :zhaoxin
 *@brief               :CtAudioCaseEleven类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -14,41 +14,58 @@
 
 #include "ctaudiocaseeleven.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtAudioCaseEleven, ct_audio_case_eleven)
-#define CT_AUDIO_CASE_ELEVEN_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), \
-		CtAudioCaseElevenPrivate, CT_TYPE_AUDIO_CASE_ELEVEN))
+G_DEFINE_TYPE(CtAudioCaseEleven, ct_audio_case_eleven, G_TYPE_OBJECT);
+#define CT_AUDIO_CASE_ELEVEN_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_AUDIO_CASE_ELEVEN, CtAudioCaseElevenPrivate))
 
 struct _CtAudioCaseElevenPrivate
 {
-	
 };
 
 /*
 *DECLS
 */
-static void ct_audio_case_eleven_constructor(CtAudioCaseEleven *self);
-static void ct_audio_case_eleven_destructor(CtAudioCaseEleven *self);
-static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue);
+static void ct_audio_case_eleven_class_init(CtAudioCaseElevenClass *klass);
+static void ct_audio_case_eleven_init(CtAudioCaseEleven *self);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
+static void doWithArgs_od(AbsCtAudioCase *self, gint caseValue);
 
 /*
  * IMPL
  */
-static void ct_audio_case_eleven_constructor(CtAudioCaseEleven *self)
+static void ct_audio_case_eleven_class_init(CtAudioCaseElevenClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtAudioCaseElevenPrivate));
+}
+
+static void ct_audio_case_eleven_init(CtAudioCaseEleven *self)
+{
+	CtAudioCaseElevenPrivate *priv = CT_AUDIO_CASE_ELEVEN_GET_PRIVATE(self);
 	((AbsCtAudioCase*)self)->doWithArgs = doWithArgs_od;
 	((AbsCtAudioCase*)self)->doNoArgs = NULL;
 }
 
-static void ct_audio_case_eleven_destructor(CtAudioCaseEleven *self)
+static void dispose_od(GObject *object)
 {
-	self = NULL;
+	CtAudioCaseEleven *self = (CtAudioCaseEleven*)object;
+	CtAudioCaseElevenPrivate *priv = CT_AUDIO_CASE_ELEVEN_GET_PRIVATE(self);
 }
 
-//245-367
-static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue)
+static void finalize_od(GObject *object)
 {
-	kpointer temp = NULL;
-	kpointer secondTemp = NULL;
+	CtAudioCaseEleven *self = (CtAudioCaseEleven*)object;
+	CtAudioCaseElevenPrivate *priv = CT_AUDIO_CASE_ELEVEN_GET_PRIVATE(self);
+}
+
+
+//245-367
+static void doWithArgs_od(AbsCtAudioCase *self, gint caseValue)
+{
+	gpointer temp = NULL;
+	gpointer secondTemp = NULL;
 	switch(caseValue)
 	{
 		case 245:
@@ -450,8 +467,8 @@ static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue)
 
 CtAudioCaseEleven *ct_audio_case_eleven_new(void)
 {
-	CtAudioCaseEleven *self = k_object_new(CT_TYPE_AUDIO_CASE_ELEVEN);
-	if (K_UNLIKELY(!self))
+	CtAudioCaseEleven *self = g_object_new(CT_TYPE_AUDIO_CASE_ELEVEN, NULL);
+	if (!self)
 	{
 		return NULL;
 	}

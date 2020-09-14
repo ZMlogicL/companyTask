@@ -34,12 +34,12 @@ struct _ImR2yStat {
 KConstType 		   	 	im_r2y_stat_get_type(void);
 ImR2yStat*		        im_r2y_stat_new(void);
 
-void im_r2y_stat_init(ImR2yStat *self, UCHAR pipe_no, UCHAR size_coef);
+void im_r2y_stat_init(ImR2yStat *self, kuint16 pipeNo, kuint16 size_coef);
 
 #ifdef IM_R2Y_STATUS_PRINT
-VOID im_r2y_stat_print_status(ImR2yStat *self);
-VOID im_r2y_stat_print_clock_status(ImR2yStat *self);
-VOID im_r2y_stat_print_acc_en_status(ImR2yStat *self);
+void im_r2y_stat_print_status(ImR2yStat *self);
+void im_r2y_stat_print_clock_status(ImR2yStat *self);
+void im_r2y_stat_print_acc_en_status(ImR2yStat *self);
 
 #endif
 #endif /* __IM_R2Y_STAT_H__ */

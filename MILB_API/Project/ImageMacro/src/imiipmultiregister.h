@@ -15,8 +15,12 @@
 #define __IM_IIP_MULTI_REGISTER_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imiipmanyregister.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,9 +28,13 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_MULTI_REGISTER							(im_iip_multi_register_get_type())
-#define IM_IIP_MULTI_REGISTER(obj)								(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipMultiRegister))
-#define IM_IS_IIP_MULTI_REGISTER(obj)						(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_MULTI_REGISTER))
+#define IM_TYPE_IIP_MULTI_REGISTER			(im_iip_multi_register_struct_get_type ())
+#define IM_IIP_MULTI_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_MULTI_REGISTER, ImIipMultiRegister))
+#define IM_IIP_MULTI_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_MULTI_REGISTER, ImIipMultiRegisterClass))
+#define IM_IS_IIP_MULTI_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_MULTI_REGISTER))
+#define IM_IS_IIP_MULTI_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_MULTI_REGISTER))
+#define IM_IIP_MULTI_REGISTER_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_MULTI_REGISTER, ImIipMultiRegisterClass))
+
 
 typedef union _UimgpcGpctopcnf					UimgpcGpctopcnf;
 typedef union _UimgpcGpccontrol					UimgpcGpccontrol;
@@ -56,8 +64,9 @@ typedef union _UimMonAbsadd						UimMonAbsadd;
 typedef union _UimMonOvervalue				UimMonOvervalue;
 typedef struct _TimMonDump							TimMonDump;
 
-typedef struct _ImIipMultiRegister 					ImIipMultiRegister;
-typedef struct _ImIipMultiRegisterPrivate 	ImIipMultiRegisterPrivate;
+typedef struct _ImIipMultiRegister			ImIipMultiRegister;
+typedef struct _ImIipMultiRegisterClass		ImIipMultiRegisterClass;
+typedef struct _ImIipMultiRegisterPrivate 		ImIipMultiRegisterPrivate;
 
 
 ///////////////////////////////////////////////////////////////
@@ -67,16 +76,16 @@ typedef struct _ImIipMultiRegisterPrivate 	ImIipMultiRegisterPrivate;
 union _UimgpcGpctopcnf
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< waitconf0<br>waitconf1<br>Refer to @ref EimPortid. */
-			kulong waitconf :6;
-			kulong :2;
-			kulong :8;
+			gulong waitconf :6;
+			gulong :2;
+			gulong :8;
 			/**< dataconf0<br>dataconf1<br>Refer to @ref EimPortid. */
-			kulong dataconf :6;
-			kulong :10;
+			gulong dataconf :6;
+			gulong :10;
 		} bit;
 } ;
 
@@ -84,26 +93,26 @@ union _UimgpcGpctopcnf
 union _UimgpcGpccontrol
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< commonpapa<br>Refer to @ref EimCommonpara. */
-			kulong commonpapa :2;
-			kulong :2;
+			gulong commonpapa :2;
+			gulong :2;
 			/**< md2dlk */
-			kulong md2dlk :1;
-			kulong :3;
+			gulong md2dlk :1;
+			gulong :3;
 			/**< alpen0 */
-			kulong alpen0 :1;
-			kulong :3;
+			gulong alpen0 :1;
+			gulong :3;
 			/**< alpen1 */
-			kulong alpen1 :1;
-			kulong :3;
+			gulong alpen1 :1;
+			gulong :3;
 			/**< atrb0<br>Refer to @ref EimAtrb */
-			kulong atrb0 :4;
+			gulong atrb0 :4;
 			/**< atrb1<br>Refer to @ref EimAtrb */
-			kulong atrb1 :4;
-			kulong :8;
+			gulong atrb1 :4;
+			gulong :8;
 		} bit;
 } ;
 
@@ -111,33 +120,33 @@ union _UimgpcGpccontrol
 union _UimgpcGpccloadadr
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< cloadadr */
-			kulong cloadadr :32;
+			gulong cloadadr :32;
 		} bit;
 } ;
 /** structure of gpcmon (0018h) */
 union _UimgpcGpcmon
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< gpcrun */
-			kulong gpcrun :1;
-			kulong :3;
+			gulong gpcrun :1;
+			gulong :3;
 			/**< seqerr */
-			kulong seqerr :1;
-			kulong :11;
+			gulong seqerr :1;
+			gulong :11;
 			/**< monpad */
-			kulong monpad :12;
+			gulong monpad :12;
 			/**< monseq */
-			kulong monseq :1;
+			gulong monseq :1;
 			/**< monlpa */
-			kulong monlpa :1;
-			kulong :2;
+			gulong monlpa :1;
+			gulong :2;
 		} bit;
 } ;
 
@@ -147,7 +156,7 @@ struct _TimgpcDump
 		/**< (0000 - 0007h) */
 		UimgpcGpctopcnf gpctopcnf[2];
 		/**< (0008 - 000Fh) */
-		kuchar dmy0008000f[0x0010 - 0x0008];
+		guchar dmy0008000f[0x0010 - 0x0008];
 		 /**< (0010 - 0013h) */
 		UimgpcGpccontrol gpccontrol;
 		 /**< (0014 - 0017h) */
@@ -155,7 +164,7 @@ struct _TimgpcDump
 		 /**< (0018 - 001Bh) */
 		UimgpcGpcmon gpcmon;
 		 /**< 001C - FFFFh */
-		kuchar dmy7001c7ffff[0x80000 - 0x7001C];
+		guchar dmy7001c7ffff[0x80000 - 0x7001C];
 } ;
 
 ///////////////////////////////////////////////////////////////
@@ -165,16 +174,16 @@ struct _TimgpcDump
 union _UimLutLuttopcnf
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		 /**< bit field */
 		struct {
 			/**< waitconf0<br>waitconf1<br>WAITCONF_2<br>WAITCONF_3<br>Refer to @ref EimPortid. */
-			kulong waitconf :6;
-			kulong :2;
-			kulong :8;
+			gulong waitconf :6;
+			gulong :2;
+			gulong :8;
 			/**< dataconf0<br>dataconf1<br>dataconf2<br>DATACONF_3<br>Refer to @ref EimPortid. */
-			kulong dataconf :6;
-			kulong :10;
+			gulong dataconf :6;
+			gulong :10;
 		} bit;
 } ;
 
@@ -182,35 +191,35 @@ union _UimLutLuttopcnf
 union _UimLutLutunitctl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< porten */
-			kulong porten :4;
+			gulong porten :4;
 			/**< port3seli */
-			kulong port3seli :2;
-			kulong :2;
+			gulong port3seli :2;
+			gulong :2;
 			/**< port3selo */
-			kulong port3selo :2;
-			kulong :2;
+			gulong port3selo :2;
+			gulong :2;
 			/**< branch */
-			kulong branch :2;
-			kulong :2;
+			gulong branch :2;
+			gulong :2;
 			/**< port2seli */
-			kulong port2seli :2;
-			kulong :2;
+			gulong port2seli :2;
+			gulong :2;
 			/**< port2selo */
-			kulong port2selo :2;
-			kulong :2;
+			gulong port2selo :2;
+			gulong :2;
 			/**< outmd0 */
-			kulong outmd0 :1;
+			gulong outmd0 :1;
 			/**< outmd1 */
-			kulong outmd1 :1;
+			gulong outmd1 :1;
 			/**< outmd2 */
-			kulong outmd2 :1;
+			gulong outmd2 :1;
 			/**< outmd3 */
-			kulong outmd3 :1;
-			kulong :4;
+			gulong outmd3 :1;
+			gulong :4;
 		} bit;
 } ;
 
@@ -223,20 +232,20 @@ union _UimLutLutunitctl
 union _UimLutLutctl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< lutbit */
-			kulong lutbit :4;
+			gulong lutbit :4;
 			/**< LUTUSE<br>Refer to @ref EimLutuse. */
-			kulong use :1;
-			kulong :3;
+			gulong use :1;
+			gulong :3;
 			/**< LUTSGN<br>Refer to @ref EimLutsgn. */
-			kulong sgn :1;
-			kulong :3;
+			gulong sgn :1;
+			gulong :3;
 			/**< splbit */
-			kulong splbit :4;
-			kulong :16;
+			gulong splbit :4;
+			gulong :16;
 		} bit;
 } ;
 
@@ -249,33 +258,33 @@ union _UimLutLutctl
 union _UimLutLutprecal
 {
 		/**< All bits */
-		kulong word[4];
+		gulong word[4];
 		/**< bit field */
 		struct {
 			/**< LUTSHIFT */
-			kulong shift :4;
-			kulong :12;
+			gulong shift :4;
+			gulong :12;
 			/**< LUTOFSEL */
-			kint64 ofset :15;
-			kulong :1;
+			gs64 ofset :15;
+			gulong :1;
 			/**< LUTCLPMAX */
-			kint64 clpmax :15;
-			kulong :1;
+			gs64 clpmax :15;
+			gulong :1;
 			/**< LUTTHMAX */
-			kint64 thmax :15;
-			kulong :1;
+			gs64 thmax :15;
+			gulong :1;
 			/**< LUTCLPMIN */
-			kint64 clpmin :15;
-			kulong :1;
+			gs64 clpmin :15;
+			gulong :1;
 			/**< LUTTHMIN */
-			kint64 thmin :15;
-			kulong :1;
+			gs64 thmin :15;
+			gulong :1;
 			/**< LUTABS */
-			kulong abs :1;
-			kulong :15;
+			gulong abs :1;
+			gulong :15;
 			/**< lutadrs */
-			kulong lutadrs :15;
-			kulong :1;
+			gulong lutadrs :15;
+			gulong :1;
 		} bit;
 } ;
 
@@ -287,45 +296,45 @@ struct _TimLutDump
 		/**< (0010 - 0013h) */
 		UimLutLutunitctl lutunitctl;
 		/**< (0014 - 001Fh) */
-		kuchar dmy0014001f[0x0020 - 0x0014];
+		guchar dmy0014001f[0x0020 - 0x0014];
 		 /**< (0020 - 0023h) */
 		UimLutLutctl lutctlA;
 		/**< (0024 - 002Fh) */
-		kuchar dmy0024002f[0x0030 - 0x0024];
+		guchar dmy0024002f[0x0030 - 0x0024];
 		/**< (0030 - 003Fh) */
 		UimLutLutprecal lutprecalA;
 		/**< (0040 - 0043h) */
 		UimLutLutctl lutctlB;
 		/**< (0044 - 004Fh) */
-		kuchar dmy0044004f[0x0050 - 0x0044];
+		guchar dmy0044004f[0x0050 - 0x0044];
 		/**< (0050 - 005Fh) */
 		UimLutLutprecal lutprecalB;
 		 /**< (0060 - 0063h) */
 		UimLutLutctl lutctlC;
 		/**< (0064 - 006Fh) */
-		kuchar dmy0064006f[0x0070 - 0x0064];
+		guchar dmy0064006f[0x0070 - 0x0064];
 		 /**< (0070 - 007Fh) */
 		UimLutLutprecal lutprecalC;
 		/**< (0080 - 0083h) */
 		UimLutLutctl lutctlD;
 		/**< (0084 - 008Fh) */
-		kuchar dmy0084008f[0x0090 - 0x0084];
+		guchar dmy0084008f[0x0090 - 0x0084];
 		/**< (0090 - 009Fh) */
 		UimLutLutprecal lutprecalD;
 		/**< (00A0 - 00A3h) */
 		UimLutLutctl lutctlE;
 		/**< (00A4 - 00AFh) */
-		kuchar dmy_00A4_00AF[0x00B0 - 0x00A4];
+		guchar dmy_00A4_00AF[0x00B0 - 0x00A4];
 		 /**< (00B0 - 00BFh) */
 		UimLutLutprecal lutprecalE;
 		/**< (00C0 - 00C3h) */
 		UimLutLutctl lutctlF;
 		/**< (00C4 - 00CFh) */
-		kuchar dmy00c400cf[0x00D0 - 0x00C4];
+		guchar dmy00c400cf[0x00D0 - 0x00C4];
 		/**< (00D0 - 00DFh) */
 		UimLutLutprecal lutprecalF;
 		/**< 00E0 - FFFFh */
-		kuchar dmy800e08ffff[0x90000 - 0x800E0];
+		guchar dmy800e08ffff[0x90000 - 0x800E0];
 } ;
 
 ///////////////////////////////////////////////////////////////
@@ -335,16 +344,16 @@ struct _TimLutDump
 union _UimMftMfttopconf
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< waitconf<br>Refer to @ref EimPortid. */
-			kulong waitconf :6;
-			kulong :2;
-			kulong :8;
+			gulong waitconf :6;
+			gulong :2;
+			gulong :8;
 			/**< dataconf<br>Refer to @ref EimPortid. */
-			kulong dataconf :6;
-			kulong :10;
+			gulong dataconf :6;
+			gulong :10;
 		} bit;
 } ;
 
@@ -352,12 +361,12 @@ union _UimMftMfttopconf
 union _UimMftMftmd
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< mftmd<br>Refer to @ref EimMftmd. */
-			kulong mftmd :1;
-			kulong :31;
+			gulong mftmd :1;
+			gulong :31;
 		} bit;
 } ;
 
@@ -365,12 +374,12 @@ union _UimMftMftmd
 union _UimMftFlttpsz
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< flttpsz */
-			kulong flttpsz :11;
-			kulong :21;
+			gulong flttpsz :11;
+			gulong :21;
 		} bit;
 } ;
 
@@ -378,12 +387,12 @@ union _UimMftFlttpsz
 union _UimMftFltouthsz
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< fltouthsz */
-			kulong fltouthsz :15;
-			kulong :17;
+			gulong fltouthsz :15;
+			gulong :17;
 		} bit;
 } ;
 
@@ -394,15 +403,15 @@ union _UimMftFltouthsz
 union _UimMftMftctl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< D0FIX<br>D1FIX<br>D2FIX<br>Refer to @ref EimDnfix. */
-			kulong fix :1;
-			kulong :15;
+			gulong fix :1;
+			gulong :15;
 			/**< D0VAL<br>D1VAL<br>D2VAL<br>D3VAL */
-			kint64 val :15;
-			kulong :1;
+			gs64 val :15;
+			gulong :1;
 		} bit;
 } ;
 
@@ -420,7 +429,7 @@ struct _TimMftDump
 		/**< (0010 - 001Fh) */
 		UimMftMftctl mftctld[4];
 		/**< 0020 - FFFFh */
-		kuchar dmy900209ffff[0xA0000 - 0x90020];
+		guchar dmy900209ffff[0xA0000 - 0x90020];
 } ;
 
 ///////////////////////////////////////////////////////////////
@@ -430,30 +439,30 @@ struct _TimMftDump
 union _UimMonMonctl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< histae */
-			kulong histae :1;
-			kulong :3;
+			gulong histae :1;
+			gulong :3;
 			/**< histbe */
-			kulong histbe :1;
-			kulong :3;
+			gulong histbe :1;
+			gulong :3;
 			/**< histce */
-			kulong histce :1;
-			kulong :3;
+			gulong histce :1;
+			gulong :3;
 			/**< histde */
-			kulong histde :1;
-			kulong :3;
+			gulong histde :1;
+			gulong :3;
 			/**< maxe */
-			kulong maxe :1;
-			kulong :3;
+			gulong maxe :1;
+			gulong :3;
 			/**< mine */
-			kulong mine :1;
-			kulong :3;
+			gulong mine :1;
+			gulong :3;
 			/**< adde */
-			kulong adde :1;
-			kulong :7;
+			gulong adde :1;
+			gulong :7;
 		} bit;
 } ;
 
@@ -461,21 +470,21 @@ union _UimMonMonctl
 union _UimMonMondsel
 {
 		 /**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< dsel<br>Refer to @ref EimDsel. */
-			kulong dsel :3;
-			kulong :1;
+			gulong dsel :3;
+			gulong :1;
 			/**< sgnen0<br>Refer to @ref EimSgnen. */
-			kulong sgnen0 :1;
+			gulong sgnen0 :1;
 			/**< sgnen1<br>Refer to @ref EimSgnen. */
-			kulong sgnen1 :1;
+			gulong sgnen1 :1;
 			/**< sgnen2<br>Refer to @ref EimSgnen. */
-			kulong sgnen2 :1;
+			gulong sgnen2 :1;
 			/**< sgnen3<br>Refer to @ref EimSgnen. */
-			kulong sgnen3 :1;
-			kulong :24;
+			gulong sgnen3 :1;
+			gulong :24;
 		} bit;
 } ;
 
@@ -483,21 +492,21 @@ union _UimMonMondsel
 union _UimMonHistctl
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< HISTSEL_0<br>HISTSEL_1<br>HISTSEL_2<br>HISTSEL_3 */
-			kulong histsel :2;
-			kulong :2;
+			gulong histsel :2;
+			gulong :2;
 			/**< BITSEL_0<br>BITSEL_1<br>BITSEL_2<br>BITSEL_3<br>Refer to @ref EimBitsel. */
-			kulong bitsel :3;
-			kulong :1;
+			gulong bitsel :3;
+			gulong :1;
 			/**< HISTSKIP_H_0<br>HISTSKIP_H_1<br>HISTSKIP_H_2<br>HISTSKIP_H_3 */
-			kulong histskipH :6;
-			kulong :2;
+			gulong histskipH :6;
+			gulong :2;
 			/**< HISTSKIP_V_0<br>HISTSKIP_V_1<br>HISTSKIP_V_2<br>HISTSKIP_V_3 */
-			kulong histskipV :6;
-			kulong :10;
+			gulong histskipV :6;
+			gulong :10;
 		} bit;
 } ;
 
@@ -505,12 +514,12 @@ union _UimMonHistctl
 union _UimMonAbsmax
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< absmax */
-			kulong absmax :1;
-			kulong :31;
+			gulong absmax :1;
+			gulong :31;
 		} bit;
 } ;
 
@@ -518,12 +527,12 @@ union _UimMonAbsmax
 union _UimMonAbsmin
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< absmin */
-			kulong absmin :1;
-			kulong :31;
+			gulong absmin :1;
+			gulong :31;
 		} bit;
 } ;
 
@@ -531,12 +540,12 @@ union _UimMonAbsmin
 union _UimMonAbsadd
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		 /**< bit field */
 		struct {
 			/**< absadd */
-			kulong absadd :1;
-			kulong :31;
+			gulong absadd :1;
+			gulong :31;
 		} bit;
 } ;
 
@@ -544,11 +553,11 @@ union _UimMonAbsadd
 union _UimMonOvervalue
 {
 		/**< All bits */
-		kulong word;
+		gulong word;
 		/**< bit field */
 		struct {
 			/**< overvalue */
-			kint64 overvalue :32;
+			gs64 overvalue :32;
 		} bit;
 } ;
 
@@ -560,7 +569,7 @@ struct _TimMonDump
 		/**< (0004 - 0007h) */
 		UimMonMondsel mondsel;
 		/**< (0008 - 000Fh) */
-		kuchar dmy0008000f[0x0010 - 0x0008];
+		guchar dmy0008000f[0x0010 - 0x0008];
 		/**< (0010 - 001Fh) */
 		UimMonHistctl histctl[4];
 		/**< (0020 - 0023h) */
@@ -568,31 +577,38 @@ struct _TimMonDump
 		/**< (0024 - 0027h) */
 		UimMonAbsmin absmin;
 		 /**< (0028 - 003Fh) */
-		kuchar dmy0028003f[0x0040 - 0x0028];
+		guchar dmy0028003f[0x0040 - 0x0028];
 		/**< (0040 - 0043h) */
 		UimMonAbsadd absadd;
 		/**< (0044 - 004Fh) */
-		kuchar dmy0044004f[0x0050 - 0x0044];
+		guchar dmy0044004f[0x0050 - 0x0044];
 		/**< (0050 - 005Fh) */
 		UimMonOvervalue overvalue[4];
 		/**< 0060 - FFFFh */
-		kuchar dmyA0060Affff[0xB0000 - 0xA0060];
+		guchar dmyA0060Affff[0xB0000 - 0xA0060];
 } ;
 
 struct _ImIipMultiRegister
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipMultiRegisterClass
+{
+	GObjectClass parentClass;
 };
 
 
-
-KConstType 		    				im_iip_multi_register_get_type(void);
-ImIipMultiRegister*		        im_iip_multi_register_new(void);
+GType									im_iip_multi_register_struct_get_type(void)	G_GNUC_CONST;
+ImIipMultiRegister*			im_iip_multi_register_struct_new(void);
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_MULTI_REGISTER_H__ */

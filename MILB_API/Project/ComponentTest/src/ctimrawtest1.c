@@ -15,7 +15,7 @@
 #include <string.h>
 
 #include "jdsraw.h"
-#include "im_raw.h"
+#include "imraw.h"
 //#include "ct_im_raw.h"
 #include "driver_common.h"
 #include "ctimrawconfig.h"
@@ -58,7 +58,27 @@ static void ct_im_raw_test1_constructor(CtImRawTest1 *self)
 
 static void ct_im_raw_test1_destructor(CtImRawTest1 *self)
 {
-//	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
+	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
+
+	if (priv->ctImRawVarify) {
+		k_object_unref(priv->ctImRawVarify);
+		priv->ctImRawVarify = NULL;
+	}
+
+	if (priv->ctImRawConfig) {
+		k_object_unref(priv->ctImRawConfig);
+		priv->ctImRawConfig = NULL;
+	}
+
+	if (priv->imRaw) {
+		k_object_unref(priv->imRaw);
+		priv->imRaw = NULL;
+	}
+
+	if (priv->ddimUserCustom) {
+		k_object_unref(priv->ddimUserCustom);
+		priv->ddimUserCustom = NULL;
+	}
 }
 
 
@@ -71,14 +91,14 @@ kint32 ct_im_raw_test1_0(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_0 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_0 porocess 2\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -90,14 +110,14 @@ kint32 ct_im_raw_test1_1(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_1 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 100);
+	priv->retval = im_raw_open(priv->imRaw, 100);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_1 porocess 2\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return CtImRawConfig_OK;
@@ -109,7 +129,7 @@ kint32 ct_im_raw_test1_2(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_2 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, -2);
+	priv->retval = im_raw_open(priv->imRaw, -2);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -124,7 +144,7 @@ kint32 ct_im_raw_test1_3(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
@@ -136,7 +156,7 @@ kint32 ct_im_raw_test1_4(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, NULL,
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, NULL,
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
@@ -144,7 +164,7 @@ kint32 ct_im_raw_test1_4(CtImRawTest1* self)
 		return CtImRawConfig_NG;
 	}
 
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig), 3);
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig), 3);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -164,7 +184,7 @@ kint32 ct_im_raw_test1_5(CtImRawTest1* self)
 	ioRaw.rctl1.bit.rtrg = 3;
 #endif
 
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
@@ -180,7 +200,7 @@ kint32 ct_im_raw_test1_6(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -191,7 +211,7 @@ kint32 ct_im_raw_test1_7(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, NULL, 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, NULL, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -211,7 +231,7 @@ kint32 ct_im_raw_test1_8(CtImRawTest1* self)
 	ioRaw.rctl1.bit.rtrg = 3;
 #endif
 
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -226,7 +246,7 @@ kint32 ct_im_raw_test1_9(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -237,7 +257,7 @@ kint32 ct_im_raw_test1_10(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, NULL);
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, NULL);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -257,7 +277,7 @@ kint32 ct_im_raw_test1_11(CtImRawTest1* self)
 	ioRaw.rctl1.bit.rtrg = 3;
 #endif
 
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -273,14 +293,14 @@ kint32 ct_im_raw_test1_12(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_12 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_12 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -288,14 +308,14 @@ kint32 ct_im_raw_test1_12(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_12 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_12 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -307,14 +327,14 @@ kint32 ct_im_raw_test1_12(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_12 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if(priv->ret != CtImRawConfig_OK){
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_12 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -326,14 +346,14 @@ kint32 ct_im_raw_test1_13(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_13 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_13 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -341,7 +361,7 @@ kint32 ct_im_raw_test1_13(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_13 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -351,7 +371,7 @@ kint32 ct_im_raw_test1_13(CtImRawTest1* self)
 	FID_IM_RAW = 0xFF;
 
 	Ddim_Print(("raw test1_13 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -362,7 +382,7 @@ kint32 ct_im_raw_test1_13(CtImRawTest1* self)
 
 #if 0	// because not start
 	Ddim_Print(("raw test1_13 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -370,7 +390,7 @@ kint32 ct_im_raw_test1_13(CtImRawTest1* self)
 #endif	// because not start
 
 	Ddim_Print(("raw test1_13 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -382,14 +402,14 @@ kint32 ct_im_raw_test1_14(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_14 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_14 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -397,14 +417,14 @@ kint32 ct_im_raw_test1_14(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_14 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_14 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -415,8 +435,8 @@ kint32 ct_im_raw_test1_14(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_14 porocess 5\n"));
-	// Im_RAW_Start() retry
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	// im_raw_start() retry
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -429,14 +449,14 @@ kint32 ct_im_raw_test1_14(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_14 porocess 6\n"));
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_14 porocess 7\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -448,14 +468,14 @@ kint32 ct_im_raw_test1_15(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_15 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_15 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -463,14 +483,14 @@ kint32 ct_im_raw_test1_15(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_15 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_15 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -482,14 +502,14 @@ kint32 ct_im_raw_test1_15(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_15 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_15 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -500,21 +520,21 @@ kint32 ct_im_raw_test1_16(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, NULL, &priv->byte, 0);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, NULL, &priv->byte, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
 		return CtImRawConfig_NG;
 	}
 
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, NULL, 0);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, NULL, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
 		return CtImRawConfig_NG;
 	}
 
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, -3);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, -3);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -530,14 +550,14 @@ kint32 ct_im_raw_test1_17(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_17 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_17 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -545,14 +565,14 @@ kint32 ct_im_raw_test1_17(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_17 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_17 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -562,7 +582,7 @@ kint32 ct_im_raw_test1_17(CtImRawTest1* self)
 	FID_IM_RAW = 0xFF;
 
 	Ddim_Print(("raw test1_17 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -572,7 +592,7 @@ kint32 ct_im_raw_test1_17(CtImRawTest1* self)
 	FID_IM_RAW = priv->tmpFid;
 
 	Ddim_Print(("raw test1_17 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -586,7 +606,7 @@ kint32 ct_im_raw_test1_18(CtImRawTest1* self)
 	DDIM_User_Set_Flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000004);
 	Ddim_Print(("Set_Flg : R_AXI_ERR\n"));
 
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -604,7 +624,7 @@ kint32 ct_im_raw_test1_19(CtImRawTest1* self)
 	DDIM_User_Set_Flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000008);
 	Ddim_Print(("Set_Flg : W_AXI_ERR\n"));
 
-	priv->retval = Im_RAW_Wait_End_Enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
+	priv->retval = im_raw_wait_end_enc(priv->imRaw, &priv->condition, &priv->byte, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -621,14 +641,14 @@ kint32 ct_im_raw_test1_20(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_20 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_20 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -636,14 +656,14 @@ kint32 ct_im_raw_test1_20(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_20 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
+	priv->retval = im_raw_ctrl_enc(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig), 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_20 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -654,14 +674,14 @@ kint32 ct_im_raw_test1_20(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_20 porocess 5\n"));
-	priv->retval = Im_RAW_Stop(priv->imRaw);
+	priv->retval = im_raw_stop(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_20 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -673,14 +693,14 @@ kint32 ct_im_raw_test1_21(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_21 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_21 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -688,14 +708,14 @@ kint32 ct_im_raw_test1_21(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_21 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_21 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -707,14 +727,14 @@ kint32 ct_im_raw_test1_21(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_21 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, &priv->condition, 1000);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, &priv->condition, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_21 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -725,14 +745,14 @@ kint32 ct_im_raw_test1_22(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, NULL, 0);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, NULL, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
 		return CtImRawConfig_NG;
 	}
 
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, &priv->condition, -100);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, &priv->condition, -100);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -748,14 +768,14 @@ kint32 ct_im_raw_test1_23(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_23 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_23 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -763,14 +783,14 @@ kint32 ct_im_raw_test1_23(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_23 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_23 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -780,7 +800,7 @@ kint32 ct_im_raw_test1_23(CtImRawTest1* self)
 	FID_IM_RAW = 0xFF;
 
 	Ddim_Print(("raw test1_23 porocess 5\n"));
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, &priv->condition, 1000);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, &priv->condition, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -790,7 +810,7 @@ kint32 ct_im_raw_test1_23(CtImRawTest1* self)
 	FID_IM_RAW = priv->tmpFid;
 
 	Ddim_Print(("raw test1_23 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -801,10 +821,10 @@ kint32 ct_im_raw_test1_24(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	DDIM_User_Set_Flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000004);
+	ddim_user_custom_set_flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000004);
 	Ddim_Print(("Set_Flg : R_AXI_ERR\n"));
 
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, &priv->condition, 1000);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, &priv->condition, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -819,10 +839,10 @@ kint32 ct_im_raw_test1_25(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	DDIM_User_Set_Flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000008);
+	ddim_user_custom_set_flg(priv->ddimUserCustom, FID_IM_RAW, 0x00000008);
 	Ddim_Print(("Set_Flg : W_AXI_ERR\n"));
 
-	priv->retval = Im_RAW_Wait_End_Dec(priv->imRaw, &priv->condition, 1000);
+	priv->retval = im_raw_wait_end_dec(priv->imRaw, &priv->condition, 1000);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -838,14 +858,14 @@ kint32 ct_im_raw_test1_26(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	Ddim_Print(("raw test1_26 porocess 1\n"));
-	priv->retval = Im_RAW_Open(priv->imRaw, 0);
+	priv->retval = im_raw_open(priv->imRaw, 0);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_26 porocess 2\n"));
-	priv->retval = Im_RAW_Ctrl_CodeTbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
+	priv->retval = im_raw_ctrl_code_tbl(priv->imRaw, &ct_im_raw_config_get_code_tbl(priv->ctImRawConfig),
 			ct_im_raw_config_get_raw_param(priv->ctImRawConfig).dataFormat);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
@@ -853,14 +873,14 @@ kint32 ct_im_raw_test1_26(CtImRawTest1* self)
 	}
 
 	Ddim_Print(("raw test1_26 porocess 3\n"));
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_26 porocess 4\n"));
-	priv->retval = Im_RAW_Start(priv->imRaw);
+	priv->retval = im_raw_start(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -871,14 +891,14 @@ kint32 ct_im_raw_test1_26(CtImRawTest1* self)
 #endif
 
 	Ddim_Print(("raw test1_26 porocess 5\n"));
-	priv->retval = Im_RAW_Stop(priv->imRaw);
+	priv->retval = im_raw_stop(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
 	}
 
 	Ddim_Print(("raw test1_26 porocess 6\n"));
-	priv->retval = Im_RAW_Close(priv->imRaw);
+	priv->retval = im_raw_close(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 
 	return priv->ret;
@@ -896,7 +916,7 @@ kint32 ct_im_raw_test1_28(CtImRawTest1* self)
 	ioRaw.rctl1.bit.rtrg = 3;
 #endif
 
-	priv->retval = Im_RAW_Stop(priv->imRaw);
+	priv->retval = im_raw_stop(priv->imRaw);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -914,7 +934,7 @@ kint32 ct_im_raw_test1_30(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 	T_IM_RAW_AXI_STATUS	axiState;
 
-	priv->retval = Im_RAW_Get_AXI_Status(priv->imRaw, &axiState);
+	priv->retval = im_raw_get_axi_status(priv->imRaw, &axiState);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -932,7 +952,7 @@ kint32 ct_im_raw_test1_31(CtImRawTest1* self)
 {
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
-	priv->retval = Im_RAW_Get_AXI_Status(priv->imRaw, NULL);
+	priv->retval = im_raw_get_axi_status(priv->imRaw, NULL);
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_NG) {
 		// NG is correct
@@ -948,7 +968,7 @@ kint32 ct_im_raw_test1_32(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	// set decode for callback setting
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -969,7 +989,7 @@ kint32 ct_im_raw_test1_33(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	// set decode for callback setting
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;
@@ -990,7 +1010,7 @@ kint32 ct_im_raw_test1_34(CtImRawTest1* self)
 	CtImRawTest1Private *priv = CT_IM_RAW_TEST1_GET_PRIVATE(self);
 
 	// set decode for callback setting
-	priv->retval = Im_RAW_Ctrl_Dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
+	priv->retval = im_raw_ctrl_dec(priv->imRaw, &ct_im_raw_config_get_raw_param(priv->ctImRawConfig));
 	priv->ret = ct_im_raw_varify_check_retval(priv->ctImRawVarify, priv->retval, D_IM_RAW_RETVAL_OK);
 	if (priv->ret != CtImRawConfig_OK) {
 		return CtImRawConfig_NG;

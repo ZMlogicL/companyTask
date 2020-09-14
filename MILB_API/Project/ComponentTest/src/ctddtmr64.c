@@ -20,7 +20,7 @@
  * <B><I>Copyright 2015 Socionext Inc.</I></B>
  */
 
-#include "dd_tmr64.h"
+#include "ddtmr64.h"
 #include "ddhdmac1.h"
 #include "peripheral.h"
 #include "chiptop.h"
@@ -44,9 +44,9 @@ static void ct_dd_tmr64_destructor(CtDdTmr64 *self)
 {
     // CtDdTmr64Private *priv = CT_DD_TMR64_GET_PRIVATE(self);
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
@@ -71,7 +71,9 @@ static void ct_dd_tmr64_destructor(CtDdTmr64 *self)
  */
 void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 {
-	T_DD_TMR64_CTRL		tmr64Ctrl = {{0}};
+	TDdTmr64Ctrl		tmr64Ctrl = {{0}};
+	DdTmr64 *			ddTmr64 = dd_tmr64_get();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 
 	/*-------*/
 	/* Open  */
@@ -79,12 +81,12 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	// ddtmr64 open [tmout]
 	if(strcmp(argv[1], "open") == 0){
 		/* Open */
-		self->ret = Dd_TMR64_Open((kint32)atoi(argv[2]));
+		self->ret = dd_tmr64_open(ddTmr64, (kint32)atoi(argv[2]));
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Open OK\n"));
+			Ddim_Print(("dd_tmr64_open OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Open ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_open ERR=%d\n", self->ret));
 		}
 	}
 	/*-------*/
@@ -93,12 +95,12 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	// ddtmr64 close
 	else if(strcmp(argv[1], "close") == 0){
 		/* Stop */
-		self->ret = Dd_TMR64_Close();
+		self->ret = dd_tmr64_close(ddTmr64);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Close OK\n"));
+			Ddim_Print(("dd_tmr64_close OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Close ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_close ERR=%d\n", self->ret));
 		}
 	}
 	/*------*/
@@ -152,7 +154,7 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 			tmr64Ctrl.csr2.bit.tsen = 0;
 		}
 
-		Ddim_Print(("--Dd_TMR64_Ctrl()--\n"));
+		Ddim_Print(("--dd_tmr64_ctrl()--\n"));
 		Ddim_Print(("tmr64Ctrl.csr1.bit.trg  = %d\n", tmr64Ctrl.csr1.bit.trg));
 		Ddim_Print(("tmr64Ctrl.csr1.bit.cnte = %d\n", tmr64Ctrl.csr1.bit.cnte));
 		Ddim_Print(("tmr64Ctrl.csr1.bit.csl  = %d\n", tmr64Ctrl.csr1.bit.csl));
@@ -161,12 +163,12 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 		Ddim_Print(("-------------------\n"));
 
 		/* Ctrl */
-		self->ret = Dd_TMR64_Ctrl(&tmr64Ctrl);
+		self->ret = dd_tmr64_ctrl(ddTmr64, &tmr64Ctrl);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Ctrl OK\n"));
+			Ddim_Print(("dd_tmr64_ctrl OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Ctrl ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_ctrl ERR=%d\n", self->ret));
 		}
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_1.word = [0x%08lx]\n", ioPeri.tmr64.tmcsr641.word));
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_2.word = [0x%08lx]\n", ioPeri.tmr64.tmcsr642.word));
@@ -178,16 +180,16 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 #endif	// CO_DEBUG_ON_PC
 
 		/* Get H/W & S/W Counter */
-		self->ret = Dd_TMR64_Get_Ctrl(&tmr64Ctrl) ;
+		self->ret = dd_tmr64_get_ctrl(ddTmr64, &tmr64Ctrl) ;
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_Ctrl OK\n"));
+			Ddim_Print(("dd_tmr64_get_ctrl OK\n"));
 			Ddim_Print(("IO_PERI.TMR64.TMCSR64_1.word = [0x%08lx]\n", ioPeri.tmr64.tmcsr641.word));
 			Ddim_Print(("IO_PERI.TMR64.TMCSR64_2.word = [0x%08lx]\n", ioPeri.tmr64.tmcsr642.word));
 			Ddim_Print(("tmr64Ctrl.csr1.word        = [0x%08lx]\n", tmr64Ctrl.csr1.word));
 			Ddim_Print(("tmr64Ctrl.csr2.word        = [0x%08lx]\n", tmr64Ctrl.csr2.word));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Ctrl ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_ctrl ERR=%d\n", self->ret));
 		}
 	}
 	/*----------------*/
@@ -195,12 +197,12 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/*----------------*/
 	else if(strcmp(argv[1], "start") == 0){
 		/* Start */
-		self->ret = Dd_TMR64_Start(atoi(argv[2]));
+		self->ret = dd_tmr64_start(ddTmr64, atoi(argv[2]));
 
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Start OK\n"));
+			Ddim_Print(("dd_tmr64_start OK\n"));
 
-			self->ret = ddim_user_custom_get_tim(&self->systim);
+			self->ret = ddim_user_custom_get_tim(ddimUserCus, &self->systim);
 			if (self->ret != DdimUserCustom_E_OK) {
 				Ddim_Print(("ddim_user_custom_get_tim ERR=%d\n", self->ret));
 			}
@@ -209,7 +211,7 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 			}
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Start ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_start ERR=%d\n", self->ret));
 		}
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_1.word =[0x%08lx].\n", ioPeri.tmr64.tmcsr641.word));
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_2.word =[0x%08lx].\n", ioPeri.tmr64.tmcsr641.word));
@@ -219,16 +221,16 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/*------*/
 	else if(strcmp(argv[1], "stop") == 0){
 #ifdef CO_DEBUG_ON_PC
-		Dd_TMR64_Start(TRUE);
+		dd_tmr64_start(ddTmr64, TRUE);
 #endif	// CO_DEBUG_ON_PC
 
 		/* Stop */
-		self->ret = Dd_TMR64_Stop();
+		self->ret = dd_tmr64_stop(ddTmr64);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Stop OK\n"));
+			Ddim_Print(("dd_tmr64_stop OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Stop ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_stop ERR=%d\n", self->ret));
 		}
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_1.word =[0x%08lx].\n", ioPeri.tmr64.tmcsr641.word));
 		Ddim_Print(("IO_PERI.TMR64.TMCSR64_2.word =[0x%08lx].\n", ioPeri.tmr64.tmcsr641.word));
@@ -245,11 +247,11 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 #endif	// CO_DEBUG_ON_PC
 
 		/* Get H/W & S/W Counter */
-		self->ret = Dd_TMR64_Get_Counter(&counter);
+		self->ret = dd_tmr64_get_counter(ddTmr64, &counter);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_Counter OK\n"));
+			Ddim_Print(("dd_tmr64_get_counter OK\n"));
 			Ddim_Print(("Counter = 0x%llX\n", counter));
-			self->ret = ddim_user_custom_get_tim(&self->systim);
+			self->ret = ddim_user_custom_get_tim(ddimUserCus, &self->systim);
 			if (self->ret != DdimUserCustom_E_OK) {
 				Ddim_Print(("ddim_user_custom_get_tim ERR=%d\n", self->ret));
 			}
@@ -258,7 +260,7 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 			}
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Counter ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_counter ERR=%d\n", self->ret));
 		}
 	}
 	/*--------------------------------------*/
@@ -272,13 +274,13 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 #endif	// CO_DEBUG_ON_PC
 
 		/* Get Time Stamp */
-		self->ret = Dd_TMR64_Get_Gyro_TimeStamp(&timeStamp);
+		self->ret = dd_tmr64_get_gyro_time_stamp(ddTmr64, &timeStamp);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_Gyro_TimeStamp OK\n"));
+			Ddim_Print(("dd_tmr64_get_gyro_time_stamp OK\n"));
 			Ddim_Print(("timeStamp = 0x%lX\n", timeStamp));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Gyro_TimeStamp ERR=%d\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_gyro_time_stamp ERR=%d\n", self->ret));
 		}
 	}
 	/*---------------------------------------------*/
@@ -291,11 +293,11 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 
 // ToDo: Set data for PC Debug
 
-		Ddim_Print(("--Dd_TMR64_Get_FrameStart_TimeStamp()--\n"));
+		Ddim_Print(("--dd_tmr64_get_frame_start_time_stamp()--\n"));
 		for (sensorNo = 0; sensorNo < 4; sensorNo ++) {
 			for (lotationCount = 0; lotationCount < 3; lotationCount ++) {   // Strange???? Change?????
 				/* Get Counter */
-				self->ret = Dd_TMR64_Get_FrameStart_TimeStamp(sensorNo, lotationCount, &timeStamp);
+				self->ret = dd_tmr64_get_frame_start_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 				if(self->ret == D_DDIM_OK){
 					Ddim_Print(("TimeStamp[%d][%d] = 0x%llX\n", 
 						sensorNo, lotationCount, timeStamp));
@@ -317,11 +319,11 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 
 // ToDo: Set data for PC Debug
 
-		Ddim_Print(("--Dd_TMR64_Get_FrameEnd_TimeStamp()--\n"));
+		Ddim_Print(("--dd_tmr64_get_frame_end_time_stamp()--\n"));
 		for (sensorNo = 0; sensorNo < 4; sensorNo ++) {
 			for (lotationCount = 0; lotationCount < 3; lotationCount ++) {
 				/* Get Counter */
-				self->ret = Dd_TMR64_Get_FrameEnd_TimeStamp(sensorNo, lotationCount, &timeStamp);
+				self->ret = dd_tmr64_get_frame_end_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 				if(self->ret == D_DDIM_OK){
 					Ddim_Print(("TimeStamp[%d][%d] = 0x%llX\n", 
 						sensorNo, lotationCount, timeStamp));
@@ -353,19 +355,19 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-		ioChiptop.DDR.bit.PB4 = 0;		// SPIRLTRG
+		ioChiptop.ddr.bit.pb4 = 0;		// SPIRLTRG
 
 //		ioChiptop.EPCR.bit.PF3 = 0;
-		ioChiptop.DDR.bit.PF3 = 1;
-		ioChiptop.PDR.bit.PF3 = 0;
+		ioChiptop.ddr.bit.pf3 = 1;
+		ioChiptop.pdr.bit.pf3 = 0;
 	}
 	/*----------------------*/
 	/* Set Gyro trigger ON  */
 	/*----------------------*/
 	else if(strcmp(argv[1], "gyro_trg_on") == 0){
-		ioChiptop.PDR.bit.PF3 = 1;		// ToDo
+		ioChiptop.pdr.bit.pf3 = 1;		// ToDo
 
-		self->ret = ddim_user_custom_get_tim(&self->systim);
+		self->ret = ddim_user_custom_get_tim(ddimUserCus, &self->systim);
 		if (self->ret != DdimUserCustom_E_OK) {
 			Ddim_Print(("ddim_user_custom_get_tim ERR=%d\n", self->ret));
 		}
@@ -377,63 +379,63 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/* Set Gyro trigger OFF  */
 	/*----------------------*/
 	else if(strcmp(argv[1], "gyro_trg_off") == 0){
-		ioChiptop.PDR.bit.PF3 = 0;
+		ioChiptop.pdr.bit.pf3 = 0;
 	}
 	/*----------*/
 	/* test 2-1 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_1") == 0){
-		self->ret = Dd_TMR64_Open(0);
+		self->ret = dd_tmr64_open(ddTmr64, 0);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Open OK\n"));
+			Ddim_Print(("dd_tmr64_open OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Open ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_open ERR=0x%08x\n", self->ret));
 		}
 
-		self->ret = Dd_TMR64_Open(0);
+		self->ret = dd_tmr64_open(ddTmr64, 0);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Open OK\n"));
+			Ddim_Print(("dd_tmr64_open OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Open ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_open ERR=0x%08x\n", self->ret));
 		}
 
-		self->ret = Dd_TMR64_Close();
+		self->ret = dd_tmr64_close(ddTmr64);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Close OK\n"));
+			Ddim_Print(("dd_tmr64_close OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Close ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_close ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
 	/* test 2-2 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_2") == 0){
-		self->ret = Dd_TMR64_Open(-2);
+		self->ret = dd_tmr64_open(ddTmr64, -2);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Open OK\n"));
+			Ddim_Print(("dd_tmr64_open OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Open ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_open ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
 	/* test 2-3 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_3") == 0){
-		DdimUserCustom_ID sidBack;
+		kint32 sidBack;
 
 		sidBack = SID_DD_TMR64;
 		SID_DD_TMR64 = 0xfff;
 
-		self->ret = Dd_TMR64_Open(0);
+		self->ret = dd_tmr64_open(ddTmr64, 0);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Open OK\n"));
+			Ddim_Print(("dd_tmr64_open OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Open ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_open ERR=0x%08x\n", self->ret));
 		}
 
 		SID_DD_TMR64 = sidBack;
@@ -442,17 +444,17 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/* test 2-4 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_4") == 0){
-		DdimUserCustom_ID sidBack;
+		kint32 sidBack;
 
 		sidBack = SID_DD_TMR64;
 		SID_DD_TMR64 = 0xfff;
 
-		self->ret = Dd_TMR64_Close();
+		self->ret = dd_tmr64_close(ddTmr64);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Close OK\n"));
+			Ddim_Print(("dd_tmr64_close OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Close ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_close ERR=0x%08x\n", self->ret));
 		}
 
 		SID_DD_TMR64 = sidBack;
@@ -461,24 +463,24 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/* test 2-5 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_5") == 0){
-		self->ret = Dd_TMR64_Ctrl(NULL);
+		self->ret = dd_tmr64_ctrl(ddTmr64, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Ctrl OK\n"));
+			Ddim_Print(("dd_tmr64_ctrl OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Ctrl ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_ctrl ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
 	/* test 2-6 */
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_6") == 0){
-		self->ret = Dd_TMR64_Get_Gyro_TimeStamp(NULL);
+		self->ret = dd_tmr64_get_gyro_time_stamp(ddTmr64, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_Gyro_TimeStamp OK\n"));
+			Ddim_Print(("dd_tmr64_get_gyro_time_stamp OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Gyro_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_gyro_time_stamp ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
@@ -490,34 +492,34 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 		kulonglong	timeStamp;
 
 		// timeStamp is null
-		self->ret = Dd_TMR64_Get_FrameStart_TimeStamp(sensorNo, lotationCount, NULL);
+		self->ret = dd_tmr64_get_frame_start_time_stamp(ddTmr64, sensorNo, lotationCount, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp ERR=0x%08x\n", self->ret));
 		}
 
 		// sensorNo is over
 		sensorNo		= 4;
 		lotationCount	= 0;
-		self->ret = Dd_TMR64_Get_FrameStart_TimeStamp(sensorNo, lotationCount, &timeStamp);
+		self->ret = dd_tmr64_get_frame_start_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp ERR=0x%08x\n", self->ret));
 		}
 
 		// lotationCount is over
 		sensorNo		= 0;
 		lotationCount	= 4;
-		self->ret = Dd_TMR64_Get_FrameStart_TimeStamp(sensorNo, lotationCount, &timeStamp);
+		self->ret = dd_tmr64_get_frame_start_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameStart_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_start_time_stamp ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
@@ -529,34 +531,34 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 		kulonglong	timeStamp;
 
 		// timeStamp is null
-		self->ret = Dd_TMR64_Get_FrameEnd_TimeStamp(sensorNo, lotationCount, NULL);
+		self->ret = dd_tmr64_get_frame_end_time_stamp(ddTmr64, sensorNo, lotationCount, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp ERR=0x%08x\n", self->ret));
 		}
 
 		// sensorNo is over
 		sensorNo		= 4;
 		lotationCount	= 0;
-		self->ret = Dd_TMR64_Get_FrameEnd_TimeStamp(sensorNo, lotationCount, &timeStamp);
+		self->ret = dd_tmr64_get_frame_end_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp ERR=0x%08x\n", self->ret));
 		}
 
 		// lotationCount is over
 		sensorNo		= 0;
 		lotationCount	= 4;
-		self->ret = Dd_TMR64_Get_FrameEnd_TimeStamp(sensorNo, lotationCount, &timeStamp);
+		self->ret = dd_tmr64_get_frame_end_time_stamp(ddTmr64, sensorNo, lotationCount, &timeStamp);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp OK"));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp OK"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_FrameEnd_TimeStamp ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_frame_end_time_stamp ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*----------*/
@@ -564,29 +566,33 @@ void ct_dd_tmr64_main(CtDdTmr64 *self, kint argc, KType* argv)
 	/*----------*/
 	else if(strcmp(argv[1], "test_2_9") == 0){
 		// counter is null
-		self->ret = Dd_TMR64_Get_Counter(NULL);
+		self->ret = dd_tmr64_get_counter(ddTmr64, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_CounterOK\n"));
+			Ddim_Print(("dd_tmr64_get_counterOK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Counter ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_counter ERR=0x%08x\n", self->ret));
 		}
 	}
 	/*-----------*/
 	/* test 2-10 */
 	/*-----------*/
 	else if(strcmp(argv[1], "test_2_10") == 0){
-		self->ret = Dd_TMR64_Get_Ctrl(NULL);
+		self->ret = dd_tmr64_get_ctrl(ddTmr64, NULL);
 		if(self->ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR64_Get_Ctrl OK\n"));
+			Ddim_Print(("dd_tmr64_get_ctrl OK\n"));
 		}
 		else {
-			Ddim_Print(("Dd_TMR64_Get_Ctrl ERR=0x%08x\n", self->ret));
+			Ddim_Print(("dd_tmr64_get_ctrl ERR=0x%08x\n", self->ret));
 		}
 	}
 	else{
 		Ddim_Print(("please check 2nd parameter!!\n"));
 	}
+	k_object_unref(ddTmr64);
+	ddTmr64 = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 CtDdTmr64 *ct_dd_tmr64_new(void)

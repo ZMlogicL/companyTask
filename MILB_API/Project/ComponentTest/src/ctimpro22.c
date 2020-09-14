@@ -392,13 +392,13 @@ void ct_im_pro2_2_7(CtImPro22* self, const kuint32 idx)
 void ct_im_pro2_2_8(CtImPro22* self, const kuint32 idx)
 {
 	TimproDpcCtrl dpcCtrlMax = {
-		.dpcMode = ImproSrocag_E_IM_PRO_DPC_MODE_5,
-		.threConv0 = ImproSrocag_E_IM_PRO_DPC_THRE_CONV_0_EN,
+		.dpcMode = ImproSrodpc_E_IM_PRO_DPC_MODE_5,
+		.threConv0 = ImproSrodpc_E_IM_PRO_DPC_THRE_CONV_0_EN,
 	};
 
 	TimproDpcCtrl dpcCtrlMin = {
-		.dpcMode = ImproSrocag_E_IM_PRO_DPC_MODE_0,
-		.threConv0 = ImproSrocag_E_IM_PRO_DPC_THRE_CONV_0_DIS,
+		.dpcMode = ImproSrodpc_E_IM_PRO_DPC_MODE_0,
+		.threConv0 = ImproSrodpc_E_IM_PRO_DPC_THRE_CONV_0_DIS,
 	};
 
 	if (idx == 1) {

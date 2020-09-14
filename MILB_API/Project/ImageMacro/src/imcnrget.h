@@ -61,7 +61,7 @@ Get SPR setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_ctrl_c(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CTRL_C** const cnr_ctrl_c, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_ctrl_c(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCtrlC** const cnr_ctrl_c, ULONG* const size );
 
 /**
 Get SPR setting address information for C for On The Fly
@@ -71,7 +71,7 @@ Get SPR setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_ctrl_c(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CTRL_C** const cnr_ctrl_c, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_ctrl_c(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCtrlC** const cnr_ctrl_c, ULONG* const size );
 
 /**
 Get SPR setting address information for Y for Off Line
@@ -81,7 +81,7 @@ Get SPR setting address information for Y for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_ctrl_y(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_OFL_CTRL_Y** const cnr_ctrl_y, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_ctrl_y(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrOflCtrlY** const cnr_ctrl_y, ULONG* const size );
 
 /**
 Get SPR table setting address information for Y for Off Line
@@ -91,7 +91,7 @@ Get SPR table setting address information for Y for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_yspr_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_OFL_YSPR_TBL** const cnr_yspr_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_yspr_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrOflYsprTbl** const cnr_yspr_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-Y setting address information for C for Off Line
@@ -101,7 +101,7 @@ Get CSPR Mid-Y setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_Y_TBL** const cspr_mid_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidYTbl** const cspr_mid_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-Y setting address information for C for On The Fly
@@ -111,7 +111,7 @@ Get CSPR Mid-Y setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_mid_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_Y_TBL** const cspr_mid_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_mid_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidYTbl** const cspr_mid_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-CC-Y setting address information for C for Off Line
@@ -121,7 +121,7 @@ Get CSPR Mid-CC-Y setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_cc_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_CC_Y_TBL** const cspr_mid_cc_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_cc_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidCcYTbl** const cspr_mid_cc_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-CC-Y setting address information for C for On The Fly
@@ -131,7 +131,7 @@ Get CSPR Mid-CC-Y setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_mid_cc_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_CC_Y_TBL** const cspr_mid_cc_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_mid_cc_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidCcYTbl** const cspr_mid_cc_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-CC-C setting address information for C for Off Line
@@ -141,7 +141,7 @@ Get CSPR Mid-CC-C setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_cc_c_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_CC_C_TBL** const cspr_mid_cc_c_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_mid_cc_c_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidCcCTbl** const cspr_mid_cc_c_tbl, ULONG* const size );
 
 /**
 Get CSPR Mid-CC-C setting address information for C for On The Fly
@@ -151,7 +151,7 @@ Get CSPR Mid-CC-C setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_mid_cc_c_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_MID_CC_C_TBL** const cspr_mid_cc_c_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_mid_cc_c_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprMidCcCTbl** const cspr_mid_cc_c_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-Y setting address information for C for Off Line
@@ -161,7 +161,7 @@ Get CSPR Low-Y setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_low_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_Y_TBL** const cspr_low_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_low_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowYTbl** const cspr_low_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-Y setting address information for C for On The Fly
@@ -171,7 +171,7 @@ Get CSPR Low-Y setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_low_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_Y_TBL** const cspr_low_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_low_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowYTbl** const cspr_low_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-CC-Y setting address information for C for Off Line
@@ -181,7 +181,7 @@ Get CSPR Low-CC-Y setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_low_cc_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_CC_Y_TBL** const cspr_low_cc_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_low_cc_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowCcYTbl** const cspr_low_cc_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-CC-Y setting address information for C for On The Fly
@@ -191,7 +191,7 @@ Get CSPR Low-CC-Y setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_low_cc_y_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_CC_Y_TBL** const cspr_low_cc_y_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_low_cc_y_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowCcYTbl** const cspr_low_cc_y_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-CC-C setting address information for C for Off Line
@@ -201,7 +201,7 @@ Get CSPR Low-CC-C setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_low_cc_c_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_CC_C_TBL** const cspr_low_cc_c_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_low_cc_c_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowCcCTbl** const cspr_low_cc_c_tbl, ULONG* const size );
 
 /**
 Get CSPR Low-CC-C setting address information for C for On The Fly
@@ -211,7 +211,7 @@ Get CSPR Low-CC-C setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_low_cc_c_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_LOW_CC_C_TBL** const cspr_low_cc_c_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_low_cc_c_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprLowCcCTbl** const cspr_low_cc_c_tbl, ULONG* const size );
 
 /**
 Get CSPR Edge setting address information for C for Off Line
@@ -221,7 +221,7 @@ Get CSPR Edge setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_edge_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_EDGE_TBL** const cspr_edge_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_edge_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprEdgeTbl** const cspr_edge_tbl, ULONG* const size );
 
 /**
 Get CSPR Edge setting address information for C for On The Fly
@@ -231,7 +231,7 @@ Get CSPR Edge setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_edge_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_EDGE_TBL** const cspr_edge_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_edge_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprEdgeTbl** const cspr_edge_tbl, ULONG* const size );
 
 /**
 Get CSPR Hue Specified setting address information for C for Off Line
@@ -241,7 +241,7 @@ Get CSPR Hue Specified setting address information for C for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_hue_spec_table( UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_HUE_TBL** const cspr_hue_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_hue_spec_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprHueTbl** const cspr_hue_tbl, ULONG* const size );
 
 /**
 Get CSPR Hue Specified setting address information for C for On The Fly
@@ -251,47 +251,47 @@ Get CSPR Hue Specified setting address information for C for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_hue_spec_table(ImCnrGet*self, UCHAR ch, const T_IM_CNR_RDMA_ADDR_CSPR_HUE_TBL** const cspr_hue_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_hue_spec_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrCsprHueTbl** const cspr_hue_tbl, ULONG* const size );
 
 /**
-Get CSPR SPRS setting address information for C for Off Line
+Get CSPR sprs setting address information for C for Off Line
 @param[in]	ch					channel[0 - 2]
-@param[out]	cspr_sprs_cc_tbl	Top address of the address array of C suppre SPRS CC parameter
-@param[out]	size				Size of the address array of C suppre SPRS CC parameter
+@param[out]	cspr_sprs_cc_tbl	Top address of the address array of C suppre sprs CC parameter
+@param[out]	size				Size of the address array of C suppre sprs CC parameter
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_sprs_cc_table( UCHAR ch, const T_IM_CNR_RDMA_ADDR_SPRS_CC_TBL** const cspr_sprs_cc_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_sprs_cc_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrSprsCcTbl** const cspr_sprs_cc_tbl, ULONG* const size );
 
 /**
-Get CSPR SPRS setting address information for C for On The Fly
+Get CSPR sprs setting address information for C for On The Fly
 @param[in]	ch					channel[0 - 2]
-@param[out]	cspr_sprs_cc_tbl	Top address of the address array of C suppre SPRS CC parameter
-@param[out]	size				Size of the address array of C suppre SPRS CC parameter
+@param[out]	cspr_sprs_cc_tbl	Top address of the address array of C suppre sprs CC parameter
+@param[out]	size				Size of the address array of C suppre sprs CC parameter
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_sprs_cc_table( UCHAR ch, const T_IM_CNR_RDMA_ADDR_SPRS_CC_TBL** const cspr_sprs_cc_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_sprs_cc_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrSprsCcTbl** const cspr_sprs_cc_tbl, ULONG* const size );
 
 /**
-Get CSPR SPRD setting address information for C for Off Line
+Get CSPR sprd setting address information for C for Off Line
 @param[in]	ch					channel[0 - 2]
-@param[out]	cspr_sprd_cc_tbl	Top address of the address array of C suppre SPRD CC parameter
-@param[out]	size				Size of the address array of C suppre SPRD CC parameter
+@param[out]	cspr_sprd_cc_tbl	Top address of the address array of C suppre sprd CC parameter
+@param[out]	size				Size of the address array of C suppre sprd CC parameter
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_ofl_cspr_sprd_cc_table( UCHAR ch, const T_IM_CNR_RDMA_ADDR_SPRD_CC_TBL** const cspr_sprd_cc_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_ofl_cspr_sprd_cc_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrSprdCcTbl** const cspr_sprd_cc_tbl, ULONG* const size );
 
 /**
-Get CSPR SPRD setting address information for C for On The Fly
+Get CSPR sprd setting address information for C for On The Fly
 @param[in]	ch					channel[0 - 2]
-@param[out]	cspr_sprd_cc_tbl	Top address of the address array of C suppre SPRD CC parameter
-@param[out]	size				Size of the address array of C suppre SPRD CC parameter
+@param[out]	cspr_sprd_cc_tbl	Top address of the address array of C suppre sprd CC parameter
+@param[out]	size				Size of the address array of C suppre sprd CC parameter
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_get_rdma_addr_otf_cspr_sprd_cc_table( UCHAR ch, const T_IM_CNR_RDMA_ADDR_SPRD_CC_TBL** const cspr_sprd_cc_tbl, ULONG* const size );
+INT32 im_cnr_get_rdma_addr_otf_cspr_sprd_cc_table(ImCnrGet*self, UCHAR ch, const TImCnrRdmaAddrSprdCcTbl** const cspr_sprd_cc_tbl, ULONG* const size );
 
 #endif
 
@@ -316,102 +316,102 @@ INT32 sample_cnr( VOID )
 {
 	INT32 im_ercd;
 	INT32 im_ercd2;
-	T_IM_CNR_OFL_CTRL cnr_ctrl = {
+	TImCnrOflCtrl cnr_ctrl = {
 		.mode = E_IM_CNR_YCC_MODE_YCC422,			// mode			SPR YCC mode	@@YUV_MODE
 
 		.width = 4000,								// width		SPR valid data width	@@HSIZE
 		.lines = 3000,								// lines		SPR valid data lines	@@VSIZE
 
-		.r_y_width = 4000,							// r_y_width	Y width for read	@@RYDEF
-		.r_y_addr = 0x42000000,						// r_y_addr		Y address for read	@@RYTA
+		.rYWidth = 4000,							// rYWidth	Y width for read	@@RYDEF
+		.rYAddr = 0x42000000,						// rYAddr		Y address for read	@@RYTA
 
-		.r_c_width = 4000 /2,						// r_c_width	CbCr width for read	@@RCDEF
-		.r_cb_addr = 0x43000000,					// r_cb_addr	Cb address for read	@@RCBTA
-		.r_cr_addr = 0x44000000,					// r_cr_addr	Cr address for read	@@RCRTA
+		.rCWidth = 4000 /2,						// rCWidth	CbCr width for read	@@RCDEF
+		.rCbAddr = 0x43000000,					// rCbAddr	Cb address for read	@@RCBTA
+		.rCrAddr = 0x44000000,					// rCrAddr	Cr address for read	@@RCRTA
 
-		.w_y_width = 4000,							// w_y_width	Y width for write	@@WYDEF
-		.w_y_addr = 0x45000000,						// w_y_addr		Y address for write	@@WYTA
+		.wYWidth = 4000,							// wYWidth	Y width for write	@@WYDEF
+		.wYAddr = 0x45000000,						// wYAddr		Y address for write	@@WYTA
 
-		.w_c_width = 4000 /2,						// w_c_width	CbCr width for write	@@WCDEF
-		.w_cb_addr = 0x46000000,					// w_cb_addr	Cb address for write	@@WCBTA
-		.w_cr_addr = 0x47000000,					// w_cr_addr	Cr address for write	@@WCRTA
+		.wCWidth = 4000 /2,						// wCWidth	CbCr width for write	@@WCDEF
+		.wCbAddr = 0x46000000,					// wCbAddr	Cb address for write	@@WCBTA
+		.wCrAddr = 0x47000000,					// wCrAddr	Cr address for write	@@WCRTA
 
-		.work_addr = 0x48000000,					// work_addr	Address fir work area	@@TMPTA
+		.workAddr = 0x48000000,					// workAddr	Address fir work area	@@TMPTA
 
-		.divide_top = E_IM_CNR_VPROCESS_NORM,		// divide_top	Virtucal process devide	@@VDIVT
-		.divide_bot = E_IM_CNR_VPROCESS_NORM,		// divide_bot	Virtucal process devide	@@VDIVB
+		.divideTop = ImCnr_E_IM_CNR_VPROCESS_NORM,		// divideTop	Virtucal process devide	@@VDIVT
+		.divideBot = ImCnr_E_IM_CNR_VPROCESS_NORM,		// divideBot	Virtucal process devide	@@VDIVB
 
 		.pCallBack = NULL,							// pCallBack	callback function
-		.user_param = 0,							// user_param	callback arg
+		.userParam = 0,							// userParam	callback arg
 	};
-	T_IM_CNR_CTRL_C cnr_ctrl_c = {
-		.enable = E_IM_CNR_ONOFF_ENABLE,					// enable				CbCr SPR enable @@CSPREN
-		.gradation_keep_en = E_IM_CNR_ONOFF_ENABLE,			// enable				gradation keep enable @@CGDKEN
-		.mid_freq_nr = {									// Middle range frequency Color NR parmeter
-			.enable = E_IM_CNR_ONOFF_ENABLE,				// Middle CbCr SPR enable @@MCEN
-			.h_y_threshold = {								// Middle SPR Y threshold for horizontal	@@MCYTHH
+	TImCnrCtrlC cnr_ctrl_c = {
+		.enable = ImCnr_E_IM_CNR_ONOFF_ENABLE,					// enable				CbCr SPR enable @@csprEn
+		.gradationKeepEn = ImCnr_E_IM_CNR_ONOFF_ENABLE,			// enable				gradation keep enable @@cgdkEn
+		.midFreqNr = {									// Middle range frequency Color NR parmeter
+			.enable = ImCnr_E_IM_CNR_ONOFF_ENABLE,				// Middle CbCr SPR enable @@mcEn
+			.hYThreshold = {								// Middle SPR Y threshold for horizontal	@@mcYthh
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_y_threshold = {								// Middle SPR Y threshold for vertical		@@MCYTHV
+			.vYThreshold = {								// Middle SPR Y threshold for vertical		@@mcYthv
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.h_c_threshold = {								// Middle SPR CbCr threshold for horizontal	@@MCCTHH
+			.hCThreshold = {								// Middle SPR CbCr threshold for horizontal	@@mcCthh
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_c_threshold = {								// Middle SPR CbCr threshold for vertical	@@MCCTHV
+			.vCThreshold = {								// Middle SPR CbCr threshold for vertical	@@mcCthv
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.y_threshold_cor = 0,							// Middle SPR Y threshold coring	@@MCYDYMYCR
-			.y_threshold_gain = 0,							// register default. Need tuning.
-			.y_threshold_dym_en = E_IM_CNR_ONOFF_DISABLE,	// Middle Y threshold dynamic setting enable @@MCYDYM
-			.y_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Middle Y threshold scale enable @@MCYSCL
-			.c_y_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Middle CbCr threshold Y scale enable @@MCSSCL
-			.c_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Middle CbCr threshold scale enable @@MCCSCL
+			.yThresholdCor = 0,							// Middle SPR Y threshold coring	@@MCYDYMYCR
+			.yThresholdGain = 0,							// register default. Need tuning.
+			.yThresholdDymEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Middle Y threshold dynamic setting enable @@mcYdym
+			.yThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Middle Y threshold scale enable @@mcYscl
+			.cYThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Middle CbCr threshold Y scale enable @@mcSscl
+			.cThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Middle CbCr threshold scale enable @@mcCscl
 		},
-		.low_freq_nr = {									// Low range frequency Color NR parmeters
-			.enable = E_IM_CNR_ONOFF_ENABLE,					// Low CbCr SPR enable @@LCEN
-			.h_y_threshold = {								// Low SPR Y threshold for horizontal		@@LCYTHH
+		.lowFreqNr = {									// Low range frequency Color NR parmeters
+			.enable = ImCnr_E_IM_CNR_ONOFF_ENABLE,					// Low CbCr SPR enable @@lcEn
+			.hYThreshold = {								// Low SPR Y threshold for horizontal		@@lcYthh
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_y_threshold = {								// Low SPR Y threshold for vertical			@@LCYTHV
+			.vYThreshold = {								// Low SPR Y threshold for vertical			@@lcYthv
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.h_c_threshold = {								// Low SPR CbCr threshold for horizontal	@@LCCTHH
+			.hCThreshold = {								// Low SPR CbCr threshold for horizontal	@@lcCthh
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.v_c_threshold = {								// Low SPR CbCr threshold for vertical		@@LCCTHV
+			.vCThreshold = {								// Low SPR CbCr threshold for vertical		@@lcCthv
 				0, 0, 0, 0										// register default. Need tuning.
 			},
-			.y_threshold_cor = 0,							// Low SPR Y threshold coring	@@LCYDYMYCR
-			.y_threshold_gain = 0,							// register default. Need tuning.
-			.y_threshold_dym_en = E_IM_CNR_ONOFF_DISABLE,	// Low Y threshold dynamic setting enable @@LCYDYM
-			.y_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Low Y threshold scale enable @@LCYSCL
-			.c_y_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Low CbCr threshold Y scale enable @@LCSSCL
-			.c_threshold_scl_en = E_IM_CNR_ONOFF_DISABLE,	// Low CbCr threshold scale enable @@LCCSCL
+			.yThresholdCor = 0,							// Low SPR Y threshold coring	@@LCYDYMYCR
+			.yThresholdGain = 0,							// register default. Need tuning.
+			.yThresholdDymEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Low Y threshold dynamic setting enable @@lcYdym
+			.yThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Low Y threshold scale enable @@lcYscl
+			.cYThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Low CbCr threshold Y scale enable @@lcSscl
+			.cThresholdSclEn = ImCnr_E_IM_CNR_ONOFF_DISABLE,	// Low CbCr threshold scale enable @@lcCscl
 		},
 	};
-	T_IM_CNR_OFL_CTRL_Y cnr_ctrl_y = {
-		.enable = E_IM_CNR_ONOFF_ENABLE,					// enable				Y SPR enable @@YSPREN
-		.threshold_type = E_IM_CNR_THRES_REGISTER,			// threshold_type		threshold type for Y	@@YSPRMODE YSPRMD
-		.level = E_IM_CNR_LEVEL_LOW,						// level				filter level		@@YSPRMODE YSPRFE
-		.h_y_threshold = 0,									// h_y_threshold		SPR Y threshold for horizontal		@@YSPRFXEYH
-		.v_y_threshold = 0,									// v_y_threshold		SPR Y threshold for vertical		@@YSPRFXEYV
-		.h_c_threshold = 0,									// h_c_threshold		SPR CbCr threshold for horizontal	@@YSPRFXECH
-		.v_c_threshold = 0,									// v_c_threshold		SPR CbCr threshold for vertical		@@YSPRFXECV
-		.alpha_blend_ratio = 0,								// alpha_blend_ratio	Alpha blend ratio			@@YSPRALPBD
+	TImCnrOflCtrlY cnr_ctrl_y = {
+		.enable = ImCnr_E_IM_CNR_ONOFF_ENABLE,					// enable				Y SPR enable @@ysprEn
+		.thresholdType = ImCnr_E_IM_CNR_THRES_REGISTER,			// thresholdType		threshold type for Y	@@ysprMode YSPRMD
+		.level = ImCnr_E_IM_CNR_LEVEL_LOW,						// level				filter level		@@ysprMode YSPRFE
+		.hYThreshold = 0,									// hYThreshold		SPR Y threshold for horizontal		@@YSPRFXEYH
+		.vYThreshold = 0,									// vYThreshold		SPR Y threshold for vertical		@@YSPRFXEYV
+		.hCThreshold = 0,									// hCThreshold		SPR CbCr threshold for horizontal	@@YSPRFXECH
+		.vCThreshold = 0,									// vCThreshold		SPR CbCr threshold for vertical		@@YSPRFXECV
+		.alphaBlendRatio = 0,								// alphaBlendRatio	Alpha blend ratio			@@ysprAlpbd
 	};
 
 
 
-	im_ercd = Im_CNR_OFL_Open( 0, 100 );	// wai_sem timeout 100 ticks
+	im_ercd = im_cnr_ofl_open(im_cnr_new(), 0, 100 );	// wai_sem timeout 100 ticks
 	if( im_ercd != D_DDIM_OK ) {
 		return im_ercd;
 	}
 
-	// don't forget Im_CNR_OFL_Close() after this line
+	// don't forget im_cnr_ofl_close() after this line
 
 	while( 1 ) {
-		im_ercd = Im_CNR_OFL_Ctrl( 0, &cnr_ctrl );
+		im_ercd = im_cnr_init_ofl_ctrl(im_cnr_init_new(), 0, &cnr_ctrl );
 		if( im_ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -426,7 +426,7 @@ INT32 sample_cnr( VOID )
 			break;
 		}
 
-		im_ercd = Im_CNR_OFL_Start_Sync( 0, 1000 );	// wait timeout 1000 ticks
+		im_ercd = im_cnr_ofl_start_sync( 0, 1000 );	// wait timeout 1000 ticks
 		if( im_ercd != D_DDIM_OK ) {
 			break;
 		}
@@ -434,19 +434,19 @@ INT32 sample_cnr( VOID )
 		break;
 	}
 
-	im_ercd2 = Im_CNR_OFL_Stop( 0 );
+	im_ercd2 = im_cnr_ofl_stop(im_cnr_new(), 0 );
 	if( im_ercd2 != D_DDIM_OK ) {
 		im_ercd = im_ercd2;
 	}
 
 	if( im_ercd == D_DDIM_OK ) {
-		im_ercd2 = Im_CNR_OFL_Close( 0 );
+		im_ercd2 = im_cnr_ofl_close(im_cnr_new(), 0 );
 		if( im_ercd2 != D_DDIM_OK ) {
 			im_ercd = im_ercd2;
 		}
 	}
 	else {
-		(VOID)Im_CNR_OFL_Close( 0 );
+		(VOID)im_cnr_ofl_close(im_cnr_new(), 0 );
 	}
 
 	return im_ercd;

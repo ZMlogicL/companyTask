@@ -68,7 +68,7 @@ static void impro_sentop_destructor(ImproSentop *self)
 VOID impro_sentop_set_cphy_common_ctrl( UCHAR phyNo, TimproSentopCphyCommonModeCtrl* cphyCommon )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	switch( phyNo ) {
 		case 0:
 			ioPro.sen.sentop.phy0mdctl.bit.phy0Bitwidthsel			= cphyCommon->bitwidthsel;
@@ -107,7 +107,7 @@ VOID impro_sentop_set_cphy_common_ctrl( UCHAR phyNo, TimproSentopCphyCommonModeC
 			break;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 }
 
 /*----------------------------------------------------------------------*/
@@ -126,33 +126,33 @@ VOID impro_sentop_init( VOID )
 {
 	// Software release
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.sr.bit.sr  = D_IM_PRO_SR_RELEASE;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 }
 
 /**
 SENTOP Macro software reset
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
 */
 INT32 impro_sentop_sw_reset( VOID )
 {
 #ifdef CO_ACT_PRO_CLOCK
 	//not ALL Stopped
-	if (im_pro_sen_get_stop_all() == FALSE){
+	if (im_pro_common_fig_im_pro_sen_get_stop_all() == FALSE){
 		Ddim_Print(("I:impro_sentop_sw_reset. macro not stopped error. \n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif	/* CO_ACT_PRO_CLOCK */
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	// Software reset
 	ioPro.sen.sentop.sr.bit.sr  = D_IM_PRO_SR_RESET;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -163,7 +163,7 @@ SENTOP Macro clock control
 @param[in]	onOff		: 0:clock on 1:clock off
 @param[in]	waitSkip	: 0:non wait 1:wait 1ms. for wait PROCLK/CDK 5 cycle.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHAR waitSkip )
 {
@@ -173,7 +173,7 @@ INT32 impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHA
 #ifdef CO_PARAM_CHECK
 	if (onOff > D_IM_PRO_CLOCK_OFF){
 		Ddim_Assertion(("I:impro_sentop_control_clock error. onOff value over!! (%d)\n", onOff));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else {
 		// DO NOTHING
@@ -181,7 +181,7 @@ INT32 impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHA
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	switch( clkType ) {
 		case ImproSentop_E_IM_PRO_SENTOP_CLK_TYPE_SENSORCLK:
 			ioPro.sen.sentop.clkstp.clkstp1.bit.pstp1 = ( ( onOff == D_IM_PRO_CLOCK_ON )
@@ -211,14 +211,14 @@ INT32 impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHA
 	}
 	// waiting for 5 cycle
 	if( waitSkip == 0 ) {
-		im_pro_get_current_clk_hz( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN, &cpuClkHz, &macroClkHz );
+		im_pro_get_current_clk_hz( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN, &cpuClkHz, &macroClkHz );
 		im_pro_common_wait_by_clk_cycle( 5, macroClkHz, cpuClkHz );
 #ifndef CO_DEBUG_ON_PC
 //			__nop();
 #endif
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -227,31 +227,31 @@ INT32 impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHA
 SENTOP macro control data setting
 @param[in]	ctrl : SENTOP macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_ctrl( TimproSentopCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_ctrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
-	if (im_pro_sen_get_stop_all() == FALSE){	//not ALL Stopped
+	if (im_pro_common_fig_im_pro_sen_get_stop_all() == FALSE){	//not ALL Stopped
 		Ddim_Print(("I:impro_sentop_ctrl. macro not stopped error. \n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 	if( ctrl->sencoreHmaxSizeCtrl > ImproSentop_E_IM_PRO_SENTOP_SENCORE_MAX_HSIZE_CTRL_2 ) {
 		Ddim_Print(("I:impro_sentop_ctrl. sencoreHmaxSizeCtrl error.(%u) \n", ctrl->sencoreHmaxSizeCtrl));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 	if( ctrl->ldivHmaxSizeCtrl > ImproSentop_E_IM_PRO_SENTOP_LDIV_MAX_HSIZE_CTRL_2 ) {
 		Ddim_Print(("I:impro_sentop_ctrl. ldivHmaxSizeCtrl error.(%u) \n", ctrl->ldivHmaxSizeCtrl));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.sentopctl1.sentopctl11.bit.senin0		= ctrl->senConnectTypeSel[0];
 	ioPro.sen.sentop.sentopctl1.sentopctl11.bit.senin1		= ctrl->senConnectTypeSel[1];
 	ioPro.sen.sentop.sentopctl1.sentopctl11.bit.senin2		= ctrl->senConnectTypeSel[2];
@@ -279,7 +279,7 @@ INT32 impro_sentop_ctrl( TimproSentopCtrl* ctrl )
 	ioPro.sen.sentop.sentopctl2.sentopctl2_2.bit.org30		= ctrl->firstPixel[3][0];
 	ioPro.sen.sentop.sentopctl2.sentopctl2_2.bit.org31		= ctrl->firstPixel[3][1];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -288,24 +288,24 @@ INT32 impro_sentop_ctrl( TimproSentopCtrl* ctrl )
 SENTOP BitShift macro control data setting
 @param[in]	ctrl : SENTOP BitShift macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_bs_ctrl( TimproSentopBsCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_bs_ctrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	//not ALL Stopped
-	if (im_pro_sen_get_stop_all() == FALSE){
+	if (im_pro_common_fig_im_pro_sen_get_stop_all() == FALSE){
 		Ddim_Print(("I:impro_sentop_bs_ctrl. macro not stopped error. \n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.bsctl.bsctl1.bit.bsamnt0	= ctrl->shiftValue[0];
 	ioPro.sen.sentop.bsctl.bsctl1.bit.bsamnt1	= ctrl->shiftValue[1];
 	ioPro.sen.sentop.bsctl.bsctl1.bit.bsamnt2	= ctrl->shiftValue[2];
@@ -319,7 +319,7 @@ INT32 impro_sentop_bs_ctrl( TimproSentopBsCtrl* ctrl )
 	ioPro.sen.sentop.bsctl.bsctl2.bit.bslr2	= ctrl->shiftDir[2];
 	ioPro.sen.sentop.bsctl.bsctl2.bit.bslr3	= ctrl->shiftDir[3];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -329,23 +329,23 @@ INT32 impro_sentop_bs_ctrl( TimproSentopBsCtrl* ctrl )
 SENTOP OBT macro setting
 @param[in]	ctrl : SENTOP BitShift macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_obt_ctrl( TimproSentopObtCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_obt_ctrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.obtcdcctl1.bit.obtcpat	= ctrl->obtCommPerttern;
 	ioPro.sen.sentop.obtcdcset.bit.obtcdcset	= 1;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	// waiting for 5 cycle
 	im_pro_common_wait_by_clk_cycle( 5, 100*1000*1000, 660*1000*1000 );
@@ -361,19 +361,19 @@ INT32 impro_sentop_obt_ctrl( TimproSentopObtCtrl* ctrl )
 SENTOP OBT macro weight coefficient setting
 @param[in]	coeff : SENTOP OBT macro weight coefficient information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_obt_set_weight_coeff( TimproSentopObtWeightCoeff* coeff )
 {
 #ifdef CO_PARAM_CHECK
 	if (coeff == NULL){
 		Ddim_Assertion(("I:impro_sentop_obt_set_weight_coeff error. coeff=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( E_IM_PRO_UNIT_NUM1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.obtcdcctl2.obtcdcctl21.bit.obtdwc00	= coeff->coeff[0][0];
 	ioPro.sen.sentop.obtcdcctl2.obtcdcctl21.bit.obtdwc01	= coeff->coeff[0][1];
 	ioPro.sen.sentop.obtcdcctl2.obtcdcctl21.bit.obtdwc10	= coeff->coeff[1][0];
@@ -384,7 +384,7 @@ INT32 impro_sentop_obt_set_weight_coeff( TimproSentopObtWeightCoeff* coeff )
 	ioPro.sen.sentop.obtcdcctl2.obtcdcctl22.bit.obtdwc31	= coeff->coeff[3][1];
 	ioPro.sen.sentop.OBTCDCSET.bit.OBTCDCSET	= 1;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	// waiting for 5 cycle
 	im_pro_common_wait_by_clk_cycle( 5, 100*1000*1000, 660*1000*1000 );
@@ -399,23 +399,23 @@ INT32 impro_sentop_obt_set_weight_coeff( TimproSentopObtWeightCoeff* coeff )
 SENTOP LVDS macro setting
 @param[in]	ctrl : SENTOP LVDS macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_lvds_ctrl( TimproSentopLvdsCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_lvds_ctrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.lvdsctl.bit.lvdsckpd	= ctrl->clockLanePowerdown;
 	ioPro.sen.sentop.lvdsctl.bit.lvdsdlpd	= ctrl->dataLanePowerdown;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -425,19 +425,19 @@ INT32 impro_sentop_lvds_ctrl( TimproSentopLvdsCtrl* ctrl )
 SENTOP SLVS macro setting
 @param[in]	ctrl : SENTOP SLVS macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_slvs_ctrl( TimproSentopSlvsCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_slvs_ctrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.slvsecctl.bit.slvsecsel		= ctrl->linkMode;
 	ioPro.sen.sentop.slvsecctl.bit.phy0Rxpdck		= ctrl->phy0Rxpdck;
 	ioPro.sen.sentop.slvsecctl.bit.phy1Rxpdck		= ctrl->phy1Rxpdck;
@@ -448,7 +448,7 @@ INT32 impro_sentop_slvs_ctrl( TimproSentopSlvsCtrl* ctrl )
 		ioPro.sen.sentop.slvsecctl.bit.phy1Rxpclk2aen	= ctrl->phy1Rxpclk2aen;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -458,25 +458,25 @@ INT32 impro_sentop_slvs_ctrl( TimproSentopSlvsCtrl* ctrl )
 SENTOP SG macro setting
 @param[in]	ctrl : SG macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_sgCtrl( TimproSentopSgCtrl* ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_sgCtrl error. ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.sgoutctl.bit.sgsel0	= ctrl->sgIfOutputSel[0];
 	ioPro.sen.sentop.sgoutctl.bit.sgsel1	= ctrl->sgIfOutputSel[1];
 	ioPro.sen.sentop.sgoutctl.bit.sgsel2	= ctrl->sgIfOutputSel[2];
 	ioPro.sen.sentop.sgoutctl.bit.sgsel3	= ctrl->sgIfOutputSel[3];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -486,19 +486,19 @@ INT32 impro_sentop_sgCtrl( TimproSentopSgCtrl* ctrl )
 SENTOP CombpPHY macro setting
 @param[in]	cphyCtrl : CombpPHY control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sentop_cphy_ctrl( TimproSentopCphyCtrl* cphyCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (cphyCtrl == NULL){
 		Ddim_Assertion(("I:impro_sentop_cphy_ctrl error. cphyCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phycifctl.phycifctl1.bit.phyPregcnt			= cphyCtrl->commonIfCtrl.pregcnt;
 	ioPro.sen.sentop.phycifctl.phycifctl1.bit.phyFreqcnt			= cphyCtrl->commonIfCtrl.freqcnt;
 	ioPro.sen.sentop.phycifctl.phycifctl1.bit.phyPdccnt			= cphyCtrl->commonIfCtrl.pdccnt;
@@ -651,7 +651,7 @@ INT32 impro_sentop_cphy_ctrl( TimproSentopCphyCtrl* cphyCtrl )
 	ioPro.sen.sentop.pll0ctl.bit.pll0Itxpclk2aen					= cphyCtrl->pll0Ctrl.itxpclk2aen;
 
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -659,7 +659,7 @@ INT32 impro_sentop_cphy_ctrl( TimproSentopCphyCtrl* cphyCtrl )
 INT32 impro_sentop_cphy_clk_ctrl( TimproSentopCphyClkCtrl* clkCtrl )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phy0clkctl.bit.phy0Clklanesel	= clkCtrl[0].clklanesel;
 	ioPro.sen.sentop.phy0clkctl.bit.phy0Clkmodesel	= clkCtrl[0].clkmodesel;
 	ioPro.sen.sentop.phy0clkctl.bit.phy0Clkoutren		= clkCtrl[0].clkoutren;
@@ -677,7 +677,7 @@ INT32 impro_sentop_cphy_clk_ctrl( TimproSentopCphyClkCtrl* clkCtrl )
 	ioPro.sen.sentop.phy3clkctl.bit.phy3Clkoutren		= clkCtrl[3].clkoutren;
 	ioPro.sen.sentop.phy3clkctl.bit.phy3Clkoutlen		= clkCtrl[3].clkoutlen;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -685,13 +685,13 @@ INT32 impro_sentop_cphy_clk_ctrl( TimproSentopCphyClkCtrl* clkCtrl )
 INT32 impro_sentop_cphy_bias_ctrl( TimproSentopCphyBiasCtrl* biasCtrl )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.biasctl.bit.phy0Xbgrpd	= biasCtrl->phy0Xbgrpd;
 	ioPro.sen.sentop.biasctl.bit.phy1Xbgrpd	= biasCtrl->phy1Xbgrpd;
 	ioPro.sen.sentop.biasctl.bit.phy2Xbgrpd	= biasCtrl->phy2Xbgrpd;
 	ioPro.sen.sentop.biasctl.bit.phy3Xbgrpd	= biasCtrl->phy3Xbgrpd;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -704,7 +704,7 @@ INT32 impro_sentop_cphy_slvs_mode_ctrl( TimproSentopCphySlvsModeCtrl* modeCtrl )
 	impro_sentop_set_cphy_common_ctrl( 3, &modeCtrl[3].commonCtrl );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phy0mdctl.bit.phy0Pimode	= modeCtrl[0].pimode;
 	ioPro.sen.sentop.phy0mdctl.bit.phy0Picnt	= modeCtrl[0].picnt;
 	ioPro.sen.sentop.phy1mdctl.bit.phy1Pimode	= modeCtrl[1].pimode;
@@ -714,7 +714,7 @@ INT32 impro_sentop_cphy_slvs_mode_ctrl( TimproSentopCphySlvsModeCtrl* modeCtrl )
 	ioPro.sen.sentop.phy3mdctl.bit.phy3Pimode	= modeCtrl[3].pimode;
 	ioPro.sen.sentop.phy3mdctl.bit.phy3Picnt	= modeCtrl[3].picnt;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -739,7 +739,7 @@ INT32 impro_sentop_cphy_dmipi_mode_ctrl( TimproSentopCphyDmipiModeCtrl* modeCtrl
 	impro_sentop_set_cphy_common_ctrl( 3, &modeCtrl[3].commonCtrl );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phy0dskctl.bit.phy0Rxspden	= modeCtrl[0].rxspden;
 	ioPro.sen.sentop.phy0dskctl.bit.phy0Dcntnum 	= modeCtrl[0].dcntnum;
 	ioPro.sen.sentop.phy0dskctl.bit.phy0Grdwidth	= modeCtrl[0].grdwidth;
@@ -778,7 +778,7 @@ INT32 impro_sentop_cphy_dmipi_mode_ctrl( TimproSentopCphyDmipiModeCtrl* modeCtrl
 	ioPro.sen.sentop.phy3ifctl.phy3ifctl6.bit.phy3Funcseld2	= modeCtrl[3].funcseld0;
 	ioPro.sen.sentop.phy3ifctl.phy3ifctl7.bit.phy3Funcseld3	= modeCtrl[3].funcseld0;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -791,7 +791,7 @@ INT32 impro_sentop_cphy_cmipi_mode_ctrl( TimproSentopCphyCmipiModeCtrl* modeCtrl
 	impro_sentop_set_cphy_common_ctrl( 3, &modeCtrl[3].commonCtrl );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phy0mdcpctl.phy0mdcpctl1.bit.phy0Zerop3uicp0	= modeCtrl[0].zerop3uicp0;
 	ioPro.sen.sentop.phy0mdcpctl.phy0mdcpctl1.bit.phy0Zerop4uicp0	= modeCtrl[0].zerop4uicp0;
 	ioPro.sen.sentop.phy0mdcpctl.phy0mdcpctl1.bit.phy0Zerop5uicp0	= modeCtrl[0].zerop5uicp0;
@@ -877,7 +877,7 @@ INT32 impro_sentop_cphy_cmipi_mode_ctrl( TimproSentopCphyCmipiModeCtrl* modeCtrl
 	ioPro.sen.sentop.phy3mdcpctl.phy3mdcpctl3.bit.phy3EqEnCp2	= modeCtrl[3].eqEnCp2;
 	ioPro.sen.sentop.phy3mdcpctl.phy3mdcpctl3.bit.phy3EqSetCp2	= modeCtrl[3].eqSetCp2;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -885,7 +885,7 @@ INT32 impro_sentop_cphy_cmipi_mode_ctrl( TimproSentopCphyCmipiModeCtrl* modeCtrl
 INT32 impro_sentop_cphy_ext_signal_ctrl( TimproSentopCphyIfExtSignalCtrl* extSignal )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.phy0ifctl.phy0ifctl1.bit.phy0Clksetsel	= extSignal[0].clksetsel;
 	ioPro.sen.sentop.phy0ifctl.phy0ifctl2.bit.phy0CphysetCp0	= extSignal[0].cphysetCp0;
 	ioPro.sen.sentop.phy0ifctl.phy0ifctl2.bit.phy0CphysetCp1	= extSignal[0].cphysetCp1;
@@ -923,7 +923,7 @@ INT32 impro_sentop_cphy_ext_signal_ctrl( TimproSentopCphyIfExtSignalCtrl* extSig
 	ioPro.sen.sentop.phy3ifctl.phy3ifctl6.bit.phy3Funcseld2	= extSignal[3].funcseld2;
 	ioPro.sen.sentop.phy3ifctl.phy3ifctl7.bit.phy3Funcseld3	= extSignal[3].funcseld3;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -933,12 +933,12 @@ INT32 impro_sentop_cphy_get_des_knew_ctrl( TimproSentopCphyDesknewMonitor* cphyM
 #ifdef CO_PARAM_CHECK
 	if (cphyMoni == NULL){
 		Ddim_Assertion(("I:impro_sentop_cphy_get_des_knew_ctrl error. cphyMoni=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	cphyMoni->desknew_moni[0].dtypemon0	= ioPro.sen.sentop.phy0dskmoni.phy0dskmoni1.bit.phy0Dtypemon0;
 	cphyMoni->desknew_moni[0].dtypemon1	= ioPro.sen.sentop.phy0dskmoni.phy0dskmoni1.bit.phy0Dtypemon1;
 	cphyMoni->desknew_moni[0].dtypemon2	= ioPro.sen.sentop.phy0dskmoni.phy0dskmoni1.bit.phy0Dtypemon2;
@@ -964,7 +964,7 @@ INT32 impro_sentop_cphy_get_des_knew_ctrl( TimproSentopCphyDesknewMonitor* cphyM
 	cphyMoni->desknew_moni[2].vldwindow2	= ioPro.sen.sentop.phy2dskmoni.phy2dskmoni2.bit.phy2Vldwindow2;
 	cphyMoni->desknew_moni[2].vldwindow3	= ioPro.sen.sentop.phy2dskmoni.phy2dskmoni2.bit.phy2Vldwindow3;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -974,12 +974,12 @@ INT32 impro_sentop_cphy_get_delay_line_monitor( TimproSentopCphyDelaylineMonitor
 #ifdef CO_PARAM_CHECK
 	if (cphyMoni == NULL){
 		Ddim_Assertion(("I:impro_sentop_cphy_get_delay_line_monitor error. cphyMoni=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	cphyMoni->delayline_moni[0].phy_code_cp0	= ioPro.sen.sentop.phy0dlmoni.phy0dlmoni1.bit.phy0CodeCp0;
 	cphyMoni->delayline_moni[0].phy_code_cp1	= ioPro.sen.sentop.phy0dlmoni.phy0dlmoni2.bit.phy0CodeCp1;
 	cphyMoni->delayline_moni[0].phy_code_cp2	= ioPro.sen.sentop.phy0dlmoni.phy0dlmoni3.bit.phy0CodeCp2;
@@ -993,7 +993,7 @@ INT32 impro_sentop_cphy_get_delay_line_monitor( TimproSentopCphyDelaylineMonitor
 	cphyMoni->delayline_moni[3].phy_code_cp1	= ioPro.sen.sentop.phy3dlmoni.phy3dlmoni2.bit.phy3CodeCp1;
 	cphyMoni->delayline_moni[3].phy_code_cp2	= ioPro.sen.sentop.phy3dlmoni.phy3dlmoni3.bit.phy3CodeCp2;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -1003,18 +1003,18 @@ INT32 impro_sentop_cphy_get_common_if_monitor( TimproSentopCphyCommonIfMonitor* 
 #ifdef CO_PARAM_CHECK
 	if (cphyMoni == NULL){
 		Ddim_Assertion(("I:impro_sentop_cphy_get_delay_line_monitor error. cphyMoni=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	cphyMoni->phy0Cdrmon	= ioPro.sen.sentop.phycmoni.phycmoni1.bit.phy0Cdrmon;
 	cphyMoni->phy1Cdrmon	= ioPro.sen.sentop.phycmoni.phycmoni2.bit.phy1Cdrmon;
 	cphyMoni->phy2Cdrmon	= ioPro.sen.sentop.phycmoni.phycmoni3.bit.phy2Cdrmon;
 	cphyMoni->phy3Cdrmon	= ioPro.sen.sentop.phycmoni.phycmoni4.bit.phy3Cdrmon;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -1022,10 +1022,10 @@ INT32 impro_sentop_cphy_get_common_if_monitor( TimproSentopCphyCommonIfMonitor* 
 INT32 impro_sentop_pseudo_vd_issue( VOID )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.sentop.pseudeVd.word = 1;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 

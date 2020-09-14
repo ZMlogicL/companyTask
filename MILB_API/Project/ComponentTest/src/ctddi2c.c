@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-05
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtDdI2c类
 *@rely                :klib
@@ -16,16 +16,17 @@
 #include <string.h>
 #include "dd_top.h"
 #include "driver_common.h"
-#include "dd_i2c.h"
+#include "ddi2c.h"
 #include "ct_dd_i2c.h"
-#include "dd_gic.h"
+#include "ddgic.h"
 #include "ddim_user_custom.h"
 #include "peripheral.h"
 
 #include "ctddi2c.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdI2c, ct_dd_i2c);
-#define CT_DD_I2C_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdI2cPrivate,CT_TYPE_DD_I2C))
+
+G_DEFINE_TYPE(CtDdI2c, ct_dd_i2c, G_TYPE_OBJECT);
+#define CT_DD_I2C_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_I2C, CtDdI2cPrivate))
 
 #define CtDdI2c_D_CT_DD_I2C_SLAVE_ADDRESS_7				(0x60)			//7 bit Slave address
 #define CtDdI2c_D_CT_DD_I2C_SLAVE_ADDRESS_10			(0x362)			//10 bit Slave address
@@ -59,55 +60,85 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtDdI2c, ct_dd_i2c);
 
 struct _CtDdI2cPrivate
 {
-
+	DdI2c *ddI2c;
+	DdGic *ddGic;
 };
 
-static kuchar* S_GCT_DD_I2C_MASTER_SEND_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_MASTER_SEND_ADDRESS;
-static kuchar* S_GCT_DD_I2C_MASTER_RECEIVE_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_MASTER_RECEIVE_ADDRESS;
-static kuchar* S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
-static kuchar* S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
+static guchar* S_GCT_DD_I2C_MASTER_SEND_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_MASTER_SEND_ADDRESS;
+static guchar* S_GCT_DD_I2C_MASTER_RECEIVE_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_MASTER_RECEIVE_ADDRESS;
+static guchar* S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
+static guchar* S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
 
-static kint32 S_GCT_DD_I2C_RECV_COUNTER = 0;
-static kint32 S_GCT_DD_I2C_SEND_COUNTER = 0;
+static gint32 S_GCT_DD_I2C_RECV_COUNTER = 0;
+static gint32 S_GCT_DD_I2C_SEND_COUNTER = 0;
 
-static T_DD_I2C_CTRL_MASTER	 S_GCT_DD_I2C_CTRL_MASTER;
-static T_DD_I2C_CTRL_SLAVE	S_GCT_DD_I2C_CTRL_SLAVE;
+static DdI2cCtrlMaster	 S_GCT_DD_I2C_CTRL_MASTER;
+static DdI2cCtrlSlave		 S_GCT_DD_I2C_CTRL_SLAVE;
 
 /*
 *DECLS
 */
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 #ifdef D_DD_I2C_PC_DEBUG
-static void ctI2cRegisterDump( kuchar ch );
+static void 	ctI2cRegisterDump( guchar ch );
 #endif
-
-static void ctI2cCtrlMasterDump( const T_DD_I2C_CTRL_MASTER* ctrlMaster );
-static void ctI2cCtrlSlaveDump( const T_DD_I2C_CTRL_SLAVE* ctrlSlave );
-static void ctI2cCtrlSmbusDump( const T_DD_I2C_CTRL_SMBUS* ctrlSmbus );
+static void 	ctI2cCtrlMasterDump( const DdI2cCtrlMaster* ctrlMaster );
+static void 	ctI2cCtrlSlaveDump( const DdI2cCtrlSlave* ctrlSlave );
+static void 	ctI2cCtrlSmbusDump( const DdI2cCtrlSmbus* ctrlSmbus );
 #ifdef D_DD_I2C_PC_DEBUG
-static void ctI2cStartInfoDump( const T_DD_I2C_START_INFO* startInfo );
+static void 	ctI2cStartInfoDump( const DdI2cStartInfo* startInfo );
 #endif
-
-static void ctDdI2cSetWriteTestData( kuint32 dataLen, kuchar* data[], kuint32 dataNum );
-static void ctDdI2cSetReadTestData( kuint32 dataLen, kuchar* data[], kuint32 dataNum );
-static kint32 ctDdI2cMasterStart( kuchar ch, T_DD_I2C_START_INFO* const startInfo, kuchar* data[], kuint32 dataNum );
-static void ctDdI2cDataPrint( E_DD_I2C_RW_MODE mode, kuint32 dataNum, kuint32 dataLength, kuchar* data[] );
-static void ctDdI2cMasterWriteTest( kuchar ch );
-static void ctDdI2cMasterReadTest( kuchar ch );
-static T_DD_I2C_SLAVE_ACTION ctDdI2c_cb( kuchar ch, E_DD_I2C_RECV_FROM_MASTER receiveSig, kuchar data );
-
+static void 	ctDdI2cSetWriteTestData( guint32 dataLen, guchar* data[], guint32 dataNum );
+static void 	ctDdI2cSetReadTestData( guint32 dataLen, guchar* data[], guint32 dataNum );
+static gint32 	ctDdI2cMasterStart( guchar ch, DdI2cStartInfo* const startInfo, guchar* data[], guint32 dataNum );
+static void 	ctDdI2cDataPrint( I2cRwMode mode, guint32 dataNum, guint32 dataLength, guchar* data[] );
+static void 	ctDdI2cMasterWriteTest( guchar ch );
+static void 	ctDdI2cMasterReadTest( guchar ch );
+static DdI2cSlaveAction
+						ctDdI2c_cb( guchar ch, I2cRecvFromMaster receiveSig, guchar data );
 /*
 *IMPL
 */
-static void ct_dd_i2c_constructor(CtDdI2c *self) 
+
+static void ct_dd_i2c_class_init(CtDdI2cClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdI2cPrivate));
 }
 
-static void ct_dd_i2c_destructor(CtDdI2c *self) 
+static void ct_dd_i2c_init(CtDdI2c *self)
 {
+	CtDdI2cPrivate *priv = CT_DD_I2C_GET_PRIVATE(self);
+	priv->ddI2c=dd_i2c_get();
+	priv->ddGic=dd_gic_new();
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdI2c *self = (CtDdI2c*)object;
+	CtDdI2cPrivate *priv = CT_DD_I2C_GET_PRIVATE(self);
+	if(priv->ddI2c){
+		g_object_unref(priv->ddI2c);
+		priv->ddI2c=NULL;
+	}
+	if(priv->ddGic){
+		g_object_unref(priv->ddGic);
+		priv->ddGic=NULL;
+	}
+	G_OBJECT_CLASS(ct_dd_i2c_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtDdI2c *self = (CtDdI2c*)object;
+//	CtDdI2cPrivate *priv = CT_DD_I2C_GET_PRIVATE(self);
 }
 
 #ifdef D_DD_I2C_PC_DEBUG
-static void ctI2cRegisterDump( kuchar ch )
+static void ctI2cRegisterDump( guchar ch )
 {
 	Ddim_Print(("REGISTER WORD\n"));
 	Ddim_Print((" IO_PERI.I2C[%d].SDAT.word = %08lX\n", ch, IO_PERI.I2C[ch].SDAT.word ));
@@ -154,46 +185,46 @@ static void ctI2cRegisterDump( kuchar ch )
 }
 #endif
 
-static void ctI2cCtrlMasterDump( const T_DD_I2C_CTRL_MASTER* ctrlMaster )
+static void ctI2cCtrlMasterDump( const DdI2cCtrlMaster* ctrlMaster )
 {
-	Ddim_Print(("T_DD_I2C_CTRL_MASTER\n"));
-	Ddim_Print((" ctrlMaster.bps                 = %d\n", (E_DD_I2C_BPS)ctrlMaster->bps ));
-	Ddim_Print((" ctrlMaster.dest_slave_addr_len = %d\n", (E_DD_I2C_ADDR_LEN)ctrlMaster->dest_slave_addr_len ));
-	Ddim_Print((" ctrlMaster.dest_slave_addr     = 0x%04X\n", ctrlMaster->dest_slave_addr ));
+	Ddim_Print(("DdI2cCtrlMaster\n"));
+	Ddim_Print((" ctrlMaster.bps                 = %d\n", (DdI2cBps)ctrlMaster->bps ));
+	Ddim_Print((" ctrlMaster.destSlaveAddrLen = %d\n", (DdI2cAddrLen)ctrlMaster->destSlaveAddrLen ));
+	Ddim_Print((" ctrlMaster.destSlaveAddr     = 0x%04X\n", ctrlMaster->destSlaveAddr ));
 }
 
-static void ctI2cCtrlSlaveDump( const T_DD_I2C_CTRL_SLAVE* ctrlSlave )
+static void ctI2cCtrlSlaveDump( const DdI2cCtrlSlave* ctrlSlave )
 {
-	Ddim_Print(("T_DD_I2C_CTRL_SLAVE\n"));
-	Ddim_Print((" ctrlSlave.own_slave_addr_len = %d\n", (E_DD_I2C_ADDR_LEN)ctrlSlave->own_slave_addr_len ));
-	Ddim_Print((" ctrlSlave.own_slave_addr     = 0x%04X\n", ctrlSlave->own_slave_addr ));
-	Ddim_Print((" ctrlSlave.global_call_en     = %d\n", ctrlSlave->global_call_en ));
-	Ddim_Print((" ctrlSlave.callback           = 0x%08lX\n", (kulong)ctrlSlave->callback ));
+	Ddim_Print(("DdI2cCtrlSlave\n"));
+	Ddim_Print((" ctrlSlave.ownSlaveAddrLen = %d\n", (DdI2cAddrLen)ctrlSlave->ownSlaveAddrLen ));
+	Ddim_Print((" ctrlSlave.ownSlaveAddr     = 0x%04X\n", ctrlSlave->ownSlaveAddr ));
+	Ddim_Print((" ctrlSlave.globalCallEn     = %d\n", ctrlSlave->globalCallEn ));
+	Ddim_Print((" ctrlSlave.callback           = 0x%08lX\n", (gulong)ctrlSlave->callback ));
 }
 
-static void ctI2cCtrlSmbusDump( const T_DD_I2C_CTRL_SMBUS* ctrlSmbus )
+static void ctI2cCtrlSmbusDump( const DdI2cCtrlSmbus* ctrlSmbus )
 {
-	Ddim_Print(("T_DD_I2C_CTRL_SMBUS\n"));
-	Ddim_Print((" ctrlSmbus.alert_resp_en = %d\n", ctrlSmbus->alert_resp_en ));
-	Ddim_Print((" ctrlSmbus.pec_num       = %d\n", ctrlSmbus->pec_num ));
-	Ddim_Print((" ctrlSmbus.timeout_div   = %d\n", (E_DD_I2C_TO_DIV)ctrlSmbus->timeout_div ));
-	Ddim_Print((" ctrlSmbus.timeout_presc = %d\n", ctrlSmbus->timeout_presc ));
+	Ddim_Print(("DdI2cCtrlSmbus\n"));
+	Ddim_Print((" ctrlSmbus.alertRespEn = %d\n", ctrlSmbus->alertRespEn ));
+	Ddim_Print((" ctrlSmbus.pecNum       = %d\n", ctrlSmbus->pecNum ));
+	Ddim_Print((" ctrlSmbus.timeoutDiv   = %d\n", (DdI2cToDiv)ctrlSmbus->timeoutDiv ));
+	Ddim_Print((" ctrlSmbus.timeoutPresc = %d\n", ctrlSmbus->timeoutPresc ));
 }
 
 #ifdef D_DD_I2C_PC_DEBUG
-static void ctI2cStartInfoDump( const T_DD_I2C_START_INFO* startInfo )
+static void ctI2cStartInfoDump( const DdI2cStartInfo* startInfo )
 {
-	Ddim_Print(("T_DD_I2C_START_INFO\n"));
-	Ddim_Print((" startInfo.rw_mode     = %d\n", startInfo->rw_mode ));
-	Ddim_Print((" startInfo.rw_data_len = %d\n", startInfo->rw_data_len ));
-	Ddim_Print((" startInfo.rw_data     = %d\n", startInfo->rw_data ));
+	Ddim_Print(("DdI2cStartInfo\n"));
+	Ddim_Print((" startInfo.rwMode     = %d\n", startInfo->rwMode ));
+	Ddim_Print((" startInfo.rwDataLen = %d\n", startInfo->rwDataLen ));
+	Ddim_Print((" startInfo.rwData     = %d\n", startInfo->rwData ));
 	Ddim_Print((" startInfo.timeout     = %d\n", startInfo->timeout ));
 }
 #endif
 
-static void ctDdI2cSetWriteTestData( kuint32 dataLen, kuchar* data[], kuint32 dataNum )
+static void ctDdI2cSetWriteTestData( guint32 dataLen, guchar* data[], guint32 dataNum )
 {
-	kint32	num, i;
+	gint32	num, i;
 
 	// Set write data
 	for( num = 0; num < dataNum; num++ ){
@@ -210,9 +241,9 @@ static void ctDdI2cSetWriteTestData( kuint32 dataLen, kuchar* data[], kuint32 da
 	}
 }
 
-static void ctDdI2cSetReadTestData( kuint32 dataLen, kuchar* data[], kuint32 dataNum )
+static void ctDdI2cSetReadTestData( guint32 dataLen, guchar* data[], guint32 dataNum )
 {
-	kint32	num, i;
+	gint32	num, i;
 
 	// Set read data
 	for( num = 0; num < dataNum; num++ ){
@@ -229,10 +260,10 @@ static void ctDdI2cSetReadTestData( kuint32 dataLen, kuchar* data[], kuint32 dat
 	}
 }
 
-static kint32 ctDdI2cMasterStart( kuchar ch, T_DD_I2C_START_INFO* const startInfo, kuchar* data[], kuint32 dataNum )
+static gint32 ctDdI2cMasterStart( guchar ch, DdI2cStartInfo* const startInfo, guchar* data[], guint32 dataNum )
 {
-	kint32 i;
-	kint32 ret = D_DDIM_OK;
+	gint32 i;
+	gint32 ret = DriverCommon_D_DDIM_OK;
 
 	for( i = 0; i < dataNum; i++ ){
 		// receive counter clear.
@@ -240,14 +271,14 @@ static kint32 ctDdI2cMasterStart( kuchar ch, T_DD_I2C_START_INFO* const startInf
 		// send counter clear.
 		S_GCT_DD_I2C_SEND_COUNTER = 0;
 		// Set RW data pointer
-		startInfo->rw_data = data[i];
+		startInfo->rwData = data[i];
 #ifdef D_DD_I2C_PC_DEBUG
 		ctI2cStartInfoDump( startInfo );
 #endif
 		// Start Master
 		Ddim_Print(("Dd_I2C_Start_Master: Start.\n"));
-		ret = Dd_I2C_Start_Master( ch, startInfo );
-		if( ret != D_DDIM_OK){
+		ret = dd_i2c_start_master(priv->ddI2c, ch, startInfo );
+		if( ret != DriverCommon_D_DDIM_OK){
 			// Master start error
 			Ddim_Print(("Dd_I2C_Start_Master: Error. ret=0x%08X\n", ret));
 		}
@@ -261,13 +292,13 @@ static kint32 ctDdI2cMasterStart( kuchar ch, T_DD_I2C_START_INFO* const startInf
 	return ret;
 }
 
-static void ctDdI2cDataPrint( E_DD_I2C_RW_MODE mode, kuint32 dataNum, kuint32 dataLength, kuchar* data[] )
+static void ctDdI2cDataPrint( I2cRwMode mode, guint32 dataNum, guint32 dataLength, guchar* data[] )
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	//Print send data to slave
 	for( i = 0; i < dataNum; i++ ){
-		if( mode == E_DD_I2C_RW_MODE_WRITE ){
+		if( mode == DdI2cCtrl_RW_MODE_WRITE ){
 			Ddim_Print(("Send Data[%d]\n",i));
 		}
 		else {
@@ -283,70 +314,70 @@ static void ctDdI2cDataPrint( E_DD_I2C_RW_MODE mode, kuint32 dataNum, kuint32 da
 }
 
 // Master ---Write---> Slave
-static void ctDdI2cMasterWriteTest( kuchar ch )
+static void ctDdI2cMasterWriteTest( guchar ch )
 {
-	T_DD_I2C_START_INFO	startInfo;
-	kuchar*				data[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
-	kuint32				dataNum = CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM;
-	kint32				ret;
+	DdI2cStartInfo	startInfo;
+	guchar*				data[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
+	guint32				dataNum = CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM;
+	gint32				ret;
 
 	// Set start info
-	startInfo.rw_mode		= E_DD_I2C_RW_MODE_WRITE;
-	startInfo.rw_data_len	= CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
+	startInfo.rwMode		= DdI2cCtrl_RW_MODE_WRITE;
+	startInfo.rwDataLen	= CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
 	startInfo.timeout		= 500;
 
 	// Reset receive data pointer
-	S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
+	S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
 
 	// Set send data pointer
 	data[0] = S_GCT_DD_I2C_MASTER_SEND_ADDRESS;
 	data[1] = S_GCT_DD_I2C_MASTER_SEND_ADDRESS + CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
 
 	// Set send test data
-	ctDdI2cSetWriteTestData( startInfo.rw_data_len, data, dataNum );
+	ctDdI2cSetWriteTestData( startInfo.rwDataLen, data, dataNum );
 
 	// Start Master
 	ret = ctDdI2cMasterStart( ch, &startInfo, data, dataNum );
 
-	if( ret == D_DDIM_OK ){
+	if( ret == DriverCommon_D_DDIM_OK ){
 		// Print send data
-		ctDdI2cDataPrint( E_DD_I2C_RW_MODE_WRITE, dataNum, startInfo.rw_data_len, data );
+		ctDdI2cDataPrint( DdI2cCtrl_RW_MODE_WRITE, dataNum, startInfo.rwDataLen, data );
 
 		// Reset receive buffer pointer
-		S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
+		S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
 
 		// Print receive data
 		data[0] = S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS;
 		data[1] = S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS + CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
-		ctDdI2cDataPrint( E_DD_I2C_RW_MODE_READ, dataNum, startInfo.rw_data_len, data );
+		ctDdI2cDataPrint( DdI2cCtrl_RW_MODE_READ, dataNum, startInfo.rwDataLen, data );
 
 		Ddim_Print(("Compare Result = %d\n", memcmp((void*)S_GCT_DD_I2C_MASTER_SEND_ADDRESS, (void*)S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS, CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN*dataNum)));
 	}
 }
 
 // Master <---Read--- Slave
-static void ctDdI2cMasterReadTest( kuchar ch )
+static void ctDdI2cMasterReadTest( guchar ch )
 {
-	T_DD_I2C_START_INFO	startInfo;
-	kuchar*				data[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
-	kuchar*				send_data[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
-	kuint32				dataNum = CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM;
-	kint32				ret;
+	DdI2cStartInfo	startInfo;
+	guchar*				data[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
+	guchar*				sendData[CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM];
+	guint32				dataNum = CtDdI2c_D_CT_DD_I2C_TEST_DATA_NUM;
+	gint32				ret;
 
 	// Set start info
-	startInfo.rw_mode		= E_DD_I2C_RW_MODE_READ;
-	startInfo.rw_data_len	= CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
+	startInfo.rwMode		= DdI2cCtrl_RW_MODE_READ;
+	startInfo.rwDataLen	= CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
 	startInfo.timeout		= 500;
 
 	// Reset send data pointer
-	S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
+	S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
 
 	// Set send data pointer
-	send_data[0] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS;
-	send_data[1] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS + CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
+	sendData[0] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS;
+	sendData[1] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS + CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
 
 	// Set send test data
-	ctDdI2cSetReadTestData( startInfo.rw_data_len, send_data, dataNum );
+	ctDdI2cSetReadTestData( startInfo.rwDataLen, sendData, dataNum );
 
 	// Set receive data pointer
 	data[0] = S_GCT_DD_I2C_MASTER_RECEIVE_ADDRESS;
@@ -355,41 +386,41 @@ static void ctDdI2cMasterReadTest( kuchar ch )
 	// Start Master
 	ret = ctDdI2cMasterStart( ch, &startInfo, data, dataNum );
 
-	if( ret == D_DDIM_OK ){
+	if( ret == DriverCommon_D_DDIM_OK ){
 		// Print receive data
-		ctDdI2cDataPrint( E_DD_I2C_RW_MODE_READ, dataNum, startInfo.rw_data_len, data );
+		ctDdI2cDataPrint( DdI2cCtrl_RW_MODE_READ, dataNum, startInfo.rwDataLen, data );
 
 		// Reset receive buffer pointer
-		S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (kuchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
+		S_GCT_DD_I2C_SLAVE_SEND_ADDRESS = (guchar*)CtDdI2c_D_CT_DD_I2C_SLAVE_SEND_ADDRESS;
 
 		// Print send data
 		data[0] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS;
 		data[1] = S_GCT_DD_I2C_SLAVE_SEND_ADDRESS + CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN;
-		ctDdI2cDataPrint( E_DD_I2C_RW_MODE_WRITE, dataNum, startInfo.rw_data_len, data );
+		ctDdI2cDataPrint( DdI2cCtrl_RW_MODE_WRITE, dataNum, startInfo.rwDataLen, data );
 
 		Ddim_Print(("Compare Result = %d\n", memcmp((void*)S_GCT_DD_I2C_SLAVE_SEND_ADDRESS, (void*)S_GCT_DD_I2C_MASTER_RECEIVE_ADDRESS, CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN*dataNum)));
 	}
 }
 
 //Call back function for slave
-static T_DD_I2C_SLAVE_ACTION ctDdI2c_cb( kuchar ch, E_DD_I2C_RECV_FROM_MASTER receiveSig, kuchar data )
+static DdI2cSlaveAction ctDdI2c_cb( guchar ch, I2cRecvFromMaster receiveSig, guchar data )
 {
-	T_DD_I2C_SLAVE_ACTION ret_act = { D_DD_I2C_SEND_NO_ACK_MASTER, 0 };
+	DdI2cSlaveAction retAct = { DdI2c_SEND_NO_ACK_MASTER, 0 };
 
 	switch( receiveSig ){
-		case E_DD_I2C_RECV_FROM_MASTER_ADDRESS:
+		case DdI2cCtrl_RECV_FROM_MASTER_ADDRESS:
 			// Receive slave address
 			S_GCT_DD_I2C_RECV_COUNTER = 0;
 			S_GCT_DD_I2C_SEND_COUNTER = 0;
 
 			Ddim_Print(("Received Slave address = 0x%04X\n",data));
 			break;
-		case E_DD_I2C_RECV_FROM_MASTER_DATA:
+		case DdI2cCtrl_RECV_FROM_MASTER_DATA:
 
 			if( S_GCT_DD_I2C_RECV_COUNTER < CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN ){
 				// Replay ACK to master
-				ret_act.action_mode = D_DD_I2C_SEND_DATA_2_MASTER;
-				ret_act.send_data = D_DD_I2C_SEND_ACK_MASTER;
+				retAct.actionMode = DdI2c_SEND_DATA_2_MASTER;
+				retAct.sendData = D_DD_I2C_SEND_ACK_MASTER;
 
 				// Get receive data
 				*S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS = data;
@@ -398,69 +429,70 @@ static T_DD_I2C_SLAVE_ACTION ctDdI2c_cb( kuchar ch, E_DD_I2C_RECV_FROM_MASTER re
 			}
 			else {
 				// Replay NOACK to master
-				ret_act.action_mode = D_DD_I2C_SEND_NO_ACK_MASTER;
+				retAct.actionMode = DdI2c_SEND_NO_ACK_MASTER;
 			}
 			break;
 
 		case E_DD_I2C_RECV_FROM_MASTER_ACK:
 			if( S_GCT_DD_I2C_SEND_COUNTER < CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN ){
 				// Replay ACK to master
-				ret_act.action_mode = D_DD_I2C_SEND_DATA_2_MASTER;
+				retAct.actionMode = DdI2c_SEND_DATA_2_MASTER;
 
 				// Set send data
-				ret_act.send_data = *S_GCT_DD_I2C_SLAVE_SEND_ADDRESS;
+				retAct.sendData = *S_GCT_DD_I2C_SLAVE_SEND_ADDRESS;
 				S_GCT_DD_I2C_SLAVE_SEND_ADDRESS++;
 				S_GCT_DD_I2C_SEND_COUNTER++;
 			}
 			else if (S_GCT_DD_I2C_SEND_COUNTER == CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN) {
-				ret_act.action_mode = D_DD_I2C_SEND_DATA_2_MASTER;
-				ret_act.send_data = 0x00;
+				retAct.actionMode = DdI2c_SEND_DATA_2_MASTER;
+				retAct.sendData = 0x00;
 			}
 			break;
 
 		case E_DD_I2C_RECV_FROM_MASTER_ERROR:
 			// Receive error
-			ret_act.action_mode = D_DD_I2C_SEND_NO_ACK_MASTER;
+			retAct.actionMode = DdI2c_SEND_NO_ACK_MASTER;
 
-			Ddim_Print(("Received Error occur. Cause = 0x%08X\n", Dd_I2C_Get_Error_Cause( ch )));
+			Ddim_Print(("Received Error occur. Cause = 0x%08X\n", dd_i2c_get_error_cause(priv->ddI2c, ch )));
 			break;
 
 		default:
 			break;
 	}
 
-	return ret_act;
+	return retAct;
 }
 
 /*
 *PUBLIC
 */
-void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
+void ct_dd_i2c_main_main(CtDdI2c* self, gint argc, gchar** argv)
 {
-	kulong val;
-	kuchar ch;
-	kchar* endstr;
-	kint32 ret = D_DDIM_OK;
+	gulong val;
+	guchar ch;
+	gchar* endstr;
+	gint32 ret = DriverCommon_D_DDIM_OK;
+	CtDdI2cPrivate *priv = CT_DD_I2C_GET_PRIVATE(self);
 
 	if( strcmp(argv[1], "init") == 0 ){
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC1L, 1 );	// IS0CL(ch0)
-		if ( val != D_DDIM_OK ) {
+		if ( val != DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Dd_Top_Set_Gpio_Function error [IS0CL(ch0)]\n"));
 		}
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC0L, 1 );	// IS0DA(ch0)
-		if ( val != D_DDIM_OK ) {
+		if ( val != DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Dd_Top_Set_Gpio_Function error [IS0DA(ch0)]\n"));
 		}
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC3L, 1 );	// IS1CL(ch1)
-		if ( val != D_DDIM_OK ) {
+		if ( val != DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Dd_Top_Set_Gpio_Function error [IS1CL(ch1)]\n"));
 		}
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC2L, 1 );	// IS1DA(ch1)
-		if ( val != D_DDIM_OK ) {
+		if ( val != DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Dd_Top_Set_Gpio_Function error [IS1DA(ch1)]\n"));
 		}
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC5L, 1 );	// IS2CL(ch2)
-		if ( val != D_DDIM_OK ) {
+		if ( val != DriverCommon_D_DDIM_OK ) {
 			Ddim_Print(("Dd_Top_Set_Gpio_Function error [IS2CL(ch2)]\n"));
 		}
 		val = Dd_Top_Set_Gpio_Function( E_DD_TOP_GPIO_PC4L, 1 );	// IS2DA(ch2)
@@ -473,9 +505,9 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		memset(S_GCT_DD_I2C_SLAVE_SEND_ADDRESS, 0, CtDdI2c_D_CT_DD_I2C_MAX_BUFFER_SIZE);
 		memset(S_GCT_DD_I2C_SLAVE_RECEIVE_ADDRESS, 0, CtDdI2c_D_CT_DD_I2C_MAX_BUFFER_SIZE);
 
-		Dd_GIC_Ctrl(E_DD_GIC_INTID_I2C_CH0_INT, 1, D_DD_GIC_PRI14, 1);
-		Dd_GIC_Ctrl(E_DD_GIC_INTID_I2C_CH1_INT, 1, D_DD_GIC_PRI14, 1);
-		Dd_GIC_Ctrl(E_DD_GIC_INTID_I2C_CH2_INT, 1, D_DD_GIC_PRI14, 1);
+		dd_gic_ctrl(priv->ddGic, E_DD_GIC_INTID_I2C_CH0_INT, 1, D_DD_GIC_PRI14, 1);
+		dd_gic_ctrl(priv->ddGic, E_DD_GIC_INTID_I2C_CH1_INT, 1, D_DD_GIC_PRI14, 1);
+		dd_gic_ctrl(priv->ddGic, E_DD_GIC_INTID_I2C_CH2_INT, 1, D_DD_GIC_PRI14, 1);
 	}
 	else if( strcmp(argv[1], "open") == 0){
 		// i2c stop_master P1
@@ -483,11 +515,11 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		//   P2 : wait time
 		ch = atoi( argv[2] );
 
-		kint32 wait_time = CtDdI2c_D_DD_CT_I2C_WAIT_TIME;
+		gint32 wait_time = CtDdI2c_D_DD_CT_I2C_WAIT_TIME;
 		if( argc > 3 ){
 			wait_time = atoi(argv[3]);
 		}
-		if( Dd_I2C_Open( ch,wait_time ) == D_DDIM_OK ){
+		if( Dd_I2C_Open( ch,wait_time ) == DriverCommon_D_DDIM_OK ){
 			Ddim_Print(("Dd_I2C_Open: OK\n"));
 		}
 		else{
@@ -505,7 +537,7 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 #ifdef CO_DEBUG_ON_PC
 		Dd_I2C_Open( ch, 1 );
 #endif
-		if( Dd_I2C_Close( ch ) == D_DDIM_OK ){
+		if( Dd_I2C_Close( ch ) == DriverCommon_D_DDIM_OK ){
 			Ddim_Print(("Dd_I2C_Close: OK\n"));
 		}
 		else{
@@ -522,15 +554,15 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		//  P4: Destination slave address
 		if( argc == 6 ){
 			ch	= atoi( argv[2] );
-			S_GCT_DD_I2C_CTRL_MASTER.bps					= (E_DD_I2C_BPS)atoi( argv[3] );
-			S_GCT_DD_I2C_CTRL_MASTER.dest_slave_addr_len	= (E_DD_I2C_ADDR_LEN)atoi( argv[4] );
-			S_GCT_DD_I2C_CTRL_MASTER.dest_slave_addr		= strtoul( argv[5], &endstr, 16 );
+			S_GCT_DD_I2C_CTRL_MASTER.bps					= (DdI2cBps)atoi( argv[3] );
+			S_GCT_DD_I2C_CTRL_MASTER.destSlaveAddrLen	= (DdI2cAddrLen)atoi( argv[4] );
+			S_GCT_DD_I2C_CTRL_MASTER.destSlaveAddr		= strtoul( argv[5], &endstr, 16 );
 #ifdef D_DD_I2C_PC_DEBUG
 			ctI2cCtrlMasterDump( &S_GCT_DD_I2C_CTRL_MASTER );
 #endif
 
 			ret = Dd_I2C_Ctrl_Master( ch, &S_GCT_DD_I2C_CTRL_MASTER );
-			if( ret == D_DDIM_OK ){
+			if( ret == DriverCommon_D_DDIM_OK ){
 				Ddim_Print(("Dd_I2C_Ctrl_Master: OK\n"));
 			}
 			else{
@@ -545,12 +577,12 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		}
 	}
 	else if( strcmp(argv[1], "get_ctrl_master") == 0 ){
-		T_DD_I2C_CTRL_MASTER	ctrlMaster;
+		DdI2cCtrlMaster	ctrlMaster;
 
 		ch	= atoi( argv[2] );
 
 		ret = Dd_I2C_Get_Ctrl_Master( ch, &ctrlMaster );
-		if( ret == D_DDIM_OK ){
+		if( ret == DriverCommon_D_DDIM_OK ){
 			Ddim_Print(("Dd_I2C_Get_Ctrl_Master: OK\n"));
 			ctI2cCtrlMasterDump( &ctrlMaster );
 		}
@@ -565,9 +597,9 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		//  P5: Callback enable
 		if( argc == 7 ){
 			ch	= atoi( argv[2] );
-			S_GCT_DD_I2C_CTRL_SLAVE.own_slave_addr_len	= (E_DD_I2C_ADDR_LEN)atoi( argv[3] );
-			S_GCT_DD_I2C_CTRL_SLAVE.own_slave_addr		= strtoul( argv[4], &endstr, 16 );
-			S_GCT_DD_I2C_CTRL_SLAVE.global_call_en		= atoi( argv[5] );
+			S_GCT_DD_I2C_CTRL_SLAVE.ownSlaveAddrLen	= (DdI2cAddrLen)atoi( argv[3] );
+			S_GCT_DD_I2C_CTRL_SLAVE.ownSlaveAddr		= strtoul( argv[4], &endstr, 16 );
+			S_GCT_DD_I2C_CTRL_SLAVE.globalCallEn		= atoi( argv[5] );
 			if( atoi( argv[6] ) == 0 ){
 				S_GCT_DD_I2C_CTRL_SLAVE.callback			= NULL;
 			}
@@ -579,7 +611,7 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 #endif
 
 			ret = Dd_I2C_Ctrl_Slave( ch, &S_GCT_DD_I2C_CTRL_SLAVE );
-			if( ret == D_DDIM_OK ){
+			if( ret == DriverCommon_D_DDIM_OK ){
 				Ddim_Print(("Dd_I2C_Ctrl_Slave: OK\n"));
 			}
 			else{
@@ -594,12 +626,12 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		}
 	}
 	else if( strcmp(argv[1], "get_ctrl_slave") == 0 ){
-		T_DD_I2C_CTRL_SLAVE	ctrlSlave;
+		DdI2cCtrlSlave	ctrlSlave;
 
 		ch	= atoi( argv[2] );
 
 		ret = Dd_I2C_Get_Ctrl_Slave( ch, &ctrlSlave );
-		if( ret == D_DDIM_OK ){
+		if( ret == DriverCommon_D_DDIM_OK ){
 			Ddim_Print(("Dd_I2C_Get_Ctrl_Slave: OK\n"));
 			ctI2cCtrlSlaveDump( &ctrlSlave );
 		}
@@ -612,19 +644,19 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		//  P1: Channel No P2: Alert Response Match Enable P3: PEC number of byte P4: Timeout Divider
 		//  P5: Timeout Prescaler
 		if( argc == 7 ){
-			T_DD_I2C_CTRL_SMBUS	ctrlSmbus;
+			DdI2cCtrlSmbus	ctrlSmbus;
 
 			ch	= atoi( argv[2] );
-			ctrlSmbus.alert_resp_en	= atoi( argv[3] );
-			ctrlSmbus.pec_num			= atoi( argv[4] );
-			ctrlSmbus.timeout_div		= (E_DD_I2C_TO_DIV)atoi( argv[5] );
-			ctrlSmbus.timeout_presc	= atoi( argv[6] );
+			ctrlSmbus.alertRespEn	= atoi( argv[3] );
+			ctrlSmbus.pecNum			= atoi( argv[4] );
+			ctrlSmbus.timeoutDiv		= (DdI2cToDiv)atoi( argv[5] );
+			ctrlSmbus.timeoutPresc	= atoi( argv[6] );
 #ifdef D_DD_I2C_PC_DEBUG
 			ctI2cCtrlSmbusDump( &ctrlSmbus );
 #endif
 
 			ret = Dd_I2C_Ctrl_SMBus( ch, &ctrlSmbus );
-			if( ret == D_DDIM_OK ){
+			if( ret == DriverCommon_D_DDIM_OK ){
 				Ddim_Print(("Dd_I2C_Ctrl_SMBus: OK\n"));
 			}
 			else{
@@ -639,12 +671,12 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		}
 	}
 	else if( strcmp(argv[1], "get_ctrl_smbus") == 0 ){
-		T_DD_I2C_CTRL_SMBUS	ctrlSmbus;
+		DdI2cCtrlSmbus	ctrlSmbus;
 
 		ch	= atoi( argv[2] );
 
 		ret = Dd_I2C_Get_Ctrl_SMBus( ch, &ctrlSmbus );
-		if( ret == D_DDIM_OK ){
+		if( ret == DriverCommon_D_DDIM_OK ){
 			Ddim_Print(("Dd_I2C_Get_Ctrl_SMBus: OK\n"));
 			ctI2cCtrlSmbusDump( &ctrlSmbus );
 		}
@@ -656,21 +688,21 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		// i2c start_master P1 P2 P3 P4 P5
 		//  P1: Channel No. P2: Read(0) or Write(1) P3: Data address P4: Data length P5: Number of data
 		if( argc == 8 ){
-			T_DD_I2C_START_INFO	startInfo;
-			kuint32				dataNum;
-			kint32				i;
-			kuchar*				data[CtDdI2c_D_CT_DD_I2C_MAX_DATA_NUM];
+			DdI2cStartInfo	startInfo;
+			guint32				dataNum;
+			gint32				i;
+			guchar*				data[CtDdI2c_D_CT_DD_I2C_MAX_DATA_NUM];
 
 			ch						= atoi( argv[2] );
-			startInfo.rw_mode		= (E_DD_I2C_RW_MODE)atoi( argv[3] );
-			data[0]					= (kuchar*)strtoul(argv[4], &endstr, 16);
-			startInfo.rw_data_len	= atoi( argv[5] );
+			startInfo.rwMode		= (I2cRwMode)atoi( argv[3] );
+			data[0]					= (guchar*)strtoul(argv[4], &endstr, 16);
+			startInfo.rwDataLen	= atoi( argv[5] );
 			dataNum				= atoi(argv[6]);
 			startInfo.timeout		= 500;
 
 			// Check test data size
-			if( startInfo.rw_data_len > CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN ){
-				Ddim_Print(("rw_data_len is over test size(%d)\n", CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN));
+			if( startInfo.rwDataLen > CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN ){
+				Ddim_Print(("rwDataLen is over test size(%d)\n", CtDdI2c_D_CT_DD_I2C_MAX_DATA_LEN));
 				return;
 			}
 			if( dataNum > CtDdI2c_D_CT_DD_I2C_MAX_DATA_NUM ){
@@ -680,21 +712,21 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 
 			// Set data address
 			for( i = 1; i < dataNum; i++ ){
-				data[i] = data[i-1] + startInfo.rw_data_len;
+				data[i] = data[i-1] + startInfo.rwDataLen;
 			}
 
-			if( startInfo.rw_mode == E_DD_I2C_RW_MODE_WRITE ){
+			if( startInfo.rwMode == DdI2cCtrl_RW_MODE_WRITE ){
 				// Set send test data
-				ctDdI2cSetWriteTestData( startInfo.rw_data_len, data, dataNum );
+				ctDdI2cSetWriteTestData( startInfo.rwDataLen, data, dataNum );
 			}
 
 			// Start Master
 			ret = ctDdI2cMasterStart( ch, &startInfo, data, dataNum );
-			if( ret == D_DDIM_OK ){
+			if( ret == DriverCommon_D_DDIM_OK ){
 				// Start OK
 				Ddim_Print(("Dd_I2C_Start_Master: OK\n"));
 				// Print result
-				ctDdI2cDataPrint( startInfo.rw_mode, dataNum, startInfo.rw_data_len, data );
+				ctDdI2cDataPrint( startInfo.rwMode, dataNum, startInfo.rwDataLen, data );
 			}
 #ifdef D_DD_I2C_PC_DEBUG
 			ctI2cRegisterDump( ch );
@@ -705,12 +737,10 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		}
 	}
 	else if( strcmp(argv[1], "stop_master") == 0 ){
-		// i2c stop_master P1
-		//  P1 : Channel No.
 		ch = atoi( argv[2] );
 
 		ret = Dd_I2C_Stop_Master( ch );
-		if( ret == D_DDIM_OK ){
+		if( ret == DriverCommon_D_DDIM_OK ){
 			// Stop OK
 			Ddim_Print(("Dd_I2C_Stop_Master OK\n"));
 		}
@@ -723,13 +753,11 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 #endif
 	}
 	else if( strcmp( argv[1], "start_slave") == 0 ) {
-		// i2c start_slave P1
-		//  P1: Channel No.
 		if( argc == 3 ){
 			ch = atoi( argv[2] );
 
 			ret = Dd_I2C_Start_Slave( ch );
-			if( ret == D_DDIM_OK ){
+			if( ret == DriverCommon_D_DDIM_OK ){
 				// Start OK
 				Ddim_Print(("Dd_I2C_Start_Slave OK\n"));
 			}
@@ -746,12 +774,10 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		}
 	}
 	else if( strcmp(argv[1], "stop_slave") == 0 ){
-		// i2c stop_slave P1
-		//  P1 : Channel No.
 		ch = atoi( argv[2] );
 
 		ret = Dd_I2C_Stop_Slave( ch );
-		if( ret == D_DDIM_OK ){
+		if( ret == DriverCommon_D_DDIM_OK ){
 			// Stop OK
 			Ddim_Print(("Dd_I2C_Stop_Slave OK\n"));
 		}
@@ -765,20 +791,13 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 	}
 	else if( strcmp(argv[1], "set") == 0 ){
 		if( strcmp(argv[2], "tgscl") == 0 ){
-			// Set Toggle SCL
-			// i2c set tgscl P1
-			//  P1 : Channel No.
 			ch = atoi(argv[3]);
 
 			Dd_I2C_Set_Toggle_SCL( ch );
 			Ddim_Print((" IO_PERI.I2C[%d].CST.bit.TGSCL = %d\n", ch, IO_PERI.I2C[ch].CST.bit.TGSCL ));
 		}
 		else if( strcmp(argv[2], "scl") == 0 ){
-			// Set SCL frequency
-			// i2c set scl P1 P2
-			//  P1 : Channel No.
-			//  P2 : SCL frequency
-			kuchar scl = atoi(argv[4]);
+			guchar scl = atoi(argv[4]);
 			ch = atoi(argv[3]);
 
 			Dd_I2C_Set_SCL( ch, scl );
@@ -787,10 +806,7 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 	}
 	else if( strcmp(argv[1], "get") == 0 ){
 		if( strcmp(argv[2], "tsda") == 0 ){
-			// Get Test SDA
-			// i2c get tsda P1
-			//  P1 : Channel No.
-			kuchar tsda;
+			guchar tsda;
 			ch = atoi(argv[3]);
 #ifdef D_DD_I2C_PC_DEBUG
 			IO_PERI.I2C[ch].CST.bit.TSDA = 1;
@@ -799,32 +815,22 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 			Ddim_Print((" IO_PERI.I2C[%d].CST.bit.TSDA = %d\n", ch, tsda ));
 		}
 		else if( strcmp(argv[2], "scl") == 0 ){
-			// Get SCL frequency
-			// i2c get scl P1
-			//  P1 : Channel No.
-			kuchar scl;
+			guchar scl;
 			ch = atoi(argv[3]);
 
 			Dd_I2C_Get_SCL( ch, &scl );
 			Ddim_Print((" IO_PERI.I2C[%d].CTL2.bit.SCLFRQ = %d\n", ch, scl ));
 		}
 		else if( strcmp(argv[2], "cause") == 0 ){
-			// Get Error Cause
-			// i2c get cause P1
-			//  P1 : Channel No.
 			ch = atoi(argv[3]);
-			Ddim_Print((" Error Cause[%d] = 0x%08X\n", ch, Dd_I2C_Get_Error_Cause( ch ) ));
+			Ddim_Print((" Error Cause[%d] = 0x%08X\n", ch, dd_i2c_get_error_cause(priv->ddI2c, ch ) ));
 		}
 	}
 	else if( strcmp(argv[1], "inthdr") == 0 ){
-		// Interrupt handler
-		// i2c inthdr P1 P2
-		//  P1 : Channel No.
-		//  P2 : ST.MODE
-		kuchar ch = atoi(argv[2]);
+		guchar ch = atoi(argv[2]);
 
 #ifdef D_DD_I2C_PC_DEBUG
-		kuchar mode = strtoul( argv[3], &endstr, 16 );;
+		guchar mode = strtoul( argv[3], &endstr, 16 );;
 
 		if( mode == 0x40 ){
 			IO_PERI.I2C[ch].CST.bit.TERR = 1;
@@ -864,12 +870,12 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 #endif
 	}
 	else if( strcmp(argv[1], "err") == 0 ){
-		kint32 ret;
-		T_DD_I2C_CTRL_MASTER ctrlMaster;
-		T_DD_I2C_CTRL_SLAVE ctrlSlave;
-		T_DD_I2C_CTRL_SMBUS ctrlSmbus;
-		T_DD_I2C_START_INFO startInfo;
-		kuchar val;
+		gint32 ret;
+		DdI2cCtrlMaster ctrlMaster;
+		DdI2cCtrlSlave ctrlSlave;
+		DdI2cCtrlSmbus ctrlSmbus;
+		DdI2cStartInfo startInfo;
+		guchar val;
 
 		ret = Dd_I2C_Open( 3,1 );
 		Ddim_Print(("Dd_I2C_Open: CH NG(%d)\n", ret));
@@ -933,18 +939,18 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 		ret = Dd_I2C_Get_Ctrl_SMBus( 2, &ctrlSmbus );
 		Ddim_Print(("Dd_I2C_Get_Ctrl_SMBus: ENABLE NG(%d)\n", ret));
 
-		ret = Dd_I2C_Start_Master( 3, &startInfo );
+		ret = dd_i2c_start_master(priv->ddI2c, 3, &startInfo );
 		Ddim_Print(("Dd_I2C_Start_Master: CH NG(%d)\n", ret));
 
-		ret = Dd_I2C_Start_Master( 2, NULL );
+		ret = dd_i2c_start_master(priv->ddI2c, 2, NULL );
 		Ddim_Print(("Dd_I2C_Start_Master: Pointer NG(%d)\n", ret));
 
 		ret = Dd_I2C_Ctrl_Slave( 2, &ctrlSlave );
-		ret = Dd_I2C_Start_Master( 2, &startInfo );
+		ret = dd_i2c_start_master(priv->ddI2c, 2, &startInfo );
 		Ddim_Print(("Dd_I2C_Start_Master: SIDE NG(%d)\n", ret));
 
-		ret = Dd_I2C_Start_Master( 2, &startInfo );
-		ret = Dd_I2C_Start_Master( 2, &startInfo );
+		ret = dd_i2c_start_master(priv->ddI2c, 2, &startInfo );
+		ret = dd_i2c_start_master(priv->ddI2c, 2, &startInfo );
 		Ddim_Print(("Dd_I2C_Start_Master: BB NG(%d)\n", ret));
 
 		ret = Dd_I2C_Stop_Master( 3 );
@@ -985,12 +991,11 @@ void ct_dd_i2c_main_main(CtDdI2c* self, kint argc, kchar** argv)
 	else{
 		Ddim_Print(("Error: Unknown command.\n"));
 	}
-
 	return;
 }
 
-CtDdI2c* ct_dd_i2c_new(void) 
+CtDdI2c *ct_dd_i2c_new(void) 
 {
-    CtDdI2c *self = k_object_new_with_private(CT_TYPE_DD_I2C, sizeof(CtDdI2cPrivate));
+    CtDdI2c *self = g_object_new(CT_TYPE_DD_I2C, NULL);
     return self;
 }

@@ -27,18 +27,42 @@ struct _CtImR2yClassfPrivate
 static void ct_im_r2y_classf_constructor(CtImR2yClassf *self)
 {
 	CtImR2yClassfPrivate *priv = CT_IM_R2Y_CLASSF_GET_PRIVATE(self);
+
+
+
+	ImR2yCtrl2*imR2yCtrl2;
+	self->imR2yClk=im_r2y_clk_new();
+	self->imR2y3=ct_im_r2y3_new();
+	self->imR2yCtrl=im_r2y_ctrl_new();
+	self->imR2yCtrl2=im_r2y_ctrl2_new();
 }
 
 static void ct_im_r2y_classf_destructor(CtImR2yClassf *self)
 {
 	CtImR2yClassfPrivate *priv = CT_IM_R2Y_CLASSF_GET_PRIVATE(self);
+	if(self->imR2yClk){
+						k_object_unref(self->imR2yClk);
+						self->imR2yClk=NULL;
+					}
+	if(self->imR2y3){
+						k_object_unref(self->imR2y3);
+						self->imR2y3=NULL;
+					}
+	if(self->imR2yCtrl){
+						k_object_unref(self->imR2yCtrl);
+						self->imR2yCtrl=NULL;
+					}
+	if(self->imR2yCtrl2){
+						k_object_unref(self->imR2yCtrl2);
+						self->imR2yCtrl2=NULL;
+					}
 }
 
 
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_46: "
-INT32 ct_im_r2y_classf_1_46( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_46(CtImR2yClassf *self, UCHAR pipeNo )
 {
 	TImR2yPostResize1Param r2yPostResize1[] = {
 		[0] = {	// max
@@ -146,323 +170,323 @@ INT32 ct_im_r2y_classf_1_46( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Ctrl_PostResizeEdge1( pipeNo, &r2yPostResize1[loopcnt] );
+		ercd = im_r2y_ctrl_post_resize_edge1(self->imR2yCtrl, pipeNo, &r2yPostResize1[loopcnt] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1EN        = 0x%x\n",  ioR2yP1.yyw.EE1CTL.bit.EE1EN ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TC        = 0x%x\n",  ioR2yP1.yyw.EE1CTL.bit.EE1TC ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK[0]   = 0x%lx\n", ioR2yP1.yyw.EE1HPFK.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK[1]   = 0x%lx\n", ioR2yP1.yyw.EE1HPFK.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK0     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK1     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK2     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK3     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK4     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK5     = 0x%x\n",  ioR2yP1.yyw.EE1HPFK.bit.EE1HPFK5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1NRLV      = 0x%x\n",  ioR2yP1.yyw.EE1NRLV.bit.EE1NRLV ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1CORPOF.bit.EE1CORPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORPOF.bit.EE1CORPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORPOF.bit.EE1CORPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORPOF.bit.EE1CORPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA    = 0x%lx\n", ioR2yP1.yyw.EE1CORPGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1CORPGA.bit.EE1CORPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORPGA.bit.EE1CORPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORPGA.bit.EE1CORPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORPGA.bit.EE1CORPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORPBD.bit.EE1CORPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORPBD.bit.EE1CORPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORPBD.bit.EE1CORPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1CORMOF.bit.EE1CORMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORMOF.bit.EE1CORMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORMOF.bit.EE1CORMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORMOF.bit.EE1CORMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA    = 0x%lx\n", ioR2yP1.yyw.EE1CORMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1CORMGA.bit.EE1CORMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORMGA.bit.EE1CORMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORMGA.bit.EE1CORMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORMGA.bit.EE1CORMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1CORMBD.bit.EE1CORMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1CORMBD.bit.EE1CORMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1CORMBD.bit.EE1CORMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLSUP    = 0x%x\n",  ioR2yP1.yyw.EE1SCLSUP.bit.EE1SCLSUP ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPOF.bit.EE1SCLPOF_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[0] = 0x%lx\n", ioR2yP1.yyw.EE1SCLPGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[1] = 0x%lx\n", ioR2yP1.yyw.EE1SCLPGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[2] = 0x%lx\n", ioR2yP1.yyw.EE1SCLPGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[3] = 0x%lx\n", ioR2yP1.yyw.EE1SCLPGA.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[4] = 0x%lx\n", ioR2yP1.yyw.EE1SCLPGA.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPGA.bit.EE1SCLPGA_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLPBD.bit.EE1SCLPBD_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMOF.bit.EE1SCLMOF_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[0] = 0x%lx\n", ioR2yP1.yyw.EE1SCLMGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[1] = 0x%lx\n", ioR2yP1.yyw.EE1SCLMGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[2] = 0x%lx\n", ioR2yP1.yyw.EE1SCLMGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[3] = 0x%lx\n", ioR2yP1.yyw.EE1SCLMGA.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[4] = 0x%lx\n", ioR2yP1.yyw.EE1SCLMGA.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMGA.bit.EE1SCLMGA_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_4  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_5  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_6  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_7  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_8  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_9  = 0x%x\n",  ioR2yP1.yyw.EE1SCLMBD.bit.EE1SCLMBD_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1TONPOF.bit.EE1TONPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONPOF.bit.EE1TONPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONPOF.bit.EE1TONPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONPOF.bit.EE1TONPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONPOF.bit.EE1TONPOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[0] = 0x%lx\n", ioR2yP1.yyw.EE1TONPGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[1] = 0x%lx\n", ioR2yP1.yyw.EE1TONPGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[2] = 0x%lx\n", ioR2yP1.yyw.EE1TONPGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1TONPGA.bit.EE1TONPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONPGA.bit.EE1TONPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONPGA.bit.EE1TONPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONPGA.bit.EE1TONPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONPGA.bit.EE1TONPGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONPBD.bit.EE1TONPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONPBD.bit.EE1TONPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONPBD.bit.EE1TONPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONPBD.bit.EE1TONPBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1TONMOF.bit.EE1TONMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONMOF.bit.EE1TONMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONMOF.bit.EE1TONMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONMOF.bit.EE1TONMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONMOF.bit.EE1TONMOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[0] = 0x%lx\n", ioR2yP1.yyw.EE1TONMGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[1] = 0x%lx\n", ioR2yP1.yyw.EE1TONMGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[2] = 0x%lx\n", ioR2yP1.yyw.EE1TONMGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1TONMGA.bit.EE1TONMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONMGA.bit.EE1TONMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONMGA.bit.EE1TONMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONMGA.bit.EE1TONMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONMGA.bit.EE1TONMGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1TONMBD.bit.EE1TONMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1TONMBD.bit.EE1TONMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_3  = 0x%x\n",  ioR2yP1.yyw.EE1TONMBD.bit.EE1TONMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_4  = 0x%x\n",  ioR2yP1.yyw.EE1TONMBD.bit.EE1TONMBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPOF.bit.EE1CLPPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPOF.bit.EE1CLPPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPOF.bit.EE1CLPPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA    = 0x%lx\n", ioR2yP1.yyw.EE1CLPPGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPGA.bit.EE1CLPPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPGA.bit.EE1CLPPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPGA.bit.EE1CLPPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPBD.bit.EE1CLPPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPPBD.bit.EE1CLPPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_0  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMOF.bit.EE1CLPMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMOF.bit.EE1CLPMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMOF.bit.EE1CLPMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA    = 0x%lx\n", ioR2yP1.yyw.EE1CLPMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_0  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMGA.bit.EE1CLPMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMGA.bit.EE1CLPMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMGA.bit.EE1CLPMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMBD_1  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMBD.bit.EE1CLPMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMBD_2  = 0x%x\n",  ioR2yP1.yyw.EE1CLPMBD.bit.EE1CLPMBD_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1en        = 0x%x\n",  ioR2yP1.yyw.ee1ctl.bit.ee1en ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tc        = 0x%x\n",  ioR2yP1.yyw.ee1ctl.bit.ee1tc ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk[0]   = 0x%lx\n", ioR2yP1.yyw.ee1hpfk.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk[1]   = 0x%lx\n", ioR2yP1.yyw.ee1hpfk.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk0     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk1     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk2     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk3     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk4     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk5     = 0x%x\n",  ioR2yP1.yyw.ee1hpfk.bit.ee1hpfk5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1nrlv      = 0x%x\n",  ioR2yP1.yyw.ee1nrlv.bit.ee1nrlv ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof0  = 0x%x\n",  ioR2yP1.yyw.ee1corpof.bit.ee1corpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof1  = 0x%x\n",  ioR2yP1.yyw.ee1corpof.bit.ee1corpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof2  = 0x%x\n",  ioR2yP1.yyw.ee1corpof.bit.ee1corpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof3  = 0x%x\n",  ioR2yP1.yyw.ee1corpof.bit.ee1corpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga    = 0x%lx\n", ioR2yP1.yyw.ee1corpga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga0  = 0x%x\n",  ioR2yP1.yyw.ee1corpga.bit.ee1corpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga1  = 0x%x\n",  ioR2yP1.yyw.ee1corpga.bit.ee1corpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga2  = 0x%x\n",  ioR2yP1.yyw.ee1corpga.bit.ee1corpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga3  = 0x%x\n",  ioR2yP1.yyw.ee1corpga.bit.ee1corpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd1  = 0x%x\n",  ioR2yP1.yyw.ee1corpbd.bit.ee1corpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd2  = 0x%x\n",  ioR2yP1.yyw.ee1corpbd.bit.ee1corpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd3  = 0x%x\n",  ioR2yP1.yyw.ee1corpbd.bit.ee1corpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof0  = 0x%x\n",  ioR2yP1.yyw.ee1cormof.bit.ee1cormof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof1  = 0x%x\n",  ioR2yP1.yyw.ee1cormof.bit.ee1cormof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof2  = 0x%x\n",  ioR2yP1.yyw.ee1cormof.bit.ee1cormof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof3  = 0x%x\n",  ioR2yP1.yyw.ee1cormof.bit.ee1cormof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga    = 0x%lx\n", ioR2yP1.yyw.ee1cormga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga0  = 0x%x\n",  ioR2yP1.yyw.ee1cormga.bit.ee1cormga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga1  = 0x%x\n",  ioR2yP1.yyw.ee1cormga.bit.ee1cormga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga2  = 0x%x\n",  ioR2yP1.yyw.ee1cormga.bit.ee1cormga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga3  = 0x%x\n",  ioR2yP1.yyw.ee1cormga.bit.ee1cormga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd1  = 0x%x\n",  ioR2yP1.yyw.ee1cormbd.bit.ee1cormbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd2  = 0x%x\n",  ioR2yP1.yyw.ee1cormbd.bit.ee1cormbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd3  = 0x%x\n",  ioR2yP1.yyw.ee1cormbd.bit.ee1cormbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclsup    = 0x%x\n",  ioR2yP1.yyw.ee1sclsup.bit.ee1sclsup ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof0  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof1  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof2  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof3  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof4  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof5  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof6  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof7  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof8  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof9  = 0x%x\n",  ioR2yP1.yyw.ee1sclpof.bit.ee1sclpof9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[0] = 0x%lx\n", ioR2yP1.yyw.ee1sclpga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[1] = 0x%lx\n", ioR2yP1.yyw.ee1sclpga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[2] = 0x%lx\n", ioR2yP1.yyw.ee1sclpga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[3] = 0x%lx\n", ioR2yP1.yyw.ee1sclpga.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[4] = 0x%lx\n", ioR2yP1.yyw.ee1sclpga.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga0  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga1  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga2  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga3  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga4  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga5  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga6  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga7  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga8  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga9  = 0x%x\n",  ioR2yP1.yyw.ee1sclpga.bit.ee1sclpga9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd1  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd2  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd3  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd4  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd5  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd6  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd7  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd8  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd9  = 0x%x\n",  ioR2yP1.yyw.ee1sclpbd.bit.ee1sclpbd9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof0  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof1  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof2  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof3  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof4  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof5  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof6  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof7  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof8  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof9  = 0x%x\n",  ioR2yP1.yyw.ee1sclmof.bit.ee1sclmof9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[0] = 0x%lx\n", ioR2yP1.yyw.ee1sclmga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[1] = 0x%lx\n", ioR2yP1.yyw.ee1sclmga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[2] = 0x%lx\n", ioR2yP1.yyw.ee1sclmga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[3] = 0x%lx\n", ioR2yP1.yyw.ee1sclmga.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[4] = 0x%lx\n", ioR2yP1.yyw.ee1sclmga.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga0  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga1  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga2  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga3  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga4  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga5  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga6  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga7  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga8  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga9  = 0x%x\n",  ioR2yP1.yyw.ee1sclmga.bit.ee1sclmga9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd1  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd2  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd3  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd4  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd5  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd6  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd7  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd8  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd9  = 0x%x\n",  ioR2yP1.yyw.ee1sclmbd.bit.ee1sclmbd9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof0  = 0x%x\n",  ioR2yP1.yyw.ee1tonpof.bit.ee1tonpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof1  = 0x%x\n",  ioR2yP1.yyw.ee1tonpof.bit.ee1tonpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof2  = 0x%x\n",  ioR2yP1.yyw.ee1tonpof.bit.ee1tonpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof3  = 0x%x\n",  ioR2yP1.yyw.ee1tonpof.bit.ee1tonpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof4  = 0x%x\n",  ioR2yP1.yyw.ee1tonpof.bit.ee1tonpof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[0] = 0x%lx\n", ioR2yP1.yyw.ee1tonpga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[1] = 0x%lx\n", ioR2yP1.yyw.ee1tonpga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[2] = 0x%lx\n", ioR2yP1.yyw.ee1tonpga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga0  = 0x%x\n",  ioR2yP1.yyw.ee1tonpga.bit.ee1tonpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga1  = 0x%x\n",  ioR2yP1.yyw.ee1tonpga.bit.ee1tonpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga2  = 0x%x\n",  ioR2yP1.yyw.ee1tonpga.bit.ee1tonpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga3  = 0x%x\n",  ioR2yP1.yyw.ee1tonpga.bit.ee1tonpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga4  = 0x%x\n",  ioR2yP1.yyw.ee1tonpga.bit.ee1tonpga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd1  = 0x%x\n",  ioR2yP1.yyw.ee1tonpbd.bit.ee1tonpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd2  = 0x%x\n",  ioR2yP1.yyw.ee1tonpbd.bit.ee1tonpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd3  = 0x%x\n",  ioR2yP1.yyw.ee1tonpbd.bit.ee1tonpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd4  = 0x%x\n",  ioR2yP1.yyw.ee1tonpbd.bit.ee1tonpbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof0  = 0x%x\n",  ioR2yP1.yyw.ee1tonmof.bit.ee1tonmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof1  = 0x%x\n",  ioR2yP1.yyw.ee1tonmof.bit.ee1tonmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof2  = 0x%x\n",  ioR2yP1.yyw.ee1tonmof.bit.ee1tonmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof3  = 0x%x\n",  ioR2yP1.yyw.ee1tonmof.bit.ee1tonmof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof4  = 0x%x\n",  ioR2yP1.yyw.ee1tonmof.bit.ee1tonmof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[0] = 0x%lx\n", ioR2yP1.yyw.ee1tonmga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[1] = 0x%lx\n", ioR2yP1.yyw.ee1tonmga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[2] = 0x%lx\n", ioR2yP1.yyw.ee1tonmga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga0  = 0x%x\n",  ioR2yP1.yyw.ee1tonmga.bit.ee1tonmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga1  = 0x%x\n",  ioR2yP1.yyw.ee1tonmga.bit.ee1tonmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga2  = 0x%x\n",  ioR2yP1.yyw.ee1tonmga.bit.ee1tonmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga3  = 0x%x\n",  ioR2yP1.yyw.ee1tonmga.bit.ee1tonmga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga4  = 0x%x\n",  ioR2yP1.yyw.ee1tonmga.bit.ee1tonmga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd1  = 0x%x\n",  ioR2yP1.yyw.ee1tonmbd.bit.ee1tonmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd2  = 0x%x\n",  ioR2yP1.yyw.ee1tonmbd.bit.ee1tonmbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd3  = 0x%x\n",  ioR2yP1.yyw.ee1tonmbd.bit.ee1tonmbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd4  = 0x%x\n",  ioR2yP1.yyw.ee1tonmbd.bit.ee1tonmbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof0  = 0x%x\n",  ioR2yP1.yyw.ee1clppof.bit.ee1clppof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof1  = 0x%x\n",  ioR2yP1.yyw.ee1clppof.bit.ee1clppof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof2  = 0x%x\n",  ioR2yP1.yyw.ee1clppof.bit.ee1clppof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga    = 0x%lx\n", ioR2yP1.yyw.ee1clppga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga0  = 0x%x\n",  ioR2yP1.yyw.ee1clppga.bit.ee1clppga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga1  = 0x%x\n",  ioR2yP1.yyw.ee1clppga.bit.ee1clppga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga2  = 0x%x\n",  ioR2yP1.yyw.ee1clppga.bit.ee1clppga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppbd1  = 0x%x\n",  ioR2yP1.yyw.ee1clppbd.bit.ee1clppbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppbd2  = 0x%x\n",  ioR2yP1.yyw.ee1clppbd.bit.ee1clppbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof0  = 0x%x\n",  ioR2yP1.yyw.ee1clpmof.bit.ee1clpmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof1  = 0x%x\n",  ioR2yP1.yyw.ee1clpmof.bit.ee1clpmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof2  = 0x%x\n",  ioR2yP1.yyw.ee1clpmof.bit.ee1clpmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga    = 0x%lx\n", ioR2yP1.yyw.ee1clpmga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga0  = 0x%x\n",  ioR2yP1.yyw.ee1clpmga.bit.ee1clpmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga1  = 0x%x\n",  ioR2yP1.yyw.ee1clpmga.bit.ee1clpmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga2  = 0x%x\n",  ioR2yP1.yyw.ee1clpmga.bit.ee1clpmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmbd1  = 0x%x\n",  ioR2yP1.yyw.ee1clpmbd.bit.ee1clpmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmbd2  = 0x%x\n",  ioR2yP1.yyw.ee1clpmbd.bit.ee1clpmbd2 ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1EN        = 0x%x\n",  ioR2yP2.yyw.EE1CTL.bit.EE1EN ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TC        = 0x%x\n",  ioR2yP2.yyw.EE1CTL.bit.EE1TC ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK[0]   = 0x%lx\n", ioR2yP2.yyw.EE1HPFK.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK[1]   = 0x%lx\n", ioR2yP2.yyw.EE1HPFK.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK0     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK1     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK2     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK3     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK4     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1HPFK5     = 0x%x\n",  ioR2yP2.yyw.EE1HPFK.bit.EE1HPFK5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1NRLV      = 0x%x\n",  ioR2yP2.yyw.EE1NRLV.bit.EE1NRLV ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1CORPOF.bit.EE1CORPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORPOF.bit.EE1CORPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORPOF.bit.EE1CORPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORPOF.bit.EE1CORPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA    = 0x%lx\n", ioR2yP2.yyw.EE1CORPGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1CORPGA.bit.EE1CORPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORPGA.bit.EE1CORPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORPGA.bit.EE1CORPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORPGA.bit.EE1CORPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORPBD.bit.EE1CORPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORPBD.bit.EE1CORPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORPBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORPBD.bit.EE1CORPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1CORMOF.bit.EE1CORMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORMOF.bit.EE1CORMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORMOF.bit.EE1CORMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORMOF.bit.EE1CORMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA    = 0x%lx\n", ioR2yP2.yyw.EE1CORMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1CORMGA.bit.EE1CORMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORMGA.bit.EE1CORMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORMGA.bit.EE1CORMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORMGA.bit.EE1CORMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1CORMBD.bit.EE1CORMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1CORMBD.bit.EE1CORMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CORMBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1CORMBD.bit.EE1CORMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLSUP    = 0x%x\n",  ioR2yP2.yyw.EE1SCLSUP.bit.EE1SCLSUP ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPOF_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPOF.bit.EE1SCLPOF_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[0] = 0x%lx\n", ioR2yP2.yyw.EE1SCLPGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[1] = 0x%lx\n", ioR2yP2.yyw.EE1SCLPGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[2] = 0x%lx\n", ioR2yP2.yyw.EE1SCLPGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[3] = 0x%lx\n", ioR2yP2.yyw.EE1SCLPGA.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA[4] = 0x%lx\n", ioR2yP2.yyw.EE1SCLPGA.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPGA_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPGA.bit.EE1SCLPGA_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLPBD_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLPBD.bit.EE1SCLPBD_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMOF_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMOF.bit.EE1SCLMOF_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[0] = 0x%lx\n", ioR2yP2.yyw.EE1SCLMGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[1] = 0x%lx\n", ioR2yP2.yyw.EE1SCLMGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[2] = 0x%lx\n", ioR2yP2.yyw.EE1SCLMGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[3] = 0x%lx\n", ioR2yP2.yyw.EE1SCLMGA.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA[4] = 0x%lx\n", ioR2yP2.yyw.EE1SCLMGA.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMGA_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMGA.bit.EE1SCLMGA_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_4  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_5  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_5 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_6  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_6 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_7  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_7 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_8  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_8 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1SCLMBD_9  = 0x%x\n",  ioR2yP2.yyw.EE1SCLMBD.bit.EE1SCLMBD_9 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1TONPOF.bit.EE1TONPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONPOF.bit.EE1TONPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONPOF.bit.EE1TONPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONPOF.bit.EE1TONPOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPOF_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONPOF.bit.EE1TONPOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[0] = 0x%lx\n", ioR2yP2.yyw.EE1TONPGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[1] = 0x%lx\n", ioR2yP2.yyw.EE1TONPGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA[2] = 0x%lx\n", ioR2yP2.yyw.EE1TONPGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1TONPGA.bit.EE1TONPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONPGA.bit.EE1TONPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONPGA.bit.EE1TONPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONPGA.bit.EE1TONPGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPGA_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONPGA.bit.EE1TONPGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONPBD.bit.EE1TONPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONPBD.bit.EE1TONPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONPBD.bit.EE1TONPBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONPBD_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONPBD.bit.EE1TONPBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1TONMOF.bit.EE1TONMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONMOF.bit.EE1TONMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONMOF.bit.EE1TONMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONMOF.bit.EE1TONMOF_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMOF_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONMOF.bit.EE1TONMOF_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[0] = 0x%lx\n", ioR2yP2.yyw.EE1TONMGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[1] = 0x%lx\n", ioR2yP2.yyw.EE1TONMGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA[2] = 0x%lx\n", ioR2yP2.yyw.EE1TONMGA.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1TONMGA.bit.EE1TONMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONMGA.bit.EE1TONMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONMGA.bit.EE1TONMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONMGA.bit.EE1TONMGA_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMGA_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONMGA.bit.EE1TONMGA_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1TONMBD.bit.EE1TONMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1TONMBD.bit.EE1TONMBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_3  = 0x%x\n",  ioR2yP2.yyw.EE1TONMBD.bit.EE1TONMBD_3 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1TONMBD_4  = 0x%x\n",  ioR2yP2.yyw.EE1TONMBD.bit.EE1TONMBD_4 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPOF.bit.EE1CLPPOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPOF.bit.EE1CLPPOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPOF.bit.EE1CLPPOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA    = 0x%lx\n", ioR2yP2.yyw.EE1CLPPGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPGA.bit.EE1CLPPGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPGA.bit.EE1CLPPGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPGA.bit.EE1CLPPGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPBD.bit.EE1CLPPBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPPBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPPBD.bit.EE1CLPPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_0  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMOF.bit.EE1CLPMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMOF.bit.EE1CLPMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMOF_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMOF.bit.EE1CLPMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA    = 0x%lx\n", ioR2yP2.yyw.EE1CLPMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_0  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMGA.bit.EE1CLPMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMGA.bit.EE1CLPMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMGA_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMGA.bit.EE1CLPMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMBD_1  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMBD.bit.EE1CLPMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE1CLPMBD_2  = 0x%x\n",  ioR2yP2.yyw.EE1CLPMBD.bit.EE1CLPMBD_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1en        = 0x%x\n",  ioR2yP2.yyw.ee1ctl.bit.ee1en ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tc        = 0x%x\n",  ioR2yP2.yyw.ee1ctl.bit.ee1tc ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk[0]   = 0x%lx\n", ioR2yP2.yyw.ee1hpfk.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk[1]   = 0x%lx\n", ioR2yP2.yyw.ee1hpfk.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk0     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk1     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk2     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk3     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk4     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1hpfk5     = 0x%x\n",  ioR2yP2.yyw.ee1hpfk.bit.ee1hpfk5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1nrlv      = 0x%x\n",  ioR2yP2.yyw.ee1nrlv.bit.ee1nrlv ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof0  = 0x%x\n",  ioR2yP2.yyw.ee1corpof.bit.ee1corpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof1  = 0x%x\n",  ioR2yP2.yyw.ee1corpof.bit.ee1corpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof2  = 0x%x\n",  ioR2yP2.yyw.ee1corpof.bit.ee1corpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpof3  = 0x%x\n",  ioR2yP2.yyw.ee1corpof.bit.ee1corpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga    = 0x%lx\n", ioR2yP2.yyw.ee1corpga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga0  = 0x%x\n",  ioR2yP2.yyw.ee1corpga.bit.ee1corpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga1  = 0x%x\n",  ioR2yP2.yyw.ee1corpga.bit.ee1corpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga2  = 0x%x\n",  ioR2yP2.yyw.ee1corpga.bit.ee1corpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpga3  = 0x%x\n",  ioR2yP2.yyw.ee1corpga.bit.ee1corpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd1  = 0x%x\n",  ioR2yP2.yyw.ee1corpbd.bit.ee1corpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd2  = 0x%x\n",  ioR2yP2.yyw.ee1corpbd.bit.ee1corpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1corpbd3  = 0x%x\n",  ioR2yP2.yyw.ee1corpbd.bit.ee1corpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof0  = 0x%x\n",  ioR2yP2.yyw.ee1cormof.bit.ee1cormof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof1  = 0x%x\n",  ioR2yP2.yyw.ee1cormof.bit.ee1cormof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof2  = 0x%x\n",  ioR2yP2.yyw.ee1cormof.bit.ee1cormof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormof3  = 0x%x\n",  ioR2yP2.yyw.ee1cormof.bit.ee1cormof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga    = 0x%lx\n", ioR2yP2.yyw.ee1cormga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga0  = 0x%x\n",  ioR2yP2.yyw.ee1cormga.bit.ee1cormga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga1  = 0x%x\n",  ioR2yP2.yyw.ee1cormga.bit.ee1cormga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga2  = 0x%x\n",  ioR2yP2.yyw.ee1cormga.bit.ee1cormga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormga3  = 0x%x\n",  ioR2yP2.yyw.ee1cormga.bit.ee1cormga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd1  = 0x%x\n",  ioR2yP2.yyw.ee1cormbd.bit.ee1cormbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd2  = 0x%x\n",  ioR2yP2.yyw.ee1cormbd.bit.ee1cormbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1cormbd3  = 0x%x\n",  ioR2yP2.yyw.ee1cormbd.bit.ee1cormbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclsup    = 0x%x\n",  ioR2yP2.yyw.ee1sclsup.bit.ee1sclsup ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof0  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof1  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof2  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof3  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof4  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof5  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof6  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof7  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof8  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpof9  = 0x%x\n",  ioR2yP2.yyw.ee1sclpof.bit.ee1sclpof9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[0] = 0x%lx\n", ioR2yP2.yyw.ee1sclpga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[1] = 0x%lx\n", ioR2yP2.yyw.ee1sclpga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[2] = 0x%lx\n", ioR2yP2.yyw.ee1sclpga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[3] = 0x%lx\n", ioR2yP2.yyw.ee1sclpga.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga[4] = 0x%lx\n", ioR2yP2.yyw.ee1sclpga.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga0  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga1  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga2  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga3  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga4  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga5  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga6  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga7  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga8  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpga9  = 0x%x\n",  ioR2yP2.yyw.ee1sclpga.bit.ee1sclpga9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd1  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd2  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd3  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd4  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd5  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd6  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd7  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd8  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclpbd9  = 0x%x\n",  ioR2yP2.yyw.ee1sclpbd.bit.ee1sclpbd9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof0  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof1  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof2  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof3  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof4  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof5  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof6  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof7  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof8  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmof9  = 0x%x\n",  ioR2yP2.yyw.ee1sclmof.bit.ee1sclmof9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[0] = 0x%lx\n", ioR2yP2.yyw.ee1sclmga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[1] = 0x%lx\n", ioR2yP2.yyw.ee1sclmga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[2] = 0x%lx\n", ioR2yP2.yyw.ee1sclmga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[3] = 0x%lx\n", ioR2yP2.yyw.ee1sclmga.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga[4] = 0x%lx\n", ioR2yP2.yyw.ee1sclmga.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga0  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga1  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga2  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga3  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga4  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga5  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga6  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga7  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga8  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmga9  = 0x%x\n",  ioR2yP2.yyw.ee1sclmga.bit.ee1sclmga9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd1  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd2  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd3  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd4  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd5  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd5 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd6  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd6 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd7  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd7 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd8  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd8 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1sclmbd9  = 0x%x\n",  ioR2yP2.yyw.ee1sclmbd.bit.ee1sclmbd9 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof0  = 0x%x\n",  ioR2yP2.yyw.ee1tonpof.bit.ee1tonpof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof1  = 0x%x\n",  ioR2yP2.yyw.ee1tonpof.bit.ee1tonpof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof2  = 0x%x\n",  ioR2yP2.yyw.ee1tonpof.bit.ee1tonpof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof3  = 0x%x\n",  ioR2yP2.yyw.ee1tonpof.bit.ee1tonpof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpof4  = 0x%x\n",  ioR2yP2.yyw.ee1tonpof.bit.ee1tonpof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[0] = 0x%lx\n", ioR2yP2.yyw.ee1tonpga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[1] = 0x%lx\n", ioR2yP2.yyw.ee1tonpga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga[2] = 0x%lx\n", ioR2yP2.yyw.ee1tonpga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga0  = 0x%x\n",  ioR2yP2.yyw.ee1tonpga.bit.ee1tonpga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga1  = 0x%x\n",  ioR2yP2.yyw.ee1tonpga.bit.ee1tonpga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga2  = 0x%x\n",  ioR2yP2.yyw.ee1tonpga.bit.ee1tonpga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga3  = 0x%x\n",  ioR2yP2.yyw.ee1tonpga.bit.ee1tonpga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpga4  = 0x%x\n",  ioR2yP2.yyw.ee1tonpga.bit.ee1tonpga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd1  = 0x%x\n",  ioR2yP2.yyw.ee1tonpbd.bit.ee1tonpbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd2  = 0x%x\n",  ioR2yP2.yyw.ee1tonpbd.bit.ee1tonpbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd3  = 0x%x\n",  ioR2yP2.yyw.ee1tonpbd.bit.ee1tonpbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonpbd4  = 0x%x\n",  ioR2yP2.yyw.ee1tonpbd.bit.ee1tonpbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof0  = 0x%x\n",  ioR2yP2.yyw.ee1tonmof.bit.ee1tonmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof1  = 0x%x\n",  ioR2yP2.yyw.ee1tonmof.bit.ee1tonmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof2  = 0x%x\n",  ioR2yP2.yyw.ee1tonmof.bit.ee1tonmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof3  = 0x%x\n",  ioR2yP2.yyw.ee1tonmof.bit.ee1tonmof3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmof4  = 0x%x\n",  ioR2yP2.yyw.ee1tonmof.bit.ee1tonmof4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[0] = 0x%lx\n", ioR2yP2.yyw.ee1tonmga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[1] = 0x%lx\n", ioR2yP2.yyw.ee1tonmga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga[2] = 0x%lx\n", ioR2yP2.yyw.ee1tonmga.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga0  = 0x%x\n",  ioR2yP2.yyw.ee1tonmga.bit.ee1tonmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga1  = 0x%x\n",  ioR2yP2.yyw.ee1tonmga.bit.ee1tonmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga2  = 0x%x\n",  ioR2yP2.yyw.ee1tonmga.bit.ee1tonmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga3  = 0x%x\n",  ioR2yP2.yyw.ee1tonmga.bit.ee1tonmga3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmga4  = 0x%x\n",  ioR2yP2.yyw.ee1tonmga.bit.ee1tonmga4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd1  = 0x%x\n",  ioR2yP2.yyw.ee1tonmbd.bit.ee1tonmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd2  = 0x%x\n",  ioR2yP2.yyw.ee1tonmbd.bit.ee1tonmbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd3  = 0x%x\n",  ioR2yP2.yyw.ee1tonmbd.bit.ee1tonmbd3 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1tonmbd4  = 0x%x\n",  ioR2yP2.yyw.ee1tonmbd.bit.ee1tonmbd4 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof0  = 0x%x\n",  ioR2yP2.yyw.ee1clppof.bit.ee1clppof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof1  = 0x%x\n",  ioR2yP2.yyw.ee1clppof.bit.ee1clppof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppof2  = 0x%x\n",  ioR2yP2.yyw.ee1clppof.bit.ee1clppof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga    = 0x%lx\n", ioR2yP2.yyw.ee1clppga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga0  = 0x%x\n",  ioR2yP2.yyw.ee1clppga.bit.ee1clppga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga1  = 0x%x\n",  ioR2yP2.yyw.ee1clppga.bit.ee1clppga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppga2  = 0x%x\n",  ioR2yP2.yyw.ee1clppga.bit.ee1clppga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppbd1  = 0x%x\n",  ioR2yP2.yyw.ee1clppbd.bit.ee1clppbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clppbd2  = 0x%x\n",  ioR2yP2.yyw.ee1clppbd.bit.ee1clppbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof0  = 0x%x\n",  ioR2yP2.yyw.ee1clpmof.bit.ee1clpmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof1  = 0x%x\n",  ioR2yP2.yyw.ee1clpmof.bit.ee1clpmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmof2  = 0x%x\n",  ioR2yP2.yyw.ee1clpmof.bit.ee1clpmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga    = 0x%lx\n", ioR2yP2.yyw.ee1clpmga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga0  = 0x%x\n",  ioR2yP2.yyw.ee1clpmga.bit.ee1clpmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga1  = 0x%x\n",  ioR2yP2.yyw.ee1clpmga.bit.ee1clpmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmga2  = 0x%x\n",  ioR2yP2.yyw.ee1clpmga.bit.ee1clpmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmbd1  = 0x%x\n",  ioR2yP2.yyw.ee1clpmbd.bit.ee1clpmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee1clpmbd2  = 0x%x\n",  ioR2yP2.yyw.ee1clpmbd.bit.ee1clpmbd2 ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -472,7 +496,7 @@ INT32 ct_im_r2y_classf_1_46( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_47: "
-INT32 ct_im_r2y_classf_1_47( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_47( CtImR2yClassf *self,UCHAR pipeNo )
 {
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y147 {
@@ -520,23 +544,23 @@ INT32 ct_im_r2y_classf_1_47( UCHAR pipeNo )
 
 
 #ifdef CO_MSG_PRINT_ON
-			ercd = Im_R2Y_Set_RGBDeknee_Table( pipeNo, loopcnt2, tbl->srcTbl );
+			ercd = im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, loopcnt2, tbl->srcTbl );
 			Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 			Im_R2Y_On_Hclk( pipeNo );
-			Im_R2Y_Set_RGBDekneeAccessEnable( pipeNo, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
+			im_r2y3_set_rgb_deknee_access_enable(self->imR2y3, pipeNo, D_IM_R2Y_ENABLE_ON, D_IM_R2Y_WAIT_ON );
 			switch( loopcnt2 ) {
 				default:
 //				case E_R2Y_DKN_RGBTBL_R:
 					if( CtImR2yTool_CHECK_TARGET_PIPE_NO_1( pipeNo ) ){
 						for( loopcnt3 = 0; loopcnt3 < D_IM_R2Y_TABLE_MAX_RGB_DEKNEE; loopcnt3++ ) {
-							if( ioR2yTblP1.DKNTBLR.hword[loopcnt3] != tbl->srcTbl[loopcnt3] ) {
+							if( ioR2yTblP1.dkntblr.hword[loopcnt3] != tbl->srcTbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
 						}
 					}
 					if( CtImR2yTool_CHECK_TARGET_PIPE_NO_2( pipeNo ) ){
 						for( loopcnt3 = 0; loopcnt3 < D_IM_R2Y_TABLE_MAX_RGB_DEKNEE; loopcnt3++ ) {
-							if( ioR2yTblP2.DKNTBLR.hword[loopcnt3] != tbl->srcTbl[loopcnt3] ) {
+							if( ioR2yTblP2.dkntblr.hword[loopcnt3] != tbl->srcTbl[loopcnt3] ) {
 								Ddim_Print(( errmsg, loopcnt2, loopcnt3 ));
 							}
 						}
@@ -575,10 +599,10 @@ INT32 ct_im_r2y_classf_1_47( UCHAR pipeNo )
 					}
 					break;
 			}
-			Im_R2Y_Set_RGBDekneeAccessEnable( pipeNo, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
+			im_r2y3_set_rgb_deknee_access_enable(self->imR2y3, pipeNo, D_IM_R2Y_ENABLE_OFF, D_IM_R2Y_WAIT_OFF );
 			Im_R2Y_Off_Hclk( pipeNo );
 #else
-			Im_R2Y_Set_RGBDeknee_Table( pipeNo, loopcnt2, tbl->srcTbl );
+			im_r2y3_set_rgb_deknee_table(self->imR2y3, pipeNo, loopcnt2, tbl->srcTbl );
 #endif
 		}
 	}
@@ -588,7 +612,7 @@ INT32 ct_im_r2y_classf_1_47( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_48: "
-INT32 ct_im_r2y_classf_1_48( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_48(CtImR2yClassf *self, UCHAR pipeNo )
 {
 	UCHAR accessEnable[] = {
 		[0] = 1,	// max
@@ -605,13 +629,13 @@ INT32 ct_im_r2y_classf_1_48( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_RGBDekneeAccessEnable( pipeNo, accessEnable[loopcnt], D_IM_R2Y_WAIT_ON );
+		ercd = im_r2y3_set_rgb_deknee_access_enable(self->imR2y3, pipeNo, accessEnable[loopcnt], D_IM_R2Y_WAIT_ON );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "YYRAEN_RGB_DEKNEE = %u\n", ioR2yP1.R2Y_CMN.RAMAEN.bit.YYRAEN_RGB_DEKNEE ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "YyraenRgbDeknee = %u\n", ioR2yP1.R2yCmn.ramaen.bit.YyraenRgbDeknee ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "YYRAEN_RGB_DEKNEE = %u\n", ioR2yP2.R2Y_CMN.RAMAEN.bit.YYRAEN_RGB_DEKNEE ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "YyraenRgbDeknee = %u\n", ioR2yP2.R2yCmn.ramaen.bit.YyraenRgbDeknee ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -621,23 +645,23 @@ INT32 ct_im_r2y_classf_1_48( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_49: "
-INT32 ct_im_r2y_classf_1_49( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_49(CtImR2yClassf *self, UCHAR pipeNo )
 {
 	TImR2yOfs ofs[] = {
 		[0] = {	// max
-			.R = 0x1FF,
-			.G = 0x1FF,
-			.B = 0x1FF,
+			.r = 0x1FF,
+			.g = 0x1FF,
+			.b = 0x1FF,
 		},
 		[1] = {	// min
-			.R = -512,
-			.G = -512,
-			.B = -512,
+			.r = -512,
+			.g = -512,
+			.b = -512,
 		},
 		[2] = {	// indvisual
-			.R = 10,
-			.G = 20,
-			.B = 30,
+			.r = 10,
+			.g = 20,
+			.b = 30,
 		},
 	};
 	UINT32 loopcnt;
@@ -651,21 +675,21 @@ INT32 ct_im_r2y_classf_1_49( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_Offset( pipeNo, &ofs[loopcnt] );
+		ercd = im_r2y_ctrl_set_offset(self->imR2yCtrl, pipeNo, &ofs[loopcnt] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFST[0] = 0x%lx\n", ioR2yP1.F_R2Y.OFG.OFST.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFST[1] = 0x%lx\n", ioR2yP1.F_R2Y.OFG.OFST.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTR   = 0x%x\n",  ioR2yP1.F_R2Y.OFG.OFST.bit.OFSTR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTG   = 0x%x\n",  ioR2yP1.F_R2Y.OFG.OFST.bit.OFSTG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTB   = 0x%x\n",  ioR2yP1.F_R2Y.OFG.OFST.bit.OFSTB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofst[0] = 0x%lx\n", ioR2yP1.fR2y.ofg.ofst.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofst[1] = 0x%lx\n", ioR2yP1.fR2y.ofg.ofst.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstr   = 0x%x\n",  ioR2yP1.fR2y.ofg.ofst.bit.ofstr ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstg   = 0x%x\n",  ioR2yP1.fR2y.ofg.ofst.bit.ofstg ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstb   = 0x%x\n",  ioR2yP1.fR2y.ofg.ofst.bit.ofstb ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFST[0] = 0x%lx\n", ioR2yP2.F_R2Y.OFG.OFST.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFST[1] = 0x%lx\n", ioR2yP2.F_R2Y.OFG.OFST.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTR   = 0x%x\n",  ioR2yP2.F_R2Y.OFG.OFST.bit.OFSTR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTG   = 0x%x\n",  ioR2yP2.F_R2Y.OFG.OFST.bit.OFSTG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "OFSTB   = 0x%x\n",  ioR2yP2.F_R2Y.OFG.OFST.bit.OFSTB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofst[0] = 0x%lx\n", ioR2yP2.fR2y.ofg.ofst.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofst[1] = 0x%lx\n", ioR2yP2.fR2y.ofg.ofst.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstr   = 0x%x\n",  ioR2yP2.fR2y.ofg.ofst.bit.ofstr ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstg   = 0x%x\n",  ioR2yP2.fR2y.ofg.ofst.bit.ofstg ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ofstb   = 0x%x\n",  ioR2yP2.fR2y.ofg.ofst.bit.ofstb ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -675,7 +699,7 @@ INT32 ct_im_r2y_classf_1_49( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_50: "
-INT32 ct_im_r2y_classf_1_50( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_50( CtImR2yClassf *self,UCHAR pipeNo )
 {
 	TImR2yRgbColor r2yRgbColor[] = {
 		[0] = {	// max
@@ -706,17 +730,17 @@ INT32 ct_im_r2y_classf_1_50( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_WB_Gain( pipeNo, &r2yRgbColor[loopcnt] );
+		ercd = im_r2y_ctrl2_set_wb_gain(self->imR2yCtrl2, pipeNo, &r2yRgbColor[loopcnt] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAR = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBGAR.bit.WBGAR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAG = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBGAR.bit.WBGAG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAB = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBGAR.bit.WBGAB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgar = 0x%x\n", ioR2yP1.fR2y.ofg.wbgar.bit.wbgar ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgag = 0x%x\n", ioR2yP1.fR2y.ofg.wbgar.bit.wbgag ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgab = 0x%x\n", ioR2yP1.fR2y.ofg.wbgar.bit.wbgab ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAR = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBGAR.bit.WBGAR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAG = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBGAR.bit.WBGAG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBGAB = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBGAR.bit.WBGAB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgar = 0x%x\n", ioR2yP2.fR2y.ofg.wbgar.bit.wbgar ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgag = 0x%x\n", ioR2yP2.fR2y.ofg.wbgar.bit.wbgag ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wbgab = 0x%x\n", ioR2yP2.fR2y.ofg.wbgar.bit.wbgab ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -726,23 +750,23 @@ INT32 ct_im_r2y_classf_1_50( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_51: "
-INT32 ct_im_r2y_classf_1_51( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_51( CtImR2yClassf *self,UCHAR pipeNo )
 {
 	TImR2yRgbColor r2yRgbColor[] = {
 		[0] = {	// max
-			.R = 0xFFF,
-			.G = 0xFFF,
-			.B = 0xFFF,
+			.r = 0xFFF,
+			.g = 0xFFF,
+			.b = 0xFFF,
 		},
 		[1] = {	// min
-			.R = 0,
-			.G = 0,
-			.B = 0,
+			.r = 0,
+			.g = 0,
+			.b = 0,
 		},
 		[2] = {	// indvisual
-			.R = 1,
-			.G = 2,
-			.B = 3,
+			.r = 1,
+			.g = 2,
+			.b = 3,
 		}
 	};
 #ifdef CO_MSG_PRINT_ON
@@ -756,17 +780,17 @@ INT32 ct_im_r2y_classf_1_51( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_WB_Clip_Level( pipeNo, &r2yRgbColor[loopcnt] );
+		ercd = im_r2y_ctrl2_set_wb_clip_level(self->imR2yCtrl2, pipeNo, &r2yRgbColor[loopcnt] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVR = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBLV.bit.WBLVR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVG = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBLV.bit.WBLVG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVB = 0x%x\n", ioR2yP1.F_R2Y.OFG.WBLV.bit.WBLVB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvr = 0x%x\n", ioR2yP1.fR2y.ofg.wblv.bit.wblvr ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvg = 0x%x\n", ioR2yP1.fR2y.ofg.wblv.bit.wblvg ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvb = 0x%x\n", ioR2yP1.fR2y.ofg.wblv.bit.wblvb ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVR = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBLV.bit.WBLVR ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVG = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBLV.bit.WBLVG ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "WBLVB = 0x%x\n", ioR2yP2.F_R2Y.OFG.WBLV.bit.WBLVB ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvr = 0x%x\n", ioR2yP2.fR2y.ofg.wblv.bit.wblvr ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvg = 0x%x\n", ioR2yP2.fR2y.ofg.wblv.bit.wblvg ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "wblvb = 0x%x\n", ioR2yP2.fR2y.ofg.wblv.bit.wblvb ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -776,7 +800,7 @@ INT32 ct_im_r2y_classf_1_51( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_52: "
-INT32 ct_im_r2y_classf_1_52( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_52( CtImR2yClassf *self,UCHAR pipeNo )
 {
 	TImR2yCtrlCc0 r2yCtrlCc[] = {
 		[0] = {	// max
@@ -853,67 +877,67 @@ INT32 ct_im_r2y_classf_1_52( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl_CC0_Matrix( pipeNo, &r2yCtrlCc[loopcnt] );
+	ercd = im_r2y_ctrl2_cc0_matrix(self->imR2yCtrl2, pipeNo, &r2yCtrlCc[loopcnt] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0DP     = %u\n",    ioR2yP1.F_R2Y.CCA0.CC0CTL.bit.CC0DP ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[0]   = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[1]   = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[2]   = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[3]   = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[4]   = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_0  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_0  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_0  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_0  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[0] = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0YBGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[1] = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0YBGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_0  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_1  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBBD.bit.CC0YBBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_2  = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0YBBD.bit.CC0YBBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_0    = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CCYC.bit.CCYC_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_1    = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CCYC.bit.CCYC_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_2    = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CCYC.bit.CCYC_0_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0dp     = %u\n",    ioR2yP1.fR2y.cca0.cc0ctl.bit.cc0dp ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[0]   = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[1]   = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[2]   = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[3]   = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[4]   = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k00  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k01  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k02  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k02 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k10  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k10 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k11  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k11 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k12  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k12 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k20  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k20 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k21  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k21 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k22  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k22 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_0  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybof.bit.cc0ybof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_1  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybof.bit.cc0ybof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_2  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybof.bit.cc0ybof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[0] = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0ybga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[1] = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0ybga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_0  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybga.bit.cc0ybga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_1  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybga.bit.cc0ybga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_2  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybga.bit.cc0ybga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_1  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybbd.bit.cc0ybbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_2  = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0ybbd.bit.cc0ybbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ccyc0    = 0x%x\n",  ioR2yP1.fR2y.cca0.CCYC.bit.ccyc00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCyc1    = 0x%x\n",  ioR2yP1.fR2y.cca0.CCYC.bit.ccyc01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCyc2    = 0x%x\n",  ioR2yP1.fR2y.cca0.CCYC.bit.ccyc02 ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0DP     = %u\n",    ioR2yP2.F_R2Y.CCA0.CC0CTL.bit.CC0DP ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[0]   = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[1]   = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[2]   = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[3]   = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[4]   = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_0  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_0  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_0  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_0  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBOF.bit.CC0YBOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[0] = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0YBGA.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[1] = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0YBGA.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_0  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBGA.bit.CC0YBGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_1  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBBD.bit.CC0YBBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_2  = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0YBBD.bit.CC0YBBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_0    = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CCYC.bit.CCYC_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_1    = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CCYC.bit.CCYC_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYC_2    = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CCYC.bit.CCYC_0_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0dp     = %u\n",    ioR2yP2.fR2y.cca0.cc0ctl.bit.cc0dp ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[0]   = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[1]   = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[2]   = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[3]   = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[4]   = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k00  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k01  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k02  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k02 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k10  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k10 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k11  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k11 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k12  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k12 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k20  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k20 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k21  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k21 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k22  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k22 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_0  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybof.bit.cc0ybof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_1  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybof.bit.cc0ybof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBOF_2  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybof.bit.cc0ybof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[0] = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0ybga.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA[1] = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0ybga.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_0  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybga.bit.cc0ybga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_1  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybga.bit.cc0ybga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBGA_2  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybga.bit.cc0ybga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_1  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybbd.bit.cc0ybbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCYBBD_2  = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0ybbd.bit.cc0ybbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ccyc0    = 0x%x\n",  ioR2yP2.fR2y.cca0.CCYC.bit.ccyc00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCyc1    = 0x%x\n",  ioR2yP2.fR2y.cca0.CCYC.bit.ccyc01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CCyc2    = 0x%x\n",  ioR2yP2.fR2y.cca0.CCYC.bit.ccyc02 ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}
@@ -923,7 +947,7 @@ INT32 ct_im_r2y_classf_1_52( UCHAR pipeNo )
 
 #undef D_IM_R2Y_FUNC_NAME
 #define D_IM_R2Y_FUNC_NAME "ct_im_r2y_classf_1_53: "
-INT32 ct_im_r2y_classf_1_53( UCHAR pipeNo )
+INT32 ct_im_r2y_classf_1_53( CtImR2yClassf *self,UCHAR pipeNo )
 {
 	SHORT r2yCc0k[3][9] = {
 		{	// max
@@ -947,39 +971,39 @@ INT32 ct_im_r2y_classf_1_53( UCHAR pipeNo )
 		Ddim_Print(( "** %u\n", loopcnt ));
 
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_CC0_Matrix_Coefficient( pipeNo, &r2yCc0k[loopcnt][0] );
+		ercd = im_r2y_ctrl2_set_cc0_matrix_coefficient(self->imR2yCtrl2, pipeNo, &r2yCc0k[loopcnt][0] );
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 		im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 		Ddim_Print(( "PIPE1\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[0]  = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[1]  = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[2]  = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[3]  = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[4]  = 0x%lx\n", ioR2yP1.F_R2Y.CCA0.CC0K.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_0 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_1 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_2 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_0_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_0 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_1 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_2 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_1_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_0 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_1 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_2 = 0x%x\n",  ioR2yP1.F_R2Y.CCA0.CC0K.bit.CC0K_2_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[0]  = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[1]  = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[2]  = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[3]  = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[4]  = 0x%lx\n", ioR2yP1.fR2y.cca0.cc0k.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k00 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k01 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k02 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k02 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k10 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k10 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k11 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k11 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k12 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k12 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k20 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k20 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k21 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k21 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k22 = 0x%x\n",  ioR2yP1.fR2y.cca0.cc0k.bit.cc0k22 ));
 		Ddim_Print(( "PIPE2\n" ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[0]  = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[0] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[1]  = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[1] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[2]  = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[2] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[3]  = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[3] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K[4]  = 0x%lx\n", ioR2yP2.F_R2Y.CCA0.CC0K.word[4] ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_0 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_1 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_0_2 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_0_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_0 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_1 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_1_2 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_1_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_0 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_1 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "CC0K_2_2 = 0x%x\n",  ioR2yP2.F_R2Y.CCA0.CC0K.bit.CC0K_2_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[0]  = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[0] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[1]  = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[1] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[2]  = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[2] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[3]  = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[3] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k[4]  = 0x%lx\n", ioR2yP2.fR2y.cca0.cc0k.word[4] ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k00 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k00 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k01 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k01 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k02 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k02 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k10 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k10 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k11 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k11 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k12 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k12 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k20 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k20 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k21 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k21 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "cc0k22 = 0x%x\n",  ioR2yP2.fR2y.cca0.cc0k.bit.cc0k22 ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}

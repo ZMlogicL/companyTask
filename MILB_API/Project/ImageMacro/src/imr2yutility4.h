@@ -39,29 +39,29 @@ ImR2yUtility4*		        im_r2y_utility4_new(void);
 //---------------------- utility section -------------------------------
 // Nothing Special
 //---------------------- colabo  section -------------------------------
-INT32 im_r2y_utility4_get_rdmaaddr_gmdf_table(ImR2yUtility4 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_GMDF_TBL_ADDR** addr );
+INT32 im_r2y_utility4_get_rdmaaddr_gmdf_table(ImR2yUtility4 *self, kuint16 pipeNo, const RdmaGmdfTblAddr** addr );
 
 /**
 Get the top address of the address array of Gamma Table(Full).
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		tbl_index				: Selection of table<br>
 										  0 : RGB common / 1 : R / 2 : G / 3 : B / 4 : Yb
 @param[out]		addr					: Top address of the address array of Gamma Table(Full).
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility4_get_rdma_addr_gmfl_table(ImR2yUtility4 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_GMFL_TBL_ADDR** addr );
+INT32 im_r2y_utility4_get_rdma_addr_gmfl_table(ImR2yUtility4 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaGmflTblAddr** addr );
 
 /**
 Get the top address of the address array of (High/Medium/Low) edge emphasis scaling table.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		tbl_index				: Selection of table<br>
 										  0 : High / 1 : Medium / 2 : Low
 @param[out]		addr					: Top address of the address array of High edge emphasis scaling table.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility4_get_rdma_addr_egwscl_table(ImR2yUtility4 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_EGWSCL_TBL_ADDR** addr );
+INT32 im_r2y_utility4_get_rdma_addr_egwscl_table(ImR2yUtility4 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaEgwsclTblAddr** addr );
 #endif	// CO_DDIM_UTILITY_USE
 
 #endif /* __IM_R2Y_UTILITY4_H__ */

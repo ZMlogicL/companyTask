@@ -51,6 +51,7 @@
 
 
 K_TYPE_DEFINE_WITH_PRIVATE(KIoTest, k_io_test);
+
 #define K_IO_TEST_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KIoTestPrivate, K_TYPE_IO_TEST))
 
 #define K_IO_TEST_RS_PRINTF printf
@@ -420,13 +421,13 @@ void k_io_test_audio_test(KIoTest *self)
 {
 #if 0
 #define ioAudio           (*ioAudio2)
-    volatile struct IoAudio* ioAudio2 = (kpointer)0x1E200000;
-//  volatile struct io_audio* ioAudio2;
+    volatile IoAudio* ioAudio2 = (kpointer)0x1E200000;
+//  volatile io_audio* ioAudio2;
 //  ioAudio2 = (kpointer)0x1E200000;
 #endif
     K_IO_TEST_RS_PRINTF("Audio I/F\n");
 #if 0
-    int loop;
+    kint loop;
 
     K_IO_TEST_RS_PRINTF("ioAudio.audioifCtrl.aures     = %lx\n", (kulong)&ioAudio.audioifCtrl.aures);
     K_IO_TEST_RS_PRINTF("ioAudio.audioifCtrl.auioe     = %lx\n", (kulong)&ioAudio.audioifCtrl.auioe);

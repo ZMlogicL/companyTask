@@ -35,19 +35,20 @@ static void dd_hdmac0_utility_destructor(DdHdmac0Utility *self)
 //---------------------- utility section -------------------------------
 /**
  * @brief  HDMAC0 Copy Sync for SDRAM
- * @param  UCHAR		ch				Channel number (0 to 7)
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			Copy size
- * @param  INT32		wait_mode		HDMAC0 end wait mode
- * @return INT32		D_DDIM_OK
+ * @param  kuchar		ch				Channel number (0 to 7)
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			Copy size
+ * @param  kint32		waitMode		HDMAC0 end wait mode
+ * @return kint32		D_DDIM_OK
  */
-INT32 dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, UINT32 wait_mode)
+kint32 dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, kuchar ch, kulong srcAddr, kulong dstAddr,
+		kulong size, kuint32 waitMode)
 {
-	INT32                 ret;
-	USHORT                status = 0;
-	Hdmac0CtrlTrns hdmac0_ctrl_trns;
-	UCHAR tmp_width;
+	kint32 ret;
+	kushort status = 0;
+	Hdmac0CtrlTrns hdmac0CtrlTrns;
+	kuchar tmpWidth;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac0_CH_NUM_MAX) {
@@ -62,41 +63,41 @@ INT32 dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, UCHAR ch, ULONG s
 		Ddim_Assertion(("HDMAC0: input param error. [size] = 0\n"));
 		return DdHdmac0_INPUT_PARAM_ERR;
 	}
-	if ((wait_mode != DdHdmac0_WAITMODE_CPU) && (wait_mode != DdHdmac0_WAITMODE_EVENT)) {
-		Ddim_Assertion(("HDMAC0: input param error. [wait_mode] = %x\n", wait_mode));
+	if ((waitMode != DdHdmac0_WAITMODE_CPU) && (waitMode != DdHdmac0_WAITMODE_EVENT)) {
+		Ddim_Assertion(("HDMAC0: input param error. [waitMode] = %x\n", waitMode));
 		return DdHdmac0_INPUT_PARAM_ERR;
 	}
 #endif
 
 	// Check transfer size
 	if (((srcAddr & 0x03) == 0) && ((dstAddr & 0x03) == 0) && ((size & 0x03) == 0)) {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_WORD;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_WORD;
 	}
 	else if (((srcAddr & 0x01) == 0) && ((dstAddr & 0x01) == 0) && ((size & 0x01) == 0)) {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_HWORD;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_HWORD;
 	}
 	else {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_BYTE;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_BYTE;
 	}
 
 	// Parameter Setting
-	hdmac0_ctrl_trns.mode.inputSel = DdHdmac0_IS_SOFT;
-	hdmac0_ctrl_trns.mode.modeSel  = DdHdmac0_MS_BLK;
-	hdmac0_ctrl_trns.mode.srcFix   = DdHdmac0_FS_INCR;
-	hdmac0_ctrl_trns.mode.dstFix   = DdHdmac0_FD_INCR;
-	tmp_width = 0x01 << hdmac0_ctrl_trns.size.trnsWidth;
-	if (size > (tmp_width * 16)) {
-		hdmac0_ctrl_trns.mode.beatType = DdHdmac0_BT_INCR16;
+	hdmac0CtrlTrns.mode.inputSel = DdHdmac0_IS_SOFT;
+	hdmac0CtrlTrns.mode.modeSel = DdHdmac0_MS_BLK;
+	hdmac0CtrlTrns.mode.srcFix = DdHdmac0_FS_INCR;
+	hdmac0CtrlTrns.mode.dstFix = DdHdmac0_FD_INCR;
+	tmpWidth = 0x01 << hdmac0CtrlTrns.size.trnsWidth;
+	if (size > (tmpWidth * 16)) {
+		hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_INCR16;
 	}
 	else {
-		hdmac0_ctrl_trns.mode.beatType  = DdHdmac0_BT_NORMAL;
+		hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_NORMAL;
 	}
 
-	hdmac0_ctrl_trns.size.trnsSize = size;
-	hdmac0_ctrl_trns.size.srcAddr  = srcAddr;
-	hdmac0_ctrl_trns.size.dstAddr  = dstAddr;
+	hdmac0CtrlTrns.size.trnsSize = size;
+	hdmac0CtrlTrns.size.srcAddr = srcAddr;
+	hdmac0CtrlTrns.size.dstAddr = dstAddr;
 
-	hdmac0_ctrl_trns.intHandler = NULL;
+	hdmac0CtrlTrns.intHandler = NULL;
 
 	ret = dd_hdmac0_open(dd_hdmac0_get(), ch, D_DDIM_WAIT_END_TIME);
 	if (ret != D_DDIM_OK) {
@@ -104,12 +105,12 @@ INT32 dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, UCHAR ch, ULONG s
 		return ret;
 	}
 	while (1) {
-		ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0_ctrl_trns);
+		ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0CtrlTrns);
 		if (ret != D_DDIM_OK) {
 			Ddim_Print(("HDMAC0 Util Copy Sync. Ctrl ERR : ret=0x%x\n", ret));
 			break;
 		}
-		ret = dd_hdmac0_start_sync(dd_hdmac0_get(), ch, &status, wait_mode);
+		ret = dd_hdmac0_start_sync(dd_hdmac0_get(), ch, &status, waitMode);
 		if (ret != D_DDIM_OK) {
 			Ddim_Print(("HDMAC0 Util Copy Sync. Start ERR : ret=0x%x, status=0x%x\n", ret, status));
 		}
@@ -126,18 +127,19 @@ INT32 dd_hdmac0_utility_copy_sdram_sync(DdHdmac0Utility *self, UCHAR ch, ULONG s
 
 /**
  * @brief  HDMAC0 Copy Async SDRAM
- * @param  UCHAR		ch				Channel number (0 to 7)
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			Copy size
- * @param  VP_CALLBACK	intHandler		Callback function pointer
- * @return INT32  		D_DDIM_OK
+ * @param  kuchar		ch				Channel number (0 to 7)
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			Copy size
+ * @param  VpCallbackFunc	intHandler		Callback function pointer
+ * @return kint32  		D_DDIM_OK
  */
-INT32 dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler)
+kint32 dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, kuchar ch, kulong srcAddr, kulong dstAddr,
+		kulong size, VpCallbackFunc intHandler)
 {
-	INT32                 ret;
-	Hdmac0CtrlTrns hdmac0_ctrl_trns;
-	UCHAR tmp_width;
+	kint32 ret;
+	Hdmac0CtrlTrns hdmac0CtrlTrns;
+	kuchar tmpWidth;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac0_CH_NUM_MAX) {
@@ -156,35 +158,35 @@ INT32 dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, UCHAR ch, ULONG 
 
 	// Check transfer size
 	if (((srcAddr & 0x03) == 0) && ((dstAddr & 0x03) == 0) && ((size & 0x03) == 0)) {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_WORD;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_WORD;
 	}
 	else if (((srcAddr & 0x01) == 0) && ((dstAddr & 0x01) == 0) && ((size & 0x01) == 0)) {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_HWORD;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_HWORD;
 	}
 	else {
-		hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_BYTE;
+		hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_BYTE;
 	}
 
 	// Parameter Setting
-	hdmac0_ctrl_trns.mode.inputSel = DdHdmac0_IS_SOFT;
-	hdmac0_ctrl_trns.mode.modeSel  = DdHdmac0_MS_BLK;
-	hdmac0_ctrl_trns.mode.srcFix   = DdHdmac0_FS_INCR;
-	hdmac0_ctrl_trns.mode.dstFix   = DdHdmac0_FD_INCR;
-	tmp_width = 0x01 << hdmac0_ctrl_trns.size.trnsWidth;
-	if (size > (tmp_width * 16)) {
-		hdmac0_ctrl_trns.mode.beatType = DdHdmac0_BT_INCR16;
+	hdmac0CtrlTrns.mode.inputSel = DdHdmac0_IS_SOFT;
+	hdmac0CtrlTrns.mode.modeSel = DdHdmac0_MS_BLK;
+	hdmac0CtrlTrns.mode.srcFix = DdHdmac0_FS_INCR;
+	hdmac0CtrlTrns.mode.dstFix = DdHdmac0_FD_INCR;
+	tmpWidth = 0x01 << hdmac0CtrlTrns.size.trnsWidth;
+	if (size > (tmpWidth * 16)) {
+		hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_INCR16;
 	}
 	else {
-		hdmac0_ctrl_trns.mode.beatType  = DdHdmac0_BT_NORMAL;
+		hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_NORMAL;
 	}
 
-	hdmac0_ctrl_trns.size.trnsSize = size;
-	hdmac0_ctrl_trns.size.srcAddr  = srcAddr;
-	hdmac0_ctrl_trns.size.dstAddr  = dstAddr;
+	hdmac0CtrlTrns.size.trnsSize = size;
+	hdmac0CtrlTrns.size.srcAddr = srcAddr;
+	hdmac0CtrlTrns.size.dstAddr = dstAddr;
 
-	hdmac0_ctrl_trns.intHandler = intHandler;
+	hdmac0CtrlTrns.intHandler = intHandler;
 
-	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0_ctrl_trns);
+	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0CtrlTrns);
 	if (ret != D_DDIM_OK) {
 		Ddim_Print(("HDMAC0 Util Copy Async. Ctrl ERR : ret=0x%x\n", ret));
 		return ret;
@@ -199,18 +201,19 @@ INT32 dd_hdmac0_utility_copy_sdram_async(DdHdmac0Utility *self, UCHAR ch, ULONG 
 
 /**
  * @brief  HDMAC0 Copy Async for Audio (Audio Input)
- * @param  UCHAR		ch				Channel number (0 to 7)
- * @param  UCHAR		inputSel		input select
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			transfer size
- * @param  VP_CALLBACK	intHandler		Callback function pointer
- * @return INT32		D_DDIM_OK
+ * @param  kuchar		ch				Channel number (0 to 7)
+ * @param  kuchar		inputSel		input select
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			transfer size
+ * @param  VpCallbackFunc	intHandler		Callback function pointer
+ * @return kint32		D_DDIM_OK
  */
-INT32 dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR inputSel, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler)
+kint32 dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, kuchar ch, kuchar inputSel, kulong srcAddr,
+		kulong dstAddr, kulong size, VpCallbackFunc intHandler)
 {
-	INT32                 ret;
-	Hdmac0CtrlTrns hdmac0_ctrl_trns;
+	kint32  ret;
+	Hdmac0CtrlTrns hdmac0CtrlTrns;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac0_CH_NUM_MAX) {
@@ -228,20 +231,20 @@ INT32 dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR
 #endif
 
 	// Set register values to the table.
-	hdmac0_ctrl_trns.mode.inputSel = inputSel;
-	hdmac0_ctrl_trns.mode.modeSel  = DdHdmac0_MS_DEMAND;
-	hdmac0_ctrl_trns.mode.srcFix   = DdHdmac0_FS_FIX;
-	hdmac0_ctrl_trns.mode.dstFix   = DdHdmac0_FD_INCR;
-	hdmac0_ctrl_trns.mode.beatType = DdHdmac0_BT_NORMAL;
+	hdmac0CtrlTrns.mode.inputSel = inputSel;
+	hdmac0CtrlTrns.mode.modeSel = DdHdmac0_MS_DEMAND;
+	hdmac0CtrlTrns.mode.srcFix = DdHdmac0_FS_FIX;
+	hdmac0CtrlTrns.mode.dstFix = DdHdmac0_FD_INCR;
+	hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_NORMAL;
 
-	hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_WORD;
-	hdmac0_ctrl_trns.size.trnsSize  = size;
-	hdmac0_ctrl_trns.size.srcAddr   = srcAddr;
-	hdmac0_ctrl_trns.size.dstAddr   = dstAddr;
+	hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_WORD;
+	hdmac0CtrlTrns.size.trnsSize = size;
+	hdmac0CtrlTrns.size.srcAddr = srcAddr;
+	hdmac0CtrlTrns.size.dstAddr = dstAddr;
 
-	hdmac0_ctrl_trns.intHandler     = intHandler;
+	hdmac0CtrlTrns.intHandler = intHandler;
 
-	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0_ctrl_trns);
+	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0CtrlTrns);
 	if (ret == D_DDIM_OK) {
 		ret = dd_hdmac0_start_async(dd_hdmac0_get(), ch);
 	}
@@ -251,18 +254,19 @@ INT32 dd_hdmac0_utility_input_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR
 
 /**
  * @brief  HDMAC0 Copy Async for Audio (Audio Output)
- * @param  UCHAR		ch				DMA Channel number (0 to 7)
- * @param  UCHAR		inputSel		input select
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			transfer size
- * @param  VP_CALLBACK	intHandler		Callback function pointer
- * @return INT32		D_DDIM_OK
+ * @param  kuchar		ch				DMA Channel number (0 to 7)
+ * @param  kuchar		inputSel		input select
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			transfer size
+ * @param  VpCallbackFunc	intHandler		Callback function pointer
+ * @return kint32		D_DDIM_OK
  */
-INT32 dd_hdmac0_utility_output_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHAR inputSel, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler)
+kint32 dd_hdmac0_utility_output_audio_async(DdHdmac0Utility *self, kuchar ch, kuchar inputSel, kulong srcAddr,
+		kulong dstAddr, kulong size, VpCallbackFunc intHandler)
 {
-	INT32                 ret;
-	Hdmac0CtrlTrns hdmac0_ctrl_trns;
+	kint32 ret;
+	Hdmac0CtrlTrns hdmac0CtrlTrns;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac0_CH_NUM_MAX) {
@@ -280,20 +284,20 @@ INT32 dd_hdmac0_utility_output_audio_async(DdHdmac0Utility *self, UCHAR ch, UCHA
 #endif
 
 	// Set register values to the table.
-	hdmac0_ctrl_trns.mode.inputSel = inputSel;
-	hdmac0_ctrl_trns.mode.modeSel  = DdHdmac0_MS_DEMAND;
-	hdmac0_ctrl_trns.mode.srcFix   = DdHdmac0_FS_INCR;
-	hdmac0_ctrl_trns.mode.dstFix   = DdHdmac0_FD_FIX;
-	hdmac0_ctrl_trns.mode.beatType = DdHdmac0_BT_NORMAL;
+	hdmac0CtrlTrns.mode.inputSel = inputSel;
+	hdmac0CtrlTrns.mode.modeSel = DdHdmac0_MS_DEMAND;
+	hdmac0CtrlTrns.mode.srcFix = DdHdmac0_FS_INCR;
+	hdmac0CtrlTrns.mode.dstFix = DdHdmac0_FD_FIX;
+	hdmac0CtrlTrns.mode.beatType = DdHdmac0_BT_NORMAL;
 
-	hdmac0_ctrl_trns.size.trnsWidth = DdHdmac0_TW_WORD;
-	hdmac0_ctrl_trns.size.trnsSize  = size;
-	hdmac0_ctrl_trns.size.srcAddr   = srcAddr;
-	hdmac0_ctrl_trns.size.dstAddr   = dstAddr;
+	hdmac0CtrlTrns.size.trnsWidth = DdHdmac0_TW_WORD;
+	hdmac0CtrlTrns.size.trnsSize = size;
+	hdmac0CtrlTrns.size.srcAddr = srcAddr;
+	hdmac0CtrlTrns.size.dstAddr = dstAddr;
 
-	hdmac0_ctrl_trns.intHandler     = intHandler;
+	hdmac0CtrlTrns.intHandler = intHandler;
 
-	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0_ctrl_trns);
+	ret = dd_hdmac0_ctrl_trns(dd_hdmac0_get(), ch, &hdmac0CtrlTrns);
 	if (ret == D_DDIM_OK) {
 		ret = dd_hdmac0_start_async(dd_hdmac0_get(), ch);
 	}

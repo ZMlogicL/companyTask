@@ -130,17 +130,17 @@ typedef enum {
 /** PCIe interrupt x callback. */
 struct _TDdPcieEpIntEpCb
 {
-	vpCallbackPcieFunc	msgUnlockCb;	/**< radm_msg_unlock callback	*/
-	vpCallbackPcieFunc	pmTurnofCb;	/**< radm_pm_turnof callback	*/
+	VpCallbackPcieFunc	msgUnlockCb;	/**< radm_msg_unlock callback	*/
+	VpCallbackPcieFunc	pmTurnofCb;	/**< radm_pm_turnof callback	*/
 };
 
 /** PCIe interrupt own callback. */
 struct _TDdPcieEpIntOwnCb
 {
-	vpCallbackPcieFunc	luCb;	/**< Link Up callback			*/
-	vpCallbackPcieFunc	ceCb;	/**< Correctable Error callback	*/
-	vpCallbackPcieFunc	nfeCb;	/**< Non-Fatal Error callback	*/
-	vpCallbackPcieFunc	feCb;	/**< Fatal Error callback		*/
+	VpCallbackPcieFunc	luCb;	/**< Link Up callback			*/
+	VpCallbackPcieFunc	ceCb;	/**< Correctable Error callback	*/
+	VpCallbackPcieFunc	nfeCb;	/**< Non-Fatal Error callback	*/
+	VpCallbackPcieFunc	feCb;	/**< Fatal Error callback		*/
 };
 
 struct _DdPcieEp
@@ -440,7 +440,7 @@ kint32 dd_pcie_ep_get_gddpcieepretype(DdPcieEp *self);
 		TDdPcieEpIntOwnCb intOwnCb
 
 		memset(&intOwnCb, 0, sizeof(intOwnCb));
-		intOwnCb.luCb = (vpCallbackPcieFunc)pcie_ep_lu_cb;
+		intOwnCb.luCb = (VpCallbackPcieFunc)pcie_ep_lu_cb;
 		dd_pcie_ep_set_int_own_func(&intOwnCb);
 
 		ret = dd_pcie_ep_init();
@@ -536,7 +536,7 @@ kint32 dd_pcie_ep_get_gddpcieepretype(DdPcieEp *self);
 		pcieCtrlDma.dmndDstAddrL = 0x5F000000;
 		pcieCtrlDma.dmndTransSize = 0x3FC000;
 		pcieCtrlDma.direction = E_DD_PCIE_DMA_DIR_STOD;
-		pcieCtrlDma.int_dma_callback = (vpCallbackPcieFunc)pcie_ep_int_dma_cb;
+		pcieCtrlDma.int_dma_callback = (VpCallbackPcieFunc)pcie_ep_int_dma_cb;
 		ret = dd_pcie_ep_ctrl_dma(&pcieCtrlDma);
 		if(ret == DriverCommon_DDIM_OK){
 			dd_pcie_ep_start_dma(pcieCtrlDma.ch, pcieCtrlDma.direction);
@@ -600,7 +600,7 @@ kint32 dd_pcie_ep_get_gddpcieepretype(DdPcieEp *self);
 		pcieCtrlDma.dmaCh = E_DD_PCIE_DMA_CH0;
 		pcieCtrlDma.llAddr = PCIE_DMA_LL_ADDR;
 		pcieCtrlDma.direction = E_DD_PCIE_DMA_DIR_STOD;
-		pcieCtrlDma.int_dma_callback = (vpCallbackPcieFunc)pcie_ep_int_dma_cb;
+		pcieCtrlDma.int_dma_callback = (VpCallbackPcieFunc)pcie_ep_int_dma_cb;
 		ret = dd_pcie_ep_ctrl_dma(&pcieCtrlDma);
 		if(ret == DriverCommon_DDIM_OK){
 			dd_pcie_ep_start_dma(pcieCtrlDma.ch, pcieCtrlDma.direction);
@@ -698,8 +698,8 @@ kint32 dd_pcie_ep_get_gddpcieepretype(DdPcieEp *self);
 	{
 		TDdPcieEpIntEpCb intEpCb;
 
-		intEpCb.msg_unlock_cb = (vpCallbackPcieFunc)pcie_ep_int_ep_msg_unlock_cb;
-		intEpCb.pmTurnofCb = (vpCallbackPcieFunc)pcie_ep_int_ep_pm_turnof_cb;
+		intEpCb.msg_unlock_cb = (VpCallbackPcieFunc)pcie_ep_int_ep_msg_unlock_cb;
+		intEpCb.pmTurnofCb = (VpCallbackPcieFunc)pcie_ep_int_ep_pm_turnof_cb;
 		dd_pcie_ep_set_int_ep_func(&intEpCb);
 	}
 

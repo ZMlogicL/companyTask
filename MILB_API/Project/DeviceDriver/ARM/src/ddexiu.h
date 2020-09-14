@@ -38,9 +38,9 @@
 extern "C" {
 #endif
 
-#define DD_TYPE_EXIU                  (dd_exiu_get_type())
-#define DD_EXIU(obj)                    (K_TYPE_CHECK_INSTANCE_CAST (obj, DdExiu))
-#define DD_IS_EXIU(obj)               (K_TYPE_CHECK_INSTANCE_TYPE (obj, DD_TYPE_EXIU))
+#define DD_TYPE_EXIU                 	(dd_exiu_get_type())
+#define DD_EXIU(obj)                   	(K_TYPE_CHECK_INSTANCE_CAST (obj, DdExiu))
+#define DD_IS_EXIU(obj)					(K_TYPE_CHECK_INSTANCE_TYPE (obj, DD_TYPE_EXIU))
 
 #define	C_INPUT_PARAM_ERR		(D_DD_EXIU | D_DDIM_INPUT_PARAM_ERROR) /**< Input Parameter Error */
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---

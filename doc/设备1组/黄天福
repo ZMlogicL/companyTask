@@ -28,7 +28,82 @@ RB.h  -------->rb.h  rb1.h
 	函数声明无法更改
 }
 
-h文件变化		
+h264movie.h文件最新修改
+修改部分如下，其余的没有变化
+原来的部分h264movie.h  搬到了h264moviewrapper.h文件里面
+方法里面前缀由原来的h264_movie_修改成h264_movie_wrapper_
+原始：
+kint32 h264_movie_rec_resize(H264Movie* self, H264MovieRecTbl* recTbl);
+VOID h264_movie_lcd_update(H264Movie* self, H264IfDisplayParam* lcdInfo, H264MovieAddr* dispAddr, kboolean riberyFormat);
+VOID h264_movie_lcd_wait(H264Movie* self);
+VOID h264_movie_tv_update(H264Movie* self, H264MovieAddr dispAddr, kuchar* firstDispFlg,
+kuchar colorMatrix, kuchar riberyFormat);
+VOID h264_movie_tv_wait(H264Movie* self);
+VOID h264_movie_hdmi_update(H264Movie* self, H264IfDisplayParam* hdmiInfo, H264MovieAddr* dispAddr, kboolean riberyFormat);
+VOID h264_movie_hdmi_wait(H264Movie* self);
+修改成如下：
+kint32 h264_movie_wrapper_rec_resize(H264Movie* self, H264MovieRecTbl* recTbl);
+VOID h264_movie_wrapper_lcd_update(H264Movie* self, H264IfDisplayParam* lcdInfo, H264MovieAddr* dispAddr, kboolean riberyFormat);
+VOID h264_movie_wrapper_lcd_wait(H264Movie* self);
+VOID h264_movie_wrapper_tv_update(H264Movie* self, H264MovieAddr dispAddr, kuchar* firstDispFlg,
+kuchar colorMatrix, kuchar riberyFormat);
+VOID h264_movie_wrapper_tv_wait(H264Movie* self);
+VOID h264_movie_wrapper_hdmi_update(H264Movie* self, H264IfDisplayParam* hdmiInfo, H264MovieAddr* dispAddr, kboolean riberyFormat);
+VOID h264_movie_wrapper_hdmi_wait(H264Movie* self);
+
+原来的部分h264movie.h  搬到了h264moviewrbs.h文件里面
+方法里面前缀由原来的h264_movie_修改成h264_movie_bs_
+原始：
+VOID h264_movie_set_pointer_address(H264Movie *self, H264MovieStreamControl *bitStream,
+UCHAR *pointerAddress);
+VOID h264_movie_skip_pointer_address(H264Movie *self, H264MovieStreamControl *bitStream, ULONG skipBytes);
+VOID h264_movie_skip_pointer_scope_bit(H264Movie *self, H264MovieStreamControl *bitStream, ULONG skipBits);
+UCHAR *h264_movie_get_pointer(H264Movie *self, H264MovieStreamControl *bitStream);
+UCHAR h264_movie_get_remain_bits(H264Movie *self, H264MovieStreamControl *bitStream);
+ULONG h264_movie_read_u_1bit(H264Movie *self, H264MovieStreamControl *bitStream);
+ULONG h264_movie_read_u_nbit(H264Movie *self, H264MovieStreamControl *bitStream,
+UCHAR readNum);
+INT32 h264_movie_read_u_e(H264Movie *self, H264MovieStreamControl *bitStream);
+INT32 h264_movie_read_s_e(H264Movie *self, H264MovieStreamControl *bitStream);
+VOID h264_movie_write_u_1bit(H264Movie *self, H264MovieStreamControl *bitStream, INT32 writeValue);
+VOID h264_movie_write_u_nbit(H264Movie *self, H264MovieStreamControl *bitStream,
+         UCHAR writeNum, INT32 writeValue);
+修改成如下：
+VOID h264_movie_bs_set_pointer_address(H264Movie *self, H264MovieStreamControl *bitStream,
+UCHAR *pointerAddress);
+VOID h264_movie_bs_skip_pointer_address(H264Movie *self, H264MovieStreamControl *bitStream, ULONG skipBytes);
+VOID h264_movie_bs_skip_pointer_scope_bit(H264Movie *self, H264MovieStreamControl *bitStream, ULONG skipBits);
+UCHAR *h264_movie_bs_get_pointer(H264Movie *self, H264MovieStreamControl *bitStream);
+UCHAR h264_movie_bs_get_remain_bits(H264Movie *self, H264MovieStreamControl *bitStream);
+ULONG h264_movie_bs_read_u_1bit(H264Movie *self, H264MovieStreamControl *bitStream);
+ULONG h264_movie_bs_read_u_nbit(H264Movie *self, H264MovieStreamControl *bitStream,
+UCHAR readNum);
+INT32 h264_movie_bs_read_u_e(H264Movie *self, H264MovieStreamControl *bitStream);
+INT32 h264_movie_bs_read_s_e(H264Movie *self, H264MovieStreamControl *bitStream);
+VOID h264_movie_bs_write_u_1bit(H264Movie *self, H264MovieStreamControl *bitStream, INT32 writeValue);
+VOID h264_movie_bs_write_u_nbit(H264Movie *self, H264MovieStreamControl *bitStream,
+         UCHAR writeNum, INT32 writeValue);
+
+原来的部分h264movie.h  搬到了h264moviewrcontrol.h文件里面
+方法里面前缀由原来的h264_movie_修改成h264_movie_control_
+原始：
+VOID h264_movie_cc_process(kint32 stacd);
+VOID h264_movie_ent_process(kint32 stacd);
+VOID h264_movie_vector_process(kint32 stacd);
+VOID h264_movie_disp_process(kint32 stacd);
+VOID h264_movie_lcd_process(kint32 stacd);
+VOID h264_movie_disp_hdmi_process(kint32 stacd);
+修改成如下：
+VOID h264_movie_control_cc_process(kint32 stacd);
+VOID h264_movie_control_ent_process(kint32 stacd);
+VOID h264_movie_control_vector_process(kint32 stacd);
+VOID h264_movie_control_disp_process(kint32 stacd);
+VOID h264_movie_control_lcd_process(kint32 stacd);
+VOID h264_movie_control_disp_hdmi_process(kint32 stacd);
+
+
+
+moviecommon.h文件变化		
 D_BF_MOVIE_COMMON_OK	-------->	MovieCommon_OK
 D_BF_MOVIE_COMMON_NG	-------->	MovieCommon_NG
 D_BF_MOVIE_COMMON_ON	-------->	MovieCommon_ON

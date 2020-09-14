@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -60,19 +60,19 @@
 /** Interrupt Mode
 */
 typedef enum {
-	E_IM_RDMA_INT_MODE_OR	= 0,		/**< Interrupt mode is "OR" */
-	E_IM_RDMA_INT_MODE_AND,				/**< Interrupt mode is "AND" */
-	E_IM_RDMA_INT_MODE_AND_ERR,			/**< Interrupt mode is "AND" + "Error" */
-} E_IM_RDMA_INT_MODE;
+	ImRdma_INT_MODE_OR 	= 0,		/**< Interrupt mode is "OR" */
+	ImRdma_INT_MODE_AND,				/**< Interrupt mode is "AND" */
+	ImRdma_INT_MODE_AND_ERR ,			/**< Interrupt mode is "AND" + "Error" */
+} ImRdmaIntMode;
 
 /** PRch precedent request threshold
 */
 typedef enum {
-	E_IM_RDMA_PRCH_CNT_NOLIMIT = 0,		/**< PRch no limit		*/
-	E_IM_RDMA_PRCH_CNT_MAX1,			/**< PRch max 1 time	*/
-	E_IM_RDMA_PRCH_CNT_MAX2,			/**< PRch max 2 times	*/
-	E_IM_RDMA_PRCH_CNT_MAX3,			/**< PRch max 3 times	*/
-} E_IM_RDMA_PRCH_CNT;
+	ImRdma_PRCH_CNT_NOLIMIT  = 0,		/**< PRch no limit		*/
+	ImRdma_PRCH_CNT_MAX1 ,			/**< PRch max 1 time	*/
+	ImRdma_PRCH_CNT_MAX2,			/**< PRch max 2 times	*/
+	ImRdma_PRCH_CNT_MAX3,			/**< PRch max 3 times	*/
+} ImRdmaPrchCnt;
 
 #ifdef CO_DDIM_UTILITY_USE
 //---------------------- utility section -------------------------------
@@ -89,35 +89,35 @@ typedef VOID (*T_IM_RDMA_CALLBACK)( ULONG interrupt_flag_mask, ULONG interrupt_e
 /** RDMA driver common control structure
 */
 typedef struct {
-	UINT32				transfer_byte;			/**< Transfer size of the input/output area. @@PRHSIZE <br>
+	UINT32				transferByte;			/**< Transfer size of the input/output area. @@PRHSIZE <br>
 													 Set at 4 byte units.
 												 */
-	ULONG				reg_addr_tbl_addr;		/**< Start address of the register address area for PRch0. @@PRSA <br>
+	ULONG				regAddrTblAddr;		/**< Start address of the register address area for PRch0. @@PRSA <br>
 													 Set at 4 byte units.
 												 */
-	ULONG				reg_data_top_addr;		/**< Start address of the register data  area for PRch1. @@PRSA <br>
+	ULONG				regDataTopAddr;		/**< Start address of the register data  area for PRch1. @@PRSA <br>
 													 Set at 4 byte units.
 												 */
-	E_IM_RDMA_PRCH_CNT	req_threshold;			/**< precedent request threshold<br>
+	ImRdmaPrchCnt	reqThreshold;			/**< precedent request threshold<br>
 													value range		:See @ref E_IM_RDMA_PRCH_CNT<br>
 													target registor	:@@PRLV */
-	E_IM_RDMA_INT_MODE int_mode;				/**< Interrupt Mode<br>
+	ImRdmaIntMode intMode;				/**< Interrupt Mode<br>
 													value range		:See @ref E_IM_RDMA_INT_MODE<br>
 													target registor	:@@RDMAINTENB */
 	VP_CALLBACK			pCallBack;				/**< Callback function pointer.
 												 */
-} T_IM_RDMA_CTRL;
+} ImRdmaCtrl;
 
 /** Im_RDMA_Set_Axi() parameter structure */
 typedef struct {
-	UINT32	write_cache_type;			/**< Write Cache type. */
-	UINT32	write_protection_type;		/**< Write Protection type. */
-} T_IM_RDMA_AXI;
+	UINT32	writeCacheType;			/**< Write Cache type. */
+	UINT32	writeProtectionType;		/**< Write Protection type. */
+} ImRdmaAxi;
 
 /** Im_RDMA_Get_Axi_Status() parameter structure */
 typedef struct {
-	UCHAR	write_channel_response;	/**< WRESP register */
-} T_IM_RDMA_AXI_STATUS;
+	UCHAR	writeChannelResponse;	/**< WRESP register */
+} ImRdmaAxiStatus;
 
 #ifdef CO_DDIM_UTILITY_USE
 //---------------------- utility section -------------------------------
@@ -160,21 +160,21 @@ struct _ImRdma {
 KConstType 		    im_rdma_get_type(void);
 ImRdma*		        im_rdma_new(void);
 
-INT32 Im_RDMA_Open( INT32 tmout );
-INT32 Im_RDMA_Close( VOID );
-INT32 Im_RDMA_Init( VOID );
-INT32 Im_RDMA_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl );
-INT32 Im_RDMA_Start_Sync( VOID );
-INT32 Im_RDMA_Start_Async( VOID );
-INT32 Im_RDMA_Wait_End( VOID );
-VOID Im_RDMA_Int_Handler( VOID );
-INT32 Im_RDMA_Get_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl );
-E_IM_RDMA_INT_MODE Im_RDMA_Get_Int_Mode( VOID );
-BOOL Im_RDMA_Get_PRch_Error_Status( VOID );
-INT32 Im_RDMA_Set_Axi( const T_IM_RDMA_AXI* const axi_ctrl );
-INT32 Im_RDMA_Get_Axi_Status( T_IM_RDMA_AXI_STATUS* const sts );
-VOID Im_RDMA_Print_ClockStatus( VOID );
-INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl );
+INT32 im_rdma_open( ImRdma*self,INT32 tmout );
+INT32 im_rdma_close( ImRdma*self );
+INT32 im_rdma_init( ImRdma*self );
+INT32 im_rdma_ctrl( ImRdma*self,ImRdmaCtrl* rdma_ctrl );
+INT32 im_rdma_start_sync( ImRdma*self );
+INT32 im_rdma_start_async( ImRdma*self );
+INT32 im_rdma_wait_end( ImRdma*self );
+VOID im_rdma_int_handler( VOID );
+INT32 im_rdma_get_ctrl( ImRdma*self,ImRdmaCtrl* rdma_ctrl );
+ImRdmaIntMode im_rdma_get_int_mode( ImRdma*self );
+BOOL im_rdma_get_prch_error_status( ImRdma*self );
+INT32 im_rdma_set_axi( ImRdma*self,const ImRdmaAxi* const axi_ctrl );
+INT32 im_rdma_get_axi_status( ImRdma*self,ImRdmaAxiStatus* const sts );
+VOID im_rdma_print_clock_status( ImRdma*self );
+INT32 im_rdma_ctrl_quick_start_sync( ImRdma*self,INT32 tmout, ImRdmaCtrl* rdma_ctrl );
 
 
 #endif /* __IM_RDAM_H__ */

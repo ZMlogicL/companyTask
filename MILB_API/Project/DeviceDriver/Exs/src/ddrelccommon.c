@@ -3,7 +3,7 @@
 *@date                :2020-08-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -24,13 +24,12 @@
 #include "ddrelccommon.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(DdRelcCommon, dd_relc_common);
-#define DD_RELC_COMMON_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), DdRelcCommonPrivate, DD_TYPE_RELC_COMMON))
-
+G_DEFINE_TYPE(DdRelcCommon, dd_relc_common, G_TYPE_OBJECT);
+#define DD_RELC_COMMON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), DD_TYPE_RELC_COMMON, DdRelcCommonPrivate));
 
 struct _DdRelcCommonPrivate
 {
-	kint a;
+	gint a;
 };
 
 /*----------------------------------------------------------------------	*/
@@ -48,18 +47,43 @@ struct _DdRelcCommonPrivate
 /*----------------------------------------------------------------------	*/
 static volatile TDdRelcDecInfo S_GRELC_DEC_INFO;
 /**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
  *IMPL
  */
-static void dd_relc_common_constructor(DdRelcCommon *self)
+static void 		dd_relc_common_class_init(DdRelcCommonClass *klass)
 {
-//	DdRelcCommonPrivate *priv = DD_RELC_COMMON_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(DdRelcCommonPrivate));
 }
 
-static void dd_relc_common_destructor(DdRelcCommon *self)
+static void 		dd_relc_common_init(DdRelcCommon *self)
 {
-//	DdRelcCommonPrivate *priv = DD_RELC_COMMON_GET_PRIVATE(self);
+	DdRelcCommonPrivate *priv = DD_RELC_COMMON_GET_PRIVATE(self);
+	self->ddrelc = dd_relc_new();
 }
 
+static void 		dispose_od(GObject *object)
+{
+	DdRelcCommonPrivate *priv = DD_RELC_COMMON_GET_PRIVATE(object);
+	DdRelcCommon *self = dd_relc_common_new();
+	if(self->ddrelc){
+		g_object_unref(self->ddrelc);
+		self->ddrelc = NULL;
+	}
+	G_OBJECT_CLASS(dd_relc_common_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	DdRelcCommonPrivate *priv = DD_RELC_COMMON_GET_PRIVATE(object);
+	G_OBJECT_CLASS(dd_relc_common_parent_class) -> dispose(object);
+}
 /**
  * PUBLIC
  */
@@ -67,9 +91,9 @@ static void dd_relc_common_destructor(DdRelcCommon *self)
  * @preif	RELC decode status is get.
  * @return	RELC decode status
  */
-kint32 dd_relc_get_status(DdRelc*self)
+gint32 dd_relc_common_get_status(DdRelcCommon*self)
 {
-	kint32 ret;
+	gint32 ret;
 
 	/* 000b = IDLE, 001b = RUN, 010b = SLEEP, 100b = FINISH  */
 	ret = (ioRelc.relcStatus.word & 0x00000007);
@@ -81,9 +105,9 @@ kint32 dd_relc_get_status(DdRelc*self)
  * @preif	RELC sleep reason is get.
  * @return	RELC sleep reason
  */
-kint32 dd_relc_get_sleep_reason(DdRelc*self)
+gint32 dd_relc_common_get_sleep_reason(DdRelcCommon*self)
 {
-	kint32 ret;
+	gint32 ret;
 
 	/* 100b = User instruction,*/
 	/* 001b = To reach the end address input,	*/
@@ -96,9 +120,9 @@ kint32 dd_relc_get_sleep_reason(DdRelc*self)
  * @preif	RELC error status is get.
  * @return	RELC error status
  */
-kint32 dd_relc_get_error_status(DdRelc*self )
+gint32 dd_relc_common_get_error_status(DdRelcCommon*self )
 {
-	kint32 ret;
+	gint32 ret;
 
 	ret = ioRelc.relcStatus.bit.eflg;
 
@@ -114,9 +138,9 @@ kint32 dd_relc_get_error_status(DdRelc*self )
  * @return DdRelc_D_DD_RELC_ERR_ADDR_MISMATCH_INPUT	Address mismatch error(input)
  * @return DdRelc_D_DD_RELC_ERR_ADDR_MISMATCH_OUTPUT	Address mismatch error(output)
 */
-kint32 dd_relc_get_error(DdRelc*self)
+gint32 dd_relc_common_get_error(DdRelcCommon*self)
 {
-	kint32 ret;
+	gint32 ret;
 
 	ret = (ioRelc.relcErrorNum.word & 0x0000ffff);
 
@@ -127,7 +151,7 @@ kint32 dd_relc_get_error(DdRelc*self)
  * @preif	RELC status is get.
  * @param[out] decInfo	RELC processing status
  */
-kint32 dd_relc_get_process_status(DdRelc*self, TDdRelcDecInfo* decInfo )
+gint32 dd_relc_common_get_process_status(DdRelcCommon*self, TDdRelcDecInfo* decInfo )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (decInfo == NULL) {
@@ -138,11 +162,11 @@ kint32 dd_relc_get_process_status(DdRelc*self, TDdRelcDecInfo* decInfo )
 
 #if 0
 	/* Number of bytes read*/
-	decInfo->readByte = (kushort)ioRelc.RELC_READ_BYTE.bit.DRNM;
+	decInfo->readByte = (gushort)ioRelc.RELC_READ_BYTE.bit.DRNM;
 	/* Number of bytes written*/
-	decInfo->writeByte = (kushort)ioRelc.RELC_WRITE_BYTE.bit.DWNM;
+	decInfo->writeByte = (gushort)ioRelc.RELC_WRITE_BYTE.bit.DWNM;
 	/* Number of processing blocks*/
-	decInfo->procBlock = (kushort)ioRelc.RELC_BLOCK.bit.BLKN;
+	decInfo->procBlock = (gushort)ioRelc.RELC_BLOCK.bit.BLKN;
 	/* Decode the total number of bytes to read*/
 	decInfo->decTotalReadBytes = ioRelc.RELC_INPUT_BYTE;
 	/* Decode the total number of bytes to write	*/
@@ -173,9 +197,9 @@ kint32 dd_relc_get_process_status(DdRelc*self, TDdRelcDecInfo* decInfo )
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_get_buf_size(DdRelc*self, kushort* inBufSize, kushort* refBufSize )
+gint32 dd_relc_common_get_buf_size(DdRelcCommon*self, gushort* inBufSize, gushort* refBufSize )
 {
-	kuint32 bufSizeType;
+	guint32 bufSizeType;
 
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (inBufSize == NULL) {
@@ -232,7 +256,7 @@ kint32 dd_relc_get_buf_size(DdRelc*self, kushort* inBufSize, kushort* refBufSize
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_in_buf_data_mirror(DdRelc*self, kulong inDataAddr, kuint32 inDataSize )
+gint32 dd_relc_common_set_in_buf_data_mirror(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (inDataAddr == 0) {
@@ -242,7 +266,7 @@ kint32 dd_relc_set_in_buf_data_mirror(DdRelc*self, kulong inDataAddr, kuint32 in
 #endif
 
 	memcpy((void*) &ioRelc.relcInputBufDataMirror, (void*) inDataAddr, inDataSize);
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -254,7 +278,7 @@ kint32 dd_relc_set_in_buf_data_mirror(DdRelc*self, kulong inDataAddr, kuint32 in
  * @return DdRelc_D_DD_RELC_OK					OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-kint32 dd_relc_get_in_buf_data_mirror(DdRelc*self, kulong outDataAddr, kuint32 outDataSize )
+gint32 dd_relc_common_get_in_buf_data_mirror(DdRelcCommon*self, gulong outDataAddr, guint32 outDataSize )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (outDataAddr == 0) {
@@ -275,7 +299,7 @@ kint32 dd_relc_get_in_buf_data_mirror(DdRelc*self, kulong outDataAddr, kuint32 o
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-kint32 dd_relc_set_in_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSize )
+gint32 dd_relc_common_set_in_buf_data(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (inDataAddr == 0) {
@@ -285,7 +309,7 @@ kint32 dd_relc_set_in_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSiz
 #endif
 
 	memcpy((void*) &ioRelc.relcInputBufData, (void*) inDataAddr, inDataSize);
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -297,7 +321,7 @@ kint32 dd_relc_set_in_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSiz
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_get_in_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outDataSize)
+gint32 dd_relc_common_get_in_buf_data(DdRelcCommon*self, gulong outDataAddr, guint32 outDataSize)
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (outDataAddr == 0) {
@@ -318,7 +342,7 @@ kint32 dd_relc_get_in_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outDataS
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_ref_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSize )
+gint32 dd_relc_common_set_ref_buf_data(DdRelcCommon*self, gulong inDataAddr, guint32 inDataSize )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (inDataAddr == 0) {
@@ -328,7 +352,7 @@ kint32 dd_relc_set_ref_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSi
 #endif
 
 	memcpy((void*) &ioRelc.relcRefBufData, (void*) inDataAddr, inDataSize);
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -340,7 +364,7 @@ kint32 dd_relc_set_ref_buf_data(DdRelc*self, kulong inDataAddr, kuint32 inDataSi
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_get_ref_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outDataSize )
+gint32 dd_relc_common_get_ref_buf_data(DdRelcCommon*self, gulong outDataAddr, guint32 outDataSize )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (outDataAddr == 0) {
@@ -364,9 +388,9 @@ kint32 dd_relc_get_ref_buf_data(DdRelc*self, kulong outDataAddr, kuint32 outData
  * @return DdRelc_D_DD_RELC_OK					OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR				Parameter error
  */
-kint32 dd_relc_utility_register(DdRelc*self, TDdRelcSetModNormal const* const relcSetModNormal )
+gint32 dd_relc_common_utility_register(DdRelcCommon*self, TDdRelcSetModNormal const* const relcSetModNormal )
 {
-	kint32 retCode = 0;
+	gint32 retCode = 0;
 	TDdRelcCtrlCmn ctrlCmn;
 	TDdRelcCtrlReg ctrl_reg;
 
@@ -377,9 +401,9 @@ kint32 dd_relc_utility_register(DdRelc*self, TDdRelcSetModNormal const* const re
 	ctrlCmn.readHprot = relcSetModNormal->readHprot;
 
 	/* After power on and the reset, this is executed only once. */
-	dd_relc_new(ctrlCmn.writeHprot, ctrlCmn.readHprot);
+	dd_relc_init(self->ddrelc, ctrlCmn.writeHprot, ctrlCmn.readHprot);
 
-	retCode = dd_relc_open();
+	retCode = dd_relc_open(self->ddrelc);
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error RELC Open !!\n" ));
 		return retCode;
@@ -412,25 +436,25 @@ kint32 dd_relc_utility_register(DdRelc*self, TDdRelcSetModNormal const* const re
 	ctrl_reg.outStartAddr = relcSetModNormal->outStartAddr;
 	ctrl_reg.outEndAddr = 0;
 
-	retCode = dd_relc_ctrl_common(NULL, &ctrlCmn);
+	retCode = dd_relc_ctrl_common(self->ddrelc, &ctrlCmn);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_ctrl_common() !!\n" ));
 	}
 
-	retCode = dd_relc_ctrl_register(NULL, &ctrl_reg);
+	retCode = dd_relc_ctrl_register(self->ddrelc, &ctrl_reg);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_ctrl_register() !!\n" ));
 	}
 
-	retCode = dd_relc_start_sync(NULL);
+	retCode = dd_relc_start_sync(self->ddrelc);
 
 	if (retCode != 0) {
 		Ddim_Print(("dd_relc_start_sync() clr_flg error. retCode=0x%x\n", retCode));
 	}
 
-	retCode = dd_relc_close(NULL);
+	retCode = dd_relc_close(self->ddrelc);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_close() !!\n" ));
@@ -445,9 +469,9 @@ kint32 dd_relc_utility_register(DdRelc*self, TDdRelcSetModNormal const* const re
  * @retval DdRelc_D_DD_RELC_OK				OK
  * @retval DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
  */
-kint32 dd_relc_utility_descriptor(DdRelc*self, TDdRelcSetModDesc const* const relcSetModDesc )
+gint32 dd_relc_common_utility_descriptor(DdRelcCommon*self, TDdRelcSetModDesc const* const relcSetModDesc )
 {
-	kint32 retCode = 0;
+	gint32 retCode = 0;
 	TDdRelcCtrlCmn ctrlCmn;
 	TDdRelcCtrlDesc ctrlDesc;
 
@@ -458,9 +482,9 @@ kint32 dd_relc_utility_descriptor(DdRelc*self, TDdRelcSetModDesc const* const re
 	ctrlCmn.readHprot = relcSetModDesc->readHprot;
 
 	/* After power on and the reset, this is executed only once. */
-	dd_relc_new(ctrlCmn.writeHprot, ctrlCmn.readHprot);
+	dd_relc_init(self->ddrelc, ctrlCmn.writeHprot, ctrlCmn.readHprot);
 
-	retCode = dd_relc_open();
+	retCode = dd_relc_open(self->ddrelc);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error RELC Open !!\n" ));
@@ -483,25 +507,25 @@ kint32 dd_relc_utility_descriptor(DdRelc*self, TDdRelcSetModDesc const* const re
 
 	ctrlDesc.descriptorAddr = relcSetModDesc->relcDescriptorAddr;
 
-	retCode = dd_relc_ctrl_common(NULL, &ctrlCmn);
+	retCode = dd_relc_ctrl_common(self->ddrelc, &ctrlCmn);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_ctrl_common() !!\n" ));
 	}
 
-	retCode = dd_relc_ctrl_descriptor(NULL, &ctrlDesc);
+	retCode = dd_relc_ctrl_descriptor(self->ddrelc, &ctrlDesc);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_ctrl_descriptor() !!\n" ));
 	}
 
-	retCode = dd_relc_start_sync(NULL);
+	retCode = dd_relc_start_sync(self->ddrelc);
 
 	if (retCode != 0) {
 		Ddim_Print(("dd_relc_start_sync() clr_flg error. retCode=0x%x\n", retCode));
 	}
 
-	retCode = dd_relc_close(NULL);
+	retCode = dd_relc_close(self->ddrelc);
 
 	if (retCode != DdRelc_D_DD_RELC_OK) {
 		Ddim_Print(("Error dd_relc_close() !!\n" ));
@@ -512,8 +536,8 @@ kint32 dd_relc_utility_descriptor(DdRelc*self, TDdRelcSetModDesc const* const re
 
 #endif	/* CO_DDIM_UTILITY_USE */
 
-DdRelcCommon* dd_relc_common_new(void)
+DdRelcCommon* 		dd_relc_common_new(void)
 {
-	DdRelcCommon *self = k_object_new_with_private(DD_TYPE_RELC_COMMON	, sizeof(DdRelcCommonPrivate));
+	DdRelcCommon *self = g_object_new(DD_TYPE_RELC_COMMON, NULL);
 	return self;
 }

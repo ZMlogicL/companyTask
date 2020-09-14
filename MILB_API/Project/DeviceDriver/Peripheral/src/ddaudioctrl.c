@@ -13,7 +13,7 @@
 #include <string.h>
 #include "audio_if.h"
 #include "ddaudio.h"
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "ddaudioctrl.h"
 
 
@@ -23,28 +23,28 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdAudioCtrl, dd_audio_ctrl);
 
 struct _DdAudioCtrlPrivate
 {
-	volatile AudioCtrlCommon	cmmnData[DdAudio_IF_CH_NUM_MAX];
-	volatile AudioCtrlIn	inData[DdAudio_IF_CH_NUM_MAX];
+	volatile AudioCtrlCommon cmmnData[DdAudio_IF_CH_NUM_MAX];
+	volatile AudioCtrlIn inData[DdAudio_IF_CH_NUM_MAX];
 	volatile AudioCtrlOut outData[DdAudio_IF_CH_NUM_MAX];
-	volatile AudioCtrlCommon	*gDd_Audio_Ctrl_Cmmn[DdAudio_IF_CH_NUM_MAX];
-	volatile AudioCtrlIn *gDd_Audio_Ctrl_In[DdAudio_IF_CH_NUM_MAX];
-	volatile AudioCtrlOut *gDd_Audio_Ctrl_Out[DdAudio_IF_CH_NUM_MAX];
+	volatile AudioCtrlCommon *cmmn[DdAudio_IF_CH_NUM_MAX];
+	volatile AudioCtrlIn *in[DdAudio_IF_CH_NUM_MAX];
+	volatile AudioCtrlOut *out[DdAudio_IF_CH_NUM_MAX];
 };
 
 
-static INT32 dd_audio_set_input_register_format(UINT8 ch, UINT8 format);
-static INT32 dd_audio_set_output_register_format(UINT8 ch, UINT8 format);
-static INT32 dd_audio_set_in_fifo(UINT8 ch, UINT8 stage);
-static INT32 dd_audio_set_out_fifo(UINT8 ch, UINT8 stage);
-static INT32 dd_audio_set_stereo(UINT8 ch, UINT8 stereo);
-static BOOL dd_audio_get_stereo(UINT8 ch);
-static INT32 dd_audio_set_register_usage(UINT8 ch, UINT8 control);
-static INT32 dd_audio_set_mix_play(UINT8 ch, UINT8 control);
-static INT32 dd_audio_set_lr_data_copy(UINT8 ch, UINT8 copy);
-static INT32 dd_audio_set_in_ahb_format(UINT8 ch, UINT8 format);
-static INT32 dd_audio_set_out_ahb_format(UINT8 ch, UINT8 format);
-static INT32 dd_audio_set_out_data_shift(UINT8 ch, UINT8 shift);
-static INT32 dd_audio_set_in_data_shift(UINT8 ch, UINT8 shift);
+static kint32 ddAudioSetInputRegisterFormat(kuint8 ch, kuint8 format);
+static kint32 ddAudioSetOutputRegisterFormat(kuint8 ch, kuint8 format);
+static kint32 ddAudioSetInFifo(kuint8 ch, kuint8 stage);
+static kint32 ddAudioSetOutFifo(kuint8 ch, kuint8 stage);
+static kint32 ddAudioSetStereo(kuint8 ch, kuint8 stereo);
+static kboolean ddAudioGetStereo(kuint8 ch);
+static kint32 ddAudioSetRegisterUsage(kuint8 ch, kuint8 control);
+static kint32 ddAudioSetMixPlay(kuint8 ch, kuint8 control);
+static kint32 ddAudioSetLrDataCopy(kuint8 ch, kuint8 copy);
+static kint32 ddAudioSetInAhbFormat(kuint8 ch, kuint8 format);
+static kint32 ddAudioSetOutAhbFormat(kuint8 ch, kuint8 format);
+static kint32 ddAudioSetOutDataShift(kuint8 ch, kuint8 shift);
+static kint32 ddAudioSetInDataShift(kuint8 ch, kuint8 shift);
 
 
 static void dd_audio_ctrl_constructor(DdAudioCtrl *self)
@@ -69,9 +69,9 @@ static void dd_audio_ctrl_constructor(DdAudioCtrl *self)
 		priv->outData[i].mixPlay = DdAudio_DISABLE;
 		priv->outData[i].bitShift = DdAudioCtrl_BIT_SHIFT_0;
 
-		priv->gDd_Audio_Ctrl_Cmmn[i] = &priv->cmmnData[i];
-		priv->gDd_Audio_Ctrl_In[i] = &priv->inData[i];
-		priv->gDd_Audio_Ctrl_Out[i] = &priv->outData[i];
+		priv->cmmn[i] = &priv->cmmnData[i];
+		priv->in[i] = &priv->inData[i];
+		priv->out[i] = &priv->outData[i];
 	}
 
 }
@@ -83,16 +83,16 @@ static void dd_audio_ctrl_destructor(DdAudioCtrl *self)
 
 /**
  * @brief  Set register AUIRF.
- * @param  UINT8 ch
- * @param  UINT8 format
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 format
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_input_register_format(UINT8 ch, UINT8 format)
+static kint32 ddAudioSetInputRegisterFormat(kuint8 ch, kuint8 format)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aucr aucr;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAucr aucr;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -109,37 +109,37 @@ static INT32 dd_audio_set_input_register_format(UINT8 ch, UINT8 format)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aucr.word = IO_AUDIO.AUDIOIF[ch].AUCR.word;
+	aucr.word = ioAudio.audioif[ch].aucr.word;
 
-	if (aucr.bit.AUIRF != format){					/* pgr0872 */
+	if (aucr.bit.auirf != format){					/* pgr0872 */
 		if (dd_audio_get_audio_in_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUIRF Error: AUIEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			aucr.bit.AUIRF = format;
-			IO_AUDIO.AUDIOIF[ch].AUCR.word = aucr.word;
+			aucr.bit.auirf = format;
+			ioAudio.audioif[ch].aucr.word = aucr.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AUORF.
- * @param  UINT8 ch
- * @param  UINT8 format
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 format
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_output_register_format(UINT8 ch, UINT8 format)
+static kint32 ddAudioSetOutputRegisterFormat(kuint8 ch, kuint8 format)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aucr aucr;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAucr aucr;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -156,41 +156,41 @@ static INT32 dd_audio_set_output_register_format(UINT8 ch, UINT8 format)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aucr.word = IO_AUDIO.AUDIOIF[ch].AUCR.word;
+	aucr.word = ioAudio.audioif[ch].aucr.word;
 
-	if (aucr.bit.AUORF != format){								/* pgr0872 */
+	if (aucr.bit.auorf != format){								/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUORF Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (dd_audio_get_loopback_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUORF Error:LBF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			aucr.bit.AUORF = format;
-			IO_AUDIO.AUDIOIF[ch].AUCR.word = aucr.word;
+			aucr.bit.auorf = format;
+			ioAudio.audioif[ch].aucr.word = aucr.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register ISTG16.
- * @param  UINT8 ch
- * @param  UINT8 stage
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 stage
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_in_fifo(UINT8 ch, UINT8 stage)
+static kint32 ddAudioSetInFifo(kuint8 ch, kuint8 stage)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aumd aumd;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAumd aumd;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -207,37 +207,37 @@ static INT32 dd_audio_set_in_fifo(UINT8 ch, UINT8 stage)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aumd.word = IO_AUDIO.AUDIOIF[ch].AUMD.word;
+	aumd.word = ioAudio.audioif[ch].aumd.word;
 
-	if (aumd.bit.ISTG16 != stage){							/* pgr0872 */
+	if (aumd.bit.istg16 != stage){							/* pgr0872 */
 		if (dd_audio_get_audio_in_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set ISTG16 Error:AUIEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			aumd.bit.ISTG16 = stage;
-			IO_AUDIO.AUDIOIF[ch].AUMD.word = aumd.word;
+			aumd.bit.istg16 = stage;
+			ioAudio.audioif[ch].aumd.word = aumd.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register OSTG16.
- * @param  UINT8 ch
- * @param  UINT8 stage
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 stage
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_out_fifo(UINT8 ch, UINT8 stage)
+static kint32 ddAudioSetOutFifo(kuint8 ch, kuint8 stage)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aumd aumd;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAumd aumd;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -254,41 +254,41 @@ static INT32 dd_audio_set_out_fifo(UINT8 ch, UINT8 stage)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aumd.word = IO_AUDIO.AUDIOIF[ch].AUMD.word;
+	aumd.word = ioAudio.audioif[ch].aumd.word;
 
-	if (aumd.bit.OSTG16 != stage){							/* pgr0872 */
+	if (aumd.bit.ostg16 != stage){							/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set OSTG16 Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (dd_audio_get_loopback_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set OSTG16 Error:LBF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			aumd.bit.OSTG16 = stage;
-			IO_AUDIO.AUDIOIF[ch].AUMD.word = aumd.word;
+			aumd.bit.ostg16 = stage;
+			ioAudio.audioif[ch].aumd.word = aumd.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register STEREO.
- * @param  UINT8 ch
- * @param  UINT8 stereo
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 stereo
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_stereo(UINT8 ch, UINT8 stereo)
+static kint32 ddAudioSetStereo(kuint8 ch, kuint8 stereo)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aumd aumd;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAumd aumd;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -305,39 +305,39 @@ static INT32 dd_audio_set_stereo(UINT8 ch, UINT8 stereo)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aumd.word = IO_AUDIO.AUDIOIF[ch].AUMD.word;
+	aumd.word = ioAudio.audioif[ch].aumd.word;
 
-	if (aumd.bit.STEREO != stereo){								/* pgr0872 */
+	if (aumd.bit.stereo != stereo){								/* pgr0872 */
 		if (dd_audio_get_audio_in_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set STEREO Error:AUIEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set STEREO Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (dd_audio_get_loopback_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set STEREO Error:LBF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			aumd.bit.STEREO = stereo;
-			IO_AUDIO.AUDIOIF[ch].AUMD.word = aumd.word;
+			aumd.bit.stereo = stereo;
+			ioAudio.audioif[ch].aumd.word = aumd.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Get register STEREO.
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @return TRUE/FALSE
  */
-static BOOL dd_audio_get_stereo(UINT8 ch)
+static kboolean ddAudioGetStereo(kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -346,7 +346,7 @@ static BOOL dd_audio_get_stereo(UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	if (IO_AUDIO.AUDIOIF[ch].AUMD.bit.STEREO == 1){
+	if (ioAudio.audioif[ch].aumd.bit.stereo == 1){
 		return TRUE;
 	}
 	else {
@@ -356,15 +356,15 @@ static BOOL dd_audio_get_stereo(UINT8 ch)
 
 /**
  * @brief  Set register ESTG.
- * @param  UINT8 ch
- * @param  UINT8 control
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 control
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_register_usage(UINT8 ch, UINT8 control)
+static kint32 ddAudioSetRegisterUsage(kuint8 ch, kuint8 control)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -381,9 +381,9 @@ static INT32 dd_audio_set_register_usage(UINT8 ch, UINT8 control)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
-	aust.bit.ESTG = control;
-	IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
+	aust.bit.estg = control;
+	ioAudio.audioif[ch].aust.word = aust.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -393,16 +393,16 @@ static INT32 dd_audio_set_register_usage(UINT8 ch, UINT8 control)
 
 /**
  * @brief  Set register MIXPLAY.
- * @param  UINT8 ch
- * @param  UINT8 copy
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 copy
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_mix_play(UINT8 ch, UINT8 control)
+static kint32 ddAudioSetMixPlay(kuint8 ch, kuint8 control)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -419,47 +419,47 @@ static INT32 dd_audio_set_mix_play(UINT8 ch, UINT8 control)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.MIXPLAY != control){								/* pgr0872 */
+	if (audp.bit.mixplay != control){								/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set MIXPLAY Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (control == 1){
-			if(dd_audio_get_stereo(ch) == FALSE){
+			if(ddAudioGetStereo(ch) == FALSE){
 				Ddim_Print(("[DD_AUDIO]Set MIXPLAY Error. MIXPLAY = 1, STEREO = 0, ch = %d\n",ch));
-				ret_val = DdAudio_SYSTEM_ERROR;
+				retVal = DdAudio_SYSTEM_ERROR;
 			}
 			else {
-				audp.bit.MIXPLAY = control;
-				IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+				audp.bit.mixplay = control;
+				ioAudio.audioif[ch].audp.word = audp.word;
 			}
 		}
 		else {
-			audp.bit.MIXPLAY = control;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.mixplay = control;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AULRCP.
- * @param  UINT8 ch
- * @param  UINT8 copy
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 copy
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_lr_data_copy(UINT8 ch, UINT8 copy)
+static kint32 ddAudioSetLrDataCopy(kuint8 ch, kuint8 copy)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -476,47 +476,47 @@ static INT32 dd_audio_set_lr_data_copy(UINT8 ch, UINT8 copy)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.AULRCP != copy){								/* pgr0872 */
+	if (audp.bit.aulrcp != copy){								/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AULRCP Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else if (copy == DdAudio_ENABLE){
-			if (IO_AUDIO.AUDIOIF[ch].AUCC.bit.AUCKOE == 0){
+			if (ioAudio.audioif[ch].aucc.bit.auckoe == 0){
 				Ddim_Print(("[DD_AUDIO]Set AULRCP = 1, AUCKOE = 0, ch = %d\n",ch));
-				ret_val = DdAudio_SYSTEM_ERROR;
+				retVal = DdAudio_SYSTEM_ERROR;
 			}
 			else {
-				audp.bit.AULRCP = copy;
-				IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+				audp.bit.aulrcp = copy;
+				ioAudio.audioif[ch].audp.word = audp.word;
 			}
 		}
 		else {
-			audp.bit.AULRCP = copy;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.aulrcp = copy;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AUIDF.
- * @param  UINT8 ch
- * @param  UINT8 shift
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 shift
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_in_ahb_format(UINT8 ch, UINT8 format)
+static kint32 ddAudioSetInAhbFormat(kuint8 ch, kuint8 format)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -533,37 +533,37 @@ static INT32 dd_audio_set_in_ahb_format(UINT8 ch, UINT8 format)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.AUIDF != format){								/* pgr0872 */
+	if (audp.bit.auidf != format){								/* pgr0872 */
 		if (dd_audio_get_audio_in_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUIDF Error:AUIEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			audp.bit.AUIDF = format;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.auidf = format;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AUODF.
- * @param  UINT8 ch
- * @param  UINT8 shift
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 shift
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_out_ahb_format(UINT8 ch, UINT8 format)
+static kint32 ddAudioSetOutAhbFormat(kuint8 ch, kuint8 format)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -580,37 +580,37 @@ static INT32 dd_audio_set_out_ahb_format(UINT8 ch, UINT8 format)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.AUODF != format){								/* pgr0872 */
+	if (audp.bit.auodf != format){								/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUODF Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			audp.bit.AUODF = format;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.auodf = format;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AUODS.
- * @param  UINT8 ch
- * @param  UINT8 shift
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 shift
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_out_data_shift(UINT8 ch, UINT8 shift)
+static kint32 ddAudioSetOutDataShift(kuint8 ch, kuint8 shift)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -627,37 +627,37 @@ static INT32 dd_audio_set_out_data_shift(UINT8 ch, UINT8 shift)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.AUODS != shift){								/* pgr0872 */
+	if (audp.bit.auods != shift){								/* pgr0872 */
 		if (dd_audio_get_audio_out_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUODS Error:AUOEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			audp.bit.AUODS = shift;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.auods = shift;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set register AUIDS.
- * @param  UINT8 ch
- * @param  UINT8 shift
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 shift
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_in_data_shift(UINT8 ch, UINT8 shift)
+static kint32 ddAudioSetInDataShift(kuint8 ch, kuint8 shift)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_audp audp;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAudp audp;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -674,35 +674,35 @@ static INT32 dd_audio_set_in_data_shift(UINT8 ch, UINT8 shift)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	audp.word = IO_AUDIO.AUDIOIF[ch].AUDP.word;
+	audp.word = ioAudio.audioif[ch].audp.word;
 
-	if (audp.bit.AUIDS != shift){								/* pgr0872 */
+	if (audp.bit.auids != shift){								/* pgr0872 */
 		if (dd_audio_get_audio_in_enable_flag(ddAudio, ch) != FALSE){
 			Ddim_Print(("[DD_AUDIO]Set AUIDS Error:AUIEF = 1\n"));
-			ret_val = DdAudio_SYSTEM_ERROR;
+			retVal = DdAudio_SYSTEM_ERROR;
 		}
 		else {
-			audp.bit.AUIDS = shift;
-			IO_AUDIO.AUDIOIF[ch].AUDP.word = audp.word;
+			audp.bit.auids = shift;
+			ioAudio.audioif[ch].audp.word = audp.word;
 		}
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Set Audio Control Information(common)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  T_DD_AUDIO_CTRL *ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
  */
-INT32 dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ctrl_inf)
+kint32 dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, kuint8 ch, AudioCtrlCommon* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
-	INT32 ret;
+	kint32 ret;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -717,7 +717,7 @@ INT32 dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ct
 #endif	// CO_PARAM_CHECK
 	
 	if (ctrl_inf->fifoUsage < DdAudioCtrl_FIFO_USAGE_STAGES_16){
-		ret = dd_audio_set_register_usage(ch, ctrl_inf->fifoUsage);
+		ret = ddAudioSetRegisterUsage(ch, ctrl_inf->fifoUsage);
 		if (ret != D_DDIM_OK){
 			Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_common:dd_audio_set_register_usage() = %x\n", ret));
 			return ret;
@@ -731,16 +731,16 @@ INT32 dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ct
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 	
-	priv->gDd_Audio_Ctrl_Cmmn[ch]->fifoUsage = ctrl_inf->fifoUsage;
+	priv->cmmn[ch]->fifoUsage = ctrl_inf->fifoUsage;
 	
 	if (ctrl_inf->channel <= DdAudioCtrl_CHANNEL_STEREO){
-		ret = dd_audio_set_stereo(ch, ctrl_inf->channel);
+		ret = ddAudioSetStereo(ch, ctrl_inf->channel);
 		if (ret != D_DDIM_OK){
 			Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_common:dd_audio_set_stereo() = %x\n", ret));
 			return ret;
 		}
 		else {
-			priv->gDd_Audio_Ctrl_Cmmn[ch]->channel = ctrl_inf->channel;
+			priv->cmmn[ch]->channel = ctrl_inf->channel;
 		}
 	}
 	else {
@@ -753,18 +753,18 @@ INT32 dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ct
 
 /**
  * @brief  Get Audio Control Information(common)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  AudioCtrlCommon* ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_ctrl_get_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ctrl_inf)
+kint32 dd_audio_ctrl_get_ctrl_common(DdAudioCtrl *self, kuint8 ch, AudioCtrlCommon* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
 		Ddim_Assertion(("[DD_AUDIO]dd_audio_ctrl_get_ctrl_common:input channel error : %d\n", ch));
-		*ctrl_inf = *priv->gDd_Audio_Ctrl_Cmmn[0];
+		*ctrl_inf = *priv->cmmn[0];
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 	
@@ -774,21 +774,21 @@ INT32 dd_audio_ctrl_get_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon
 	}
 #endif	// CO_PARAM_CHECK
 	
-	*ctrl_inf = *priv->gDd_Audio_Ctrl_Cmmn[ch];
+	*ctrl_inf = *priv->cmmn[ch];
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set Audio Control Information(input)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  AudioCtrlIn *ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
  */
-INT32 dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrl_inf)
+kint32 dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, kuint8 ch, AudioCtrlIn* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
-	INT32 ret;
+	kint32 ret;
 	
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -802,40 +802,40 @@ INT32 dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrl_in
 	}
 #endif	// CO_PARAM_CHECK
 	
-	ret = dd_audio_set_input_register_format(ch, ctrl_inf->format);
+	ret = ddAudioSetInputRegisterFormat(ch, ctrl_inf->format);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_input:dd_audio_set_input_register_format() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_In[ch]->format = ctrl_inf->format;
+		priv->in[ch]->format = ctrl_inf->format;
 	}
 	
-	ret = dd_audio_set_in_fifo(ch, ctrl_inf->fifoStages);
+	ret = ddAudioSetInFifo(ch, ctrl_inf->fifoStages);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_input:dd_audio_set_in_fifo() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_In[ch]->fifoStages = ctrl_inf->fifoStages;
+		priv->in[ch]->fifoStages = ctrl_inf->fifoStages;
 	}
 	
-	ret = dd_audio_set_in_ahb_format(ch, ctrl_inf->ahbFormat);
+	ret = ddAudioSetInAhbFormat(ch, ctrl_inf->ahbFormat);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_input:dd_audio_set_in_ahb_format() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_In[ch]->ahbFormat = ctrl_inf->ahbFormat;
+		priv->in[ch]->ahbFormat = ctrl_inf->ahbFormat;
 	}
 
-	ret = dd_audio_set_in_data_shift(ch, ctrl_inf->bitShift);
+	ret = ddAudioSetInDataShift(ch, ctrl_inf->bitShift);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_input:dd_audio_set_in_data_shift() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_In[ch]->bitShift = ctrl_inf->bitShift;
+		priv->in[ch]->bitShift = ctrl_inf->bitShift;
 	}
 	
 	return D_DDIM_OK;
@@ -843,18 +843,18 @@ INT32 dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrl_in
 
 /**
  * @brief  Get Audio Control Information(input)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  AudioCtrlIn *ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_ctrl_get_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrl_inf)
+kint32 dd_audio_ctrl_get_ctrl_input(DdAudioCtrl *self, kuint8 ch, AudioCtrlIn* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
 		Ddim_Assertion(("[DD_AUDIO]dd_audio_ctrl_get_ctrl_input:input channel error : %d\n", ch));
-		*ctrl_inf = *priv->gDd_Audio_Ctrl_In[0];
+		*ctrl_inf = *priv->in[0];
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 	
@@ -864,21 +864,21 @@ INT32 dd_audio_ctrl_get_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctr
 	}
 #endif	// CO_PARAM_CHECK
 	
-	*ctrl_inf = *priv->gDd_Audio_Ctrl_In[ch];
+	*ctrl_inf = *priv->in[ch];
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set Audio Control Information(output)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  AudioCtrlOut *ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR/DdAudio_SYSTEM_ERROR
  */
-INT32 dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrl_inf)
+kint32 dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, kuint8 ch, AudioCtrlOut* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 	DdAudio* ddAudio = dd_audio_get();
-	INT32 ret;
+	kint32 ret;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -892,31 +892,31 @@ INT32 dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrl_
 	}
 #endif	// CO_PARAM_CHECK
 
-	ret = dd_audio_set_output_register_format(ch, ctrl_inf->format);
+	ret = ddAudioSetOutputRegisterFormat(ch, ctrl_inf->format);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_output_register_format() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->format = ctrl_inf->format;
+		priv->out[ch]->format = ctrl_inf->format;
 	}
 	
-	ret = dd_audio_set_out_fifo(ch, ctrl_inf->fifoStages);
+	ret = ddAudioSetOutFifo(ch, ctrl_inf->fifoStages);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_out_fifo() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->fifoStages = ctrl_inf->fifoStages;
+		priv->out[ch]->fifoStages = ctrl_inf->fifoStages;
 	}
 	
-	ret = dd_audio_set_out_ahb_format(ch, ctrl_inf->ahbFormat);
+	ret = ddAudioSetOutAhbFormat(ch, ctrl_inf->ahbFormat);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_out_ahb_format() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->ahbFormat = ctrl_inf->ahbFormat;
+		priv->out[ch]->ahbFormat = ctrl_inf->ahbFormat;
 	}
 	
 	if ((ctrl_inf->lrCopy == DdAudio_ENABLE) && (dd_audio_get_cmmn_master_slave(ddAudio, ch) == DdAudioI2s_CLK_SLAVE)){
@@ -924,31 +924,31 @@ INT32 dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrl_
 		return DdAudio_SYSTEM_ERROR;
 	}
 	
-	ret = dd_audio_set_lr_data_copy(ch, ctrl_inf->lrCopy);
+	ret = ddAudioSetLrDataCopy(ch, ctrl_inf->lrCopy);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_lr_data_copy() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->lrCopy = ctrl_inf->lrCopy;
+		priv->out[ch]->lrCopy = ctrl_inf->lrCopy;
 	}
 	
-	ret = dd_audio_set_mix_play(ch, ctrl_inf->mixPlay);
+	ret = ddAudioSetMixPlay(ch, ctrl_inf->mixPlay);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_mix_play() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->mixPlay = ctrl_inf->mixPlay;
+		priv->out[ch]->mixPlay = ctrl_inf->mixPlay;
 	}
 	
-	ret = dd_audio_set_out_data_shift(ch, ctrl_inf->bitShift);
+	ret = ddAudioSetOutDataShift(ch, ctrl_inf->bitShift);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("[DD_AUDIO]dd_audio_ctrl_ctrl_output:dd_audio_set_out_data_shift() = %x\n", ret));
 		return ret;
 	}
 	else {
-		priv->gDd_Audio_Ctrl_Out[ch]->bitShift = ctrl_inf->bitShift;
+		priv->out[ch]->bitShift = ctrl_inf->bitShift;
 	}
 	
 	return D_DDIM_OK;
@@ -956,18 +956,18 @@ INT32 dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrl_
 
 /**
  * @brief  Get Audio Control Information(output)
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  AudioCtrlOut *ctrl_inf
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_ctrl_get_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrl_inf)
+kint32 dd_audio_ctrl_get_ctrl_output(DdAudioCtrl *self, kuint8 ch, AudioCtrlOut* ctrl_inf)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
 		Ddim_Assertion(("[DD_AUDIO]dd_audio_ctrl_get_ctrl_output:input channel error : %d\n", ch));
-		*ctrl_inf = *priv->gDd_Audio_Ctrl_Out[0];
+		*ctrl_inf = *priv->out[0];
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 	
@@ -977,7 +977,7 @@ INT32 dd_audio_ctrl_get_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* c
 	}
 #endif	// CO_PARAM_CHECK
 	
-	*ctrl_inf = *priv->gDd_Audio_Ctrl_Out[ch];
+	*ctrl_inf = *priv->out[ch];
 	
 	return D_DDIM_OK;
 }
@@ -986,112 +986,112 @@ void dd_audio_ctrl_set_cmmn_fifo_usage(DdAudioCtrl *self, int index, AudioFifoUs
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Cmmn[index]->fifoUsage = fifoUsage;
+	priv->cmmn[index]->fifoUsage = fifoUsage;
 }
 
 void dd_audio_ctrl_set_cmmn_channel(DdAudioCtrl *self, int index, AudioChannel channel)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Cmmn[index]->channel = channel;
+	priv->cmmn[index]->channel = channel;
 }
 
 AudioFifoUsage dd_audio_ctrl_get_cmmn_fifo_usage(DdAudioCtrl *self, int index)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	return priv->gDd_Audio_Ctrl_Cmmn[index]->fifoUsage;
+	return priv->cmmn[index]->fifoUsage;
 }
 
 AudioChannel dd_audio_ctrl_get_cmmn_channel(DdAudioCtrl *self, int index)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	return priv->gDd_Audio_Ctrl_Cmmn[index]->channel;
+	return priv->cmmn[index]->channel;
 }
 
 void dd_audio_ctrl_set_in_format(DdAudioCtrl *self, int index, AudioDataRegFrmt format)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_In[index]->format = format;
+	priv->in[index]->format = format;
 }
 
 void dd_audio_ctrl_set_in_fifo_stages(DdAudioCtrl *self, int index, AudioFifoStages fifoStages)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_In[index]->fifoStages = fifoStages;
+	priv->in[index]->fifoStages = fifoStages;
 }
 
 void dd_audio_ctrl_set_in_ahb_format(DdAudioCtrl *self, int index, AudioAhbFrmt ahbFormat)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_In[index]->ahbFormat = ahbFormat;
+	priv->in[index]->ahbFormat = ahbFormat;
 }
 
 void dd_audio_ctrl_set_in_bit_shift(DdAudioCtrl *self, int index, AudioBitShift bitShift)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_In[index]->bitShift = bitShift;
+	priv->in[index]->bitShift = bitShift;
 }
 
 AudioFifoStages dd_audio_ctrl_get_in_fifo_stages(DdAudioCtrl *self, int index)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	return priv->gDd_Audio_Ctrl_In[index]->fifoStages;
+	return priv->in[index]->fifoStages;
 }
 
 void dd_audio_ctrl_set_out_format(DdAudioCtrl *self, int index, AudioDataRegFrmt format)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->format = format;
+	priv->out[index]->format = format;
 }
 
 void dd_audio_ctrl_set_out_fifo_stages(DdAudioCtrl *self, int index, AudioFifoStages fifoStages)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->fifoStages = fifoStages;
+	priv->out[index]->fifoStages = fifoStages;
 }
 
 void dd_audio_ctrl_set_out_ahb_format(DdAudioCtrl *self, int index, AudioAhbFrmt ahbFormat)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->ahbFormat = ahbFormat;
+	priv->out[index]->ahbFormat = ahbFormat;
 }
 
-void dd_audio_ctrl_set_out_lr_copy(DdAudioCtrl *self, int index, UINT8 lrCopy)
+void dd_audio_ctrl_set_out_lr_copy(DdAudioCtrl *self, int index, kuint8 lrCopy)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->lrCopy = lrCopy;
+	priv->out[index]->lrCopy = lrCopy;
 }
 
-void dd_audio_ctrl_set_out_mix_play(DdAudioCtrl *self, int index, UINT8 mixPlay)
+void dd_audio_ctrl_set_out_mix_play(DdAudioCtrl *self, int index, kuint8 mixPlay)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->mixPlay = mixPlay;
+	priv->out[index]->mixPlay = mixPlay;
 }
 
 void dd_audio_ctrl_set_out_bit_shift(DdAudioCtrl *self, int index, AudioBitShift bitShift)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	priv->gDd_Audio_Ctrl_Out[index]->bitShift = bitShift;
+	priv->out[index]->bitShift = bitShift;
 }
 
 AudioFifoStages dd_audio_ctrl_get_out_fifo_stages(DdAudioCtrl *self, int index)
 {
 	DdAudioCtrlPrivate *priv = DD_AUDIO_CTRL_GET_PRIVATE(self);
 
-	return priv->gDd_Audio_Ctrl_Out[index]->fifoStages;
+	return priv->out[index]->fifoStages;
 }
 
 DdAudioCtrl* dd_audio_ctrl_new(void)

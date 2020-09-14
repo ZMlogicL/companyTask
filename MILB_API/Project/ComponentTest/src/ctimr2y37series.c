@@ -32,7 +32,17 @@ struct _CtImR2y37seriesPrivate
  */
 static void ct_im_r2y_37series_constructor(CtImR2y37series *self)
 {
-	//CtImR2y37seriesPrivate *priv = CT_IM_R2Y_37SERIES_GET_PRIVATE(self);
+	CtImR2y37seriesPrivate *priv = CT_IM_R2Y_37SERIES_GET_PRIVATE(self);
+	self->ctImR2y = ct_im_r2y_new();
+	self->ctImR2yClassa = ct_im_r2y_classa_new();
+	self->ctImR2yClassb = ct_im_r2y_classb_new();
+	self->imR2y = im_r2y_new();
+	self->imR2y2 = im_r2y2_new();
+	self->imR2y3 = im_r2y3_new();
+	self->imR2yCtrl2 = im_r2y_ctrl2_new();
+	self->imR2yCtrl3 = im_r2y_ctrl3_new();
+	self->imR2yProc = im_r2y_proc_new();
+	self->imR2yStat = im_r2y_stat_new();
 }
 
 static void ct_im_r2y_37series_destructor(CtImR2y37series *self)
@@ -68,36 +78,36 @@ kint32 ct_im_r2y_37series_0(CtImR2y37series *self, kuchar pipeNo)
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].yywLines = D_IM_R2Y_DST_IMG_PIXS_LINES;
 	// 180 degree rotation.
 	r2yCtrl.yywHorizontalFlip = ImR2y_ENABLE_ON;
-	r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
-		= (VOID*)(((ULONG)r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY)
-		+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[D_IM_R2Y_PORT_Y]
+	r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
+		= (VOID*)(((ULONG)r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY)
+		+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[ImR2y_PORT_Y]
 		* (r2yResizeRectParam.inputSize.imgLines -1)));
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[D_IM_R2Y_PORT_Y]
-		= -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[D_IM_R2Y_PORT_Y];
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[ImR2y_PORT_Y]
+		= -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_2].outputGlobalW[ImR2y_PORT_Y];
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_2, &r2yAddr0);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -109,10 +119,10 @@ kint32 ct_im_r2y_37series_0(CtImR2y37series *self, kuchar pipeNo)
 #endif
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -129,28 +139,28 @@ kint32 ct_im_r2y_37series_0(CtImR2y37series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW2_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_common_reg();
-	ct_im_r2y_print_r2y_yyr_reg();
-	ct_im_r2y_print_r2y_yyw_reg();
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_color_extract_reg();
-	ct_im_r2y_print_chroma_scale_reg();
-	ct_im_r2y_print_hue_scale_reg();
-	ct_im_r2y_print_post_resize_edge0_reg();
-	ct_im_r2y_print_post_resize_edge1_reg();
-	ct_im_r2y_print_fr2y_ctrl_reg();
+	ct_im_r2y_classa_print_r2y_common_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyr_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyw_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_color_extract_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_chroma_scale_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_chroma_scale_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge0_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge1_reg(self->ctImR2yClassa);
+	ct_im_r2y_classb_print_fr2y_ctrl_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -187,9 +197,9 @@ kint32 ct_im_r2y_37series_1(CtImR2y37series *self, kuchar pipeNo)
 			+ (r2yResizeRectParam.inputSize.imgWidth * r2yResizeRectParam.inputSize.imgLines * 2));
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywWidth = 1280;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines = 960;
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y]     = 1280;
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y]     = 1280;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR]  = 1280;
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y]    = 1280 / 32;
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y]    = 1280 / 32;
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_CBCR] = 1280 / 32;
 	r2yCtrlTrimming.trimmingEnable       = ImR2y_ENABLE_ON;
 	r2yCtrlTrimming.trimWindow.imgLeft  = 0;
@@ -200,74 +210,74 @@ kint32 ct_im_r2y_37series_1(CtImR2y37series *self, kuchar pipeNo)
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 	// 180 degree rotation.
 	r2yCtrl.yywHorizontalFlip = ImR2y_ENABLE_ON;
-	r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY  = (VOID*)(r2yInAddr.rgb.addrB
+	r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY  = (VOID*)(r2yInAddr.rgb.addrB
 			+ (r2yResizeRectParam.inputSize.imgWidth * r2yResizeRectParam.inputSize.imgLines * 2));
-	r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
-			= (VOID*)(((ULONG)r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY)
-			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y]
+	r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
+			= (VOID*)(((ULONG)r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY)
+			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines)));
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
-			= (VOID*)(((ULONG)r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb)
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
+			= (VOID*)(((ULONG)r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb)
 			 + (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR]
 			 * (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines)));
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
-			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY)
-			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y]
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
+			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY)
+			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines / 32)));
-	r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
-			= (VOID*)(((ULONG)r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY)
-			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y]
+	r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
+			= (VOID*)(((ULONG)r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY)
+			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines -1)));
-	r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
-			= (VOID*)(((ULONG)r2yAddr0.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb)
+	r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
+			= (VOID*)(((ULONG)r2yAddr0.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb)
 			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines -1)));
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
-			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY)
-			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y]
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
+			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY)
+			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines / 32 -1)));
-	r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
-			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb)
+	r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
+			= (VOID*)(((ULONG)r2yAddr0a.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb)
 			+ (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_CBCR]
 			* (r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].yywLines / 32 -1)));
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y]
-	        = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_Y];
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y]
+	        = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[ImR2y_PORT_Y];
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR]
 		    = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0].outputGlobalW[D_IM_R2Y_PORT_CBCR];
-	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y]
-		   = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_Y];
+	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y]
+		   = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[ImR2y_PORT_Y];
 	r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_CBCR]
 		  = -r2yResizeRectParam.outputSize[D_IM_R2Y_YYW_CH_0A].outputGlobalW[D_IM_R2Y_PORT_CBCR];
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	ercd = im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Ctrl_Trimming(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y3_ctrl_trimming(self->imR2y3, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yCtrlTrimming);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0A, &r2yAddr0a);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "Status\n"));
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -279,10 +289,10 @@ kint32 ct_im_r2y_37series_1(CtImR2y37series *self, kuchar pipeNo)
 #endif
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -301,30 +311,30 @@ kint32 ct_im_r2y_37series_1(CtImR2y37series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y1_INT_FLG_YYW0A_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60);
-	Im_R2Y_Stop(pipeNo);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
 #endif
-	ct_im_r2y_print_r2y_common_reg();
-	ct_im_r2y_print_r2y_yyr_reg();
-	ct_im_r2y_print_r2y_yyw_reg();
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_other_reg();
-	ct_im_r2y_print_color_extract_reg();
-	ct_im_r2y_print_chroma_scale_reg();
-	ct_im_r2y_print_hue_scale_reg();
-	ct_im_r2y_print_post_resize_edge0_reg();
-	ct_im_r2y_print_post_resize_edge1_reg();
-	ct_im_r2y_print_fr2y_ctrl_reg();
+	ct_im_r2y_classa_print_r2y_common_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyr_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyw_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
+	ct_im_r2y_classa_print_color_extract_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_chroma_scale_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_chroma_scale_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge0_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge1_reg(self->ctImR2yClassa);
+	ct_im_r2y_classb_print_fr2y_ctrl_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
-	Im_R2Y_Print_Status();
+	im_r2y_stat_print_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -361,33 +371,33 @@ kint32 ct_im_r2y_37series_2(CtImR2y37series *self, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_BeforeTone_Tct(pipeNo, &r2yCtrlBtcTct);
+	ercd = im_r2y_ctrl2_before_tone_tct(self->imR2yCtrl2, pipeNo, &r2yCtrlBtcTct);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Ctrl_BeforeTone_Tct(pipeNo, &r2yCtrlBtcTct);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl2_before_tone_tct(self->imR2yCtrl2, pipeNo, &r2yCtrlBtcTct);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start Status\n"));
-	Im_R2Y_Print_Status();
-	Im_R2Y_Print_ClockStatus();
+	im_r2y_stat_print_status(self->imR2yStat);
+	im_r2y_stat_print_clock_status(self->ctImR2yStat);
 	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
@@ -400,10 +410,10 @@ kint32 ct_im_r2y_37series_2(CtImR2y37series *self, kuchar pipeNo)
 #endif
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -420,42 +430,42 @@ kint32 ct_im_r2y_37series_2(CtImR2y37series *self, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60 * 10);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60 * 10);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Get_LuminanceEvaluation_BeforeTone(pipeNo, tct_addr,
+	ercd = im_r2y_ctrl3_get_luminance_evaluation_before_tone(self->imR2yCtrl3, pipeNo, tct_addr,
 			r2yCtrlBtcTct.blockHnum * r2yCtrlBtcTct.blockVnum);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60 * 10);
-	Im_R2Y_Stop(pipeNo);
-	Im_R2Y_Get_LuminanceEvaluation_BeforeTone(pipeNo, tct_addr,
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60 * 10);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
+	im_r2y_ctrl3_get_luminance_evaluation_before_tone(self->imR2yCtrl3, pipeNo, tct_addr,
 			r2yCtrlBtcTct.blockHnum * r2yCtrlBtcTct.blockVnum);
 #endif
 	for(loopcnt = 0; loopcnt < 64; loopcnt++){
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCTDATA[%x] = 0x%x\n", loopcnt, *tct_addr));
 		tct_addr++;
 	}
-	ct_im_r2y_print_r2y_common_reg();
-	ct_im_r2y_print_r2y_yyr_reg();
-	ct_im_r2y_print_r2y_yyw_reg();
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_r2y_ctrl_modedirect_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_color_extract_reg();
-	ct_im_r2y_print_hist_reg();
-	ct_im_r2y_print_post_resize_edge0_reg();
-	ct_im_r2y_print_post_resize_edge1_reg();
-	ct_im_r2y_print_other_reg();
-	ct_im_r2y_print_fr2y_ctrl_reg();
-	ct_im_r2y_print_axi_reg();
+	ct_im_r2y_classa_print_r2y_common_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyr_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyw_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modedirect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_color_extract_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_hist_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge0_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge1_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
+	ct_im_r2y_classb_print_fr2y_ctrl_reg(self->ctImR2yClassb);
+	ct_im_r2y_classb_print_axi_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y End Status\n"));
-	Im_R2Y_Print_Status();
-	Im_R2Y_Print_ClockStatus();
+	im_r2y_stat_print_status(self->imR2yStat);
+	im_r2y_stat_print_clock_status(self->ctImR2yStat);
 	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 
@@ -499,33 +509,33 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 	memset(&r2yAddr0, '\x00', sizeof(r2yAddr0));
 	r2yAddr0 = gctImR2yOutAddrYcc422;
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
+	ercd = im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
+	ercd = im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
+	ercd = im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
+	ercd = im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	ercd = im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Ctrl_BeforeTone_Tchs(pipeNo, &r2yCtrlBtcTchs);
+	ercd = im_r2y_ctrl2_before_tone_tchs(self->imR2yCtrl2, pipeNo, &r2yCtrlBtcTchs);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Ctrl(pipeNo, &r2yCtrl);
-	Im_R2Y_Ctrl_ModeSDRAMInput(pipeNo, &r2yCtrlSdramIn);
-	Im_R2Y_Set_Resize_Rect(pipeNo, &r2yResizeRectParam);
-	Im_R2Y_Set_InAddr_Info(pipeNo, &r2yInAddr);
-	Im_R2Y_Set_OutBankInfo(pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
-	Im_R2Y_Ctrl_BeforeTone_Tchs(pipeNo, &r2yCtrlBtcTchs);
+	im_r2y_ctrl(self->imR2y, pipeNo, &r2yCtrl);
+	im_r2y_ctrl_mode_sdram_input(self->imR2y, pipeNo, &r2yCtrlSdramIn);
+	im_r2y2_set_resize_rect(self->imR2y2, pipeNo, &r2yResizeRectParam);
+	im_r2y_set_inaddr_info(self->imR2y, pipeNo, &r2yInAddr);
+	im_r2y_set_out_bank_info(self->imR2y, pipeNo, D_IM_R2Y_YYW_CH_0, &r2yAddr0);
+	im_r2y_ctrl2_before_tone_tchs(self->imR2yCtrl2, pipeNo, &r2yCtrlBtcTchs);
 #endif
-	ct_im_r2y_set_wb_gain_rgb(pipeNo);
-	ct_im_r2y_set_gamma_on(pipeNo);
+	ct_im_r2y_classa_set_wb_gain_rgb(self->ctImR2yClassa, pipeNo);
+	ct_im_r2y_set_gamma_on(self->ctImR2y, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", 0));
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start Status\n"));
-	Im_R2Y_Print_Status();
-	Im_R2Y_Print_ClockStatus();
+	im_r2y_stat_print_status(self->imR2yStat);
+	im_r2y_stat_print_clock_status(self->ctImR2yStat);
 	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
@@ -538,10 +548,10 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 #endif
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y Start\n"));
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_Start(pipeNo);
+	ercd = im_r2y_proc_start(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 #else
-	Im_R2Y_Start(pipeNo);
+	im_r2y_proc_start(self->imR2yProc, pipeNo);
 #endif
 #ifdef D_IM_R2Y_DEBUG_ON_PC
 	if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)){
@@ -558,11 +568,11 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 		flgptn |= D_IM_R2Y2_INT_FLG_YYW0_END;
 	}
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_R2Y_WaitEnd(NULL, flgptn, 60 * 10);
+	ercd = im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60 * 10);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Stop(pipeNo);
+	ercd = im_r2y_proc_stop(self->imR2yProc, pipeNo);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
-	ercd = Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_Y, &tchsFlg, tchsYAddr);
+	ercd = im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_Y, &tchsFlg, tchsYAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 	if(tchsFlg.Y != 0){
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHS Y overflow\n"));
@@ -571,7 +581,7 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHSYDATA[%x] = 0x%x\n", loopcnt, *tchsYAddr));
 		tchsYAddr++;
 	}
-	ercd = Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_R, &tchsFlg, tchsRAddr);
+	ercd = im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_R, &tchsFlg, tchsRAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 	if(tchsFlg.R != 0){
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHS R overflow\n"));
@@ -580,7 +590,7 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHSRDATA[%x] = 0x%x\n", loopcnt, *tchsRAddr));
 		tchsRAddr++;
 	}
-	ercd = Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_G, &tchsFlg, tchsGAddr);
+	ercd = im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_G, &tchsFlg, tchsGAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 	if(tchsFlg.G != 0){
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHS G overflow\n"));
@@ -589,7 +599,7 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHSGDATA[%x] = 0x%x\n", loopcnt, *tchsGAddr));
 		tchsGAddr++;
 	}
-	ercd = Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_B, &tchsFlg, tchsBAddr);
+	ercd = im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_B, &tchsFlg, tchsBAddr);
 	Ddim_Print((CtImR2y37series_FUNC_NAME "0x%x\n", ercd));
 	if(tchsFlg.B != 0){
 		Ddim_Print((CtImR2y37series_FUNC_NAME "TCHS B overflow\n"));
@@ -599,32 +609,32 @@ kint32 ct_im_r2y_37series_3(CtImR2y37series *self,, kuchar pipeNo)
 		tchsBAddr++;
 	}
 #else
-	Im_R2Y_WaitEnd(NULL, flgptn, 60 * 10);
-	Im_R2Y_Stop(pipeNo);
-	Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_Y, &tchsFlg, tchsYAddr);
-	Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_R, &tchsFlg, tchsRAddr);
-	Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_G, &tchsFlg, tchsGAddr);
-	Im_R2Y_Get_Histogram_BeforeTone(pipeNo, E_R2Y_BTC_HIST_RGBTBL_B, &tchsFlg, tchsBAddr);
+	im_r2y_proc_waitend(self->imR2yProc, NULL, flgptn, 60 * 10);
+	im_r2y_proc_stop(self->imR2yProc, pipeNo);
+	im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_Y, &tchsFlg, tchsYAddr);
+	im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_R, &tchsFlg, tchsRAddr);
+	im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_G, &tchsFlg, tchsGAddr);
+	im_r2y_ctrl3_get_histogram_before_tone(self->imR2yCtrl3, pipeNo, E_R2Y_BTC_HIST_RGBTBL_B, &tchsFlg, tchsBAddr);
 #endif
-	ct_im_r2y_print_r2y_common_reg();
-	ct_im_r2y_print_r2y_yyr_reg();
-	ct_im_r2y_print_r2y_yyw_reg();
-	ct_im_r2y_print_r2y_ctrl_reg();
-	ct_im_r2y_print_r2y_ctrl_modesdraminput_reg();
-	ct_im_r2y_print_r2y_ctrl_modedirect_reg();
-	ct_im_r2y_print_resize_rect_reg();
-	ct_im_r2y_print_trimming_reg();
-	ct_im_r2y_print_color_extract_reg();
-	ct_im_r2y_print_hist_reg();
-	ct_im_r2y_print_post_resize_edge0_reg();
-	ct_im_r2y_print_post_resize_edge1_reg();
-	ct_im_r2y_print_other_reg();
-	ct_im_r2y_print_fr2y_ctrl_reg();
-	ct_im_r2y_print_axi_reg();
+	ct_im_r2y_classa_print_r2y_common_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyr_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_yyw_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modesdraminput_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_r2y_ctrl_modedirect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_resize_rect_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_trimming_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_color_extract_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_hist_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge0_reg(self->ctImR2yClassa);
+	ct_im_r2y_classa_print_post_resize_edge1_reg(self->ctImR2yClassa);
+	ct_im_classb_r2y_print_other_reg(self->ctImR2yClassb);
+	ct_im_r2y_classb_print_fr2y_ctrl_reg(self->ctImR2yClassb);
+	ct_im_r2y_classb_print_axi_reg(self->ctImR2yClassb);
 #ifdef IM_R2Y_STATUS_PRINT
 	Ddim_Print((CtImR2y37series_FUNC_NAME "R2Y End Status\n"));
-	Im_R2Y_Print_Status();
-	Im_R2Y_Print_ClockStatus();
+	im_r2y_stat_print_status(self->imR2yStat);
+	im_r2y_stat_print_clock_status(self->ctImR2yStat);
 	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 

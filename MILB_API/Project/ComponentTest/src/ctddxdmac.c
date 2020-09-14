@@ -11,8 +11,11 @@
 #include <string.h>
 // #include "ctddxdmac.h"
 #include "driver_common.h"
-#include "dd_xdmac.h"
-#include "dd_top.h"
+// #include "dd_xdmac.h"
+#include "../../DeviceDriver/Exs/src/ddxdmac.h"
+
+// #include "dd_top.h"
+#include "../../Project/DeviceDriver/LSITop/src/ddtop.h"
 
 #include "ctddxdmac.h"
 #include "ctddxdmac1.h"
@@ -41,7 +44,7 @@ struct _CtDdXdmacPrivate
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
-static T_DD_XDMAC_COMMON			S_GXDMAC_COMMON;
+static TDdXdmacCommon			S_GXDMAC_COMMON;
 
 /*
 DECLS
@@ -81,218 +84,218 @@ static void ctXdmacResultOut(kint32 expect, kint32 ret)
 static void ctXdmacTest( void )
 {	
 	kint32 ret;
-	T_DD_XDMAC_CTRL dma_ctrl_trans;
-	T_DD_XDMAC_TRNS_SIZE dma_trns_size;
+	TDdXdmacCtrl dma_ctrl_trans;
+	TDdXdmacTrnsSize dma_trns_size;
 	USHORT status;
 	VP_CALLBACK intHandler = 0;
 	
 	printf("<Dd_XDMAC>\n");
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Open]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Open(D_DD_XDMAC_CH_NUM_MAX, D_DDIM_USER_SEM_WAIT_FEVR);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_open]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_open(DdXdmac_CH_NUM_MAX, D_DDIM_USER_SEM_WAIT_FEVR);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("tmout < D_DDIM_USER_SEM_WAIT_FEVR:\n");
-	ret = Dd_XDMAC_Open(0, D_DDIM_USER_SEM_WAIT_FEVR - 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_open(0, D_DDIM_USER_SEM_WAIT_FEVR - 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("tmout = D_DDIM_USER_SEM_WAIT_POL, pol_sem = D_DDIM_USER_E_TMOUT:\n");
-	ret = Dd_XDMAC_Open(0, D_DDIM_USER_SEM_WAIT_POL);
-	ret = Dd_XDMAC_Open(0, D_DDIM_USER_SEM_WAIT_POL);
-	ctXdmacResultOut(D_DD_XDMAC_SEM_TIMEOUT, ret);
+	ret = dd_xdmac_open(0, D_DDIM_USER_SEM_WAIT_POL);
+	ret = dd_xdmac_open(0, D_DDIM_USER_SEM_WAIT_POL);
+	ctXdmacResultOut(DdXdmac_SEM_TIMEOUT, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Close]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Close(D_DD_XDMAC_CH_NUM_MAX);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_close]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_close(DdXdmac_CH_NUM_MAX);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Ctrl_Common]\n");
+	printf("[dd_xdmac_ctrl_common]\n");
 	printf("dma_common is NULL:\n");
-	ret = Dd_XDMAC_Ctrl_Common(NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_ctrl_common(NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Ctrl_Trns]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Ctrl_Trns(D_DD_XDMAC_CH_NUM_MAX, NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_ctrl_trns]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_ctrl_trns(DdXdmac_CH_NUM_MAX, NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dma_ctrl_trans is NULL:\n");
-	ret = Dd_XDMAC_Ctrl_Trns(0, NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_ctrl_trns(0, NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dma_ctrl_trans->trns_size = 0:\n");
-	dma_ctrl_trans.trns_size = 0;
-	ret = Dd_XDMAC_Ctrl_Trns(0, &dma_ctrl_trans);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	dma_ctrl_trans.trnsSize = 0;
+	ret = dd_xdmac_ctrl_trns(0, &dma_ctrl_trans);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Set_Trns_Size]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Set_Trns_Size(D_DD_XDMAC_CH_NUM_MAX, NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_set_trns_size]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_set_trns_size(DdXdmac_CH_NUM_MAX, NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dma_trns_size is NULL:\n");
-	ret = Dd_XDMAC_Set_Trns_Size(0, NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_set_trns_size(0, NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dma_trns_size->trns_size = 0:\n");
-	dma_trns_size.trns_size = 0;
-	ret = Dd_XDMAC_Set_Trns_Size(0, &dma_trns_size);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	dma_trns_size.trnsSize = 0;
+	ret = dd_xdmac_set_trns_size(0, &dma_trns_size);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Start_Sync]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Start_Sync(D_DD_XDMAC_CH_NUM_MAX, NULL, D_DD_XDMAC_WAITMODE_CPU);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("[Dd_XDMAC_Start_Sync]\n");
+	printf("[dd_xdmac_start_sync]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_start_sync(DdXdmac_CH_NUM_MAX, NULL, DdXdmac_WAITMODE_CPU);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_start_sync]\n");
 	printf("status is NULL:\n");
-	ret = Dd_XDMAC_Start_Sync(0, NULL, D_DD_XDMAC_WAITMODE_CPU);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMAC_WAITMODE_CPU, D_DD_XDMAC_WAITMODE_EVENT):\n");
-	ret = Dd_XDMAC_Start_Sync(0, &status, D_DD_XDMAC_WAITMODE_EVENT + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("wait_mode = D_DD_XDMAC_WAITMODE_EVENT, twai_flg <> D_DDIM_USER_E_TMOUT:\n");
-	ret = Dd_XDMAC_Start_Sync(0, &status, D_DD_XDMAC_WAITMODE_EVENT);
-	ctXdmacResultOut(D_DD_XDMAC_SYSTEM_ERR, ret);
+	ret = dd_xdmac_start_sync(0, NULL, DdXdmac_WAITMODE_CPU);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmac_WAITMODE_CPU, DdXdmac_WAITMODE_EVENT):\n");
+	ret = dd_xdmac_start_sync(0, &status, DdXdmac_WAITMODE_EVENT + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("wait_mode = DdXdmac_WAITMODE_EVENT, twai_flg <> D_DDIM_USER_E_TMOUT:\n");
+	ret = dd_xdmac_start_sync(0, &status, DdXdmac_WAITMODE_EVENT);
+	ctXdmacResultOut(DdXdmac_CH_SYSTEM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Start_Async]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Start_Async(D_DD_XDMAC_CH_NUM_MAX);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_start_async]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_start_async(DdXdmac_CH_NUM_MAX);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Stop]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Stop(D_DD_XDMAC_CH_NUM_MAX);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_stop]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_stop(DdXdmac_CH_NUM_MAX);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Set_Wait_Time]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Set_Wait_Time(D_DD_XDMAC_CH_NUM_MAX, D_DDIM_WAIT_END_FOREVER);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_set_wait_time]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_set_wait_time(DdXdmac_CH_NUM_MAX, D_DDIM_WAIT_END_FOREVER);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("waitTime < D_DDIM_WAIT_END_FOREVER:\n");
-	ret = Dd_XDMAC_Set_Wait_Time(0, D_DDIM_WAIT_END_FOREVER - 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_set_wait_time(0, D_DDIM_WAIT_END_FOREVER - 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Wait_End]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Wait_End(D_DD_XDMAC_CH_NUM_MAX, &status, D_DD_XDMAC_WAITMODE_CPU);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_wait_end]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_wait_end(DdXdmac_CH_NUM_MAX, &status, DdXdmac_WAITMODE_CPU);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("status is NULL:\n");
-	ret = Dd_XDMAC_Wait_End(0, NULL, D_DD_XDMAC_WAITMODE_CPU);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMAC_WAITMODE_CPU, D_DD_XDMAC_WAITMODE_EVENT):\n");
-	ret = Dd_XDMAC_Wait_End(0, &status, D_DD_XDMAC_WAITMODE_EVENT + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_wait_end(0, NULL, DdXdmac_WAITMODE_CPU);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmac_WAITMODE_CPU, DdXdmac_WAITMODE_EVENT):\n");
+	ret = dd_xdmac_wait_end(0, &status, DdXdmac_WAITMODE_EVENT + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Clear_Status]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Clear_Status(D_DD_XDMAC_CH_NUM_MAX);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_clear_status]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_clear_status(DdXdmac_CH_NUM_MAX);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Get_Status]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Get_Status(D_DD_XDMAC_CH_NUM_MAX, &status, &status, &status);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_get_status]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_get_status(DdXdmac_CH_NUM_MAX, &status, &status, &status);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("XDMAC_status is NULL:\n");
-	ret = Dd_XDMAC_Get_Status(0, NULL, &status, &status);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_get_status(0, NULL, &status, &status);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("transfer_status is NULL:\n");
-	ret = Dd_XDMAC_Get_Status(0, &status, NULL, &status);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_get_status(0, &status, NULL, &status);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("interrupt_status is NULL:\n");
-	ret = Dd_XDMAC_Get_Status(0, &status, &status, NULL);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_get_status(0, &status, &status, NULL);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Get_Trns_Size]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Get_Trns_Size(D_DD_XDMAC_CH_NUM_MAX);
+	printf("[dd_xdmac_get_trns_size]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_get_trns_size(DdXdmac_CH_NUM_MAX);
 	ctXdmacResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Get_Src_Addr]\n");
+	printf("[dd_xdmac_get_src_addr]\n");
 	printf("ch >= D_DD_XDAMC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Get_Src_Addr(D_DD_XDMAC_CH_NUM_MAX);
+	ret = dd_xdmac_get_src_addr(DdXdmac_CH_NUM_MAX);
 	ctXdmacResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Get_Dst_Addr]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Get_Dst_Addr(D_DD_XDMAC_CH_NUM_MAX);
+	printf("[dd_xdmac_get_dst_addr]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_get_dst_addr(DdXdmac_CH_NUM_MAX);
 	ctXdmacResultOut(0, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Set_LowPower]\n");
-	printf("lowpower > D_DD_XDMAC_XDACS_LP_ENABLE:\n");
-	ret = Dd_XDMAC_Set_LowPower(D_DD_XDMAC_XDACS_LP_ENABLE + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_set_low_power]\n");
+	printf("lowpower > DdXdmacXDACS_LP_ENABLE:\n");
+	ret = dd_xdmac_set_low_power(DdXdmacXDACS_LP_ENABLE + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
 	printf("[Dd_XDMAC_Set_Source_Protect]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Set_Source_Protect(D_DD_XDMAC_CH_NUM_MAX, D_DD_XDMAC_XDDPC_SP_PRIVILEGED_SECURE);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = Dd_XDMAC_Set_Source_Protect(DdXdmac_CH_NUM_MAX, DdXdmacXDDPC_SP_PRIVILEGED_SECURE);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("protect_code > D_DD_xdmac_XDDPC_SP_PRIVILEGED_SECURE:\n");
-	ret = Dd_XDMAC_Set_Source_Protect(0, D_DD_XDMAC_XDDPC_SP_PRIVILEGED_SECURE + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = Dd_XDMAC_Set_Source_Protect(0, DdXdmacXDDPC_SP_PRIVILEGED_SECURE + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Set_Destination_Protect]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Set_Destination_Protect(D_DD_XDMAC_CH_NUM_MAX, D_DD_XDMAC_XDDPC_DP_PRIVILEGED_SECURE);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("protect_code > D_DD_XDMAC_XDDPC_SP_PRIVILEGED_SECURE:\n");
-	ret = Dd_XDMAC_Set_Destination_Protect(0, D_DD_XDMAC_XDDPC_DP_PRIVILEGED_SECURE + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_set_destination_protect]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_set_destination_protect(DdXdmac_CH_NUM_MAX, DdXdmacXDDPC_DP_PRIVILEGED_SECURE);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("protect_code > DdXdmacXDDPC_SP_PRIVILEGED_SECURE:\n");
+	ret = dd_xdmac_set_destination_protect(0, DdXdmacXDDPC_DP_PRIVILEGED_SECURE + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Set_Int_Handler]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	Dd_XDMAC_Set_Int_Handler(D_DD_XDMAC_CH_NUM_MAX, NULL);
+	printf("[dd_xdmac_set_int_handler]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	dd_xdmac_set_int_handler(DdXdmac_CH_NUM_MAX, NULL);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Int_Handler]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	Dd_XDMAC_Int_Handler(D_DD_XDMAC_CH_NUM_MAX);
+	printf("[dd_xdmac_int_handler]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	dd_xdmac_int_handler(DdXdmac_CH_NUM_MAX);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Copy_SDRAM_Sync]\n");
+	printf("[dd_xdmac_copy_sdram_sync]\n");
 	printf("ch >= D_DD_xdmac_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Sync(D_DD_XDMAC_CH_NUM_MAX, 1, 1, 1, D_DD_XDMAC_WAITMODE_EVENT);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_sync(DdXdmac_CH_NUM_MAX, 1, 1, 1, DdXdmac_WAITMODE_EVENT);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("src_addr = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Sync(0, 0, 1, 1, D_DD_XDMAC_WAITMODE_EVENT);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_sync(0, 0, 1, 1, DdXdmac_WAITMODE_EVENT);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dst_addr = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Sync(1, 1, 0, 1, D_DD_XDMAC_WAITMODE_EVENT);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_sync(1, 1, 0, 1, DdXdmac_WAITMODE_EVENT);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("size = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Sync(2, 1, 1, 0, D_DD_XDMAC_WAITMODE_EVENT);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
-	printf("wait_mode not in (D_DD_XDMAC_WAITMODE_CPU, D_DD_XDMAC_WAITMODE_EVENT):\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Sync(3, 1, 1, 1, D_DD_XDMAC_WAITMODE_EVENT + 1);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_sync(2, 1, 1, 0, DdXdmac_WAITMODE_EVENT);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
+	printf("wait_mode not in (DdXdmac_WAITMODE_CPU, DdXdmac_WAITMODE_EVENT):\n");
+	ret = dd_xdmac_copy_sdram_sync(3, 1, 1, 1, DdXdmac_WAITMODE_EVENT + 1);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 	
-	printf("[Dd_XDMAC_Copy_SDRAM_Async]\n");
-	printf("ch >= D_DD_XDMAC_CH_NUM_MAX:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Async(D_DD_XDMAC_CH_NUM_MAX, 1, 1, 1, intHandler);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	printf("[dd_xdmac_copy_sdram_async]\n");
+	printf("ch >= DdXdmac_CH_NUM_MAX:\n");
+	ret = dd_xdmac_copy_sdram_async(DdXdmac_CH_NUM_MAX, 1, 1, 1, intHandler);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("src_addr = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Async(0, 0, 1, 1, intHandler);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_async(0, 0, 1, 1, intHandler);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("dst_addr = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Async(1, 1, 0, 1, intHandler);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_async(1, 1, 0, 1, intHandler);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("size = 0:\n");
-	ret = Dd_XDMAC_Copy_SDRAM_Async(2, 1, 1, 0, intHandler);
-	ctXdmacResultOut(D_DD_XDMAC_INPUT_PARAM_ERR, ret);
+	ret = dd_xdmac_copy_sdram_async(2, 1, 1, 0, intHandler);
+	ctXdmacResultOut(DdXdmac_INPUT_PARAM_ERR, ret);
 	printf("\n");
 }
 
@@ -314,7 +317,7 @@ void ct_dd_xdmac_callback_cb(void)
  *	+-----------------+----------+------------+----------+------------+------------+----------+----+----+-----+-----+-----------------------------------+
  *	| P1              | P2       | P3         | P4       | P5         | P6         | P7       | P8 | P9 | P10 | P11 | Meaning                           |
  *	+-----------------+----------+------------+----------+------------+------------+----------+----+----+-----+-----+-----------------------------------+
- *	| "open"          | ch       | waitTime  |          |            |            |          |    |    |     |     | Dd_XDMAC_Open()                   |
+ *	| "open"          | ch       | waitTime  |          |            |            |          |    |    |     |     | dd_xdmac_open()                   |
  *	+-----------------+----------+------------+----------+------------+------------+----------+----+----+-----+-----+-----------------------------------+
  *	| "close"         | ch       |            |          |            |            |          |    |    |     |     | Dd_XDMAC_Close()                  |
  *	+-----------------+----------+------------+----------+------------+------------+----------+----+----+-----+-----+-----------------------------------+
@@ -344,29 +347,29 @@ void ct_dd_xdmac_callback_cb(void)
  *
  * @return void
  */
-void ct_dd_xdmac_main(int argc, char** argv)
+void ct_dd_xdmac_main(CtDdXdmac* self,int argc, char** argv)
 {
 	// kint32				ret;
 	// kuchar				ch;
 	// kuchar				num;
 	// kint32				waitTime;
 	
-	CtDdXdmac* self = ct_dd_xdmac_new();
-	CtDdXdmacPrivate *priv = CT_DD_XDMAC_GET_PRIVATE(self);
+	CtDdXdmac* ctDdXdmac = ct_dd_xdmac_new();
+	CtDdXdmacPrivate *priv = CT_DD_XDMAC_GET_PRIVATE(ctDdXdmac);
 	// check number of parameter
 	if (argc > 12) {
 		Ddim_Print(("The number of input parameters is exceeded!\n"));
 		return;
 	}
 	
-	Dd_Top_Set_CLKSTOP2_EXSAX(0);
+	DdToptwo_SET_CLKSTOP2_EXSAX(0);
 	
 	if (strcmp(argv[1], "open") == 0) {
 		/* ch number */
 		priv->ch = atoi(argv[2]);
 		priv->waitTime = atoi(argv[3]);
 		
-		priv->ret = Dd_XDMAC_Open(priv->ch, priv->waitTime);
+		priv->ret = dd_xdmac_open(priv->ch, priv->waitTime);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMAC Open OK\n"));
 		}
@@ -378,7 +381,7 @@ void ct_dd_xdmac_main(int argc, char** argv)
 		/* ch number */
 		priv->ch = atoi(argv[2]);
 		
-		priv->ret = Dd_XDMAC_Close(priv->ch);
+		priv->ret = dd_xdmac_close(priv->ch);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMAC Close OK\n"));
 		}
@@ -387,56 +390,56 @@ void ct_dd_xdmac_main(int argc, char** argv)
 		}
 	}
 	else if (strcmp(argv[1], "ctrl_cmm") == 0) {
-		Dd_XDMAC_Open(0, D_DDIM_USER_SEM_WAIT_POL);
+		dd_xdmac_open(0, D_DDIM_USER_SEM_WAIT_POL);
 		
 		// Set XE
 		if (strcmp(argv[2], "0") == 0) {
-			S_GXDMAC_COMMON.common_config.bit.XE = D_DD_XDMAC_XDACS_XE_DISABLE;
+			S_GXDMAC_COMMON.commonConfig.bit.XE = DdXdmacXDACS_XE_DISABLE;
 		}
 		else if (strcmp(argv[2], "1") == 0) {
-			S_GXDMAC_COMMON.common_config.bit.XE = D_DD_XDMAC_XDACS_XE_ENABLE;
+			S_GXDMAC_COMMON.commonConfig.bit.XE = DdXdmacXDACS_XE_ENABLE;
 		}
 		else {
 			Ddim_Print(("Parameter ERR. P3 \n"));
-			Dd_XDMAC_Close(0);
+			dd_xdmac_close(0);
 			return;
 		}
 		
 		// Set CP
 		if (strcmp(argv[3], "0") == 0) {
-			S_GXDMAC_COMMON.common_config.bit.CP = D_DD_XDMAC_XDACS_CP_FIXED;
+			S_GXDMAC_COMMON.commonConfig.bit.CP = DdXdmacXDACS_CP_FIXED;
 		}
 		else if (strcmp(argv[3], "1") == 0) {
-			S_GXDMAC_COMMON.common_config.bit.CP = D_DD_XDMAC_XDACS_CP_ROTATED;
+			S_GXDMAC_COMMON.commonConfig.bit.CP = DdXdmacXDACS_CP_ROTATED;
 		}
 		else {
 			Ddim_Print(("Parameter ERR. P4 \n"));
-			Dd_XDMAC_Close(0);
+			dd_xdmac_close(0);
 			return;
 		}
 		
-		priv->ret = Dd_XDMAC_Ctrl_Common(&S_GXDMAC_COMMON);
+		priv->ret = dd_xdmac_ctrl_common(&S_GXDMAC_COMMON);
 		if (priv->ret == 0) {
 			Ddim_Print(("XDMAC Ctrl_Common OK\n"));
 		}
 		else {
 			Ddim_Print(("XDMAC Ctrl_Common ERR. priv->ret=0x%x\n", priv->ret));
 		}
-		Dd_XDMAC_Close(0);
+		dd_xdmac_close(0);
 	}
 	else if (strcmp(argv[1], "int_set") == 0){
 		/* ch number */
 		priv->ch = atoi(argv[2]);
 		
-		Dd_XDMAC_Set_Int_Handler(priv->ch, ct_dd_xdmac_callback_cb);
+		dd_xdmac_set_int_handler(priv->ch, ct_dd_xdmac_callback_cb);
 	}
 	else if (strcmp(argv[1], "auto") == 0) {
 		/* ch number */
 		priv->num = atoi(argv[2]);
-		CtDdXdmac1* ctddxdmac1 = ct_dd_xdmac1_new();
-		ct_dd_xdmac1_set_ctddxdmac(ctddxdmac1,self);
-		priv->ret = ct_dd_xdmac1_process(ctddxdmac1);
-		k_object_unref(ctddxdmac1);
+		CtDdXdmac1* ctDdXdmac1 = ct_dd_xdmac1_new();
+		ct_dd_xdmac1_set_ctddxdmac(ctDdXdmac1,ctDdXdmac);
+		priv->ret = ct_dd_xdmac1_process(ctDdXdmac1);
+		k_object_unref(ctDdXdmac1);
 		if (priv->ret == 0) {
 			Ddim_Print(("ct_dd_xdmac1_process OK\n"));
 		}
@@ -445,28 +448,28 @@ void ct_dd_xdmac_main(int argc, char** argv)
 		}
 	}
 	else if (strcmp(argv[1], "prm_chk") == 0) {
-		T_DD_XDMAC_CTRL    dma_ctrl_trns;
-		T_DD_XDMAC_TRNS_SIZE dma_trns_size;
+		TDdXdmacCtrl    dma_ctrl_trns;
+		TDdXdmacTrnsSize dma_trns_size;
 		
 		if(strcmp(argv[2], "0") == 0){
-			dma_ctrl_trns.trns_size       = 0;
-			dma_ctrl_trns.src_addr        = 0;
-			dma_ctrl_trns.dst_addr        = 0;
-			dma_ctrl_trns.int_handler     = NULL;
+			dma_ctrl_trns.trnsSize       = 0;
+			dma_ctrl_trns.srcAddr        = 0;
+			dma_ctrl_trns.dstAddr        = 0;
+			dma_ctrl_trns.intHandler     = NULL;
 			
-			priv->ret = Dd_XDMAC_Ctrl_Trns(0, &dma_ctrl_trns);
+			priv->ret = dd_xdmac_ctrl_trns(0, &dma_ctrl_trns);
 			if(priv->ret != D_DDIM_OK){
-				Ddim_Print(("Dd_XDMAC_Ctrl_Trns ERR : priv->ret=0x%x\n", priv->ret));
+				Ddim_Print(("dd_xdmac_ctrl_trns ERR : priv->ret=0x%x\n", priv->ret));
 			}
 		}
 		else if(strcmp(argv[2], "1") == 0){
-			dma_trns_size.trns_size       = 0;
-			dma_trns_size.src_addr        = 0;
-			dma_trns_size.dst_addr        = 0;
+			dma_trns_size.trnsSize       = 0;
+			dma_trns_size.srcAddr        = 0;
+			dma_trns_size.dstAddr        = 0;
 			
-			priv->ret = Dd_XDMAC_Set_Trns_Size(0,&dma_trns_size);
+			priv->ret = dd_xdmac_set_trns_size(0,&dma_trns_size);
 			if(priv->ret != D_DDIM_OK){
-				Ddim_Print(("Dd_XDMAC_Set_Trns_Size ERR : priv->ret=0x%x\n", priv->ret));
+				Ddim_Print(("dd_xdmac_set_trns_size ERR : priv->ret=0x%x\n", priv->ret));
 			}
 		}
 		else{
@@ -479,7 +482,7 @@ void ct_dd_xdmac_main(int argc, char** argv)
 	else {
 		Ddim_Print(("please check 1st parameter!!\n"));
 	}
-	k_object_unref(self);
+	k_object_unref(ctDdXdmac);
 	return;
 }
 

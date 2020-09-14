@@ -40,44 +40,44 @@ struct  _KJdsimg
 /*	structure of imgpipepsw	(2880_0000h)	*/
 typedef union _IoImgpipepsw
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long r2ysel :2;
-		unsigned long :2;
-		unsigned long b2rcnc :2;
-		unsigned long :26;
+		kulong r2ysel :2;
+		kulong :2;
+		kulong b2rcnc :2;
+		kulong :26;
 	} bit;
 } IoImgpipepsw;
 
 /*	structure of mxicmon	(2880_0004h)	*/
 typedef union _IoMxicmon
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long vden :1;
-		unsigned long hden :1;
-		unsigned long :1;
-		unsigned long senen :1;
-		unsigned long sro1en :1;
-		unsigned long sro2en :1;
-		unsigned long b2b1en :1;
-		unsigned long b2b2en :1;
-		unsigned long yo1en :1;
-		unsigned long yo2en :1;
-		unsigned long staten :1;
-		unsigned long pasen :1;
-		unsigned long den :1;
-		unsigned long :19;
+		kulong vden :1;
+		kulong hden :1;
+		kulong :1;
+		kulong senen :1;
+		kulong sro1en :1;
+		kulong sro2en :1;
+		kulong b2b1en :1;
+		kulong b2b2en :1;
+		kulong yo1en :1;
+		kulong yo2en :1;
+		kulong staten :1;
+		kulong pasen :1;
+		kulong den :1;
+		kulong :19;
 	} bit;
 } IoMxicmon;
 
 /*	structure of srampd		(2880_0008h)	*/
 typedef union _IoSrampd
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long jpegpd :4;
-		unsigned long :28;
+		kulong jpegpd :4;
+		kulong :28;
 	} bit;
 } IoSrampd;
 
@@ -92,7 +92,7 @@ typedef struct _IoImg
 	/* 2880_(0008 - 000Bh) */
 	IoSrampd srampd;
 	/* 2880_000C - 2880_FFFFh */
-	unsigned char dmy2880000c2880ffff[0x28810000 - 0x2880000C];
+	kuchar dmy2880000c2880ffff[0x28810000 - 0x2880000C];
 } IoImg;
 
 extern volatile IoImg		ioImg;

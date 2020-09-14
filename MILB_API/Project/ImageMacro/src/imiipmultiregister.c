@@ -14,32 +14,51 @@
 #include "imiipmultiregister.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipMultiRegister, im_iip_multi_register);
-#define IM_IIP_MULTI_REGISTER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipMultiRegisterPrivate, IM_TYPE_IIP_MULTI_REGISTER))
-
+G_DEFINE_TYPE(ImIipMultiRegister, im_iip_multi_register, G_TYPE_OBJECT);
+#define IM_IIP_MULTI_REGISTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_MULTI_REGISTER, ImIipMultiRegisterPrivate));
 
 struct _ImIipMultiRegisterPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_multi_register_constructor(ImIipMultiRegister *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_multi_register_class_init(ImIipMultiRegisterClass *klass)
 {
-//	ImIipMultiRegisterPrivate *priv = IM_IIP_MULTI_REGISTER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipMultiRegisterPrivate));
 }
 
-static void im_iip_multi_register_destructor(ImIipMultiRegister *self)
+static void 		im_iip_multi_register_init(ImIipMultiRegister *self)
 {
-//	ImIipMultiRegisterPrivate *priv = IM_IIP_MULTI_REGISTER_GET_PRIVATE(self);
+	ImIipMultiRegisterPrivate *priv = IM_IIP_MULTI_REGISTER_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipMultiRegisterPrivate *priv = IM_IIP_MULTI_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_multi_register_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipMultiRegisterPrivate *priv = IM_IIP_MULTI_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_multi_register_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipMultiRegister* im_iip_multi_register_new(void)
+ImIipMultiRegister* 		im_iip_multi_register_new(void)
 {
-	ImIipMultiRegister *self = k_object_new_with_private(IM_TYPE_IIP_MULTI_REGISTER, sizeof(ImIipMultiRegisterPrivate));
+	ImIipMultiRegister *self = g_object_new(IM_TYPE_IIP_MULTI_REGISTER, NULL);
 	return self;
 }
 

@@ -17,7 +17,7 @@
 #include <klib.h>
 #include <string.h>
 #include "ddarm.h"
-#include "ddim_user_custom.h"
+#include "ddimusercustom.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,7 +47,7 @@ DdIpcuMb*		dd_ipcu_mb_new(void);
 /**
 It is Interrupt Handler of IPCU request.<br>
 @param [in] intCh	Interrupt CH number(0 to 15)
-@remarks This API uses DDIM_User_Set_Flg().
+@remarks This API uses DDIM_User_Set_Flg ().
 */
 void				dd_ipcu_int_handler_req(DdIpcuMb *self, kuint32 intCh );
 
@@ -56,8 +56,8 @@ Get Request data to global variable.
 @param [in] id		IPCU ID(0 to 17)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
-@remarks	This API uses DDIM_User_Clr_Flg().
-@remarks	This API uses DDIM_User_Twai_Flg().
+@remarks	This API uses DDIM_User_Clr_Flg ().
+@remarks	This API uses DDIM_User_Twai_Flg ().
 */
 kint32				dd_ipcu_wait_req(DdIpcuMb *self, kulong id );
 
@@ -85,12 +85,12 @@ kint32				dd_ipcu_set_req_cb(DdIpcuMb *self, kulong unit, kulong ch, void (* req
 /**
 Clear Destination information indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] dst_ch 	Request transmit destination ch(0-15)
+@param [in] dstCh 	Request transmit destination ch(0-15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
  */
-kint32				dd_ipcu_mb_clr_mb_dst_unit(DdIpcuMb *self, kuchar id, kulong dst_ch );
+kint32				dd_ipcu_mb_clr_mb_dst_unit(DdIpcuMb *self, kuchar id, kulong dstCh );
 
 /**
 Get Destination information
@@ -99,17 +99,17 @@ Get Destination information
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_get_mb_dst_stat(DdIpcuMb *self, kuchar id, kulong *dst );
+kint32				dd_ipcu_mb_get_mb_dst_stat(DdIpcuMb * self, kuchar id, kulong * dst );
 
 /**
 Get Destination information indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] dst_ch 	Request transmit destination ch(0-15)
+@param [in] dstCh 	Request transmit destination ch(0-15)
 @param [out] dst 	Request transmit destination by bit data
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_get_mb_dst_stat_unit(DdIpcuMb *self, kuchar id, kulong dst_ch, kulong *dst );
+kint32				dd_ipcu_mb_get_mb_dst_stat_unit(DdIpcuMb * self, kuchar id, kulong dstCh, kulong * dst );
 
 /**
 Set Mask request
@@ -119,17 +119,17 @@ Set Mask request
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_set_mb_msk(DdIpcuMb *self, kuchar id, kulong msk );
+kint32				dd_ipcu_mb_set_mb_msk(DdIpcuMb * self, kuchar id, kulong msk );
 
 /**
 Set Mask request indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] msk_ch 	Request mask ch(0-15)
+@param [in] mskCh 	Request mask ch(0-15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
  */
-kint32				dd_ipcu_mb_set_mb_msk_unit(DdIpcuMb *self, kuchar id, kulong msk_ch);
+kint32				dd_ipcu_mb_set_mb_msk_unit(DdIpcuMb *self, kuchar id, kulong mskCh);
 
 /**
 Clear Mask request
@@ -139,17 +139,17 @@ Clear Mask request
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_clr_mb_msk(DdIpcuMb *self, kuchar id, kulong msk );
+kint32				dd_ipcu_mb_clr_mb_msk(DdIpcuMb * self, kuchar id, kulong msk );
 
 /**
 Clear Mask request indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] msk_ch 	Request mask ch(0-15)
+@param [in] mskCh 	Request mask ch(0-15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_clr_mb_msk_unit(DdIpcuMb *self, kuchar id, kulong msk_ch );
+kint32				dd_ipcu_mb_clr_mb_msk_unit(DdIpcuMb * self, kuchar id, kulong mskCh );
 
 /**
 Get Mask request status
@@ -158,17 +158,17 @@ Get Mask request status
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_get_mb_msk_stat(DdIpcuMb *self, kuchar id, kulong *msk );
+kint32				dd_ipcu_mb_get_mb_msk_stat(DdIpcuMb * self, kuchar id, kulong * msk );
 
 /**
 Get Mask request indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] msk_ch 	Request mask ch(0-15)
+@param [in] mskCh 	Request mask ch(0-15)
 @param [out] msk 	Mask request
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_get_mb_msk_stat_unit(DdIpcuMb *self, kuchar id, kulong msk_ch, kulong *msk );
+kint32				dd_ipcu_mb_get_mb_msk_stat_unit(DdIpcuMb * self, kuchar id, kulong mskCh, kulong * msk );
 
 /**
 Set Acknowledge
@@ -178,16 +178,16 @@ Set Acknowledge
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_set_mb_ack(DdIpcuMb *self, kuchar id, kulong ack );
+kint32				dd_ipcu_mb_set_mb_ack(DdIpcuMb * self, kuchar id, kulong ack );
 
 /**
 Set Acknowledge indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] ack_ch 	Acknowledge ch(0-15)
+@param [in] ackCh 	Acknowledge ch(0-15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
  */
-kint32				dd_ipcu_mb_set_mb_ack_unit(DdIpcuMb *self, kuchar id, kulong ack_ch );
+kint32				dd_ipcu_mb_set_mb_ack_unit(DdIpcuMb * self, kuchar id, kulong ackCh );
 
 /**
 Clear Acknowledge indicated by IPCU ch
@@ -196,17 +196,17 @@ Clear Acknowledge indicated by IPCU ch
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
  */
-kint32				dd_ipcu_mb_clr_mb_ack(DdIpcuMb *self, kuchar id, kulong ack );
+kint32				dd_ipcu_mb_clr_mb_ack(DdIpcuMb * self, kuchar id, kulong ack );
 
 /**
 Clear Acknowledge indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] ack_ch 	Acknowledge ch(0-15)
+@param [in] ackCh 	Acknowledge ch(0-15)
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_clr_mb_ack_unit(DdIpcuMb *self, kuchar id, kulong ack_ch );
+kint32				dd_ipcu_mb_clr_mb_ack_unit(DdIpcuMb * self, kuchar id, kulong ackCh );
 
 /**
 Get Acknowledge status
@@ -216,18 +216,18 @@ Get Acknowledge status
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_get_mb_ack_stat(DdIpcuMb *self, kuchar id, kulong *ack );
+kint32				dd_ipcu_mb_get_mb_ack_stat(DdIpcuMb * self, kuchar id, kulong * ack );
 
 /**
 Get Acknowledge indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] ack_ch 	Acknowledge ch(0-15)
+@param [in] ackCh 	Acknowledge ch(0-15)
 @param [out] ack 	Acknowledge
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_get_mb_ack_stat_unit(DdIpcuMb *self, kuchar id, kulong ack_ch, kulong *ack );
+kint32				dd_ipcu_mb_get_mb_ack_stat_unit(DdIpcuMb * self, kuchar id, kulong ackCh, kulong * ack );
 
 /**
 Get Acknowledge source information
@@ -237,28 +237,28 @@ Get Acknowledge source information
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_get_mb_ack_src(DdIpcuMb *self, kuchar id, kulong *ack );
+kint32				dd_ipcu_mb_get_mb_ack_src(DdIpcuMb * self, kuchar id, kulong * ack );
 
 /**
 Get Source information indicated by IPCU ch
 @param [in] id		IPCU ID(0 to 17)
-@param [in] ack_ch	Interrupt ch of IPCU(0-15)
+@param [in] ackCh	Interrupt ch of IPCU(0-15)
 @param [out] ack  	Acknowledge source
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_IPCU_STATUS_ABNORMAL	: IPCU status error
 */
-kint32				dd_ipcu_mb_get_mb_ack_src_unit(DdIpcuMb *self, kuchar id, kulong ack_ch, kulong *ack );
+kint32				dd_ipcu_mb_get_mb_ack_src_unit(DdIpcuMb * self, kuchar id, kulong ackCh, kulong * ack );
 
 /**
 Get Transfer data
 @param [in] id		IPCU ID(0 to 17)
-@param [in] dat_num	Transfer data No.
+@param [in] datNum	Transfer data No.
 @param [out] data 	Transfer data
 @retval		D_DDIM_OK					: OK
 @retval		D_DD_IPCU_INPUT_PARAM_ERROR	: Input parameter error
 */
-kint32				dd_ipcu_mb_get_mb_data(DdIpcuMb *self, kuchar id, kuchar dat_num, kulong *data );
+kint32				dd_ipcu_mb_get_mb_data(DdIpcuMb * self, kuchar id, kuchar datNum, kulong * data );
 
 #ifdef __cplusplus
 }

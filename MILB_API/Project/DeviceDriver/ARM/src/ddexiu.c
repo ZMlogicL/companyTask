@@ -75,7 +75,7 @@ kint32 dd_exiu_get_eimask(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 	
-	*val = (1 & (IO_EXIU.EIMASK.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eimask.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -97,7 +97,7 @@ kint32 dd_exiu_get_eisrcsel(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 	
-	*val = (1 & (IO_EXIU.EISRCSEL.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eisrcsel.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -119,7 +119,7 @@ kint32 dd_exiu_get_eireqsta(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 
-	*val = (1 & (IO_EXIU.EIREQSTA.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eireqsta.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -141,7 +141,7 @@ kint32 dd_exiu_get_eirawreqsta(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 	
-	*val = (1 & (IO_EXIU.EIRAWREQSTA.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eirawreqsta.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -163,7 +163,7 @@ kint32 dd_exiu_get_eilvl(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 
-	*val = (1 & (IO_EXIU.EILVL.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eilvl.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -185,7 +185,7 @@ kint32 dd_exiu_get_eiedg(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 	
-	*val = (1 & (IO_EXIU.EIEDG.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eiedg.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -207,7 +207,7 @@ kint32 dd_exiu_get_eisir(DdExiu *self, kuint32 ch, kuint32* val)
 	}
 #endif
 	
-	*val = (1 & (IO_EXIU.EISIR.word >> (ch - C_CH_MIN)));
+	*val = (1 & (ioExiu.eisir.word >> (ch - C_CH_MIN)));
 	return D_DDIM_OK;
 }
 
@@ -226,7 +226,7 @@ kint32 dd_exiu_set_eimask_release(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIMASK.word &= ~(1U << (ch - C_CH_MIN));
+	ioExiu.eimask.word &= ~(1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -246,7 +246,7 @@ kint32 dd_exiu_dd_exiu_set_eimask_mask(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIMASK.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eimask.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -266,7 +266,7 @@ kint32 dd_exiu_set_eimask_val(DdExiu *self, kuint32 val)
 #endif
 
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIMASK.word = (val);
+	ioExiu.eimask.word = (val);
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -286,7 +286,7 @@ kint32 dd_exiu_set_eisrcsel_ext(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EISRCSEL.word &= ~(1U << (ch - C_CH_MIN));
+	ioExiu.eisrcsel.word &= ~(1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -306,7 +306,7 @@ kint32 dd_exiu_set_eisrcsel_soft(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EISRCSEL.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eisrcsel.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -326,7 +326,7 @@ kint32 dd_exiu_set_eireqclr_ch(DdExiu *self, kuint32 ch)
 #endif
 
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIREQCLR.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eireqclr.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -346,7 +346,7 @@ kint32 dd_exiu_set_eireqclr_val(DdExiu *self, kuint32 val)
 #endif
 
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIREQCLR.word = (val);
+	ioExiu.eireqclr.word = (val);
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -366,7 +366,7 @@ kint32 dd_exiu_set_eilvl_lo(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EILVL.word &= ~(1U << (ch - C_CH_MIN));
+	ioExiu.eilvl.word &= ~(1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -386,7 +386,7 @@ kint32 dd_exiu_set_eilvl_hi(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EILVL.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eilvl.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -406,7 +406,7 @@ kint32 dd_exiu_set_eiedg_level(DdExiu *self, kuint32 ch)
 #endif
 
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIEDG.word &= ~(1U << (ch - C_CH_MIN));
+	ioExiu.eiedg.word &= ~(1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -416,7 +416,7 @@ kint32 dd_exiu_set_eiedg_level(DdExiu *self, kuint32 ch)
  * @param	kuint32 ch
  * @return	D_DDIM_OK/C_INPUT_PARAM_ERR
  */
-kint32 dd_exiu_set_eiedg_edge(DdExiu *self, kuint32 ch)
+kint32 dd_exiu_set_eiedg_edge(DdExiu * self, kuint32 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch < C_CH_MIN || ch > C_CH_MAX) {
@@ -426,7 +426,7 @@ kint32 dd_exiu_set_eiedg_edge(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EIEDG.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eiedg.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }
@@ -446,7 +446,7 @@ kint32 dd_exiu_set_eisir_generate(DdExiu *self, kuint32 ch)
 #endif
 	
 	DD_ARM_CRITICAL_SECTION_START(gDDExiuSpinLock);
-	IO_EXIU.EISIR.word |= (1U << (ch - C_CH_MIN));
+	ioExiu.eisir.word |= (1U << (ch - C_CH_MIN));
 	DD_ARM_CRITICAL_SECTION_END(gDDExiuSpinLock);
 	return D_DDIM_OK;
 }

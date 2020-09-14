@@ -14,31 +14,51 @@
 #include "imiipparam.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipParam, im_iip_param);
-#define IM_IIP_PARAM_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipParamPrivate, IM_TYPE_IIP_PARAM	))
+G_DEFINE_TYPE(ImIipParam, im_iip_param, G_TYPE_OBJECT);
+#define IM_IIP_PARAM_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_PARAM, ImIipParamPrivate));
 
 
 struct _ImIipParamPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_param_constructor(ImIipParam *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_param_class_init(ImIipParamClass *klass)
 {
-//	ImIipParamPrivate *priv = IM_IIP_PARAM_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipParamPrivate));
 }
 
-static void im_iip_param_destructor(ImIipParam *self)
+static void 		im_iip_param_init(ImIipParam *self)
 {
-//	ImIipParamPrivate *priv = IM_IIP_PARAM_GET_PRIVATE(self);
+	ImIipParamPrivate *priv = IM_IIP_PARAM_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipParamPrivate *priv = IM_IIP_PARAM_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_param_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipParamPrivate *priv = IM_IIP_PARAM_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_param_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipParam* im_iip_param_new(void)
+ImIipParam* 		im_iip_param_new(void)
 {
-	ImIipParam *self = k_object_new_with_private(IM_TYPE_IIP_PARAM, sizeof(ImIipParamPrivate));
+	ImIipParam *self = g_object_new(IM_TYPE_IIP_PARAM, NULL);
 	return self;
 }

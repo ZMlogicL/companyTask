@@ -36,6 +36,9 @@
 #include "ctddaudioctrl10.h"
 #include "ctddaudioget.h"
 
+#include "../../../../MILB_API/Project/DeviceDriver/Peripheral/src/ddaudioctrl.h"
+#include "../../../../MILB_API/Project/DeviceDriver/Peripheral/src/ddaudio.h"
+
 G_DEFINE_TYPE(CtDdAudioGet, ct_dd_audio_get, G_TYPE_OBJECT);
 #define 	CT_DD_AUDIO_GET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
 				CT_TYPE_DD_AUDIO_GET, CtDdAudioGetPrivate))
@@ -83,9 +86,9 @@ static void finalize_od(GObject *object)
 */
 void ct_dd_audio_get_ctrl_common_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
-	T_DD_AUDIO_CTRL_COMMON ctrlInf;
+	AudioCtrlCommon ctrlInf;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
@@ -97,14 +100,14 @@ void ct_dd_audio_get_ctrl_common_test1( CtDdAudioGet *self )
 
 	result = dd_audio_get_ctrl_common(dd_audio_get(), ch, &ctrlInf);
 
-	DriverCommon_DDIM_PRINT(("fifo_usage=0x%x\n", ctrlInf.fifo_usage));
+	DriverCommon_DDIM_PRINT(("fifoUsage=0x%x\n", ctrlInf.fifoUsage));
 	DriverCommon_DDIM_PRINT(("channel=0x%x\n", ctrlInf.channel));
 	DriverCommon_DDIM_PRINT(("<%s> End. result= 0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_common_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -116,8 +119,8 @@ void ct_dd_audio_get_ctrl_common_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_input_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_IN ctrlInf;
+	guint8 ch = self->ch;
+	AudioCtrlIn ctrlInf;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -131,16 +134,16 @@ void ct_dd_audio_get_ctrl_input_test1( CtDdAudioGet *self )
 	result = dd_audio_get_ctrl_input(dd_audio_get(), ch, &ctrlInf);
 
 	DriverCommon_DDIM_PRINT(("format=0x%x\n", ctrlInf.format));
-	DriverCommon_DDIM_PRINT(("fifo_stages=0x%x\n", ctrlInf.fifo_stages));
-	DriverCommon_DDIM_PRINT(("ahb_format=0x%x\n", ctrlInf.ahb_format));
-	DriverCommon_DDIM_PRINT(("bit_shift=0x%x\n", ctrlInf.bit_shift));
+	DriverCommon_DDIM_PRINT(("fifoStages=0x%x\n", ctrlInf.fifoStages));
+	DriverCommon_DDIM_PRINT(("ahbFormat=0x%x\n", ctrlInf.ahbFormat));
+	DriverCommon_DDIM_PRINT(("bitShift=0x%x\n", ctrlInf.bitShift));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_input_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -152,8 +155,8 @@ void ct_dd_audio_get_ctrl_input_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_output_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_OUT ctrlInf;
+	guint8 ch = self->ch;
+	AudioCtrlOut ctrlInf;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -167,18 +170,18 @@ void ct_dd_audio_get_ctrl_output_test1( CtDdAudioGet *self )
 	result = dd_audio_get_ctrl_output(dd_audio_get(), ch, &ctrlInf);
 
 	DriverCommon_DDIM_PRINT(("format=0x%x\n", ctrlInf.format));
-	DriverCommon_DDIM_PRINT(("fifo_stages=0x%x\n", ctrlInf.fifo_stages));
-	DriverCommon_DDIM_PRINT(("ahb_format=0x%x\n", ctrlInf.ahb_format));
-	DriverCommon_DDIM_PRINT(("lr_copy=0x%x\n", ctrlInf.lr_copy));
-	DriverCommon_DDIM_PRINT(("mix_play=0x%x\n", ctrlInf.mix_play));
-	DriverCommon_DDIM_PRINT(("bit_shift=0x%x\n", ctrlInf.bit_shift));
+	DriverCommon_DDIM_PRINT(("fifoStages=0x%x\n", ctrlInf.fifoStages));
+	DriverCommon_DDIM_PRINT(("ahbFormat=0x%x\n", ctrlInf.ahbFormat));
+	DriverCommon_DDIM_PRINT(("lrCopy=0x%x\n", ctrlInf.lrCopy));
+	DriverCommon_DDIM_PRINT(("mixPlay=0x%x\n", ctrlInf.mixPlay));
+	DriverCommon_DDIM_PRINT(("bitShift=0x%x\n", ctrlInf.bitShift));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_output_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -190,8 +193,8 @@ void ct_dd_audio_get_ctrl_output_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_i2scmmn_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_I2S_CMMN i2sCommon;
+	guint8 ch = self->ch;
+	AudioI2sCmmn i2sCommon;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -205,18 +208,18 @@ void ct_dd_audio_get_ctrl_i2scmmn_test1( CtDdAudioGet *self )
 	result = dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
 
 	DriverCommon_DDIM_PRINT(("aumclki=0x%x\n", i2sCommon.aumclki));
-	DriverCommon_DDIM_PRINT(("div_aumclko=0x%x\n", i2sCommon.div_aumclko));
-	DriverCommon_DDIM_PRINT(("div_auclk=0x%x\n", i2sCommon.div_auclk));
-	DriverCommon_DDIM_PRINT(("div_lrclk=0x%x\n", i2sCommon.div_lrclk));
-	DriverCommon_DDIM_PRINT(("clk_div_enable=0x%x\n", i2sCommon.clk_div_enable));
-	DriverCommon_DDIM_PRINT(("master_slave=0x%x\n", i2sCommon.master_slave));
+	DriverCommon_DDIM_PRINT(("divAumclko=0x%x\n", i2sCommon.divAumclko));
+	DriverCommon_DDIM_PRINT(("divAuclk=0x%x\n", i2sCommon.divAuclk));
+	DriverCommon_DDIM_PRINT(("divLrclk=0x%x\n", i2sCommon.divLrclk));
+	DriverCommon_DDIM_PRINT(("clkDivEnable=0x%x\n", i2sCommon.clkDivEnable));
+	DriverCommon_DDIM_PRINT(("masterSlave=0x%x\n", i2sCommon.masterSlave));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_i2scmmn_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -228,8 +231,8 @@ void ct_dd_audio_get_ctrl_i2scmmn_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_i2sin_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_I2S_IN i2sIn;
+	guint8 ch = self->ch;
+	AudioI2sIn i2sIn;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -242,15 +245,15 @@ void ct_dd_audio_get_ctrl_i2sin_test1( CtDdAudioGet *self )
 
 	result = dd_audio_get_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
 
-	DriverCommon_DDIM_PRINT(("mode_in=0x%x\n", i2sIn.mode_in));
-	DriverCommon_DDIM_PRINT(("bit_in=0x%x\n", i2sIn.bit_in));
+	DriverCommon_DDIM_PRINT(("modeIn=0x%x\n", i2sIn.modeIn));
+	DriverCommon_DDIM_PRINT(("bitIn=0x%x\n", i2sIn.bitIn));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_i2sin_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -262,8 +265,8 @@ void ct_dd_audio_get_ctrl_i2sin_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_i2sout_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_I2S_OUT i2sOut;
+	guint8 ch = self->ch;
+	AudioI2sOut i2sOut;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -276,8 +279,8 @@ void ct_dd_audio_get_ctrl_i2sout_test1( CtDdAudioGet *self )
 
 	result = dd_audio_get_ctrl_i2s_out(dd_audio_get(), ch, &i2sOut);
 
-	DriverCommon_DDIM_PRINT(("mode_out=0x%x\n", i2sOut.mode_out));
-	DriverCommon_DDIM_PRINT(("bit_out=0x%x\n", i2sOut.bit_out));
+	DriverCommon_DDIM_PRINT(("modeOut=0x%x\n", i2sOut.modeOut));
+	DriverCommon_DDIM_PRINT(("bitOut=0x%x\n", i2sOut.bitOut));
 	DriverCommon_DDIM_PRINT(("fs=0x%x\n", i2sOut.fs));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
@@ -285,7 +288,7 @@ void ct_dd_audio_get_ctrl_i2sout_test1( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_i2sout_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -297,8 +300,8 @@ void ct_dd_audio_get_ctrl_i2sout_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_dmain_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_DMA dmaSetting;
+	guint8 ch = self->ch;
+	AudioDma dmaSetting;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -311,15 +314,15 @@ void ct_dd_audio_get_ctrl_dmain_test1( CtDdAudioGet *self )
 
 	result = dd_audio_get_ctrl_dma_in(dd_audio_get(), ch, &dmaSetting);
 
-	DriverCommon_DDIM_PRINT(("dma_2ch=0x%x\n", dmaSetting.dma_2ch));
-	DriverCommon_DDIM_PRINT(("dma_trnsf_cnt=0x%x\n", dmaSetting.dma_trnsf_cnt));
+	DriverCommon_DDIM_PRINT(("dma2Ch=0x%x\n", dmaSetting.dma2Ch));
+	DriverCommon_DDIM_PRINT(("dmaTrnsfCnt=0x%x\n", dmaSetting.dmaTrnsfCnt));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_dmain_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -331,8 +334,8 @@ void ct_dd_audio_get_ctrl_dmain_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_ctrl_dmaout_test1( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_DMA dmaSetting;
+	guint8 ch = self->ch;
+	AudioDma dmaSetting;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -345,15 +348,15 @@ void ct_dd_audio_get_ctrl_dmaout_test1( CtDdAudioGet *self )
 
 	result = dd_audio_get_ctrl_dma_out(dd_audio_get(), ch, &dmaSetting);
 
-	DriverCommon_DDIM_PRINT(("dma_2ch=0x%x\n", dmaSetting.dma_2ch));
-	DriverCommon_DDIM_PRINT(("dma_trnsf_cnt=0x%x\n", dmaSetting.dma_trnsf_cnt));
+	DriverCommon_DDIM_PRINT(("dma2Ch=0x%x\n", dmaSetting.dma2Ch));
+	DriverCommon_DDIM_PRINT(("dmaTrnsfCnt=0x%x\n", dmaSetting.dmaTrnsfCnt));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_get_ctrl_dmaout_test2( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -365,7 +368,7 @@ void ct_dd_audio_get_ctrl_dmaout_test2( CtDdAudioGet *self )
 
 void ct_dd_audio_get_status_input_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
@@ -377,7 +380,7 @@ void ct_dd_audio_get_status_input_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_status_output_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
@@ -389,7 +392,7 @@ void ct_dd_audio_get_status_output_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_status_loop_back_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
@@ -401,10 +404,10 @@ void ct_dd_audio_get_status_loop_back_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_in_dmasample_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
-	IO_AUDIO.AUDIOIF[ch].AUDMISAMPLE.word = 0;		// for PC-Sim
+	ioAudio.AUDIOIF[ch].AUDMISAMPLE.word = 0;		// for PC-Sim
 	dd_audio_reset(dd_audio_get(), ch);
 
 	DriverCommon_DDIM_PRINT(( "DMISPL=0x%x\n", dd_audio_get_in_dma_sample(dd_audio_get(), ch)));
@@ -414,10 +417,10 @@ void ct_dd_audio_get_in_dmasample_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_out_dmasample_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
-	IO_AUDIO.AUDIOIF[ch].AUDMOSAMPLE.word = 0;		// for PC-Sim
+	ioAudio.AUDIOIF[ch].AUDMOSAMPLE.word = 0;		// for PC-Sim
 
 	dd_audio_reset(dd_audio_get(), ch);
 
@@ -428,7 +431,7 @@ void ct_dd_audio_get_out_dmasample_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auidlr_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUIDLR%d addr=0x%lx\n", 
@@ -439,7 +442,7 @@ void ct_dd_audio_get_addr_reg_auidlr_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auodlr_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUODLR %d addr=0x%lx\n", 
@@ -450,7 +453,7 @@ void ct_dd_audio_get_addr_reg_auodlr_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auidl_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUIDL%d addr=0x%lx\n", 
@@ -461,7 +464,7 @@ void ct_dd_audio_get_addr_reg_auidl_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auidr_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUIDR %d addr=0x%lx\n", 
@@ -472,7 +475,7 @@ void ct_dd_audio_get_addr_reg_auidr_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auodl_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUODL %d addr=0x%lx\n", 
@@ -483,7 +486,7 @@ void ct_dd_audio_get_addr_reg_auodl_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auodr_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUODR %d addr=0x%lx\n",
@@ -494,7 +497,7 @@ void ct_dd_audio_get_addr_reg_auodr_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auiddmapt_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUIDDMAPT%d addr=0x%lx\n", 
@@ -505,7 +508,7 @@ void ct_dd_audio_get_addr_reg_auiddmapt_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_addr_reg_auoddmapt_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUODDMAPT %d addr=0x%lx\n", 
@@ -516,7 +519,7 @@ void ct_dd_audio_get_addr_reg_auoddmapt_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_input_fifo_status_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUIFST%d = 0x%lx\n", 
@@ -527,7 +530,7 @@ void ct_dd_audio_get_input_fifo_status_test( CtDdAudioGet *self )
 
 void ct_dd_audio_get_output_fifo_status_test( CtDdAudioGet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	DriverCommon_DDIM_PRINT(("AUOFST%d = 0x%lx\n", 

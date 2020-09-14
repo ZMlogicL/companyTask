@@ -213,7 +213,7 @@ ImproSroffc*			impro_sroffc_new();
 Start FFC
 @param[in]	unitNo : Unit number.
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH/M2P not running NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH/M2P not running NG
 */
 extern	INT32			impro_sroffc_start( E_IM_PRO_UNIT_NUM unitNo );
 /**
@@ -221,7 +221,7 @@ Stop FFC
 @param[in]	unitNo : Unit number.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH/M2P not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH/M2P not stopped NG
 */
 extern	INT32			impro_sroffc_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force );
 /**
@@ -229,7 +229,7 @@ Set FFC control information
 @param[in]	unitNo : Unit number.
 @param[in]	ffcCtrl	: FFC control Information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffc_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproFfcCtrl* ffcCtrl );
 /**
@@ -237,7 +237,7 @@ Set FFC blend control information
 @param[in]	unitNo : Unit number.
 @param[in]	blendCtrl	: FFC blend control Information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffc_set_blend( E_IM_PRO_UNIT_NUM unitNo, TimproFfcBlendCtrl* blendCtrl );
 /**
@@ -246,8 +246,8 @@ A setup of enable access to the built-in RAM of FFC.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_sroffc_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 /**
@@ -255,7 +255,7 @@ Set FFC area
 @param[in]	unitNo : Unit number.
 @param[in]	ffcArea	: FFC area.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffc_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproFfcArea* ffcArea );
 /**
@@ -267,7 +267,7 @@ set the request issue interval when reading the coefficients from PRCH/M2P macro
 			(FCWRIC < ((Input horizontal size - (4* FCSUBPRH)) - 10)/3) <br>
 			target registor	:@@FCWRIC
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sroffc_set_coeff_read_line_wait( E_IM_PRO_UNIT_NUM unitNo, USHORT reqIntervalClk );
 /**

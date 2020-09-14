@@ -66,18 +66,19 @@ struct _CtDdPcieEpPrivate {
 //												   E_DD_PCIE_PM_D1_D2_USPT,
 //												   0};
 
-static TDdPcieEpIntEpCb			S_GCTDD_PCIE_EP_INT_EP_CD		= {NULL, NULL};
-static TDdPcieEpIntOwnCb		S_GCTDD_PCIE_EP_INT_OWN_CD		= {NULL, NULL,NULL,NULL};
+static TDdPcieEpIntEpCb		S_GCTDD_PCIE_EP_INT_EP_CD		= {NULL, NULL};
+static TDdPcieEpIntOwnCb	S_GCTDD_PCIE_EP_INT_OWN_CD		= {NULL, NULL,NULL,NULL};
 
-/*DECLS*/
-
-static void ctDdPcieEpIntDmaCb(kint32 status);
-static void ctDdPcieEpIntEpMsgUnlockCb(kint32 status);
-static void ctDdPcieEpIntEpPmTurnofCb(kint32 status);
-static void ctDdPcieEpIntOwnLuCb(kint32 status);
-static void ctDdPcieEpIntOwnCeCb(kint32 status);
-static void ctDdPcieEpIntOwnNfeCb(kint32 status);
-static void ctDdPcieEpIntOwnFeCb(kint32 status);
+/*
+ *DECLS
+ */
+static void ctDdPcieEpIntDma_cb(kint32 status);
+static void ctDdPcieEpIntEpMsgUnlock_cb(kint32 status);
+static void ctDdPcieEpIntEpPmTurnof_cb(kint32 status);
+static void ctDdPcieEpIntOwnLu_cb(kint32 status);
+static void ctDdPcieEpIntOwnCe_cb(kint32 status);
+static void ctDdPcieEpIntOwnNfe_cb(kint32 status);
+static void ctDdPcieEpIntOwnFe_cb(kint32 status);
 static void ctDdPcieEpLlDma(void);
 static void ctDdPcieEpLlDma1(void);
 static void ctDdPcieEpErrMsg(kuint32 msg);
@@ -92,9 +93,9 @@ static void ct_dd_pcie_ep_destructor(CtDdPcieEp *self)
 {
 	// CtDdPcieEpPrivate *priv = CT_DD_PCIE_EP_GET_PRIVATE(self);
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
@@ -108,11 +109,11 @@ static void ct_dd_pcie_ep_destructor(CtDdPcieEp *self)
 /*----------------------------------------------------------------------*/
 /* Local Function														*/
 /*----------------------------------------------------------------------*/
-static void ctDdPcieEpIntDmaCb(kint32 status)
+static void ctDdPcieEpIntDma_cb(kint32 status)
 {
-	kulonglong	timestampCounter;
-	kulong		transferTime;
-	DdTimestamp *dtStamp = dd_timestamp_new();
+	kulonglong		timestampCounter;
+	kulong			transferTime;
+	DdTimestamp *	dtStamp = dd_timestamp_new();
 
 	dd_timestamp_get_counter(dtStamp, &timestampCounter);
 //	dd_timestamp_stop();
@@ -120,48 +121,49 @@ static void ctDdPcieEpIntDmaCb(kint32 status)
 	transferTime = (kulong)(timestampCounter * CtDdPcieEp_PCIE_TIMESTAMP_K);
 	Ddim_Print(("[DD_PCIe_CT] DMA transfer time=%ld[us]\n", transferTime));
 
-	Ddim_Print(("ctDdPcieEpIntDmaCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntDma_cb called. Status=0x%08X\n", status));
 	k_object_unref(dtStamp);
 	dtStamp = NULL;
 }
 
-static void ctDdPcieEpIntEpMsgUnlockCb(kint32 status)
+static void ctDdPcieEpIntEpMsgUnlock_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntEpMsgUnlockCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntEpMsgUnlock_cb called. Status=0x%08X\n", status));
 }
 
-static void ctDdPcieEpIntEpPmTurnofCb(kint32 status)
+static void ctDdPcieEpIntEpPmTurnof_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntEpPmTurnofCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntEpPmTurnof_cb called. Status=0x%08X\n", status));
 }
 
-static void ctDdPcieEpIntOwnLuCb(kint32 status)
+static void ctDdPcieEpIntOwnLu_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntOwnLuCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntOwnLu_cb called. Status=0x%08X\n", status));
 }
 
-static void ctDdPcieEpIntOwnCeCb(kint32 status)
+static void ctDdPcieEpIntOwnCe_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntOwnCeCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntOwnCe_cb called. Status=0x%08X\n", status));
 }
 
-static void ctDdPcieEpIntOwnNfeCb(kint32 status)
+static void ctDdPcieEpIntOwnNfe_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntOwnNfeCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntOwnNfe_cb called. Status=0x%08X\n", status));
 }
 
-static void ctDdPcieEpIntOwnFeCb(kint32 status)
+static void ctDdPcieEpIntOwnFe_cb(kint32 status)
 {
-	Ddim_Print(("ctDdPcieEpIntOwnFeCb called. Status=0x%08X\n", status));
+	Ddim_Print(("ctDdPcieEpIntOwnFe_cb called. Status=0x%08X\n", status));
 }
 
 static void ctDdPcieEpLlDma(void)
 {
-	kuint32 LinkedList[22];
-	kuint32 tarnsData[3] = {0x87654321, 0xffedcba9, 0xddccbbaa};
+	kuint32 			LinkedList[22];
+	kuint32 			tarnsData[3] = {0x87654321, 0xffedcba9, 0xddccbbaa};
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 
 	memcpy((void*)0x58000000, (void*)tarnsData, sizeof(tarnsData));
-	ddim_user_custom_l1l2cache_clean_flush_addr(0x58000000, sizeof(tarnsData));
+	ddim_user_custom_l1l2cache_clean_flush_addr(ddimUserCus, 0x58000000, sizeof(tarnsData));
 
 	LinkedList[0]	= 0x00000001;	// Channel Control
 	LinkedList[1]	= 0x00000004;	// Transfer Size
@@ -190,12 +192,15 @@ static void ctDdPcieEpLlDma(void)
 	LinkedList[21]	= 0x0;
 
 	memcpy((void*)CtDdPcieEp_PCIE_DMA_LL_ADDR, (void*)LinkedList, sizeof(LinkedList));
-	ddim_user_custom_l1l2cache_clean_flush_addr(CtDdPcieEp_PCIE_DMA_LL_ADDR, sizeof(LinkedList));
+	ddim_user_custom_l1l2cache_clean_flush_addr(ddimUserCus, CtDdPcieEp_PCIE_DMA_LL_ADDR, sizeof(LinkedList));
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 static void ctDdPcieEpLlDma1(void)
 {
-	kuint32 LinkedList[22];
+	kuint32 		LinkedList[22];
+	DdimUserCustom *ddimUserCus = ddim_user_custom_new();
 
 	// Element 0
 	LinkedList[0]	= 0x00000001;	// Channel Control
@@ -225,7 +230,9 @@ static void ctDdPcieEpLlDma1(void)
 	LinkedList[21]	= 0x0;
 
 	memcpy((void*)CtDdPcieEp_PCIE_DMA_LL_ADDR, (void*)LinkedList, sizeof(LinkedList));
-	ddim_user_custom_l1l2cache_clean_flush_addr(CtDdPcieEp_PCIE_DMA_LL_ADDR, sizeof(LinkedList));
+	ddim_user_custom_l1l2cache_clean_flush_addr(ddimUserCus, CtDdPcieEp_PCIE_DMA_LL_ADDR, sizeof(LinkedList));
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 static void ctDdPcieEpErrMsg(kuint32 msg)
@@ -276,9 +283,9 @@ static void ctDdPcieEpLtr(void)
 	ioPcie0.ltrMsg.bit.ltrMsgLatency		= 0x1000;
 	ioPcie0.pmUnlockReq.bit.ltrMsgReq		= 1;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Global Function														*/
 /*----------------------------------------------------------------------*/
@@ -350,9 +357,10 @@ static void ctDdPcieEpLtr(void)
 
 void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 {
-	kint32					ret;
-	DdPcieEp *				dpEp = dd_pcie_ep_get();
-	DdTimestamp *			dtStamp = dd_timestamp_new();
+	kint32				ret;
+	DdPcieEp *			dpEp = dd_pcie_ep_get();
+	DdTimestamp *		dtStamp = dd_timestamp_new();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 	
 	if(strcmp(argv[1], "open") == 0){
 		ret = dd_pcie_ep_open(dpEp, (kint32)atoi(argv[2]));
@@ -379,10 +387,10 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 		if(strcmp(argv[2], "dma") == 0){
 			memset(&self->ctrlDma,0,sizeof(self->ctrlDma));
 			self->ctrlDma.mode	= (DdPcieDmaTransMode)atoi(argv[3]);
-			self->ctrlDma.ch	= DdPcieComm_DD_PCIE_CH0;
+			self->ctrlDma.ch	= DdPcieComm_CH0;//别人还未修改，可能需要再改
 			self->ctrlDma.dmaCh	= (DdPcieDmaCh)atoi(argv[4]);
 			sscanf(argv[5], "%lx", (kulong*)&self->ctrlDma.dmndSrcAddrL);
-			sscanf(argv[6], "%lx", (kulong*)&self->ctrlDma.dmndDstAddrL);//对方没改完
+			sscanf(argv[6], "%lx", (kulong*)&self->ctrlDma.dmndDstAddrL);
 			self->ctrlDma.dmndDstAddrH = 0;
 			sscanf(argv[7], "%lx", (kulong*)&self->ctrlDma.dmndTransSize);
 			self->ctrlDma.direction	= (DdPcieDmaDir)atoi(argv[8]);
@@ -390,11 +398,11 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 				self->ctrlDma.intDmaCb = NULL;
 			}
 			else{
-				self->ctrlDma.intDmaCb = (VP_CALLBACK_PCIE)ctDdPcieEpIntDmaCb;
+				self->ctrlDma.intDmaCb = (vpCallbackPcieFunc)ctDdPcieEpIntDma_cb;
 			}
-			if(self->ctrlDma.mode == DdPcieComm_DD_PCIE_DMA_LL_MODE){
+			if(self->ctrlDma.mode == DdPcieComm_DMA_LL_MODE){//
 				self->ctrlDma.llAddr = CtDdPcieEp_PCIE_DMA_LL_ADDR;
-				if(self->ctrlDma.direction == DdPcieComm_DD_PCIE_DMA_DIR_STOD){	// Write
+				if(self->ctrlDma.direction == DdPcieCommDMA_DIR_STOD){	// Write
 					ctDdPcieEpLlDma();
 				}
 				else{	// Read
@@ -426,7 +434,7 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 		self->dmach		= (DdPcieDmaCh)atoi(argv[3]);
 		self->dir		= (DdPcieDmaDir)atoi(argv[4]);
 		if(strcmp(argv[2], "start") == 0){
-			self->timestampCtrl.hdbg			= 0;			// has no effect
+			self->timestampCtrl.hdbg		= 0;			// has no effect
 			self->timestampCtrl.counter		= 0;			// Counter
 			self->timestampCtrl.frequency	= CtDdPcieEp_PCIE_TIMESTAMP_FREQUENCY;
 			dd_timestamp_init(dtStamp);
@@ -476,8 +484,8 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 		}
 		else if(strcmp(argv[2], "ixcb") == 0){
 			if(strcmp(argv[3], "1") == 0){
-				S_GCTDD_PCIE_EP_INT_EP_CD.msgUnlockCb	= (VP_CALLBACK_PCIE)ctDdPcieEpIntEpMsgUnlockCb;
-				S_GCTDD_PCIE_EP_INT_EP_CD.pmTurnofCb	= (VP_CALLBACK_PCIE)ctDdPcieEpIntEpPmTurnofCb;
+				S_GCTDD_PCIE_EP_INT_EP_CD.msgUnlockCb	= (vpCallbackPcieFunc)ctDdPcieEpIntEpMsgUnlock_cb;
+				S_GCTDD_PCIE_EP_INT_EP_CD.pmTurnofCb	= (vpCallbackPcieFunc)ctDdPcieEpIntEpPmTurnof_cb;
 			}
 			else{
 				S_GCTDD_PCIE_EP_INT_EP_CD.msgUnlockCb	= NULL;
@@ -488,10 +496,10 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 		}
 		else if(strcmp(argv[2], "iocb") == 0){
 			if(strcmp(argv[3], "1") == 0){
-				S_GCTDD_PCIE_EP_INT_OWN_CD.luCb		= (VP_CALLBACK_PCIE)ctDdPcieEpIntOwnLuCb;
-				S_GCTDD_PCIE_EP_INT_OWN_CD.ceCb		= (VP_CALLBACK_PCIE)ctDdPcieEpIntOwnCeCb;
-				S_GCTDD_PCIE_EP_INT_OWN_CD.nfeCb	= (VP_CALLBACK_PCIE)ctDdPcieEpIntOwnNfeCb;
-				S_GCTDD_PCIE_EP_INT_OWN_CD.feCb		= (VP_CALLBACK_PCIE)ctDdPcieEpIntOwnFeCb;
+				S_GCTDD_PCIE_EP_INT_OWN_CD.luCb		= (vpCallbackPcieFunc)ctDdPcieEpIntOwnLu_cb;
+				S_GCTDD_PCIE_EP_INT_OWN_CD.ceCb		= (vpCallbackPcieFunc)ctDdPcieEpIntOwnCe_cb;
+				S_GCTDD_PCIE_EP_INT_OWN_CD.nfeCb	= (vpCallbackPcieFunc)ctDdPcieEpIntOwnNfe_cb;
+				S_GCTDD_PCIE_EP_INT_OWN_CD.feCb		= (vpCallbackPcieFunc)ctDdPcieEpIntOwnFe_cb;
 			}
 			else{
 				S_GCTDD_PCIE_EP_INT_OWN_CD.luCb		= NULL;
@@ -590,8 +598,8 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 		sscanf(argv[2], "%lx", (kulong*)&addr1);
 		sscanf(argv[3], "%lx", (kulong*)&addr2);
 		sscanf(argv[4], "%lx", (kulong*)&size);
-		ddim_user_custom_l1l2cache_flush_addr((kuint32)addr1, size);
-		ddim_user_custom_l1l2cache_flush_addr((kuint32)addr2, size);
+		ddim_user_custom_l1l2cache_flush_addr(ddimUserCus, (kuint32)addr1, size);
+		ddim_user_custom_l1l2cache_flush_addr(ddimUserCus, (kuint32)addr2, size);
 		if(memcmp((void*)addr1, (void*)addr2, size) == 0){
 			Ddim_Print(("Memory Compare OK.\n"));
 		}
@@ -680,6 +688,8 @@ void ct_dd_pcie_ep_main(CtDdPcieEp *self, kint argc, KType* argv)
 	dpEp = NULL;
 	k_object_unref(dtStamp);
 	dtStamp = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 CtDdPcieEp *ct_dd_pcie_ep_new(void)

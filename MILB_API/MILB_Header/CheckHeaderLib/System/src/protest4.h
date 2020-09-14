@@ -17,7 +17,7 @@
 
 
 #include <klib.h>
-#include "internals.h"
+#include "checkheadermaindefs.h"
 
 
 #define PRO_TYPE_TEST4                  (pro_test4_get_type())

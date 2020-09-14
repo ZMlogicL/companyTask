@@ -153,36 +153,36 @@ typedef struct _Hdmac1ReloadMode Hdmac1ReloadMode;
 
 /** HDMAC1 Control DMACA */
 union _Hdmac1Dmaca {
-	ULONG		word;						/**< for ULONG access */
+	kulong		word;						/**< for kulong access */
 	struct {
-		ULONG	tc				:16;		/**< Transfer Count (16'h0000 to 16'hFFFF) */
-		ULONG	bc				:4;			/**< Block Count (4'b0000 to 4'bFFFF)<br>
+		kulong	tc				:16;		/**< Transfer Count (16'h0000 to 16'hFFFF) */
+		kulong	bc				:4;			/**< Block Count (4'b0000 to 4'bFFFF)<br>
 												 In the demand transfer mode, BC must be set to 4'b0000. */
-		ULONG	bt				:4;			/**< Beat Type (4'b0000, 4'b1000 to 4'b1111)<br>
+		kulong	bt				:4;			/**< Beat Type (4'b0000, 4'b1000 to 4'b1111)<br>
 												 In the demand transfer mode, incrementing/wrapping burst (INCR*, WRAP*) is not supported. */
-		ULONG	is				:5;			/**< Input Select (5'b00000, 5'b01110 to 5'b11111) */
-		ULONG					:3;			/**< Reserved */
+		kulong	is				:5;			/**< Input Select (5'b00000, 5'b01110 to 5'b11111) */
+		kulong					:3;			/**< Reserved */
 	} bit;									/**< for bit access */
 };
 
 /** HDMAC1 Control DMACB */
 union _Hdmac1Dmacb {
-	ULONG		word;						/**< for ULONG access */
+	kulong		word;						/**< for kulong access */
 	struct {
-		ULONG					:8;			/**< Reserved */
-		ULONG	dp				:4;			/**< Destination Protection (4'b0000 to 4'b1111) */
-		ULONG	sp				:4;			/**< Source Protection (4'b0000 to 4'b1111) */
-		ULONG	ss				:3;			/**< Stop Status (3'b000 to 3'b111) */
-		ULONG	ci				:1;			/**< Completion Interrupt (0 or 1) */
-		ULONG	ei				:1;			/**< Error Interrupt (0 or 1) */
-		ULONG	rd				:1;			/**< Reload Destination (0 or 1) */
-		ULONG	rs				:1;			/**< Reload Source (0 or 1) */
-		ULONG	rc				:1;			/**< Reload Count (0 or 1) */
-		ULONG	fd				:1;			/**< Fixed Destination (0 or 1) */
-		ULONG	fs				:1;			/**< Fixed Source (0 or 1) */
-		ULONG	tw				:2;			/**< Transfer Width (2'b00 to 2'b10) */
-		ULONG	ms				:2;			/**< Mode Select (2'b00 to 2'b10) */
-		ULONG	tt				:2;			/**< Transfer Type (2'b00) */
+		kulong					:8;			/**< Reserved */
+		kulong	dp				:4;			/**< Destination Protection (4'b0000 to 4'b1111) */
+		kulong	sp				:4;			/**< Source Protection (4'b0000 to 4'b1111) */
+		kulong	ss				:3;			/**< Stop Status (3'b000 to 3'b111) */
+		kulong	ci				:1;			/**< Completion Interrupt (0 or 1) */
+		kulong	ei				:1;			/**< Error Interrupt (0 or 1) */
+		kulong	rd				:1;			/**< Reload Destination (0 or 1) */
+		kulong	rs				:1;			/**< Reload Source (0 or 1) */
+		kulong	rc				:1;			/**< Reload Count (0 or 1) */
+		kulong	fd				:1;			/**< Fixed Destination (0 or 1) */
+		kulong	fs				:1;			/**< Fixed Source (0 or 1) */
+		kulong	tw				:2;			/**< Transfer Width (2'b00 to 2'b10) */
+		kulong	ms				:2;			/**< Mode Select (2'b00 to 2'b10) */
+		kulong	tt				:2;			/**< Transfer Type (2'b00) */
 	} bit;									/**< for bit access */
 };
 
@@ -190,41 +190,41 @@ union _Hdmac1Dmacb {
 struct _Hdmac1Ctrl {
 	Hdmac1Dmaca		configA;		/**< Configuration A */
 	Hdmac1Dmacb		configB;		/**< Configuration B */
-	ULONG			srcAddr;		/**< Source Address */
-	ULONG			dstAddr;		/**< Destination Address */
-	VP_CALLBACK		intHandler;	/**< Interrupt Handler */
+	kulong			srcAddr;		/**< Source Address */
+	kulong			dstAddr;		/**< Destination Address */
+	VpCallbackFunc		intHandler;	/**< Interrupt Handler */
 };
 
 /** HDMAC1 Transfer mode */
 struct _Hdmac1TrnsMode {
-	UCHAR			inputSel;		/**< Input Select (5'b00000, 5'b01110 to 5'b11111) */
-	UCHAR			modeSel;		/**< Mode Select (2'b00 to 2'b10) */
-	UCHAR			srcFix;		/**< Source Address fixed (0 or 1) */
-	UCHAR			dstFix;		/**< Destination Address fixed (0 or 1) */
-	UCHAR			beatType;		/**< Beat Type (4'b0000, 4'b1000 to 4'b1111)<br>
+	kuchar			inputSel;		/**< Input Select (5'b00000, 5'b01110 to 5'b11111) */
+	kuchar			modeSel;		/**< Mode Select (2'b00 to 2'b10) */
+	kuchar			srcFix;		/**< Source Address fixed (0 or 1) */
+	kuchar			dstFix;		/**< Destination Address fixed (0 or 1) */
+	kuchar			beatType;		/**< Beat Type (4'b0000, 4'b1000 to 4'b1111)<br>
 												 In the demand transfer mode, incrementing/wrapping burst (INCR*, WRAP*) is not supported. */
 };
 
 /** HDMAC1 Transfer size */
 struct _Hdmac1TrnsSize{
-	UCHAR		trnsWidth;		/**< Transfer Width (2'b00 to 2'b10) */
-	ULONG		trnsSize;		/**< Transfer Size */
-	ULONG		srcAddr;		/**< Source Address */
-	ULONG		dstAddr;		/**< Destination Address */
+	kuchar		trnsWidth;		/**< Transfer Width (2'b00 to 2'b10) */
+	kulong		trnsSize;		/**< Transfer Size */
+	kulong		srcAddr;		/**< Source Address */
+	kulong		dstAddr;		/**< Destination Address */
 };
 
 /** HDMAC1 Transfer Control */
 struct _Hdmac1CtrlTrns {
 	Hdmac1TrnsMode	mode;			/**< Transfer mode set */
 	Hdmac1TrnsSize	size;			/**< Transfer size set */
-	VP_CALLBACK		intHandler;	/**< Interrupt Handler */
+	VpCallbackFunc		intHandler;	/**< Interrupt Handler */
 };
 
 /** HDMAC1 Reload mode set */
 struct _Hdmac1ReloadMode {
-	UCHAR		reloadCnt;		/**< Reload Count mode (0 or 1) */
-	UCHAR		reloadSrc;		/**< Reload Source mode (0 or 1) */
-	UCHAR		reloadDst;		/**< Reload Destination mode (0 or 1) */
+	kuchar		reloadCnt;		/**< Reload Count mode (0 or 1) */
+	kuchar		reloadSrc;		/**< Reload Source mode (0 or 1) */
+	kuchar		reloadDst;		/**< Reload Destination mode (0 or 1) */
 };
 
 
@@ -248,14 +248,14 @@ When the designated channel is idle (un-lock) state, change the channel state to
 if the channel state is in-use (lock), return "DdHdmac1_EXC_LOCK_NG".
 
 @param [in] ch	Channel number (0 to 7)
-@param [in]	tmout	semaphore timeout value(milli seconds)/D_DDIM_USER_SEM_WAIT_POL(polling semaphore)
+@param [in]	tmout	semaphore timeout value(milli seconds)/DdimUserCustom_SEM_WAIT_POL(polling semaphore)
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_EXC_LOCK_NG		Lock Error (System Using designated channel number)
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 @remarks This API uses DDIM_User_Pol_Sem() when waitTime is set to 0. <br>
 		 This API uses DDIM_User_Twai_Sem() when waitTime is set to the value except for 0.
 */
-INT32		dd_hdmac1_open(DdHdmac1 *self, UCHAR ch, INT32 tmout);
+kint32		dd_hdmac1_open(DdHdmac1 *self, kuchar ch, kint32 tmout);
 
 /**
 The member who exists in the structure of "Hdmac1Ctrl" is set.<br>
@@ -269,7 +269,7 @@ The member who exists in the structure of "Hdmac1Ctrl" is set.<br>
          In the case of the asynchronous mode, an end can be supervised by calling "dd_hdmac1_wait_end()" or setting up "intHandler".<br>
          When you don't call "dd_hdmac1_wait_end()", please be sure to set up "intHandler".
 */
-INT32		dd_hdmac1_ctrl_common(DdHdmac1 *self, UCHAR ch, Hdmac1Ctrl const *const hdmac1Ctrl);
+kint32		dd_hdmac1_ctrl_common(DdHdmac1 *self, kuchar ch, Hdmac1Ctrl const *const hdmac1Ctrl);
 
 /**
 The member who exists in the structure of "Hdmac1CtrlTrns" is set.<br>
@@ -293,7 +293,7 @@ The member who exists in the structure of "Hdmac1CtrlTrns" is set.<br>
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 128KByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 64KByte.<br>
 */
-INT32		dd_hdmac1_ctrl_trns(DdHdmac1 *self, UCHAR ch, Hdmac1CtrlTrns const *const hdmac1CtrlTrans);
+kint32		dd_hdmac1_ctrl_trns(DdHdmac1 *self, kuchar ch, Hdmac1CtrlTrns const *const hdmac1CtrlTrans);
 
 /**
 The member who exists in the structure of "Hdmac1TrnsSize" is set.<br>
@@ -315,7 +315,7 @@ The member who exists in the structure of "Hdmac1TrnsSize" is set.<br>
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 128KByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 64KByte.<br>
 */
-INT32		dd_hdmac1_set_trns_size(DdHdmac1 *self, UCHAR ch, Hdmac1TrnsSize const *const hdmac1TrnsSize);
+kint32		dd_hdmac1_set_trns_size(DdHdmac1 *self, kuchar ch, Hdmac1TrnsSize const *const hdmac1TrnsSize);
 
 /**
 HDMAC1 start of "Synchronous" mode.<br>
@@ -331,7 +331,7 @@ The operation of HDMAC1 of specified ch begins.<br>
 @remarks This API uses DDIM_User_Clr_Flg().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-INT32		dd_hdmac1_start_sync(DdHdmac1 *self, UCHAR ch, USHORT *const status, UINT32 waitMode);
+kint32		dd_hdmac1_start_sync(DdHdmac1 *self, kuchar ch, kushort *const status, kuint32 waitMode);
 
 /**
 HDMAC1 start of "Asynchronous" mode.<br>
@@ -345,7 +345,7 @@ The operation of HDMAC1 of specified ch begins.
 @remarks This API uses DDIM_User_Clr_Flg().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-INT32		dd_hdmac1_start_async(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_start_async(DdHdmac1 *self, kuchar ch);
 
 /**
 The operation of HDMAC1 of specified ch is stopped.
@@ -354,7 +354,7 @@ The operation of HDMAC1 of specified ch is stopped.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_stop(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_stop(DdHdmac1 *self, kuchar ch);
 
 /**
 The operation of HDMAC1 of specified ch is paused.
@@ -363,7 +363,7 @@ The operation of HDMAC1 of specified ch is paused.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_pause(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_pause(DdHdmac1 *self, kuchar ch);
 
 /**
 The operation of HDMAC1 of specified ch is resumed.
@@ -373,7 +373,7 @@ The operation of HDMAC1 of specified ch is resumed.
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 @remarks This API uses DDIM_User_Clr_Flg().
 */
-INT32		dd_hdmac1_resume(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_resume(DdHdmac1 *self, kuchar ch);
 
 /**
 Wait end time of transfer process of designated channel.
@@ -383,7 +383,7 @@ Wait end time of transfer process of designated channel.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_set_wait_time(DdHdmac1 *self, UCHAR ch, INT32 waitTime);
+kint32		dd_hdmac1_set_wait_time(DdHdmac1 *self, kuchar ch, kint32 waitTime);
 
 /**
 Wait end of transfer process of designated channel.<br>
@@ -402,7 +402,7 @@ The value of the CSTR register is passed by the out parameter.
 @remarks This API uses DDIM_User_Clr_Flg().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-INT32		dd_hdmac1_wait_end(DdHdmac1 *self, UCHAR ch, USHORT *const status, UINT32 waitMode);
+kint32		dd_hdmac1_wait_end(DdHdmac1 *self, kuchar ch, kushort *const status, kuint32 waitMode);
 
 /**
 The status bit of the DMACB register is cleared.
@@ -411,7 +411,7 @@ The status bit of the DMACB register is cleared.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_clear_status(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_clear_status(DdHdmac1 *self, kuchar ch);
 
 /**
 Cancel exclusive control for designated HDMAC1 channel.<br>
@@ -423,7 +423,7 @@ When the designated channel is under transferring, stop transfer immediately and
 @remarks This API forced cancel exclusive control if process is under executing.
 @remarks This API uses DDIM_User_Sig_Sem().
 */
-INT32		dd_hdmac1_close(DdHdmac1 *self, UCHAR ch);
+kint32		dd_hdmac1_close(DdHdmac1 *self, kuchar ch);
 
 /**
 The content of the DMACB register is acquired.
@@ -433,7 +433,7 @@ The content of the DMACB register is acquired.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_get_status(DdHdmac1 *self, UCHAR ch, USHORT *const status);
+kint32		dd_hdmac1_get_status(DdHdmac1 *self, kuchar ch, kushort *const status);
 
 /**
 The value of the transferd size of the specified channel is acquired.
@@ -442,7 +442,7 @@ The value of the transferd size of the specified channel is acquired.
 @retval size						transferd size of the specified channel
 @remarks This API forced cancel exclusive control if process is under executing.
 */
-ULONG		dd_hdmac1_get_trns_size(DdHdmac1 *self, UCHAR ch);
+kulong		dd_hdmac1_get_trns_size(DdHdmac1 *self, kuchar ch);
 
 /**
 The value of the remainder transfer size of the specified channel is acquired.
@@ -451,7 +451,7 @@ The value of the remainder transfer size of the specified channel is acquired.
 @retval size						remainder transfer size of the specified channel
 @remarks This API forced cancel exclusive control if process is under executing.
 */
-ULONG		dd_hdmac1_get_remain_trns_size(DdHdmac1 *self, UCHAR ch);
+kulong		dd_hdmac1_get_remain_trns_size(DdHdmac1 *self, kuchar ch);
 
 /**
 The value of the total transfer size of the specified channel is acquired.
@@ -459,7 +459,7 @@ The value of the total transfer size of the specified channel is acquired.
 @param [in] ch				Channel number (0 to 7)
 @retval size						total transfer size of the specified channel
 */
-ULONG		dd_hdmac1_get_total_trns_size(DdHdmac1 *self, UCHAR ch);
+kulong		dd_hdmac1_get_total_trns_size(DdHdmac1 *self, kuchar ch);
 
 /**
 The value of the source address (DMACSA) of the specified channel is acquired.
@@ -467,7 +467,7 @@ The value of the source address (DMACSA) of the specified channel is acquired.
 @param [in] ch				Channel number (0 to 7)
 @retval srcAddr					source address of the specified channel
 */
-ULONG		dd_hdmac1_get_src_addr(DdHdmac1 *self, UCHAR ch);
+kulong		dd_hdmac1_get_src_addr(DdHdmac1 *self, kuchar ch);
 
 /**
 The value of the destination address (DMACDA) of the specified channel is acquired.
@@ -475,7 +475,7 @@ The value of the destination address (DMACDA) of the specified channel is acquir
 @param [in] ch				Channel number (0 to 7)
 @retval dstAddr					Destination address of the specified channel
 */
-ULONG		dd_hdmac1_get_dst_addr(DdHdmac1 *self, UCHAR ch);
+kulong		dd_hdmac1_get_dst_addr(DdHdmac1 *self, kuchar ch);
 
 /**
 The value of the taransfer count (TC) of the specified channel is get.
@@ -485,7 +485,7 @@ The value of the taransfer count (TC) of the specified channel is get.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_get_trans_count(DdHdmac1 *self, UCHAR ch, ULONG* const transCount);
+kint32		dd_hdmac1_get_trans_count(DdHdmac1 *self, kuchar ch, kulong* const transCount);
 
 /**
 Source Protection code is set.
@@ -500,7 +500,7 @@ Source Protection code is set.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_set_source_protect(DdHdmac1 *self, UCHAR ch, UCHAR protectCode);
+kint32		dd_hdmac1_set_source_protect(DdHdmac1 *self, kuchar ch, kuchar protectCode);
 
 /**
 Destination Protection code is set.
@@ -515,7 +515,7 @@ Destination Protection code is set.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_set_destination_protect(DdHdmac1 *self, UCHAR ch, UCHAR protectCode);
+kint32		dd_hdmac1_set_destination_protect(DdHdmac1 *self, kuchar ch, kuchar protectCode);
 
 /**
 Arbitration mode is set.
@@ -525,7 +525,7 @@ Arbitration mode is set.
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 @remarks There is an influence in all channels when setting it because it is a common register to all channels.
 */
-INT32		dd_hdmac1_set_arbitration(DdHdmac1 *self, UCHAR arbitration);
+kint32		dd_hdmac1_set_arbitration(DdHdmac1 *self, kuchar arbitration);
 
 /**
 Arbitration mode is read.
@@ -534,24 +534,24 @@ Arbitration mode is read.
 @retval D_DDIM_OK					OK
 @retval DdHdmac1_INPUT_PARAM_ERR	Input Parameter Error
 */
-INT32		dd_hdmac1_get_arbitration(DdHdmac1 *self, UCHAR *const arbitration);
+kint32		dd_hdmac1_get_arbitration(DdHdmac1 *self, kuchar *const arbitration);
 
 /**
 Arbitration mode is returned to an initial value.
 
 @remarks There is an influence in all channels when setting it because it is a common register to all channels.
 */
-VOID		dd_hdmac1_clear_arbitration(DdHdmac1 *self);
+void		dd_hdmac1_clear_arbitration(DdHdmac1 *self);
 
 /**
 The operation of All HDMAC1 channel is stopped.
 */
-VOID		dd_hdmac1_stop_all_ch(DdHdmac1 *self);
+void		dd_hdmac1_stop_all_ch(DdHdmac1 *self);
 
 /**
 The operation of All HDMAC1 channel is resumed.
 */
-VOID		dd_hdmac1_resume_all_ch(DdHdmac1 *self);
+void		dd_hdmac1_resume_all_ch(DdHdmac1 *self);
 
 /**
 It is API that returns the value set to the register of TW. 
@@ -565,7 +565,7 @@ It is API that returns the value set to the register of TW.
          	HALF WORD transfer (source address and destination address are 2byte alignment) : MAX size is 2MByte.<br>
          	BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 */
-UCHAR		dd_hdmac1_get_trns_width(DdHdmac1 *self, ULONG srcAddr, ULONG dstAddr, ULONG totalSize);
+kuchar		dd_hdmac1_get_trns_width(DdHdmac1 *self, kulong srcAddr, kulong dstAddr, kulong totalSize);
 
 /**
 Set Interrupt handler address.
@@ -573,26 +573,26 @@ Set Interrupt handler address.
 @param [in] ch				Channel number (0 to 7)
 @param [in] *intHandler	callback function pointer
 */
-VOID		dd_hdmac1_set_int_handler(DdHdmac1 *self, UCHAR ch, VOID (*intHandler)(VOID));
+void		dd_hdmac1_set_int_handler(DdHdmac1 *self, kuchar ch, void (*intHandler)(void));
 
 /**
 Interrupt handler of HDMAC1 for transfer process is finished.<br>
 The register value of CSTR is set to the argument of the callback function of the user registration.<br>
-The type of the argument is "USHORT*" type.
+The type of the argument is "kushort*" type.
 
 @param [in] ch				Channel number (0 to 7)
 @remarks	This API uses DDIM_User_Set_Flg().
 @remarks	This API uses DDIM_User_Clr_Flg().
 @remarks	This API uses DDIM_User_Twai_Flg().
 */
-VOID		dd_hdmac1_int_handler(DdHdmac1 *self, UCHAR ch);
+void		dd_hdmac1_int_handler(DdHdmac1 *self, kuchar ch);
 
 #ifdef CO_DDIM_UTILITY_USE
 
-INT32		dd_hdmac1_copy_sdram_sync(DdHdmac1 *self, UCHAR ch, ULONG srcAddr,
-						ULONG dstAddr, ULONG size, UINT32 waitMode);
-INT32		dd_hdmac1_copy_sdram_async(DdHdmac1 *self, UCHAR ch, ULONG srcAddr,
-						ULONG dstAddr, ULONG size, VP_CALLBACK intHandler);
+kint32		dd_hdmac1_copy_sdram_sync(DdHdmac1 *self, kuchar ch, kulong srcAddr,
+						kulong dstAddr, kulong size, kuint32 waitMode);
+kint32		dd_hdmac1_copy_sdram_async(DdHdmac1 *self, kuchar ch, kulong srcAddr,
+						kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 
 #endif
 

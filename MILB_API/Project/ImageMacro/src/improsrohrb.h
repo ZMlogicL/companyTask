@@ -77,9 +77,9 @@
 #define	ImproSrohrb_D_IM_PRO_HRB_HRBOSM_MAX			(8191)
 /*	@}*/	// im_pro_sro_hrb
 
+
 /*其他结构体或类型定义区域*/
-/** HRB Information
-*/
+/** HRB Information*/
 typedef struct {
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
@@ -139,6 +139,7 @@ typedef struct {
 // --- REMOVE_ES_COMPILE_OPT END ---
 } TimproHrbCtrl;
 
+
 /*类型定义区域*/
 typedef struct _ImproSrohrb					ImproSrohrb;
 typedef struct _ImproSrohrbPrivate				ImproSrohrbPrivate;
@@ -170,7 +171,7 @@ HRB control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	hrbCtrl : HRB control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srohrbCtrl( E_IM_PRO_UNIT_NUM unitNo, TimproHrbCtrl* hrbCtrl );
 /**
@@ -179,8 +180,8 @@ A setup of enable access to the built-in RAM of hrb.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srohrb_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 

@@ -204,7 +204,7 @@ enum _DdPcieMps
 	E_DD_PCIE_DMA_MPS_512 /**< 512 bytes	*/
 };
 
-typedef void (*vpCallbackPcieFunc)(UINT32 status);	/**< Type is defined to Callback function pointer for PCIE */
+typedef void (*VpCallbackPcieFunc)(UINT32 status);	/**< Type is defined to Callback function pointer for PCIE */
 
 /** PCIe DMA control data */
 struct _DdPcieCtrlDma

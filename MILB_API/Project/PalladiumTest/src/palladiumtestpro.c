@@ -143,7 +143,7 @@ static VOID ptImProEnableGic( VOID )
 
 static VOID ptImProStartClock( VOID )
 {
-	UCHAR clkIdx = 0;
+	kuchar clkIdx = 0;
 
 	Dd_Top_Set_CLKSTOP4_APCK0( 1 );
 	Dd_Top_Set_CLKSTOP4_APCK1( 1 );
@@ -234,7 +234,7 @@ static VOID ptImProRun1( const UINT32 type1 )
 void palladium_test_pro_main( void )
 {
 	kuchar		clkIdx = 0;
-	UCHAR	type1;
+	kuchar	type1;
 	Ddim_Print(( "****** PRO begin palladium_test_pro_main\n" ));
 	Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_INIT );
 	type1	= gDDIM_Info.com._6a;

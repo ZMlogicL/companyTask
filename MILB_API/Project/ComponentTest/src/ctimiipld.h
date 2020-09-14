@@ -23,7 +23,7 @@
 #define __CT_IM_IIP_LD_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_IM_IIP_LD                  (ct_im_iip_ld_get_type())
 #define CT_IM_IIP_LD(obj)                  (K_TYPE_CHECK_INSTANCE_CAST (obj, CtImIipLd)) 

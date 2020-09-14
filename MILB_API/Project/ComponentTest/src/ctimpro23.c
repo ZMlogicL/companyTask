@@ -71,25 +71,25 @@ static void ct_im_pro2_3_destructor(CtImPro23 *self)
 void ct_im_pro2_3_0(CtImPro23* self, const kuint32 idx)
 {
 	TimproDpcArea dpcCtrlMax = {
-		.gPosX = ImproSrocag_D_IM_PRO_DPC_DPCGH_MAX,
-		.gPosY = ImproSrocag_D_IM_PRO_DPC_DPCGV_MAX,
-		.gWidth = ImproSrocag_D_IM_PRO_DPC_DPCGHW_MAX,
-		.gLines = ImproSrocag_D_IM_PRO_DPC_DPCGVW_MAX,
-		.posX = ImproSrocag_D_IM_PRO_DPC_DPCH_MAX,
-		.posY = ImproSrocag_D_IM_PRO_DPC_DPCV_MAX,
-		.width = ImproSrocag_D_IM_PRO_DPC_DPCHW_MAX,
-		.lines = ImproSrocag_D_IM_PRO_DPC_DPCVW_MAX,
+		.gPosX = ImproSrodpc_D_IM_PRO_DPC_DPCGH_MAX,
+		.gPosY = ImproSrodpc_D_IM_PRO_DPC_DPCGV_MAX,
+		.gWidth = ImproSrodpc_D_IM_PRO_DPC_DPCGHW_MAX,
+		.gLines = ImproSrodpc_D_IM_PRO_DPC_DPCGVW_MAX,
+		.posX = ImproSrodpc_D_IM_PRO_DPC_DPCH_MAX,
+		.posY = ImproSrodpc_D_IM_PRO_DPC_DPCV_MAX,
+		.width = ImproSrodpc_D_IM_PRO_DPC_DPCHW_MAX,
+		.lines = ImproSrodpc_D_IM_PRO_DPC_DPCVW_MAX,
 	};
 
 	TimproDpcArea dpcCtrlMin = {
-		.gPosX = ImproSrocag_D_IM_PRO_DPC_DPCGH_MIN,
-		.gPosY = ImproSrocag_D_IM_PRO_DPC_DPCGV_MIN,
-		.gWidth = ImproSrocag_D_IM_PRO_DPC_DPCGHW_MIN,
-		.gLines = ImproSrocag_D_IM_PRO_DPC_DPCGVW_MIN,
-		.posX = ImproSrocag_D_IM_PRO_DPC_DPCH_MIN,
-		.posY = ImproSrocag_D_IM_PRO_DPC_DPCV_MIN,
-		.width = ImproSrocag_D_IM_PRO_DPC_DPCHW_MIN,
-		.lines = ImproSrocag_D_IM_PRO_DPC_DPCVW_MIN,
+		.gPosX = ImproSrodpc_D_IM_PRO_DPC_DPCGH_MIN,
+		.gPosY = ImproSrodpc_D_IM_PRO_DPC_DPCGV_MIN,
+		.gWidth = ImproSrodpc_D_IM_PRO_DPC_DPCGHW_MIN,
+		.gLines = ImproSrodpc_D_IM_PRO_DPC_DPCGVW_MIN,
+		.posX = ImproSrodpc_D_IM_PRO_DPC_DPCH_MIN,
+		.posY = ImproSrodpc_D_IM_PRO_DPC_DPCV_MIN,
+		.width = ImproSrodpc_D_IM_PRO_DPC_DPCHW_MIN,
+		.lines = ImproSrodpc_D_IM_PRO_DPC_DPCVW_MIN,
 	};
 
 	if (idx == 1) {
@@ -163,12 +163,12 @@ void ct_im_pro2_3_1(CtImPro23* self, const kuint32 idx)
 void ct_im_pro2_3_2(CtImPro23* self, const kuint32 idx)
 {
 	TimproDpcDddCtrl dpcCtrlMax = {
-		.grgbIndependentSetting = ImproSrocag_E_IM_PRO_DPC_DD_GRGB_INDEPENDENT,
-		.gMode = ImproSrocag_E_IM_PRO_DPC_DD_MODE_G_2_CONSECUTIVE_DEFECT,
-		.rbMode = ImproSrocag_E_IM_PRO_DPC_DD_MODE_RB_2_CONSECUTIVE_DEFECT,
+		.grgbIndependentSetting = ImproSrodpc_E_IM_PRO_DPC_DD_GRGB_INDEPENDENT,
+		.gMode = ImproSrodpc_E_IM_PRO_DPC_DD_MODE_G_2_CONSECUTIVE_DEFECT,
+		.rbMode = ImproSrodpc_E_IM_PRO_DPC_DD_MODE_RB_2_CONSECUTIVE_DEFECT,
 		.upperLimitLocalRegistration = 6,
-		.useMdd = ImproSrocag_E_IM_PRO_DPC_DD_USE_MDD_EN,
-		.support2concecutiveDefect = ImproSrocag_E_IM_PRO_DPC_DD_MDD_2CONSECUTIVE_DEFECT_EN,
+		.useMdd = ImproSrodpc_E_IM_PRO_DPC_DD_USE_MDD_EN,
+		.support2concecutiveDefect = ImproSrodpc_E_IM_PRO_DPC_DD_MDD_2CONSECUTIVE_DEFECT_EN,
 		.pThresholdStartPos[0] = 16383,
 		.pThresholdStartPos[1] = 16383,
 		.pThresholdStartPos[2] = 16383,
@@ -201,12 +201,12 @@ void ct_im_pro2_3_2(CtImPro23* self, const kuint32 idx)
 	};
 
 	TimproDpcDddCtrl dpcCtrlMin = {
-		.grgbIndependentSetting = ImproSrocag_E_IM_PRO_DPC_DD_GRGB_UNITED,
-		.gMode = ImproSrocag_E_IM_PRO_DPC_DD_MODE_G_SINGLE_DEFECT,
-		.rbMode = ImproSrocag_E_IM_PRO_DPC_DD_MODE_RB_SINGLE_DEFECT,
+		.grgbIndependentSetting = ImproSrodpc_E_IM_PRO_DPC_DD_GRGB_UNITED,
+		.gMode = ImproSrodpc_E_IM_PRO_DPC_DD_MODE_G_SINGLE_DEFECT,
+		.rbMode = ImproSrodpc_E_IM_PRO_DPC_DD_MODE_RB_SINGLE_DEFECT,
 		.upperLimitLocalRegistration = 0,
-		.useMdd = ImproSrocag_E_IM_PRO_DPC_DD_USE_MDD_DIS,
-		.support2concecutiveDefect = ImproSrocag_E_IM_PRO_DPC_DD_MDD_2CONSECUTIVE_DEFECT_DIS,
+		.useMdd = ImproSrodpc_E_IM_PRO_DPC_DD_USE_MDD_DIS,
+		.support2concecutiveDefect = ImproSrodpc_E_IM_PRO_DPC_DD_MDD_2CONSECUTIVE_DEFECT_DIS,
 		.pThresholdStartPos[0] = 0,
 		.pThresholdStartPos[1] = 0,
 		.pThresholdStartPos[2] = 0,
@@ -319,7 +319,7 @@ void ct_im_pro2_3_3(CtImPro23* self, const kuint32 idx)
 void ct_im_pro2_3_4(CtImPro23* self, const kuint32 idx)
 {
 	TimproDpcMdcCtrl dpcCtrlMax = {
-		.useOcd = ImproSrocag_E_IM_PRO_DPC_MDC_USE_OCD_EN,
+		.useOcd = ImproSrodpc_E_IM_PRO_DPC_MDC_USE_OCD_EN,
 		.pManualAdjValSingle = 1023,
 		.mManualAdjValSingle = 1023,
 		.pManualAdjVal2consecutive = 1023,
@@ -329,7 +329,7 @@ void ct_im_pro2_3_4(CtImPro23* self, const kuint32 idx)
 	};
 
 	TimproDpcMdcCtrl dpcCtrlMin = {
-		.useOcd = ImproSrocag_E_IM_PRO_DPC_MDC_USE_OCD_DIS,
+		.useOcd = ImproSrodpc_E_IM_PRO_DPC_MDC_USE_OCD_DIS,
 		.pManualAdjValSingle = 0,
 		.mManualAdjValSingle = 0,
 		.pManualAdjVal2consecutive = 0,
@@ -368,9 +368,9 @@ void ct_im_pro2_3_4(CtImPro23* self, const kuint32 idx)
 void ct_im_pro2_3_5(CtImPro23* self, const kuint32 idx)
 {
 	TimproDpcEsdcCtrl dpcCtrlMax = {
-		.esdMode = ImproSrocag_E_IM_PRO_DPC_ESD_MODE_3,
-		.useRbJdge = ImproSrocag_E_IM_PRO_DPC_ESD_USE_RB_JUDGE_EN,
-		.useOcd = ImproSrocag_E_IM_PRO_DPC_ESD_USE_OCD_EN,
+		.esdMode = ImproSrodpc_E_IM_PRO_DPC_ESD_MODE_3,
+		.useRbJdge = ImproSrodpc_E_IM_PRO_DPC_ESD_USE_RB_JUDGE_EN,
+		.useOcd = ImproSrodpc_E_IM_PRO_DPC_ESD_USE_OCD_EN,
 		.thresholdStartPos = 16383,
 		.thresholdOffset = 16383,
 		.thresholdGain = 255,
@@ -382,9 +382,9 @@ void ct_im_pro2_3_5(CtImPro23* self, const kuint32 idx)
 	};
 
 	TimproDpcEsdcCtrl dpcCtrlMin = {
-		.esdMode = ImproSrocag_E_IM_PRO_DPC_ESD_MODE_0,
-		.useRbJdge = ImproSrocag_E_IM_PRO_DPC_ESD_USE_RB_JUDGE_DIS,
-		.useOcd = ImproSrocag_E_IM_PRO_DPC_ESD_USE_OCD_DIS,
+		.esdMode = ImproSrodpc_E_IM_PRO_DPC_ESD_MODE_0,
+		.useRbJdge = ImproSrodpc_E_IM_PRO_DPC_ESD_USE_RB_JUDGE_DIS,
+		.useOcd = ImproSrodpc_E_IM_PRO_DPC_ESD_USE_OCD_DIS,
 		.thresholdStartPos = 0,
 		.thresholdOffset = 0,
 		.thresholdGain = 0,
@@ -497,7 +497,7 @@ void ct_im_pro2_3_8(CtImPro23* self, const kuint32 idx)
 
 void ct_im_pro2_3_9(CtImPro23* self, const kuint32 idx)
 {
-	UCHAR force;
+	kuchar force;
 
 	if (idx == 1) {
 		for (self->priv->unitNo = 0; self->priv->unitNo < E_IM_PRO_UNIT_NUM_MAX; self->priv->unitNo++) {

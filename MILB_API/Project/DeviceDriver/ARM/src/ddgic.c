@@ -56,7 +56,7 @@ PUBLIC
  */
 void dd_gic_init1(DdGic *self)
 {
-	kuint16	i;
+	kuint16 i;
 	
 	//----------------------------------------------------------------------
 	// Distributor side Disable
@@ -135,7 +135,7 @@ void dd_gic_init1(DdGic *self)
  */
 void dd_gic_dist_bank_init(DdGic *self)
 {
-	kuint16	i;
+	kuint16 i;
 	
 	//----------------------------------------------------------------------
 	// Disable Interrupt
@@ -234,11 +234,11 @@ void dd_gic_end(DdGic *self)
 /**
  * @brief	Control Generic Interrupt Controller to set resource.
  * @param	DdGicIntid	intid
-			kulong			set_enable
-			kint64			intrpt_pri
-			kint64			cpu_target
+			kulong			setEnable
+			kint64			intrptPri
+			kint64			cpuTarget
  */
-kint32 dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 intrpt_pri, kint64 cpu_target)
+kint32 dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong setEnable, kint64 intrptPri, kint64 cpuTarget)
 {
 	kulong num;
 	kint32 sho;
@@ -250,28 +250,28 @@ kint32 dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 intr
 		Ddim_Assertion(("GIC: input param error. [intid] = %x\n", (kuint32)intid));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
-	if (set_enable > 1) {
-		Ddim_Assertion(("GIC: input param error. [set_enable] = %x\n", (kuint32)set_enable));
+	if (setEnable > 1) {
+		Ddim_Assertion(("GIC: input param error. [setEnable] = %x\n", (kuint32)setEnable));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
 	flg = 0;
 	num = 0;
-	while (num <= 248 && intrpt_pri >= 0) {
-		if (intrpt_pri == num) {
+	while (num <= 248 && intrptPri >= 0) {
+		if (intrptPri == num) {
 			flg = 1;
 			break;
 		}
-		if (intrpt_pri < num) {
+		if (intrptPri < num) {
 			break;
 		}
 		num += 8;
 	}
-	if (intrpt_pri != -1 && flg == 0) {
-		Ddim_Assertion(("GIC: input param error. [intrpt_pri] = %x\n", (kint32)intrpt_pri));
+	if (intrptPri != -1 && flg == 0) {
+		Ddim_Assertion(("GIC: input param error. [intrptPri] = %x\n", (kint32)intrptPri));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
-	if (cpu_target < -1 || cpu_target > 15) {
-		Ddim_Assertion(("GIC: input param error. [cpu_target] = %x\n", (kint32)cpu_target));
+	if (cpuTarget < -1 || cpuTarget > 15) {
+		Ddim_Assertion(("GIC: input param error. [cpuTarget] = %x\n", (kint32)cpuTarget));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
 #endif
@@ -290,23 +290,23 @@ kint32 dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 intr
 	// Set Interupt Priority
 	// Interrupt Priority Register (GICD_IPRIORITYR)
 	//----------------------------------------------------------------------
-	dd_gic_set_priority(NULL, intid, intrpt_pri);
+	dd_gic_set_priority(NULL, intid, intrptPri);
 	
 	//----------------------------------------------------------------------
 	// Set Target CPU
 	// Interrupt Processor Targets Register (GICD_ITARGETSR)
 	//----------------------------------------------------------------------
-	dd_gic_set_target_cpu(NULL, intid, cpu_target);
+	dd_gic_set_target_cpu(NULL, intid, cpuTarget);
 	
 	//----------------------------------------------------------------------
 	// Enable Interrupt
 	// Interrupt Set-Enable Registers (GICD_ISENABLER)
 	//----------------------------------------------------------------------
 	// SGIs are always enabled.
-	if (set_enable) {
+	if (setEnable) {
 		if (intid > C_INTID_SGI_MAX && intid <= C_INTID_SPI_MAX) {
 			sho = intid / 32;
-			num = set_enable << (intid - sho * 32);
+			num = setEnable << (intid - sho * 32);
 			DdGic_DIST_SET_ISENABLER(sho, num);
 		}
 	}
@@ -319,9 +319,9 @@ kint32 dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 intr
 /**
  * @brief	Set Interrupt Priority Registers.
  * @param	kulong	intid
-			kint64	intrpt_pri
+			kint64	intrptPri
  */
-kint32 dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri)
+kint32 dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrptPri)
 {
 #ifdef CO_PARAM_CHECK
 	kuint16 flg;
@@ -333,18 +333,18 @@ kint32 dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri)
 	}
 	flg = 0;
 	num = 0;
-	while (num <= 248 && intrpt_pri >= 0) {
-		if (intrpt_pri == num) {
+	while (num <= 248 && intrptPri >= 0) {
+		if (intrptPri == num) {
 			flg = 1;
 			break;
 		}
-		if (intrpt_pri < num) {
+		if (intrptPri < num) {
 			break;
 		}
 		num += 8;
 	}
-	if (intrpt_pri != -1 && flg == 0) {
-		Ddim_Assertion(("GIC: input param error. [intrpt_pri] = %x\n", (kint32)intrpt_pri));
+	if (intrptPri != -1 && flg == 0) {
+		Ddim_Assertion(("GIC: input param error. [intrptPri] = %x\n", (kint32)intrptPri));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
 #endif
@@ -352,9 +352,9 @@ kint32 dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri)
 	// Set Interupt Priority
 	// Interrupt Priority Register (GICD_IPRIORITYR)
 	//----------------------------------------------------------------------
-	if (intrpt_pri != -1) {
+	if (intrptPri != -1) {
 		if (intid <= C_INTID_SPI_MAX) {
-			DdGic_DIST_SET_IPRIORITYR(intid, intrpt_pri);
+			DdGic_DIST_SET_IPRIORITYR(intid, intrptPri);
 		}
 	}
 	
@@ -365,17 +365,17 @@ kint32 dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri)
 /**
  * @brief	Set Interrupt Processor Targets Registers.
  * @param	kulong	intid
-			kint64	cpu_target
+			kint64	cpuTarget
  */
-kint32 dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpu_target)
+kint32 dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpuTarget)
 {
 #ifdef CO_PARAM_CHECK
 	if (intid > C_INTID_SPI_MAX) {
 		Ddim_Assertion(("GIC: input param error. [intid] = %x\n", (kuint32)intid));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
-	if (cpu_target < -1 || cpu_target > 15) {
-		Ddim_Assertion(("GIC: input param error. [cpu_target] = %x\n", (kint32)cpu_target));
+	if (cpuTarget < -1 || cpuTarget > 15) {
+		Ddim_Assertion(("GIC: input param error. [cpuTarget] = %x\n", (kint32)cpuTarget));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
 #endif
@@ -383,9 +383,9 @@ kint32 dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpu_target)
 	// Target CPU
 	// Interrupt Processor Targets Register (GICD_ITARGETSR)
 	//----------------------------------------------------------------------
-	if (cpu_target != -1) {
+	if (cpuTarget != -1) {
 		if (intid <= C_INTID_SPI_MAX) {
-			DdGic_DIST_SET_ITARGETSR(intid, cpu_target);
+			DdGic_DIST_SET_ITARGETSR(intid, cpuTarget);
 		}
 	}
 	
@@ -396,29 +396,29 @@ kint32 dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpu_target)
 /**
  * @brief	Set Software Generated Interrupt Registers.
  * @param	kulong	intid
-			kulong	target_filter
-			kulong	cpu_target
+			kulong	targetFilter
+			kulong	cpuTarget
  */
-kint32 dd_gic_send_sgi(DdGic *self, DdGicIntid intid, kulong target_filter, kulong cpu_target)
+kint32 dd_gic_send_sgi(DdGic *self, DdGicIntid intid, kulong targetFilter, kulong cpuTarget)
 {
 #ifdef CO_PARAM_CHECK
 	if (intid > C_INTID_SGI_MAX) {
 		Ddim_Assertion(("GIC: input param error. [intid] = %x\n", (kuint32)intid));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
-	if (target_filter > 2) {
-		Ddim_Assertion(("GIC: input param error. [target_filter] = %x\n", (kint32)target_filter));
+	if (targetFilter > 2) {
+		Ddim_Assertion(("GIC: input param error. [targetFilter] = %x\n", (kint32)targetFilter));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
-	if (cpu_target > 15) {
-		Ddim_Assertion(("GIC: input param error. [cpu_target] = %x\n", (kint32)cpu_target));
+	if (cpuTarget > 15) {
+		Ddim_Assertion(("GIC: input param error. [cpuTarget] = %x\n", (kint32)cpuTarget));
 		return C_GIC_INPUT_PARAM_ERR;
 	}
 #endif
 	kulong sgiSet;
 	
 	// Select SATT bit value always secure.
-	sgiSet = (kulong) intid + (target_filter << 24) + (cpu_target << 16);
+	sgiSet = (kulong) intid + (targetFilter << 24) + (cpuTarget << 16);
 	DdGic_DIST_SET_SGIR(sgiSet);
 	DD_ARM_DSB_POU();
 	return D_DDIM_OK;

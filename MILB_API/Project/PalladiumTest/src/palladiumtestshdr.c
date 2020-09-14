@@ -24,8 +24,8 @@
 
 #include "im_shdr.h"
 #include "ct_im_shdr.h"
-#include "dd_gic.h"
-#include "dd_top.h"
+#include "ddgic.h"
+#include "ddtop.h"
 #include "driver_common.h"
 #include "palladium_test.h"
 #include "palladiumtestshdr.h"
@@ -42,7 +42,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(PalladiumTestShdr, palladium_test_shdr);
 /*----------------------------------------------------------------------*/
 /* Global Data                              */
 /*----------------------------------------------------------------------*/
-static char* S_G_CMD_ARGV[ PalladiumTestShdr_PT_SHDR_CMD_LEN ];
+static kchar* S_G_CMD_ARGV[ PalladiumTestShdr_PT_SHDR_CMD_LEN ];
 
 struct _PalladiumTestShdrPrivate
 {
@@ -51,9 +51,9 @@ struct _PalladiumTestShdrPrivate
 /*
  * DECLS
  */
-static VOID ptImShdrEnableGic( VOID );
-static VOID ptImShdrStartClock( VOID );
-static void ptImShdrExecuteCmd( int cmdArgc, char* cmdArgv );
+static void ptImShdrEnableGic(void);
+static void ptImShdrStartClock(void);
+static void ptImShdrExecuteCmd(kint cmdArgc, kchar* cmdArgv);
 static void ptImShdrRegisterDumpCmd();
 
 static void palladium_test_shdr_constructor(PalladiumTestShdr *self)
@@ -72,78 +72,81 @@ static void palladium_test_shdr_destructor(PalladiumTestShdr *self)
 /*----------------------------------------------------------------------*/
 /* Local Function                           */
 /*----------------------------------------------------------------------*/
-static VOID ptImShdrEnableGic( VOID )
+static void ptImShdrEnableGic(void)
 {
-  Dd_GIC_Ctrl( E_DD_GIC_INTID_TIMER_CH0_INT, 1, D_DD_GIC_PRI30, 1 );    // cpu=0, intid=118, enable, pri=30
-  Dd_GIC_Ctrl( E_DD_GIC_INTID_SHDR_INT, 1, D_DD_GIC_PRI30, 1 );    // int enable
-  Dd_GIC_Ctrl( E_DD_GIC_INTID_SHDR_LINE_INT, 1, D_DD_GIC_PRI30, 1 );    // int enable
+  Dd_GIC_Ctrl(E_DD_GIC_INTID_TIMER_CH0_INT, 1, C_PRI30, 1);    // cpu=0, intid=118, enable, pri=30
+  Dd_GIC_Ctrl(E_DD_GIC_INTID_SHDR_INT, 1, C_PRI30, 1);    // kint enable
+  Dd_GIC_Ctrl(E_DD_GIC_INTID_SHDR_LINE_INT, 1, C_PRI30, 1);    // kint enable
 }
 
 
-static VOID ptImShdrStartClock( VOID )
+static void ptImShdrStartClock(void)
 {
-  UCHAR imShdrPclkCtrlCnt = 0;
-  UCHAR imShdrClkCtrlCnt = 0;
-  UCHAR imShdrIlkCtrlCnt = 0;
-  UCHAR imShdrHclkCtrlCnt = 0;
+  kuchar imShdrPclkCtrlCnt = 0;
+  kuchar imShdrClkCtrlCnt = 0;
+  kuchar imShdrIlkCtrlCnt = 0;
+  kuchar imShdrHclkCtrlCnt = 0;
 
-  Dd_Top_Start_Clock( (UCHAR*)&imShdrPclkCtrlCnt, &Dd_Top_Get_CLKSTOP7(), ~D_DD_TOP_SHDRAP_BIT );
+  Dd_Top_Start_Clock((kuchar*)&imShdrPclkCtrlCnt, &DdToptwo_GET_CLKSTOP7(), ~DdTopone_SHDRAP_BIT);
 
-  Dd_Top_Start_Clock( (UCHAR*)&imShdrIlkCtrlCnt, &Dd_Top_Get_CLKSTOP7(), ~D_DD_TOP_SHDRAX_BIT );
+  Dd_Top_Start_Clock((kuchar*)&imShdrIlkCtrlCnt, &DdToptwo_GET_CLKSTOP7(), ~DdTopone_SHDRAX_BIT);
 
-  Dd_Top_Start_Clock( (UCHAR*)&imShdrClkCtrlCnt, &Dd_Top_Get_CLKSTOP7(), ~D_DD_TOP_SHDRCK_BIT );
+  Dd_Top_Start_Clock((kuchar*)&imShdrClkCtrlCnt, &DdToptwo_GET_CLKSTOP7(), ~DdTopone_SHDRCK_BIT);
 
-  Dd_Top_Start_Clock( (UCHAR*)&imShdrHclkCtrlCnt, &Dd_Top_Get_CLKSTOP7(), ~D_DD_TOP_SHDRAH_BIT );
+  Dd_Top_Start_Clock((kuchar*)&imShdrHclkCtrlCnt, &DdToptwo_GET_CLKSTOP7(), ~DdTopone_SHDRAH_BIT);
 }
 
-static void ptImShdrExecuteCmd( int cmdArgc, char* cmdArgv )
+static void ptImShdrExecuteCmd(kint cmdArgc, kchar* cmdArgv)
 {
-  INT32 j;
-  INT32 cmdPos = 0;
+  kint32 j;
+  kint32 cmdPos = 0;
 
-  for( j = 0; j < cmdArgc; j++ ) {
-    S_G_CMD_ARGV[ j ] = ( cmdArgv + ( cmdPos * PalladiumTestShdr_PT_SHDR_CMD_LEN ) );
+  for(j = 0; j < cmdArgc; j++) {
+    S_G_CMD_ARGV[ j ] = (cmdArgv + (cmdPos * PalladiumTestShdr_PT_SHDR_CMD_LEN));
     cmdPos++;
   }
 
-  Ct_Im_SHDR_Main( cmdArgc, S_G_CMD_ARGV );
+  Ct_Im_SHDR_Main(cmdArgc, S_G_CMD_ARGV);
 }
 
 static void ptImShdrRegisterDumpCmd()
 {
-  char testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "ctrl" };
-  char testArgv2[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "pre" };
-  char testArgv3[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "fmd" };
-  char testArgv4[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "pmsk" };
-  char testArgv5[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "spnr" };
-  char testArgv6[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "mask" };
-  char testArgv7[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "blend" };
-  char testArgv8[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "post" };
-  char testArgv9[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "resize" };
-  char testArgv10[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "smc" };
-  char testArgv11[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgr" };
-  char testArgv12[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgg" };
-  char testArgv13[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgb" };
-  char testArgv14[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "axi" };
-  char testArgv15[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "axires" };
+  kchar testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "ctrl" };
+  kchar testArgv2[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "pre" };
+  kchar testArgv3[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "fmd" };
+  kchar testArgv4[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "pmsk" };
+  kchar testArgv5[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "spnr" };
+  kchar testArgv6[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "mask" };
+  kchar testArgv7[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "blend" };
+  kchar testArgv8[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "post" };
+  kchar testArgv9[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "resize" };
+  kchar testArgv10[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "smc" };
+  kchar testArgv11[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgr" };
+  kchar testArgv12[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgg" };
+  kchar testArgv13[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "dgb" };
+  kchar testArgv14[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "axi" };
+  kchar testArgv15[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "get", "axires" };
 
-  ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv1);
-  ptImShdrExecuteCmd((sizeof(testArgv2) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv2);
-  ptImShdrExecuteCmd((sizeof(testArgv3) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv3);
-  ptImShdrExecuteCmd((sizeof(testArgv4) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv4);
-  ptImShdrExecuteCmd((sizeof(testArgv5) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv5);
-  ptImShdrExecuteCmd((sizeof(testArgv6) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv6);
-  ptImShdrExecuteCmd((sizeof(testArgv7) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv7);
-  ptImShdrExecuteCmd((sizeof(testArgv8) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv8);
-  ptImShdrExecuteCmd((sizeof(testArgv9) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv9);
-  ptImShdrExecuteCmd((sizeof(testArgv10) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv10);
-  ptImShdrExecuteCmd((sizeof(testArgv11) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv11);
-  ptImShdrExecuteCmd((sizeof(testArgv12) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv12);
-  ptImShdrExecuteCmd((sizeof(testArgv13) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv13);
-  ptImShdrExecuteCmd((sizeof(testArgv14) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv14);
-  ptImShdrExecuteCmd((sizeof(testArgv15) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv15);
+  ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv1);
+  ptImShdrExecuteCmd((sizeof(testArgv2) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv2);
+  ptImShdrExecuteCmd((sizeof(testArgv3) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv3);
+  ptImShdrExecuteCmd((sizeof(testArgv4) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv4);
+  ptImShdrExecuteCmd((sizeof(testArgv5) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv5);
+  ptImShdrExecuteCmd((sizeof(testArgv6) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv6);
+  ptImShdrExecuteCmd((sizeof(testArgv7) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv7);
+  ptImShdrExecuteCmd((sizeof(testArgv8) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv8);
+  ptImShdrExecuteCmd((sizeof(testArgv9) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv9);
+  ptImShdrExecuteCmd((sizeof(testArgv10) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv10);
+  ptImShdrExecuteCmd((sizeof(testArgv11) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv11);
+  ptImShdrExecuteCmd((sizeof(testArgv12) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv12);
+  ptImShdrExecuteCmd((sizeof(testArgv13) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv13);
+  ptImShdrExecuteCmd((sizeof(testArgv14) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv14);
+  ptImShdrExecuteCmd((sizeof(testArgv15) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv15);
 }
 
+/*
+ * PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Global Function                            */
 /*----------------------------------------------------------------------*/
@@ -154,140 +157,140 @@ static void ptImShdrRegisterDumpCmd()
  * @note    None
  * @attention None
  */
-void palladium_test_shdr_im_main( void )
+void palladium_test_shdr_im_main(PalladiumTestShdr *self)
 {
-  UINT32  testno;
+  kuint32  testno;
 
   // 開始...
-  Ddim_Print(( "****** SHDR begin palladium_test_shdr_im_main\n" ));
+  Ddim_Print(("****** SHDR begin palladium_test_shdr_im_main\n"));
 
   // タイマー初期化
-  Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_INIT );
+  Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_INIT);
 
   // テストパラメータ取得
   testno  = gDDIM_Info.com._6a;
 
-  Ddim_Print(( "****** Palladium Test %d begin\n", testno ));
+  Ddim_Print(("****** Palladium Test %d begin\n", testno));
 
   ptImShdrEnableGic();
   ptImShdrStartClock();
 
-  while( 1 ) {
+  while(1) {
 
     // 3DNR w/o MC.
-    if ( testno == 1 ) {
+    if (testno == 1) {
       // 入力データ.
-      Palladium_Set_In_Localstack( D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
-                                   D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES );
-      Palladium_Set_In_Localstack( D_IM_SHDR_IMG_MEM_IN_YCC_STD_ADDR_TOP,
-                                   D_IM_SHDR_IMG_MEM_4K2K_YCC_STD_U8_BYTES );
+      Palladium_Set_In_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
+                                   CtImShdr_D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES);
+      Palladium_Set_In_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_IN_YCC_STD_ADDR_TOP,
+                                   CtImShdr_D_IM_SHDR_IMG_MEM_4K2K_YCC_STD_U8_BYTES);
 
       // タイマー起動.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_START );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_START);
 
       // テストコード起動.
-      char testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "1" };
-      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv1);
+      kchar testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "1" };
+      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv1);
 
       // レジスタダンプ.
       ptImShdrRegisterDumpCmd();
 
       // タイマー停止.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_END );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_END);
 
       // 出力ダンプ
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES );
-//      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
-      D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES );
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES);
+//      Palladium_Set_Out_Localstack(D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
+      CtImShdr_D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES);
     }
     // Video-HDR with MC.
-    else if ( testno == 3 ) {
+    else if (testno == 3) {
       // 入力データ.
-      Palladium_Set_In_Localstack( D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
-                                   D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES );
-      Palladium_Set_In_Localstack( D_IM_SHDR_IMG_MEM_IN_YCC_STD_ADDR_TOP,
-                                   D_IM_SHDR_IMG_MEM_4K2K_YCC_STD_U8_BYTES );
+      Palladium_Set_In_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
+                                   CtImShdr_D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES);
+      Palladium_Set_In_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_IN_YCC_STD_ADDR_TOP,
+                                   CtImShdr_D_IM_SHDR_IMG_MEM_4K2K_YCC_STD_U8_BYTES);
 
       // タイマー起動.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_START );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_START);
 
       // テストコード起動.
-      char testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "3" };
-      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv1);
+      kchar testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "3" };
+      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv1);
 
       // レジスタダンプ.
       ptImShdrRegisterDumpCmd();
 
       // タイマー停止.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_END );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_END);
 
       // 出力ダンプ
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES );
-//      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
-      D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES );
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES);
+//      Palladium_Set_Out_Localstack(D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
+      CtImShdr_D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES);
     }
     // Bypass-YCC.
-    else if ( testno == 5 ) {
+    else if (testno == 5) {
       // 入力データ.
-      Palladium_Set_In_Localstack( D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
-                                   D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES );
+      Palladium_Set_In_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_IN_YCC_REF_ADDR_TOP,
+                                   CtImShdr_D_IM_SHDR_IMG_MEM_4K2K_YCC_REF_U8_BYTES);
 
       // タイマー起動.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_START );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_START);
 
       // テストコード起動.
-      char testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "5" };
-      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (char*)testArgv1);
+      kchar testArgv1[][ PalladiumTestShdr_PT_SHDR_CMD_LEN ] = { "imshdr", "2", "5" };
+      ptImShdrExecuteCmd((sizeof(testArgv1) / PalladiumTestShdr_PT_SHDR_CMD_LEN), (kchar*)testArgv1);
 
       // レジスタダンプ.
       ptImShdrRegisterDumpCmd();
 
       // タイマー停止.
-      Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_END );
+      Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_END);
 
       // 出力ダンプ
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES );
-//      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
-      D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES );
-      Palladium_Set_Out_Localstack( D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
-                                    D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES );
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_HEVC_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_HEVC_U8_BYTES);
+//      Palladium_Set_Out_Localstack(D_IM_SHDR_IMG_MEM_OUT_MEIN_ADDR_TOP,
+      CtImShdr_D_IM_SHDR_IMG_MEM_MEIN_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_FHD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_FHD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_RIB_HD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_RIB_HD_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_HDMI_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_HDMI_YCC_U8_BYTES);
+      Palladium_Set_Out_Localstack(CtImShdr_D_IM_SHDR_IMG_MEM_OUT_DISP_LCD_ADDR_TOP,
+                                    CtImShdr_D_IM_SHDR_IMG_MEM_DISP_LCD_YCC_U8_BYTES);
     }
     else {
-      Ddim_Print(("*** RS Parameter Error\n" ));
+      Ddim_Print(("*** RS Parameter Error\n"));
     }
 
     break;
   }
 
   // タイマーログ出力
-  Palladium_Timer( P_TIMER_ID_COMMON0, P_TIMER_PRINT );
+  Palladium_Timer(P_TIMER_ID_COMMON0, P_TIMER_PRINT);
 
-  Ddim_Print(( "****** Palladium Test %d end\n", testno ));
+  Ddim_Print(("****** Palladium Test %d end\n", testno));
 
   // Force stop
   Palladium_Force_Stop();

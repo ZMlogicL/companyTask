@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "ksdramc.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KSdramc, k_sdramc);
+
 #define K_SDRAMC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KSdramcPrivate, K_TYPE_SDRAMC))
+
 
 struct _KSdramcPrivate
 {
 
 };
+
 
 volatile IoSdramc ioSdramc[2] __attribute__((section(".UMC")));
 /**
@@ -43,4 +48,3 @@ KSdramc* k_sdramc_new(void)
     KSdramc* self = k_object_new_with_private(K_TYPE_SDRAMC, sizeof(KSdramcPrivate));
     return self;
 }
-

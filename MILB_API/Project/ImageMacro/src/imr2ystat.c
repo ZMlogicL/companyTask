@@ -115,59 +115,59 @@ static void im_r2y_stat_destructor(ImR2yStat *self)
 
 #ifdef IM_R2Y_STATUS_PRINT
 // Calculate YYW0 output image width
-static UINT32 imR2yCalcYyw0OutWidth( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw0OutWidth( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRHSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRHSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_width;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgWidth;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HSTA.bit.RSZ0HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HPIT.bit.RSZ0HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VSTA.bit.RSZ0VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VPIT.bit.RSZ0VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HSTA.bit.RSZ0HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HPIT.bit.RSZ0HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VSTA.bit.RSZ0VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VPIT.bit.RSZ0VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HPIT.bit.RSZ0HPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HPIT.bit.RSZ0HPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
 			// Resize 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RSZ0MD == D_IM_R2Y_RSZ_BICUBIC ){
-				out_pixs = ((((in_pixs - ref_pixs - 2) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HSTA.bit.RSZ0HSTA - 1) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HPIT.bit.RSZ0HPIT) + 1);
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RSZ0MD == ImR2yCtrl_RSZ_BICUBIC ){
+				out_pixs = ((((in_pixs - refPixs - 2) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HSTA.bit.RSZ0HSTA - 1) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HPIT.bit.RSZ0HPIT) + 1);
 			}
 			else{
-				out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HSTA.bit.RSZ0HSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HPIT.bit.RSZ0HPIT) + 1);
+				out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HSTA.bit.RSZ0HSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HPIT.bit.RSZ0HPIT) + 1);
 			}
 
 			// Reduction 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RDC0EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RDC0MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RDC0EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RDC0MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -181,70 +181,70 @@ static UINT32 imR2yCalcYyw0OutWidth( UCHAR pipe_no )
 			out_pixs = out_pixs & 0x1FFE;
 
 			// YC Trimming 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.TRM0EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM0H.bit.TRM0HSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.TRM0EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM0H.bit.TRM0HSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
 
 // Calculate YYW0 output image lines
-static UINT32 imR2yCalcYyw0OutLines( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw0OutLines( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRVSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRVSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_lines;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgLines;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HSTA.bit.RSZ0HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0HPIT.bit.RSZ0HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VSTA.bit.RSZ0VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VPIT.bit.RSZ0VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HSTA.bit.RSZ0HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0HPIT.bit.RSZ0HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VSTA.bit.RSZ0VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VPIT.bit.RSZ0VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VPIT.bit.RSZ0VPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VPIT.bit.RSZ0VPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
 			// Resize 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RSZ0MD == D_IM_R2Y_RSZ_BICUBIC ){
-				out_pixs = ((((in_pixs - ref_pixs - 2) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VSTA.bit.RSZ0VSTA - 1) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VPIT.bit.RSZ0VPIT) + 1);
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RSZ0MD == ImR2yCtrl_RSZ_BICUBIC ){
+				out_pixs = ((((in_pixs - refPixs - 2) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VSTA.bit.RSZ0VSTA - 1) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VPIT.bit.RSZ0VPIT) + 1);
 			}
 			else{
-				out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VSTA.bit.RSZ0VSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ0VPIT.bit.RSZ0VPIT) + 1);
+				out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VSTA.bit.RSZ0VSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ0VPIT.bit.RSZ0VPIT) + 1);
 			}
 
 			// Reduction 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RDC0EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.RDC0MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RDC0EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.RDC0MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -258,37 +258,37 @@ static UINT32 imR2yCalcYyw0OutLines( UCHAR pipe_no )
 			out_pixs = out_pixs & 0x1FFE;
 
 			// YC Trimming 0 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.TRM0EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM0V.bit.TRM0VSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.TRM0EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM0V.bit.TRM0VSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
 
 // Calculate YYW0a output image width
-static UINT32 imR2yCalcYyw0aOutWidth( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw0aOutWidth( kuint16 pipeNo )
 {
 	UINT32 out_pixs;
-	UCHAR reduct_val;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
 
-	out_pixs = imR2yCalcYyw0OutWidth( pipe_no );
+	out_pixs = imR2yCalcYyw0OutWidth( pipeNo );
 
-	switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.CH0AMD ){
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_4_Y:
+	switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.CH0AMD ){
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_4_Y:
 			reduct_val = 4;
 			break;
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_8_Y:
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_8_Y:
 			reduct_val = 8;
 			break;
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_32_SP:
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_32_SP:
 			reduct_val = 32;
 			break;
-//		case D_IM_R2Y_YYW0A_OUTPUT_MODE_STOP:
+//		case ImR2yCtrl_YYW0A_OUTPUT_MODE_STOP:
 		default:
 			return 0xffffffff;
 	}
@@ -305,26 +305,26 @@ static UINT32 imR2yCalcYyw0aOutWidth( UCHAR pipe_no )
 }
 
 // Calculate YYW0a output image lines
-static UINT32 imR2yCalcYyw0aOutLines( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw0aOutLines( kuint16 pipeNo )
 {
 	UINT32 out_pixs;
-	UCHAR reduct_val;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
 
-	out_pixs = imR2yCalcYyw0OutLines( pipe_no );
+	out_pixs = imR2yCalcYyw0OutLines( pipeNo );
 
-	switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW0MD.bit.CH0AMD ){
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_4_Y:
+	switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW0MD.bit.CH0AMD ){
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_4_Y:
 			reduct_val = 4;
 			break;
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_8_Y:
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_8_Y:
 			reduct_val = 8;
 			break;
-		case D_IM_R2Y_YYW0A_OUTPUT_MODE_DIV_32_SP:
+		case ImR2yCtrl_YYW0A_OUTPUT_MODE_DIV_32_SP:
 			reduct_val = 32;
 			break;
-//		case D_IM_R2Y_YYW0A_OUTPUT_MODE_STOP:
+//		case ImR2yCtrl_YYW0A_OUTPUT_MODE_STOP:
 		default:
 			return 0xffffffff;
 	}
@@ -341,59 +341,59 @@ static UINT32 imR2yCalcYyw0aOutLines( UCHAR pipe_no )
 }
 
 // Calculate YYW1 output image width
-static UINT32 imR2yCalcYyw1OutWidth( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw1OutWidth( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRHSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRHSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_width;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgWidth;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HSTA.bit.RSZ1HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HPIT.bit.RSZ1HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VSTA.bit.RSZ1VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VPIT.bit.RSZ1VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HSTA.bit.RSZ1HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HPIT.bit.RSZ1HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VSTA.bit.RSZ1VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VPIT.bit.RSZ1VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HPIT.bit.RSZ1HPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HPIT.bit.RSZ1HPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
 			// Resize 1 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RSZ1MD == D_IM_R2Y_RSZ_BICUBIC ){
-				out_pixs = ((((in_pixs - ref_pixs - 2) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HSTA.bit.RSZ1HSTA - 1) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HPIT.bit.RSZ1HPIT) + 1);
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RSZ1MD == ImR2yCtrl_RSZ_BICUBIC ){
+				out_pixs = ((((in_pixs - refPixs - 2) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HSTA.bit.RSZ1HSTA - 1) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HPIT.bit.RSZ1HPIT) + 1);
 			}
 			else{
-				out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HSTA.bit.RSZ1HSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HPIT.bit.RSZ1HPIT) + 1);
+				out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HSTA.bit.RSZ1HSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HPIT.bit.RSZ1HPIT) + 1);
 			}
 
 			// Reduction 1 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RDC1EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RDC1MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RDC1EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RDC1MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -407,69 +407,69 @@ static UINT32 imR2yCalcYyw1OutWidth( UCHAR pipe_no )
 			out_pixs = out_pixs & 0x1FFE;
 
 			// YC Trimming 1 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.TRM1EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM1H.bit.TRM1HSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.TRM1EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM1H.bit.TRM1HSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
 
 // Calculate YYW1 output image lines
-static UINT32 imR2yCalcYyw1OutLines( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw1OutLines( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRVSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRVSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_lines;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgLines;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HSTA.bit.RSZ1HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1HPIT.bit.RSZ1HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VSTA.bit.RSZ1VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VPIT.bit.RSZ1VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HSTA.bit.RSZ1HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1HPIT.bit.RSZ1HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VSTA.bit.RSZ1VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VPIT.bit.RSZ1VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VPIT.bit.RSZ1VPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VPIT.bit.RSZ1VPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RSZ1MD == D_IM_R2Y_RSZ_BICUBIC ){
-				out_pixs = ((((in_pixs - ref_pixs - 2) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VSTA.bit.RSZ1VSTA - 1) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VPIT.bit.RSZ1VPIT) + 1);
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RSZ1MD == ImR2yCtrl_RSZ_BICUBIC ){
+				out_pixs = ((((in_pixs - refPixs - 2) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VSTA.bit.RSZ1VSTA - 1) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VPIT.bit.RSZ1VPIT) + 1);
 			}
 			else{
-				out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VSTA.bit.RSZ1VSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ1VPIT.bit.RSZ1VPIT) + 1);
+				out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VSTA.bit.RSZ1VSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ1VPIT.bit.RSZ1VPIT) + 1);
 			}
 
 			// Reduction 1 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RDC1EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.RDC1MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RDC1EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.RDC1MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -483,65 +483,65 @@ static UINT32 imR2yCalcYyw1OutLines( UCHAR pipe_no )
 			out_pixs = out_pixs & 0x1FFE;
 
 			// YC Trimming 1 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW1MD.bit.TRM1EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM1V.bit.TRM1VSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW1MD.bit.TRM1EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM1V.bit.TRM1VSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
 
 // Calculate YYW2 output image width
-static UINT32 imR2yCalcYyw2OutWidth( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw2OutWidth( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRHSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRHSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_width;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgWidth;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HSTA.bit.RSZ2HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HPIT.bit.RSZ2HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VSTA.bit.RSZ2VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VPIT.bit.RSZ2VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HSTA.bit.RSZ2HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HPIT.bit.RSZ2HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VSTA.bit.RSZ2VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VPIT.bit.RSZ2VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HPIT.bit.RSZ2HPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HPIT.bit.RSZ2HPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
 			// Resize 2 block
-			out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HSTA.bit.RSZ2HSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HPIT.bit.RSZ2HPIT) + 1);
+			out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HSTA.bit.RSZ2HSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HPIT.bit.RSZ2HPIT) + 1);
 
 			// Reduction 2 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.RDC2EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.RDC2MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.RDC2EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.RDC2MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -553,65 +553,65 @@ static UINT32 imR2yCalcYyw2OutWidth( UCHAR pipe_no )
 			out_pixs = out_pixs & 0x1FFE;
 
 			// YC Trimming 2 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.TRM2EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM2H.bit.TRM2HSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.TRM2EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM2H.bit.TRM2HSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
 
 // Calculate YYW2 output image lines
-static UINT32 imR2yCalcYyw2OutLines( UCHAR pipe_no )
+static UINT32 imR2yCalcYyw2OutLines( kuint16 pipeNo )
 {
 	UINT32 in_pixs;
 	UINT32 out_pixs;
-	UINT32 ref_pixs;
-	UCHAR reduct_val;
+	UINT32 refPixs;
+	kuint16 reduct_val;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipe_no );
-	if( gIM_R2Y_State[pipe_no].video_photo_mode == D_IM_R2Y_MODE_SDRAM_INPUT ) {
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  pipeNo );
+	if( gImR2yState[pipeNo].videoPhotoMode == ImR2yUtils_MODE_SDRAM_INPUT ) {
 		// Photo mode.
-		in_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYR.YYRVSIZ.word;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImIoR2yRegPtr[pipeNo]->YYR.YYRVSIZ.word;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 	else {
 		// Video mode.
-		in_pixs = gIM_R2Y_State[pipe_no].input_size.img_lines;
-		ref_pixs = gIM_R2Y_State[pipe_no].ring_pixs_info.ref_pixs;
+		in_pixs = gImR2yState[pipeNo].inputSize.imgLines;
+		refPixs = gImR2yState[pipeNo].ringPixsInfo.refPixs;
 	}
 
-	if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HSTA.bit.RSZ2HSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2HPIT.bit.RSZ2HPIT == D_IM_R2Y_STA_PIT_1_0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VSTA.bit.RSZ2VSTA == 0)
-	 && (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VPIT.bit.RSZ2VPIT == D_IM_R2Y_STA_PIT_1_0)
+	if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HSTA.bit.RSZ2HSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2HPIT.bit.RSZ2HPIT == ImR2yCtrl_STA_PIT_1_0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VSTA.bit.RSZ2VSTA == 0)
+	 && (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VPIT.bit.RSZ2VPIT == ImR2yCtrl_STA_PIT_1_0)
 	 ) {
 		// dot by dot output mode(not resized)
-		out_pixs = ((in_pixs - ref_pixs) & 0x1FFE);
+		out_pixs = ((in_pixs - refPixs) & 0x1FFE);
 	}
 	else {
-		if( (gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VPIT.bit.RSZ2VPIT == 0) || (in_pixs == 0) ) {
+		if( (gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VPIT.bit.RSZ2VPIT == 0) || (in_pixs == 0) ) {
 			out_pixs = 0xffffffff;
 		}
 		else {
 			// Resize 2 block
-			out_pixs = ((((in_pixs - ref_pixs - 1) * D_IM_R2Y_STA_PIT_1_0 - gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VSTA.bit.RSZ2VSTA) / gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.RSZ2VPIT.bit.RSZ2VPIT) + 1);
+			out_pixs = ((((in_pixs - refPixs - 1) * ImR2yCtrl_STA_PIT_1_0 - gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VSTA.bit.RSZ2VSTA) / gImIoR2yRegPtr[pipeNo]->YYW.RSZ2VPIT.bit.RSZ2VPIT) + 1);
 
 			// Reduction 2 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.RDC2EN == D_IM_R2Y_ENABLE_ON ){
-				switch( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.RDC2MD ){
-					case D_IM_R2Y_RDC_MODE_DIV_2:
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.RDC2EN == ImR2yCtrl_ENABLE_ON ){
+				switch( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.RDC2MD ){
+					case ImR2yCtrl_RDC_MODE_DIV_2:
 						reduct_val = 2;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_4:
+					case ImR2yCtrl_RDC_MODE_DIV_4:
 						reduct_val = 4;
 						break;
-					case D_IM_R2Y_RDC_MODE_DIV_8:
+					case ImR2yCtrl_RDC_MODE_DIV_8:
 						reduct_val = 8;
 						break;
 					default:
@@ -622,12 +622,12 @@ static UINT32 imR2yCalcYyw2OutLines( UCHAR pipe_no )
 			}
 
 			// YC Trimming 2 block
-			if( gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.YYW2MD.bit.TRM2EN == D_IM_R2Y_ENABLE_ON ){
-				out_pixs = gIM_Io_R2y_Reg_Ptr[pipe_no]->YYW.TRM2V.bit.TRM2VSIZ;
+			if( gImIoR2yRegPtr[pipeNo]->YYW.YYW2MD.bit.TRM2EN == ImR2yCtrl_ENABLE_ON ){
+				out_pixs = gImIoR2yRegPtr[pipeNo]->YYW.TRM2V.bit.TRM2VSIZ;
 			}
 		}
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipe_no );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  pipeNo );
 
 	return out_pixs;
 }
@@ -640,29 +640,29 @@ static UINT32 imR2yCalcYyw2OutLines( UCHAR pipe_no )
 /* Grobal Function														*/
 /*----------------------------------------------------------------------*/
 //---------------------- driver  section -------------------------------
-void im_r2y_stat_init(ImR2yStat *self, UCHAR pipe_no, UCHAR size_coef)
+void im_r2y_stat_init(ImR2yStat *self, kuint16 pipeNo, kuint16 size_coef)
 {
 
 	// Initialize of State & Handler management information
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
 
-	memset( (USHORT*)&(imR2yUtils->gIM_R2Y_State[pipe_no]), 0, sizeof(T_IM_R2Y_STATE_MNG) * size_coef );
+	memset( (kuint16*)&(imR2yUtils->gImR2yState[pipeNo]), 0, sizeof(R2yStateMng) * size_coef );
 	// initialize of Resize information
-	im_r2y2_sta_manage_init(im_r2y2_new(), pipe_no, size_coef);
+	im_r2y2_sta_manage_init(im_r2y2_new(), pipeNo, size_coef);
 	// Initialize of control information
-	memset( (USHORT*)&(imR2yUtils->gIM_R2Y_yyra_ofs_info[pipe_no]), 0, sizeof(T_IM_R2Y_YYRA_OFS_INFO) * size_coef );
+	memset( (kuint16*)&(imR2yUtils->gImR2yYyraOfsInfo[pipeNo]), 0, sizeof(R2yYyraOfsInfo) * size_coef );
 
 }
 
 #ifdef IM_R2Y_STATUS_PRINT
-VOID im_r2y_stat_print_status(ImR2yStat *self)
+void im_r2y_stat_print_status(ImR2yStat *self)
 {
 	UINT32 loopcnt;
 	UINT32 loopcnt2;
 	UINT32 loopcnt3;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile T_IM_R2Y_STATE_MNG* gIM_R2Y_State = im_r2y_utils_get_state_mng(imR2yUtils);
-	volatile T_IM_R2Y_YYRA_OFS_INFO* gIM_R2Y_yyra_ofs_info = im_r2y_utils_get_yyra_ofs_info(imR2yUtils);
+	volatile R2yStateMng* gImR2yState = im_r2y_utils_get_state_mng(imR2yUtils);
+	volatile R2yYyraOfsInfo* gImR2yYyraOfsInfo = im_r2y_utils_get_yyra_ofs_info(imR2yUtils);
 
 	for( loopcnt3 = 0; loopcnt3 < 2; loopcnt3++ ) {
 		Ddim_Print(( "PIPE%u:\n", loopcnt3+1 ));
@@ -672,129 +672,129 @@ VOID im_r2y_stat_print_status(ImR2yStat *self)
 		Ddim_Print(( "\t\tYYW1 x=%u, y=%u\n", imR2yCalcYyw1OutWidth(loopcnt3), imR2yCalcYyw1OutLines(loopcnt3) ));
 		Ddim_Print(( "\t\tYYW2 x=%u, y=%u\n", imR2yCalcYyw2OutWidth(loopcnt3), imR2yCalcYyw2OutLines(loopcnt3) ));
 		Ddim_Print(( "\tgIM_R2Y_State[%u]:\n", loopcnt3 ));
-		Ddim_Print(( "\t\twas_started = %u\n", gIM_R2Y_State[loopcnt3].was_started ));
-		Ddim_Print(( "\t\tvideo_photo_mode = %u\n", gIM_R2Y_State[loopcnt3].video_photo_mode ));
-		Ddim_Print(( "\t\tbusy_state = %u\n", gIM_R2Y_State[loopcnt3].busy_state ));
-		Ddim_Print(( "\t\tycf_bypass = %u\n", gIM_R2Y_State[loopcnt3].ycf_bypass ));
-		Ddim_Print(( "\t\tycf_padding = %u\n", gIM_R2Y_State[loopcnt3].ycf_padding ));
-		Ddim_Print(( "\t\tmcc_select = %u\n", gIM_R2Y_State[loopcnt3].mcc_select ));
-		Ddim_Print(( "\t\tmcc_bit_shift = %u\n", gIM_R2Y_State[loopcnt3].mcc_bit_shift ));
-		Ddim_Print(( "\t\tpix_avg_reduct_mode[0] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_mode[0] ));
-		Ddim_Print(( "\t\tpix_avg_reduct_mode[1] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_mode[1] ));
-		Ddim_Print(( "\t\tpix_avg_reduct_mode[2] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_mode[2] ));
-		Ddim_Print(( "\t\tpix_avg_reduct_en[0] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_en[0] ));
-		Ddim_Print(( "\t\tpix_avg_reduct_en[1] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_en[1] ));
-		Ddim_Print(( "\t\tpix_avg_reduct_en[2] = %u\n", gIM_R2Y_State[loopcnt3].pix_avg_reduct_en[2] ));
-		Ddim_Print(( "\t\toutput_mode_0a = %u\n", gIM_R2Y_State[loopcnt3].output_mode_0a ));
-		Ddim_Print(( "\t\tint_status = %u\n", gIM_R2Y_State[loopcnt3].int_status ));
-		Ddim_Print(( "\t\tr2y_user_handler = 0x%x\n", (UINT32)gIM_R2Y_State[loopcnt3].r2y_user_handler ));
-		Ddim_Print(( "\t\tuser_param = 0x%x\n", (UINT32)gIM_R2Y_State[loopcnt3].user_param ));
-		Ddim_Print(( "\t\tinput_dtype = %u\n", gIM_R2Y_State[loopcnt3].input_dtype ));
-		Ddim_Print(( "\t\tin_addr[0] = 0x%x\n", (UINT32)gIM_R2Y_State[loopcnt3].in_addr[D_IM_R2Y_PORT_0] ));
-		Ddim_Print(( "\t\tin_addr[1] = 0x%x\n", (UINT32)gIM_R2Y_State[loopcnt3].in_addr[D_IM_R2Y_PORT_1] ));
-		Ddim_Print(( "\t\tin_addr[2] = 0x%x\n", (UINT32)gIM_R2Y_State[loopcnt3].in_addr[D_IM_R2Y_PORT_2] ));
-		Ddim_Print(( "\t\tinput_global = %u\n", gIM_R2Y_State[loopcnt3].input_global ));
-		Ddim_Print(( "\t\ttop_offset[0] = %u\n", gIM_R2Y_State[loopcnt3].top_offset[D_IM_R2Y_PORT_0] ));
-		Ddim_Print(( "\t\ttop_offset[1] = %u\n", gIM_R2Y_State[loopcnt3].top_offset[D_IM_R2Y_PORT_1] ));
-		Ddim_Print(( "\t\ttop_offset[2] = %u\n", gIM_R2Y_State[loopcnt3].top_offset[D_IM_R2Y_PORT_2] ));
-		Ddim_Print(( "\t\tyyw_enable[0] = %u\n", gIM_R2Y_State[loopcnt3].yyw_enable[D_IM_R2Y_YYW_CH_0] ));
-		Ddim_Print(( "\t\tyyw_enable[1] = %u\n", gIM_R2Y_State[loopcnt3].yyw_enable[D_IM_R2Y_YYW_CH_1] ));
-		Ddim_Print(( "\t\tyyw_enable[2] = %u\n", gIM_R2Y_State[loopcnt3].yyw_enable[D_IM_R2Y_YYW_CH_2] ));
-		Ddim_Print(( "\t\tyyw_rect_valid = %u\n", gIM_R2Y_State[loopcnt3].yyw_rect_valid ));
-		Ddim_Print(( "\t\tyyw_width[0] = %u\n", gIM_R2Y_State[loopcnt3].yyw_width[D_IM_R2Y_YYW_CH_0] ));
-		Ddim_Print(( "\t\tyyw_width[1] = %u\n", gIM_R2Y_State[loopcnt3].yyw_width[D_IM_R2Y_YYW_CH_1] ));
-		Ddim_Print(( "\t\tyyw_width[2] = %u\n", gIM_R2Y_State[loopcnt3].yyw_width[D_IM_R2Y_YYW_CH_2] ));
-		Ddim_Print(( "\t\tyyw_lines[0] = %u\n", gIM_R2Y_State[loopcnt3].yyw_lines[D_IM_R2Y_YYW_CH_0] ));
-		Ddim_Print(( "\t\tyyw_lines[1] = %u\n", gIM_R2Y_State[loopcnt3].yyw_lines[D_IM_R2Y_YYW_CH_1] ));
-		Ddim_Print(( "\t\tyyw_lines[2] = %u\n", gIM_R2Y_State[loopcnt3].yyw_lines[D_IM_R2Y_YYW_CH_2] ));
-		Ddim_Print(( "\t\tring_pixs_info.pad_enable = %u\n", gIM_R2Y_State[loopcnt3].ring_pixs_info.pad_enable ));
-		Ddim_Print(( "\t\tring_pixs_info.ring_pixs = %u\n", gIM_R2Y_State[loopcnt3].ring_pixs_info.ring_pixs ));
-		Ddim_Print(( "\t\tring_pixs_info.pad_pixs = %u\n", gIM_R2Y_State[loopcnt3].ring_pixs_info.pad_pixs ));
-		Ddim_Print(( "\t\tring_pixs_info.ref_pixs = %u\n", gIM_R2Y_State[loopcnt3].ring_pixs_info.ref_pixs ));
-		Ddim_Print(( "\t\tinput_size.img_top = %u\n", gIM_R2Y_State[loopcnt3].input_size.img_top ));
-		Ddim_Print(( "\t\tinput_size.img_left = %u\n", gIM_R2Y_State[loopcnt3].input_size.img_left ));
-		Ddim_Print(( "\t\tinput_size.img_width = %u\n", gIM_R2Y_State[loopcnt3].input_size.img_width ));
-		Ddim_Print(( "\t\tinput_size.img_lines = %u\n", gIM_R2Y_State[loopcnt3].input_size.img_lines ));
-		Ddim_Print(( "\t\ttrim[0].trimming_enable = %u\n", gIM_R2Y_State[loopcnt3].trim[0].trimming_enable ));
-		Ddim_Print(( "\t\ttrim[0].trim_window.img_top = %u\n", gIM_R2Y_State[loopcnt3].trim[0].trim_window.img_top ));
-		Ddim_Print(( "\t\ttrim[0].trim_window.img_left = %u\n", gIM_R2Y_State[loopcnt3].trim[0].trim_window.img_left ));
-		Ddim_Print(( "\t\ttrim[0].trim_window.img_width = %u\n", gIM_R2Y_State[loopcnt3].trim[0].trim_window.img_width ));
-		Ddim_Print(( "\t\ttrim[0].trim_window.img_lines = %u\n", gIM_R2Y_State[loopcnt3].trim[0].trim_window.img_lines ));
-		Ddim_Print(( "\t\ttrim[1].trimming_enable = %u\n", gIM_R2Y_State[loopcnt3].trim[1].trimming_enable ));
-		Ddim_Print(( "\t\ttrim[1].trim_window.img_top = %u\n", gIM_R2Y_State[loopcnt3].trim[1].trim_window.img_top ));
-		Ddim_Print(( "\t\ttrim[1].trim_window.img_left = %u\n", gIM_R2Y_State[loopcnt3].trim[1].trim_window.img_left ));
-		Ddim_Print(( "\t\ttrim[1].trim_window.img_width = %u\n", gIM_R2Y_State[loopcnt3].trim[1].trim_window.img_width ));
-		Ddim_Print(( "\t\ttrim[1].trim_window.img_lines = %u\n", gIM_R2Y_State[loopcnt3].trim[1].trim_window.img_lines ));
-		Ddim_Print(( "\t\ttrim[2].trimming_enable = %u\n", gIM_R2Y_State[loopcnt3].trim[2].trimming_enable ));
-		Ddim_Print(( "\t\ttrim[2].trim_window.img_top = %u\n", gIM_R2Y_State[loopcnt3].trim[2].trim_window.img_top ));
-		Ddim_Print(( "\t\ttrim[2].trim_window.img_left = %u\n", gIM_R2Y_State[loopcnt3].trim[2].trim_window.img_left ));
-		Ddim_Print(( "\t\ttrim[2].trim_window.img_width = %u\n", gIM_R2Y_State[loopcnt3].trim[2].trim_window.img_width ));
-		Ddim_Print(( "\t\ttrim[2].trim_window.img_lines = %u\n", gIM_R2Y_State[loopcnt3].trim[2].trim_window.img_lines ));
-		Ddim_Print(( "\t\ttrim_ext.trimming_enable_b = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trimming_enable_b ));
-		Ddim_Print(( "\t\ttrim_ext.trimming_enable_c = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trimming_enable_c ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_b.img_top = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_b.img_top ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_b.img_left = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_b.img_left ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_b.img_width = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_b.img_width ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_b.img_lines = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_b.img_lines ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_c.img_top = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_c.img_top ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_c.img_left = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_c.img_left ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_c.img_width = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_c.img_width ));
-		Ddim_Print(( "\t\ttrim_ext.trim_window_c.img_lines = %u\n", gIM_R2Y_State[loopcnt3].trim_ext.trim_window_c.img_lines ));
+		Ddim_Print(( "\t\twas_started = %u\n", gImR2yState[loopcnt3].wasStarted ));
+		Ddim_Print(( "\t\tvideo_photo_mode = %u\n", gImR2yState[loopcnt3].videoPhotoMode ));
+		Ddim_Print(( "\t\tbusy_state = %u\n", gImR2yState[loopcnt3].busyState ));
+		Ddim_Print(( "\t\tycf_bypass = %u\n", gImR2yState[loopcnt3].ycfBypass ));
+		Ddim_Print(( "\t\tycf_padding = %u\n", gImR2yState[loopcnt3].ycfPadding ));
+		Ddim_Print(( "\t\tmcc_select = %u\n", gImR2yState[loopcnt3].mccSelect ));
+		Ddim_Print(( "\t\tmcc_bit_shift = %u\n", gImR2yState[loopcnt3].mccBitShift ));
+		Ddim_Print(( "\t\tpix_avg_reduct_mode[0] = %u\n", gImR2yState[loopcnt3].pixAvgReductMode[0] ));
+		Ddim_Print(( "\t\tpix_avg_reduct_mode[1] = %u\n", gImR2yState[loopcnt3].pixAvgReductMode[1] ));
+		Ddim_Print(( "\t\tpix_avg_reduct_mode[2] = %u\n", gImR2yState[loopcnt3].pixAvgReductMode[2] ));
+		Ddim_Print(( "\t\tpix_avg_reduct_en[0] = %u\n", gImR2yState[loopcnt3].pixAvgReductEn[0] ));
+		Ddim_Print(( "\t\tpix_avg_reduct_en[1] = %u\n", gImR2yState[loopcnt3].pixAvgReductEn[1] ));
+		Ddim_Print(( "\t\tpix_avg_reduct_en[2] = %u\n", gImR2yState[loopcnt3].pixAvgReductEn[2] ));
+		Ddim_Print(( "\t\toutput_mode_0a = %u\n", gImR2yState[loopcnt3].outputMode0a ));
+		Ddim_Print(( "\t\tint_status = %u\n", gImR2yState[loopcnt3].intStatus ));
+		Ddim_Print(( "\t\tr2y_user_handler = 0x%x\n", (UINT32)gImR2yState[loopcnt3].r2yUserHandler ));
+		Ddim_Print(( "\t\tuser_param = 0x%x\n", (UINT32)gImR2yState[loopcnt3].userParam ));
+		Ddim_Print(( "\t\tinput_dtype = %u\n", gImR2yState[loopcnt3].inputDtype ));
+		Ddim_Print(( "\t\tin_addr[0] = 0x%x\n", (UINT32)gImR2yState[loopcnt3].inAddr[ImR2yCtrl_PORT_0] ));
+		Ddim_Print(( "\t\tin_addr[1] = 0x%x\n", (UINT32)gImR2yState[loopcnt3].inAddr[ImR2yCtrl_PORT_1] ));
+		Ddim_Print(( "\t\tin_addr[2] = 0x%x\n", (UINT32)gImR2yState[loopcnt3].inAddr[ImR2yCtrl_PORT_2] ));
+		Ddim_Print(( "\t\tinput_global = %u\n", gImR2yState[loopcnt3].inputGlobal ));
+		Ddim_Print(( "\t\ttop_offset[0] = %u\n", gImR2yState[loopcnt3].topOffset[ImR2yCtrl_PORT_0] ));
+		Ddim_Print(( "\t\ttop_offset[1] = %u\n", gImR2yState[loopcnt3].topOffset[ImR2yCtrl_PORT_1] ));
+		Ddim_Print(( "\t\ttop_offset[2] = %u\n", gImR2yState[loopcnt3].topOffset[ImR2yCtrl_PORT_2] ));
+		Ddim_Print(( "\t\tyyw_enable[0] = %u\n", gImR2yState[loopcnt3].yywEnable[ImR2yCtrl_YYW_CH_0] ));
+		Ddim_Print(( "\t\tyyw_enable[1] = %u\n", gImR2yState[loopcnt3].yywEnable[ImR2yCtrl_YYW_CH_1] ));
+		Ddim_Print(( "\t\tyyw_enable[2] = %u\n", gImR2yState[loopcnt3].yywEnable[ImR2yCtrl_YYW_CH_2] ));
+		Ddim_Print(( "\t\tyyw_rect_valid = %u\n", gImR2yState[loopcnt3].yywRectValid ));
+		Ddim_Print(( "\t\tyyw_width[0] = %u\n", gImR2yState[loopcnt3].yywWidth[ImR2yCtrl_YYW_CH_0] ));
+		Ddim_Print(( "\t\tyyw_width[1] = %u\n", gImR2yState[loopcnt3].yywWidth[ImR2yCtrl_YYW_CH_1] ));
+		Ddim_Print(( "\t\tyyw_width[2] = %u\n", gImR2yState[loopcnt3].yywWidth[ImR2yCtrl_YYW_CH_2] ));
+		Ddim_Print(( "\t\tyyw_lines[0] = %u\n", gImR2yState[loopcnt3].yywLines[ImR2yCtrl_YYW_CH_0] ));
+		Ddim_Print(( "\t\tyyw_lines[1] = %u\n", gImR2yState[loopcnt3].yywLines[ImR2yCtrl_YYW_CH_1] ));
+		Ddim_Print(( "\t\tyyw_lines[2] = %u\n", gImR2yState[loopcnt3].yywLines[ImR2yCtrl_YYW_CH_2] ));
+		Ddim_Print(( "\t\tring_pixs_info.padEnable = %u\n", gImR2yState[loopcnt3].ringPixsInfo.padEnable ));
+		Ddim_Print(( "\t\tring_pixs_info.ringPixs = %u\n", gImR2yState[loopcnt3].ringPixsInfo.ringPixs ));
+		Ddim_Print(( "\t\tring_pixs_info.padPixs = %u\n", gImR2yState[loopcnt3].ringPixsInfo.padPixs ));
+		Ddim_Print(( "\t\tring_pixs_info.refPixs = %u\n", gImR2yState[loopcnt3].ringPixsInfo.refPixs ));
+		Ddim_Print(( "\t\tinput_size.imgTop = %u\n", gImR2yState[loopcnt3].inputSize.imgTop ));
+		Ddim_Print(( "\t\tinput_size.imgLeft = %u\n", gImR2yState[loopcnt3].inputSize.imgLeft ));
+		Ddim_Print(( "\t\tinput_size.imgWidth = %u\n", gImR2yState[loopcnt3].inputSize.imgWidth ));
+		Ddim_Print(( "\t\tinput_size.imgLines = %u\n", gImR2yState[loopcnt3].inputSize.imgLines ));
+		Ddim_Print(( "\t\ttrim[0].trimming_enable = %u\n", gImR2yState[loopcnt3].trim[0].trimming_enable ));
+		Ddim_Print(( "\t\ttrim[0].trim_window.imgTop = %u\n", gImR2yState[loopcnt3].trim[0].trim_window.imgTop ));
+		Ddim_Print(( "\t\ttrim[0].trim_window.imgLeft = %u\n", gImR2yState[loopcnt3].trim[0].trim_window.imgLeft ));
+		Ddim_Print(( "\t\ttrim[0].trim_window.imgWidth = %u\n", gImR2yState[loopcnt3].trim[0].trim_window.imgWidth ));
+		Ddim_Print(( "\t\ttrim[0].trim_window.imgLines = %u\n", gImR2yState[loopcnt3].trim[0].trim_window.imgLines ));
+		Ddim_Print(( "\t\ttrim[1].trimming_enable = %u\n", gImR2yState[loopcnt3].trim[1].trimming_enable ));
+		Ddim_Print(( "\t\ttrim[1].trim_window.imgTop = %u\n", gImR2yState[loopcnt3].trim[1].trim_window.imgTop ));
+		Ddim_Print(( "\t\ttrim[1].trim_window.imgLeft = %u\n", gImR2yState[loopcnt3].trim[1].trim_window.imgLeft ));
+		Ddim_Print(( "\t\ttrim[1].trim_window.imgWidth = %u\n", gImR2yState[loopcnt3].trim[1].trim_window.imgWidth ));
+		Ddim_Print(( "\t\ttrim[1].trim_window.imgLines = %u\n", gImR2yState[loopcnt3].trim[1].trim_window.imgLines ));
+		Ddim_Print(( "\t\ttrim[2].trimming_enable = %u\n", gImR2yState[loopcnt3].trim[2].trimming_enable ));
+		Ddim_Print(( "\t\ttrim[2].trim_window.imgTop = %u\n", gImR2yState[loopcnt3].trim[2].trim_window.imgTop ));
+		Ddim_Print(( "\t\ttrim[2].trim_window.imgLeft = %u\n", gImR2yState[loopcnt3].trim[2].trim_window.imgLeft ));
+		Ddim_Print(( "\t\ttrim[2].trim_window.imgWidth = %u\n", gImR2yState[loopcnt3].trim[2].trim_window.imgWidth ));
+		Ddim_Print(( "\t\ttrim[2].trim_window.imgLines = %u\n", gImR2yState[loopcnt3].trim[2].trim_window.imgLines ));
+		Ddim_Print(( "\t\ttrim_ext.trimming_enable_b = %u\n", gImR2yState[loopcnt3].trimExt.trimming_enable_b ));
+		Ddim_Print(( "\t\ttrim_ext.trimming_enable_c = %u\n", gImR2yState[loopcnt3].trimExt.trimming_enable_c ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_b.imgTop = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_b.imgTop ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_b.imgLeft = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_b.imgLeft ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_b.imgWidth = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_b.imgWidth ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_b.imgLines = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_b.imgLines ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_c.imgTop = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_c.imgTop ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_c.imgLeft = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_c.imgLeft ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_c.imgWidth = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_c.imgWidth ));
+		Ddim_Print(( "\t\ttrim_ext.trim_window_c.imgLines = %u\n", gImR2yState[loopcnt3].trimExt.trim_window_c.imgLines ));
 
-		for( loopcnt2 = 0; loopcnt2 < D_IM_R2Y_YYW_CH_MAX; loopcnt2++ ) {
+		for( loopcnt2 = 0; loopcnt2 < ImR2yCtrl_YYW_CH_MAX; loopcnt2++ ) {
 			Ddim_Print(( "\tgIM_R2Y_Out_Mng[%u]:\n", loopcnt2 ));
 			im_r2y_ddim_print(im_r2y_new(),  loopcnt, loopcnt2, loopcnt3)
 		}
 
 		Ddim_Print(( "\tgIM_R2Y_yyra_ofs_info:\n" ));
-		Ddim_Print(( "\t\tofs_x_pixs[%u] = %u\n", loopcnt2, gIM_R2Y_yyra_ofs_info[loopcnt3].ofs_x_pixs ));
-		Ddim_Print(( "\t\tofs_y_pixs[%u] = %u\n", loopcnt2, gIM_R2Y_yyra_ofs_info[loopcnt3].ofs_y_pixs ));
-		Ddim_Print(( "\t\tofs_bytes[%u] = %lu\n", loopcnt2, gIM_R2Y_yyra_ofs_info[loopcnt3].ofs_bytes ));
+		Ddim_Print(( "\t\tofs_x_pixs[%u] = %u\n", loopcnt2, gImR2yYyraOfsInfo[loopcnt3].ofsXPixs ));
+		Ddim_Print(( "\t\tofs_y_pixs[%u] = %u\n", loopcnt2, gImR2yYyraOfsInfo[loopcnt3].ofsYPixs ));
+		Ddim_Print(( "\t\tofs_bytes[%u] = %lu\n", loopcnt2, gImR2yYyraOfsInfo[loopcnt3].ofsBytes ));
 	}
 }
 
-VOID im_r2y_stat_print_clock_status(ImR2yStat *self)
+void im_r2y_stat_print_clock_status(ImR2yStat *self)
 {
 	//TODO imr2yclk.c中
 	im_r2y_clk_ddim_print(im_r2y_clk_new());
 	Ddim_Print(( "\n" ));
 }
 
-VOID im_r2y_stat_print_acc_en_status(ImR2yStat *self)
+void im_r2y_stat_print_acc_en_status(ImR2yStat *self)
 {
 	UINT32 loopcnt;
 	ImR2yUtils* imR2yUtils = im_r2y_utils_get();
-	volatile struct io_r2y** gIM_Io_R2y_Reg_Ptr = im_r2y_utils_get_io_reg(imR2yUtils);
+	volatile struct io_r2y** gImIoR2yRegPtr = im_r2y_utils_get_io_reg(imR2yUtils);
 
-	im_r2y_clk_on_pclk(im_r2y_clk_new(),  D_IM_R2Y_PIPE12 );
+	im_r2y_clk_on_pclk(im_r2y_clk_new(),  ImR2yCtrl_PIPE12 );
 	for( loopcnt = 0; loopcnt < 2; loopcnt++ ) {
 		Ddim_Print(( "PIPE%x\n", loopcnt+1 ));
-		Ddim_Print(( "YYRAEN_RGB_DEKNEE = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YYRAEN_RGB_DEKNEE ));
-		Ddim_Print(( "YYRAEN_YYR = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YYRAEN_YYR ));
-		Ddim_Print(( "YW0AEN_YYW0 = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0 ));
-		Ddim_Print(( "YW0AEN_YYW0_BICUBIC = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0_BICUBIC ));
-		Ddim_Print(( "YW0AEN_YYW0_EDGE = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0_EDGE ));
-		Ddim_Print(( "YW0AEN_YYW0A = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0A ));
-		Ddim_Print(( "YW1AEN_YYW1 = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1 ));
-		Ddim_Print(( "YW1AEN_YYW1_BICUBIC = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1_BICUBIC ));
-		Ddim_Print(( "YW1AEN_YYW1_EDGE = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1_EDGE ));
-		Ddim_Print(( "YW2AEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW2AEN ));
-		Ddim_Print(( "HSTAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->R2Y_CMN.RAMAEN.bit.HSTAEN ));
+		Ddim_Print(( "YYRAEN_RGB_DEKNEE = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YYRAEN_RGB_DEKNEE ));
+		Ddim_Print(( "YYRAEN_YYR = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YYRAEN_YYR ));
+		Ddim_Print(( "YW0AEN_YYW0 = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0 ));
+		Ddim_Print(( "YW0AEN_YYW0_BICUBIC = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0_BICUBIC ));
+		Ddim_Print(( "YW0AEN_YYW0_EDGE = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0_EDGE ));
+		Ddim_Print(( "YW0AEN_YYW0A = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW0AEN_YYW0A ));
+		Ddim_Print(( "YW1AEN_YYW1 = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1 ));
+		Ddim_Print(( "YW1AEN_YYW1_BICUBIC = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1_BICUBIC ));
+		Ddim_Print(( "YW1AEN_YYW1_EDGE = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW1AEN_YYW1_EDGE ));
+		Ddim_Print(( "YW2AEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.YW2AEN ));
+		Ddim_Print(( "HSTAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->R2Y_CMN.RAMAEN.bit.HSTAEN ));
 
-		Ddim_Print(( "TCTAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.BTC.TCTCTL.bit.TCTAEN ));
-		Ddim_Print(( "TCHAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.BTC.TCHSCTL.bit.TCHAEN ));
-		Ddim_Print(( "TCAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.TC.TCCTL.bit.TCAEN ));
-		Ddim_Print(( "GMAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.GAM.GMCTL.bit.GMAEN ));
-		Ddim_Print(( "GMYAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.GAM.GMCTL.bit.GMYAEN ));
-		Ddim_Print(( "EHSAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGHW.EGHWCTL.bit.EHSAEN ));
-		Ddim_Print(( "EHTAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGHW.EGHWCTL.bit.EHTAEN ));
-		Ddim_Print(( "EMSAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGMW.EGMWCTL.bit.EMSAEN ));
-		Ddim_Print(( "EMTAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGMW.EGMWCTL.bit.EMTAEN ));
-		Ddim_Print(( "ELSAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGLW.EGLWCTL.bit.ELSAEN ));
-		Ddim_Print(( "ELTAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.EGLW.EGLWCTL.bit.ELTAEN ));
-		Ddim_Print(( "EMPAEN = 0x%x\n", gIM_Io_R2y_Reg_Ptr[loopcnt]->F_R2Y.MAPSCL.EGMPCTL.bit.EMPAEN ));
+		Ddim_Print(( "TCTAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.BTC.TCTCTL.bit.TCTAEN ));
+		Ddim_Print(( "TCHAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.BTC.TCHSCTL.bit.TCHAEN ));
+		Ddim_Print(( "TCAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.TC.TCCTL.bit.TCAEN ));
+		Ddim_Print(( "GMAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.GAM.GMCTL.bit.GMAEN ));
+		Ddim_Print(( "GMYAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.GAM.GMCTL.bit.GMYAEN ));
+		Ddim_Print(( "EHSAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGHW.EGHWCTL.bit.EHSAEN ));
+		Ddim_Print(( "EHTAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGHW.EGHWCTL.bit.EHTAEN ));
+		Ddim_Print(( "EMSAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGMW.EGMWCTL.bit.EMSAEN ));
+		Ddim_Print(( "EMTAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGMW.EGMWCTL.bit.EMTAEN ));
+		Ddim_Print(( "ELSAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGLW.EGLWCTL.bit.ELSAEN ));
+		Ddim_Print(( "ELTAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.EGLW.EGLWCTL.bit.ELTAEN ));
+		Ddim_Print(( "EMPAEN = 0x%x\n", gImIoR2yRegPtr[loopcnt]->F_R2Y.MAPSCL.EGMPCTL.bit.EMPAEN ));
 	}
-	im_r2y_clk_off_pclk(im_r2y_clk_new(),  D_IM_R2Y_PIPE12 );
+	im_r2y_clk_off_pclk(im_r2y_clk_new(),  ImR2yCtrl_PIPE12 );
 }
 #endif
 

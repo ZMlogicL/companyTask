@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-02
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImLtmRbk类
 *@rely                :klib
@@ -11,6 +11,7 @@
 *@version
 *
 */
+
 #include "ct_im_ltm.h"
 
 #include "im_ltm.h"
@@ -28,13 +29,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ctimltmrbk.h"
 #include "ctimrbkrun1.h"
 #include "ctimrbkrun2.h"
 #include "ctimrbkrun3.h"
+#include "ctimltmrbk.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImLtmRbk, ct_im_ltm_rbk);
-#define CT_IM_LTM_RBK_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImLtmRbkPrivate,CT_TYPE_IM_LTM_RBK))
+
+G_DEFINE_TYPE(CtImLtmRbk, ct_im_ltm_rbk, G_TYPE_OBJECT);
+#define CT_IM_LTM_RBK_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_LTM_RBK, CtImLtmRbkPrivate))
 
 /*----------------------------------------------------------------------*/
 /* Local Method															*/
@@ -47,6 +49,9 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImLtmRbk, ct_im_ltm_rbk);
 
 struct _CtImLtmRbkPrivate
 {
+	CtImRbkRun1 *runself1;
+	CtImRbkRun2 *runself2;
+	CtImRbkRun3 *runself3;
 };
 
 static volatile BOOL S_GCT_IM_LTM_RBK_SRO_VD_FLG = FALSE;
@@ -54,13 +59,14 @@ static volatile BOOL S_GCT_IM_LTM_RBK_SRO_VD_FLG = FALSE;
 /*
 *DECLS
 */
-static void 		ctImLtmRbkSroPrchIntHandler( T_CALLBACK_ID* cbId, kulong result, kulong userParam );
-static void 		ctImLtmRbkSroVdIntHandler( T_CALLBACK_ID* cbId, kulong result, kulong userParam );
-static void 		ctImLtmRbkWaitVdSro( void );
-static kint32 		ctImLtmRbkRun1( CtImRbkRun1 *self, const kuint32 ctNo2nd );
-static kint32 		ctImLtmRbkRun2( CtImRbkRun2* self, const kuint32 ctNo2nd );
-static kint32 		ctImLtmRbkRun3( CtImRbkRun3 *self, CtImRbkRun2* self2, const kuint32 ctNo2nd );
-
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+static void 		ctImLtmRbkSroPrchIntHandler(T_CALLBACK_ID* cbId, gulong result, gulong userParam);
+static void 		ctImLtmRbkSroVdIntHandler(T_CALLBACK_ID* cbId, gulong result, gulong userParam);
+static void 		ctImLtmRbkWaitVdSro(void);
+static gint32 		ctImLtmRbkRun1(CtImLtmRbk *self, const guint32 ctNo2nd);
+static gint32 		ctImLtmRbkRun2(CtImLtmRbk *self, const guint32 ctNo2nd);
+static gint32 		ctImLtmRbkRun3(CtImLtmRbk *self, const guint32 ctNo2nd);
 
 /*----------------------------------------------------------------------*/
 /* Function																*/
@@ -68,25 +74,58 @@ static kint32 		ctImLtmRbkRun3( CtImRbkRun3 *self, CtImRbkRun2* self2, const kui
 #ifdef IM_LTM_STATUS_PRINT
 extern void Im_LTM_RBK_Print_Status( void );
 #endif
-
 /*
 *IMPL
 */
-static void ct_im_ltm_rbk_constructor(CtImLtmRbk *self) 
+
+static void ct_im_ltm_rbk_class_init(CtImLtmRbkClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImLtmRbkPrivate));
 }
 
-static void ct_im_ltm_rbk_destructor(CtImLtmRbk *self) 
+static void ct_im_ltm_rbk_init(CtImLtmRbk *self)
 {
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+	priv->runself1 = ct_im_rbk_run1_new();
+	priv->runself2 = ct_im_rbk_run2_new();
+	priv->runself3 = ct_im_rbk_run3_new();
 }
 
-static void ctImLtmRbkSroPrchIntHandler( T_CALLBACK_ID* cbId, kulong result, kulong userParam )
+static void dispose_od(GObject *object)
+{
+//	CtImLtmRbk *self = (CtImLtmRbk*)object;
+//	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtImLtmRbk *self = (CtImLtmRbk*)object;
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+	if(priv->runself1!=NULL){
+		g_object_unref(priv->runself1);
+		priv->runself1=NULL;
+	}
+	if(priv->runself2!=NULL){
+		g_object_unref(priv->runself2);
+		priv->runself2=NULL;
+	}
+	if(priv->runself3!=NULL){
+		g_object_unref(priv->runself3);
+		priv->runself3=NULL;
+	}
+	G_OBJECT_CLASS(ct_im_ltm_rbk_parent_class)->finalize(object);
+}
+
+static void ctImLtmRbkSroPrchIntHandler( T_CALLBACK_ID* cbId, gulong result, gulong userParam )
 {
 	Ddim_Print(( "PRch Int %u, %u, %u %lx, %lx\n", cbId->unit_no, cbId->block_type, cbId->channel,
 			result, userParam ));
 }
 
-static void ctImLtmRbkSroVdIntHandler( T_CALLBACK_ID* cbId, kulong result, kulong userParam )
+static void ctImLtmRbkSroVdIntHandler( T_CALLBACK_ID* cbId, gulong result, gulong userParam )
 {
 	Ddim_Print(( "VD Int %u, %u, %u %lx, %lx\n", cbId->unit_no, cbId->block_type, cbId->channel,
 			result, userParam ));
@@ -95,7 +134,7 @@ static void ctImLtmRbkSroVdIntHandler( T_CALLBACK_ID* cbId, kulong result, kulon
 
 static void ctImLtmRbkWaitVdSro( void )
 {
-	kuint32 loopcnt;
+	guint32 loopcnt;
 #ifdef CO_DEBUG_ON_PC
 	T_CALLBACK_ID cbId = {
 		.unit_no	= 0,
@@ -119,76 +158,78 @@ static void ctImLtmRbkWaitVdSro( void )
 	S_GCT_IM_LTM_RBK_SRO_VD_FLG = FALSE;
 }
 
-static kint32 ctImLtmRbkRun1( CtImRbkRun1 *self1, const kuint32 ctNo2nd )
+static gint32 ctImLtmRbkRun1(CtImLtmRbk *self, const guint32 ctNo2nd)
 {
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+
 	switch( ctNo2nd ) {
 		// Test-1-1-1
 		case 1:
-			return ct_im_rbk_run1_rbk_1_1( self1 );
+			return ct_im_rbk_run1_rbk_1_1(priv->runself1);
 
 		// Test-1-1-2
 		case 2:
-			return ct_im_rbk_run1_rbk_1_2( self1 );
+			return ct_im_rbk_run1_rbk_1_2(priv->runself1);
 
 		// Test-1-1-3
 		case 3:
-			return ct_im_rbk_run1_rbk_1_3( self1 );
+			return ct_im_rbk_run1_rbk_1_3(priv->runself1);
 
 		// Test-1-1-4
 		case 4:
-			return ct_im_rbk_run1_rbk_1_4( self1 );
+			return ct_im_rbk_run1_rbk_1_4(priv->runself1);
 
 		// Test-1-1-5
 		case 5:
-			return ct_im_rbk_run1_rbk_1_5( self1 );
+			return ct_im_rbk_run1_rbk_1_5(priv->runself1);
 
 		// Test-1-1-6
 		case 6:
-			return ct_im_rbk_run1_rbk_1_6( self1 );
+			return ct_im_rbk_run1_rbk_1_6(priv->runself1);
 
 		// Test-1-1-7
 		case 7:
-			return ct_im_rbk_run1_rbk_1_7( self1 );
+			return ct_im_rbk_run1_rbk_1_7(priv->runself1);
 
 		// Test-1-1-8
 		case 8:
-			return ct_im_rbk_run1_rbk_1_8( self1 );
+			return ct_im_rbk_run1_rbk_1_8(priv->runself1);
 
 		// Test-1-1-9
 		case 9:
-			return ct_im_rbk_run1_rbk_1_9( self1 );
+			return ct_im_rbk_run1_rbk_1_9(priv->runself1);
 
 		// Test-1-1-10
 		case 10:
-			return ct_im_rbk_run1_rbk_1_10( self1 );
+			return ct_im_rbk_run1_rbk_1_10(priv->runself1);
 
 		// Test-1-1-11
 		case 11:
-			return ct_im_rbk_run1_rbk_1_11( self1 );
+			return ct_im_rbk_run1_rbk_1_11(priv->runself1);
 
 		// Test-1-1-12
 		case 12:
-			return ct_im_rbk_run1_rbk_1_12( self1 );
+			return ct_im_rbk_run1_rbk_1_12(priv->runself1);
 
 		// Test-1-1-13
 		case 13:
-			return ct_im_rbk_run1_rbk_1_13( self1 );
+			return ct_im_rbk_run1_rbk_1_13(priv->runself1);
 
 		// Test-1-1-14
 		case 14:
-			return ct_im_rbk_run1_rbk_1_14( self1 );
+			return ct_im_rbk_run1_rbk_1_14(priv->runself1);
 
 		// Test-1-1-15
 		case 15:
-			return ct_im_rbk_run1_rbk_1_15( self1 );
+			return ct_im_rbk_run1_rbk_1_15(priv->runself1);
 
 		// Test-1-1-16
 		case 16:
-			return ct_im_rbk_run1_rbk_1_16( self1 );
+			return ct_im_rbk_run1_rbk_1_16(priv->runself1);
 
 		// Test-1-1-17
 		case 17:
-			return ct_im_rbk_run1_rbk_1_17( self1 );
+			return ct_im_rbk_run1_rbk_1_17(priv->runself1);
 
 		default:
 			Ddim_Print(("Error: Unknown command.\n"));
@@ -199,60 +240,62 @@ static kint32 ctImLtmRbkRun1( CtImRbkRun1 *self1, const kuint32 ctNo2nd )
 
 }
 
-static kint32 ctImLtmRbkRun2( CtImRbkRun2* self2, const kuint32 ctNo2nd )
+static gint32 ctImLtmRbkRun2(CtImLtmRbk *self, const guint32 ctNo2nd)
 {
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+
 	switch( ctNo2nd ) {
 		// Test-1-2-1
 		case 1:
-			return ct_im_rbk_run2_rbk_2_1( self2 );
+			return ct_im_rbk_run2_rbk_2_1(priv->runself2);
 
 		// Test-1-2-2
 		case 2:
-			return ct_im_rbk_run2_rbk_2_2( self2 );
+			return ct_im_rbk_run2_rbk_2_2(priv->runself2);
 
 		// Test-1-2-3
 		case 3:
-			return ct_im_rbk_run2_rbk_2_3( self2 );
+			return ct_im_rbk_run2_rbk_2_3(priv->runself2);
 
 		// Test-1-2-4
 		case 4:
-			return ct_im_rbk_run2_rbk_2_4( self2 );
+			return ct_im_rbk_run2_rbk_2_4(priv->runself2);
 
 		// Test-1-2-5
 		case 5:
-			return ct_im_rbk_run2_rbk_2_5( self2 );
+			return ct_im_rbk_run2_rbk_2_5(priv->runself2);
 
 		// Test-1-2-6
 		case 6:
-			return ct_im_rbk_run2_rbk_2_6( self2 );
+			return ct_im_rbk_run2_rbk_2_6(priv->runself2);
 
 		// Test-1-2-7
 		case 7:
-			return ct_im_rbk_run2_rbk_2_7( self2 );
+			return ct_im_rbk_run2_rbk_2_7(priv->runself2);
 
 		// Test-1-2-8
 		case 8:
-			return ct_im_rbk_run2_rbk_2_8( self2 );
+			return ct_im_rbk_run2_rbk_2_8(priv->runself2);
 
 		// Test-1-2-9
 		case 9:
-			return ct_im_rbk_run2_rbk_2_9( self2 );
+			return ct_im_rbk_run2_rbk_2_9(priv->runself2);
 
 		// Test-1-2-10
 		case 10:
-			return ct_im_rbk_run2_rbk_2_10( self2 );
+			return ct_im_rbk_run2_rbk_2_10(priv->runself2);
 
 		// Test-1-2-11
 		case 11:
-			return ct_im_rbk_run2_rbk_2_11( self2 );
+			return ct_im_rbk_run2_rbk_2_11(priv->runself2);
 
 		// Test-1-2-12
 		case 12:
-			return ct_im_rbk_run2_rbk_2_12( self2 );
+			return ct_im_rbk_run2_rbk_2_12(priv->runself2);
 
 		// Test-1-2-13
 		case 13:
-			return ct_im_rbk_run2_rbk_2_13( self2 );
+			return ct_im_rbk_run2_rbk_2_13(priv->runself2);
 
 		default:
 			Ddim_Print(("Error: Unknown command.\n"));
@@ -262,76 +305,78 @@ static kint32 ctImLtmRbkRun2( CtImRbkRun2* self2, const kuint32 ctNo2nd )
 	return D_DDIM_INPUT_PARAM_ERROR;
 }
 
-static kint32 ctImLtmRbkRun3( CtImRbkRun3 *self3, CtImRbkRun2* self2, const kuint32 ctNo2nd )
+static gint32 ctImLtmRbkRun3(CtImLtmRbk *self, const guint32 ctNo2nd)
 {
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+
 	switch( ctNo2nd ) {
 		// Test-1-3-1
 		case 1:
-			return ct_im_rbk_run3_3_1( self3 );
+			return ct_im_rbk_run3_3_1(priv->runself3);
 
 		// Test-1-3-2
 		case 2:
-			return ct_im_rbk_run3_3_2( self3 );
+			return ct_im_rbk_run3_3_2(priv->runself3);
 
 		// Test-1-3-3
 		case 3:
-			return ct_im_rbk_run3_3_3( self3 );
+			return ct_im_rbk_run3_3_3(priv->runself3);
 
 		// Test-1-3-4
 		case 4:
-			return ct_im_rbk_run3_3_4( self3 );
+			return ct_im_rbk_run3_3_4(priv->runself3);
 
 		// Test-1-3-5
 		case 5:
-			return ct_im_rbk_run3_3_5( self3 );
+			return ct_im_rbk_run3_3_5(priv->runself3);
 
 		// Test-1-3-6
 		case 6:
-			return ct_im_rbk_run3_3_6( self3 );
+			return ct_im_rbk_run3_3_6(priv->runself3);
 
 		// Test-1-3-7
 		case 7:
-			return ct_im_rbk_run3_3_7( self3 );
+			return ct_im_rbk_run3_3_7(priv->runself3);
 
 		// Test-1-3-8
 		case 8:
-			return ct_im_rbk_run3_3_8( self3 );
+			return ct_im_rbk_run3_3_8(priv->runself3);
 
 		// Test-1-3-9
 		case 9:
-			return ct_im_rbk_run3_3_9( self3 );
+			return ct_im_rbk_run3_3_9(priv->runself3);
 
 		// Test-1-3-10
 		case 10:
-			return ct_im_rbk_run3_3_10( self3 );
+			return ct_im_rbk_run3_3_10(priv->runself3);
 
 		// Test-1-3-11
 		case 11:
-			return ct_im_rbk_run2_rbk_3_11( self2 );
+			return ct_im_rbk_run2_rbk_3_11(priv->runself2);
 
 		// Test-1-3-12
 		case 12:
-			return ct_im_rbk_run2_rbk_3_12( self2 );
+			return ct_im_rbk_run2_rbk_3_12(priv->runself2);
 
 		// Test-1-3-13
 		case 13:
-			return ct_im_rbk_run2_rbk_3_13( self2 );
+			return ct_im_rbk_run2_rbk_3_13(priv->runself2);
 
 		// Test-1-3-14
 		case 14:
-			return ct_im_rbk_run2_rbk_3_14( self2 );
+			return ct_im_rbk_run2_rbk_3_14(priv->runself2);
 
 		// Test-1-3-15
 		case 15:
-			return ct_im_rbk_run2_rbk_3_15( self2 );
+			return ct_im_rbk_run2_rbk_3_15(priv->runself2);
 
 		// Test-1-3-16
 		case 16:
-			return ct_im_rbk_run2_rbk_3_16( self2 );
+			return ct_im_rbk_run2_rbk_3_16(priv->runself2);
 
 		// Test-1-3-18
 		case 18:
-			return ct_im_rbk_run3_3_18( self3 );
+			return ct_im_rbk_run3_3_18(priv->runself3);
 
 		default:
 			Ddim_Print(("Error: Unknown command.\n"));
@@ -522,7 +567,7 @@ void ct_im_ltm_rbk_print_all_reg( void )
 	Im_LTM_Off_Pclk( D_IM_LTM_PIPE12 );
 }
 
-void ct_im_ltm_rbk_set_sro(E_IM_PRO_UNIT_NUM unitNo, kuchar testPtn)
+void ct_im_ltm_rbk_set_sro(E_IM_PRO_UNIT_NUM unitNo, guchar testPtn)
 {
 	T_IM_PRO_SROTOP_CTRL		sroCtrl;
 	T_IM_PRO_PG_CTRL			pgCtrl;
@@ -698,18 +743,18 @@ void ct_im_ltm_rbk_waitend_stop_sro(E_IM_PRO_UNIT_NUM unitNo)
 	Im_PRO_PG_Stop( unitNo, E_IM_PRO_BLOCK_TYPE_SRO );
 }
 
-void CT_Im_LTM_RBK_Run(const kuint32 ctIdx1st, const kuint32 ctIdx2nd, const kuint32 ctIdx3rd)
+void CT_Im_LTM_RBK_Run(CtImLtmRbk *self, const guint32 ctIdx1st, const guint32 ctIdx2nd, const guint32 ctIdx3rd)
 {
-	CtImRbkRun1 *self1=ct_im_rbk_run1_new();
-	CtImRbkRun2 *self2 =ct_im_rbk_run2_new();
-	ct_im_rbk_run2_set_var1(self2,self1);
-	CtImRbkRun3 *self3 =ct_im_rbk_run3_new();
-	ct_im_rbk_run3_set_var1(self3,self1);
+	CtImLtmRbkPrivate *priv = CT_IM_LTM_RBK_GET_PRIVATE(self);
+
+	ct_im_rbk_run2_set_var1(priv->runself2,priv->runself1);
+	ct_im_rbk_run3_set_var1(priv->runself3,priv->runself1);
+
 #ifdef CO_MSG_PRINT_ON
-	kint32 result = D_DDIM_INPUT_PARAM_ERROR;
+	gint32 result = D_DDIM_INPUT_PARAM_ERROR;
 #endif
 	static BOOL isInit = 0;
-	kuchar loopCnt;
+	guchar loopCnt;
 
 	Ddim_Print(( "CT_Im_LTM_RBK_Run( %u, %u, %u ) Begin\n", ctIdx1st, ctIdx2nd, ctIdx3rd ));
 
@@ -736,14 +781,14 @@ void CT_Im_LTM_RBK_Run(const kuint32 ctIdx1st, const kuint32 ctIdx2nd, const kui
 
 	if( ctIdx1st != 3 ){
 		for( loopCnt = 0; loopCnt <= 1; loopCnt++ ){
-			ct_im_rbk_run1_set_pipe_no(self1,loopCnt);
+			ct_im_rbk_run1_set_pipe_no(priv->runself1,loopCnt);
 			switch( ctIdx1st ) {
 				case 1:
-					CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun1(self1, ctIdx2nd ) );
+					CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun1(priv->runself1, ctIdx2nd ) );
 					break;
 
 				case 2:
-					CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun2( self2, ctIdx2nd ) );
+					CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun2( priv->runself2, ctIdx2nd ) );
 					break;
 
 				default:
@@ -758,9 +803,9 @@ void CT_Im_LTM_RBK_Run(const kuint32 ctIdx1st, const kuint32 ctIdx2nd, const kui
 		}
 	}
 	else{
-		ct_im_rbk_run1_set_pipe_no(self1,ctIdx3rd);
+		ct_im_rbk_run1_set_pipe_no(priv->runself1,ctIdx3rd);
 
-		CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun3( self3, self2, ctIdx2nd ) );
+		CtImLtmRbk_D_IM_LTM_RESULT( ctImLtmRbkRun3( priv->runself3, ctIdx2nd ) );
 
 #ifdef CO_MSG_PRINT_ON
 		Ddim_Print(( "result = 0x%x\n", result ));
@@ -768,39 +813,24 @@ void CT_Im_LTM_RBK_Run(const kuint32 ctIdx1st, const kuint32 ctIdx2nd, const kui
 		Ddim_Print(( "CT_Im_LTM_RBK_Run( %u, %u, %u) End\n", ctIdx1st, ctIdx2nd, ctIdx3rd ));
 	}
 
-	if(self1){
-		k_object_unref(self1);
-		self1=NULL;
-		}
-
-	if(self2){
-		k_object_unref(self2);
-		self2=NULL;
-		}
-
-	if(self3){
-		k_object_unref(self3);
-		self3=NULL;
-		}
-
 	return;
 }
 
 // for Debug console interface
-void CT_Im_LTM_RBK_Main(kint32 argc, kchar** argv)
+void ct_im_ltm_rbk_main(CtImLtmRbk* self, gint32 argc, gchar** argv)
 {
 	if( argc < 3 ) {
-		Ddim_Print(( "CT_Im_LTM_RBK_Main: parameter error.\n" ));
+		Ddim_Print(( "ct_im_ltm_rbk_main: parameter error.\n" ));
 		return;
 	}
 
-	CT_Im_LTM_RBK_Run( (kuint32)atoi((const char*)argv[1]),
-					   (kuint32)atoi((const char*)argv[2]),
-					   (kuint32)atoi((const char*)argv[3]) );
+	CT_Im_LTM_RBK_Run(self, (guint32)atoi((const char*)argv[1]),
+					   (guint32)atoi((const char*)argv[2]),
+					   (guint32)atoi((const char*)argv[3]) );
 }
 
-CtImLtmRbk* ct_im_ltm_rbk_new(void) 
+CtImLtmRbk *ct_im_ltm_rbk_new(void) 
 {
-    CtImLtmRbk *self = k_object_new_with_private(CT_TYPE_IM_LTM_RBK, sizeof(CtImLtmRbkPrivate));
+    CtImLtmRbk *self = g_object_new(CT_TYPE_IM_LTM_RBK, NULL);
     return self;
 }

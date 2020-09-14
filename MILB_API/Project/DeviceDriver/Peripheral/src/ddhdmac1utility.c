@@ -37,19 +37,19 @@ static void dd_hdmac1_utility_destructor(DdHdmac1Utility *self)
 #ifdef CO_DDIM_UTILITY_USE
 /**
  * @brief  HDMAC1 Copy Sync for SDRAM
- * @param  UCHAR		ch				Channel number (0 to 7)
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			Copy size
- * @param  INT32		wait_mode		HDMAC1 end wait mode
- * @return INT32		D_DDIM_OK
+ * @param  kuchar		ch				Channel number (0 to 7)
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			Copy size
+ * @param  kint32		wait_mode		HDMAC1 end wait mode
+ * @return kint32		D_DDIM_OK
  */
-INT32 dd_hdmac1_utility_copy_sdram_sync(DdHdmac1Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, UINT32 wait_mode)
+kint32 dd_hdmac1_utility_copy_sdram_sync(DdHdmac1Utility *self, kuchar ch, kulong srcAddr, kulong dstAddr, kulong size, kuint32 wait_mode)
 {
-	INT32                 ret;
-	USHORT                status = 0;
+	kint32                 ret;
+	kushort                status = 0;
 	Hdmac1CtrlTrns hdmac1_ctrl_trns;
-	UCHAR tmp_width;
+	kuchar tmp_width;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac1_CH_NUM_MAX) {
@@ -128,18 +128,18 @@ INT32 dd_hdmac1_utility_copy_sdram_sync(DdHdmac1Utility *self, UCHAR ch, ULONG s
 
 /**
  * @brief  HDMAC1 Copy Async SDRAM
- * @param  UCHAR		ch				Channel number (0 to 7)
- * @param  ULONG		srcAddr		source address
- * @param  ULONG		dstAddr		destination address
- * @param  ULONG		size			Copy size
- * @param  VP_CALLBACK	intHandler		Callback function pointer
- * @return INT32  		D_DDIM_OK
+ * @param  kuchar		ch				Channel number (0 to 7)
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
+ * @param  kulong		size			Copy size
+ * @param  VpCallbackFunc	intHandler		Callback function pointer
+ * @return kint32  		D_DDIM_OK
  */
-INT32 dd_hdmac1_utility_copy_sdram_async(DdHdmac1Utility *self, UCHAR ch, ULONG srcAddr, ULONG dstAddr, ULONG size, VP_CALLBACK intHandler)
+kint32 dd_hdmac1_utility_copy_sdram_async(DdHdmac1Utility *self, kuchar ch, kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler)
 {
-	INT32                 ret;
+	kint32                 ret;
 	Hdmac1CtrlTrns hdmac1_ctrl_trns;
-	UCHAR tmp_width;
+	kuchar tmp_width;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdHdmac1_CH_NUM_MAX) {

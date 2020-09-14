@@ -40,977 +40,977 @@ struct  _KJdsme
 /*	structure of sreset			*/
 typedef union _IoMeSreset
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long cmdr :1;
-		unsigned long :31;
+		kulong cmdr :1;
+		kulong :31;
 	} bit;
 } IoMeSreset;
 
 /*	structure of intmode		*/
 typedef union _IoMeIntmode
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ppavalid :1;
-		unsigned long ppbvalid :1;
-		unsigned long ppcvalid :1;
-		unsigned long :1;
-		unsigned long intmode :1;
-		unsigned long :27;
+		kulong ppavalid :1;
+		kulong ppbvalid :1;
+		kulong ppcvalid :1;
+		kulong :1;
+		kulong intmode :1;
+		kulong :27;
 	} bit;
 } IoMeIntmode;
 
 /*	structure of intstate		*/
 typedef union _IoMeIntstate
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ppaint :1;
-		unsigned long ppbint :1;
-		unsigned long ppcint :1;
-		unsigned long :29;
+		kulong ppaint :1;
+		kulong ppbint :1;
+		kulong ppcint :1;
+		kulong :29;
 	} bit;
 } IoMeIntstate;
 
 /*	structure of intcntr		*/
 typedef union _IoMeIntcntr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long interval :10;
-		unsigned long :22;
+		kulong interval :10;
+		kulong :22;
 	} bit;
 } IoMeIntcntr;
 
 /*	structure of cr				*/
 typedef union _IoMeCr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long cmdr :1;
-		unsigned long :31;
+		kulong cmdr :1;
+		kulong :31;
 	} bit;
 } IoMeCr;
 
 /*	structure of ptcc			*/
 typedef union _IoMePtcc
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long cka :1;
-		unsigned long :31;
+		kulong cka :1;
+		kulong :31;
 	} bit;
 } IoMePtcc;
 
 /*	structure of pacc			*/
 typedef union _IoMePacc
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long pabtCka :1;
-		unsigned long ckm :1;
-		unsigned long :30;
+		kulong pabtCka :1;
+		kulong ckm :1;
+		kulong :30;
 	} bit;
 } IoMePacc;
 
 /*	structure of irqsc			*/
 typedef union _IoMeIrqsc
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long __irq0 :1;
-		unsigned long __irq1 :1;
-		unsigned long __irq2 :1;
-		unsigned long __irq3 :1;
-		unsigned long __irq4 :1;
-		unsigned long __irq5 :1;
-		unsigned long __irq6 :1;
-		unsigned long __irq7 :1;
-		unsigned long __irq8 :1;
-		unsigned long :23;
+		kulong __irq0 :1;
+		kulong __irq1 :1;
+		kulong __irq2 :1;
+		kulong __irq3 :1;
+		kulong __irq4 :1;
+		kulong __irq5 :1;
+		kulong __irq6 :1;
+		kulong __irq7 :1;
+		kulong __irq8 :1;
+		kulong :23;
 	} bit;
 } IoMeIrqsc;
 
 /*	structure of irqe			*/
 typedef union _IoMeIrqe
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long irqe0 :1;
-		unsigned long irqe1 :1;
-		unsigned long irqe2 :1;
-		unsigned long irqe3 :1;
-		unsigned long irqe4 :1;
-		unsigned long irqe5 :1;
-		unsigned long irqe6 :1;
-		unsigned long irqe7 :1;
-		unsigned long irqe8 :1;
-		unsigned long :23;
+		kulong irqe0 :1;
+		kulong irqe1 :1;
+		kulong irqe2 :1;
+		kulong irqe3 :1;
+		kulong irqe4 :1;
+		kulong irqe5 :1;
+		kulong irqe6 :1;
+		kulong irqe7 :1;
+		kulong irqe8 :1;
+		kulong :23;
 	} bit;
 } IoMeIrqe;
 
 /*	structure of mirqs			*/
 typedef union _IoMeMirqs
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long irqms0 :1;
-		unsigned long irqms1 :1;
-		unsigned long irqms2 :1;
-		unsigned long irqms3 :1;
-		unsigned long irqms4 :1;
-		unsigned long irqms5 :1;
-		unsigned long irqms6 :1;
-		unsigned long irqms7 :1;
-		unsigned long irqms8 :1;
-		unsigned long :23;
+		kulong irqms0 :1;
+		kulong irqms1 :1;
+		kulong irqms2 :1;
+		kulong irqms3 :1;
+		kulong irqms4 :1;
+		kulong irqms5 :1;
+		kulong irqms6 :1;
+		kulong irqms7 :1;
+		kulong irqms8 :1;
+		kulong :23;
 	} bit;
 } IoMeMirqs;
 
 /*	structure of pabtParamMpr		*/
 typedef union IoMePabtParamMpr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long iniMpr :4;
-		unsigned long apMpr :2;
-		unsigned long :26;
+		kulong iniMpr :4;
+		kulong apMpr :2;
+		kulong :26;
 	} bit;
 } IoMePabtParamMpr;
 
 /*	structure of pabtParamMvr		*/
 typedef union _IoMePabtParamMvr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long iniMvr :4;
-		unsigned long apMvr :2;
-		unsigned long :26;
+		kulong iniMvr :4;
+		kulong apMvr :2;
+		kulong :26;
 	} bit;
 } IoMePabtParamMvr;
 
 /*	structure of pabtParamMvw		*/
 typedef union _IoMePabtParamMvw
 {
-	unsigned long		word;
+	kulong		word;
 	struct {
-		unsigned long	iniMvw			:4;
-		unsigned long	apMvw			:2;
-		unsigned long					:26;
+		kulong	iniMvw			:4;
+		kulong	apMvw			:2;
+		kulong					:26;
 	}bit;
 }IoMePabtParamMvw;
 
 /*	structure of pabtParamPpw		*/
 typedef union _IoMePabtParamPpw
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long iniPpw :4;
-		unsigned long apPpw :2;
-		unsigned long :26;
+		kulong iniPpw :4;
+		kulong apPpw :2;
+		kulong :26;
 	} bit;
 } IoMePabtParamPpw;
 
 /*	structure of pabtParamPpr		*/
 typedef union _IoMePabtParamPpr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long iniPpr :4;
-		unsigned long apPpr :2;
-		unsigned long :26;
+		kulong iniPpr :4;
+		kulong apPpr :2;
+		kulong :26;
 	} bit;
 } IoMePabtParamPpr;
 
 /*	structure of pabtParamPsw		*/
 typedef union _IoMePabtParamPsw
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long iniPsw :4;
-		unsigned long apPsw :2;
-		unsigned long :26;
+		kulong iniPsw :4;
+		kulong apPsw :2;
+		kulong :26;
 	} bit;
 } IoMePabtParamPsw;
 
 /*	structure of srst				*/
 typedef union _IoMeSrst
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long srst :1;
-		unsigned long :31;
+		kulong srst :1;
+		kulong :31;
 	} bit;
 } IoMeSrst;
 
 /*	structure of active				*/
 typedef union _IoMeActive
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long clkact :1;
-		unsigned long ckenMode0 :1;
-		unsigned long ckenMode1 :1;
-		unsigned long :29;
+		kulong clkact :1;
+		kulong ckenMode0 :1;
+		kulong ckenMode1 :1;
+		kulong :29;
 	} bit;
 } IoMeActive;
 
 /*	structure of state				*/
 typedef union _IoMeState
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :1;
-		unsigned long me1State :3;
-		unsigned long :28;
+		kulong :1;
+		kulong me1State :3;
+		kulong :28;
 	} bit;
 } IoMeState;
 
 /*	structure of MBNUMH/V				*/
 typedef union _IoMeMbnum
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :9;
-		unsigned long :23;
-		unsigned long v :8;
-		unsigned long :24;
+		kulong h :9;
+		kulong :23;
+		kulong v :8;
+		kulong :24;
 	} bit;
 } IoMeMbnum;
 
 /*	structure of inputmode			*/
 typedef union _IoMeInputmode
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long inputmode :1;
-		unsigned long :6;
-		unsigned long refTxb :1;
-		unsigned long :24;
+		kulong inputmode :1;
+		kulong :6;
+		kulong refTxb :1;
+		kulong :24;
 	} bit;
 } IoMeInputmode;
 
 /*	structure of outlimit			*/
 typedef union _IoMeOutlimit
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long limit :2;
-		unsigned long :30;
+		kulong limit :2;
+		kulong :30;
 	} bit;
 } IoMeOutlimit;
 
 /*	structure of QMBADRH/V			*/
 typedef union _IoMeQmbadr
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :8;
-		unsigned long :24;
-		unsigned long v :7;
-		unsigned long :25;
+		kulong h :8;
+		kulong :24;
+		kulong v :7;
+		kulong :25;
 	} bit;
 } IoMeQmbadr;
 
 /*	structure of m1banknum			*/
 typedef union _IoMeM1banknum
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long banknum :3;
-		unsigned long :29;
+		kulong banknum :3;
+		kulong :29;
 	} bit;
 } IoMeM1banknum;
 
 /*	structure of M1ORGxMODE			*/
 typedef union _IoMeM1orgmode
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long direction :1;
-		unsigned long parity :1;
-		unsigned long readmode :1;
-		unsigned long sad0mode :3;
-		unsigned long sad1mode :3;
-		unsigned long vecmode :1;
-		unsigned long vecsel :2;
-		unsigned long :2;
-		unsigned long pictype :2;
-		unsigned long :16;
+		kulong direction :1;
+		kulong parity :1;
+		kulong readmode :1;
+		kulong sad0mode :3;
+		kulong sad1mode :3;
+		kulong vecmode :1;
+		kulong vecsel :2;
+		kulong :2;
+		kulong pictype :2;
+		kulong :16;
 	} bit;
 } IoMeM1orgmode;
 
 /*	structure of m1start			*/
 typedef union _IoMeM1start
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :1;
-		unsigned long m1picStr :1;
-		unsigned long :30;
+		kulong :1;
+		kulong m1picStr :1;
+		kulong :30;
 	} bit;
 } IoMeM1start;
 
 /*	structure of m1correct			*/
 typedef union _IoMeM1corrct
 {
-	unsigned long word[5];
+	kulong word[5];
 	struct {
-		unsigned long fky :3;
-		unsigned long bky :3;
-		unsigned long :2;
-		unsigned long fkx :2;
-		unsigned long bkx :2;
-		unsigned long mode :4;
-		unsigned long :16;
-		unsigned long fh :6;
-		unsigned long :26;
-		unsigned long fv :5;
-		unsigned long :27;
-		unsigned long bh :6;
-		unsigned long :26;
-		unsigned long bv :5;
-		unsigned long :27;
+		kulong fky :3;
+		kulong bky :3;
+		kulong :2;
+		kulong fkx :2;
+		kulong bkx :2;
+		kulong mode :4;
+		kulong :16;
+		kulong fh :6;
+		kulong :26;
+		kulong fv :5;
+		kulong :27;
+		kulong bh :6;
+		kulong :26;
+		kulong bv :5;
+		kulong :27;
 	} bit;
 } IoMeM1corrct;
 
 /*	structure of M1MCWGHTP/B	*/
 typedef union _IoMeM1mc
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long p :13;
-		unsigned long :19;
-		unsigned long b :13;
-		unsigned long :19;
+		kulong p :13;
+		kulong :19;
+		kulong b :13;
+		kulong :19;
 	} bit;
 } IoMeM1mc;
 
 /*	structure of m1splt					*/
 typedef union _IoMeM1splt
 {
-	unsigned long word[3];
+	kulong word[3];
 	struct {
-		unsigned long mode :2;
-		unsigned long :30;
-		unsigned long th :8;
-		unsigned long :24;
-		unsigned long tv :8;
-		unsigned long :24;
+		kulong mode :2;
+		kulong :30;
+		kulong th :8;
+		kulong :24;
+		kulong tv :8;
+		kulong :24;
 	} bit;
 } IoMeM1splt;
 
 /*	structure of m1skip		*/
 typedef union _IoMeM1skip
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long skip :1;
-		unsigned long :31;
+		kulong skip :1;
+		kulong :31;
 	} bit;
 } IoMeM1skip;
 
-/*	structure of M1SADSUM_U/L		*/
+/*	structure of M1SADSUM_U/l		*/
 typedef union _IoMeM1sadsum
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long u :12;
-		unsigned long :20;
-		unsigned long l :12;
-		unsigned long :20;
+		kulong u :12;
+		kulong :20;
+		kulong l :12;
+		kulong :20;
 	} bit;
 } IoMeM1sadsum;
 
 /*	structure of m1adjust		*/
 typedef union _IoMeM1adjust
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long cycle :15;
-		unsigned long on :1;
-		unsigned long :16;
+		kulong cycle :15;
+		kulong on :1;
+		kulong :16;
 	} bit;
 } IoMeM1adjust;
 
 /*	structure of m1pause		*/
 typedef union _IoMeM1pause
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long line :7;
-		unsigned long :8;
-		unsigned long on :1;
-		unsigned long :16;
+		kulong line :7;
+		kulong :8;
+		kulong on :1;
+		kulong :16;
 	} bit;
 } IoMeM1pause;
 
 /*	structure of M1LIMITMVx		*/
 typedef union _IoMeM1limitmv
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long p :4;
-		unsigned long :4;
-		unsigned long m :4;
-		unsigned long :20;
+		kulong p :4;
+		kulong :4;
+		kulong m :4;
+		kulong :20;
 	} bit;
 } IoMeM1limitmv;
 
 /*	structure of M1LIMITMHx		*/
 typedef union _IoMeM1limitmh
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long p :5;
-		unsigned long :3;
-		unsigned long m :5;
-		unsigned long :19;
+		kulong p :5;
+		kulong :3;
+		kulong m :5;
+		kulong :19;
 	} bit;
 } IoMeM1limitmh;
 
 /*	structure of M1STORGxAVRSAD			*/
 typedef union _IoMeM1storgavrsad
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :12;
-		unsigned long :20;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :12;
+		kulong :20;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMeM1storgavrsad;
 
 /*	structure of M1STMINxAVRSAD			*/
 typedef union _IoMeM1stminavrsad
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :12;
-		unsigned long :20;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :12;
+		kulong :20;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMeM1stminavrsad;
 
 /*	structure of M1ST_ORGx_VxVx			*/
 typedef union _IoMeM1storgv
 {
-	unsigned long word[4];
+	kulong word[4];
 	struct {
-		unsigned long vxvxH :12;
-		unsigned long :20;
-		unsigned long vxvxL :16;
-		unsigned long :16;
-		unsigned long vyvyH :12;
-		unsigned long :20;
-		unsigned long vyvyL :16;
-		unsigned long :16;
+		kulong vxvxH :12;
+		kulong :20;
+		kulong vxvxL :16;
+		kulong :16;
+		kulong vyvyH :12;
+		kulong :20;
+		kulong vyvyL :16;
+		kulong :16;
 	} bit;
 } IoMeM1storgv;
 
 /*	structure of pmbufCtl		*/
 typedef union _IoMePmbufctl
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long cmdrst :1;
-		unsigned long :7;
-		unsigned long thru :1;
-		unsigned long :23;
+		kulong cmdrst :1;
+		kulong :7;
+		kulong thru :1;
+		kulong :23;
 	} bit;
 } IoMePmbufctl;
 
 /*	structure of coremode		*/
 typedef union _IoMeCoremode
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long lineintv :2;
-		unsigned long :6;
-		unsigned long initposy :2;
-		unsigned long :22;
+		kulong lineintv :2;
+		kulong :6;
+		kulong initposy :2;
+		kulong :22;
 	} bit;
 } IoMeCoremode;
 
 /*	structure of cncl		*/
 typedef union _IoMeCncl
 {
-	unsigned long word[3];
+	kulong word[3];
 	struct {
-		unsigned long mode :2;
-		unsigned long :30;
-		unsigned long thh :8;
-		unsigned long :24;
-		unsigned long thl :8;
-		unsigned long :24;
+		kulong mode :2;
+		kulong :30;
+		kulong thh :8;
+		kulong :24;
+		kulong thl :8;
+		kulong :24;
 	} bit;
 } IoMeCncl;
 
 /*	structure of voutFmt		*/
 typedef union _IoMeVoutfmt
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long hsize :12;
-		unsigned long :20;
+		kulong hsize :12;
+		kulong :20;
 	} bit;
 } IoMeVoutfmt;
 
 /*	structure of ORGAVRx		*/
 typedef union _IoMeOrgavr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long orgavr :8;
-		unsigned long :24;
+		kulong orgavr :8;
+		kulong :24;
 	} bit;
 } IoMeOrgavr;
 
 /*	structure of clkenb1		*/
 typedef union _IoMeClkenb1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :4;
-		unsigned long m6PfmEn :1;
-		unsigned long :27;
+		kulong :4;
+		kulong m6PfmEn :1;
+		kulong :27;
 	} bit;
 } IoMeClkenb1;
 
 /*	structure of clkenb4		*/
 typedef union _IoMeClkenb4
 {
-	unsigned long		word;
+	kulong		word;
 	struct {
-		unsigned long					:4;
-		unsigned long	m6P4mEn		:1;
-		unsigned long					:27;
+		kulong					:4;
+		kulong	m6P4mEn		:1;
+		kulong					:27;
 	}bit;
 }IoMeClkenb4;
 
 /*	structure of clkact1		*/
 typedef union _IoMeClkact1
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :4;
-		unsigned long m6PfmAct :1;
-		unsigned long :27;
+		kulong :4;
+		kulong m6PfmAct :1;
+		kulong :27;
 	} bit;
 } IoMeClkact1;
 
 /*	structure of clkact4		*/
 typedef union _IoMeClkact4
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :4;
-		unsigned long m6P4mAct :1;
-		unsigned long :27;
+		kulong :4;
+		kulong m6P4mAct :1;
+		kulong :27;
 	} bit;
 } IoMeClkact4;
 
 /*	structure of pfSize		*/
 typedef union _IoMePfsize
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :13;
-		unsigned long :19;
-		unsigned long v :12;
-		unsigned long :20;
+		kulong h :13;
+		kulong :19;
+		kulong v :12;
+		kulong :20;
 	} bit;
 } IoMePfsize;
 
 /*	structure of writeState		*/
 typedef union _IoMeWritestate
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long ppA :1;
-		unsigned long ppB :1;
-		unsigned long ppC :1;
-		unsigned long :29;
+		kulong ppA :1;
+		kulong ppB :1;
+		kulong ppC :1;
+		kulong :29;
 	} bit;
 } IoMeWritestate;
 
 /*	structure of abtType		*/
 typedef union _IoMeAbttype
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long abtType :1;
-		unsigned long :31;
+		kulong abtType :1;
+		kulong :31;
 	} bit;
 } IoMeAbttype;
 
 /*	structure of bankTblPvec		*/
 typedef union _IoMeBanktblpvec
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long fwdPvec :8;
-		unsigned long :24;
+		kulong fwdPvec :8;
+		kulong :24;
 	} bit;
 } IoMeBanktblpvec;
 
 /*	structure of bankTbl8pelref	*/
 typedef union _IoMeBanktbl8pelref
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long top :8;
-		unsigned long :24;
+		kulong top :8;
+		kulong :24;
 	} bit;
 } IoMeBanktbl8pelref;
 
 /*	structure of bankTbl8pel	*/
 typedef union _IoMeBanktbl8pel
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long fwd8pel :8;
-		unsigned long :24;
+		kulong fwd8pel :8;
+		kulong :24;
 	} bit;
 } IoMeBanktbl8pel;
 
 /*	structure of pf1On	*/
 typedef union _IoMePf1on
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long pf1On :1;
-		unsigned long pfbufEn :1;
-		unsigned long :30;
+		kulong pf1On :1;
+		kulong pfbufEn :1;
+		kulong :30;
 	} bit;
 } IoMePf1on;
 
 /*	structure of pf1Inisize	*/
 typedef union _IoMePf1inisize
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long sizeX :8;
-		unsigned long sizeY :6;
-		unsigned long :18;
+		kulong sizeX :8;
+		kulong sizeY :6;
+		kulong :18;
 	} bit;
 } IoMePf1inisize;
 
 /*	structure of pf1Tbsel		*/
 typedef union _IoMePf1tbsel
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long tbsel :1;
-		unsigned long :31;
+		kulong tbsel :1;
+		kulong :31;
 	} bit;
 } IoMePf1tbsel;
 
 /*	structure of pf1Pmenum		*/
 typedef union _IoMePf1pmenum
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long pmenum :2;
-		unsigned long :30;
+		kulong pmenum :2;
+		kulong :30;
 	} bit;
 } IoMePf1pmenum;
 
 /*	structure of pf1Start		*/
 typedef union _IoMePfstart
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long str :1;
-		unsigned long :31;
+		kulong str :1;
+		kulong :31;
 	} bit;
 } IoMePfstart;
 
 /*	structure of pf1Clear		*/
 typedef union _IoMeClear
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long clr :1;
-		unsigned long :31;
+		kulong clr :1;
+		kulong :31;
 	} bit;
 } IoMeClear;
 
 /*	structure of PF1_PB0/2_STBKNO	*/
 typedef union _IoMePf1pbstbkno
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long pf1Pb0Stbkno :14;
-		unsigned long :1;
-		unsigned long pf1Pb0Stbknoen :1;
-		unsigned long :16;
+		kulong pf1Pb0Stbkno :14;
+		kulong :1;
+		kulong pf1Pb0Stbknoen :1;
+		kulong :16;
 	} bit;
 } IoMePf1pbstbkno;
 
 /*	structure of pf1Pfb0/2		*/
 typedef union _IoMePf1pfb
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long posx :8;
-		unsigned long posy :8;
-		unsigned long :16;
-		unsigned long sizey :4;
-		unsigned long :28;
+		kulong posx :8;
+		kulong posy :8;
+		kulong :16;
+		kulong sizey :4;
+		kulong :28;
 	} bit;
 } IoMePf1pfb;
 
 /*	structure of prevsz3dnrme	*/
 typedef union _IoMePrevsz3dnrme
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :11;
-		unsigned long :21;
-		unsigned long v :10;
-		unsigned long :22;
+		kulong h :11;
+		kulong :21;
+		kulong v :10;
+		kulong :22;
 	} bit;
 } IoMePrevsz3dnrme;
 
 /*	structure of mrgn3dnrme	*/
 typedef union _IoMeMtgn3dnrme
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :4;
-		unsigned long :28;
-		unsigned long v :4;
-		unsigned long :28;
+		kulong h :4;
+		kulong :28;
+		kulong v :4;
+		kulong :28;
 	} bit;
 } IoMeMtgn3dnrme;
 
 /*	structure of SHIFTX/Y_3DNRME	*/
 typedef union _IoMeShift3dnrme
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		long x :7;
-		unsigned long :25;
-		long y :7;
-		unsigned long :25;
+		klong x :7;
+		kulong :25;
+		klong y :7;
+		kulong :25;
 	} bit;
 } IoMeShift3dnrme;
 
 /*	structure of cmdRst		*/
 typedef union _IoMeCmdrst
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long :15;
-		unsigned long cmdRst :1;
-		unsigned long :16;
+		kulong :15;
+		kulong cmdRst :1;
+		kulong :16;
 	} bit;
 } IoMeCmdrst;
 
-/*	structure of M1_GBO_H/L		*/
+/*	structure of M1_GBO_H/l		*/
 typedef union _IoMeM1gbo
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :16;
-		unsigned long :16;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :16;
+		kulong :16;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMeM1gbo;
 
-/*	structure of M1_GBS_H/L		*/
+/*	structure of M1_GBS_H/l		*/
 typedef union _IoMeM1gbs
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :6;
-		unsigned long :26;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :6;
+		kulong :26;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMeM1gbs;
 
 /*	structure of m1Glss		*/
 typedef union _IoMeM1glss
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long glss :11;
-		unsigned long :21;
+		kulong glss :11;
+		kulong :21;
 	} bit;
 } IoMeM1glss;
 
-/*	structure of PREV_GBO_H/L		*/
+/*	structure of PREV_GBO_H/l		*/
 typedef union _IoMePrevgbo
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :16;
-		unsigned long :16;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :16;
+		kulong :16;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMePrevgbo;
 
-/*	structure of PREV_GBS_H/L		*/
+/*	structure of PREV_GBS_H/l		*/
 typedef union _IoMePrevgbs
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :6;
-		unsigned long :26;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :6;
+		kulong :26;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMePrevgbs;
 
 /*	structure of prevGlss		*/
 typedef union _IoMePrevglss
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long glss :11;
-		unsigned long :21;
+		kulong glss :11;
+		kulong :21;
 	} bit;
 } IoMePrevglss;
 
-/*	structure of PVEC_GBO_H/L		*/
+/*	structure of PVEC_GBO_H/l		*/
 typedef union _IoMePvecgbo
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :16;
-		unsigned long :16;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :16;
+		kulong :16;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMePvecgbo;
 
-/*	structure of PVEC_GBS_H/L		*/
+/*	structure of PVEC_GBS_H/l		*/
 typedef union _IoMePvecgbs
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long h :14;
-		unsigned long :18;
-		unsigned long l :16;
-		unsigned long :16;
+		kulong h :14;
+		kulong :18;
+		kulong l :16;
+		kulong :16;
 	} bit;
 } IoMePvecgbs;
 
 /*	structure of WBUF0			*/
 typedef union _IoMeWbuf
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long radd :7;
-		unsigned long :25;
-		unsigned long wadd :7;
-		unsigned long :25;
+		kulong radd :7;
+		kulong :25;
+		kulong wadd :7;
+		kulong :25;
 	} bit;
 } IoMeWbuf;
 
 /*	structure of RBUF0/1			*/
 typedef union _IoMeRbuf
 {
-	unsigned long word[2];
+	kulong word[2];
 	struct {
-		unsigned long radd :8;
-		unsigned long :24;
-		unsigned long wadd :8;
-		unsigned long :24;
+		kulong radd :8;
+		kulong :24;
+		kulong wadd :8;
+		kulong :24;
 	} bit;
 } IoMeRbuf;
 
 /*	structure of axiCntlSet		*/
 typedef union _IoMeAxicntlset
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long arcache :4;
-		unsigned long arprot :3;
-		unsigned long :1;
-		unsigned long awcache :4;
-		unsigned long awprot :3;
-		unsigned long :1;
-		unsigned long :16;
+		kulong arcache :4;
+		kulong arprot :3;
+		kulong :1;
+		kulong awcache :4;
+		kulong awprot :3;
+		kulong :1;
+		kulong :16;
 	} bit;
 } IoMeAxicntlset;
 
 /*	structure of axiErrClr		*/
 typedef union _IoMeAxierrclr
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long curClr :1;
-		unsigned long :3;
-		unsigned long preClr :1;
-		unsigned long :3;
-		unsigned long vecClr :1;
-		unsigned long :23;
+		kulong curClr :1;
+		kulong :3;
+		kulong preClr :1;
+		kulong :3;
+		kulong vecClr :1;
+		kulong :23;
 	} bit;
 } IoMeAxierrclr;
 
 /*	structure of axiErrClr		*/
 typedef union _IoMeAxierrstatus
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long respCir :2;
-		unsigned long curSts :1;
-		unsigned long :1;
-		unsigned long respPre :2;
-		unsigned long preSts :1;
-		unsigned long :1;
-		unsigned long respVec :2;
-		unsigned long vecSts :1;
-		unsigned long :21;
+		kulong respCir :2;
+		kulong curSts :1;
+		kulong :1;
+		kulong respPre :2;
+		kulong preSts :1;
+		kulong :1;
+		kulong respVec :2;
+		kulong vecSts :1;
+		kulong :21;
 	} bit;
 } IoMeAxierrstatus;
 
 /*	structure of curRdmaQuStat		*/
 typedef union _IoMeCurrdmaqustat
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long curPrqbacc :2;
-		unsigned long :2;
-		unsigned long curRrqbacc :2;
-		unsigned long :2;
-		unsigned long curCrqbacc :2;
-		unsigned long :22;
+		kulong curPrqbacc :2;
+		kulong :2;
+		kulong curRrqbacc :2;
+		kulong :2;
+		kulong curCrqbacc :2;
+		kulong :22;
 	} bit;
 } IoMeCurrdmaqustat;
 
 /*	structure of preRdmaQuStat		*/
 typedef union _IoMePrerdmaqustat
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long prePrqbacc :2;
-		unsigned long :2;
-		unsigned long preRrqbacc :2;
-		unsigned long :2;
-		unsigned long preCrqbacc :2;
-		unsigned long :22;
+		kulong prePrqbacc :2;
+		kulong :2;
+		kulong preRrqbacc :2;
+		kulong :2;
+		kulong preCrqbacc :2;
+		kulong :22;
 	} bit;
 } IoMePrerdmaqustat;
 
 /*	structure of vecWdmaQuStat		*/
 typedef union _IoMeVecwdmaqustat
 {
-	unsigned long word;
+	kulong word;
 	struct {
-		unsigned long pwqbacc :2;
-		unsigned long :2;
-		unsigned long rwqbacc :2;
-		unsigned long :2;
-		unsigned long cwqbacc :2;
-		unsigned long :22;
+		kulong pwqbacc :2;
+		kulong :2;
+		kulong rwqbacc :2;
+		kulong :2;
+		kulong cwqbacc :2;
+		kulong :22;
 	} bit;
 } IoMeVecwdmaqustat;
 
@@ -1024,7 +1024,7 @@ typedef struct _IoMePme
 	/* (2008 - 200Bh) */
 	IoMePacc pacc;
 	/* (200C - 203Fh) */
-	unsigned char dmy200c203f[0x2040 - 0x200C];
+	kuchar dmy200c203f[0x2040 - 0x200C];
 	/* (2040 - 2043h) */
 	IoMeIrqsc irqsc;
 	/* (2044 - 2047h) */
@@ -1032,7 +1032,7 @@ typedef struct _IoMePme
 	/* (2048 - 204Bh) */
 	IoMeMirqs mirqs;
 	/* (204C - 207Fh) */
-	unsigned char dmy204c207f[0x2080 - 0x204C];
+	kuchar dmy204c207f[0x2080 - 0x204C];
 	/* (2080 - 2083h) */
 	IoMePabtParamMpr pabtParamMpr;
 	/* (2084 - 2087h) */
@@ -1046,9 +1046,9 @@ typedef struct _IoMePme
 	/* (2094 - 2097h) */
 	IoMePabtParamPsw pabtParamPsw;
 	/* (2098 - 20FFh) */
-	unsigned char dmy209820ff[0x2100 - 0x2098];
+	kuchar dmy209820ff[0x2100 - 0x2098];
 	/* (2100 - 27FFh) */
-	unsigned char dmy210027ff[0x2800 - 0x2100];
+	kuchar dmy210027ff[0x2800 - 0x2100];
 	// pme.
 	/* (2800 - 2803h) */
 	IoMeSrst srst;
@@ -1062,16 +1062,16 @@ typedef struct _IoMePme
 	/* (2814 - 2817h) */
 	IoMeInputmode inputmode;
 	/* (2818 - 2837h) */
-	unsigned char dmy28182837[0x2838 - 0x2818];
+	kuchar dmy28182837[0x2838 - 0x2818];
 	/* (2838 - 283Bh) */
 	IoMeOutlimit outlimit;
 	/* (283C - 283Fh) */
-	unsigned char dmy_283C_283F[0x2840 - 0x283C];
+	kuchar dmy_283C_283F[0x2840 - 0x283C];
 	/* (2840 - 2843h) */
 	IoMeQmbadr qmbadr;
 	/* (2844 - 2847h) */
 	/* (2848 - 284Fh) */
-	unsigned char dmy2848284f[0x2850 - 0x2848];
+	kuchar dmy2848284f[0x2850 - 0x2848];
 	/* (2850 - 2853h) */
 	IoMeM1banknum m1banknum;
 	/* (2854 - 2857h) */
@@ -1080,7 +1080,7 @@ typedef struct _IoMePme
 	/* (285C - 285Fh) */
 	/* (2860 - 2863h) */
 	/* (2864 - 28FFh) */
-	unsigned char dmy286428ff[0x2900 - 0x2864];
+	kuchar dmy286428ff[0x2900 - 0x2864];
 	/* (2900 - 2903h) */
 	IoMeM1start m1start;
 	/* (2904 - 2907h) */
@@ -1096,16 +1096,16 @@ typedef struct _IoMePme
 	IoMeM1splt m1splt; /* (2920 - 2923h) */
 	/* (2928 - 292Bh) */
 	/* (292C - 2937h) */
-	unsigned char dmy292c2937[0x2938 - 0x292C];
+	kuchar dmy292c2937[0x2938 - 0x292C];
 	/* (2938 - 293Bh) */
 	IoMeM1skip m1skip;
 	/* (293C - 295Bh) */
-	unsigned char dmy293c295b[0x295C - 0x293C];
+	kuchar dmy293c295b[0x295C - 0x293C];
 	/* (295C - 295Fh) */
 	IoMeM1sadsum m1sadsum;
 	/* (2960 - 2963h) */
 	/* (2964 - 2977h) */
-	unsigned char dmy29642977[0x2978 - 0x2964];
+	kuchar dmy29642977[0x2978 - 0x2964];
 	/* (2978 - 297Bh) */
 	IoMeM1adjust m1adjust;
 	/* (297C - 297Fh) */
@@ -1121,7 +1121,7 @@ typedef struct _IoMePme
 	/* (2998 - 299Bh) */
 	/* (299C - 299Fh) */
 	/* (29A0 - 29BFh) */
-	unsigned char dmy29a029bf[0x29C0 - 0x29A0];
+	kuchar dmy29a029bf[0x29C0 - 0x29A0];
 	/* (29C0 - 29C3h) */
 	/* (29C4 - 29C7h) */
 	/* (29C8 - 29CBh) */
@@ -1160,30 +1160,30 @@ typedef struct _IoMePme
 	/* (2A40 - 2A43h) */
 	IoMePmbufctl pmbufCtl;
 	/* (2A44 - 2A4Fh) */
-	unsigned char dmy2a442a4f[0x2A50 - 0x2A44];
+	kuchar dmy2a442a4f[0x2A50 - 0x2A44];
 	/* (2A50 - 2A53h) */
 	IoMeCoremode coremode;
 	/* (2A54 - 2A5Fh) */
-	unsigned char dmy2a542a5f[0x2A60 - 0x2A54];
+	kuchar dmy2a542a5f[0x2A60 - 0x2A54];
 	/* (2A60 - 2A63h) */
 	IoMeCncl cncl;
 	/* (2A64 - 2A67h) */
 	/* (2A68 - 2A6Bh) */
 	/* (2A6C - 2A6Fh) */
-	unsigned char dmy2a6c2a6f[0x2A70 - 0x2A6C];
+	kuchar dmy2a6c2a6f[0x2A70 - 0x2A6C];
 	/* (2A70 - 2A73h) */
 	IoMeVoutfmt voutFmt;
 	/* (2A74 - 2A7Fh) */
-	unsigned char dmy2a742a7f[0x2A80 - 0x2A74];
+	kuchar dmy2a742a7f[0x2A80 - 0x2A74];
 	/* (2A80 - 2A83h) */
 	IoMeOrgavr orgavr[4];
 	/* (2A84 - 2A87h) */
 	/* (2A88 - 2A8Bh) */
 	/* (2A8C - 2A8Fh) */
 	/* (2A90 - 2AFFh) */
-	unsigned char dmy2a902aff[0x2B00 - 0x2A90];
+	kuchar dmy2a902aff[0x2B00 - 0x2A90];
 	/* (2B00 - 3FFFh) */
-	unsigned char dmy2b003fff[0x4000 - 0x2B00];
+	kuchar dmy2b003fff[0x4000 - 0x2B00];
 } IoMePme;
 
 /* Define i/o mapping */
@@ -1199,7 +1199,7 @@ typedef struct _IoJdsme
 	/* (000C - 000Fh) */
 	IoMeIntcntr intcntr;
 	/* (0010 - 1FFFh) */
-	unsigned char dmy00101fff[0x2000 - 0x0010];
+	kuchar dmy00101fff[0x2000 - 0x0010];
 	// PPA pme 0/1/2.
 	/* (2000 - 3FFFh) */
 	IoMePme pme[3];
@@ -1216,28 +1216,28 @@ typedef struct _IoJdsme
 	/* (800C - 800Fh) */
 	IoMeClkact4 clkact4;
 	/* (8010 - 801Fh) */
-	unsigned char dmy8010801f[0x8020 - 0x8010];
+	kuchar dmy8010801f[0x8020 - 0x8010];
 	/* (8020 - 8023h) */
 	IoMePfsize pfSize;
 	/* (8024 - 8027h) */
 	/* (8028 - 802Bh) */
-	unsigned char dmy8028802b[0x802C - 0x8028];
+	kuchar dmy8028802b[0x802C - 0x8028];
 	/* (802C - 802Fh) */
 	IoMeWritestate writeState;
 	/* (8030 - 8033h) */
 	IoMeAbttype abtType;
 	/* (8034 - 80FFh) */
-	unsigned char dmy803480ff[0x8100 - 0x8034];
+	kuchar dmy803480ff[0x8100 - 0x8034];
 	/* (8100 - 8103h) */
 	IoMeBanktblpvec bankTblPvec;
 	/* (8104 - 81FFh) */
-	unsigned char dmy810481ff[0x8200 - 0x8104];
+	kuchar dmy810481ff[0x8200 - 0x8104];
 	/* (8200 - 8203h) */
 	IoMeBanktbl8pelref bankTbl8pelref;
 	/* (8204 - 8207h) */
 	IoMeBanktbl8pel bankTbl8pel;
 	/* (8208 - 82FFh) */
-	unsigned char dmy820882ff[0x8300 - 0x8208];
+	kuchar dmy820882ff[0x8300 - 0x8208];
 	/* (8300 - 8303h) */
 	IoMePf1on pf1On;
 	/* (8304 - 8307h) */
@@ -1251,7 +1251,7 @@ typedef struct _IoJdsme
 	/* (8314 - 8317h) */
 	IoMeClear pf1Clear;
 	/* (8318 - 831Bh) */
-	unsigned char dmy8318831b[0x831C - 0x8318];
+	kuchar dmy8318831b[0x831C - 0x8318];
 	/* (831C - 831Fh) */
 	IoMePf1pbstbkno pf1Pb0Stbkno;
 	/* (8320 - 8323h) */
@@ -1263,7 +1263,7 @@ typedef struct _IoJdsme
 	IoMePf1pfb pf1Pfb2;
 	/* (8330 - 8333h) */
 	/* (8334 - 83FFh) */
-	unsigned char dmy83348fff[0x8400 - 0x8334];
+	kuchar dmy83348fff[0x8400 - 0x8334];
 	/* (8400 - 8403h) */
 	IoMePrevsz3dnrme prevsz3dnrme;
 	/* (8404 - 8407h) */
@@ -1274,11 +1274,11 @@ typedef struct _IoJdsme
 	IoMeShift3dnrme shift3dnrme;
 	/* (8414 - 8417h) */
 	/* (8418 - 84FFh) */
-	unsigned char dmy841884ff[0x8500 - 0x8418];
+	kuchar dmy841884ff[0x8500 - 0x8418];
 	/* (8500 - 8503h) */
 	IoMeCmdrst cmdRst;
 	/* (8504 - 85FFh) */
-	unsigned char dmy850485ff[0x8600 - 0x8504];
+	kuchar dmy850485ff[0x8600 - 0x8504];
 	/* (8600 - 8603h) */
 	IoMeM1gbo m1Gbo;
 	/* (8604 - 8607h) */
@@ -1288,7 +1288,7 @@ typedef struct _IoJdsme
 	/* (8610 - 8613h) */
 	IoMeM1glss m1Glss;
 	/* (8614 - 86FFh) */
-	unsigned char dmy861486ff[0x8700 - 0x8614];
+	kuchar dmy861486ff[0x8700 - 0x8614];
 	/* (8700 - 8703h) */
 	IoMePrevgbo prevGbo;
 	; /* (8704 - 8707h) */
@@ -1298,7 +1298,7 @@ typedef struct _IoJdsme
 	/* (8710 - 8713h) */
 	IoMePrevglss prevGlss;
 	/* (8714 - 87FFh) */
-	unsigned char dmy871487ff[0x8800 - 0x8714];
+	kuchar dmy871487ff[0x8800 - 0x8714];
 	/* (8800 - 8803h) */
 	IoMePvecgbo pvecGbo;
 	/* (8804 - 8807h) */
@@ -1306,7 +1306,7 @@ typedef struct _IoJdsme
 	IoMePvecgbs pvecGbs;
 	/* (880C - 880Fh) */
 	/* (8810 - 89FFh) */
-	unsigned char dmy881089ff[0x8A00 - 0x8810];
+	kuchar dmy881089ff[0x8A00 - 0x8810];
 	/* (8A00 - 8A03h) */
 	IoMeWbuf wbuf;
 	/* (8A04 - 8A07h) */
@@ -1316,17 +1316,17 @@ typedef struct _IoJdsme
 	/* (8A10 - 8A13h) */
 	/* (8A14 - 8A17h) */
 	/* (8A18 - 8BFFh) */
-	unsigned char dmy8a188bff[0x8C00 - 0x8A18];
+	kuchar dmy8a188bff[0x8C00 - 0x8A18];
 	/* (8C00 - 8C03h) */
 	IoMeAxicntlset axiCntlSet;
 	/* (8C04 - 8C0Fh) */
-	unsigned char dmy8c048c0f[0x8C10 - 0x8C04];
+	kuchar dmy8c048c0f[0x8C10 - 0x8C04];
 	/* (8C10 - 8C13h) */
 	IoMeAxierrclr axiErrClr;
 	/* (8C14 - 8C17h) */
 	IoMeAxierrstatus axiErrStatus;
 	/* (8C18 - 8CFFh) */
-	unsigned char dmy8c188cff[0x8D00 - 0x8C18];
+	kuchar dmy8c188cff[0x8D00 - 0x8C18];
 	/* (8D00 - 8D03h) */
 	IoMeCurrdmaqustat curRdmaQuStat;
 	/* (8D04 - 8D07h) */
@@ -1334,12 +1334,13 @@ typedef struct _IoJdsme
 	/* (8D08 - 8D0Bh) */
 	IoMeVecwdmaqustat vecWdmaQuStat;
 	/* (8D0C - 8FFFh) */
-	unsigned char dmy8d0c8fff[0x9000 - 0x8D0C];
+	kuchar dmy8d0c8fff[0x9000 - 0x8D0C];
 	/* (9000 - 9FFFh) */
-	unsigned char dmy90009fff[0xA000 - 0x9000];
+	kuchar dmy90009fff[0xA000 - 0x9000];
 	/* (A000 - FFFFh) */
-	unsigned char dmya000ffff[0x10000 - 0xA000];
+	kuchar dmya000ffff[0x10000 - 0xA000];
 } IoJdsme;
+
 
 extern volatile IoJdsme		ioMe;
 

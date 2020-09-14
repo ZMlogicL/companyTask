@@ -52,15 +52,15 @@ struct _CtImJpeg1Class
 };
 
 
-GType     		  ct_im_jpeg1_get_type(void);
-CtImJpeg1*     ct_im_jpeg1_new();
+GType     		 	ct_im_jpeg1_get_type(void);
+CtImJpeg1*		ct_im_jpeg1_new();
 
 /**********私有变公有区域***********/
 void ct_im_jpeg1_start_hclock(CtImJpeg1 *self);
 void ct_im_jpeg1_stop_hclock(CtImJpeg1 *self);
 void ct_im_jpeg1_ctrl_print(CtImJpeg1EPrintCtrl ptn, gpointer ctrl);
 void ct_im_jpeg1_stop(void);
-void ct_im_jpeg1_encode_cb(TImJpegEncMng* pjpgEncMng);
+void ct_im_jpeg1_encode_cb(TimgEncMng* pjpgEncMng);
 void ct_im_jpeg1_encode(CtImJpeg1 *self,CtImJpeg6* encParam, guchar setQualv);
 #ifdef CO_DEBUG_ON_PC
 void ct_im_jpeg1_encode_int_handler(guchar ptn);
@@ -76,9 +76,9 @@ gulong ct_im_jpeg_get_enc_size(CtImJpeg1 *self);
 gulong ct_im_jpeg_get_output_bytes(CtImJpeg1 *self);
 gulong ct_im_jpeg1_get3(CtImJpeg1 *self);
 guchar ct_im_jpeg1_get4(CtImJpeg1 *self);
-void 	ct_im_jpeg1_set2(CtImJpeg1 *self,gulong Encode_Size);
+void 	ct_im_jpeg1_set2(CtImJpeg1 *self,gulong encodeSize);
 void	ct_im_jpeg1_set3(CtImJpeg1 *self,gulong outputBytes);
-void 	ct_im_jpeg1_set4(CtImJpeg1 *self,gulong gJpeg_AXI_Err);
+void 	ct_im_jpeg1_set4(CtImJpeg1 *self,gulong gJpegAXIErr);
 
 
 G_END_DECLS

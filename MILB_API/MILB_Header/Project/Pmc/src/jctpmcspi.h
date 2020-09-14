@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_SPI_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_SPI		(jctpmc_spi_get_type())
-#define JCTPMC_SPI(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcSpi))
-#define JCTPMC_IS_SPI(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_SPI))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcSpiDiv IoPmcSpiDiv;
@@ -44,216 +40,214 @@ typedef union 				_IoPmcSpiFifoDpth IoPmcSpiFifoDpth;
 typedef union 				_IoPmcSpiFifoWmk IoPmcSpiFifoWmk;
 typedef union 				_IoPmcSpiTxDwr IoPmcSpiTxDwr;
 typedef struct 				_IoPmcSpi IoPmcSpi;
-typedef struct 				_JctpmcSpi JctpmcSpi;
-typedef struct 				_JctpmcSpiPrivate JctpmcSpiPrivate;
 
 /* QSPI */
 
 /* DIV */
 union _IoPmcSpiDiv {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	divisor			:8;
-		kulong					:24;
+		gulong	divisor			:8;
+		gulong					:24;
 	}bit;
 };
 
 /* CTRL */
 union _IoPmcSpiCtrl {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	contxfer		:1;
-		kulong	divenable		:1;
-		kulong	msb1st			:1;
-		kulong	cpha			:1;
-		kulong	cpol			:1;
-		kulong	master			:1;
-		kulong					:4;
-		kulong	dma				:1;
-		kulong	mwaiten			:1;
-		kulong					:20;
+		gulong	contxfer		:1;
+		gulong	divenable		:1;
+		gulong	msb1st			:1;
+		gulong	cpha			:1;
+		gulong	cpol			:1;
+		gulong	master			:1;
+		gulong					:4;
+		gulong	dma				:1;
+		gulong	mwaiten			:1;
+		gulong					:20;
 	}bit;
 };
 
 /* AUX_CTRL */
 union _IoPmcSpiAuxCtrl {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	spimode			:2;
-		kulong					:1;
-		kulong	inhibitdin		:1;
-		kulong	xferformat		:2;
-		kulong					:1;
-		kulong	contxferextend	:1;
-		kulong	bitsize			:5;
-		kulong					:19;
+		gulong	spimode			:2;
+		gulong					:1;
+		gulong	inhibitdin		:1;
+		gulong	xferformat		:2;
+		gulong					:1;
+		gulong	contxferextend	:1;
+		gulong	bitsize			:5;
+		gulong					:19;
 	}bit;
 };
 
 /* ST */
 union _IoPmcSpiSt {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	xferip			:1;
-		kulong				 	:1;
-		kulong	txempty			:1;
-		kulong	txwmark			:1;
-		kulong	txfull			:1;
-		kulong	rxempty			:1;
-		kulong	rxwmark			:1;
-		kulong	rxfull			:1;
-		kulong	rxoverflow		:1;
-		kulong	rxtimeout		:1;
-		kulong					:22;
+		gulong	xferip			:1;
+		gulong				 	:1;
+		gulong	txempty			:1;
+		gulong	txwmark			:1;
+		gulong	txfull			:1;
+		gulong	rxempty			:1;
+		gulong	rxwmark			:1;
+		gulong	rxfull			:1;
+		gulong	rxoverflow		:1;
+		gulong	rxtimeout		:1;
+		gulong					:22;
 	}bit;
 };
 
 /* SLV_SEL */
 union _IoPmcSpiSlvSel {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	ssout			:1;
-		kulong					:31;
+		gulong	ssout			:1;
+		gulong					:31;
 	}bit;
 };
 
 /* SLV_POL */
 union _IoPmcSpiSlvPol {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	sspol			:1;
-		kulong					:31;
+		gulong	sspol			:1;
+		gulong					:31;
 	}bit;
 };
 
 /* INT_EN */
 union _IoPmcSpiIntEn {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	txemptypulse	:1;
-		kulong	txwmarkpulse	:1;
-		kulong	rxwmarkpulse	:1;
-		kulong	rxfullpulse		:1;
-		kulong	xferdonepulse	:1;
-		kulong					:2;
-		kulong	rxfifooverflow	:1;
-		kulong	rxtimeout		:1;
-		kulong					:23;
+		gulong	txemptypulse	:1;
+		gulong	txwmarkpulse	:1;
+		gulong	rxwmarkpulse	:1;
+		gulong	rxfullpulse		:1;
+		gulong	xferdonepulse	:1;
+		gulong					:2;
+		gulong	rxfifooverflow	:1;
+		gulong	rxtimeout		:1;
+		gulong					:23;
 	}bit;
 };
 
 /* INT_ST */
 union _IoPmcSpiIntSt {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	txemptypulse	:1;
-		kulong	txwmarkpulse	:1;
-		kulong	rxwmarkpulse	:1;
-		kulong	rxfullpulse		:1;
-		kulong	xferdonepulse	:1;
-		kulong					:2;
-		kulong	rxfifooverflow	:1;
-		kulong	rxtimeout		:1;
-		kulong					:23;
+		gulong	txemptypulse	:1;
+		gulong	txwmarkpulse	:1;
+		gulong	rxwmarkpulse	:1;
+		gulong	rxfullpulse		:1;
+		gulong	xferdonepulse	:1;
+		gulong					:2;
+		gulong	rxfifooverflow	:1;
+		gulong	rxtimeout		:1;
+		gulong					:23;
 	}bit;
 };
 
 /* INT_CLR */
 union _IoPmcSpiIntClr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	txemptypulseTemp2		:1;
-		kulong	txwmarkpulseTemp2		:1;
-		kulong	rxwmarkpulseTemp2		:1;
-		kulong	rxfullpulseTemp2		:1;
-		kulong	xferdonepulseTemp2		:1;
-		kulong						:2;
-		kulong	rxfifooverflowTemp2	:1;
-		kulong	rxtimeoutTemp2			:1;
-		kulong						:23;
+		gulong	txemptypulseTemp2		:1;
+		gulong	txwmarkpulseTemp2		:1;
+		gulong	rxwmarkpulseTemp2		:1;
+		gulong	rxfullpulseTemp2		:1;
+		gulong	xferdonepulseTemp2		:1;
+		gulong						:2;
+		gulong	rxfifooverflowTemp2	:1;
+		gulong	rxtimeoutTemp2			:1;
+		gulong						:23;
 	}bit;
 };
 
 /* TXFIFO */
 union _IoPmcSpiTxfifo {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	txFifoLevel	:7;
-		kulong					:25;
+		gulong	txFifoLevel	:7;
+		gulong					:25;
 	}bit;
 };
 
 /* RXFIFO */
 union _IoPmcSpiRxfifo {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	rxFifoLevel	:7;
-		kulong					:25;
+		gulong	rxFifoLevel	:7;
+		gulong					:25;
 	}bit;
 };
 
 /* DMA_TO */
 union _IoPmcSpiDmaTo {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	timeout			:24;
-		kulong					:8;
+		gulong	timeout			:24;
+		gulong					:8;
 	}bit;
 };
 
 /* MS_DLY */
 union _IoPmcSpiMsDly {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	mwait			:8;
-		kulong					:24;
+		gulong	mwait			:8;
+		gulong					:24;
 	}bit;
 };
 
 /* EN */
 union _IoPmcSpiEn {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	enablereqTemp2		:1;
-		kulong	extenselTemp2		:3;
-		kulong					:28;
+		gulong	enablereqTemp2		:1;
+		gulong	extenselTemp2		:3;
+		gulong					:28;
 	}bit;
 };
 
 /* FIFO_DPTH */
 union _IoPmcSpiFifoDpth {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	fifodepth		:9;
-		kulong					:23;
+		gulong	fifodepth		:9;
+		gulong					:23;
 	}bit;
 };
 
 /* FIFO_WMK */
 union _IoPmcSpiFifoWmk {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	rxwmarkset		:8;
-		kulong	txwmarkset		:8;
-		kulong					:16;
+		gulong	rxwmarkset		:8;
+		gulong	txwmarkset		:8;
+		gulong					:16;
 	}bit;
 };
 
 /* TX_DWR */
 union _IoPmcSpiTxDwr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	txdummywr		:8;
-		kulong					:24;
+		gulong	txdummywr		:8;
+		gulong					:24;
 	}bit;
 };
 
 /* QSPI */
 struct _IoPmcSpi {
 	/* 1DD0_(0000 - 0003h)	*/
-	kulong					txdata;
+	gulong					txdata;
 	/* 1DD0_(0004 - 0007h)	*/
-	kulong					rxdata;
+	gulong					rxdata;
 	/* 1DD0_(0008 - 000Bh)	*/
 	IoPmcSpiDiv			div;
 	/* 1DD0_(000C - 000Fh)	*/
@@ -283,7 +277,7 @@ struct _IoPmcSpi {
 	/* 1DD0_(003C - 003Fh)	*/
 	IoPmcSpiEn			en;
 	/* 1DD0_(0040 - 0047h)	*/
-	kuchar					dmyPmcSpi040047[0x048 - 0x040];
+	guchar					dmyPmcSpi040047[0x048 - 0x040];
 	/* 1DD0_(0048 - 004Bh)	*/
 	IoPmcSpiFifoDpth	fifoDpth;
 	/* 1DD0_(004C - 004Fh)	*/
@@ -291,16 +285,8 @@ struct _IoPmcSpi {
 	/* 1DD0_(0050 - 0053h)	*/
 	IoPmcSpiTxDwr		txDwr;
 	/* 1DD0_0054 - 1DDF_FFFFh)	*/
-	kuchar					dmyPmcSpi00054Fffff[0x100000 - 0x054];
+	guchar					dmyPmcSpi00054Fffff[0x100000 - 0x054];
 };
-
-struct _JctpmcSpi {
-	KObject parent;
-};
-
-
-KConstType 			jctpmc_spi_get_type(void);
-JctpmcSpi*		        jctpmc_spi_new(void);
 
 
 #endif /* __JCTPMC_SPI_H__ */

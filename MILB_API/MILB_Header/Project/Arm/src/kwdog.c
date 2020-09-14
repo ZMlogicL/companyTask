@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kwdog.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KWdog, k_wdog);
+
 #define K_WDOG_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KWdogPrivate, K_TYPE_WDOG))
+
 
 struct _KWdogPrivate
 {
 
 };
+
 
 volatile IoWdog ioWdog __attribute__((section(".WDOG")));
 /**
@@ -43,4 +48,3 @@ KWdog* k_wdog_new(void)
     KWdog* self = k_object_new_with_private(K_TYPE_WDOG, sizeof(KWdogPrivate));
     return self;
 }
-

@@ -20,13 +20,13 @@
 #include "imjpegcommon.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImJpegCommon, im_jpeg_common);
-#define IM_JPEG_COMMON_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImJpegCommonPrivate, IM_TYPE_JPEG_COMMON))
+G_DEFINE_TYPE(ImJpegCommon, im_jpeg_common, G_TYPE_OBJECT);
+#define IM_JPEG_COMMON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_JPEG_COMMON, ImJpegCommonPrivate));
 
 
 struct _ImJpegCommonPrivate
 {
-	kint a;
+	gint a;
 };
 
 
@@ -35,7 +35,7 @@ struct _ImJpegCommonPrivate
 /*----------------------------------------------------------------------*/
 // quantization table for the next frame
 static TimgQuatTblPack S_GIM_JPEG_NEXT_FRAME_QUANT_TBL;
-static volatile kuchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
+static volatile guchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
 
 static TimgQuatTbl S_GIM_JPEG_QUANT_TBL_0;
 static TimgQuatTbl S_GIM_JPEG_QUANT_TBL_1;
@@ -43,8 +43,8 @@ static TimgQuatTbl S_GIM_JPEG_QUANT_TBL_2;
 static TimgQuatTbl S_GIM_JPEG_QUANT_TBL_3;
 
 // counter
-static volatile kushort S_GIM_JPEG_LINE_CNT = 0;
-static volatile kulong S_GIM_JPEG_SECT_CNT = 0;
+static volatile gushort S_GIM_JPEG_LINE_CNT = 0;
+static volatile gulong S_GIM_JPEG_SECT_CNT = 0;
 
 // encode setting table
 static TimgEncMng S_GIM_JPEG_ENC_MNG;
@@ -54,7 +54,7 @@ static TimgEncFrameMng S_GIM_JPEG_ENC_FRAME_MNG;
 static TimgDecMng S_GIM_JPEG_DEC_MNG;
 static TimgDecFrameMng S_GIM_JPEG_DEC_FRAME_MNG;
 
-static kint32 S_GIM_JPEG_RESULT_JUDGE = 0;
+static gint32 S_GIM_JPEG_RESULT_JUDGE = 0;
 
 /********************************************************/
 /* Default Quantization Table							*/
@@ -83,17 +83,44 @@ static const TimgQuatTbl S_GDEFAULT_QUANTIZE_TBL_CHROMA = {
 		0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63	}
 };
 /**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
  *IMPL
  */
-static void im_jpeg_common_constructor(ImJpegCommon *self)
+static void 		im_jpeg_common_class_init(ImJpegCommonClass *klass)
 {
-//	ImJpegCommonPrivate *priv = IM_JPEG_COMMON_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImJpegCommonPrivate));
 }
 
-static void im_jpeg_common_destructor(ImJpegCommon *self)
+static void 		im_jpeg_common_init(ImJpegCommon *self)
 {
-//	ImJpegCommonPrivate *priv = IM_JPEG_COMMON_GET_PRIVATE(self);
+	ImJpegCommonPrivate *priv = IM_JPEG_COMMON_GET_PRIVATE(self);
+	self->ddimUserCustom = ddim_user_custom_new();
 }
+
+static void 		dispose_od(GObject *object)
+{
+	ImJpegCommonPrivate *priv = IM_JPEG_COMMON_GET_PRIVATE(object);
+	ImJpegCommon *self = im_jpeg_common_new();
+	if(self->ddimUserCustom){
+		g_object_unref(self->ddimUserCustom);
+		self->ddimUserCustom = NULL;
+	}
+	G_OBJECT_CLASS(im_jpeg_common_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImJpegCommonPrivate *priv = IM_JPEG_COMMON_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_jpeg_common_parent_class) -> dispose(object);
+}
+
 /**
  * PUBLIC
  */
@@ -108,7 +135,7 @@ static void im_jpeg_common_destructor(ImJpegCommon *self)
  */
 void im_jpeg_init( ImJpegCommon*self )
 {
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	im_jpeg_on_clk(NULL);
 	im_jpeg_on_iclk(NULL);
 	im_jpeg_on_hclk(NULL);
@@ -118,38 +145,38 @@ void im_jpeg_init( ImJpegCommon*self )
 	im_jpeg_off_iclk(NULL);
 	im_jpeg_off_clk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 }
 
 /**
  * @brief		The semaphore of JPEG is acquired
- * @param[in]	kint32	tmout	:Timeout time ( -1:Forever, 0:Polling, Other(ms))
+ * @param[in]	gint32	tmout	:Timeout time ( -1:Forever, 0:Polling, Other(ms))
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_SEM_TIMEOUT /
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_SEM_TIMEOUT /
  * ImJpegCommon_D_IM_JPEG_SEM_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_open(ImJpegCommon*self, kint32 tmout )
+gint32 im_jpeg_open(ImJpegCommon*self, gint32 tmout )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
-	if (tmout < D_DDIM_USER_SEM_WAIT_FEVR) {
+	if (tmout < DdimUserCustom_SEM_WAIT_FEVR) {
 		Ddim_Assertion(("I:im_jpeg_open: input param error. tmout = %x\n", tmout));
 		return ImJpegCommon_D_IM_JPEG_PARAM_ERROR;
 	}
 #endif
 
-	if ( D_DDIM_USER_SEM_WAIT_POL == tmout) {
+	if ( DdimUserCustom_SEM_WAIT_POL == tmout) {
 		// pol_sem()
-		ercd = DDIM_User_Pol_Sem( SID_IM_JPEG);
+		ercd = ddim_user_custom_pol_sem(self->ddimUserCustom,  SID_IM_JPEG);
 	}
 	else {
 		// twai_sem()
-		ercd = DDIM_User_Twai_Sem( SID_IM_JPEG, (DDIM_USER_TMO) tmout);
+		ercd = ddim_user_custom_twai_sem(self->ddimUserCustom,  SID_IM_JPEG, (DdimUserCustom_TMO) tmout);
 	}
 
-	if ( D_DDIM_USER_E_OK != ercd) {
-		if ( D_DDIM_USER_E_TMOUT == ercd) {
+	if ( DdimUserCustom_E_OK != ercd) {
+		if ( DdimUserCustom_E_TMOUT == ercd) {
 			Ddim_Print(("I:im_jpeg_open() Error : Semaphore Get Time Out. ercd = %d\n", ercd));
 			return ImJpegCommon_D_IM_JPEG_SEM_TIMEOUT;
 		}
@@ -178,11 +205,11 @@ kint32 im_jpeg_open(ImJpegCommon*self, kint32 tmout )
  * @brief		The semaphore of JPEG is returned
  * @param[in]	None
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_SEM_NG
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_SEM_NG
  */
-kint32 im_jpeg_close( ImJpegCommon*self )
+gint32 im_jpeg_close( ImJpegCommon*self )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 	// ICLK off
 	im_jpeg_off_iclk(NULL);
@@ -192,8 +219,8 @@ kint32 im_jpeg_close( ImJpegCommon*self )
 
 	S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
 
-	ercd = DDIM_User_Sig_Sem( SID_IM_JPEG);
-	if (ercd != D_DDIM_USER_E_OK) {
+	ercd = ddim_user_custom_sig_sem(self->ddimUserCustom,  SID_IM_JPEG);
+	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("I:im_jpeg_close() Error : ercd = %d\n", ercd));
 		return ImJpegCommon_D_IM_JPEG_SEM_NG;
 	}
@@ -204,12 +231,12 @@ kint32 im_jpeg_close( ImJpegCommon*self )
 /**
  * @brief		Set quantization table
  * @param[in]	TimgQuatTblPack*	pQuantTbl		: Pointer to quantization table
- * @param[in]	kuchar						nextFrmFlg	: Flag to determine whether a quantization table for the next frame
+ * @param[in]	guchar						nextFrmFlg	: Flag to determine whether a quantization table for the next frame
  * @param[out]	None
  * @return 		None
  * @note		"pQuantTbl" is NULL, use the default table.
  */
-void im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, kuchar nextFrmFlg )
+void im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, guchar nextFrmFlg )
 {
 	// Set flag for next frame
 	S_GIM_JPEG_UPDATE_QUANT_FLG = nextFrmFlg;
@@ -220,9 +247,9 @@ void im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, kuchar next
 	}
 	else {
 		// Set quantization table
-		DDIM_User_AhbReg_SpinLock();
+		ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 		im_jpeg_set_quant_tbl(NULL, pQuantTbl);
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	}
 
 	return;
@@ -230,23 +257,23 @@ void im_jpeg_set_qtbl(ImJpegCommon*self, TimgQuatTblPack* pQuantTbl, kuchar next
 
 /**
  * @brief		Set the quantization table value by considering the quality value.
- * @param[in]	kint32	quaValue		: Quality value ( format: S7.10 )
- * @param[in]	kuchar	nextFrmFlg	: Flag to determine whether a quantization table for the next frame
+ * @param[in]	gint32	quaValue		: Quality value ( format: S7.10 )
+ * @param[in]	guchar	nextFrmFlg	: Flag to determine whether a quantization table for the next frame
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg )
+gint32 im_jpeg_set_quality(ImJpegCommon*self, gint32 quaValue, guchar nextFrmFlg )
 {
-	kint32 i, index;
-	kuchar lumaArray[64];
-	kuchar chroArray[64];
-	kint32 lumaBuf;
-	kint32 chroBuf;
+	gint32 i, index;
+	guchar lumaArray[64];
+	guchar chroArray[64];
+	gint32 lumaBuf;
+	gint32 chroBuf;
 
 	// parameter check
 #ifdef CO_PARAM_CHECK
 	// check for S7.10 format (18bits length)
-	if ((kuint32) quaValue >= (1 << 17)) {
+	if ((guint32) quaValue >= (1 << 17)) {
 		Ddim_Assertion(("im_jpeg_set_quality(): Quality value error.\n"));
 		return ImJpegCommon_D_IM_JPEG_PARAM_ERROR;
 	}
@@ -265,10 +292,10 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 	else {
 		// DC/AC component
 		for (i = 0; i < 64; i++) {
-			lumaBuf = (((((kint32) (S_GDEFAULT_QUANTIZE_TBL_LUMA.quantValue[i])) << 11) / quaValue) + 1) >> 1;
-			chroBuf = (((((kint32) (S_GDEFAULT_QUANTIZE_TBL_CHROMA.quantValue[i])) << 11) / quaValue) + 1) >> 1;
-			lumaArray[i] = (kuchar) ImJpegCommon_IM_JPEG_LIMIT(lumaBuf, 1, 255);
-			chroArray[i] = (kuchar) ImJpegCommon_IM_JPEG_LIMIT(chroBuf, 1, 255);
+			lumaBuf = (((((gint32) (S_GDEFAULT_QUANTIZE_TBL_LUMA.quantValue[i])) << 11) / quaValue) + 1) >> 1;
+			chroBuf = (((((gint32) (S_GDEFAULT_QUANTIZE_TBL_CHROMA.quantValue[i])) << 11) / quaValue) + 1) >> 1;
+			lumaArray[i] = (guchar) ImJpegCommon_IM_JPEG_LIMIT(lumaBuf, 1, 255);
+			chroArray[i] = (guchar) ImJpegCommon_IM_JPEG_LIMIT(chroBuf, 1, 255);
 		}
 	}
 
@@ -300,7 +327,7 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 		S_GIM_JPEG_NEXT_FRAME_QUANT_TBL.quantizationTbl3 = &S_GIM_JPEG_QUANT_TBL_3;
 
 #ifdef CO_IM_JPEG_DEBUG
-		kuchar i;
+		guchar i;
 		for ( i=0; i < 64; i++ ) {
 			Ddim_Print(("S_GIM_JPEG_NEXT_FRAME_QUANT_TBL.quantizationTbl0.quantValue[%d]=0x%X\n", i,
 				S_GIM_JPEG_NEXT_FRAME_QUANT_TBL.quantizationTbl0->quantValue[i]));
@@ -321,7 +348,7 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 
 	}
 	else {
-		DDIM_User_AhbReg_SpinLock();
+		ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 		// HCLK on
 		im_jpeg_on_hclk(NULL);
@@ -333,7 +360,7 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 		ImJpegCommon_IM_JPEG_DSB();
 
 		// QTTBL SRAM power down control wait time.
-		Dd_ARM_Wait_ns(1000);
+		DD_ARM_WAIT_NS(1000);
 
 		// Set Quantization table
 		// Quantization table No.0 for Y
@@ -358,8 +385,8 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 		}
 
 #ifdef CO_IM_JPEG_DEBUG
-		static kint32 zeroCnt=0;
-		kulong value;
+		static gint32 zeroCnt=0;
+		gulong value;
 		for ( i = 0; i < 16; i++ ) {
 			value = ioJpg7.jpqt0.word[i];
 			if ( (value & 0xFF000000) == 0 ) {
@@ -433,7 +460,7 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
 
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	}
 
 	return ImJpegCommon_D_IM_JPEG_OK;
@@ -441,19 +468,19 @@ kint32 im_jpeg_set_quality(ImJpegCommon*self, kint32 quaValue, kuchar nextFrmFlg
 
 /**
  * @brief		Setting the block downsampling (for Pass-1 mode)
- * @param[in]	kuchar downspType : downsampling type  (0:1/1, 1:1/2, 2:1/4, 3:1/8)
+ * @param[in]	guchar downspType : downsampling type  (0:1/1, 1:1/2, 2:1/4, 3:1/8)
  * @param[out]	None
- * @return		kushort	: Proportion of remainder after adjusting for size when decimated. (format: 8.8)
+ * @return		gushort	: Proportion of remainder after adjusting for size when decimated. (format: 8.8)
  */
-kushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType )
+gushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, guchar downspType )
 {
-	kushort dspHSize;
-	kushort dspVSize;
+	gushort dspHSize;
+	gushort dspVSize;
 	kdouble orgSize;
 	kdouble mcrSize;
-	kushort errRatio = 0;
-	kuint32 roundH;
-	kuint32 roundV;
+	gushort errRatio = 0;
+	guint32 roundH;
+	guint32 roundV;
 
 #ifdef CO_PARAM_CHECK
 	if (downspType > 3) {
@@ -482,7 +509,7 @@ kushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType )
 			return 0;
 	}
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -505,14 +532,14 @@ kushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType )
 
 	// Horizon
 	// adjust align
-	dspHSize = (kushort) (roundH * (kushort) ((S_GIM_JPEG_ENC_MNG.width / (0x1 << downspType)) / roundH));
+	dspHSize = (gushort) (roundH * (gushort) ((S_GIM_JPEG_ENC_MNG.width / (0x1 << downspType)) / roundH));
 	S_GIM_JPEG_ENC_MNG.width = (dspHSize << downspType);
 	ioJpg7.jimgsh.bit.jimgsh = S_GIM_JPEG_ENC_MNG.width;
 	ioJpg7.jpwidth.bit.jpwidth = dspHSize;
 
 	// Vertical
 	// adjust align
-	dspVSize = (kushort) (roundV * (kushort) (S_GIM_JPEG_ENC_MNG.lines / (0x1 << downspType) / roundV));
+	dspVSize = (gushort) (roundV * (gushort) (S_GIM_JPEG_ENC_MNG.lines / (0x1 << downspType) / roundV));
 	S_GIM_JPEG_ENC_MNG.lines = (dspVSize << downspType);
 	ioJpg7.jimgsv.bit.jimgsv = S_GIM_JPEG_ENC_MNG.lines;
 	ioJpg7.jpheight.bit.jpheight = dspVSize;
@@ -520,11 +547,11 @@ kushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	// Ask the error ratio
 	mcrSize = ((kdouble) S_GIM_JPEG_ENC_MNG.width * S_GIM_JPEG_ENC_MNG.lines);
-	errRatio = (kushort) ((orgSize / mcrSize) * 256);
+	errRatio = (gushort) ((orgSize / mcrSize) * 256);
 
 	return errRatio;
 }
@@ -533,9 +560,9 @@ kushort im_jpeg_set_down_sampling_rate(ImJpegCommon*self, kuchar downspType )
  * @brief		Base configuration of the JPEG encoding process
  * @param[in]	TimgEncMng*	pJpgEncMng	: Pointer to JPEG Encode base management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
+gint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncMng == NULL) {
@@ -544,7 +571,7 @@ kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -555,7 +582,7 @@ kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -605,7 +632,7 @@ kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
 	ioJpg7.jmode.bit.jcscccen = 0;
 	// Not use Ext mode
 	ioJpg7.jmode.bit.jpbdext = 0;
-	ioJpg7.jmode.bit.jmemform = (kuchar) pJpgEncMng->memFormat;
+	ioJpg7.jmode.bit.jmemform = (guchar) pJpgEncMng->memFormat;
 	ioJpg7.jmode.bit.jpbendian = pJpgEncMng->pbufCtrl.endian;
 	ioJpg7.jmode.bit.jjbendian = pJpgEncMng->jbufCtrl.endian;
 	ioJpg7.jmode.bit.jburstAlOn = pJpgEncMng->burstAlignment;
@@ -693,9 +720,9 @@ kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	// SRAM power down control wait time.
-	Dd_ARM_Wait_ns(1000);
+	DD_ARM_WAIT_NS(1000);
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
 
@@ -705,9 +732,9 @@ kint32 im_jpeg_ctrl_enc(ImJpegCommon*self, TimgEncMng* pJpgEncMng )
  * @brief		Get the frame settings for Jpeg decode.
  * @param[in]	None
  * @param[out]	TimgDecFrameMng*	pJpgDecFrmMng	:Pointer to JPEG Decode frame management table
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrmMng )
+gint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrmMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecFrmMng == NULL) {
@@ -715,7 +742,7 @@ kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrm
 		return ImJpegCommon_D_IM_JPEG_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -730,7 +757,7 @@ kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrm
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
 
@@ -738,13 +765,13 @@ kint32	im_jpeg_get_ctrl_dec_frame(ImJpegCommon*self, TimgDecFrameMng* pJpgDecFrm
  * @brief		JPEG Decoding process asynchronous.
  * @param[in]	None
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
  */
-kint32 im_jpeg_start_dec( ImJpegCommon*self )
+gint32 im_jpeg_start_dec( ImJpegCommon*self )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -753,14 +780,14 @@ kint32 im_jpeg_start_dec( ImJpegCommon*self )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	// Initialize
 	// Decompression Error Code
 	S_GIM_JPEG_DEC_MNG.errCode = 0;
@@ -769,11 +796,11 @@ kint32 im_jpeg_start_dec( ImJpegCommon*self )
 	S_GIM_JPEG_RESULT_JUDGE = 0;
 	S_GIM_JPEG_LINE_CNT = 0;
 	S_GIM_JPEG_SECT_CNT = 0;
-	ercd = DDIM_User_Clr_Flg( FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom,  FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
+	if ( DdimUserCustom_E_OK != ercd) {
 		return ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR;
 	}
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -786,12 +813,12 @@ kint32 im_jpeg_start_dec( ImJpegCommon*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
 
-ImJpegCommon* im_jpeg_common_new(void)
+ImJpegCommon* 		im_jpeg_common_new(void)
 {
-	ImJpegCommon *self = k_object_new_with_private(IM_TYPE_JPEG_COMMON, sizeof(ImJpegCommonPrivate));
+	ImJpegCommon *self = g_object_new(IM_TYPE_JPEG_COMMON, NULL);
 	return self;
 }

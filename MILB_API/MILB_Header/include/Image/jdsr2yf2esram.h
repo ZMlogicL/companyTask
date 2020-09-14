@@ -279,30 +279,30 @@ struct _IoR2ySram {
 	IoR2ySramTchsgdata		tchsgdata;	/* 294A_(6200 - 63FFh) */
 	IoR2ySramTchsbdata		tchsbdata;	/* 294A_(6400 - 65FFh) */
 	unsigned char 				dmy66007fff[0x8000-0x6600];	/* 294A_(6600 - 7FFFh) */
-	IoR2ySramGmrgbdf		gmrgbdf;	/* 294A_(8000 - 87FFh) */
-	IoR2ySramGmrdf			gmrdf;		/* 294A_(8800 - 8FFFh) */
-	IoR2ySramGmgdf			gmgdf;		/* 294A_(9000 - 97FFh) */
+	IoR2ySramGmrgbdf		gmrgbdf;		/* 294A_(8000 - 87FFh) */
+	IoR2ySramGmrdf			gmrdf;			/* 294A_(8800 - 8FFFh) */
+	IoR2ySramGmgdf			gmgdf;			/* 294A_(9000 - 97FFh) */
 	IoR2ySramGmbdf			gmbdf;		/* 294A_(9800 - 9FFFh) */
 	IoR2ySramGmybdf			gmybdf;		/* 294A_(A000 - A7FFh) */
-	IoR2ySramGmrgbfl		gmrgbfl;	/* 294A_(A800 - A9FFh) */
-	IoR2ySramGmrfl				gmrfl;		/* 294A_(AA00 - ABFFh) */
-	IoR2ySramGmgfl			gmgfl;		/* 294A_(AC00 - ADFFh) */
-	IoR2ySramGmbfl			gmbfl;		/* 294A_(AE00 - AFFFh) */
+	IoR2ySramGmrgbfl		gmrgbfl;		/* 294A_(A800 - A9FFh) */
+	IoR2ySramGmrfl				gmrfl;			/* 294A_(AA00 - ABFFh) */
+	IoR2ySramGmgfl			gmgfl;			/* 294A_(AC00 - ADFFh) */
+	IoR2ySramGmbfl			gmbfl;			/* 294A_(AE00 - AFFFh) */
 	IoR2ySramGmybfl			gmybfl;		/* 294A_(B000 - B1FFh) */
-	unsigned char 				dmyB200Bfff[0xC000-0xB200];	/* 294A_(B200 - BFFFh) */
-	IoR2ySramEghwscl			eghwscl;	/* 294A_(C000 - C1FFh) */
-	IoR2ySramEghwton		eghwton;	/* 294A_(C200 - C3FFh) */
-	IoR2ySramEgmwscl		egmwscl;	/* 294A_(C400 - C5FFh) */
+	unsigned char 				dmyB200Bfff[0xC000-0xB200];		/* 294A_(B200 - BFFFh) */
+	IoR2ySramEghwscl			eghwscl;		/* 294A_(C000 - C1FFh) */
+	IoR2ySramEghwton		eghwton;		/* 294A_(C200 - C3FFh) */
+	IoR2ySramEgmwscl		egmwscl;		/* 294A_(C400 - C5FFh) */
 	IoR2ySramEgmwton		egmwton;	/* 294A_(C600 - C7FFh) */
-	IoR2ySramEglwscl			eglwscl;	/* 294A_(C800 - C9FFh) */
-	IoR2ySramEglwton			eglwton;	/* 294A_(CA00 - CBFFh) */
-	IoR2ySramEgmpscl		egmpscl;	/* 294A_(CC00 - CDB9h) */
+	IoR2ySramEglwscl			eglwscl;		/* 294A_(C800 - C9FFh) */
+	IoR2ySramEglwton			eglwton;		/* 294A_(CA00 - CBFFh) */
+	IoR2ySramEgmpscl		egmpscl;		/* 294A_(CC00 - CDB9h) */
 	unsigned char 				dmyCdbcDfff[0xE000-0xCDBA];	/* 294A_(CDBA - DFFFh) */
-	IoR2ySramDkntbl			dkntblr;	/* 294A_(E000 - E1FFh) */
-	IoR2ySramDkntbl			dkntblg;	/* 294A_(E200 - E3FFh) */
-	IoR2ySramDkntbl			dkntblb;	/* 294A_(E400 - E5FFh) */
+	IoR2ySramDkntbl			dkntblr;		/* 294A_(E000 - E1FFh) */
+	IoR2ySramDkntbl			dkntblg;		/* 294A_(E200 - E3FFh) */
+	IoR2ySramDkntbl			dkntblb;		/* 294A_(E400 - E5FFh) */
 	unsigned char 				dmyE600Efff[0xF000-0xE600];	/* 294A_(E600 - EFFFh) */
-	IoR2ySramHsty				hsty;		/* 294A_(F000 - F0FFh) */
+	IoR2ySramHsty				hsty;				/* 294A_(F000 - F0FFh) */
 	unsigned char 				dmy294af100294affff[0x294B0000-0x294AF100];	/* 294A_F100 - 294A_FFFFh */
 
 };

@@ -22,13 +22,41 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro76, ct_impro_7_6)
 
 struct _CtImpro76Private
 {
-
+    TImProCallbackCfg callbackIntCtrl;
+    T_IM_PRO_INT_B2BTOP_CTRL b2btopIntCtrl;
+    T_IM_PRO_INT_VHD_DELAY_CTRL vhdDelayIntCtrlMax;
+    T_IM_PRO_INT_VHD_DELAY_CTRL vhdDelayIntCtrlMin;
+    TImProCallbackCfg callbackIntCtrlMax;
 };
 
 
 static void ct_impro_7_6_constructor(CtImpro76 *self)
 {
 	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
+
+    priv->callbackIntCtrl.inthandler = NULL;
+    priv->callbackIntCtrl.userParam = 0;
+
+    priv->b2btopIntCtrl.intMode = E_IM_PRO_INT_INTMD_ORAND;
+    priv->b2btopIntCtrl.vdEnable[0].interruptBit = 0;
+    priv->b2btopIntCtrl.vdEnable[0].permissionFlg = 0;
+    priv->b2btopIntCtrl.hdEnable[0].interruptBit = 0;
+    priv->b2btopIntCtrl.hdEnable[0].permissionFlg = 0;
+    priv->b2btopIntCtrl.vdEnable[1].interruptBit = 0;
+    priv->b2btopIntCtrl.vdEnable[1].permissionFlg = 0;
+    priv->b2btopIntCtrl.hdEnable[1].interruptBit = 0;
+    priv->b2btopIntCtrl.hdEnable[1].permissionFlg = 0;
+
+    priv->vhdDelayIntCtrlMax.hdDelay = 12288;
+    priv->vhdDelayIntCtrlMax.vdHDelay = 12288;
+    priv->vhdDelayIntCtrlMax.vdVDelay = 16383;
+
+    priv->vhdDelayIntCtrlMin.hdDelay = 0;
+    priv->vhdDelayIntCtrlMin.vdHDelay = 0;
+    priv->vhdDelayIntCtrlMin.vdVDelay = 0;
+    
+    priv->callbackIntCtrlMax.inthandler = im_pro_callback_b2b_hd_int_cb;
+    priv->callbackIntCtrlMax.userParam = 0;
 }
 
 static void ct_impro_7_6_destructor(CtImpro76 *self)
@@ -37,152 +65,123 @@ static void ct_impro_7_6_destructor(CtImpro76 *self)
 }
 
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_60(const kuint32 idx)
+void ct_im_pro_7_6_0(CtImpro76* self,const kuint32 idx)
 {
+	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kuchar ch;
     kulong userParam;
-    TImProCallbackCfg intCtrl = {
-        .inthandler = NULL,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
         for(unitNo = 0; unitNo < E_IM_PRO_BOTH_UNIT; unitNo++) {
             for(ch = 0; ch < D_IM_PRO_SRO_SDC_CH_NUM; ch++) {
                 for(userParam = 0; userParam < 4; userParam++) {
-                    intCtrl.inthandler = im_pro_callback_sro_sdc_int_cb;
-                    intCtrl.userParam = userParam;
-                    ercd = Im_PRO_SDC_Set_Int_Handler(unitNo, ch, &intCtrl);
-                    im_pro_7_60_Print(NULL,"", unitNo, ch, ercd, &intCtrl);
+                    priv->callbackIntCtrl.inthandler = im_pro_callback_sro_sdc_int_cb;
+                    priv->callbackIntCtrl.userParam = userParam;
+                    ercd = Im_PRO_SDC_Set_Int_Handler(unitNo, ch, &priv->callbackIntCtrl);
+                    im_pro_7_print_60(im_pro_7_print_get(), "", unitNo, ch, ercd, &priv->callbackIntCtrl);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_7_61(const kuint32 idx)
+void ct_im_pro_7_6_1(CtImpro76* self,const kuint32 idx)
 {
+	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
     kint32 ercd;
     kuchar permissionFlg;
     E_IM_PRO_UNIT_NUM unitNo;
     kuchar  intMode;
-    T_IM_PRO_INT_B2BTOP_CTRL intCtrl = {
-        .intMode = E_IM_PRO_INT_INTMD_ORAND,
-        .vdEnable[0].interruptBit = 0,
-        .vdEnable[0].permissionFlg = 0,
-        .hdEnable[0].interruptBit = 0,
-        .hdEnable[0].permissionFlg = 0,
-        .vdEnable[1].interruptBit = 0,
-        .vdEnable[1].permissionFlg = 0,
-        .hdEnable[1].interruptBit = 0,
-        .hdEnable[1].permissionFlg = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
-            for(intMode = E_IM_PRO_INT_INTMD_OR; intMode < E_IM_PRO_INT_INTMD_ORAND + 1; intMode++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+            for(intMode = ImPro_INT_INTMD_OR; intMode < E_IM_PRO_INT_INTMD_ORAND + 1; intMode++) {
                 for(permissionFlg = 0; permissionFlg < 2; permissionFlg++) {
-                    intCtrl.vdEnable[0].permissionFlg = permissionFlg;
-                    intCtrl.hdEnable[0].permissionFlg = permissionFlg;
-                    intCtrl.vdEnable[1].permissionFlg = permissionFlg;
-                    intCtrl.hdEnable[1].permissionFlg = permissionFlg;
+                    priv->b2btopIntCtrl.vdEnable[0].permissionFlg = permissionFlg;
+                    priv->b2btopIntCtrl.hdEnable[0].permissionFlg = permissionFlg;
+                    priv->b2btopIntCtrl.vdEnable[1].permissionFlg = permissionFlg;
+                    priv->b2btopIntCtrl.hdEnable[1].permissionFlg = permissionFlg;
 
-                    intCtrl.vdEnable[0].interruptBit = D_IM_PRO_B2BTOP_INT_VDE0;
-                    intCtrl.hdEnable[0].interruptBit = D_IM_PRO_B2BTOP_INT_HDE0;
-                    intCtrl.vdEnable[1].interruptBit = D_IM_PRO_B2BTOP_INT_VDE1;
-                    intCtrl.hdEnable[1].interruptBit = D_IM_PRO_B2BTOP_INT_HDE1;
-                    intCtrl.intMode = intMode;
+                    priv->b2btopIntCtrl.vdEnable[0].interruptBit = D_IM_PRO_B2BTOP_INT_VDE0;
+                    priv->b2btopIntCtrl.hdEnable[0].interruptBit = D_IM_PRO_B2BTOP_INT_HDE0;
+                    priv->b2btopIntCtrl.vdEnable[1].interruptBit = D_IM_PRO_B2BTOP_INT_VDE1;
+                    priv->b2btopIntCtrl.hdEnable[1].interruptBit = D_IM_PRO_B2BTOP_INT_HDE1;
+                    priv->b2btopIntCtrl.intMode = intMode;
 
 #ifdef CO_DEBUG_ON_PC
-                    ioPro.imgPipe[unitNo].b2b.b2btop.vhdintflg.word = (intCtrl.vdEnable[0].interruptBit | intCtrl.vdEnable[1].interruptBit | intCtrl.hdEnable[0].interruptBit | intCtrl.hdEnable[1].interruptBit);
+                    ioPro.imgPipe[unitNo].b2b.b2btop.vhdintflg.word = (priv->b2btopIntCtrl.vdEnable[0].interruptBit | priv->b2btopIntCtrl.vdEnable[1].interruptBit | priv->b2btopIntCtrl.hdEnable[0].interruptBit | priv->b2btopIntCtrl.hdEnable[1].interruptBit);
 #endif  // CO_DEBUG_ON_PC
-                    ercd = Im_PRO_B2BTOP_Interrupt_Ctrl(unitNo, &intCtrl);
-                    im_pro_7_61_Print(NULL,ercd, unitNo, &intCtrl, permissionFlg);
+                    ercd = Im_PRO_B2BTOP_Interrupt_Ctrl(unitNo, &priv->b2btopIntCtrl);
+                    im_pro_7_print_61(im_pro_7_print_get(), ercd, unitNo, &priv->b2btopIntCtrl, permissionFlg);
                 }
             }
         }
     }
 }
 
-void ct_im_pro_7_62(const kuint32 idx)
+void ct_im_pro_7_6_2(CtImpro76* self,const kuint32 idx)
 {
+	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kuchar ch;
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMax = {
-        .hdDelay = 12288,
-        .vdHDelay = 12288,
-        .vdVDelay = 16383,
-    };
-
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMin = {
-        .hdDelay = 0,
-        .vdHDelay = 0,
-        .vdVDelay = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
             for(ch = 0; ch < 2; ch++) {
-                ercd = Im_PRO_B2BTOP_Set_VHD_Delay(unitNo, ch, &intCtrlMax);
-                im_pro_7_62_Print(NULL,"max_para", unitNo, ch, ercd, &intCtrlMax);
+                ercd = Im_PRO_B2BTOP_Set_VHD_Delay(unitNo, ch, &priv->vhdDelayIntCtrlMax);
+                im_pro_7_print_62(im_pro_7_print_get(), "max_para", unitNo, ch, ercd, &priv->vhdDelayIntCtrlMax);
 
-                ercd = Im_PRO_B2BTOP_Set_VHD_Delay(unitNo, ch, &intCtrlMin);
-                im_pro_7_62_Print(NULL,"min_para", unitNo, ch, ercd, &intCtrlMin);
+                ercd = Im_PRO_B2BTOP_Set_VHD_Delay(unitNo, ch, &priv->vhdDelayIntCtrlMin);
+                im_pro_7_print_62(im_pro_7_print_get(), "min_para", unitNo, ch, ercd, &priv->vhdDelayIntCtrlMin);
             }
         }
     }
 }
 
-void ct_im_pro_7_63(const kuint32 idx)
+void ct_im_pro_7_6_3(CtImpro76* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_64(const kuint32 idx)
+void ct_im_pro_7_6_4(CtImpro76* self,const kuint32 idx)
 {
+	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_b2b_vd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
             for(userParam = 0; userParam < 4; userParam++) {
-                intCtrlMax.userParam = userParam;
-                ercd = Im_PRO_B2BTOP_Pipe_Set_VD_Int_Handler(unitNo, &intCtrlMax);
-                im_pro_7_64_Print(NULL,"", ercd, unitNo, &intCtrlMax);
+                priv->callbackIntCtrlMax.userParam = userParam;
+                ercd = Im_PRO_B2BTOP_Pipe_Set_VD_Int_Handler(unitNo, &priv->callbackIntCtrlMax);
+                im_pro_7_print_64(im_pro_7_print_get(), "", ercd, unitNo, &priv->callbackIntCtrlMax);
             }
         }
     }
 }
 
-void ct_im_pro_7_65(const kuint32 idx)
+void ct_im_pro_7_6_5(CtImpro76* self,const kuint32 idx)
 {
+	CtImpro76Private *priv = CT_IMPRO_7_6_GET_PRIVATE(self);
     kint32 ercd;
     E_IM_PRO_UNIT_NUM unitNo;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_b2b_hd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
-        for(unitNo = E_IM_PRO_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
+        for(unitNo = ImPro_UNIT_NUM_1; unitNo < E_IM_PRO_UNIT_NUM_MAX; unitNo++) {
             for(userParam = 0; userParam < 4; userParam++) {
-                intCtrlMax.userParam = userParam;
-                ercd = Im_PRO_B2BTOP_Pipe_Set_HD_Int_Handler(unitNo, &intCtrlMax);
-                im_pro_7_65_Print(NULL,"", ercd, unitNo, &intCtrlMax);
+                priv->callbackIntCtrlMax.userParam = userParam;
+                ercd = Im_PRO_B2BTOP_Pipe_Set_HD_Int_Handler(unitNo, &priv->callbackIntCtrlMax);
+                im_pro_7_print_65(im_pro_7_print_get(), "", ercd, unitNo, &priv->callbackIntCtrlMax);
             }
         }
     }
 }
 
-void ct_im_pro_7_66(const kuint32 idx)
+void ct_im_pro_7_6_6(CtImpro76* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32  chLoopcnt;
@@ -191,7 +190,7 @@ void ct_im_pro_7_66(const kuint32 idx)
     kuint32 prchInte = (D_IM_PRO_PRCHINTENB_PRE | D_IM_PRO_PRCHINTENB_PREE | D_IM_PRO_PRCHINTENB_PRXE);
     kuint32 prchIntf = (D_IM_PRO_PRCHINTFLG_PRF | D_IM_PRO_PRCHINTFLG_PREF | D_IM_PRO_PRCHINTFLG_PRXF);
 
-    for(chLoopcnt = 0; chLoopcnt < E_IM_PRO_PWCH_MAX; chLoopcnt++) {
+    for(chLoopcnt = 0; chLoopcnt < ImProPwch_MAX; chLoopcnt++) {
         im_pro_debug_pwch_intflg_fill(im_pro_debug_get(),0, E_IM_PRO_BLOCK_TYPE_B2B, chLoopcnt, pwchInte, pwchIntf);
     }
 
@@ -202,7 +201,7 @@ void ct_im_pro_7_66(const kuint32 idx)
     Im_PRO_B2BTOP_Pipe1_Int_Handler();
 }
 
-void ct_im_pro_7_67(const kuint32 idx)
+void ct_im_pro_7_6_7(CtImpro76* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 vdInte = (D_IM_PRO_B2BTOP_INT_VDE0 | D_IM_PRO_B2BTOP_INT_VDE1);
@@ -213,7 +212,7 @@ void ct_im_pro_7_67(const kuint32 idx)
     Im_PRO_B2BTOP_Pipe1_VD_Int_Handler();
 }
 
-void ct_im_pro_7_68(const kuint32 idx)
+void ct_im_pro_7_6_8(CtImpro76* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 hdInte = (D_IM_PRO_B2BTOP_INT_HDE0 | D_IM_PRO_B2BTOP_INT_HDE1);
@@ -224,7 +223,7 @@ void ct_im_pro_7_68(const kuint32 idx)
     Im_PRO_B2BTOP_Pipe1_HD_Int_Handler();
 }
 
-void ct_im_pro_7_69(const kuint32 idx)
+void ct_im_pro_7_6_9(CtImpro76* self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32  chLoopcnt;
@@ -233,7 +232,7 @@ void ct_im_pro_7_69(const kuint32 idx)
     kuint32 prchInte = (D_IM_PRO_PRCHINTENB_PRE | D_IM_PRO_PRCHINTENB_PREE | D_IM_PRO_PRCHINTENB_PRXE);
     kuint32 prchIntf = (D_IM_PRO_PRCHINTFLG_PRF | D_IM_PRO_PRCHINTFLG_PREF | D_IM_PRO_PRCHINTFLG_PRXF);
 
-    for(chLoopcnt = 0; chLoopcnt < E_IM_PRO_PWCH_MAX; chLoopcnt++) {
+    for(chLoopcnt = 0; chLoopcnt < ImProPwch_MAX; chLoopcnt++) {
         im_pro_debug_pwch_intflg_fill(im_pro_debug_get(),1, E_IM_PRO_BLOCK_TYPE_B2B, chLoopcnt, pwchInte, pwchIntf);
     }
 

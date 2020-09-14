@@ -1,7 +1,7 @@
 /*
  *ctimdisp2m.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -27,28 +30,49 @@
 #include "imdisp2group.h"
 #include "ctimdisp2m.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2m, ct_im_disp2m, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2M_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2mPrivate, CT_TYPE_IM_DISP2M))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2m, ct_im_disp2m, IM_TYPE_DISP2_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2M_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2M, CtImDisp2mPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp2mPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
-
-static void outputAntiGamma(const T_IM_DISP_ANTI_GAMMA_TBL* antiTbl);
-static void outputMainGamma(const T_IM_DISP_GAMMA_TBL_IN* gammaTbl);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2mDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp2m_constructor(CtImDisp2m *self)
+static void ct_im_disp2m_class_init(CtImDisp2mClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2mPrivate));
+}
+
+static void ct_im_disp2m_init(CtImDisp2m *self)
 {
 	//CtImDisp2mPrivate *priv = CT_IM_DISP2M_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -57,8 +81,29 @@ static void ct_im_disp2m_constructor(CtImDisp2m *self)
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 }
 
-static void ct_im_disp2m_destructor(CtImDisp2m *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2m *self = CT_IM_DISP2M(object);
+//	CtImDisp2mPrivate *priv = CT_IM_DISP2M_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2m_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImDisp2m *self = CT_IM_DISP2M(object);
+//	CtImDisp2mPrivate *priv = CT_IM_DISP2M_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2m_parent_class)->finalize(object);
 }
 
 static void outputAntiGamma(const T_IM_DISP_ANTI_GAMMA_TBL* antiTbl)
@@ -94,19 +139,19 @@ static void outputMainGamma(const T_IM_DISP_GAMMA_TBL_IN* gammaTbl)
 }
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void disp2mDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
 {
 	ImDisp2Group *disp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
 	CtImDisp4 *ctImDisp4 = (CtImDisp4 *)im_disp2_group_get_disp4(disp2Group);
-	kint i = 0;
-	kint32 error = D_DDIM_OK;
-	kuint32 layer = 0;
+	gint i = 0;
+	gint32 error = D_DDIM_OK;
+	guint32 layer = 0;
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
-	kuchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
+	guchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
 	CtImDisp3 *disp3 = (CtImDisp3 *)im_disp2_group_get_disp3(imDisp2Group);
 	CtImDisp3a *disp3a = (CtImDisp3a *)im_disp2_group_get_disp3a(imDisp2Group);
 
-	if (strcmp((kchar*) argv[1], "SetOSDBTim") == 0)
+	if (strcmp((gchar *) argv[1], "SetOSDBTim") == 0)
 	{
 		//Im_DISP_Set_OSD_Blink_Timer
 
@@ -152,7 +197,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 9\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetOSDBTim") == 0)
+	else if (strcmp((gchar *) argv[1], "GetOSDBTim") == 0)
 	{
 		//Im_DISP_Get_OSD_Blink_Timer
 
@@ -204,7 +249,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetOSDRes") == 0)
+	else if (strcmp((gchar *) argv[1], "SetOSDRes") == 0)
 	{
 		//Im_DISP_Set_OSD_Resize
 
@@ -256,7 +301,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 9\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetOSDRes") == 0)
+	else if (strcmp((gchar *) argv[1], "GetOSDRes") == 0)
 	{
 		//Im_DISP_Get_OSD_Resize
 
@@ -305,7 +350,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetOSDMax") == 0)
+	else if (strcmp((gchar *) argv[1], "SetOSDMax") == 0)
 	{
 		//Im_DISP_Set_OSD_Matrix
 
@@ -356,7 +401,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 8\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetOSDMax") == 0)
+	else if (strcmp((gchar *) argv[1], "GetOSDMax") == 0)
 	{
 		//Im_DISP_Get_OSD_Matrix
 
@@ -402,7 +447,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetOSDAph") == 0)
+	else if (strcmp((gchar *) argv[1], "SetOSDAph") == 0)
 	{
 		//Im_DISP_Set_OSD_Alpha
 
@@ -423,9 +468,9 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].GRCH[0].GRALP = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word)); /* pgr0539 */
 			Ddim_Print(("IO_DISP.MAIN[%d].GRCH[1].GRALP = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
+					block, (guint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_OSD_Alpha(block, (E_IM_DISP_SEL_LAYER) layer, alpha); /* pgr0539 */
@@ -438,9 +483,9 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				Ddim_Print(("------- After Setting -------\n"));
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].GRCH[0].GRALP = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word));
+						block, (guint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].GRCH[1].GRALP = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
+						block, (guint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -449,7 +494,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetOSDAph") == 0)
+	else if (strcmp((gchar *) argv[1], "GetOSDAph") == 0)
 	{
 		//Im_DISP_Get_OSD_Alpha
 
@@ -482,13 +527,13 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].GRCH[0].GRALP = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word));
+						block, (guint32)IO_DISP.MAIN[block].GRCH[0].GRALP.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].GRCH[1].GRALP = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
+						block, (guint32)IO_DISP.MAIN[block].GRCH[1].GRALP.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("Layer = %02X\n", layer));
-				Ddim_Print(("GRALP = 0x%08X\n", (kuint32)alpha));
+				Ddim_Print(("GRALP = 0x%08X\n", (guint32)alpha));
 			}
 		}
 		else
@@ -496,7 +541,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetAnTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "SetAnTbl") == 0)
 	{
 		//Im_DISP_Set_Anti_Gamma_Table
 
@@ -512,9 +557,9 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_ANTI_GAMMA_TBL antiTbl;
-			antiTbl.r_anti = (kushort*) ct_im_disp4_get_r_anti_tbla(ctImDisp4);
-			antiTbl.g_anti = (kushort*) ct_im_disp4_get_g_anti_tbla(ctImDisp4);
-			antiTbl.b_anti = (kushort*) ct_im_disp4_get_b_anti_tbla(ctImDisp4);
+			antiTbl.r_anti = (gushort*) ct_im_disp4_get_r_anti_tbla(ctImDisp4);
+			antiTbl.g_anti = (gushort*) ct_im_disp4_get_g_anti_tbla(ctImDisp4);
+			antiTbl.b_anti = (gushort*) ct_im_disp4_get_b_anti_tbla(ctImDisp4);
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
@@ -544,7 +589,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetAnTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "GetAnTbl") == 0)
 	{
 		//Im_DISP_Get_Anti_Gamma_Table
 
@@ -560,12 +605,12 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_ANTI_GAMMA_TBL antiTblAa;
-			kushort antiRMatrix[256];
-			kushort antiGMatrix[256];
-			kushort antiBMatrix[256];
-			memset(antiRMatrix, 0, (sizeof(kushort) * 256));
-			memset(antiGMatrix, 0, (sizeof(kushort) * 256));
-			memset(antiBMatrix, 0, (sizeof(kushort) * 256));
+			gushort antiRMatrix[256];
+			gushort antiGMatrix[256];
+			gushort antiBMatrix[256];
+			memset(antiRMatrix, 0, (sizeof(gushort) * 256));
+			memset(antiGMatrix, 0, (sizeof(gushort) * 256));
+			memset(antiBMatrix, 0, (sizeof(gushort) * 256));
 
 			antiTblAa.r_anti = antiRMatrix;
 			antiTblAa.g_anti = antiGMatrix;
@@ -596,7 +641,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetMainGamTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "SetMainGamTbl") == 0)
 	{
 		//Im_DISP_Set_Gamma_Table -> Im_DISP_Set_Main_Gamma_Table
 
@@ -612,16 +657,16 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_GAMMA_TBL_IN gammaTable;
-			gammaTable.r_data = (kushort*) ct_im_disp4_get_r_full_tbl(ctImDisp4);
-			gammaTable.g_data = (kushort*) ct_im_disp4_get_g_full_tbl(ctImDisp4);
-			gammaTable.b_data = (kushort*) ct_im_disp4_get_b_full_tbl(ctImDisp4);
+			gammaTable.r_data = (gushort*) ct_im_disp4_get_r_full_tbl(ctImDisp4);
+			gammaTable.g_data = (gushort*) ct_im_disp4_get_g_full_tbl(ctImDisp4);
+			gammaTable.b_data = (gushort*) ct_im_disp4_get_b_full_tbl(ctImDisp4);
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LTRG               = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LTRG.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LTRG.word)); /* pgr0539 */
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LTBLASET.bit.GMTSL = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMTSL));
+					block, (guint32)IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMTSL));
 			Ddim_Print(("Surface = %02X\n", surface)); /* pgr0539 */
 			ct_im_disp3_dump_main_gamma_table(disp3, block);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
@@ -648,7 +693,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetMainGamTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "GetMainGamTbl") == 0)
 	{
 		//Im_DISP_Get_Gamma_Table -> Im_DISP_Get_Main_Gamma_Table
 
@@ -664,23 +709,23 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_GAMMA_TBL_IN gammaTable;
-			kushort gammaRMatrix[32];
-			kushort gammaGMatrix[32];
-			kushort gammaBMatrix[32];
-			memset(gammaRMatrix, 0, (sizeof(kushort) * 32));
-			memset(gammaGMatrix, 0, (sizeof(kushort) * 32));
-			memset(gammaBMatrix, 0, (sizeof(kushort) * 32));
+			gushort gammaRMatrix[32];
+			gushort gammaGMatrix[32];
+			gushort gammaBMatrix[32];
+			memset(gammaRMatrix, 0, (sizeof(gushort) * 32));
+			memset(gammaGMatrix, 0, (sizeof(gushort) * 32));
+			memset(gammaBMatrix, 0, (sizeof(gushort) * 32));
 
-			gammaTable.r_data = (kushort*) gammaRMatrix;
-			gammaTable.g_data = (kushort*) gammaGMatrix;
-			gammaTable.b_data = (kushort*) gammaBMatrix;
+			gammaTable.r_data = (gushort*) gammaRMatrix;
+			gammaTable.g_data = (gushort*) gammaGMatrix;
+			gammaTable.b_data = (gushort*) gammaBMatrix;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Setting -------\n"));
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LTRG               = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LTRG.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LTRG.word)); /* pgr0539 */
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LTBLASET.bit.GMTSL = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMTSL));
+					block, (guint32)IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMTSL));
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 
 			if (argv[2][0] == '0')
@@ -708,7 +753,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetDcoreGamTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "SetDcoreGamTbl") == 0)
 	{
 		//Im_DISP_Set_Dcore_Gamma_Table
 
@@ -726,15 +771,15 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			T_IM_DISP_GAMMA_TBL_OUT gammaTable;
 			if (surface == 0)
 			{
-				gammaTable.r_data = (kushort*) ct_im_disp4_get_r_gamma_out_tbla(ctImDisp4);
-				gammaTable.g_data = (kushort*) ct_im_disp4_get_g_gamma_out_tbla(ctImDisp4);
-				gammaTable.b_data = (kushort*) ct_im_disp4_get_b_gamma_out_tbla(ctImDisp4);
+				gammaTable.r_data = (gushort*) ct_im_disp4_get_r_gamma_out_tbla(ctImDisp4);
+				gammaTable.g_data = (gushort*) ct_im_disp4_get_g_gamma_out_tbla(ctImDisp4);
+				gammaTable.b_data = (gushort*) ct_im_disp4_get_b_gamma_out_tbla(ctImDisp4);
 			}
 			else
 			{
-				gammaTable.r_data = (kushort*) ct_im_disp4_get_r_gamma_out_tblb(ctImDisp4);
-				gammaTable.g_data = (kushort*) ct_im_disp4_get_g_gamma_out_tblb(ctImDisp4);
-				gammaTable.b_data = (kushort*) ct_im_disp4_get_b_gamma_out_tblb(ctImDisp4);
+				gammaTable.r_data = (gushort*) ct_im_disp4_get_r_gamma_out_tblb(ctImDisp4);
+				gammaTable.g_data = (gushort*) ct_im_disp4_get_g_gamma_out_tblb(ctImDisp4);
+				gammaTable.b_data = (gushort*) ct_im_disp4_get_b_gamma_out_tblb(ctImDisp4);
 			}
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
@@ -769,7 +814,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetDcoreGamTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "GetDcoreGamTbl") == 0)
 	{
 		//Im_DISP_Get_Dcore_Gamma_Table
 
@@ -785,16 +830,16 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_GAMMA_TBL_OUT gammaTable;
-			kushort gammaRMatrix[33];
-			kushort gammaGMatrix[33];
-			kushort gammaBMatrix[33];
-			memset(gammaRMatrix, 0, (sizeof(kushort) * 33));
-			memset(gammaGMatrix, 0, (sizeof(kushort) * 33));
-			memset(gammaBMatrix, 0, (sizeof(kushort) * 33));
+			gushort gammaRMatrix[33];
+			gushort gammaGMatrix[33];
+			gushort gammaBMatrix[33];
+			memset(gammaRMatrix, 0, (sizeof(gushort) * 33));
+			memset(gammaGMatrix, 0, (sizeof(gushort) * 33));
+			memset(gammaBMatrix, 0, (sizeof(gushort) * 33));
 
-			gammaTable.r_data = (kushort*) gammaRMatrix;
-			gammaTable.g_data = (kushort*) gammaGMatrix;
-			gammaTable.b_data = (kushort*) gammaBMatrix;
+			gammaTable.r_data = (gushort*) gammaRMatrix;
+			gammaTable.g_data = (gushort*) gammaGMatrix;
+			gammaTable.b_data = (gushort*) gammaBMatrix;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Setting -------\n"));
@@ -827,7 +872,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetLumiTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "SetLumiTbl") == 0)
 	{
 		//Im_DISP_Set_Luminance_Table
 
@@ -842,10 +887,10 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
-			kushort setTable[33];
+			gushort setTable[33];
 			memcpy(setTable, ct_im_disp4_get_luminance_tbla(ctImDisp4), sizeof(setTable));
 			T_IM_DISP_CTRL_OUTPUT_TBL outputTbl;
-			outputTbl.luminance_a = (kushort*) setTable;
+			outputTbl.luminance_a = (gushort*) setTable;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
@@ -864,7 +909,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			else
 			{
 //					error = Im_DISP_Set_Luminance_Table(block, surface, setTable);
-				error = Im_DISP_Set_Luminance_Table(block, surface, (kushort*) &outputTbl.luminance_a);
+				error = Im_DISP_Set_Luminance_Table(block, surface, (gushort*) &outputTbl.luminance_a);
 			}
 			if (error != D_DDIM_OK)
 			{
@@ -881,7 +926,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetLumiTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "GetLumiTbl") == 0)
 	{
 		//Im_DISP_Get_Luminance_Table
 
@@ -896,10 +941,10 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
-			kushort getTable[33];
+			gushort getTable[33];
 			memset(getTable, 0, sizeof(getTable));
 			T_IM_DISP_CTRL_OUTPUT_TBL outputTbl;
-			outputTbl.luminance_a = (kushort*) getTable;
+			outputTbl.luminance_a = (gushort*) getTable;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Setting -------\n"));
@@ -917,7 +962,7 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 //					error = Im_DISP_Get_Luminance_Table(block, surface, getTable);	/* pgr0539 */
 				error = Im_DISP_Get_Luminance_Table(block, surface,
-						(kushort*) &outputTbl.luminance_a); /* pgr0539 */
+						(gushort*) &outputTbl.luminance_a); /* pgr0539 */
 			}
 			if (error != D_DDIM_OK)
 			{
@@ -946,6 +991,6 @@ static void disp2mDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 CtImDisp2m *ct_im_disp2m_new(void)
 {
-	CtImDisp2m *self = (CtImDisp2m *) k_object_new_with_private(CT_TYPE_IM_DISP2M,sizeof(CtImDisp2mPrivate));
+	CtImDisp2m *self = (CtImDisp2m *) g_object_new(CT_TYPE_IM_DISP2M, NULL);
 	return self;
 }

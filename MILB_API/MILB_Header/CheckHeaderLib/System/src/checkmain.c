@@ -96,16 +96,16 @@ void CheckHeaderMain( void )
 				disp_test();
 				break;
 			case 5:
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_SEN);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_SRO1);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_SRO2);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_SRO3);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_B2B1);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_B2B2);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_B2B3);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_STAT);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_PAS);
-				pro_test(IntErnals_E_PRO_BLOCK_TYPE_TABLE);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_SEN);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_SRO1);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_SRO2);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_SRO3);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_B2B1);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_B2B2);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_B2B3);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_STAT);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_PAS);
+				pro_test(CheckHeaderMain_E_PRO_BLOCK_TYPE_TABLE);
 				break;
 			case 6:
 				xch_test();

@@ -1,0 +1,716 @@
+将 fj_peripheral.c修改为fjperipheral.c
+将 fj_peripheral.h修改为fjperipheral.h
+
+fjperipheral.h修改内容记录：
+枚举 FJ_PERI_CH 修改为    FjPeriCh .
+枚举 FJ_SIO_TYPE 修改为   FjSioType      .
+枚举 FJ_SIO_MODE 修改为   FjSioMode .
+枚举 FJ_SIO_BIT_DIR   修改为 FjSioBitDir        .
+枚举 FJ_SIO_LENGTH  修改为   FjSioLength      .
+枚举 FJ_SIO_DATA_DIR 修改为  FjSioDataDir       .
+枚举 FJ_SPI_TYPE;  修改为      FjSpiType;   .
+枚举 FJ_SPI_MODE 修改为      FjSpiMode   .
+枚举 FJ_SPI_BIT_DIR 修改为   FjSpiBitDir      .
+枚举 FJ_SPI_LENGTH  修改为      FjSpiLength   .
+枚举 FJ_SPI_DATA_DIR  修改为  FjSpiDataDir       .
+
+枚举      FJ_SPI_CONT_TRANS 修改为   FjSpiContTrans      .
+枚举      FJ_USIO_DMA_CH 修改为     FjUsioDmaCh    .
+枚举      FJ_GYROIF_TMR_CLK 修改为    FjGyroifTmrClk     .
+枚举     FJ_GPIO_PORT  修改为      FjGpioPort   .
+枚举      FJ_EXT_INT_TRIGGER_TYPE 修改为   FjExtIntTriggerType      .
+枚举      FJ_EXT_INT_TARGET_CPU 修改为      FjExtIntTargetCpu   .
+枚举      FJ_PWM_MODE 修改为        FjPwmMode .
+枚举      FJ_PWM_POLARITY 修改为      FjPwmPolarity   .
+枚举      FJ_PWM_CLK 修改为      FjPwmClk   .
+枚举      FJ_PWM_EDGE 修改为       FjPwmEdge  .
+枚举      FJ_PWM_STP_CHAS 修改为    FjPwmStpChas     .
+枚举      FJ_PWM_RESTART 修改为       FjPwm_Restart  .
+枚举     FJ_PWM_FORCE  修改为     FjPwmForce    .
+枚举     FJ_WDOG_MODE  修改为      FjWdogMode   .
+枚举      FJ_WDOG_RESET_STATUS 修改为    FjWdogResetStatus     .
+枚举      FJ_WDOG_RESET_MASK_STATUS 修改为   FjWdogResetMaskStatus      .
+枚举      FJ_UDC_COMP_CLEAR 修改为   FjUdcCompClear      .
+枚举     FJ_UDC_RELOAD  修改为   FjUdcReload      .
+枚举      FJ_UDC_ZIN_COUNT 修改为    FjUdcZinCount     .
+枚举       FJ_UDC_ZIN_EDGE修改为     FjUdcZinEdge    .
+枚举      FJ_UDC_COMP_CB 修改为      FjUdcCompCb   .
+
+枚举      FJ_UDC_UNDER_OVER_CB 修改为    FjUdcUnderOverCb     .
+枚举       FJ_UDC_CNT_DIR_CB修改为      FjUdcCntDirCb   .
+枚举     FJ_UDC_ZIN_CTRL  修改为     FjUdcZinCtrl    .
+枚举      FJ_UDC_INT_FACTOR 修改为    FjUdcIntFactor     .
+枚举     FJ_UDC_COUNT_EDGE  修改为  FjUdcCountEdge      .
+枚举      FJ_UDC_PHASE_COUNT 修改为  FjUdcPhaseCount       .
+枚举      FJ_UDC_COUNT_DIR 修改为     FjUdcCountDir    .
+枚举      FJ_I2C_TYPE 修改为      FjI2cType   .
+枚举      FJ_I2C_SPEED 修改为    FjI2cSpeed     .
+枚举      FJ_I2C_ADDRESS_FORMAT 修改为  FjI2cAddressFormat       .
+
+枚举      FJ_I2C_RECEIVE_FROM_MASTER 修改为  FjI2cReceiveFromMaster       .
+枚举       FJ_UART_BAUD_RATE修改为   FjUartBaudRate      .
+枚举      FJ_UART_MODE 修改为     FjUartMode    .
+枚举       FJ_UART_BIT_DIR修改为    FjUarBitDir     .
+枚举      FJ_UART_STOP_BIT 修改为 FjUarStopBit        .
+枚举      FJ_UART_PARITY_BIT 修改为   FjUarParityBit      .
+枚举      FJ_UART_DATA_LENGTH 修改为    FjUarDataLength     .
+枚举     FJ_UART_CB_INFO  修改为      FjUarCbInfo   .
+枚举      FJ_SLIMBUS_CH 修改为       FjSlimbusCh  .
+枚举      FJ_SLIMBUS_MANAGER_MODE 修改为    FjSlimbusManagerMode     .
+枚举     FJ_SLIMBUS_FR_EN  修改为    FjSlimbusFrEn     .
+结构体    FJ_PWM_CTRL   修改为     FjPwmCtrl    .
+结构体     FJ_PWM_STEP_PULSE_LINK  修改为  FjPwmStepPuliseLink       .
+结构体     FJ_PWM_STEP_DATA  修改为   FjPwmStepData      .
+结构体     FJ_PWM_STEP_PARAM_FOR_2CH  修改为    StepParamFor2ch     .
+结构体      FJ_PWM_STEP_CTRL 修改为   FjPwmStepCtrl      .
+结构体      FJ_PWM_CTRL_PARAM 修改为    FjPwmCtrlParam     .
+结构体     FJ_SIO_CTRL  修改为  FjSioCtrl       .
+结构体     FJ_SIO_CTRL_TRANSFER  修改为 FjSioCtrlTransfer        .
+结构体     FJ_SIO_CTRL_FULL_DUPLEX  修改为  SioCtrlFullDuplex       .
+结构体     FJ_SPI_SS_INFO  修改为   FjSpiSsInfo      .
+结构体    FJ_SPI_CTRL   修改为      FjSpiCtrl   .
+结构体     FJ_SPI_CTRL_TRANSFER  修改为  FjSpiCtrlTransfer      .
+结构体      FJ_SPI_CTRL_FULL_DUPLEX 修改为  SpiCtrlFullDurplex       .
+结构体     FJ_GYROIF_DATA_CTRL  修改为   FjGyroifDataCtrl      .
+结构体    FJ_GYROIF_STAMP_CTRL   修改为    FjGyroifStampCtrl     .
+结构体     FJ_GYROIF_READ_CTRL  修改为    FjGyroifReadCtrl     .
+结构体      FJ_EXT_INT_CONFIG 修改为  FjExtIntConfig       .
+结构体     FJ_I2C_ACTION_SLAVE  修改为 FjI2cActionSlave        .
+结构体      FJ_I2C_CTRL 修改为    FjI2cCtrl     .
+结构体     FJ_I2C_TRANSFER_DATA_BUFFER  修改为 I2cTransferDataBuffer       .
+结构体    FJ_I2C_TRANSFER_DATA   修改为   FjI2cTransferData      .
+结构体      FJ_UDC_CTRL  修改为     FjUdcCtrl     .
+结构体      FJ_UART_CTRL 修改为   FjUartCtrl      .
+结构体      FJ_UART_DEBUG_CONFIG 修改为  FjUartDebugConfig       .
+结构体   FJ_TMR32_CTRL_CSR  修改为  FjTmr32CtrlCsr .
+结构体   FJ_TMR32_CTRL 修改为 FjTmr32Ctrl  .
+结构体   FJ_SLIMBUS_CTRL  修改为  FjSlimbusCtrl .
+
+原函数名：						修改后函数名：
+
+         FJ_PWM_Calculate_Array_Clock_Sel 		fj_peripheral_pwm_calculate_array_clock_sel
+         FJ_PWM_Set_By_Ratio        			fj_peripheral_pwm_set_by_ratio
+         FJ_PWM_Set_By_Time				fj_peripheral_pwm_set_by_time
+         FJ_PWM_Set_2ch					fj_peripheral_pwm_set_2ch
+         FJ_PWM_Set_Step				fj_peripheral_pwm_set_step
+         FJ_UART_Debug_Configure			fj_peripheral_uart_debug_configure
+
+         FJ_UART_Start					fj_peri_uart_start
+        
+         FJ_UART_Send_Target_Slave_Addr			fj_peri_uart_send_target_slave_addr
+         FJ_GyroIF_Start_Read				fj_peripheral_gyroif_start_read
+         FJ_GyroIF_Stop_Read				fj_peripheral_gyroif_stop_read			
+	 FJ_GyroIF_Get_Read_Count			fj_peripheral_gyroif_get_read_count
+         
+        	FJ_Slimbus_Open6			fj_slimbus_open_temp2
+        	FJ_Slimbus_Close			fj_slimbus_close_temp2
+        	FJ_Slimbus_Ctrl				fj_peripheral_slimbus_ctrl
+        	FJ_Slimbus_Get_Ctrl			fj_slimbus_get_ctrl_temp2
+        	FJ_Slimbus_Start			fj_slimbus_start_temp2
+        	FJ_Slimbus_Stop				fj_slimbus_stop_temp2
+         FJ_Slimbus_Write_Msg				fj_slimbus_write_msg_temp2
+         FJ_Slimbus_Read_Msg				fj_slimbus_read_msg_temp2
+         FJ_Slimbus_Write_Data				fj_slimbus_write_data_temp2
+         FJ_Slimbus_Read_Data				fj_slimbus_read_data_temp2
+         FJ_Slimbus_Set_Read_Msg_Area_Addr		fj_slimbus_set_read_msg_area_addr_temp2
+         VOID FJ_Slimbus_Get_Read_Msg_Area_Addr		fj_slimbus_get_read_msg_area_addr_temp2
+         FJ_Slimbus_Set_Read_Data_Area_Addr		fj_slimbus_set_read_data_area_addr_temp2
+         VOID FJ_Slimbus_Get_Read_Data_Area_Addr	fj_slimbus_get_read_data_area_addr_temp2
+      
+         FJ_Wdog_Timer_Init 				fj_peripheral_wdog_timer_init	
+         FJ_Wdog_Timer_Open 				fj_peripheral_wdog_timer_open
+         FJ_Wdog_Timer_Ctrl 				fj_peripheral_wdog_timer_ctrl
+         FJ_Wdog_Timer_Refresh 				fj_peripheral_wdog_timer_refresh
+         FJ_Wdog_Timer_Get_Reset_Status 		fj_peripheral_wdog_timer_get_reset_status
+         FJ_Wdog_Timer_Get_Load_Value 			fj_peripheral_wdog_timer_get_load_value
+         FJ_Wdog_Timer_Close 				fj_peripheral_wdog_timer_close
+         FJ_ERR_CODE FJ_UDC_Init 			fj_peripheral_udc_init
+         
+
+
+修改后：
+fjperi.h
+1.       fj_peri_pwm_open
+2.       fj_peri_pwm_open_step
+3.       fj_per_pwm_open_step_2ch
+4.       fj_peri_pwm_calculate_clock_sel
+5.       fj_peri_pwm_set_buffer_data_window
+6.       fj_peri_pwm_set_buffer_data_window_by_step_data
+7        fj_peri_pwm_start
+8        fj_peri_pwm_2ch_start
+9        fj_peri_pwm_stop
+10       fj_peri_pwm_close
+11       fj_peri_tmr32_open
+12       fj_peri_tmr32_set
+13       fj_peri_tmr32_set_pwm
+14       fj_peri_tmr32_ctrl
+15       fj_peri_tmr32_tout_ctrl
+16       fj_peri_tmr32_start
+17        fj_peri_tmr32_stop
+18        fj_peri_tmr32_close
+19       fj_peri_i2c_open
+20        fj_peri_i2c_close
+21       fj_peri_i2c_ctrl
+22       fj_peri_i2c_transfer
+23       fj_peri_i2c_set_approxclock
+24       fj_peri_uart_debug_start
+25      fj_peri_uart_debug_stop
+26      fj_peri_uart_debug_get_char
+27       fj_peri_uart_debug_save
+28        fj_peri_uart_open
+29       fj_peri_uart_close
+30       fj_peri_uart_ctrl
+31       fj_peri_uart_stop
+32       fj_peri_uart_send
+33       fj_peri_uart_receive
+34       fj_peri_uart_set_slave_addr
+35       fj_peri_uart_send_sync
+36        fj_peri_uart_receive_sync
+37       fj_peri_sio_open
+38       fj_peri_sio_close
+39        fj_peri_sio_ctrl
+40        fj_peri_sio_stop
+41       fj_peri_sio_transfer
+42       fj_peri_sio_full_duplex
+43       fj_peri_sio_full_duplex_dma
+44       fj_peri_spi_open
+45       fj_peri_spi_close
+46       fj_peri_spi_ctrl
+47       fj_peri_spi_stop
+48       fj_peri_spi_transfer
+49       fj_peri_spi_full_duplex
+50       fj_peri_spi_full_duplex_dma
+51       fj_peri_udc_open
+52       fj_peri_udc_set_timer_mode
+53       fj_peri_udc_start
+54       fj_peri_udc_stop
+55       fj_peri_udc_set_up_down_count_mode
+56       fj_peri_udc_set_phase_lag_mode
+57       fj_peri_udc_set_up_down_counter
+58       fj_peri_udc_set_comp_counter
+59       fj_peri_udc_set_callback
+60      fj_peri_udc_get_up_down_counter
+61      fj_udc_get_peri_up_down_flag
+62      fj_peri_udc_clear_up_down_counter
+63      fj_peri_udc_close
+
+fjgio.h
+64	fj_gpio_set_function_temp2
+65	fj_gpio_set_direction_temp2
+66	fj_gpio_set_status_temp2
+67	fj_gpio_get_status_temp2
+68	fj_gpio_set_pull_up_down_enable_temp2
+69	fj_gpio_set_pull_up_down_ctrl_temp2
+70	fj_gio_set_config
+71	fj_gio_set_enable
+72	fj_gio_set_level
+73	fj_gio_get_level
+74	fj_gio_clear_req
+
+序号一一对应：
+修改前
+1         FJ_PWM_Open 
+2        FJ_PWM_Open_Step
+3        FJ_PWM_Open_Step_2ch
+4        FJ_PWM_Calculate_Clock_Sel
+5        FJ_PWM_Set_Buffer_Data_Window
+6        FJ_PWM_Set_Buffer_Data_Window_by_Step_Data
+7	 FJ_PWM_Start
+8        FJ_PWM_2ch_Start
+9        FJ_PWM_Stop
+10        FJ_PWM_Close
+11       FJ_TMR32_Open
+12       FJ_TMR32_Set
+13       FJ_TMR32_Set_Pwm
+14       FJ_TMR32_Ctrl
+15       FJ_TMR32_Tout_Ctrl
+16       FJ_TMR32_Start
+17       FJ_TMR32_Stop
+18       FJ_TMR32_Close
+19       FJ_I2C_Open
+20       FJ_I2C_Close
+21       FJ_I2C_Ctrl
+22       FJ_I2C_Transfer
+23       FJ_I2C_Set_ApproxClock
+24        FJ_UART_Debug_Start
+25       FJ_UART_Debug_Stop
+26       FJ_UART_Debug_Get_Char
+27       FJ_UART_Debug_Save
+28       FJ_UART_Open
+29       FJ_UART_Close
+30       FJ_UART_Ctrl	 
+31	 FJ_UART_Stop
+32       FJ_UART_Send
+33       FJ_UART_Receive
+34	 FJ_UART_Set_Slave_Addr
+35        FJ_UART_Send_Sync
+36       FJ_UART_Receive_Sync
+37       FJ_SIO_Open
+38       FJ_SIO_Close
+39       FJ_SIO_Ctrl
+40       FJ_SIO_Stop
+41       FJ_SIO_Transfer
+42       FJ_SIO_Full_Duplex
+43       FJ_SIO_Full_Duplex_DMA
+44       FJ_SPI_Open
+45       FJ_SPI_Close
+46       FJ_SPI_Ctrl
+47       FJ_SPI_Stop
+48	 FJ_SPI_Transfer
+49       FJ_SPI_Full_Duplex
+50       FJ_SPI_Full_Duplex_DMA	
+51	 FJ_UDC_Open;
+52	 FJ_UDC_Set_Timer_Mode( FJ_PERI_CH ch, ULONG usec, UDC_CALLBACK pCallback );
+53	 FJ_UDC_Start( FJ_PERI_CH ch );
+54	 FJ_UDC_Stop( FJ_PERI_CH ch );
+55	 FJ_UDC_Set_Up_Down_Count_Mode( FJ_PERI_CH ch, FJ_UDC_COUNT_EDGE edge, FJ_UDC_CTRL const* const udc_ctrl );
+56	 FJ_UDC_Set_Phase_Lag_Mode( FJ_PERI_CH ch, FJ_UDC_PHASE_COUNT count_mode, FJ_UDC_CTRL const* const udc_ctrl );
+57 	 FJ_UDC_Set_Up_Down_Counter( FJ_PERI_CH ch, USHORT up_down_counter );
+58	 FJ_UDC_Set_Comp_Counter( FJ_PERI_CH ch, USHORT comp_counter );
+59       FJ_UDC_Set_CallBack( FJ_PERI_CH ch, UDC_CALLBACK pCallBack );
+60       FJ_UDC_Get_Up_Down_Counter( FJ_PERI_CH ch );
+61       FJ_UDC_Get_Up_Down_Flag( FJ_PERI_CH ch );
+62       FJ_UDC_Clear_Up_Down_Counter( FJ_PERI_CH ch );
+63       FJ_UDC_Close( FJ_PERI_CH ch );
+
+figio.h
+
+64	 FJ_Gpio_Set_Function( FJ_GPIO_PORT port, UCHAR function );
+65       FJ_ERR_CODE	FJ_Gpio_Set_Direction( FJ_GPIO_PORT port, UCHAR direction );
+66       FJ_ERR_CODE	FJ_Gpio_Set_Status( FJ_GPIO_PORT port, UCHAR status );
+67       FJ_ERR_CODE	FJ_Gpio_Get_Status( FJ_GPIO_PORT port, UCHAR* status );
+68       FJ_ERR_CODE	FJ_Gpio_Set_Pull_Up_Down_Enable( FJ_GPIO_PORT port, UCHAR enable );
+69       FJ_ERR_CODE	FJ_Gpio_Set_Pull_Up_Down_Ctrl( FJ_GPIO_PORT port, UCHAR control );
+70	 FJ_ERR_CODE	FJ_Ext_Interrupt_Set_Config( FJ_GPIO_PORT port, FJ_EXT_INT_CONFIG* int_config );
+71       FJ_ERR_CODE	FJ_Ext_Interrupt_Set_Enable( FJ_GPIO_PORT port, UCHAR enable );
+72       FJ_Ext_Interrupt_Set_Level( FJ_GPIO_PORT port, UCHAR level );
+73       FJ_Ext_Interrupt_Get_Level( FJ_GPIO_PORT port, UCHAR* level );
+74       FJ_Ext_Interrupt_Clear_Req( FJ_GPIO_PORT port );
+
+修改后：
+fjperi.h
+1.         fj_peri_pwm_open(FjPeri* self, FjPeriCh ch );
+2.         fj_peri_pwm_open_step(FjPeri* self, FjPeriCh ch );
+3.         fj_per_pwm_open_step_2ch(FjPeri* self, FjPeriCh ch_1st,  FjPeriCh ch_2nd);
+4.         fj_peri_pwm_calculate_clock_sel(FjPeri* self,ULONG usec, UCHAR* const clk_sel, USHORT* const cycle);
+5.         fj_peri_pwm_set_buffer_data_window(FjPeri* self,FjPeriCh ch, ULONG usec_array[][2], FjPwmStepData step_data[], UCHAR data_num, UCHAR pulse_end_flag);
+6.         fj_peri_pwm_set_buffer_data_window_by_step_data(FjPeri* self,FjPeriCh ch, FjPwmStepData step_data[], UCHAR data_num);
+7       fj_peri_pwm_start( FjPeriCh ch );
+8       fj_peri_pwm_2ch_start( FjPeriCh ch_a, FjPeriCh ch_b );
+9        fj_peri_pwm_stop( FjPeriCh ch );
+10       fj_peri_pwm_close( FjPeriCh ch );
+11       fj_peri_tmr32_open( FjPeriCh ch );
+12       fj_peri_tmr32_set( FjPeriCh ch, ULONG usec, VP_CALLBACK pcallback );
+13       fj_peri_tmr32_set_pwm( FjPeriCh reload_ch, FjPeriCh pwm_ch, UCHAR	mode, VP_CALLBACK pcallback);
+14       fj_peri_tmr32_ctrl( FjPeriCh ch, FjTmr32Ctrl const* const tmr32_ctrl, VP_CALLBACK pcallback );
+15       fj_peri_tmr32_tout_ctrl( FjPeriCh ch, BOOL enable, UINT32 out_level );
+16       fj_peri_tmr32_start( FjPeriCh ch, BOOL reload );
+17        fj_peri_tmr32_stop( FjPeriCh ch );
+18        fj_peri_tmr32_close( FjPeriCh ch );
+19       fj_peri_i2c_open( FjPeriCh ch );
+20        fj_peri_i2c_close( FjPeriCh ch );
+21       fj_peri_i2c_ctrl( FjPeriCh ch, FjI2cCtrl i2c_ctrl, I2C_CALLBACK pcallback );
+22       fj_peri_i2c_transfer(FjPeriCh ch, FjI2cTransferData trans_ctrl[], UINT32 length);
+23       fj_peri_i2c_set_approxclock(FjPeriCh ch, UINT32 req_clock, UINT32* act_clock, BOOL under_flag);
+24       fj_peri_uart_debug_start( FjPeriCh ch, FjUsioDmaCh dma_ch );
+25      fj_peri_uart_debug_stop( FjPeriCh ch );
+26      fj_peri_uart_debug_get_char( CHAR *Buf );
+27       fj_peri_uart_debug_save( const CHAR* file_name );
+28        fj_peri_uart_open( FjPeriCh ch );
+29       fj_peri_uart_close( FjPeriCh ch );
+30       fj_peri_uart_ctrl( FjPeriCh ch, FjUartCtrl const* const uart_ctrl );
+31       fj_peri_uart_stop( FjPeriCh ch );
+32       fj_peri_uart_send( FjPeriCh ch, VOID const* const send_ptr, UINT32 data_count, FjUsioDmaCh dma_ch );
+33       fj_peri_uart_receive( FjPeriCh ch, VOID const* const recv_ptr, UINT32 data_count, FjUsioDmaCh dma_ch );
+34       fj_peri_uart_set_slave_addr( FjPeriCh ch, UCHAR slave_addr );
+35       fj_peri_uart_send_sync( FjPeriCh ch, VOID const* const send_ptr, UINT32 buffer_size, UINT32 *data_bytes_sent, UINT32 timeout );
+36        fj_peri_uart_receive_sync( FjPeriCh ch, VOID const* const recv_ptr, UINT32 buffer_size, UINT32 *data_bytes_read, UINT32 timeout );
+37       fj_peri_sio_open( FjPeriCh ch );
+38       fj_peri_sio_close( FjPeriCh ch );
+39        fj_peri_sio_ctrl( FjPeriCh ch, FjSioCtrl const* const sio_ctrl );
+40        fj_peri_sio_stop( FjPeriCh ch );
+41       fj_peri_sio_transfer( FjPeriCh ch, FjSioCtrlTransfer const* const trans_ctrl, FjUsioDmaCh dma_ch );
+42       fj_peri_sio_full_duplex( FjPeriCh ch, FjSioCtrlFullDuplex const* const sio_ctrl );
+43       fj_peri_sio_full_duplex_dma( FjPeriCh ch, FjSioCtrlFullDuplex const* const sio_ctrl, FjUsioDmaCh dma_ch_send, FjUsioDmaCh dma_ch_recv  );
+44       fj_peri_spi_open( FjPeriCh ch );
+45       fj_peri_spi_close( FjPeriCh ch );
+46       fj_peri_spi_ctrl( FjPeriCh ch, FjSpiCtrl const* const spi_ctrl );
+47       fj_peri_spi_stop( FjPeriCh ch );
+48       fj_peri_spi_transfer( FjPeriCh ch, FjSpiCtrlTransfer const* const trans_ctrl, FjUsioDmaCh dma_ch );
+49       fj_peri_spi_full_duplex( FjPeriCh ch, FjSpiCtrlFullDurplex const* const spi_ctrl );
+50       fj_peri_spi_full_duplex_dma( FjPeriCh ch, FjSpiCtrlFullDurplex const* const spi_ctrl, FjUsioDmaCh dma_ch_send, FjUsioDmaCh dma_ch_recv  );
+51       FJ_ERR_CODE		fj_peri_udc_open( FjPeriCh ch );
+52       FJ_ERR_CODE		fj_peri_udc_set_timer_mode( FjPeriCh ch, ULONG usec, UDC_CALLBACK pCallback );
+53       FJ_ERR_CODE		fj_peri_udc_start( FjPeriCh ch );
+54       FJ_ERR_CODE		fj_peri_udc_stop( FjPeriCh ch );
+55       FJ_ERR_CODE		fj_peri_udc_set_up_down_count_mode( FjPeriCh ch, FjUdcCountEdge edge, FjUdcCtrl const* const udc_ctrl );
+56       FJ_ERR_CODE		fj_peri_udc_set_phase_lag_mode( FjPeriCh ch, FjUdcPhaseCount count_mode, FjUdcCtrl const* const udc_ctrl );
+57       FJ_ERR_CODE		fj_peri_udc_set_up_down_counter( FjPeriCh ch, USHORT up_down_counter );
+58       FJ_ERR_CODE		fj_peri_udc_set_comp_counter( FjPeriCh ch, USHORT comp_counter );
+59       FJ_ERR_CODE		fj_peri_udc_set_callback( FjPeriCh ch, UDC_CALLBACK pCallBack );
+60      USHORT			fj_peri_udc_get_up_down_counter( FjPeriCh ch );
+61     FjUdcCountDir		fj_udc_get_peri_up_down_flag( FjPeriCh ch );
+62      FJ_ERR_CODE		fj_peri_udc_clear_up_down_counter( FjPeriCh ch );
+63      FJ_ERR_CODE		fj_peri_udc_close( FjPeriCh ch );
+
+fjgio.h
+64	fj_gpio_set_function_temp2
+65	fj_gpio_set_direction_temp2
+66	fj_gpio_set_status_temp2
+67	fj_gpio_get_status_temp2
+68	fj_gpio_set_pull_up_down_enable_temp2
+69	fj_gpio_set_pull_up_down_ctrl_temp2
+70	fj_gio_set_config
+71	fj_gio_set_enable
+72	fj_gio_set_level
+73	fj_gio_get_level
+74	fj_gio_clear_req
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+将fj_still.c修改为 fjstill.c.
+将fj_still.h修改为 fjstill.h.
+
+
+1.枚举 FJ_JPEG_QUALITY_KIND 修改为 FjJpegQualityKind.
+2.枚举 FJ_COMPRESSION_RATIO 修改为 FjCompressionRatio.
+3.枚举 FJ_LTM_MAP_CTRL 修改为 FjLtmMapCtrl.
+4.枚举 FJ_CAP_EFFECT 修改为 FjCapEffect .
+5.枚举 FJ_DISP_PAUSE_ID 修改为 FjDispPauseId .
+6.枚举 FJ_DISP_PAUSE_FUNC 修改为 FjDispPauseFunc .
+7.枚举 E_YCC_FORMAT_TYPE 修改为 EYccFormatType .
+8.枚举 FJ_VIEW_SDHD_MODE 修改为 FjViemSdhdMode .
+9.枚举 FJ_SENSOR_DRIVE_MODE 修改为 FjSensorDriveMode .
+20.枚举 FJ_IMG_RESIZE_MODE 修改为 FjImgResizeMode .
+11.枚举 FJ_IMG_PFMT 修改为 FjImgPfmt .
+12.枚举 FJ_IMG_ROTATE_DEGREE 修改为 FjImgRotateDegree .
+13.枚举 FJ_IMG_DISPLAY 修改为 FjImgDisplay .
+14.枚举 FJ_STILL_SNR_SYNTYP 修改为 FjStillSnrSyntyp .
+15.枚举 FJ_IMG_DEPTH 修改为 FjImgDepth .
+16.枚举 E_FJ_STILL_STERAM_PROC_TYPE 修改为 EFjStillSteramProcType .
+17.枚举 E_FJ_IMGPROC_STAT 修改为 EFjImgprocStat .
+18.枚举 FJ_STILL_IP_IMAGE_FORM 修改为 FjStillIpImageForm .
+19.枚举 FJ_STILL_IP_IMAGE_DATA_FORM 修改为FjStillIpImageDataForm .
+20.枚举 FJ_SENSOR_ENUM 修改为 FjSensorEnum .
+21.枚举 FJ_SEN_ENUM 修改为 FjSenEnum .
+22.枚举 FJ_DEMOSAIC_ENUM 修改为 FjDemosaicEnum .
+23.枚举 FJ_STITCH_ENUM 修改为 FjStitchEnum .
+24.枚举 FJ_STILL_IMAGE_MACRO_MODE 修改为 FjStillImageMacroMode.
+25.枚举 FJ_STILL_SEN_INPUT_FORMAT 修改为 FjStillSenInputFormat .
+26.枚举 FJ_STILL_SEN_BIT_WIDTH 修改为 FjStillSenBitWidth .
+27.枚举 FJ_STILL_SEN_SENSOR_INTERFACE 修改为 FjStillSenSensorInterface .
+28.枚举 FJ_STILL_SEN_SENSOR_LP 修改为 FjStillSenSensorLp .
+29.枚举 FJ_STILL_SEN_SENSOR_LP_CTRL 修改为 SenSensorLpCtrl .
+30.枚举 FJ_DEMOSAIC_OUTPUT 修改为 FjDemosaicOutput .
+31.枚举 FJ_DEMOSAIC_OUTPUT_IMG_PFMT 修改为 FjDemosaicOutputImgPfmt .
+32.枚举 FJ_STILL_3DNR_MODE 修改为 FjStill3DnrMode .
+33.枚举 FJ_IMG_FILL_TYPE 修改为 FjImgFillType .
+34.结构体 FJ_IMG_FILL_DATA 修改为 FjImgFillData .
+35,枚举 FJ_STILL_LVDS_CH 修改为 FStillLvdsCh .
+36.枚举 FJ_STILL_DMIPI_CH 修改为 FjStillDmipiCh .
+37.枚举 FJ_PRO_CTRL_DMIPI_LANE 修改为 FjProCtrlDmipiLane .
+38.枚举 FJ_PRO_CTRL_DMIPI_VC 修改为 FjProCtrlDmipiVc .
+39.枚举 FJ_PRO_CTRL_DMIPI_IN_DATA_MODE 修改为 FjProCtrlDmipiInDataMode .
+40.枚举 FJ_PRO_CTRL_DMIPI_OUT_MODE 修改为 FjProCtrlDmipiOutMode .
+41.枚举 FJ_PRO_CTRL_DMIPI_DT_OUT 修改为 FjProCtrlDmipiDtOut .
+42.枚举 FJ_PRO_CTRL_DMIPI_RXSYNCMODE 修改为 FjProCtrlDmipiRxsyncmode .
+43.枚举 FJ_PRO_CTRL_DMIPI_RXENABLE 修改为 FjProCtrlDmipiRxenable .
+44.枚举 FJ_PRO_CTRL_DMIPI_SEL_CYCLE 修改为 FjProCtrlDmipiSelCycle .
+45.枚举 FJ_PRO_CTRL_DMIPI_MULTI_CH 修改为 FjProCtrlDmipiMultiCh .
+46.枚举 FJ_STILL_CMIPI_CH 修改为 FjStillCmipiCh .
+47.枚举 FJ_PRO_CTRL_CMIPI_VC 修改为 FjProCtrlCmipiVc .
+48.枚举 FJ_PRO_CTRL_CMIPI_IN_DATA_MODE 修改为 FjProCtrlCmipiInDataMode .
+49.枚举 FJ_PRO_CTRL_CMIPI_OUT_MODE 修改为 FjProCtrlCmipiOutMode .
+50.枚举 FJ_PRO_CTRL_CMIPI_DT_OUT 修改为 FjProCtrlCmipiDtOut .
+51.枚举 FJ_PRO_CTRL_CMIPI_LANE 修改为 FjProCtrlCmipiLane .
+52.枚举 FJ_PRO_CTRL_CMIPI_SEL_CYCLE 修改为 FjProCtrlCmipiSelCycle .
+53.枚举 FJ_PRO_CTRL_CMIPI_RXENABLE 修改为 FjProCtrlCmipiRxenable .
+54.枚举 FJ_PRO_CTRL_CMIPI_MULTI_CH 修改为 FjProCtrlCmipiMultiCh .
+55.枚举 FJ_PRO_CTRL_DMIPI_RXMODE 修改为 FjProCtrlDmipiRxmode .
+56.枚举 FJ_PRO_CTRL_DMIPI_RXSPEED 修改为 FjProCtrlDmipiRxspeed .
+57.枚举 FJ_PRO_CTRL_DMIPI_DESKEW_CODE_SEARCH_WIDTH 修改为 FjProCtrlDmipiDeskewCodeSearchWidth .
+58.枚举 FJ_PRO_CTRL_DMIPI_MIN_VALID_WIDTH 修改为 FjProCtrlDmipiMinValidWidth .
+59.枚举 FJ_PRO_CTRL_DMIPI_SAMPLING_NUM 修改为 FjProCtrlDmipiSamplingNum .
+60.枚举 FJ_PRO_CTRL_SLVS_STREAM_TYPE 修改为 FjProCtrSlvsStreamType .
+61.枚举 FJ_PRO_CTRL_SLVS_MULTIPLICATION_FACTOR 修改为 FjProCtrSlvsMultiplicationFactor .
+62.枚举 FJ_PRO_CTRL_SLVS_INPUT_DATA_INVERSION 修改为 FjProCtrSlvsInoutDataInversion .
+63.枚举 FJ_PRO_CTRL_SLVS_VDOUT_CTRL 修改为 FjProCtrSlvsVdoutCtrl .
+64.枚举 FJ_PRO_CTRL_SLVS_ECCCRC_OPT 修改为 FjProCtrSlvsEcccrcOpt .
+65.枚举 FJ_PRO_CTRL_SLVS_EXPECT_VAL 修改为 FjProCtrSlvsExpectVal .
+66.枚举 FJ_PRO_CTRL_SLVS_SYMBOL_TYPE 修改为 FjProCtrSlvsSymbolType .
+67.枚举 FJ_PRO_CTRL_SLVS_PIXEL_BIT 修改为 FjProCtrSlvsPixelBit .
+68.枚举 FJ_PRO_CTRL_SLVS_LANE_NUM 修改为 FjProCtrSlvsLaneNum .
+69.枚举 FJ_PRO_CTRL_SLVS_OUT_FORMAT 修改为 FjProCtrSlvsOutFormat .
+70.枚举  FJ_PRO_CTRL_SLVS_LANE_SWAP_INPUT_PORT_SEL 修改为  FjProCtrSlvsLaneSwapInputPOortSel .
+71.枚举 FJ_PRO_CTRL_SLVS_LANE_ENABLE 修改为 FjProCtrSlvsLaneEnable .
+72.枚举 FJ_PRO_CTRL_SLVS_TRIM_ENABLE 修改为 FjProCtrSlvsTrimEnable .
+73.枚举 E_FJ_STILL_BTC_HIST_TBL 修改为 EFjStillBtcHistTbl .
+74.枚举 E_FJ_STILL_TCHS_HIST_HCYC 修改为 EFjStillTchsHistHcyc .
+75.枚举 E_FJ_STILL_TCHS_HIST_VCYC 修改为 EFjStillTchsHistVcyc .
+76.枚举 E_FJ_STILL_TCHS_HIST_BIT_WIDTH 修改为 EFjStillTchsHistBitWidth .
+77.枚举 E_FJ_STILL_TC_REF_RESOLUTION 修改为 EFjStillTcRefResolution .
+78.枚举 E_FJ_STILL_YTC_OUT 修改为 EFjStillYtcOut .
+79.枚举 E_FJ_STILL_TC_INTBIT 修改为 EFjStillTcIntbit .
+80.枚举 FJ_STILL_ADAPTIVE_AE_MODE 修改为 FjSTtilAdaptiveAeMode .
+81.枚举 FJ_STILL_RAW_SCALER_SEL 修改为 FJStillRawSCalerSel .
+82.枚举 FJ_STILL_STITCH_TYPE 修改为 FjStillSTitchType.
+83.结构体 FJ_T_ADDR_YCC 修改为 FjTAddYcc
+84.结构体  FJ_T_ADDR_RGB 修改为  FjTAddrRgb
+85.结构体 FJ_IMG_INFO 修改为 FjImgInfo .
+86.结构体 FJ_IMG_INFO_RGB 修改为 FjImgInfoRgb
+87.结构体 FJ_T_ADDR_IMG 修改为 FJjTAddrImg.
+88.结构体 FJ_T_LINE_BYTES 修改为 FjTLineBytes .
+89.结构体 FJ_IMG_INFO_CONV 修改为 FjImgInfoConv .
+90.结构体 SPANOINFO 修改为 SpanoInfo .
+91.结构体 PSPANOINFO 修改为 pSpanoInfo .
+92.结构体 JPGINFO 修改为 JpgInfo .
+93.结构体 PSJPGINFO 修改为 psJpgInfo .
+94.结构体 FJ_IMG_CROP_RECT 修改为 FjImgCropRect .
+95.结构体 SYUVINFO 修改为 SyuvInfo .
+96.结构体 PSYUVINFO 修改为 pSyuvInfo .
+97.结构体 SRGBINFO 修改为 SRgbInfo .
+98.结构体 PSRGBINFO 修改为 psRgbInfo .
+99.结构体 SSTITCHINFO 修改为 SStitchInfo .
+99.结构体 PSSTITCHINFO 修改为 PSStitchInfo .
+100.结构体 T_OFFSET 修改为 TOffset .
+101.结构体 SRAWINFO 修改为 SrawInfo .
+102.结构体 PSRAWINFO 修改为 pSrawInfo.
+103.结构体 FJ_T_KNEE_DKNEE_TBL 修改为 FjTKneeDkneeTbl .
+104.结构体 FJ_PRO_LVDS_SYNC_CODE 修改为 ProLvdsSyncCode .
+105.结构体 FJ_PRO_LVDS_SYNC_MASK 修改为 ProLvdsSyncMask .
+106.结构体 FJ_PRO_LVDS_PIXEL_ORDER 修改为 ProLvdsPixelOrder .
+107.结构体 FJ_PRO_CTRL_LVDS 修改为 FjProCtrlLvds .
+108.结构体 FJ_PRO_CTRL_SLVS_INPUT_DATA_INVERSION_SEL 修改为 InputDataInversionSel .
+109.结构体 FJ_PRO_CTRL_SLVS_VALID_LANE_SEL 修改为 ValidLaneSel .
+110.结构体 FJ_PRO_CTRL_SLVS_COMMON_CFG 修改为 CtrSlvsCommonCfgo .
+111.结构体 FJ_PRO_CTRL_SLVS_PMA_INIT_OPT 修改为 PmaInitOpt .
+112.结构体 FJ_PRO_CTRL_SLVS_CTRL 修改为 FjProCtrSlvsCtrl .
+113.结构体 FJ_PRO_CTRL_SLVS_TRIM_CFG 修改为 CtrSlvsTrimCfg .
+114.结构体 FJ_PRO_CTRL_SLVS_MODE_CFG 修改为 CtrSlvsModeCfg .
+115.结构体 FJ_PRO_CTRL_SLVS_STREAM_CFG 修改为 FjProCtrSlvsStreamCfg .
+116.结构体 FJ_PRO_CTRL_SLVS 修改为 FjProCtrSlvs .
+117.结构体 FJ_PRO_CTRL_DMIPI_PHY_CTRL 修改为 CtrlDmipiPhyCTtrl .
+118.结构体 FJ_PRO_CTRL_DMIPI_CTRL 修改为 ProCtrlDmipiCTtrl .
+119.结构体 FJ_PRO_CTRL_DMIPI 修改为 FjProCtrlDmipi .
+120.结构体 FJ_PRO_CTRL_CMIPI_PHY_CTRL 修改为 CtrlCmipiPhyCtrl .
+121.结构体 FJ_PRO_CTRL_CMIPI_CTRL 修改为 ProCtrlCmipiCtrl .
+122.结构体 FJ_PRO_CTRL_CMIPI 修改为 FjProCtrlCmipi .
+123.结构体 FJ_PRO_CTRL_FIRST_PIX_COLOR 修改为 FjProCtrlLFirstPixColor .
+124.结构体 FJ_PRO_CTRL_READOUT_SAMPLING_CNT 修改为 FjProCtrlLReadoutSampLingCnt .
+125.结构体 FJ_SG_CTRL 修改为 FjProCtrl .
+126.结构体 FJ_CROP_INFO 修改为 FjCropInfo .
+127.结构体 FJ_IMG_BLEND_CTRL 修改为 FjImgBlendCtrl .
+128.结构体 FJ_IMG_COLOR 修改为 FjImgColor .
+129.结构体 FJ_RECT_FRAME_EACH_SET 修改为 FrameEachSet .
+130.结构体 FJ_RECT_FRAME_SET 修改为 FjRectFrameSet .
+131.结构体 FJ_IMG_CONV_CTRL 修改为 FjImgConvCtrl .
+132.结构体 FJ_IMG_CROP_CTRL 修改为 FjImgCropCtrl .
+133.结构体 FJ_IMG_CROP_CTRL_SPLIT 修改为 CropCtrlSplit .
+134.结构体 FJ_IMG_FILL_CTRL 修改为 FjImgFillCtrl .
+135.结构体 FJ_IMG_FRECT_TABLE_INFO 修改为 FrectTableInfo .
+136.结构体 FJ_IMG_FRECT_CTRL 修改为 FjImgFrectCtrl .
+137.结构体  FJ_IMG_JPEG_CTRL 修改为  FjImgJpegCtrl .
+138.结构体 FJ_STILL_SNR_ELEM 修改为 FjStillSnrElem .
+139.结构体 FJ_STILL_SEQ_SNR 修改为 FjStillSeqSnr .
+140.结构体 T_FJ_STILL_IQ_PARAM 修改为TFjStillIqParam .
+141.结构体 FJ_STILL_STREAM_INFO 修改为 FjStillStreamInfo .
+142.结构体 FJ_IMG_SPF_KERNEL 修改为 FjImgSpfKernel .
+143.结构体 FJ_IMG_SPF_CTRL 修改为 FjImgSpfCtrl .
+144.结构体 FJ_STILL_IMG_SRAM_BANK_INFO 修改为 ImgSramBankInfo .
+145.结构体 FJ_STILL_ADAPTIVE_AE_PARAM 修改为 AdaptiveAeParam .
+146.结构体 FJ_STILL_IP_IMAGE_INFO 修改为 FjStillIpImageInfo .
+147.结构体 FJ_STILL_IP_IMAGE 修改为 FjStillIpImage .
+148.结构体 FJ_STILL_IP_IMG_INFO_PRM 修改为 IpImgInfoPrm .
+149.结构体 FJ_SENSOR_WINDOW_CONFIG 修改为 FjSensorWindowConfig .
+150.结构体 FJ_SEN_WINDOW_CONFIG 修改为 FjSenWindowConfig .
+151.结构体 FJ_DEMOSAIC_SCALER_CONFIG 修改为 FjDemosaicScalerConfig .
+152.结构体 FJ_DEMOSAIC_OUTPUT_CONFIG 修改为 FjDemosaicOutputConfig .
+153.结构体 FJ_STITCH_OUTPUT_CONFIG 修改为 FjStitchOutputConfig .
+154.结构体 FJ_DEMOSAIC_WINDOW_CONFIG 修改为 FjDemosaicWindowConfig .
+155.结构体 FJ_STITCH_INPUT_WINDOW_CONFIG 修改为 FjStitchInputWindowConfig .
+156.结构体 FJ_STITCH_WINDOW_CONFIG 修改为 FjStitchWindowConfig .
+157.结构体 FJ_ENCODE_OUTPUT_CONFIG 修改为 FjEncodeOutputConfig .
+158.结构体 FJ_ENCODE_WINDOW_CONFIG 修改为 FjEncodeWindowConfig .
+159.结构体 FJ_STILL_SEN_SENSOR_IF 修改为 SenSensorIf .
+160.结构体 FJ_STILL_SEN_OB_MODE 修改为 FjStillSenObMode .
+161.结构体 FJ_STILL_SEN_CONFIG 修改为 FjStillSenConfig .
+162.结构体 FJ_STILL_SHDR_CONFIG 修改为 FjStillShdrConfig .
+163.结构体 FJ_STILL_3DNR_CONFIG 修改为 FjStill3DnrConfig .
+164.结构体 FJ_STILL_OB_VALUE 修改为 FjStillObValue .
+165.结构体 FJ_GE_CELL 修改为 FjGeCell .
+166.结构体 FJ_GE_TBL_INFO 修改为 FjGeTblInfo .
+167.结构体 FJ_WARP_CALC_PARAM 修改为 FjWarpCalcParam .
+168.结构体 FJ_IMG_FILL_INFO 修改为 FjImgFillInfo .
+169.结构体 T_FJ_STILL_RGB_OFFSET 修改为 TFjStillRgbOffset .
+170.结构体 T_FJ_STILL_TCT_PARAM 修改为 TFjStillTctParam .
+171.结构体 T_FJ_STILL_TCHS_PARAM 修改为 FjStillTchsParam
+172.结构体 T_FJ_STILL_TONE_PARAM 修改为 FjStillToneParam
+173.结构体 FJ_GYRO_CONFIG 修改为 FjGyroConfig
+174.结构体 FJ_GYRO_DATA_SAMPLE 修改为 FjGyroDataSample
+175.结构体 FJ_GYRO_DATA 修改为 FjGyroData
+176.结构体 FJ_STILL_RAW_WINDOW_CONFIG 修改为 RawWindowConfig
+177.结构体 FJ_STILL_READOUT_TIMESTAMP 修改为 FjStillReadoutTimestamp
+178.结构体 FJ_STAT_LOCATION_TYPE 修改为 FjStatLocationType
+179.结构体 AAA_Common_Info 修改为 AaaCommonInfo
+180.结构体 Statistic_Info 修改为 StatisticInfo
+181.结构体 FJ_STILL_DATE 修改为 FjStillDate
+182.结构体 FJ_STILL_FRACTION 修改为 FjStillFRaction
+183.结构体 FJ_STILL_GPS 修改为 FjStillGps
+184.结构体 FJ_STILL_CAMERA_INFO 修改为 FjStillCameraInfo
+
+
+
+修改前：函数名													修改后：函数名
+
+extern	FJ_ERR_CODE	FJ_ConfigCapture( UCHAR bConfig, USHORT wOperand );     				fj_still_config_capture(FjStill* self, kuchar bConfig, kushort wOperand );
+extern	FJ_ERR_CODE	FJ_SaveRawVideo										fj_still_save_raw_video
+extern	FJ_ERR_CODE	FJ_SetSg( UCHAR sen_id, FJ_SG_CTRL* sg_ctrl );						fj_still_sen_set_sg
+extern	FJ_ERR_CODE	FJ_SgStart( UCHAR sen_id );								fj_still_sen_sg_start
+extern	FJ_ERR_CODE	FJ_SgStop( UCHAR sen_id, UCHAR stop_mode );						fj_still_sen_sg_stop
+extern	FJ_ERR_CODE	FJ_GetNonLinerHistogram( UCHAR demosaic_id, USHORT* pHistogramBuff );			fj_still_set_adaptive_ae_param
+extern	FJ_ERR_CODE FJ_Still_Set_Adaptive_Ae_Param( const FJ_STILL_ADAPTIVE_AE_PARAM* const param );		fj_still_get_non_liner_histogram
+extern	FJ_ERR_CODE FJ_Sensor_Open( FJ_SENSOR_ENUM sensor_enum, UCHAR* sensor_id );				fj_still_sensor_open
+extern	FJ_ERR_CODE FJ_Sen_Open( FJ_SEN_ENUM sen_enum, UCHAR* sen_id );						fj_still_sen_open
+extern	FJ_ERR_CODE FJ_Sen_Close( UCHAR sen_id );								fj_still_sen_close
+extern	FJ_ERR_CODE FJ_Sen_Init( FJ_SEN_ENUM sen_enum );							fj_still_sen_init
+extern	FJ_ERR_CODE FJ_Sen_Suspend( UCHAR sen_id );								fj_still_sen_suspend
+extern	FJ_ERR_CODE FJ_Sen_Resume( UCHAR sen_id );								fj_still_sen_resume
+extern	FJ_ERR_CODE FJ_Demosaic_Open( FJ_DEMOSAIC_ENUM demosaic_enum, UCHAR* demosaic_id );			fj_still_demosaic_open
+extern	FJ_ERR_CODE FJ_Demosaic_Close( UCHAR demosaic_id );							fj_still_demosaic_close
+extern	FJ_ERR_CODE FJ_Demosaic_Init( FJ_DEMOSAIC_ENUM demosaic_enum );						fj_still_demosaic_init
+extern	FJ_ERR_CODE FJ_Demosaic_Suspend( UCHAR demosaic_id );							fj_still_demosaic_suspend
+extern	FJ_ERR_CODE FJ_Demosaic_Resume( UCHAR demosaic_id );							fj_still_demosaic_resume
+extern	FJ_ERR_CODE FJ_Stitch_Open( FJ_STITCH_ENUM stitch_enum, UCHAR* stitch_id );				fj_still_stitch_open
+extern	FJ_ERR_CODE FJ_Stitch_Close( UCHAR stitch_id );								fj_still_stitch_close
+extern	FJ_ERR_CODE FJ_Stitch_Init( FJ_STITCH_ENUM stitch_enum );						fj_still_stitch_init
+extern	FJ_ERR_CODE FJ_Stitch_Suspend( UCHAR stitch_id );							fj_still_stitch_suspend
+extern	FJ_ERR_CODE FJ_Stitch_Resume( UCHAR stitch_id );							fj_still_stitch_resume
+extern	FJ_ERR_CODE FJ_SetImageMacroMode( FJ_STILL_IMAGE_MACRO_MODE macro_mode );				fj_still_set_image_macro_mode
+extern	FJ_ERR_CODE FJ_Sensor_Connect( UCHAR sensor_id, UCHAR sen_id );						fj_still_sensor_connect
+extern	FJ_ERR_CODE FJ_Sen_Connect( UCHAR sen_id, UCHAR demosaic_id );						fj_still_sen_connect
+extern	FJ_ERR_CODE FJ_Sen_Connect_Display( UCHAR sen_id, UCHAR disp_id );					fj_still_sen_connect_display
+extern	FJ_ERR_CODE FJ_Demosaic_Connect_Encode( UCHAR demosaic_id, UCHAR output_id, UCHAR encode_id );		fj_still_demosaic_connect_encode
+extern	FJ_ERR_CODE FJ_Demosaic_Connect_Display( UCHAR demosaic_id, UCHAR output_id, UCHAR disp_id );		fj_still_demosaic_connect_display
+extern	FJ_ERR_CODE FJ_Demosaic_Connect_Stitch( UCHAR demosaic_id, UCHAR output_id, UCHAR stitch_id );		fj_still_demosaic_connect_stitch
+extern	FJ_ERR_CODE FJ_Stitch_Connect_Encode									fj_still_stitch_connect_encode
+extern	FJ_ERR_CODE FJ_Stitch_Connect_Display( UCHAR stitch_id, UCHAR disp_id );				fj_still_stitch_connect_display
+extern	FJ_ERR_CODE FJ_Sensor_Disconnect( UCHAR sensor_id, UCHAR sen_id );					fj_still_sensor_disconnect
+extern	FJ_ERR_CODE FJ_Sen_Disconnect( UCHAR sen_id, UCHAR demosaic_id );					fj_still_sen_disconnect
+extern	FJ_ERR_CODE FJ_Sen_Disconnect_Display( UCHAR sen_id, UCHAR disp_id );					fj_still_sen_disconnect_display
+extern  FJ_ERR_CODE FJ_Set_Capture_Stitch_Status( FJ_STILL_STITCH_TYPE stitch_type );				fj_still_stitch_set_capture_stitch_status
+extern  FJ_ERR_CODE FJ_Get_Capture_Stitch_Status( FJ_STILL_STITCH_TYPE * stitch_type );				fj_still_stitch_get_capture_stitch_status
+extern	FJ_ERR_CODE FJ_Demosaic_Disconnect_Encode( UCHAR demosaic_id, UCHAR output_id, UCHAR encode_id );	fj_still_demosaic_disconnect_encode
+extern	FJ_ERR_CODE FJ_Demosaic_Disconnect_Display( UCHAR demosaic_id, UCHAR output_id, UCHAR disp_id );	fj_still_demosaic_disconnect_display
+extern	FJ_ERR_CODE FJ_Demosaic_Disconnect_Stitch( UCHAR demosaic_id, UCHAR output_id, UCHAR stitch_id );	fj_still_demosaic_disconnect_stitch
+extern	FJ_ERR_CODE FJ_Stitch_Disconnect_Encode									fj_still_stitch_disconnect_encode
+extern	FJ_ERR_CODE FJ_Stitch_Disconnect_Display( UCHAR stitch_id, UCHAR disp_id );				fj_still_stitch_disconnect_display
+extern	FJ_ERR_CODE	FJ_Set_Sensor_Window( UCHAR sensor_id, FJ_SENSOR_WINDOW_CONFIG* sensor_info );		fj_still_set_sensor_window
+extern	FJ_ERR_CODE	FJ_Get_Sensor_Window( UCHAR sensor_id, FJ_SENSOR_WINDOW_CONFIG* sensor_info );		fj_still_get_sensor_window
+extern	FJ_ERR_CODE	FJ_Set_Sen_Window( UCHAR sen_id, FJ_SEN_WINDOW_CONFIG* window_config );			fj_still_sen_set_window
+extern	FJ_ERR_CODE	FJ_Get_Sen_Window( UCHAR sen_id, FJ_SEN_WINDOW_CONFIG* window_config );			fj_still_sen_get_window
+extern	FJ_ERR_CODE	FJ_Set_Demosaic_Window( UCHAR demosaic_id, FJ_DEMOSAIC_WINDOW_CONFIG* window_config );	fj_still_set_demosaic_window
+extern	FJ_ERR_CODE	FJ_Get_Demosaic_Window( UCHAR demosaic_id, FJ_DEMOSAIC_WINDOW_CONFIG* window_config );	fj_still_get_demosaic_window
+extern	FJ_ERR_CODE	FJ_Set_Stitch_Window( UCHAR stitch_id, FJ_STITCH_WINDOW_CONFIG* window_config );	fj_still_set_stitch_window
+extern	FJ_ERR_CODE	FJ_Get_Stitch_Window( UCHAR stitch_id, FJ_STITCH_WINDOW_CONFIG* window_config );	fj_still_get_stitch_window
+extern	FJ_ERR_CODE	FJ_Set_Encode_Window( UCHAR encode_id, FJ_ENCODE_WINDOW_CONFIG* window_config );	fj_still_set_encode_window
+extern	FJ_ERR_CODE	FJ_Get_Encode_Window( UCHAR encode_id, FJ_ENCODE_WINDOW_CONFIG* window_config );	fj_still_get_encode_window
+extern	FJ_ERR_CODE	FJ_SetDemosaicInputControl								fj_still_set_demosaic_input_control
+extern	FJ_ERR_CODE	FJ_GetDemosaicInputControl								fj_still_get_demosaic_input_control
+extern	FJ_ERR_CODE	FJ_SetDemosaicOutputControl								fj_still_set_demosaic_output_control
+extern	FJ_ERR_CODE	FJ_GetDemosaicOutputControl								fj_still_get_demosaic_output_control
+extern	FJ_ERR_CODE	FJ_SetDemosaic3dnrEnabled( UCHAR demosaic_id, BOOL enabled );				fj_still_set_demosaic_3dnr_enabled
+extern	FJ_ERR_CODE	FJ_GetDemosaic3dnrEnabled( UCHAR demosaic_id, BOOL* enabled );				fj_still_get_demosaic_3dnr_enabled
+extern	FJ_ERR_CODE	FJ_SetDemosaic3dnrConfig( UCHAR demosaic_id, FJ_STILL_3DNR_CONFIG* config );		fj_still_set_demosaic_3dnr_config
+extern	FJ_ERR_CODE	FJ_GetDemosaic3dnrConfig( UCHAR demosaic_id, FJ_STILL_3DNR_CONFIG* config );		fj_still_get_demosaic_3dnr_config
+extern	FJ_ERR_CODE	FJ_SetDemosaicLtmEnabled( UCHAR demosaic_id, BOOL enabled );				fj_still_set_demosaic_ltm_enabled
+extern	FJ_ERR_CODE	FJ_GetDemosaicLtmEnabled( UCHAR demosaic_id, BOOL* enabled );				fj_still_get_demosaic_ltm_enabled
+extern	FJ_ERR_CODE	FJ_SetDemosaicShdrEnabled( UCHAR demosaic_id, BOOL enabled );				fj_still_set_demosaic_shdr_enabled
+extern	FJ_ERR_CODE	FJ_GetDemosaicShdrEnabled( UCHAR demosaic_id, BOOL* enabled );				fj_still_get_demosaic_shdr_enabled
+extern	FJ_ERR_CODE	FJ_SetDemosaicShdrConfig( UCHAR demosaic_id, FJ_STILL_SHDR_CONFIG* config );		fj_still_set_demosaic_shdr_config
+extern	FJ_ERR_CODE	FJ_GetDemosaicShdrConfig( UCHAR demosaic_id, FJ_STILL_SHDR_CONFIG* config );		fj_still_get_demosaic_shdr_config
+extern	FJ_ERR_CODE	FJ_SetDemosaicAhipEnabled( UCHAR demosaic_id, BOOL enabled );				fj_still_set_demosaic_ahip_enabled
+extern	FJ_ERR_CODE	FJ_GetDemosaicAhipEnabled( UCHAR demosaic_id, BOOL* enabled );				fj_still_get_demosaic_ahip_enabled
+FJ_ERR_CODE	FJ_SetDemosaicWarpEnabled( UCHAR demosaic_id, BOOL enabled );					fj_still_set_demosaic_warp_enabled
+FJ_ERR_CODE	FJ_GetDemosaicWarpEnabled( UCHAR demosaic_id, BOOL* enabled );					fj_still_get_demosaic_warp_enabled
+extern FJ_ERR_CODE FJ_Notify_Loading_WarpTable_Complete( UINT32 tbl_idx, const BYTE* addr, ULONG bytes );	fj_still_notify_loading_warp_table_complete
+extern FJ_ERR_CODE FJ_Warp_Calc_GeTable										fj_still_warp_calc_ceTable
+extern	FJ_ERR_CODE	FJ_SetDemosaicRawOutPart( UCHAR demosaic_id, UCHAR raw_out_part );			fj_still_set_demosaic_raw_out_part
+extern	FJ_ERR_CODE	FJ_GetDemosaicRawOutPart( UCHAR demosaic_id, UCHAR* raw_out_part );			fj_still_get_demosaic_raw_out_part
+extern	FJ_ERR_CODE	FJ_SetSenConfig( UCHAR sen_id, FJ_STILL_SEN_CONFIG* sen_config );			fj_still_sen_set_config
+extern	FJ_ERR_CODE	FJ_GetSenConfig( UCHAR sen_id, FJ_STILL_SEN_CONFIG* sen_config );			fj_still_sen_get_config
+extern	FJ_ERR_CODE	FJ_SetJpegEncodeQuality									fj_still_set_jpeg_encode_quality
+extern	FJ_ERR_CODE	FJ_GetJpegEncodeQuality									fj_still_get_jpeg_encode_quality
+extern	FJ_ERR_CODE	FJ_LoadLtmMap( UCHAR demosaic_id, FJ_LTM_MAP_CTRL map_ctrl, UINT32 map_addr );		fj_still_load_ltm_map
+extern	FJ_ERR_CODE	FJ_GenerateJpegShdr( UCHAR demosaic_id, BOOL normal_img_jpeg_onoff );			fj_still_generate_jpeg_shdr
+extern	FJ_ERR_CODE	FJ_Reconfigure_Sensor( UCHAR sen_id, UINT32 pre_frame_rate, UINT32 post_frame_rate );	fj_still_sen_reconfigure_sensor
+extern FJ_ERR_CODE	FJ_SetDemosaicFlipMirrorEnabled								fj_still_set_demosaic_flip_mirror_enabled
+extern FJ_ERR_CODE	FJ_GetDemosaicFlipMirrorEnabled								fj_still_get_demosaic_flip_mirror_enabled
+extern	FJ_ERR_CODE	FJ_Still_Get_ObWaveDetectValue( UCHAR sen_id, FJ_STILL_OB_VALUE* const obdata );	fj_still_sen_get_ob_wave_detect_value
+extern FJ_ERR_CODE	FJ_Still_GetBeforeTCHistogram								fj_still_get_before_tc_histogram
+extern FJ_ERR_CODE	FJ_Still_GetBeforeTCLuminanceEvaluation							fj_still_get_before_tc_luminance_evaluation
+extern FJ_ERR_CODE	FJ_Still_SetToneTable									fj_still_set_tone_table
+extern FJ_ERR_CODE	FJ_Still_SetRgbOffset( UCHAR demosaic_id, T_FJ_STILL_RGB_OFFSET* rgb_offset );		fj_still_set_rgb_offset
+extern FJ_ERR_CODE	FJ_Still_SetTctParam( UCHAR demosaic_id, T_FJ_STILL_TCT_PARAM* tct_param );		fj_still_set_tct_param
+extern FJ_ERR_CODE	FJ_Still_SetTchsParam( UCHAR demosaic_id, T_FJ_STILL_TCHS_PARAM* tchs_param );		fj_still_set_tchs_param
+extern FJ_ERR_CODE	FJ_Still_SetToneParam( UCHAR demosaic_id, T_FJ_STILL_TONE_PARAM* tone_param );		fj_still_set_tone_param
+extern FJ_ERR_CODE	FJ_Still_GetTctTchsGlobalWindowSize							fj_still_get_tct_tchs_global_window_size
+extern	FJ_ERR_CODE	FJ_SetDemosaicRawScalerEnabled								fj_still_set_demosaic_raw_scaler_enabled	
+extern	FJ_ERR_CODE	FJ_GetDemosaicRawScalerEnabled								fj_still_get_demosaic_raw_scaler_enabled
+extern	FJ_ERR_CODE	FJ_GetRawWindowConfig ( UCHAR sen_id, FJ_STILL_RAW_WINDOW_CONFIG* raw_window_cfg );	fj_still_sen_get_raw_window_config 
+extern	FJ_ERR_CODE	FJ_Still_GetReadoutTimestamp								fj_still_sen_get_readout_timestamp
+extern FJ_ERR_CODE FJ_SetStatisticPeriod									fj_still_set_statistic_period
+extern FJ_ERR_CODE FJ_SetStatAeAwbConfig( UCHAR aeawb_id, UCHAR inst_id, FJ_STAT_LOCATION_TYPE stat_locate );	fj_still_set_stat_ae_awb_config
+extern FJ_ERR_CODE FJ_GetStatAeAwbConfig( UCHAR aeawb_id, UCHAR* inst_id, FJ_STAT_LOCATION_TYPE* stat_locate );	fj_still_get_stat_ae_awb_config
+extern FJ_ERR_CODE FJ_SetStatAfConfig( UCHAR af_id, UCHAR inst_id, FJ_STAT_LOCATION_TYPE stat_locate );		fj_still_set_stat_af_config
+extern FJ_ERR_CODE FJ_GetStatAfConfig( UCHAR af_id, UCHAR* inst_id, FJ_STAT_LOCATION_TYPE* stat_locate );	fj_still_get_stat_af_config
+extern FJ_ERR_CODE FJ_SetStatFlckConfig( UCHAR flck_id, UCHAR inst_id, FJ_STAT_LOCATION_TYPE stat_locate );	fj_still_set_stat_flck_config
+extern FJ_ERR_CODE FJ_GetStatFlckConfig( UCHAR flck_id, FJ_STAT_LOCATION_TYPE* stat_locate, UCHAR* inst_id );	fj_still_get_stat_flck_config
+extern FJ_ERR_CODE FJ_SetStatHistConfig( UCHAR hist_id, UCHAR inst_id, FJ_STAT_LOCATION_TYPE stat_locate );	fj_still_set_stat_hist_config
+extern FJ_ERR_CODE FJ_GetStatHistConfig( UCHAR hist_id, FJ_STAT_LOCATION_TYPE* stat_locate, UCHAR* inst_id );	fj_still_get_stat_hist_config
+extern	FJ_ERR_CODE	FJ_ImageSPF( FJ_IMG_SPF_CTRL* spf_ctrl_info );						fj_still_image_spf
+extern	FJ_ERR_CODE	FJ_ImageCopy( UINT32 src_addr, UINT32 dst_addr, UINT32 width, UINT32 lines );		fj_still_image_copy
+extern	FJ_ERR_CODE	FJ_ImageCopyYcc( FJ_IMG_INFO* src, FJ_IMG_INFO* dst );					fj_still_image_copy_ycc
+extern	FJ_ERR_CODE	FJ_ImageConvert( FJ_IMG_CONV_CTRL* conv_info );						fj_still_image_convert
+extern	FJ_ERR_CODE	FJ_ImageFormatConvert( FJ_IMG_INFO* src, FJ_IMG_INFO* dst, UCHAR planer_select );	fj_still_image_format_convert
+extern	FJ_ERR_CODE	FJ_ImageCrop( FJ_IMG_CROP_CTRL* crop_info );						fj_still_image_crop
+extern FJ_ERR_CODE	FJ_ImageCropSplitWithDisplay( FJ_IMG_CROP_CTRL_SPLIT* crop_info );			fj_still_image_crop_split_with_display
+extern	FJ_ERR_CODE	FJ_ImageFillVideo( FJ_IMG_FILL_CTRL* fill_info );					fj_still_image_fill_video
+extern FJ_ERR_CODE 	FJ_ImageFreeRect( FJ_IMG_FRECT_CTRL* frect_ctrl );					fj_still_image_free_rect
+extern	FJ_ERR_CODE	FJ_ImageBlend( FJ_IMG_BLEND_CTRL* osd_blend_info );					fj_still_image_blend
+extern	FJ_ERR_CODE	FJ_ImageDrawFaceFrame									fj_still_image_draw_face_frame
+extern	FJ_ERR_CODE	FJ_ImageDrawRect( FJ_IMG_INFO* src_frame, FJ_RECT_FRAME_SET* frame_set );		fj_still_image_draw_rect
+extern	FJ_ERR_CODE FJ_ImageFill( FJ_IMG_FILL_INFO* fill_info );						fj_still_image_fill
+extern	FJ_ERR_CODE FJ_IsBufferFillAvailable( VOID );								fj_still_is_buffer_fill_available
+extern	FJ_ERR_CODE FJ_ConfigGyro( FJ_GYRO_CONFIG* gyro_config );						fj_still_config_gyro
+extern	FJ_ERR_CODE FJ_AddGyroData( ULLONG frame_no, FJ_GYRO_DATA* gyro_data );					fj_still_add_gyro_data
+extern	FJ_ERR_CODE	FJ_ImageJpegEncode( FJ_IMG_JPEG_CTRL* enc_info );					fj_still_image_jpeg_encode

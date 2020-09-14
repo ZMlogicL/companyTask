@@ -2105,7 +2105,7 @@ typedef enum {
 typedef enum {
 	E_IM_PRO_SLVS_STREAM_TYPE_A = 0,		/**< Stream A		*/
 	E_IM_PRO_SLVS_STREAM_TYPE_B,			/**< Stream B		*/
-	E_IM_PRO_SLVS_STREAM_TYPE_BOTH,			/**< Stream A & B	*/
+	E_IM_PRO_SLVS_STREAM_TYPE_BOTH1,			/**< Stream A & B	*/
 } E_IM_PRO_SLVS_STREAM_TYPE;
 
 /** SLVS input differential data value inversion setting.

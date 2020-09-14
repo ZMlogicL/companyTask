@@ -35,12 +35,12 @@ typedef struct _DdIpcuSendInfo DdIpcuSendInfo;
 /* IPCU Send information table */
 struct _DdIpcuSendInfo
 {
-	kuchar 	state;				/* State of IPCU process	*/
-	kuchar 	async;				/* Async  			*/
+	kuchar 	state;				/* State of IPCU process*/
+	kuchar 	async;				/* Async*/
 };
 
 /* IPCU Callback function for Acknowledge */
-typedef void (*T_DD_IPCU_ACK_FUNC)( kuchar );
+typedef void (*DdIpcuAckFunc)( kuchar );
 
 struct _DdIpcuPrivate
 {
@@ -48,8 +48,8 @@ struct _DdIpcuPrivate
 };
 
 
-static volatile DdIpcuSendInfo				S_GDD_IPCU_SEND_INFO_TBL[C_IPCU_MB_TOTAL_NUM] = {{0}};
-static volatile T_DD_IPCU_ACK_FUNC		S_GDD_IPCU_ACK_FUNC[C_IPCU_MB_TOTAL_NUM] = {0};
+static volatile DdIpcuSendInfo	S_GDD_IPCU_SEND_INFO_TBL[C_IPCU_MB_TOTAL_NUM] = {{0}};
+static volatile DdIpcuAckFunc		S_GDD_IPCU_ACK_FUNC[C_IPCU_MB_TOTAL_NUM] = {0};
 
 /**
 DECLS
@@ -96,7 +96,7 @@ void dd_ipcu_memcpy_ulong(DdIpcu *self, kulong* const dst, kulong* const src, ku
  */
 kint32 dd_ipcu_open(DdIpcu *self, kuchar mbNum, kint32 tmout, kuchar *id )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
 	if (mbNum > C_IPCU_MB_MAX) {
@@ -109,14 +109,14 @@ kint32 dd_ipcu_open(DdIpcu *self, kuchar mbNum, kint32 tmout, kuchar *id )
 	}
 #endif // CO_PARAM_CHECK
 
-	if (tmout == D_DDIM_USER_SEM_WAIT_POL) {
-		ercd = DDIM_User_Pol_Sem(SID_DD_IPCU(mbNum));
+	if (tmout == DdimUserCustom_SEM_WAIT_POL) {
+		ercd = ddim_user_custom_pol_sem(NULL, SID_DD_IPCU(mbNum));
 	} else {
-		ercd = DDIM_User_Twai_Sem(SID_DD_IPCU(mbNum), (DDIM_USER_TMO) tmout);
+		ercd = ddim_user_custom_twai_sem(NULL, SID_DD_IPCU(mbNum), (DdimUserCustom_TMO) tmout);
 	}
 
-	if ( D_DDIM_USER_E_OK != ercd) {
-		if ( D_DDIM_USER_E_TMOUT == ercd) {
+	if ( DdimUserCustom_E_OK != ercd) {
+		if ( DdimUserCustom_E_TMOUT == ercd) {
 			return C_IPCU_SEM_TIMEOUT;
 		}
 		return C_IPCU_SEM_NG;
@@ -144,7 +144,7 @@ kint32 dd_ipcu_open(DdIpcu *self, kuchar mbNum, kint32 tmout, kuchar *id )
 kint32 dd_ipcu_close(DdIpcu *self, kuchar id )
 {
 	kuchar mbIdx;
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 	
 #ifdef CO_PARAM_CHECK
 	if (id > C_IPCU_ID_MAX) {
@@ -153,9 +153,9 @@ kint32 dd_ipcu_close(DdIpcu *self, kuchar id )
 	}
 #endif // CO_PARAM_CHECK
 
-	ercd = DDIM_User_Sig_Sem( SID_DD_IPCU( id ));
+	ercd = ddim_user_custom_sig_sem(NULL,  SID_DD_IPCU( id ));
 
-	if ( D_DDIM_USER_E_OK != ercd) {
+	if ( DdimUserCustom_E_OK != ercd) {
 		return C_IPCU_SEM_NG;
 	}
 
@@ -168,10 +168,10 @@ kint32 dd_ipcu_close(DdIpcu *self, kuchar id )
 	/* Release Malibox */
 	if (id < 8) {
 		mbIdx = id;
-		IO_IPCU0.MAILBOX[mbIdx].SRC.word = 0; /* unit 0 */
+		ioIpcu0.mailbox[mbIdx].src.word = 0; /* unit 0 */
 	} else {
 		mbIdx = id - 8;
-		IO_IPCU1.MAILBOX[mbIdx].SRC.word = 0; /* unit 1 */
+		ioIpcu1.mailbox[mbIdx].src.word = 0; /* unit 1 */
 	}
 	
 	/* Clear Send info table */
@@ -217,7 +217,7 @@ kint32 dd_ipcu_ctrl(kuchar id, DdIpcu const* const self)
 #endif // CO_PARAM_CHECK
 	
 	/* Level1 & Level2 D-Cache Clean by Addressing & size */
-	DDIM_User_L1l2cache_Clean_Flush_Addr( ( kuint32 )( self->sendData ), self->dataSize );
+	ddim_user_custom_l1l2cache_clean_flush_addr(NULL,  ( kuint32 )( self->sendData ), self->dataSize );
 	
 	/* Clear local data */
 	memset((void*)&S_GDD_IPCU_ACK_FUNC[id], 0, sizeof(DdIpcuSendInfo));
@@ -225,36 +225,36 @@ kint32 dd_ipcu_ctrl(kuchar id, DdIpcu const* const self)
 	if (id < 8) {
 		mbIdx = id;
 		/* Set source */
-		IO_IPCU0.MAILBOX[mbIdx].SRC.word = (1 << srcNum);
+		ioIpcu0.mailbox[mbIdx].src.word = (1 << srcNum);
 
-		if (IO_IPCU0.MAILBOX[mbIdx].SRC.word != (1 << srcNum)) {
+		if (ioIpcu0.mailbox[mbIdx].src.word != (1 << srcNum)) {
 			return C_IPCU_MB_BUSY;
 		}
 		/* Set destination */
-		IO_IPCU0.MAILBOX[mbIdx].DSTSET.word = dstChBit;
+		ioIpcu0.mailbox[mbIdx].dstset.word = dstChBit;
 		/* Set mask */
-		IO_IPCU0.MAILBOX[mbIdx].MASKSET.word = maskChBit;
+		ioIpcu0.mailbox[mbIdx].maskset.word = maskChBit;
 		/* Set mode */
-		IO_IPCU0.MAILBOX[mbIdx].MODE.bit.MODE = self->mode;
+		ioIpcu0.mailbox[mbIdx].mode.bit.mode = self->mode;
 		/* Set data */
-		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(IO_IPCU0.MAILBOX[mbIdx].DATA), (kulong*) &(self->sendData),
+		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(ioIpcu0.mailbox[mbIdx].data), (kulong*) &(self->sendData),
 				self->dataSize);
 	} else {
 		mbIdx = id - 8;
 		/* Set Mailbox */
-		IO_IPCU1.MAILBOX[mbIdx].SRC.word = (1 << srcNum);
+		ioIpcu1.mailbox[mbIdx].src.word = (1 << srcNum);
 
-		if (IO_IPCU1.MAILBOX[mbIdx].SRC.word != (1 << srcNum)) {
+		if (ioIpcu1.mailbox[mbIdx].src.word != (1 << srcNum)) {
 			return C_IPCU_MB_BUSY;
 		}
 		/* Set destination */
-		IO_IPCU1.MAILBOX[mbIdx].DSTSET.word = dstChBit;
+		ioIpcu1.mailbox[mbIdx].dstset.word = dstChBit;
 		/* Set mask */
-		IO_IPCU1.MAILBOX[mbIdx].MASKSET.word = maskChBit;
+		ioIpcu1.mailbox[mbIdx].maskset.word = maskChBit;
 		/* Set Mode */
-		IO_IPCU1.MAILBOX[mbIdx].MODE.bit.MODE = self->mode;
+		ioIpcu1.mailbox[mbIdx].mode.bit.mode = self->mode;
 		/* Set data */
-		dd_ipcu_memcpy_ulong(NULL, (kulong*)&( IO_IPCU1.MAILBOX[mbIdx].DATA ), (kulong*)&( self -> sendData ),
+		dd_ipcu_memcpy_ulong(NULL, (kulong*)&( ioIpcu1.mailbox[mbIdx].data ), (kulong*)&( self -> sendData ),
 				self -> dataSize );
 	}
 	
@@ -288,35 +288,35 @@ kint32 dd_ipcu_get_ctrl(kuchar id, DdIpcu * const self)
 		mbIdx = id;
 		/* Get source */
 		for (srcCnt = 0; srcCnt < C_IPCU_ID_MAX; srcCnt++) {
-			if (1 & (IO_IPCU0.MAILBOX[mbIdx].SRC.word >> (srcCnt))) {
+			if (1 & (ioIpcu0.mailbox[mbIdx].src.word >> (srcCnt))) {
 				self->srcChNum = srcCnt;
 			}
 		}
 		/* Get destination */
-		self->dstChBit = IO_IPCU0.MAILBOX[mbIdx].DSTSTAT.word;
+		self->dstChBit = ioIpcu0.mailbox[mbIdx].dststat.word;
 		/* Get mask */
-		self->maskChBit = IO_IPCU0.MAILBOX[mbIdx].MASKSTAT.word;
+		self->maskChBit = ioIpcu0.mailbox[mbIdx].maskstat.word;
 		/* Get mode */
-		self->mode = IO_IPCU0.MAILBOX[mbIdx].MODE.bit.MODE;
+		self->mode = ioIpcu0.mailbox[mbIdx].mode.bit.mode;
 		/* Get data */
-		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(self->sendData), (kulong*) &(IO_IPCU0.MAILBOX[mbIdx].DATA),
+		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(self->sendData), (kulong*) &(ioIpcu0.mailbox[mbIdx].data),
 				self->dataSize);
 	} else {
 		mbIdx = id - 8;
 		/* Get source */
 		for (srcCnt = 0; srcCnt < C_IPCU_ID_MAX; srcCnt++) {
-			if (1 & (IO_IPCU1.MAILBOX[mbIdx].SRC.word >> (srcCnt))) {
+			if (1 & (ioIpcu1.mailbox[mbIdx].src.word >> (srcCnt))) {
 				self->srcChNum = srcCnt;
 			}
 		}
 		/* Get destination */
-		self->dstChBit = IO_IPCU1.MAILBOX[mbIdx].DSTSTAT.word;
+		self->dstChBit = ioIpcu1.mailbox[mbIdx].dststat.word;
 		/* Get mask */
-		self->maskChBit = IO_IPCU1.MAILBOX[mbIdx].MASKSTAT.word;
+		self->maskChBit = ioIpcu1.mailbox[mbIdx].maskstat.word;
 		/* Get mode */
-		self->mode = IO_IPCU1.MAILBOX[mbIdx].MODE.bit.MODE;
+		self->mode = ioIpcu1.mailbox[mbIdx].mode.bit.mode;
 		/* Get data */
-		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(self->sendData), (kulong*) &(IO_IPCU1.MAILBOX[mbIdx].DATA),
+		dd_ipcu_memcpy_ulong(NULL, (kulong*) &(self->sendData), (kulong*) &(ioIpcu1.mailbox[mbIdx].data),
 				self->dataSize);
 	}
 	
@@ -329,8 +329,8 @@ kint32 dd_ipcu_get_ctrl(kuchar id, DdIpcu * const self)
  */
 kint32 dd_ipcu_start(DdIpcu *self, kuchar id )
 {
-	DDIM_USER_FLGPTN flgptn;
-	DDIM_USER_ER ercd;
+	DdimUserCustom_FLGPTN flgptn;
+	DdimUserCustom_ER ercd;
 	kuchar mbIdx;
 
 #ifdef CO_PARAM_CHECK
@@ -342,18 +342,19 @@ kint32 dd_ipcu_start(DdIpcu *self, kuchar id )
 	if (id < 8) {
 		mbIdx = id;
 		/* Set source register */
-		IO_IPCU0.MAILBOX[mbIdx].SEND.bit.SEND = 1; /* unit 0 */
+		ioIpcu0.mailbox[mbIdx].send.bit.send = 1; /* unit 0 */
 	} else {
 		mbIdx = id - 8;
 		/* Set source register */
-		IO_IPCU1.MAILBOX[mbIdx].SEND.bit.SEND = 1;	/* unit 1 */
+		ioIpcu1.mailbox[mbIdx].send.bit.send = 1;	/* unit 1 */
 	}
 	/* Check Sync or Async */
 	if( S_GDD_IPCU_SEND_INFO_TBL[id].async == 0 ) {
 		/* Sync process */
-		ercd = DDIM_User_Twai_Flg( FID_DD_IPCU_ACK, (1 << id), D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME);
-		DDIM_User_Clr_Flg( FID_DD_IPCU_ACK, ~(1 << id));
-		if (ercd == D_DDIM_USER_E_TMOUT) {
+		ercd = ddim_user_custom_twai_flg(NULL, FID_DD_IPCU_ACK, (1 << id), DdimUserCustom_TWF_ORW, &flgptn,
+				D_DDIM_WAIT_END_TIME);
+		ddim_user_custom_clr_flg(NULL,  FID_DD_IPCU_ACK, ~(1 << id));
+		if (ercd == DdimUserCustom_E_TMOUT) {
 			Ddim_Print(("dd_ipcu_start() : time out. ercd = %d\n", ercd));
 			return C_IPCU_WAIT_TIMEOUT;
 		}
@@ -378,29 +379,29 @@ void dd_ipcu_int_handler_ack(DdIpcu *self,  kuint32 intCh, kulong *mbNum )
 	/* Get Mail Box Number */
 	if (16 > intCh) {
 		unit = 0;
-		mbIdx = (IO_IPCU0.MBADR[intCh].bit.MBA - 0x100) >> 7;
+		mbIdx = (ioIpcu0.mbadr[intCh].bit.mba - 0x100) >> 7;
 		*mbNum = mbIdx;
 	} else {
 		unit = 1;
 		intCh -= 16;
-		mbIdx = (IO_IPCU1.MBADR[intCh].bit.MBA - 0x100) >> 7;
+		mbIdx = (ioIpcu1.mbadr[intCh].bit.mba - 0x100) >> 7;
 		*mbNum = mbIdx + 8;
 	}
 
 	if (unit == 0) {
 		/* Read acknowlegde status */
-		ackReg = IO_IPCU0.MAILBOX[mbIdx].ACKSTAT.word;
+		ackReg = ioIpcu0.mailbox[mbIdx].ackstat.word;
 		/* Clear acknowlegde */
-		IO_IPCU0.MAILBOX[mbIdx].ACKCLR.word = ackReg;
+		ioIpcu0.mailbox[mbIdx].ackclr.word = ackReg;
 		/* Clear source register */
-		IO_IPCU0.MAILBOX[mbIdx].SRC.word = 0;
+		ioIpcu0.mailbox[mbIdx].src.word = 0;
 	} else {
 		/* Read acknowlegde status */
-		ackReg = IO_IPCU1.MAILBOX[mbIdx].ACKSTAT.word;
+		ackReg = ioIpcu1.mailbox[mbIdx].ackstat.word;
 		/* Clear acknowlegde */
-		IO_IPCU1.MAILBOX[mbIdx].ACKCLR.word = ackReg;
+		ioIpcu1.mailbox[mbIdx].ackclr.word = ackReg;
 		/* Clear source register */
-		IO_IPCU1.MAILBOX[mbIdx].SRC.word = 0;
+		ioIpcu1.mailbox[mbIdx].src.word = 0;
 	}
 	
 	DD_ARM_DSB_POU();
@@ -409,9 +410,9 @@ void dd_ipcu_int_handler_ack(DdIpcu *self,  kuint32 intCh, kulong *mbNum )
 	/* Check Sync or Async */
 	if( S_GDD_IPCU_SEND_INFO_TBL[mbIdx].async == 0 ) {
 		/* Sync process */
-		ercd = DDIM_User_Set_Flg( FID_DD_IPCU_ACK, (1 << mbIdx));
+		ercd = ddim_user_custom_set_flg(NULL, FID_DD_IPCU_ACK, (1 << mbIdx));
 
-		if( ercd == D_DDIM_USER_E_TMOUT ) {
+		if( ercd == DdimUserCustom_E_TMOUT ) {
 			Ddim_Print(("Dd_IPCU_Int_Handler(ACK) : Set flag is timeout. ercd = %d\n", ercd));
 		}
 	} else {
@@ -433,7 +434,7 @@ void dd_ipcu_int_handler_ack(DdIpcu *self,  kuint32 intCh, kulong *mbNum )
  */
 kint32 dd_ipcu_start_ack_proc(DdIpcu *self, kulong mbNum, kulong intCh )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 	kulong id;
 	
 #ifdef CO_PARAM_CHECK
@@ -448,9 +449,9 @@ kint32 dd_ipcu_start_ack_proc(DdIpcu *self, kulong mbNum, kulong intCh )
 	/* Check Sync or Async */
 	if (S_GDD_IPCU_SEND_INFO_TBL[id].async == 0) {
 		/* Sync process */
-		ercd = DDIM_User_Set_Flg( FID_DD_IPCU_ACK, (1 << id));
+		ercd = ddim_user_custom_set_flg(NULL, FID_DD_IPCU_ACK, (1 << id));
 
-		if (ercd == D_DDIM_USER_E_TMOUT) {
+		if (ercd == DdimUserCustom_E_TMOUT) {
 			Ddim_Print(("Dd_IPCU_Int_Handler(ACK) : Set flag is timeout. ercd = %d\n", ercd));
 		}
 	} else {
@@ -467,7 +468,7 @@ kint32 dd_ipcu_start_ack_proc(DdIpcu *self, kulong mbNum, kulong intCh )
 /**
  * @brief	Set Acknowledge callback function.
  * @param	kuchar id		IPCU ID(0-15)
- * @param	T_DD_IPCU_ACK_FUNC	ackFnPtr Callback function of Acknowledge
+ * @param	DdIpcuAckFunc	ackFnPtr Callback function of Acknowledge
  * @return	D_DDIM_OK/C_IPCU_INPUT_PARAM_ERR/C_IPCU_STATUS_ABNORMAL
  */
 kint32 dd_ipcu_set_ack_cb(DdIpcu *self, kuchar id, void (* ackFnPtr )( kuchar ))
@@ -526,9 +527,9 @@ kint32 dd_ipcu_get_int_stat(DdIpcu *self, kulong unit, kulong ch, kulong *state)
 #endif // CO_PARAM_CHECK
 
 	if (unit == 0) {
-		*state = IO_IPCU0.ISR[ch].word; /* unit 0 */
+		*state = ioIpcu0.isr[ch].word; /* unit 0 */
 	} else {
-		*state = IO_IPCU1.ISR[ch].word; /* unit 1 */
+		*state = ioIpcu1.isr[ch].word; /* unit 1 */
 	}
 	return D_DDIM_OK;
 }
@@ -566,9 +567,9 @@ kint32 dd_ipcu_get_int_stat_mb(DdIpcu *self, kulong unit, kulong ch, kuchar mbNu
 #endif // CO_PARAM_CHECK
 
 	if (unit == 0) {
-		*state = (1 & (IO_IPCU0.ISR[ch].word >> (mbNum))); /* unit 0 */
+		*state = (1 & (ioIpcu0.isr[ch].word >> (mbNum))); /* unit 0 */
 	} else {
-		*state = (1 & (IO_IPCU1.ISR[ch].word >> (mbNum))); /* unit 1 */
+		*state = (1 & (ioIpcu1.isr[ch].word >> (mbNum))); /* unit 1 */
 	}
 	return D_DDIM_OK;
 }
@@ -601,9 +602,9 @@ kint32 dd_ipcu_get_mb_ack(DdIpcu *self, kulong unit, kulong ch, kulong *ack )
 #endif // CO_PARAM_CHECK
 	
 	if (unit == 0) {
-		*ack = IO_IPCU0.MBADR[ch].bit.ACK; /* unit 0 */
+		*ack = ioIpcu0.mbadr[ch].bit.ack; /* unit 0 */
 	} else {
-		*ack = IO_IPCU1.MBADR[ch].bit.ACK; /* unit 1 */
+		*ack = ioIpcu1.mbadr[ch].bit.ack; /* unit 1 */
 	}
 	return D_DDIM_OK;
 }
@@ -633,9 +634,9 @@ kint32 dd_ipcu_get_mb_req(DdIpcu *self, kulong unit, kulong ch, kulong *req)
 #endif // CO_PARAM_CHECK
 	
 	if (unit == 0) {
-		*req = IO_IPCU0.MBADR[ch].bit.REQ; /* unit 0 */
+		*req = ioIpcu0.mbadr[ch].bit.req; /* unit 0 */
 	} else {
-		*req = IO_IPCU1.MBADR[ch].bit.REQ; /* unit 1 */
+		*req = ioIpcu1.mbadr[ch].bit.req; /* unit 1 */
 	}
 	return D_DDIM_OK;
 }
@@ -665,9 +666,9 @@ kint32 dd_ipcu_get_mb_adr(DdIpcu *self, kulong unit, kulong ch, kulong *mba)
 #endif // CO_PARAM_CHECK
 
 	if (unit == 0) {
-		*mba = IO_IPCU0.MBADR[ch].bit.MBA; /* unit 0 */
+		*mba = ioIpcu0.mbadr[ch].bit.mba; /* unit 0 */
 	} else {
-		*mba = IO_IPCU1.MBADR[ch].bit.MBA; /* unit 1 */
+		*mba = ioIpcu1.mbadr[ch].bit.mba; /* unit 1 */
 	}
 	return D_DDIM_OK;
 }
@@ -699,10 +700,10 @@ kint32 dd_ipcu_get_mb_src(DdIpcu *self, kuchar id, kulong *src )
 	/* Get unit No. */
 	if (id < 8) {
 		mbIdx = id;
-		*src = IO_IPCU0.MAILBOX[mbIdx].SRC.word; /* unit 0 */
+		*src = ioIpcu0.mailbox[mbIdx].src.word; /* unit 0 */
 	} else {
 		mbIdx = id - 8;
-		*src = IO_IPCU1.MAILBOX[mbIdx].SRC.word; /* unit 1 */
+		*src = ioIpcu1.mailbox[mbIdx].src.word; /* unit 1 */
 	}
 	
 	return D_DDIM_OK;
@@ -739,10 +740,10 @@ kint32 dd_ipcu_get_mb_src_unit(DdIpcu *self, kuchar id, kulong srcCh, kulong *sr
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		*src = (1 & (IO_IPCU0.MAILBOX[mbIdx].SRC.word >> (srcCh)));
+		*src = (1 & (ioIpcu0.mailbox[mbIdx].src.word >> (srcCh)));
 	} else { /* unit 2 */
 		mbIdx = id - 8;
-		*src = (1 & (IO_IPCU1.MAILBOX[mbIdx].SRC.word >> (srcCh)));
+		*src = (1 & (ioIpcu1.mailbox[mbIdx].src.word >> (srcCh)));
 	}
 	
 	return D_DDIM_OK;
@@ -772,10 +773,10 @@ kint32 dd_ipcu_set_mb_src(DdIpcu *self, kuchar id, kulong src )
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		IO_IPCU0.MAILBOX[mbIdx].SRC.word = src;
+		ioIpcu0.mailbox[mbIdx].src.word = src;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		IO_IPCU1.MAILBOX[mbIdx].SRC.word = src;
+		ioIpcu1.mailbox[mbIdx].src.word = src;
 	}
 	
 	DD_ARM_DSB_POU();
@@ -809,10 +810,10 @@ kint32 dd_ipcu_get_mb_mode(DdIpcu *self, kuchar id, kulong *mode )
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		*mode = IO_IPCU0.MAILBOX[mbIdx].MODE.bit.MODE;
+		*mode = ioIpcu0.mailbox[mbIdx].mode.bit.mode;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		*mode = IO_IPCU1.MAILBOX[mbIdx].MODE.bit.MODE;
+		*mode = ioIpcu1.mailbox[mbIdx].mode.bit.mode;
 	}
 	
 	return D_DDIM_OK;
@@ -842,10 +843,10 @@ kint32 dd_ipcu_set_mb_mode(DdIpcu *self, kuchar id, DdIpcuMbMode mode)
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		IO_IPCU0.MAILBOX[mbIdx].MODE.bit.MODE = mode;
+		ioIpcu0.mailbox[mbIdx].mode.bit.mode = mode;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		IO_IPCU1.MAILBOX[mbIdx].MODE.bit.MODE = mode;
+		ioIpcu1.mailbox[mbIdx].mode.bit.mode = mode;
 	}
 
 	DD_ARM_DSB_POU();
@@ -879,10 +880,10 @@ kint32 dd_ipcu_get_mb_send(DdIpcu *self, kuchar id, kulong *send)
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		*send = IO_IPCU0.MAILBOX[mbIdx].SEND.bit.SEND;
+		*send = ioIpcu0.mailbox[mbIdx].send.bit.send;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		*send = IO_IPCU1.MAILBOX[mbIdx].SEND.bit.SEND;
+		*send = ioIpcu1.mailbox[mbIdx].send.bit.send;
 	}
 	
 	return D_DDIM_OK;
@@ -907,20 +908,20 @@ kint32 dd_ipcu_set_mb_send(DdIpcu *self, kuchar id)
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		if (IO_IPCU0.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu0.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_send() - Request transmit source is not set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 
-		IO_IPCU0.MAILBOX[mbIdx].SEND.bit.SEND = 1;
+		ioIpcu0.mailbox[mbIdx].send.bit.send = 1;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		if (IO_IPCU1.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu1.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_send() - Request transmit source is not set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 
-		IO_IPCU1.MAILBOX[mbIdx].SEND.bit.SEND = 1;
+		ioIpcu1.mailbox[mbIdx].send.bit.send = 1;
 	}
 	
 	DD_ARM_DSB_POU();
@@ -951,31 +952,31 @@ kint32 dd_ipcu_set_mb_dst(DdIpcu *self, kuchar id, kulong dst)
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
 		/* Check Sourece register */
-		if (IO_IPCU0.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu0.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request transmit source is not set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Send register */
-		if (IO_IPCU0.MAILBOX[mbIdx].SEND.bit.SEND != 0) {
+		if (ioIpcu0.mailbox[mbIdx].send.bit.send != 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Send trigger is set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 
-		IO_IPCU0.MAILBOX[mbIdx].DSTSET.word = dst;
+		ioIpcu0.mailbox[mbIdx].dstset.word = dst;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
 		/* Check Sourece register */
-		if (IO_IPCU1.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu1.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request transmit source is not set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Send register */
-		if (IO_IPCU1.MAILBOX[mbIdx].SEND.bit.SEND != 0) {
+		if (ioIpcu1.mailbox[mbIdx].send.bit.send != 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Send trigger is set. : ID = %d\n", id ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 
-		IO_IPCU1.MAILBOX[mbIdx].DSTSET.word = dst;
+		ioIpcu1.mailbox[mbIdx].dstset.word = dst;
 	}
 	
 	DD_ARM_DSB_POU();
@@ -1008,33 +1009,33 @@ kint32 dd_ipcu_set_mb_dst_unit(DdIpcu *self, kuchar id, kulong dstCh )
 	if( id < 8 ) {				/* unit 0 */
 		mbIdx = id;
 		/* Check Sourece register */
-		if (IO_IPCU0.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu0.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst_unit() - Request transmit source is not set. : ID = %d Ch = %lu\n",
 					id, dstCh ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Send register */
-		if (IO_IPCU0.MAILBOX[mbIdx].SEND.bit.SEND != 0) {
+		if (ioIpcu0.mailbox[mbIdx].send.bit.send != 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst_unit() - Send trigger is set. : ID = %d Ch = %lu\n", id, dstCh ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		
-		IO_IPCU0.MAILBOX[mbIdx].DSTSET.word = (1U << (dstCh));
+		ioIpcu0.mailbox[mbIdx].dstset.word = (1U << (dstCh));
 	} else { /* unit 1 */
 		mbIdx = id - 8;
 		/* Check Sourece register */
-		if (IO_IPCU1.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu1.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst_unit() - Request transmit source is not set. : ID = %d Ch = %lu\n",
 					id, dstCh ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Send register */
-		if (IO_IPCU1.MAILBOX[mbIdx].SEND.bit.SEND != 0) {
+		if (ioIpcu1.mailbox[mbIdx].send.bit.send != 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst_unit() - Send trigger is set. : ID = %d Ch = %lu\n", id, dstCh ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		
-		IO_IPCU1.MAILBOX[mbIdx].DSTSET.word = (1U << (dstCh));
+		ioIpcu1.mailbox[mbIdx].dstset.word = (1U << (dstCh));
 	}
 	
 	DD_ARM_DSB_POU();
@@ -1079,33 +1080,33 @@ kint32 dd_ipcu_clr_mb_dst(DdIpcu *self, kuchar id, kulong dst)
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
 		/* Check Sourece register */
-		if (IO_IPCU0.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu0.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request transmit source is not set. : ID = %d, Dst = %lu\n",
 					id, dst ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Destination Status register */
-		if (dst != (IO_IPCU0.MAILBOX[mbIdx].DSTSTAT.word & dst)) {
+		if (dst != (ioIpcu0.mailbox[mbIdx].dststat.word & dst)) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request for designated ch is nothing. : ID = %d, Dst = %lu\n",
 					id, dst ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		
-		IO_IPCU0.MAILBOX[mbIdx].DSTCLR.word = dst;
+		ioIpcu0.mailbox[mbIdx].dstclr.word = dst;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
 		/* Check Sourece register */
-		if (IO_IPCU1.MAILBOX[mbIdx].SRC.word == 0) {
+		if (ioIpcu1.mailbox[mbIdx].src.word == 0) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request transmit source is not set. : ID = %d, Dst = %lu\n", id, dst ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		/* Check Destination Status register */
-		if (dst != (IO_IPCU1.MAILBOX[mbIdx].DSTSTAT.word & dst)) {
+		if (dst != (ioIpcu1.mailbox[mbIdx].dststat.word & dst)) {
 			Ddim_Print(( "dd_ipcu_set_mb_dst() - Request for designated ch is nothing. : ID = %d, Dst = %lu\n", id, dst ));
 			return C_IPCU_STATUS_ABNORMAL;
 		}
 		
-		IO_IPCU1.MAILBOX[mbIdx].DSTCLR.word = dst;
+		ioIpcu1.mailbox[mbIdx].dstclr.word = dst;
 	}
 	
 	DD_ARM_DSB_POU();
@@ -1115,33 +1116,33 @@ kint32 dd_ipcu_clr_mb_dst(DdIpcu *self, kuchar id, kulong dst)
 /**
  * @brief	Set Transfer data
  * @param	kuchar id	IPCU ID(0 to 17)
- * @param	kuchar dat_num	Transfer data No.
+ * @param	kuchar datNum	Transfer data No.
  * @param	kulong data 		Transfer data
  * @return  D_DDIM_OK / C_IPCU_INPUT_PARAM_ERR
  */
-kint32 dd_ipcu_mb_set_mb_data(DdIpcu *self, kuchar id, kuchar dat_num, kulong data )
+kint32 dd_ipcu_mb_set_mb_data(DdIpcu *self, kuchar id, kuchar datNum, kulong data )
 {
 	kuchar mbIdx;
 
 #ifdef CO_PARAM_CHECK
 	if (id > C_IPCU_ID_MAX) {
 		Ddim_Print(( "dd_ipcu_mb_set_mb_data() - Mailbox number exceeds the maximum. : ID = %d, Data No = %d\n",
-				id, dat_num ));
+				id, datNum ));
 		return C_IPCU_INPUT_PARAM_ERR;
 	}
-	if (dat_num > C_IPCU_MB_DATA_MAX) {
+	if (datNum > C_IPCU_MB_DATA_MAX) {
 		Ddim_Print(( "dd_ipcu_mb_set_mb_data() - Transfer data No. exceeds the maximum. : ID = %d, Data No = %d\n",
-				id, dat_num ));
+				id, datNum ));
 		return C_IPCU_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
 	/* Get unit No. */
 	if (id < 8) { /* unit 0 */
 		mbIdx = id;
-		IO_IPCU0.MAILBOX[mbIdx].DATA[dat_num] = data;
+		ioIpcu0.mailbox[mbIdx].data[datNum] = data;
 	} else { /* unit 1 */
 		mbIdx = id - 8;
-		IO_IPCU1.MAILBOX[mbIdx].DATA[dat_num] = data;
+		ioIpcu1.mailbox[mbIdx].data[datNum] = data;
 	}
 
 	DD_ARM_DSB_POU();
@@ -1171,9 +1172,9 @@ kint32 dd_ipcu_mb_get_mb_stat(DdIpcu *self,  kuchar unit, kulong *mb_stat )
 #endif // CO_PARAM_CHECK
 
 	if (unit == 0) {
-		*mb_stat = IO_IPCU0.MBSTAT.word;
+		*mb_stat = ioIpcu0.mbstat.word;
 	} else {
-		*mb_stat = IO_IPCU1.MBSTAT.word;
+		*mb_stat = ioIpcu1.mbstat.word;
 	}
 
 	DD_ARM_DSB_POU();
@@ -1203,9 +1204,9 @@ kint32 dd_ipcu_mb_get_mb_stat_mb(DdIpcu *self, kuchar unit, kulong num, kulong *
 #endif // CO_PARAM_CHECK
 
 	if (unit == 0) {
-		*mb_stat = (1 & (IO_IPCU0.MBSTAT.word >> (num)));
+		*mb_stat = (1 & (ioIpcu0.mbstat.word >> (num)));
 	} else {
-		*mb_stat = (1 & (IO_IPCU1.MBSTAT.word >> (num)));
+		*mb_stat = (1 & (ioIpcu1.mbstat.word >> (num)));
 	}
 
 	return D_DDIM_OK;

@@ -15,8 +15,12 @@
 #define __IM_FPT_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imfptcommon.h"
+
+
+G_BEGIN_DECLS
 
 
 /*----------------------------------------------------------------------	*/
@@ -36,30 +40,42 @@ extern "C" {
 
 
 
-#define IM_TYPE_FPT							(im_fpt_get_type())
-#define IM_FPT	(obj)						(K_TYPE_CHECK_INSTANCE_CAST(obj, ImFpt))
-#define IM_IS_FPT	(obj)					(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_FPT))
+#define IM_TYPE_FPT			(im_fpt_get_type ())
+#define IM_FPT(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_FPT, ImFpt))
+#define IM_FPT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_FPT, ImFptClass))
+#define IM_IS_FPT(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_FPT))
+#define IM_IS_FPT_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_FPT))
+#define IM_FPT_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_FPT, ImFptClass))
 
 
-typedef struct _ImFpt 						ImFpt;
-typedef struct _ImFptPrivate 			ImFptPrivate;
+typedef struct _ImFpt			ImFpt;
+typedef struct _ImFptClass		ImFptClass;
+typedef struct _ImFptPrivate 		ImFptPrivate;
 
 
 struct _ImFpt
 {
-	KObject parent;
+	GObject parent;
+	IoFptFptaxictl0 fptaxictl0;
+	DdimUserCustomTest *ddimUserCustomTest;
+	IoFptFptctl2 fptctl2;
+};
+
+struct _ImFptClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    im_fpt_get_type(void);
-ImFpt*		        	im_fpt_new(void);
-void 						im_fpt_on_hclk(ImFpt*self, kuchar ch);
-void 						im_fpt_off_hclk(ImFpt*self, kuchar ch);
-void 						im_fpt_on_iclk(ImFpt*self, kuchar ch);
-void	 					im_fpt_off_iclk(ImFpt*self, kuchar ch);
-void 						im_fpt_on_pclk(ImFpt*self, kuchar ch);
-void 						im_fpt_off_pclk(ImFpt*self, kuchar ch);
-extern void 		Im_FPTAsm_Wait_CpuCyc(kulong count);
+GType						im_fpt_get_type(void)	G_GNUC_CONST;
+ImFpt*					im_fpt_new(void);
+void 						im_fpt_on_hclk(ImFpt*self, guchar ch);
+void 						im_fpt_off_hclk(ImFpt*self, guchar ch);
+void 						im_fpt_on_iclk(ImFpt*self, guchar ch);
+void	 					im_fpt_off_iclk(ImFpt*self, guchar ch);
+void 						im_fpt_on_pclk(ImFpt*self, guchar ch);
+void 						im_fpt_off_pclk(ImFpt*self, guchar ch);
+extern void 			im_fptasm_wait_cpucyc(gulong count);
 /**
  Initialize driver.<br>
 
@@ -70,7 +86,7 @@ extern void 		Im_FPTAsm_Wait_CpuCyc(kulong count);
  @remarks	It should be called at first.
  @remarks	It should be called when FPT is not running.
  */
-extern kint32 			im_fpt_im_fpt_init(ImFpt*self, kuchar ch);
+extern gint32 			im_fpt_im_fpt_init(ImFpt*self, guchar ch);
 
 /**
  Open driver.<br>
@@ -86,7 +102,7 @@ extern kint32 			im_fpt_im_fpt_init(ImFpt*self, kuchar ch);
  @remarks	This API uses DDIM_User_Pol_Sem() when waitTime is set to 0. <br>
  This API uses DDIM_User_Twai_Sem() when waitTime is set to the value except for 0.
  */
-extern kint32 			im_fpt_open(ImFpt*self, kuchar ch, kint32 waitTime);
+extern gint32 			im_fpt_open(ImFpt*self, guchar ch, gint32 waitTime);
 
 /**
  Close driver.<br>
@@ -99,7 +115,7 @@ extern kint32 			im_fpt_open(ImFpt*self, kuchar ch, kint32 waitTime);
  @remarks	It should be called when FPT is not running.
  @remarks	This API uses DDIM_User_Sig_Sem().
  */
-extern kint32 im_fpt_close(ImFpt*self, kuchar ch);
+extern gint32 im_fpt_close(ImFpt*self, guchar ch);
 
 /**
  Configure the mode, "Calculate Feature Amount".<br>
@@ -110,7 +126,7 @@ extern kint32 im_fpt_close(ImFpt*self, kuchar ch);
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const param);
+extern gint32 im_fpt_ctrl_mode0(ImFpt*self, guchar ch, const TfptMode0* const param);
 
 /**
  Configure the mode, "Re-calculate Feature Amount".<br>
@@ -121,7 +137,7 @@ extern kint32 im_fpt_ctrl_mode0(ImFpt*self, kuchar ch, const TfptMode0* const pa
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const param);
+extern gint32 im_fpt_ctrl_mode1(ImFpt*self, guchar ch, const TfptMode1* const param);
 
 /**
  Configure the mode, "Feature point Tracking".<br>
@@ -132,7 +148,7 @@ extern kint32 im_fpt_ctrl_mode1(ImFpt*self, kuchar ch, const TfptMode1* const pa
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const param);
+extern gint32 im_fpt_ctrl_mode2(ImFpt*self, guchar ch, const TfptMode2* const param);
 
 /**
  Configure the mode, "Re-calculate Feature Amount and Feature point Tracking".<br>
@@ -143,7 +159,7 @@ extern kint32 im_fpt_ctrl_mode2(ImFpt*self, kuchar ch, const TfptMode2* const pa
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const param);
+extern gint32 im_fpt_ctrl_mode3(ImFpt*self, guchar ch, const TfptMode3* const param);
 
 
 //---------------------------- utility section ---------------------------
@@ -174,15 +190,15 @@ extern kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const pa
  #include "fpt.h"
  #define round_up( val, al )	((val+(al-1)) &(~(al-1)) )	// "al" is power of 2.
 
- void FPT_Sample( kint32 mode, const kuchar* lut0, const kuchar* lut1 )
+ void FPT_Sample( gint32 mode, const guchar* lut0, const guchar* lut1 )
 	{
 		TfptMode0 m0_param;
 		TfptMode1 m1_param;
 		TfptMode2 m2_param;
 		TfptMode3 m3_param;
 		TfptInterrupt int_param;
-		kuint32 status;
-		kint offset;
+		guint32 status;
+		gint offset;
 
 		im_fpt_open( 0, 0 );
 
@@ -468,6 +484,9 @@ extern kint32 im_fpt_ctrl_mode3(ImFpt*self, kuchar ch, const TfptMode3* const pa
 #ifdef __cplusplus
 }
 #endif	// __cplusplus
+
+
+G_END_DECLS
 
 
 #endif /* __IM_FPT_H__ */

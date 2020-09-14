@@ -35,9 +35,9 @@ static void ct_dd_pmu_destructor(CtDdPmu *self)
 {
 // CtDdPmuPrivate *priv = CT_DD_PMU_GET_PRIVATE(self);
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
@@ -80,6 +80,7 @@ static void ct_dd_pmu_destructor(CtDdPmu *self)
 void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 {
 	kint32	ret;
+	DdPmu *	ddPmu = dd_pmu_get();
 
 	if(strcmp(argv[1], "pd") == 0){
 		// get 2nd paramter.
@@ -88,17 +89,17 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 			if(argc > 3){
 				self->param2 = atoi(argv[3]);
 
-				ret = Dd_PMU_Get_Status(self->param2, &self->value);
+				ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 				Ddim_Print(("--- PMU Power status ---\n"));
 				Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 			}
 			else {
 				Ddim_Print(("--- PMU Power status ---\n"));
-				for (self->param2 = 0; self->param2 < E_DD_PMU_PD_TYPE_MAX; self->param2 ++) {
-					if (self->param2 == E_DD_PMU_PD_TYPE_RESERVED) {
+				for (self->param2 = 0; self->param2 < DdPmu_PD_TYPE_MAX; self->param2 ++) {
+					if (self->param2 == DdPmu_PD_TYPE_RESERVED) {
 						continue;
 					}
-					ret = Dd_PMU_Get_Status(self->param2, &self->value);
+					ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 					Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 				}
 			}
@@ -108,17 +109,17 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 				// get 3rd paramter.
 				self->param2 = atoi(argv[3]);
 
-				ret = Dd_PMU_PD_Off(self->param2);
+				ret = dd_pmu_pd_off(ddPmu, self->param2);
 				Ddim_Print(("--- PMU status ---\n"));
 				Ddim_Print(("Stauts : %d ret=0x%08x\n", self->param2, ret));
 			}
 			else {
 				Ddim_Print(("--- PMU status ---\n"));
-				for (self->param2 = 0; self->param2 < E_DD_PMU_PD_TYPE_MAX; self->param2 ++) {
-					if (self->param2 == E_DD_PMU_PD_TYPE_RESERVED) {
+				for (self->param2 = 0; self->param2 < DdPmu_PD_TYPE_MAX; self->param2 ++) {
+					if (self->param2 == DdPmu_PD_TYPE_RESERVED) {
 						continue;
 					}
-					ret = Dd_PMU_PD_Off(self->param2);
+					ret = dd_pmu_pd_off(ddPmu, self->param2);
 					Ddim_Print(("Status : %d ret=0x%08x\n", self->param2, ret));
 				}
 			}
@@ -128,17 +129,17 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 				// get 3rd paramter.
 				self->param2 = atoi(argv[3]);
 
-				ret = Dd_PMU_PD_On(self->param2);
+				ret = dd_pmu_pd_on(ddPmu, self->param2);
 				Ddim_Print(("--- PMU status ---\n"));
 				Ddim_Print(("Status : %d ret=0x%08x\n", self->param2, ret));
 			}
 			else {
 				Ddim_Print(("--- PMU status ---\n"));
-				for (self->param2 = 0; self->param2 < E_DD_PMU_PD_TYPE_MAX; self->param2++) {
-					if (self->param2 == E_DD_PMU_PD_TYPE_RESERVED) {
+				for (self->param2 = 0; self->param2 < DdPmu_PD_TYPE_MAX; self->param2++) {
+					if (self->param2 == DdPmu_PD_TYPE_RESERVED) {
 						continue;
 					}
-					ret = Dd_PMU_PD_On(self->param2);
+					ret = dd_pmu_pd_on(ddPmu, self->param2);
 					Ddim_Print(("Status : %d ret=0x%08x\n", self->param2, ret));
 				}
 			}
@@ -148,16 +149,16 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 				// get 3rd paramter.
 				self->param2 = atoi(argv[3]);
 
-				ret = Dd_PMU_Get_Status(self->param2, &self->value);
+				ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 				Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
-				ret = Dd_PMU_PD_On(self->param2);
-				ret = Dd_PMU_Get_Status(self->param2, &self->value);
+				ret = dd_pmu_pd_on(ddPmu, self->param2);
+				ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 				Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 
-				ret = Dd_PMU_Get_Status(self->param2, &self->value);
+				ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 				Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
-				ret = Dd_PMU_PD_Off(self->param2);
-				ret = Dd_PMU_Get_Status(self->param2, &self->value);
+				ret = dd_pmu_pd_off(ddPmu, self->param2);
+				ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 				Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 
 				Ddim_Print(("--- PMU status ---\n"));
@@ -165,23 +166,23 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 			}
 			else {
 				Ddim_Print(("--- PMU status ---\n"));
-				for (self->param2 = 0; self->param2 < E_DD_PMU_PD_TYPE_MAX; self->param2 ++) {
-					if (self->param2 == E_DD_PMU_PD_TYPE_RESERVED) {
+				for (self->param2 = 0; self->param2 < DdPmu_PD_TYPE_MAX; self->param2 ++) {
+					if (self->param2 == DdPmu_PD_TYPE_RESERVED) {
 						continue;
 					}
-					ret = Dd_PMU_Get_Status(self->param2, &self->value);
+					ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 					Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 
-					ret = Dd_PMU_PD_On(self->param2);
+					ret = dd_pmu_pd_on(ddPmu, self->param2);
 					Ddim_Print(("Status : %d ret=0x%08x\n", self->param2, ret));
 
-					ret = Dd_PMU_Get_Status(self->param2, &self->value);
+					ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 					Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n", self->param2, self->value, ret));
 
-					ret = Dd_PMU_PD_Off(self->param2);
+					ret = dd_pmu_pd_off(ddPmu, self->param2);
 					Ddim_Print(("Status : %d ret=0x%08x\n", self->param2, ret));
 
-					ret = Dd_PMU_Get_Status(self->param2, &self->value);
+					ret = dd_pmu_get_status(ddPmu, self->param2, &self->value);
 					Ddim_Print(("Status : %d=0x%08lx ret=0x%08x\n\n", self->param2, self->value, ret));
 				}
 			}
@@ -193,6 +194,8 @@ void ct_dd_pmu_main(CtDdPmu *self, kint argc, KType* argv)
 	else{
 		Ddim_Print(("please check 1st parameter!!\n"));
 	}
+	k_object_unref(ddPmu);
+	ddPmu = NULL; 
 }
 
 CtDdPmu *ct_dd_pmu_new(void)

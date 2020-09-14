@@ -1,7 +1,7 @@
 /*
  *imdisp2group.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-07
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -9,6 +9,10 @@
  *设计的主要功能:
  *@version: 
  */
+
+/*
+ * 以下开始include语句
+ * */
 
 #include "ctimdisp2.h"
 #include "ctimdisp2a.h"
@@ -38,26 +42,41 @@
 #include "ctimdisp3a.h"
 #include "imdisp2group.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(ImDisp2Group, im_disp2_group, K_TYPE_OBJECT)
-#define IM_DISP2_GROUP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), ImDisp2GroupPrivate, IM_TYPE_DISP2_GROUP))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (ImDisp2Group, im_disp2_group, G_TYPE_OBJECT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define IM_DISP2_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
+		IM_TYPE_DISP2_GROUP, ImDisp2GroupPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _ImDisp2GroupPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 	CtImDisp4 *pCtimDisp4;
 	T_IM_DISP_CTRL_MAIN_TBL gLcdDispTblMainTbl[CtImDisp4_LCD_DISP_SEL_END];
 	T_IM_DISP_CTRL_OUTPUT_TBL gLcdDispTblOutputTbl[CtImDisp4_LCD_DISP_SEL_END];
 	T_IM_DISP_CTRL_OUTPUT gLcdDispTblOutctrl[CtImDisp4_LCD_DISP_SEL_END];
-	kuchar *pImDispPclkCounter;
-	kuchar *pImDispHclkCounter;
+	guchar *pImDispPclkCounter;
+	guchar *pImDispHclkCounter;
 	CtImDisp3 *ctImDisp3;
 	CtImDisp3a *ctImDisp3a;
 };
 
+/*
+ * 文件级全局变量定义
+ * */
+
 // Pointer of R data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_R_ANTI_TBL_B[32/2] = {
+static guint32 S_R_ANTI_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLR0	,
 	DISP_TBL_REVERSE_IGTBLR1	,
 	DISP_TBL_REVERSE_IGTBLR2	,
@@ -77,9 +96,9 @@ static kuint32 S_R_ANTI_TBL_B[32/2] = {
 };
 
 // Pointer of G data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_G_ANTI_TBL_B[32/2] = {
+static guint32 S_G_ANTI_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLG0	,
 	DISP_TBL_REVERSE_IGTBLG1	,
 	DISP_TBL_REVERSE_IGTBLG2	,
@@ -99,9 +118,9 @@ static kuint32 S_G_ANTI_TBL_B[32/2] = {
 };
 
 // Pointer of B data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_B_ANTI_TBL_B[32/2] = {
+static guint32 S_B_ANTI_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLB0	,
 	DISP_TBL_REVERSE_IGTBLB1	,
 	DISP_TBL_REVERSE_IGTBLB2	,
@@ -121,9 +140,9 @@ static kuint32 S_B_ANTI_TBL_B[32/2] = {
 };
 
 // Pointer of R data gamma table A.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_R_GAMMA_TBL_A[32/2] = {
+static guint32 S_R_GAMMA_TBL_A[32/2] = {
 	DISP_TBL_REVERSE_GTBLR0		,
 	DISP_TBL_REVERSE_GTBLR1		,
 	DISP_TBL_REVERSE_GTBLR2		,
@@ -143,9 +162,9 @@ static kuint32 S_R_GAMMA_TBL_A[32/2] = {
 };
 
 // Pointer of G data gamma table A.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_G_GAMMA_TBL_A[32/2] = {
+static guint32 S_G_GAMMA_TBL_A[32/2] = {
 	DISP_TBL_REVERSE_GTBLG0		,
 	DISP_TBL_REVERSE_GTBLG1		,
 	DISP_TBL_REVERSE_GTBLG2		,
@@ -165,9 +184,9 @@ static kuint32 S_G_GAMMA_TBL_A[32/2] = {
 };
 
 // Pointer of B data gamma table A.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_B_GAMMA_TBL_A[32/2] = {
+static guint32 S_B_GAMMA_TBL_A[32/2] = {
 	DISP_TBL_REVERSE_GTBLB0		,
 	DISP_TBL_REVERSE_GTBLB1		,
 	DISP_TBL_REVERSE_GTBLB2		,
@@ -187,9 +206,9 @@ static kuint32 S_B_GAMMA_TBL_A[32/2] = {
 };
 
 // Pointer of R data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_R_GAMMA_TBL_B[32/2] = {
+static guint32 S_R_GAMMA_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLR0	,
 	DISP_TBL_REVERSE_IGTBLR1	,
 	DISP_TBL_REVERSE_IGTBLR2	,
@@ -209,9 +228,9 @@ static kuint32 S_R_GAMMA_TBL_B[32/2] = {
 };
 
 // Pointer of G data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_G_GAMMA_TBL_B[32/2] = {
+static guint32 S_G_GAMMA_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLG0	,
 	DISP_TBL_REVERSE_IGTBLG1	,
 	DISP_TBL_REVERSE_IGTBLG2	,
@@ -231,9 +250,9 @@ static kuint32 S_G_GAMMA_TBL_B[32/2] = {
 };
 
 // Pointer of B data anti gamma table B.<br>
-//	Please specify the address of the array of kushort[32].<br>
+//	Please specify the address of the array of gushort[32].<br>
 //	If NULL is specified, this setting is skipped.<br>
-static kuint32 S_B_GAMMA_TBL_B[32/2] = {
+static guint32 S_B_GAMMA_TBL_B[32/2] = {
 	DISP_TBL_REVERSE_IGTBLB0	,
 	DISP_TBL_REVERSE_IGTBLB1	,
 	DISP_TBL_REVERSE_IGTBLB2	,
@@ -255,17 +274,27 @@ static kuint32 S_B_GAMMA_TBL_B[32/2] = {
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 static void initLcdDispTblMain(ImDisp2Group *self);
 static void initLcdDispTblOutctrl(ImDisp2Group *self);
 
 /*
  * IMPL
  * */
-static void im_disp2_group_constructor(ImDisp2Group *self)
+static void im_disp2_group_class_init(ImDisp2GroupClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(ImDisp2GroupPrivate));
+}
+
+static void im_disp2_group_init(ImDisp2Group *self)
 {
 	ImDisp2GroupPrivate *priv = IM_DISP2_GROUP_GET_PRIVATE(self);
 	CtImDisp4 *ctImDisp4 = ct_im_disp4_new();
-	kint loopIndex = 0;
+	gint loopIndex = 0;
 	priv->pCtimDisp4 = ctImDisp4;
 	self->privImDisp2Group = priv;
 
@@ -275,30 +304,51 @@ static void im_disp2_group_constructor(ImDisp2Group *self)
 	for (loopIndex = 0; loopIndex < CtImDisp4_LCD_DISP_SEL_END; loopIndex++)
 	{
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_a.r_data =
-				(kushort*) ct_im_disp4_get_r_gamma_out_tbla(ctImDisp4);
+				(gushort*) ct_im_disp4_get_r_gamma_out_tbla(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_a.g_data =
-				(kushort*) ct_im_disp4_get_g_gamma_out_tbla(ctImDisp4);
+				(gushort*) ct_im_disp4_get_g_gamma_out_tbla(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_a.b_data =
-				(kushort*) ct_im_disp4_get_b_gamma_out_tbla(ctImDisp4);
+				(gushort*) ct_im_disp4_get_b_gamma_out_tbla(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_b.r_data =
-				(kushort*) ct_im_disp4_get_r_gamma_out_tblb(ctImDisp4);
+				(gushort*) ct_im_disp4_get_r_gamma_out_tblb(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_b.g_data =
-				(kushort*) ct_im_disp4_get_g_gamma_out_tblb(ctImDisp4);
+				(gushort*) ct_im_disp4_get_g_gamma_out_tblb(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].gamma_b.b_data =
-				(kushort*) ct_im_disp4_get_b_gamma_out_tblb(ctImDisp4);
+				(gushort*) ct_im_disp4_get_b_gamma_out_tblb(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].luminance_a =
-				(kushort*) ct_im_disp4_get_luminance_tbla(ctImDisp4);
+				(gushort*) ct_im_disp4_get_luminance_tbla(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].chroma_a =
-				(kushort*) ct_im_disp4_get_gain_tbla(ctImDisp4);
+				(gushort*) ct_im_disp4_get_gain_tbla(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].luminance_b =
-				(kushort*) ct_im_disp4_get_luminance_tblb(ctImDisp4);
+				(gushort*) ct_im_disp4_get_luminance_tblb(ctImDisp4);
 		priv->gLcdDispTblOutputTbl[loopIndex].chroma_b =
-				(kushort*) ct_im_disp4_get_gain_tblb(ctImDisp4);
+				(gushort*) ct_im_disp4_get_gain_tblb(ctImDisp4);
 	}
 }
 
-static void im_disp2_group_destructor(ImDisp2Group *self)
+static void dispose_od(GObject *object)
 {
+//	ImDisp2Group *self = IM_DISP2_GROUP(object);
+//	ImDisp2GroupPrivate *priv = IM_DISP2_GROUP_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (im_disp2_group_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	ImDisp2Group *self = IM_DISP2_GROUP(object);
+//	ImDisp2GroupPrivate *priv = IM_DISP2_GROUP_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (im_disp2_group_parent_class)->finalize(object);
 }
 
 static void initLcdDispTblMain(ImDisp2Group *self)
@@ -309,46 +359,46 @@ static void initLcdDispTblMain(ImDisp2Group *self)
 	T_IM_DISP_CTRL_MAIN_TBL tblMainTbl[CtImDisp4_LCD_DISP_SEL_END] = {
 		{
 			{
-				(kushort*)ct_im_disp4_get_r_anti_tbla(ctImDisp4),
-				(kushort*)ct_im_disp4_get_g_anti_tbla(ctImDisp4),
-				(kushort*)ct_im_disp4_get_b_anti_tbla(ctImDisp4)
+				(gushort*)ct_im_disp4_get_r_anti_tbla(ctImDisp4),
+				(gushort*)ct_im_disp4_get_g_anti_tbla(ctImDisp4),
+				(gushort*)ct_im_disp4_get_b_anti_tbla(ctImDisp4)
 			},
 			{
-				(kushort*)S_R_ANTI_TBL_B,
-				(kushort*)S_G_ANTI_TBL_B,
-				(kushort*)S_B_ANTI_TBL_B
+				(gushort*)S_R_ANTI_TBL_B,
+				(gushort*)S_G_ANTI_TBL_B,
+				(gushort*)S_B_ANTI_TBL_B
 			},
 			{
-				(kushort*)S_R_GAMMA_TBL_A,
-				(kushort*)S_G_GAMMA_TBL_A,
-				(kushort*)S_B_GAMMA_TBL_A
+				(gushort*)S_R_GAMMA_TBL_A,
+				(gushort*)S_G_GAMMA_TBL_A,
+				(gushort*)S_B_GAMMA_TBL_A
 			},
 			{
-				(kushort*)S_R_GAMMA_TBL_B,
-				(kushort*)S_G_GAMMA_TBL_B,
-				(kushort*)S_B_GAMMA_TBL_B
+				(gushort*)S_R_GAMMA_TBL_B,
+				(gushort*)S_G_GAMMA_TBL_B,
+				(gushort*)S_B_GAMMA_TBL_B
 			},
 		},
 		{
 			{
-				(kushort*)ct_im_disp4_get_r_anti_tbla(ctImDisp4),
-				(kushort*)ct_im_disp4_get_g_anti_tbla(ctImDisp4),
-				(kushort*)ct_im_disp4_get_b_anti_tbla(ctImDisp4)
+				(gushort*)ct_im_disp4_get_r_anti_tbla(ctImDisp4),
+				(gushort*)ct_im_disp4_get_g_anti_tbla(ctImDisp4),
+				(gushort*)ct_im_disp4_get_b_anti_tbla(ctImDisp4)
 			},
 			{
-				(kushort*)S_R_ANTI_TBL_B,
-				(kushort*)S_G_ANTI_TBL_B,
-				(kushort*)S_B_ANTI_TBL_B
+				(gushort*)S_R_ANTI_TBL_B,
+				(gushort*)S_G_ANTI_TBL_B,
+				(gushort*)S_B_ANTI_TBL_B
 			},
 			{
-				(kushort*)S_R_GAMMA_TBL_A,
-				(kushort*)S_G_GAMMA_TBL_A,
-				(kushort*)S_B_GAMMA_TBL_A
+				(gushort*)S_R_GAMMA_TBL_A,
+				(gushort*)S_G_GAMMA_TBL_A,
+				(gushort*)S_B_GAMMA_TBL_A
 			},
 			{
-				(kushort*)S_R_GAMMA_TBL_B,
-				(kushort*)S_G_GAMMA_TBL_B,
-				(kushort*)S_B_GAMMA_TBL_B
+				(gushort*)S_R_GAMMA_TBL_B,
+				(gushort*)S_G_GAMMA_TBL_B,
+				(gushort*)S_B_GAMMA_TBL_B
 			},
 		}
 	};
@@ -367,8 +417,8 @@ static void initLcdDispTblOutctrl(ImDisp2Group *self)
 			{ (ULONG)DISP_HDMI_DATA_FODATA },	// fodata
 			{									// blankdt
 				{
-					(kulong)DISP_HDMI_DATA_BLANKDT0,
-					(kulong)DISP_HDMI_DATA_BLANKDT1
+					(gulong)DISP_HDMI_DATA_BLANKDT0,
+					(gulong)DISP_HDMI_DATA_BLANKDT1
 				}
 			},
 			DISP_HDMI_DATA_CLBHSIZE,			// clbhsize
@@ -399,11 +449,11 @@ static void initLcdDispTblOutctrl(ImDisp2Group *self)
 			},
 			{										// clipCal
 				{ (ULONG)DISP_HDMI_DATA_YCAL,		(ULONG)DISP_HDMI_DATA_YCAL },		// y_cal
-				{ (kushort)DISP_HDMI_DATA_YCLIP,		(kushort)DISP_HDMI_DATA_YCLIP },		// y_clip
+				{ (gushort)DISP_HDMI_DATA_YCLIP,		(gushort)DISP_HDMI_DATA_YCLIP },		// y_clip
 				{ (SHORT)DISP_HDMI_DATA_CBCAL,		(SHORT)DISP_HDMI_DATA_CBCAL },		// cb_cal
-				{ (kushort)DISP_HDMI_DATA_CBCLIP,	(kushort)DISP_HDMI_DATA_CBCLIP },	// cb_clip
+				{ (gushort)DISP_HDMI_DATA_CBCLIP,	(gushort)DISP_HDMI_DATA_CBCLIP },	// cb_clip
 				{ (SHORT)DISP_HDMI_DATA_CRCAL,		(SHORT)DISP_HDMI_DATA_CRCAL },		// cr_cal
-				{ (kushort)DISP_HDMI_DATA_CRCLIP,	(kushort)DISP_HDMI_DATA_CRCLIP }		// cr_clip
+				{ (gushort)DISP_HDMI_DATA_CRCLIP,	(gushort)DISP_HDMI_DATA_CRCLIP }		// cr_clip
 			},
 			{ (ULONG)DISP_HDMI_DATA_DOCTL0 },			// doctl0
 			{ (ULONG)DISP_HDMI_DATA_DOCTL1 },			// doctl1
@@ -534,8 +584,8 @@ static void initLcdDispTblOutctrl(ImDisp2Group *self)
 			{ (ULONG)DISP_LCD_DATA_FODATA },		// fodata
 			{										// blankdt
 				{
-					(kulong)DISP_LCD_DATA_BLANKDT0,
-					(kulong)DISP_LCD_DATA_BLANKDT1
+					(gulong)DISP_LCD_DATA_BLANKDT0,
+					(gulong)DISP_LCD_DATA_BLANKDT1
 				}
 			},
 			DISP_LCD_DATA_CLBHSIZE,					// clbhsize
@@ -702,7 +752,7 @@ static void initLcdDispTblOutctrl(ImDisp2Group *self)
  * PUBLIC
  * */
 ImDisp2Parent *im_disp2_group_create_im_disp(ImDisp2Group *self,
-		ImDisp2GroupDoMainType mainType, KData data)
+		ImDisp2GroupDoMainType mainType, GData data)
 {
 	ImDisp2Parent *imDisp2Parent = NULL;
 //	CtImDisp *ctImDisp = (CtImDisp *)data;
@@ -714,7 +764,7 @@ ImDisp2Parent *im_disp2_group_create_im_disp(ImDisp2Group *self,
 			break;
 		case ImDisp2Group_DO_IM_DISP_TEST_A:
 			imDisp2Parent = (ImDisp2Parent *)ct_im_disp2a_new();
-//			ct_im_disp2a_set_group((CtImDisp2a *)imDisp2Parent, (KObject *)self);//im_disp2_parent_set_group
+//			ct_im_disp2a_set_group((CtImDisp2a *)imDisp2Parent, (GObject *)self);//im_disp2_parent_set_group
 			break;
 		case ImDisp2Group_DO_IM_DISP_TEST_B:
 			imDisp2Parent = (ImDisp2Parent *)ct_im_disp2b_new((Disp2bNewParams *)data);
@@ -766,15 +816,15 @@ ImDisp2Parent *im_disp2_group_create_im_disp(ImDisp2Group *self,
 
 	if(imDisp2Parent)
 	{
-		im_disp2_parent_set_group(imDisp2Parent, (KObject *)self);
+		im_disp2_parent_set_group(imDisp2Parent, (GObject *)self);
 	}
 	return imDisp2Parent;
 }
 
-KObject *im_disp2_group_get_disp4(ImDisp2Group *self)
+GObject *im_disp2_group_get_disp4(ImDisp2Group *self)
 {
 	ImDisp2GroupPrivate *priv = self->privImDisp2Group;
-	return (KObject *)priv->pCtimDisp4;
+	return (GObject *)priv->pCtimDisp4;
 }
 
 T_IM_DISP_CTRL_MAIN_TBL *im_disp2_group_get_main_tbl(ImDisp2Group *self)
@@ -795,7 +845,7 @@ T_IM_DISP_CTRL_OUTPUT *im_disp2_group_get_output_ctl(ImDisp2Group *self)
 	return priv->gLcdDispTblOutctrl;
 }
 
-kuchar *im_disp2_group_get_pclk_counter(ImDisp2Group *self)
+guchar *im_disp2_group_get_pclk_counter(ImDisp2Group *self)
 {
 	if (IM_IS_DISP2_GROUP(self))
 	{
@@ -805,7 +855,7 @@ kuchar *im_disp2_group_get_pclk_counter(ImDisp2Group *self)
 	return NULL;
 }
 
-kuchar *im_disp2_group_get_hclk_counter(ImDisp2Group *self)
+guchar *im_disp2_group_get_hclk_counter(ImDisp2Group *self)
 {
 	if (IM_IS_DISP2_GROUP(self))
 	{
@@ -815,48 +865,47 @@ kuchar *im_disp2_group_get_hclk_counter(ImDisp2Group *self)
 	return NULL;
 }
 
-void im_disp2_group_set_disp3(ImDisp2Group *self, KObject *obj3)
+void im_disp2_group_set_disp3(ImDisp2Group *self, GObject *obj3)
 {
 	if (IM_IS_DISP2_GROUP(self))
 	{
 		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
-		priv->ctImDisp3 = (CtImDisp3 *)k_object_ref(obj3);
+		priv->ctImDisp3 = (CtImDisp3 *)g_object_ref(obj3);
 	}
 }
 
-KObject * im_disp2_group_get_disp3(ImDisp2Group *self)
+GObject * im_disp2_group_get_disp3(ImDisp2Group *self)
 {
 	if (IM_IS_DISP2_GROUP(self))
 	{
 		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
-		return (KObject *)priv->ctImDisp3;
-	}
-	return NULL;
-}
-
-void im_disp2_group_set_disp3a(ImDisp2Group *self, KObject *obj3a)
-{
-	if (IM_IS_DISP2_GROUP(self))
-	{
-		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
-		priv->ctImDisp3a = (CtImDisp3a *)k_object_ref(obj3a);
-	}
-}
-
-KObject * im_disp2_group_get_disp3a(ImDisp2Group *self)
-{
-	if (IM_IS_DISP2_GROUP(self))
-	{
-		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
-		return (KObject *)priv->ctImDisp3a;
+		return (GObject *)priv->ctImDisp3;
 	}
 	return NULL;
 }
 
-ImDisp2Group *im_disp2_group_new(kuchar *pclkCounter, kuchar *hclkCounter)
+void im_disp2_group_set_disp3a(ImDisp2Group *self, GObject *obj3a)
 {
-	ImDisp2Group *self = (ImDisp2Group *) k_object_new_with_private(IM_TYPE_DISP2_GROUP,
-			sizeof(ImDisp2GroupPrivate));
+	if (IM_IS_DISP2_GROUP(self))
+	{
+		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
+		priv->ctImDisp3a = (CtImDisp3a *)g_object_ref(obj3a);
+	}
+}
+
+GObject * im_disp2_group_get_disp3a(ImDisp2Group *self)
+{
+	if (IM_IS_DISP2_GROUP(self))
+	{
+		ImDisp2GroupPrivate *priv = self->privImDisp2Group;
+		return (GObject *)priv->ctImDisp3a;
+	}
+	return NULL;
+}
+
+ImDisp2Group *im_disp2_group_new(guchar *pclkCounter, guchar *hclkCounter)
+{
+	ImDisp2Group *self = (ImDisp2Group *) g_object_new(IM_TYPE_DISP2_GROUP, NULL);
 	ImDisp2GroupPrivate *priv = self->privImDisp2Group;
 	priv->pImDispPclkCounter = pclkCounter;
 	priv->pImDispHclkCounter = hclkCounter;

@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -75,7 +75,7 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 	memset( &xch_copy_1ch, 0, sizeof(ImXchCopyEx) );
 
 	// X0ch open
-	ret = im_xch_open(NULL, E_IM_XCH_CH_SEL_0, D_DDIM_WAIT_END_FOREVER );
+	ret = im_xch_open(NULL, ImXch_XCH_CH_SEL_0, D_DDIM_WAIT_END_FOREVER );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
 		Ddim_Print(("I:imXchCopy2ch: im_xch_open(0ch) error. ret = 0x%X\n", ret));
@@ -83,10 +83,10 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 	}
 
 	// X1ch open
-	ret = im_xch_open(NULL, E_IM_XCH_CH_SEL_1, D_DDIM_WAIT_END_FOREVER );
+	ret = im_xch_open(NULL, ImXch_XCH_CH_SEL_1, D_DDIM_WAIT_END_FOREVER );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
 		Ddim_Print(("I:imXchCopy2ch: im_xch_open(1ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
@@ -94,14 +94,14 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 	// set 0ch control
 	if( ((src_addr & 0xF) != 0) || ((dst_addr & 0xF) != 0) ){
 		// normal copy mode
-		xch_copy_0ch.copyType	= E_IM_XCH_COPY_SEL_NORMAL;
+		xch_copy_0ch.copyType	= ImXch_XCH_COPY_SEL_NORMAL;
 	}
 	else{
 		// hi-speed copy mode
-		xch_copy_0ch.copyType	= E_IM_XCH_COPY_SEL_HI;
+		xch_copy_0ch.copyType	= ImXch_XCH_COPY_SEL_HI;
 	}
 
-	xch_copy_0ch.xch	= E_IM_XCH_CH_SEL_0;
+	xch_copy_0ch.xch	= ImXch_XCH_CH_SEL_0;
 	xch_copy_0ch.size.width			= width;
 	xch_copy_0ch.size.lines			= lines_0ch;
 	xch_copy_0ch.size.srcGlWidth	= src_gl_width;
@@ -112,14 +112,14 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 	// set 1ch control
 	if( ((src_second_addr & 0xF) != 0) || ((dst_second_addr & 0xF) != 0) ){
 		// normal copy mode
-		xch_copy_1ch.copyType	= E_IM_XCH_COPY_SEL_NORMAL;
+		xch_copy_1ch.copyType	= ImXch_XCH_COPY_SEL_NORMAL;
 	}
 	else{
 		// hi-speed copy mode
-		xch_copy_1ch.copyType	= E_IM_XCH_COPY_SEL_HI;
+		xch_copy_1ch.copyType	= ImXch_XCH_COPY_SEL_HI;
 	}
 
-	xch_copy_1ch.xch	= E_IM_XCH_CH_SEL_1;
+	xch_copy_1ch.xch	= ImXch_XCH_CH_SEL_1;
 	xch_copy_1ch.size.width			= width;
 	xch_copy_1ch.size.lines			= lines_1ch;
 	xch_copy_1ch.size.srcGlWidth	= src_gl_width;
@@ -133,21 +133,21 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 #endif
 
 	// Xch start copy process
-	ret = Im_Xch_Copy_Ex_Async( &xch_copy_0ch, NULL );
+	ret = im_xch2_copy_ex_async(NULL, &xch_copy_0ch, NULL );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Copy_Ex_Async error(0ch)
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
-		Ddim_Print(("I:imXchCopy2ch: Im_Xch_Copy_Ex_Async(0ch) error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
+		Ddim_Print(("I:imXchCopy2ch: im_xch2_copy_ex_async(0ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	ret = Im_Xch_Copy_Ex_Async( &xch_copy_1ch, NULL );
+	ret = im_xch2_copy_ex_async(NULL, &xch_copy_1ch, NULL );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Copy_Ex_Async error(1ch)
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
-		Ddim_Print(("I:imXchCopy2ch: Im_Xch_Copy_Ex_Async(1ch) error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
+		Ddim_Print(("I:imXchCopy2ch: im_xch2_copy_ex_async(1ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -161,10 +161,10 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 #endif
 
 	// Xch wait end
-	ret = im_xch_wait_end(NULL, E_IM_XCH_CH_SEL_0 );
+	ret = im_xch_wait_end(NULL, ImXch_XCH_CH_SEL_0 );
 	if( ret != D_IM_XCH_OK ){
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
 		Ddim_Print(("I:imXchCopy2ch: im_xch_wait_end(0ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
@@ -178,23 +178,23 @@ static int imXchCopy2ch( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_wid
 	im_xch_int_handler();
 #endif
 
-	ret = im_xch_wait_end(NULL, E_IM_XCH_CH_SEL_1 );
+	ret = im_xch_wait_end(NULL, ImXch_XCH_CH_SEL_1 );
 	if( ret != D_IM_XCH_OK ){
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
 		Ddim_Print(("I:imXchCopy2ch: im_xch_wait_end(1ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
 	// 0ch Close
-	ret = im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
+	ret = im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error(0ch)
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
 		Ddim_Print(("I:imXchCopy2ch: Im_Xch_Close(0ch) error. ret = 0x%X\n", ret));
 		return ret;
 	}
 	// 1ch Close
-	ret = im_xch_close(NULL,E_IM_XCH_CH_SEL_1 );
+	ret = im_xch_close(NULL,ImXch_XCH_CH_SEL_1 );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error(1ch)
 		Ddim_Print(("I:imXchCopy2ch: Im_Xch_Close(1ch) error. ret = 0x%X\n", ret));
@@ -209,26 +209,26 @@ static INT32 imXchCopyByte( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_
 	INT32				ret;
 	ImXchCopyEx	xch_copy;
 	T_DDIM_USER_RSEM	xch_sem_param;
-	E_IM_XCH_CH_SEL		xch	= E_IM_XCH_CH_SEL_0;
+	ImXchChSel		xch	= ImXch_XCH_CH_SEL_0;
 
 	// initialize
 	memset( &xch_copy, 0, sizeof(ImXchCopyEx) );
-	DDIM_User_Ref_Sem( SID_IM_XCH(E_IM_XCH_CH_SEL_0), &xch_sem_param );
+	DDIM_User_Ref_Sem( SID_IM_XCH(ImXch_XCH_CH_SEL_0), &xch_sem_param );
 
 	if( xch_sem_param.semcnt == 0 ){
 		// The X0ch has not become empty.
-		DDIM_User_Ref_Sem( SID_IM_XCH( E_IM_XCH_CH_SEL_1 ), &xch_sem_param );
+		DDIM_User_Ref_Sem( SID_IM_XCH( ImXch_XCH_CH_SEL_1 ), &xch_sem_param );
 
 		if( xch_sem_param.semcnt == 0 ){
 			// The X1ch has not become empty.
 			Ddim_Print(("I:imXchCopyByte: The channel has not become empty. . \n"));
 			return D_IM_XCH_NG;
 		}
-		xch = E_IM_XCH_CH_SEL_1;
+		xch = ImXch_XCH_CH_SEL_1;
 	}
 	else{
 		// The channel has become empty.
-		xch = E_IM_XCH_CH_SEL_0;
+		xch = ImXch_XCH_CH_SEL_0;
 	}
 
 	// Xch open
@@ -242,11 +242,11 @@ static INT32 imXchCopyByte( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_
 	// set copy control
 	if( ((src_addr & 0xF) != 0) || ((dst_addr & 0xF) != 0) || ((width & 0xF) != 0) ){
 		// normal copy mode
-		xch_copy.copyType	= E_IM_XCH_COPY_SEL_NORMAL;
+		xch_copy.copyType	= ImXch_XCH_COPY_SEL_NORMAL;
 	}
 	else{
 		// hi-speed copy mode
-		xch_copy.copyType	= E_IM_XCH_COPY_SEL_HI;
+		xch_copy.copyType	= ImXch_XCH_COPY_SEL_HI;
 	}
 
 	xch_copy.xch				= xch;
@@ -263,17 +263,17 @@ static INT32 imXchCopyByte( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_
 #endif
 
 	// Xch start copy process
-	ret = Im_Xch_Copy_Ex_Async( &xch_copy, NULL );
+	ret = im_xch2_copy_ex_async(NULL, &xch_copy, NULL );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Copy_Ex_Async error
 		im_xch_close(NULL,xch );
-		Ddim_Print(("I:imXchCopyByte: Im_Xch_Copy_Ex_Async error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:imXchCopyByte: im_xch2_copy_ex_async error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 #ifdef CO_DEBUG_ON_PC
 	Ddim_Print(("Call im_xch_int_handler() for PC route check.\n"));
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		IO_XCH.XCHICE.bit.XE0	= 1;
 		IO_XCH.XCHICF.bit.__XF0	= 1;
 		IO_XCH.XCHICE.bit.XE1	= 0;
@@ -311,9 +311,9 @@ static INT32 imXchCopyByte( UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_
 PUBLIC
  */
 
-INT32 im_xch_conv_copy_param( ImXchCopyEx* copy_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlThin* xch_ctrl_thin, ImXchCtrlCopy* xch_ctrl_copy )
+INT32 im_xch2_conv_copy_param( ImXch2*self,ImXchCopyEx* copy_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlThin* xch_ctrl_thin, ImXchCtrlCopy* xch_ctrl_copy )
 {
-	if( copy_param->copyType == E_IM_XCH_COPY_SEL_HI ){
+	if( copy_param->copyType == ImXch_XCH_COPY_SEL_HI ){
 		// hi-speed copy
 		xch_ctrl_cmn->mode = D_IM_XCH_MD_COPY;
 		xch_ctrl_copy->vcyc		= 0x0;
@@ -339,7 +339,7 @@ INT32 im_xch_conv_copy_param( ImXchCopyEx* copy_param, ImXchCtrlCmn* xch_ctrl_cm
 	return D_IM_XCH_OK;
 }
 
-VOID im_xch_conv_fill_param( ImXchFillEx* fill_param, ImXchCtrlCmn* xch_ctrl_cmn )
+VOID im_xch2_conv_fill_param( ImXch2*self,ImXchFillEx* fill_param, ImXchCtrlCmn* xch_ctrl_cmn )
 {
 	// set common control structure
 	xch_ctrl_cmn->mode		= D_IM_XCH_MD_FILL;
@@ -350,7 +350,7 @@ VOID im_xch_conv_fill_param( ImXchFillEx* fill_param, ImXchCtrlCmn* xch_ctrl_cmn
 	return;
 }
 
-VOID im_xch_conv_hist_param( ImXchExamineHist* hist_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlHist* xch_ctrl_hist )
+VOID im_xch2_conv_hist_param( ImXch2*self,ImXchExamineHist* hist_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlHist* xch_ctrl_hist )
 {
 	// set common control structure
 	xch_ctrl_cmn->mode		= D_IM_XCH_MD_HISTGRAM;
@@ -370,7 +370,7 @@ VOID im_xch_conv_hist_param( ImXchExamineHist* hist_param, ImXchCtrlCmn* xch_ctr
 	return;
 }
 
-INT32 im_xch_conv_thin_param( ImXchConvThin* thin_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlThin* xch_ctrl_thin )
+INT32 im_xch2_conv_thin_param( ImXch2*self,ImXchConvThin* thin_param, ImXchCtrlCmn* xch_ctrl_cmn, ImXchCtrlThin* xch_ctrl_thin )
 {
 	switch( thin_param->thinWidth ){
 		case D_IM_XCH_THIN_SEL_1_2:
@@ -431,7 +431,7 @@ INT32 im_xch_conv_thin_param( ImXchConvThin* thin_param, ImXchCtrlCmn* xch_ctrl_
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
+INT32 im_xch2_copy_dual_channel( ImXch2*self,VOID* dst_addr, VOID* src_addr, INT32 size )
 {
 	INT32	ret = D_IM_XCH_OK;
 	UINT32	src;
@@ -442,14 +442,14 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 
 	while( size >= 0x4000000 ){
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: 0x4000000 copy root.\n"));
+		Ddim_Print(("I:im_xch2_copy_dual_channel: 0x4000000 copy root.\n"));
 #endif //CO_DEBUG_ON_PC
 
 		// 8192 x 8192 byte copy
 		ret = imXchCopy2ch( src, 0x2000, 0x2000, dst, 0x2000, 0x2000 );
 		if( ret != D_IM_XCH_OK ){
 			// imXchCopy2ch error
-			Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: imXchCopy2ch error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_dual_channel: imXchCopy2ch error. ret = 0x%X\n", ret));
 			return ret;
 		}
 		size -= 0x4000000;
@@ -459,7 +459,7 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 
 	while( size >= 0x4000 ){
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: 0x4000 copy root.\n"));
+		Ddim_Print(("I:im_xch2_copy_dual_channel: 0x4000 copy root.\n"));
 #endif //CO_DEBUG_ON_PC
 
 		// 8192 * 2 byte copy
@@ -467,7 +467,7 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 		ret = imXchCopy2ch( src, 0x2000, 0x2000, dst, 0x2000, vsize );
 		if( ret != D_IM_XCH_OK ){
 			// imXchCopy2ch error
-			Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: imXchCopy2ch error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_dual_channel: imXchCopy2ch error. ret = 0x%X\n", ret));
 			return ret;
 		}
 		size -= vsize * 0x2000;
@@ -477,7 +477,7 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 
 	while( size >= 0x2000 ){
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: 0x2000 copy root.\n"));
+		Ddim_Print(("I:im_xch2_copy_dual_channel: 0x2000 copy root.\n"));
 #endif //CO_DEBUG_ON_PC
 
 		// 8192 byte copy
@@ -485,7 +485,7 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 		ret = imXchCopyByte( src, 0x2000, 0x2000, dst, 0x2000, vsize );
 		if( ret != D_IM_XCH_OK ){
 			// imXchCopy2ch error
-			Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: imXchCopyByte error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_dual_channel: imXchCopyByte error. ret = 0x%X\n", ret));
 			return ret;
 		}
 		size -= vsize * 0x2000;
@@ -495,14 +495,14 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 
 	if( size > 0 ){
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: 0 copy root.\n"));
+		Ddim_Print(("I:im_xch2_copy_dual_channel: 0 copy root.\n"));
 #endif //CO_DEBUG_ON_PC
 
 		//
 		ret = imXchCopyByte( src, 0x2000, 0x2000, dst, size, 1 );
 		if( ret != D_IM_XCH_OK ){
 			// imXchCopyByte error
-			Ddim_Print(("I:Im_Xch_Copy_Dual_Channel: imXchCopyByte error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_dual_channel: imXchCopyByte error. ret = 0x%X\n", ret));
 			return ret;
 		}
 	}
@@ -510,7 +510,7 @@ INT32 Im_Xch_Copy_Dual_Channel( VOID* dst_addr, VOID* src_addr, INT32 size )
 	return ret;
 }
 
-INT32 Im_Xch_Copy( E_IM_XCH_CH_SEL xch, UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_width, UINT32 dst_addr, USHORT width, USHORT lines )
+INT32 im_xch2_copy( ImXch2*self,ImXchChSel xch, UINT32 src_addr, USHORT src_gl_width, USHORT dst_gl_width, UINT32 dst_addr, USHORT width, USHORT lines )
 {
 	INT32 ret;
 
@@ -518,9 +518,9 @@ INT32 Im_Xch_Copy( E_IM_XCH_CH_SEL xch, UINT32 src_addr, USHORT src_gl_width, US
 	ImXchCtrlCopy	xch_ctrl_copy;
 
 #ifdef CO_PARAM_CHECK
-	if( (xch != E_IM_XCH_CH_SEL_0) && (xch != E_IM_XCH_CH_SEL_1) ){
+	if( (xch != ImXch_XCH_CH_SEL_0) && (xch != ImXch_XCH_CH_SEL_1) ){
 		// Channel number error
-		Ddim_Assertion(("I:Im_Xch_Copy: Unknown channel error. Xch = %d\n", xch));
+		Ddim_Assertion(("I:im_xch2_copy: Unknown channel error. Xch = %d\n", xch));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -541,22 +541,22 @@ INT32 Im_Xch_Copy( E_IM_XCH_CH_SEL xch, UINT32 src_addr, USHORT src_gl_width, US
 	ret = im_xch_open(NULL, xch, D_DDIM_WAIT_END_TIME );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
-		Ddim_Print(("I:Im_Xch_Copy: im_xch_open error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy: im_xch_open error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	ret = Im_Xch_Ctrl_Common( xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
 		im_xch_close(NULL,xch );
-		Ddim_Print(("I:Im_Xch_Copy: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
-	ret = Im_Xch_Ctrl_Copy( xch, &xch_ctrl_copy );
+	ret = im_xch1_ctrl_copy(NULL, xch, &xch_ctrl_copy );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Copy error
 		im_xch_close(NULL,xch );
-		Ddim_Print(("I:Im_Xch_Copy: Im_Xch_Ctrl_Copy error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy: im_xch1_ctrl_copy error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -564,14 +564,14 @@ INT32 Im_Xch_Copy( E_IM_XCH_CH_SEL xch, UINT32 src_addr, USHORT src_gl_width, US
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error
 		im_xch_close(NULL,xch );
-		Ddim_Print(("I:Im_Xch_Copy: im_xch_start_sync error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy: im_xch_start_sync error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	ret = im_xch_close(NULL,xch );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error
-		Ddim_Print(("I:Im_Xch_Copy: Im_Xch_Close error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy: Im_Xch_Close error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -579,7 +579,7 @@ INT32 Im_Xch_Copy( E_IM_XCH_CH_SEL xch, UINT32 src_addr, USHORT src_gl_width, US
 
 }
 
-INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
+INT32 im_xch2_copy_ex_sync( ImXch2*self,ImXchCopyEx* copy_param )
 {
 	ImXchCtrlCmn		xch_ctrl_cmn;
 	ImXchCtrlThin		xch_ctrl_thin;
@@ -589,7 +589,7 @@ INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
 #ifdef CO_PARAM_CHECK
 	if( copy_param == NULL ){
 		// copy_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Copy_Ex_Sync: Null check error. copy_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_copy_ex_sync: Null check error. copy_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -602,10 +602,10 @@ INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
 	// set call back function
 	xch_ctrl_cmn.pCallBack	= NULL;
 	// set control structure
-	ret = im_xch_conv_copy_param( copy_param, &xch_ctrl_cmn, &xch_ctrl_thin, &xch_ctrl_copy );
+	ret = im_xch2_conv_copy_param( NULL,copy_param, &xch_ctrl_cmn, &xch_ctrl_thin, &xch_ctrl_copy );
 	if( ret != D_IM_XCH_OK ){
 		// im_xch_prepare_copy_ex_param error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: im_xch_conv_copy_param error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch2_conv_copy_param error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -613,35 +613,35 @@ INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
 	ret = im_xch_open(NULL, copy_param->xch, D_DDIM_WAIT_END_TIME );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: im_xch_open error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch_open error. ret = 0x%X\n", ret));
 		return ret;
 	}
 	// set control
-	ret = Im_Xch_Ctrl_Common( copy_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, copy_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
 		im_xch_close(NULL,copy_param->xch );
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	if( copy_param->copyType == E_IM_XCH_COPY_SEL_HI ){
+	if( copy_param->copyType == ImXch_XCH_COPY_SEL_HI ){
 		// hi-speed copy
-		ret = Im_Xch_Ctrl_Copy( copy_param->xch, &xch_ctrl_copy );
+		ret = im_xch1_ctrl_copy(NULL, copy_param->xch, &xch_ctrl_copy );
 		if( ret != D_IM_XCH_OK ){
 			// Im_Xch_Ctrl_Copy error
 			im_xch_close(NULL,copy_param->xch );
-			Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: Im_Xch_Ctrl_Copy error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch1_ctrl_copy error. ret = 0x%X\n", ret));
 			return ret;
 		}
 	}
 	else{
 		// normal-speed copy
-		ret = Im_Xch_Ctrl_Thin( copy_param->xch, &xch_ctrl_thin );
+		ret = im_xch1_ctrl_thin(NULL, copy_param->xch, &xch_ctrl_thin );
 		if( ret != D_IM_XCH_OK ){
 			// Im_Xch_Ctrl_Thin error
 			im_xch_close(NULL,copy_param->xch );
-			Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: Im_Xch_Ctrl_Thin error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch1_ctrl_thin error. ret = 0x%X\n", ret));
 			return ret;
 		}
 	}
@@ -650,7 +650,7 @@ INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Sync error
 		im_xch_close(NULL,copy_param->xch );
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: im_xch_start_sync error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_sync: im_xch_start_sync error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -658,14 +658,14 @@ INT32 Im_Xch_Copy_Ex_Sync( ImXchCopyEx* copy_param )
 	ret = im_xch_close(NULL,copy_param->xch );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Sync: Im_Xch_Close error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_sync: Im_Xch_Close error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	return ret;
 }
 
-INT32 Im_Xch_Copy_Ex_Async( ImXchCopyEx* copy_param, VP_CALLBACK pCallBack )
+INT32 im_xch2_copy_ex_async( ImXch2*self,ImXchCopyEx* copy_param, VP_CALLBACK pCallBack )
 {
 	ImXchCtrlCmn		xch_ctrl_cmn;
 	ImXchCtrlThin		xch_ctrl_thin;
@@ -675,7 +675,7 @@ INT32 Im_Xch_Copy_Ex_Async( ImXchCopyEx* copy_param, VP_CALLBACK pCallBack )
 #ifdef CO_PARAM_CHECK
 	if( copy_param == NULL ){
 		// copy_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Copy_Ex_Async: Null check error. copy_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_copy_ex_async: Null check error. copy_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -689,36 +689,36 @@ INT32 Im_Xch_Copy_Ex_Async( ImXchCopyEx* copy_param, VP_CALLBACK pCallBack )
 	xch_ctrl_cmn.pCallBack	= pCallBack;
 
 	// set control structure
-	ret = im_xch_conv_copy_param( copy_param, &xch_ctrl_cmn, &xch_ctrl_thin, &xch_ctrl_copy );
+	ret = im_xch2_conv_copy_param( NULL,copy_param, &xch_ctrl_cmn, &xch_ctrl_thin, &xch_ctrl_copy );
 	if( ret != D_IM_XCH_OK ){
 		// im_xch_prepare_copy_ex_param error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Async: im_xch_conv_copy_param error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_async: im_xch2_conv_copy_param error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( copy_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, copy_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Async: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_async: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	if( copy_param->copyType == E_IM_XCH_COPY_SEL_HI ){
+	if( copy_param->copyType == ImXch_XCH_COPY_SEL_HI ){
 		// hi-speed copy
-		ret = Im_Xch_Ctrl_Copy( copy_param->xch, &xch_ctrl_copy );
+		ret = im_xch1_ctrl_copy(NULL, copy_param->xch, &xch_ctrl_copy );
 		if( ret != D_IM_XCH_OK ){
 			// Im_Xch_Ctrl_Copy error
-			Ddim_Print(("I:Im_Xch_Copy_Ex_Async: Im_Xch_Ctrl_Copy error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_ex_async: im_xch1_ctrl_copy error. ret = 0x%X\n", ret));
 			return ret;
 		}
 	}
 	else{
 		// normal-speed copy
-		ret = Im_Xch_Ctrl_Thin( copy_param->xch, &xch_ctrl_thin );
+		ret = im_xch1_ctrl_thin(NULL, copy_param->xch, &xch_ctrl_thin );
 		if( ret != D_IM_XCH_OK ){
 			// Im_Xch_Ctrl_Thin error
-			Ddim_Print(("I:Im_Xch_Copy_Ex_Async: Im_Xch_Ctrl_Thin error. ret = 0x%X\n", ret));
+			Ddim_Print(("I:im_xch2_copy_ex_async: im_xch1_ctrl_thin error. ret = 0x%X\n", ret));
 			return ret;
 		}
 	}
@@ -727,14 +727,14 @@ INT32 Im_Xch_Copy_Ex_Async( ImXchCopyEx* copy_param, VP_CALLBACK pCallBack )
 	ret = im_xch_start_async(NULL, copy_param->xch );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Async error
-		Ddim_Print(("I:Im_Xch_Copy_Ex_Async: im_xch_start_async error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_copy_ex_async: im_xch_start_async error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	return ret;
 }
 
-INT32 Im_Xch_Examine_Histogram_Sync( ImXchExamineHist* hist_param, ULONG* hist_buffer, UCHAR* hist_max )
+INT32 im_xch2_examine_histogram_sync( ImXch2*self,ImXchExamineHist* hist_param, ULONG* hist_buffer, UCHAR* hist_max )
 {
 	ImXchCtrlCmn	xch_ctrl_cmn;
 	ImXchCtrlHist	xch_ctrl_hist;
@@ -743,12 +743,12 @@ INT32 Im_Xch_Examine_Histogram_Sync( ImXchExamineHist* hist_param, ULONG* hist_b
 #ifdef CO_PARAM_CHECK
 	if( hist_param == NULL ){
 		// hist_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Examine_Histogram_Sync: Null check error. hist_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_examine_histogram_sync: Null check error. hist_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 	if( hist_max == NULL ){
 		// hist_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Examine_Histogram_Sync: Null check error. hist_max = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_examine_histogram_sync: Null check error. hist_max = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -761,39 +761,39 @@ INT32 Im_Xch_Examine_Histogram_Sync( ImXchExamineHist* hist_param, ULONG* hist_b
 	xch_ctrl_cmn.pCallBack	= NULL;
 
 	// set control structure
-	im_xch_conv_hist_param( hist_param, &xch_ctrl_cmn, &xch_ctrl_hist );
+	im_xch2_conv_hist_param( NULL,hist_param, &xch_ctrl_cmn, &xch_ctrl_hist );
 
 	// X0ch open
-	ret = im_xch_open(NULL, E_IM_XCH_CH_SEL_0, D_DDIM_WAIT_END_TIME );
+	ret = im_xch_open(NULL, ImXch_XCH_CH_SEL_0, D_DDIM_WAIT_END_TIME );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: im_xch_open error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: im_xch_open error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL_0, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, ImXch_XCH_CH_SEL_0, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	ret = Im_Xch_Ctrl_Hist( E_IM_XCH_CH_SEL_0, &xch_ctrl_hist );
+	ret = im_xch1_ctrl_hist(NULL, ImXch_XCH_CH_SEL_0, &xch_ctrl_hist );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Hist error
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: Im_Xch_Ctrl_Hist error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: im_xch1_ctrl_hist error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// Xch start(Sync)
-	ret = im_xch_start_sync(NULL, E_IM_XCH_CH_SEL_0 );
+	ret = im_xch_start_sync(NULL, ImXch_XCH_CH_SEL_0 );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Sync error
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: im_xch_start_sync error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: im_xch_start_sync error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -805,26 +805,26 @@ INT32 Im_Xch_Examine_Histogram_Sync( ImXchExamineHist* hist_param, ULONG* hist_b
 	ret = im_xch_get_histogram(NULL, hist_buffer );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Sync error
-		im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: im_xch_get_histogram error. ret = 0x%X\n", ret));
+		im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: im_xch_get_histogram error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// Get histogram max
-	*hist_max = Im_Xch_Get_Histogram_Max();
+	*hist_max = im_xch1_get_histogram_max(NULL);
 
 	// X0ch close
-	ret = im_xch_close(NULL,E_IM_XCH_CH_SEL_0 );
+	ret = im_xch_close(NULL,ImXch_XCH_CH_SEL_0 );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Sync: Im_Xch_Close error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_examine_histogram_sync: Im_Xch_Close error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	return ret;
 }
 
-INT32 Im_Xch_Examine_Histogram_Async( ImXchExamineHist* hist_param, VP_CALLBACK pCallBack )
+INT32 Im_Xch_Examine_Histogram_Async( ImXch2*self,ImXchExamineHist* hist_param, VP_CALLBACK pCallBack )
 {
 	ImXchCtrlCmn	xch_ctrl_cmn;
 	ImXchCtrlHist	xch_ctrl_hist;
@@ -833,7 +833,7 @@ INT32 Im_Xch_Examine_Histogram_Async( ImXchExamineHist* hist_param, VP_CALLBACK 
 #ifdef CO_PARAM_CHECK
 	if( hist_param == NULL ){
 		// hist_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Examine_Histogram_Async: Null check error. hist_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_examine_histogram_async: Null check error. hist_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -846,34 +846,34 @@ INT32 Im_Xch_Examine_Histogram_Async( ImXchExamineHist* hist_param, VP_CALLBACK 
 	xch_ctrl_cmn.pCallBack	= pCallBack;
 
 	// set control structure
-	im_xch_conv_hist_param( hist_param, &xch_ctrl_cmn, &xch_ctrl_hist );
+	im_xch2_conv_hist_param( NULL,hist_param, &xch_ctrl_cmn, &xch_ctrl_hist );
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL_0, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, ImXch_XCH_CH_SEL_0, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Async: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_examine_histogram_async: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
-	ret = Im_Xch_Ctrl_Hist( E_IM_XCH_CH_SEL_0, &xch_ctrl_hist );
+	ret = im_xch1_ctrl_hist(NULL, ImXch_XCH_CH_SEL_0, &xch_ctrl_hist );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Hist error
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Async: Im_Xch_Ctrl_Hist error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_examine_histogram_async: im_xch1_ctrl_hist error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// Xch start(Async)
-	ret = im_xch_start_async(NULL, E_IM_XCH_CH_SEL_0 );
+	ret = im_xch_start_async(NULL, ImXch_XCH_CH_SEL_0 );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Async error
-		Ddim_Print(("I:Im_Xch_Examine_Histogram_Async: im_xch_start_async error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_examine_histogram_async: im_xch_start_async error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	return ret;
 }
 
-INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
+INT32 im_xch2_convert_thinning_sync( ImXch2*self,ImXchConvThin* thin_param )
 {
 	ImXchCtrlCmn		xch_ctrl_cmn;
 	ImXchCtrlThin		xch_ctrl_thin;
@@ -882,7 +882,7 @@ INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
 #ifdef CO_PARAM_CHECK
 	if( thin_param == NULL ){
 		// thin_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Convert_Thinning_Sync. Null check error. thin_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_convert_thinning_sync. Null check error. thin_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -895,10 +895,10 @@ INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
 	xch_ctrl_cmn.pCallBack	= NULL;
 
 	// set control structure
-	ret = im_xch_conv_thin_param( thin_param, &xch_ctrl_cmn, &xch_ctrl_thin );
+	ret = im_xch2_conv_thin_param( NULL,thin_param, &xch_ctrl_cmn, &xch_ctrl_thin );
 	if( ret != D_IM_XCH_OK ){
 		// im_xch_conv_thin_param error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: im_xch_conv_thin_param error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: im_xch2_conv_thin_param error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -906,23 +906,23 @@ INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
 	ret = im_xch_open(NULL, thin_param->xch, D_DDIM_WAIT_END_TIME );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Open error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: im_xch_open error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: im_xch_open error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( thin_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, thin_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
 		im_xch_close(NULL,thin_param->xch );
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
-	ret = Im_Xch_Ctrl_Thin( thin_param->xch, &xch_ctrl_thin );
+	ret = im_xch1_ctrl_thin(NULL, thin_param->xch, &xch_ctrl_thin );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Fill error
 		im_xch_close(NULL,thin_param->xch );
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: Im_Xch_Ctrl_Thin error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: im_xch1_ctrl_thin error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -931,7 +931,7 @@ INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Sync error
 		im_xch_close(NULL,thin_param->xch );
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: im_xch_start_sync error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: im_xch_start_sync error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -939,14 +939,14 @@ INT32 Im_Xch_Convert_Thinning_Sync( ImXchConvThin* thin_param )
 	ret = im_xch_close(NULL,thin_param->xch );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Close error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Sync: Im_Xch_Close error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_sync: Im_Xch_Close error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	return ret;
 }
 
-INT32 Im_Xch_Convert_Thinning_Async( ImXchConvThin* thin_param, VP_CALLBACK pCallBack )
+INT32 im_xch2_convert_thinning_async( ImXch2*self,ImXchConvThin* thin_param, VP_CALLBACK pCallBack )
 {
 	ImXchCtrlCmn		xch_ctrl_cmn;
 	ImXchCtrlThin		xch_ctrl_thin;
@@ -955,7 +955,7 @@ INT32 Im_Xch_Convert_Thinning_Async( ImXchConvThin* thin_param, VP_CALLBACK pCal
 #ifdef CO_PARAM_CHECK
 	if( thin_param == NULL ){
 		// thin_param is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Convert_Thinning_Async. thin_param = NULL\n"));
+		Ddim_Assertion(("I:im_xch2_convert_thinning_async. thin_param = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -968,25 +968,25 @@ INT32 Im_Xch_Convert_Thinning_Async( ImXchConvThin* thin_param, VP_CALLBACK pCal
 	xch_ctrl_cmn.pCallBack	= pCallBack;
 
 	// set control structure
-	ret = im_xch_conv_thin_param( thin_param, &xch_ctrl_cmn, &xch_ctrl_thin );
+	ret = im_xch2_conv_thin_param( NULL,thin_param, &xch_ctrl_cmn, &xch_ctrl_thin );
 	if( ret != D_IM_XCH_OK ){
 		// im_xch_conv_thin_param error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Async: im_xch_conv_thin_param error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_async: im_xch2_conv_thin_param error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
 	// set control
-	ret = Im_Xch_Ctrl_Common( thin_param->xch, &xch_ctrl_cmn );
+	ret = im_xch1_ctrl_common(NULL, thin_param->xch, &xch_ctrl_cmn );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Common error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Async: Im_Xch_Ctrl_Common error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_async: im_xch1_ctrl_common error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
-	ret = Im_Xch_Ctrl_Thin( thin_param->xch, &xch_ctrl_thin );
+	ret = im_xch1_ctrl_thin(NULL, thin_param->xch, &xch_ctrl_thin );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Ctrl_Fill error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Async: Im_Xch_Ctrl_Thin error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_async: im_xch1_ctrl_thin error. ret = 0x%X\n", ret));
 		return ret;
 	}
 
@@ -994,7 +994,7 @@ INT32 Im_Xch_Convert_Thinning_Async( ImXchConvThin* thin_param, VP_CALLBACK pCal
 	ret = im_xch_start_async(NULL, thin_param->xch );
 	if( ret != D_IM_XCH_OK ){
 		// Im_Xch_Start_Async error
-		Ddim_Print(("I:Im_Xch_Convert_Thinning_Async: im_xch_start_async error. ret = 0x%X\n", ret));
+		Ddim_Print(("I:im_xch2_convert_thinning_async: im_xch_start_async error. ret = 0x%X\n", ret));
 		return ret;
 	}
 

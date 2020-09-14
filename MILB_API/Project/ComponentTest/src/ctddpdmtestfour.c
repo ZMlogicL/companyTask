@@ -15,13 +15,19 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pdm.h"
-#include "dd_pdm.h"
+// #include "dd_pdm.h"
 #include "ct_dd_pdm.h"
-#include "dd_top.h"
-#include "dd_cache.h"
-#include "dd_gic.h"
-#include "dd_audio.h"
-#include "dd_hdmac0.h"
+// #include "dd_top.h"
+// #include "dd_cache.h"
+// #include "dd_gic.h"
+// #include "dd_audio.h"
+// #include "dd_hdmac0.h"
+#include "../../DeviceDriver/Peripheral/src/ddpdm.h"
+#include "../../DeviceDriver/LSITop/src/ddtopone.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudioctrl.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudio.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudioi2s.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac0.h"
 #include "peripheral.h"
 #include "ctddpdmtestone.h"
 #include "ctddpdmtestfour.h"
@@ -64,9 +70,9 @@ static void ctDdPdm_DmaIntHandler019( void )
 	*S_GCt_DD_PDM_DMA_INT_CNT4++;
 	
 	if(*S_GCt_DD_PDM_DMA_INT_CNT4 < 10) {
-		Dd_HDMAC0_Input_Audio_Async( 0,
-									 D_DD_HDMAC0_IS_IDREQ_8,
-									 Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+		dd_hdmac0_input_audio_async(dd_hdmac0_get(), 0,
+									 DdHdmac0_IS_IDREQ_8,
+									 dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 									 CtDdPdmTestone_WORK_AREA+(800*2*2*(*S_GCt_DD_PDM_DMA_INT_CNT4)),
 									 (800*2*2),
 									 (VP_CALLBACK)ctDdPdm_DmaIntHandler019);
@@ -80,9 +86,9 @@ static void ctDdPdm_DmaIntHandler022( void )
 	*S_GCt_DD_PDM_DMA_INT_CNT4++;
 	
 	if(*S_GCt_DD_PDM_DMA_INT_CNT4 < 10) {
-		Dd_HDMAC0_Input_Audio_Async( 0,
-									 D_DD_HDMAC0_IS_IDREQ_8,
-									 Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+		dd_hdmac0_input_audio_async(dd_hdmac0_get(), 0,
+									 DdHdmac0_IS_IDREQ_8,
+									 dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 									 CtDdPdmTestone_WORK_AREA+(4410*2*2*(*S_GCt_DD_PDM_DMA_INT_CNT4)),
 									 (4410*2*2),
 									 (VP_CALLBACK)ctDdPdm_DmaIntHandler022);
@@ -96,9 +102,9 @@ static void ctDdPdm_DmaIntHandler024( void )
 	*S_GCt_DD_PDM_DMA_INT_CNT4++;
 	
 	if(*S_GCt_DD_PDM_DMA_INT_CNT4 < 10) {
-		Dd_HDMAC0_Input_Audio_Async( 0,
-									 D_DD_HDMAC0_IS_IDREQ_8,
-									 Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+		dd_hdmac0_input_audio_async(dd_hdmac0_get(), 0,
+									 DdHdmac0_IS_IDREQ_8,
+									 dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 									 CtDdPdmTestone_WORK_AREA+(2205*2*2*(*S_GCt_DD_PDM_DMA_INT_CNT4)),
 									 (2205*2*2),
 									 (VP_CALLBACK)ctDdPdm_DmaIntHandler024);
@@ -124,115 +130,115 @@ void ct_dd_pdm_testfour_019(CtDdPdmTestfour *self)
 	 * FS:8kHz
 	 */
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 12;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 12;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_24_576;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_12;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DDAUDIOI2S_MASTER_CLOCK_24_576;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_12;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch = D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch = DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(800*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler019);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 013 : Record PDM0 Clock:12.288MHz(AUCLK/2) FS=8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -245,115 +251,115 @@ void ct_dd_pdm_testfour_020(CtDdPdmTestfour *self)
 	 * FS:8kHz
 	 */
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_8_192;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_4;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_8_192;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_4;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch	= D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch	= DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(800*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler019);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 014 : PDM0 Clock:8.192MHz(AUCLK) FS=8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -367,115 +373,115 @@ void ct_dd_pdm_testfour_021(CtDdPdmTestfour *self)
 	 */
 	
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_8_192;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_4;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_8_192;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_4;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch	= D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch	= DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(800*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler019);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 015 : PDM0 Clock:4.092MHz(AUCLK/2) FS=8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -488,115 +494,115 @@ void ct_dd_pdm_testfour_022(CtDdPdmTestfour *self)
 	 * FS:44.1kHz
 	 */
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 16;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 16;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_2;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_2;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch = D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch = DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(4410*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler022);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 016 : PDM0 Clock:22.5792MHz(AUCLK) FS=44.1kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -609,115 +615,115 @@ void ct_dd_pdm_testfour_023(CtDdPdmTestfour *self)
 	 * FS:44.1kHz
 	 */
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 16;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 16;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_2;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_2;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch	= D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch	= DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(4410*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler022);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 017 : PDM0 Clock:11.2896MHz(AUCLK/2) FS=44.1kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -730,115 +736,115 @@ void ct_dd_pdm_testfour_024(CtDdPdmTestfour *self)
 	 * FS:22.05kHz
 	 */
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_4;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_4;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch = D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch = DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(2205*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler024);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 018 : PDM0 Clock:22.5792MHz(AUCLK) FS=22.05kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));
@@ -852,115 +858,115 @@ void ct_dd_pdm_testfour_025(CtDdPdmTestfour *self)
 	 */
 	
 	kuint8 ch = 0;
-	T_DD_AUDIO_CTRL_COMMON	ctrlCommon;
-	T_DD_AUDIO_CTRL_IN	ctrlIn;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
-	T_DD_AUDIO_I2S_IN	i2sIn;
-	T_DD_AUDIO_DMA	dma;
+	AUDIOCTRLCOMMON	ctrlCommon;
+	AUDIOCTRLIN	ctrlIn;
+	AUDIOI2SCMMN	i2sCommon;
+	AUDIOI2SIN	i2sIn;
+	AUDIODMA	dma;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_STEREO;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_STEREO;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	if(Dd_HDMAC0_Open(0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Open Error(ch0)\n"));
+	if(dd_hdmac0_open(dd_hdmac0_get(),0, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_open Error(ch0)\n"));
 	}
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_4;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_4;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Audio_Get_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_get_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	i2sIn.mode_in = E_DD_AUDIO_MODE_I2S;
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
+	i2sIn.modeIn = DdAudioI2s_MODE_I2S;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
 	
-	Dd_Audio_Ctrl_I2sIn(4, &i2sIn);
+	dd_audio_ctrl_i2s_in(dd_audio_get(),4, &i2sIn);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Audio_Get_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_get_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_1;
-	ctrlCommon.channel = E_DD_AUDIO_CHANNEL_STEREO;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_1;
+	ctrlCommon.channel = DdAudioCtrl_CHANNEL_STEREO;
 	
-	Dd_Audio_Ctrl_Common(4, &ctrlCommon);
+	dd_audio_ctrl_common(dd_audio_get(),4, &ctrlCommon);
 	
-	Dd_Audio_Get_Ctrl_Input(4, &ctrlIn);
+	dd_audio_get_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	ctrlIn.format = E_DD_AUDIO_DATA_REG_FRMT_L_JUST;
-	ctrlIn.fifo_stages = E_DD_AUDIO_FIFO_STAGES_16;
-	ctrlIn.ahb_format = E_DD_AUDIO_AHB_FRMT_L_JUST;
-	ctrlIn.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlIn.format = DdAudioCtrl_DATA_REG_FRMT_L_JUST;
+	ctrlIn.fifoStages = DdAudioCtrl_FIFO_STAGES_16;
+	ctrlIn.ahbFormat = DdAudioCtrl_AHB_FRMT_L_JUST;
+	ctrlIn.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	
-	Dd_Audio_Ctrl_Input(4, &ctrlIn);
+	dd_audio_ctrl_input(dd_audio_get(),4, &ctrlIn);
 	
-	Dd_Audio_Get_Ctrl_DmaIn(4, &dma);
+	dd_audio_get_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	dma.dma_2ch	= D_DD_AUDIO_DISABLE;
-	dma.dma_trnsf_cnt = 0;
+	dma.dma2Ch	= DdAudio_DISABLE;
+	dma.dmaTrnsfCnt = 0;
 	
-	Dd_Audio_Ctrl_DmaIn(4, &dma);
+	dd_audio_ctrl_dma_in(dd_audio_get(),4, &dma);
 	
-	Dd_Audio_Set_SwapHW_AUIDLR(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_swap_hw_auidlr(dd_audio_get(),4, DdAudio_ENABLE);
 	
 	*S_GCt_DD_PDM_DMA_INT_CNT4 = 0;
-	Dd_HDMAC0_Input_Audio_Async(0,
-								D_DD_HDMAC0_IS_IDREQ_8,
-								Dd_Audio_Get_Addr_Reg_AUIDLR(4),
+	dd_hdmac0_input_audio_async(dd_hdmac0_get(),0,
+								DdHdmac0_IS_IDREQ_8,
+								dd_audio_get_addr_reg_auidlr(dd_audio_get(),4),
 								CtDdPdmTestone_WORK_AREA,
 								(2205*2*2),
 								(VP_CALLBACK)ctDdPdm_DmaIntHandler024);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_ENABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_ENABLE);
 	
-	Dd_Audio_Start_Input(4);
+	dd_audio_start_input(dd_audio_get(),4);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Audio_Stop_Input(4);
+	dd_audio_stop_input(dd_audio_get(),4);
 	
-	Dd_Audio_Set_InputDMARequestEnable(4, D_DD_AUDIO_DISABLE);
+	dd_audio_set_input_dma_request_enable(dd_audio_get(),4, DdAudio_DISABLE);
 	
-	if(Dd_HDMAC0_Stop(0) != D_DDIM_OK) {
-		Ddim_Print(("Dd_HDMAC0_Stop Error(ch0)\n"));
+	if(dd_hdmac0_stop(dd_hdmac0_get(),0) != D_DDIM_OK) {
+		Ddim_Print(("dd_hdmac0_stop Error(ch0)\n"));
 	}
 	
-	Dd_HDMAC0_Close(0);
+	dd_hdmac0_close(dd_hdmac0_get(),0);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
-	Dd_Pdm_Stop_Streaming(ch);
-	Dd_Pdm_Close(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 019 : PDM0 Clock:11.2896MHz(AUCLK/2) FS=22.05kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestfour));

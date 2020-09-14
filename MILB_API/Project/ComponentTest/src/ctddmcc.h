@@ -23,7 +23,7 @@
 #define __CT_DD_MCC_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_DD_MCC                  (ct_dd_mcc_get_type())
 #define CT_DD_MCC(obj)                  (K_TYPE_CHECK_INSTANCE_CAST (obj, CtDdMcc)) 

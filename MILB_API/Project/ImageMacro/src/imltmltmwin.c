@@ -14,7 +14,7 @@
 
 #include "im_ltm.h"
 #include <string.h>
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "jdsltm.h"
 #include "imltmltmutlis.h"
 #include "imltmltmwin.h"
@@ -242,7 +242,7 @@ INT32 Im_LTM_LTM_SW_Reset( UCHAR pipe_no )
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 	Im_LTM_On_Clk( pipe_no );
@@ -470,7 +470,7 @@ INT32 Im_LTM_LTM_Ctrl_Common( UCHAR pipe_no, const T_IM_LTM_LTM_CTRL_COMMON* con
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -507,6 +507,7 @@ INT32 Im_LTM_LTM_Ctrl_Common( UCHAR pipe_no, const T_IM_LTM_LTM_CTRL_COMMON* con
 
 	return D_DDIM_OK;
 }
+
 /* LTM_LTM Control (SDRAM input mode control)
  */
 INT32 Im_LTM_LTM_Ctrl_ModeSDRAMInput( UCHAR pipe_no, const T_IM_LTM_LTM_CTRL_SDRAM_INPUT* const ltm_ctrl_sdram_input )
@@ -526,7 +527,7 @@ INT32 Im_LTM_LTM_Ctrl_ModeSDRAMInput( UCHAR pipe_no, const T_IM_LTM_LTM_CTRL_SDR
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_ltm_ltm_utlis_get_gIM_LTM_LTM_Mng(imLtmLtmUtlis,loop_cnt).inputSizeRgb = ltm_ctrl_sdram_input->input_rect;
@@ -696,7 +697,7 @@ INT32 Im_LTM_LTM_Ctrl_ModeB2RDirect( UCHAR pipe_no, const T_IM_LTM_LTM_CTRL_B2R_
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_ltm_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_ltm_utlis_im_ltm_ltm_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		im_ltm_ltm_utlis_get_gIM_LTM_LTM_Mng(imLtmLtmUtlis,loop_cnt).inputSizeRgb = ltm_ctrl_b2r_direct->input_rect;

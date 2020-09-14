@@ -61,6 +61,8 @@ struct _CtImJpeg2Private
 	CtImJpeg1 *jpeg1;
 	CtImJpeg3 *jpeg3;
 	CtImJpeg4 *jpeg4;
+	CtImJpeg5 *jpeg5;
+	CtImJpeg6 *jpeg6;
 };
 
 #ifdef CtImJpeg2_CO_ACT_JPEG_CLOCK
@@ -90,6 +92,8 @@ static void ct_im_jpeg2_init(CtImJpeg2 *self)
 	priv->jpeg1=ct_im_jpeg1_new();
 	priv->jpeg3=ct_im_jpeg3_new();
 	priv->jpeg4=ct_im_jpeg4_new();
+	priv->jpeg5=ct_im_jpeg5_new();
+	priv->jpeg6=ct_im_jpeg6_new();
 }
 
 /*
@@ -97,44 +101,53 @@ static void ct_im_jpeg2_init(CtImJpeg2 *self)
  * */
 static void dispose_od(GObject *object)
 {
-//	CtImJpeg2 *self = (CtImJpeg2*)object;
-//	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
+	CtImJpeg2 *self = (CtImJpeg2*)object;
+	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg2_parent_class)->dispose(object);
+
+	if(priv->jpeg1){
+		g_object_unref(priv->jpeg1);
+		priv->jpeg1=NULL;
+	}
+
+	if(priv->jpeg3){
+			g_object_unref(priv->jpeg3);
+			priv->jpeg3=NULL;
+		}
+
+	if(priv->jpeg4){
+			g_object_unref(priv->jpeg4);
+			priv->jpeg4=NULL;
+		}
+
+	if(priv->jpeg5){
+				g_object_unref(priv->jpeg5);
+				priv->jpeg5=NULL;
+			}
+
+	if(priv->jpeg6){
+					g_object_unref(priv->jpeg6);
+					priv->jpeg6=NULL;
+				}
 }
 
 static void finalize_od(GObject *object)
 {
-	CtImJpeg2 *self = (CtImJpeg2*)object;
-	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
+//	CtImJpeg2 *self = (CtImJpeg2*)object;
+//	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg2_parent_class)->finalize(object);
-
-	if(priv->jpeg1)
-	{
-		g_object_unref(priv->jpeg1);
-		priv->jpeg1=NULL;
-	}
-	if(priv->jpeg3)
-		{
-			g_object_unref(priv->jpeg3);
-			priv->jpeg3=NULL;
-		}
-	if(priv->jpeg4)
-		{
-			g_object_unref(priv->jpeg4);
-			priv->jpeg4=NULL;
-		}
 }
 
 static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 {
 	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
-	TImJpegDecMng decMng;
-	TImJpegDecFrameMng decFrmMng;
+	TimgDecMng decMng;
+	TimgDecFrameMng decFrmMng;
 	gint32	ret=0;
 	gint32	i;
 
-	memset(&decMng, 0, sizeof(TImJpegDecMng));
-	memset(&decFrmMng, 0, sizeof(TImJpegDecFrameMng));
+	memset(&decMng, 0, sizeof(TimgDecMng));
+	memset(&decFrmMng, 0, sizeof(TimgDecFrameMng));
 
 	switch(decParam->format) {
 		case CtImJpeg6_E_CT_JPEG_FORMAT_444P:
@@ -167,15 +180,15 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 			return;
 	}
 
-	decMng.ext_mode 		= decParam->ext;
+	decMng.extMode 		= decParam->ext;
 	decMng.skipMkFlg	= 0;
 	decMng.pintLine		= 0;
 	decMng.pintSect		= 0;
-	decMng.corr_mode	= decParam->corrFlg;
+	decMng.extMode	= decParam->corrFlg;
 
-	decMng.color_band.y_band		= 0x01;
-	decMng.color_band.cb_band	= 0x01;
-	decMng.color_band.cr_band		= 0x01;
+	decMng.colorBand.yBand		= 0x01;
+	decMng.colorBand.cbBand	= 0x01;
+	decMng.colorBand.crBand		= 0x01;
 
 	decMng.pbufCtrl.endian					= ImJpegCommon_E_IM_JPEG_ENDIAN_LITTLE;
 	decMng.pbufCtrl.issueTranNum	= ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_8;
@@ -192,7 +205,7 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 		decMng.pcallback = NULL;
 	}
 	else {
-		decMng.pcallback = (VP_CALLBACK)ct_im_jpeg4_decode_cb;
+		decMng.pcallback = (VpCallback)ct_im_jpeg4_decode_cb;
 	}
 
 	// Frame memory
@@ -200,41 +213,38 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 	decFrmMng.globalYWidth = decParam->gYWidth;
 
 	if (decParam->cutOutFlg) {
-		decFrmMng.cutout_flg		= ImJpegCommon_D_IM_JPEG_ENABLE_ON;
-		decFrmMng.cutout_width	= decParam->cutHSize;
-		decFrmMng.cutout_lines	= decParam->cutVSize;
-		decFrmMng.cutout_offset_h = ((decParam->hSize - decParam->cutHSize) / 2);
-		decFrmMng.cutout_offset_v = ((decParam->vSize - decParam->cutVSize) / 2);
+		decFrmMng.cutoutFlg		= ImJpegCommon_D_IM_JPEG_ENABLE_ON;
+		decFrmMng.cutoutWidth	= decParam->cutHSize;
+		decFrmMng.cutoutLines	= decParam->cutVSize;
+		decFrmMng.cutoutOffsetH = ((decParam->hSize - decParam->cutHSize) / 2);
+		decFrmMng.cutoutOffsetV = ((decParam->vSize - decParam->cutVSize) / 2);
 
-		if ((decFrmMng.cutout_offset_h & 0xF) != 0) {
-			decFrmMng.cutout_offset_h = ((decFrmMng.cutout_offset_h >> 4) << 4) + 16;
+		if ((decFrmMng.cutoutOffsetH & 0xF) != 0) {
+			decFrmMng.cutoutOffsetH = ((decFrmMng.cutoutOffsetH >> 4) << 4) + 16;
 		}
-		if ((decFrmMng.cutout_offset_v & 0xF) != 0) {
-			decFrmMng.cutout_offset_v = ((decFrmMng.cutout_offset_v >> 4) << 4) + 16;
+		if ((decFrmMng.cutoutOffsetV & 0xF) != 0) {
+			decFrmMng.cutoutOffsetV = ((decFrmMng.cutoutOffsetV >> 4) << 4) + 16;
 		}
 
 		if(ct_im_jpeg1_get4(priv->jpeg1)) {
 			decFrmMng.yccAddr.y		= CtImJpeg2_D_CT_JPEG_YCC_ADDR_ERR;
-		}
-		else {
+		}else {
 			decFrmMng.yccAddr.y		= CtImJpeg5_D_CT_JPEG_YCC_ADDR;
 		}
 
 		// CbCr
 		decFrmMng.globalCWidth = decParam->gCWidth;
 		decFrmMng.yccAddr.c	= CtImJpeg5_D_CT_JPEG_YCC_ADDR + (decParam->gYWidth * decParam->gYLines);
-	}
-	else {
-		decFrmMng.cutout_flg		= ImJpegCommon_D_IM_JPEG_ENABLE_OFF;
-		decFrmMng.cutout_width	= 0;
-		decFrmMng.cutout_lines	= 0;
-		decFrmMng.cutout_offset_h	= 0;
-		decFrmMng.cutout_offset_v	= 0;
+	}else {
+		decFrmMng.cutoutFlg		= ImJpegCommon_D_IM_JPEG_ENABLE_OFF;
+		decFrmMng.cutoutWidth	= 0;
+		decFrmMng.cutoutLines	= 0;
+		decFrmMng.cutoutOffsetH	= 0;
+		decFrmMng.cutoutOffsetV	= 0;
 
 		if(ct_im_jpeg1_get4(priv->jpeg1)) {
 			decFrmMng.yccAddr.y		= CtImJpeg2_D_CT_JPEG_YCC_ADDR_ERR;
-		}
-		else {
+		}else {
 			decFrmMng.yccAddr.y		= CtImJpeg5_D_CT_JPEG_YCC_ADDR;
 		}
 
@@ -246,64 +256,63 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 
 //	ct_im_jpeg1_measure_time_start();
 
-	ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
-	Ddim_Print(("Im_JPEG_Open ret=0x%X\n", ret));
+	ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);
+	Ddim_Print(("im_jpeg_open ret=0x%X\n", ret));
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return;
 	}
 
 	for(i=0; i < 10; i++) {
 		if (i == 0) {
-			ret = Im_JPEG_Ctrl_Dec(&decMng);
-			Ddim_Print(("Im_JPEG_Ctrl_Dec ret=0x%X\n", ret));
+			ret = im_jpeg_ctrl_dec(&decMng);
+			Ddim_Print(("im_jpeg_ctrl_dec ret=0x%X\n", ret));
 			ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_BASE, (gpointer)&decMng);
-		}
-		else {
-			ret = Im_JPEG_Set_Skip_Marker_Dec();
+		}else {
+			ret = im_jpeg_set_skip_marker_dec();
 			// target address change
 			decFrmMng.codeAddr = CtImJpeg2_D_CT_JPEG_CODE_ADDR2;
 		}
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Im_JPEG_Close();
+			im_jpeg_close();
 			return;
 		}
 
 		// limit size
 		decFrmMng.codeSize		= decParam->limitSize;
-		ret = Im_JPEG_Ctrl_Dec_Frame(&decFrmMng);
-		Ddim_Print(("Im_JPEG_Ctrl_Dec_Frame ret=0x%X\n", ret));
+		ret = im_jpeg_ctrl_dec_frame(&decFrmMng);
+		Ddim_Print(("im_jpeg_ctrl_dec_frame ret=0x%X\n", ret));
 		// Ctrl Print
 		ct_im_jpeg1_ctrl_print(CtImJpeg1_E_PRINT_CTRL_DEC_FRAME, (gpointer)&decFrmMng);
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Im_JPEG_Close();
+			im_jpeg_close();
 			return;
 		}
 
 		if (i == 0) {
-			ret = Im_JPEG_Start_Dec();
-			Ddim_Print(("Im_JPEG_Start_Dec ret=0x%X\n", ret));
+			ret = im_jpeg_start_dec();
+			Ddim_Print(("im_jpeg_start_dec ret=0x%X\n", ret));
 		}
 		else {
-			ret = Im_JPEG_Start_Skip_Marker_Dec();
-			Ddim_Print(("Im_JPEG_Start_Skip_Marker_Dec ret=0x%X\n", ret));
+			ret = im_jpeg_start_skip_marker_dec();
+			Ddim_Print(("im_jpeg_start_skip_marker_dec ret=0x%X\n", ret));
 #if 0	// error root
-			ret = Im_JPEG_Start_Skip_Marker_Dec();
-			Ddim_Print(("Im_JPEG_Start_Skip_Marker_Dec ret=0x%X\n", ret));
+			ret = im_jpeg_start_skip_marker_dec();
+			Ddim_Print(("im_jpeg_start_skip_marker_dec ret=0x%X\n", ret));
 #endif
 		}
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 			ct_im_jpeg1_stop();
-			Im_JPEG_Close();
+			im_jpeg_close();
 			return;
 		}
-		ret = Im_JPEG_Wait_End_Dec(&decMng, 5000);
-		Ddim_Print(("Im_JPEG_Wait_End_Dec ret=0x%X\n", ret));
+		ret = im_jpeg_wait_end_dec(&decMng, 5000);
+		Ddim_Print(("im_jpeg_wait_end_dec ret=0x%X\n", ret));
 
-		memcpy(ct_im_jpeg4_get1(priv->jpeg4), &decMng, sizeof(TImJpegDecMng));
+		memcpy(ct_im_jpeg4_get1(priv->jpeg4), &decMng, sizeof(TimgDecMng));
 
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 			ct_im_jpeg1_stop();
-			Im_JPEG_Close();
+			im_jpeg_close();
 			Ddim_Print(("***** Decode Error result=[0x%X] *****\n", ct_im_jpeg4_get1(priv->jpeg4)->result));
 			Ddim_Print(("***** Decode Error Code=[0x%X] *****\n", ct_im_jpeg4_get1(priv->jpeg4)->errCode));
 			Ddim_Print(("***** Decode Sampling type[%d] *****\n", ct_im_jpeg4_get1(priv->jpeg4)->smplType));
@@ -316,8 +325,8 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 				ct_im_jpeg4_get1(priv->jpeg4)->orgWidth, ct_im_jpeg4_get1(priv->jpeg4)->orgLines));
 	}
 
-	ret = Im_JPEG_Close();
-	Ddim_Print(("Im_JPEG_Close ret=0x%X\n", ret));
+	ret = im_jpeg_close();
+	Ddim_Print(("im_jpeg_close ret=0x%X\n", ret));
 	if (ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return;
 	}
@@ -327,9 +336,9 @@ static void ctJpegDecodeMkSkip(CtImJpeg2 *self,CtImJpeg5* decParam)
 }
 /*
  *PUBLIC
- * */
-void ct_im_jpeg2_set_ycc_out_bytes(CtImJpeg2 *self,const EImJpegSmplType smplType,
-			const EImJpegMemForm memFormat,
+ * *///todo:参数个数
+void ct_im_jpeg2_set_ycc_out_bytes(CtImJpeg2 *self,const EimgSmplType smplType,
+			const EimgMemForm memFormat,
 			const gulong globalYWidth, const gulong globalCWidth, const gulong lines)
 {
 	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
@@ -398,19 +407,16 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 
 	if (ctParam1 == 1) {
 		ct_Im_jpeg3_run1(priv->jpeg3,ctParam2, ctParam3);
-	}
-	else if (ctParam1 == 2) {
+	}else if (ctParam1 == 2) {
 		ct_im_jpeg4_run2(priv->jpeg4,ctParam2, ctParam3);
-	}
-	else if (ctParam1 == 3) {
+	}else if (ctParam1 == 3) {
 	// Encode
-		CtImJpeg6 *encParam=ct_im_jpeg6_new();
 
-		encParam->sync				= 1;
-		encParam->gYWidth		= ctParam3;
-		encParam->gYLines		= ctParam4;
-		encParam->hSize			= ctParam3;
-		encParam->vSize			= ctParam4;
+		priv->jpeg6->sync				= 1;
+		priv->jpeg6->gYWidth		= ctParam3;
+		priv->jpeg6->gYLines		= ctParam4;
+		priv->jpeg6->hSize			= ctParam3;
+		priv->jpeg6->vSize			= ctParam4;
 		// AXI_Err happen
 		ct_im_jpeg1_set4(priv->jpeg1,atoi((const gchar *)argv[5]));
 		// Quality value use or Qtable set
@@ -419,202 +425,148 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 		ctParam6	 			= atoi((const gchar *)argv[7]);
 
 		if (ctParam2 == 0) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 1) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
-			encParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 2) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 3) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
-			encParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 4) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 5) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
-			encParam->gCWidth	= 0;
-		}
-		else {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 1) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
+			priv->jpeg6->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 2) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 3) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
+			priv->jpeg6->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 4) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 5) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
+			priv->jpeg6->gCWidth	= 0;
+		}else {
 			Ddim_Print(("input parameter error. argc=%d\n", argc));
-
-			if(encParam){
-				g_object_unref(encParam);
-				encParam=NULL;
-			}
 
 			return;
 		}
 
-		encParam->limitSize		= 0;
-		encParam->pauseFlg		= 0;
-		encParam->countFlg		= 0;
-		encParam->quantupFlg	= 0;
-		encParam->dri				= 0;
-		encParam->dspRate		= ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
-		encParam->skipMkFlg	= ctParam6;
+		priv->jpeg6->limitSize		= 0;
+		priv->jpeg6->pauseFlg		= 0;
+		priv->jpeg6->countFlg		= 0;
+		priv->jpeg6->quantupFlg	= 0;
+		priv->jpeg6->dri				= 0;
+		priv->jpeg6->dspRate		= ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
+		priv->jpeg6->skipMkFlg	= ctParam6;
 
-		Im_JPEG_Init();
+		im_jpeg_init();
 
-		ct_im_jpeg1_encode(priv->jpeg1,encParam, ctParam5);
-
-		if(encParam){
-			g_object_unref(encParam);
-			encParam=NULL;
-		}
-	}
-	else if (ctParam1 == 4) {
+		ct_im_jpeg1_encode(priv->jpeg1,priv->jpeg6, ctParam5);
+	}else if (ctParam1 == 4) {
 	// Decode
-		CtImJpeg5 *decParam=ct_im_jpeg5_new();
 
 //		memset((void *)0x49000000 ,0, 0x10000000);
 
-//		Im_JPEG_Init();
+//		im_jpeg_init();
 
-		decParam->sync				= 1;
-		decParam->gYWidth		= ctParam3;
-		decParam->gYLines		= ctParam4;
-		decParam->hSize			= ctParam3;
-		decParam->vSize			= ctParam4;
+		priv->jpeg5->sync				= 1;
+		priv->jpeg5->gYWidth		= ctParam3;
+		priv->jpeg5->gYLines		= ctParam4;
+		priv->jpeg5->hSize			= ctParam3;
+		priv->jpeg5->vSize			= ctParam4;
 		// AXI_Err happen
 		ct_im_jpeg1_set4(priv->jpeg1,atoi((const gchar *)argv[5]));
 		// skip marker mode use
 		ctParam5				= atoi((const gchar *)argv[6]);
 
 		if (ctParam2 == 0) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 1) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
-			decParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 2) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 3) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
-			decParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 4) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 5) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
-			decParam->gCWidth	= 0;
-		}
-		else {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 1) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
+			priv->jpeg5->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 2) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 3) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
+			priv->jpeg5->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 4) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 5) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
+			priv->jpeg5->gCWidth	= 0;
+		}else {
 			Ddim_Print(("input parameter error. argc=%d\n", argc));
-
-			if(decParam){
-				g_object_unref(decParam);
-				decParam=NULL;
-			}
 
 			return;
 		}
 
-		decParam->cutOutFlg	= 0;
-		decParam->cutHSize		= 0;
-		decParam->cutVSize		= 0;
-		decParam->limitSize		= 0;
-		decParam->ext				= ImJpegCommon_E_IM_JPEG_RESIZE_EXT_DIRECT;
-		decParam->corrFlg			= 1;
-		decParam->pauseFlg		= 0;
+		priv->jpeg5->cutOutFlg	= 0;
+		priv->jpeg5->cutHSize		= 0;
+		priv->jpeg5->cutVSize		= 0;
+		priv->jpeg5->limitSize		= 0;
+		priv->jpeg5->ext				= ImJpegCommon_E_IM_JPEG_RESIZE_EXT_DIRECT;
+		priv->jpeg5->corrFlg			= 1;
+		priv->jpeg5->pauseFlg		= 0;
 
 		if (ctParam5 > 0) {
 		// marker skip mode test
-			ctJpegDecodeMkSkip(self,decParam);
-		}
-		else {
+			ctJpegDecodeMkSkip(self,priv->jpeg5);
+		}else {
 		// normal test
-			ct_im_jpeg4_decode(priv->jpeg4,decParam);
+			ct_im_jpeg4_decode(priv->jpeg4,priv->jpeg5);
 		}
-
-		if(decParam){
-			g_object_unref(decParam);
-			decParam=NULL;
-		}
-	}
-	else if (ctParam1 == 5) {
+	}else if (ctParam1 == 5) {
 	// cont Decode
-		CtImJpeg5 *decParam=ct_im_jpeg5_new();
 		gint32 i;
 		gint32 cntMax = 1;
 
-		decParam->sync				= 1;
-		decParam->gYWidth		= ctParam3;
-		decParam->gYLines		= ctParam4;
-		decParam->hSize			= ctParam3;
-		decParam->vSize			= ctParam4;
+		priv->jpeg5->sync				= 1;
+		priv->jpeg5->gYWidth		= ctParam3;
+		priv->jpeg5->gYLines		= ctParam4;
+		priv->jpeg5->hSize			= ctParam3;
+		priv->jpeg5->vSize			= ctParam4;
 		ct_im_jpeg1_set4(priv->jpeg1,atoi((const gchar *)argv[5]));
 		cntMax = atoi((const gchar *)argv[6]);
 
 		if (ctParam2 == 0) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 1) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
-			decParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 2) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 3) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
-			decParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 4) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
-			decParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 5) {
-			decParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
-			decParam->gCWidth	= 0;
-		}
-		else {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 1) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
+			priv->jpeg5->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 2) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 3) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
+			priv->jpeg5->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 4) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
+			priv->jpeg5->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 5) {
+			priv->jpeg5->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
+			priv->jpeg5->gCWidth	= 0;
+		}else {
 			Ddim_Print(("input parameter error. argc=%d\n", argc));
-
-			if(decParam){
-				g_object_unref(decParam);
-				decParam=NULL;
-			}
 
 			return;
 		}
 
-		decParam->cutOutFlg	= 0;
-		decParam->cutHSize		= 0;
-		decParam->cutVSize		= 0;
-		decParam->limitSize		= 0;
-		decParam->ext				= ImJpegCommon_E_IM_JPEG_RESIZE_EXT_BAND;
-		decParam->corrFlg			= 1;
-		decParam->pauseFlg		= 0;
+		priv->jpeg5->cutOutFlg	= 0;
+		priv->jpeg5->cutHSize		= 0;
+		priv->jpeg5->cutVSize		= 0;
+		priv->jpeg5->limitSize		= 0;
+		priv->jpeg5->ext				= ImJpegCommon_E_IM_JPEG_RESIZE_EXT_BAND;
+		priv->jpeg5->corrFlg			= 1;
+		priv->jpeg5->pauseFlg		= 0;
 
 		for(i=0; i < cntMax; i++) {
-//			Im_JPEG_Init();
-			ct_im_jpeg4_decode(priv->jpeg4,decParam);
+//			im_jpeg_init();
+			ct_im_jpeg4_decode(priv->jpeg4,priv->jpeg5);
 		}
+	}else if (ctParam1 == 6) {
 
-		if(decParam){
-			g_object_unref(decParam);
-			decParam=NULL;
-		}
-	}
-	else if (ctParam1 == 6) {
-
-		TImJpegEncMng jpegMng;
+		TimgEncMng jpegMng;
 		gushort retRatio;
 		gint32 ret;
 		UINT32 dsp;
@@ -693,18 +645,18 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 		jpegMng.bitDepth								= ImJpegCommon_E_IM_JPEG_BIT_DEPTH_8BIT;
 		jpegMng.codeSize								= 0;
 		jpegMng.result									= 0;
-		jpegMng.pcallback 							= (VP_CALLBACK)ct_im_jpeg1_encode_cb;
+		jpegMng.pcallback 							= (VpCallback)ct_im_jpeg1_encode_cb;
 
-		ret = Im_JPEG_Open(D_DDIM_WAIT_END_TIME);
+		ret = im_jpeg_open(D_DDIM_WAIT_END_TIME);
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Ddim_Print(("Im_JPEG_Open error ret=0x%X\n", ret));
+			Ddim_Print(("im_jpeg_open error ret=0x%X\n", ret));
 			return;
 		}
 
-		Im_JPEG_Ctrl_Enc(&jpegMng);
+		im_jpeg_ctrl_enc(&jpegMng);
 
-		retRatio = Im_JPEG_Set_Down_Sampling_Rate(dsp);
-		Ddim_Print(("Im_JPEG_Set_Down_Sampling_Rate=0x%X\n", retRatio));
+		retRatio = im_jpeg_set_down_sampling_rate(dsp);
+		Ddim_Print(("im_jpeg_set_down_sampling_rate=0x%X\n", retRatio));
 
 		ct_im_jpeg1_start_hclock(priv->jpeg1);
 		Ddim_Print(("IO_JPG7.JICTL.bit.JIXP=0x%X\n", IO_JPG7.JICTL.bit.JIXP));
@@ -714,22 +666,21 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 		Ddim_Print(("IO_JPG7.JPHEIGHT.bit.JPHEIGHT=%d\n", IO_JPG7.JPHEIGHT.bit.JPHEIGHT));
 		ct_im_jpeg1_stop_hclock(priv->jpeg1);
 
-		ret = Im_JPEG_Close();
+		ret = im_jpeg_close();
 		if (ret != ImJpegCommon_D_IM_JPEG_OK) {
-			Ddim_Print(("Im_JPEG_Close error ret=0x%X\n", ret));
+			Ddim_Print(("im_jpeg_close error ret=0x%X\n", ret));
 			return;
 		}
 	}
 	else if (ctParam1 == 7) {
 	// Encode
-		CtImJpeg6 *encParam=ct_im_jpeg6_new();
 		gint32	i;
 
-		encParam->sync				= 1;
-		encParam->gYWidth		= ctParam3;
-		encParam->gYLines		= ctParam4;
-		encParam->hSize			= ctParam3;
-		encParam->vSize			= ctParam4;
+		priv->jpeg6->sync				= 1;
+		priv->jpeg6->gYWidth		= ctParam3;
+		priv->jpeg6->gYLines		= ctParam4;
+		priv->jpeg6->hSize			= ctParam3;
+		priv->jpeg6->vSize			= ctParam4;
 		// AXI_Err happen
 		ct_im_jpeg1_set4(priv->jpeg1,atoi((const gchar *)argv[5]));
 		// Quality value use or Qtable set
@@ -738,60 +689,43 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 		ctParam6	 			= atoi((const gchar *)argv[7]);
 
 		if (ctParam2 == 0) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 1) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
-			encParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 2) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 3) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
-			encParam->gCWidth	= (gulong)(ctParam3 >> 1);
-		}
-		else if(ctParam2 == 4) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
-			encParam->gCWidth	= (gulong)ctParam3;
-		}
-		else if(ctParam2 == 5) {
-			encParam->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
-			encParam->gCWidth	= 0;
-		}
-		else {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_444P;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 1) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422P;
+			priv->jpeg6->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 2) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_422PD;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 3) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420P;
+			priv->jpeg6->gCWidth	= (gulong)(ctParam3 >> 1);
+		}else if(ctParam2 == 4) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_420PD;
+			priv->jpeg6->gCWidth	= (gulong)ctParam3;
+		}else if(ctParam2 == 5) {
+			priv->jpeg6->format	= CtImJpeg6_E_CT_JPEG_FORMAT_400P;
+			priv->jpeg6->gCWidth	= 0;
+		}else {
 			Ddim_Print(("input parameter error. argc=%d\n", argc));
-
-			if(encParam){
-				g_object_unref(encParam);
-				encParam=NULL;
-			}
 
 			return;
 		}
 
-		encParam->limitSize			= 0;
-		encParam->pauseFlg			= 0;
-		encParam->countFlg			= 0;
-		encParam->quantupFlg		= 0;
-		encParam->dri					= 0;
-		encParam->dspRate			= ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
-		encParam->skipMkFlg		= ctParam6;
+		priv->jpeg6->limitSize			= 0;
+		priv->jpeg6->pauseFlg			= 0;
+		priv->jpeg6->countFlg			= 0;
+		priv->jpeg6->quantupFlg		= 0;
+		priv->jpeg6->dri					= 0;
+		priv->jpeg6->dspRate			= ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
+		priv->jpeg6->skipMkFlg		= ctParam6;
 
-		Im_JPEG_Init();
+		im_jpeg_init();
 
 		for (i=0; i<1000; i++) {
-			ct_im_jpeg1_encode(priv->jpeg1,encParam, ctParam5);
+			ct_im_jpeg1_encode(priv->jpeg1,priv->jpeg6, ctParam5);
 		}
-
-		if(encParam){
-			g_object_unref(encParam);
-			encParam=NULL;
-		}
-	}
-	else if (ctParam1 == 8) {
+	}else if (ctParam1 == 8) {
 		ct_Im_jpeg3_run1(priv->jpeg3,1, 1);
 		ct_Im_jpeg3_run1(priv->jpeg3,2, 1);
 		ct_Im_jpeg3_run1(priv->jpeg3,2, 2);
@@ -857,16 +791,14 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 		ct_im_jpeg4_run2(priv->jpeg4,4, 11);	// Int_Handler PC check
 		ct_im_jpeg4_run2(priv->jpeg4,4, 12);	// Int_Handler PC check
 		ct_im_jpeg4_run2(priv->jpeg4,4, 13);	// Int_Handler PC check
-	}
-	else {
+	}else {
 		Ddim_Print(("input parameter error\n"));
 	}
 
 #ifdef CtImJpeg2_CO_ACT_JPEG_CLOCK
 	if (S_GCT_IM_JPG_CLK_CTRL_CNT != 0) {
 		Ddim_Print(("Jpeg clock Error S_GCT_IM_JPG_CLK_CTRL_CNT=%d\n", S_GCT_IM_JPG_CLK_CTRL_CNT));
-	}
-	else {
+	}else {
 		Ddim_Print(("Jpeg clock OK\n"));
 	}
 #endif
@@ -874,8 +806,7 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 #ifdef CtImJpeg2_CO_ACT_JPEG_HCLOCK
 	if (ct_im_jpeg1_get1(priv->jpeg1) != 0) {
 		Ddim_Print(("Jpeg Hclock Error ct_im_jpeg1_get1(priv->jpeg1)=%d\n",ct_im_jpeg1_get1(priv->jpeg1)));
-	}
-	else {
+	}else {
 		Ddim_Print(("Jpeg Hclock OK\n"));
 	}
 #endif
@@ -883,8 +814,7 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 #ifdef CtImJpeg2_CO_ACT_JPEG_ICLOCK
 	if (S_GCT_IM_JPG_ICLK_CTRL_CNT != 0) {
 		Ddim_Print(("Jpeg Iclock Error S_GCT_IM_JPG_ICLK_CTRL_CNT=%d\n", S_GCT_IM_JPG_ICLK_CTRL_CNT));
-	}
-	else {
+	}else {
 		Ddim_Print(("Jpeg Iclock OK\n"));
 	}
 #endif
@@ -901,6 +831,5 @@ void ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv)
 CtImJpeg2* ct_im_jpeg2_new()
 {
 	CtImJpeg2 *self = g_object_new(CT_TYPE_IM_JPEG_2,NULL);
-//	CtImJpeg2Private *priv = CT_IM_JPEG_2_GET_PRIVATE(self);
 	return self;
 }

@@ -20,7 +20,7 @@
 
 #include <klib.h>
 #include "jdspro.h"
-#include "im_pro_common.h"
+#include "improcommon.h"
 #include "dd_top.h"
 
 
@@ -36,6 +36,10 @@
 #define	ImproSentop_D_IM_PRO_SEN_BS_NUM				(4)
 	/**< Number of ComboPHY		*/
 #define	ImproSentop_D_IM_PRO_SENTOP_CPHY_NUM		(4)
+	/**< Number of SG			*/
+#define	ImproSentop_D_IM_PRO_SEN_SG_NUM				(4)
+
+
 /*其他结构体或类型定义区域*/
 /** LDIV maximum horizontal size of RAM
 */
@@ -252,9 +256,9 @@ typedef enum {
 */
 typedef struct {
 	/**< Select an input sensor type of each SENCORE. SENTOPCTL1@@SENIN0-@@SENIN3 */
-	EimproSentopConnTypeSel				senConnectTypeSel[D_IM_PRO_SEN_SENCORE_NUM];
+	EimproSentopConnTypeSel				senConnectTypeSel[ImproBase_D_IM_PRO_SEN_SENCORE_NUM];
 	/**< Select an input block type of each BLOB. SENTOPCTL1@@BLOBSET0-@@BLOBSET3 */
-	EimproSentopInputToBlob				blobInputSel[D_IM_PRO_SENTOP_BLOB_NUM];
+	EimproSentopInputToBlob				blobInputSel[ImproBase_D_IM_PRO_SENTOP_BLOB_NUM];
 	/**< Select a type of output to SDRAM from LDIV. SENTOPCTL1@@PWSW0-@@PWSW3 */
 	EimproSentopSdramOutputType		sdramOutputType[ImproSentop_D_IM_PRO_SENTOP_PWSW_NUM];
 	/**< Select an output block to SRO2 I/F. SENTOPCTL1@@PIPE2S */
@@ -266,7 +270,7 @@ typedef struct {
 	/**< Select a LDIV multi channel input control. SENTOPCTL1@@LDIVMCH */
 	EimproSentopLdivMultiInputCtrl		ldivMultiChInputCtrl;
 	/**< Select a Bayer first pixel for each PAT block input SENTOPCTL2@@ORG00-@@ORG31 */
-	E_IM_PRO_ORG									firstPixel[D_IM_PRO_SENTOP_BLOB_NUM][2];
+	EimproOrg									firstPixel[ImproBase_D_IM_PRO_SENTOP_BLOB_NUM][2];
 } TimproSentopCtrl;
 
 /** ComboPHY Common Mode Control.<br>
@@ -353,7 +357,7 @@ typedef struct {
 */
 typedef struct {
 	/**< Select an SG I/F output control. SGOUTCTL@@SGSEL0 - @@SGSEL3 */
-	EimproSentopSgIfOutputSel		sgIfOutputSel[D_IM_PRO_SEN_SG_NUM];
+	EimproSentopSgIfOutputSel		sgIfOutputSel[ImproSentop_D_IM_PRO_SEN_SG_NUM];
 } TimproSentopSgCtrl;
 
 /** ComboPHY Common I/F Control.<br>
@@ -758,7 +762,7 @@ extern	VOID			impro_sentop_init( VOID );
 /**
 SENTOP Macro software reset
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
 */
 extern	INT32			impro_sentop_sw_reset( VOID );
 /**
@@ -767,133 +771,133 @@ SENTOP Macro clock control
 @param[in]	onOff		: 0:clock on 1:clock off
 @param[in]	waitSkip	: 0:non wait 1:wait 1ms. for wait PROCLK/CDK 5 cycle.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sentop_control_clock( EimproSentopClkType clkType, UCHAR onOff, UCHAR waitSkip );
 /**
 SENTOP macro control data setting
 @param[in]	ctrl : SENTOP macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sentop_ctrl( TimproSentopCtrl* ctrl );
 /**
 SENTOP BitShift macro control data setting
 @param[in]	ctrl : SENTOP BitShift macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_sentop_bs_ctrl( TimproSentopBsCtrl* ctrl );
 /**
 SENTOP OBT macro setting
 @param[in]	ctrl : SENTOP BitShift macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_obt_ctrl( TimproSentopObtCtrl* ctrl );
 /**
 SENTOP OBT macro weight coefficient setting
 @param[in]	coeff : SENTOP OBT macro weight coefficient information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_obt_set_weight_coeff( TimproSentopObtWeightCoeff* coeff );
 /**
 SENTOP LVDS macro setting
 @param[in]	ctrl : SENTOP LVDS macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_lvds_ctrl( TimproSentopLvdsCtrl* ctrl );
 /**
 SENTOP SLVS macro setting
 @param[in]	ctrl : SENTOP SLVS macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_slvs_ctrl( TimproSentopSlvsCtrl* ctrl );
 /**
 SENTOP SG macro setting
 @param[in]	ctrl : SG macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_sgCtrl( TimproSentopSgCtrl* ctrl );
 /**
 SENTOP ComboPHY macro setting
 @param[in]	cphyCtrl : ComboPHY control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_ctrl( TimproSentopCphyCtrl* cphyCtrl );
 /**
 SENTOP ComboPHY macro Clock setting
 @param[in]	clkCtrl : ComboPHY clock control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_clk_ctrl( TimproSentopCphyClkCtrl* clkCtrl );
 /**
 SENTOP ComboPHY macro Bias setting
 @param[in]	biasCtrl : ComboPHY Bias control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_bias_ctrl( TimproSentopCphyBiasCtrl* biasCtrl );
 /**
 SENTOP ComboPHY SLVS-EC mode setting
 @param[in]	modeCtrl : ComboPHY mode control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_slvs_mode_ctrl( TimproSentopCphySlvsModeCtrl* modeCtrl );
 /**
 SENTOP ComboPHY Sub-LVDS mode setting
 @param[in]	modeCtrl : ComboPHY mode control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_lvds_mode_ctrl( TimproSentopCphyLvdsModeCtrl* modeCtrl );
 /**
 SENTOP ComboPHY MIPI D-PHY mode setting
 @param[in]	modeCtrl : ComboPHY mode control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_dmipi_mode_ctrl( TimproSentopCphyDmipiModeCtrl* modeCtrl );
 /**
 SENTOP ComboPHY MIPI C-PHY mode setting
 @param[in]	modeCtrl : ComboPHY mode control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_cmipi_mode_ctrl( TimproSentopCphyCmipiModeCtrl* modeCtrl );
 /**
 SENTOP ComboPHY Extension Signals setting
 @param[in]	extSignal : ComboPHY extension signals control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_ext_signal_ctrl( TimproSentopCphyIfExtSignalCtrl* extSignal );
 /**
 Get CPHY DesKnew Monitor pin status.
 @param[out]	cphyMoni : CPHY DesKnew Monitor pin status information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_get_des_knew_ctrl( TimproSentopCphyDesknewMonitor* cphyMoni );
 /**
 Get CPHY DelayLine Monitor pin status.
 @param[out]	cphyMoni : CPHY DelayLine Monitor pin status information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_get_delay_line_monitor( TimproSentopCphyDelaylineMonitor* cphyMoni );
 /**
 Get CPHY Common I/F Monitor pin status.
 @param[out]	cphyMoni : CPHY Common I/F Monitor pin status information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern INT32			impro_sentop_cphy_get_common_if_monitor( TimproSentopCphyCommonIfMonitor* cphyMoni );
 /**

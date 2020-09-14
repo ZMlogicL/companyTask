@@ -17,7 +17,7 @@
 #define __DD_EXS_BRANCH_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 #include "driver_common.h"
 #include "ddarm.h"
 #include "ddexs.h"

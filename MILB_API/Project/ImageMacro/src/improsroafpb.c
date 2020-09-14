@@ -53,16 +53,16 @@ struct _ImproSroafpbPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const UINT32	gIM_PRO_AFPB_Status_Tbl[E_IM_PRO_UNIT_NUM_MAX][ImproSroafpb_D_IM_PRO_SRO_AFPB_CH_NUM] = {
-	// E_IM_PRO_UNIT_NUM_1
+static const UINT32	gIM_PRO_AFPB_Status_Tbl[ImproBase_E_IM_PRO_UNIT_NUM_MAX][ImproSroafpb_D_IM_PRO_SRO_AFPB_CH_NUM] = {
+	// ImproBase_E_IM_PRO_UNIT_NUM_1
 	{
 		ImproSroafpb_D_IM_SRO1_STATUS_AFPB_A,		ImproSroafpb_D_IM_SRO1_STATUS_AFPB_G,
 	},
-	// E_IM_PRO_UNIT_NUM_2
+	// ImproBase_E_IM_PRO_UNIT_NUM_2
 	{
 		ImproSroafpb_D_IM_SRO2_STATUS_AFPB_A,		ImproSroafpb_D_IM_SRO2_STATUS_AFPB_G,
 	},
-	// E_IM_PRO_BOTH_UNIT
+	// ImproBase_E_IM_PRO_BOTH_UNIT
 	{
 		ImproSroafpb_D_IM_SRO_STATUS_AFPB_A_BOTH,	ImproSroafpb_D_IM_SRO_STATUS_AFPB_G_BOTH,
 	},
@@ -102,10 +102,10 @@ Start AFPB
 VOID impro_sroafpb_start( E_IM_PRO_UNIT_NUM unitNo, EimproAfpbCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.afpb[ch].afpbtrg.bit.afpbtrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(gIM_PRO_AFPB_Status_Tbl[unitNo][ch], 0);
 }
@@ -118,7 +118,7 @@ Stop AFPB
 VOID impro_sroafpb_stop( E_IM_PRO_UNIT_NUM unitNo, EimproAfpbCh ch, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	if(force == 0) {
 		// stop
@@ -129,7 +129,7 @@ VOID impro_sroafpb_stop( E_IM_PRO_UNIT_NUM unitNo, EimproAfpbCh ch, UCHAR force 
 		ioPro.imgPipe[unitNo].sro.afpb[ch].afpbtrg.bit.afpbtrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(gIM_PRO_AFPB_Status_Tbl[unitNo][ch], 0);
 }
@@ -144,33 +144,33 @@ INT32 impro_sroafpb_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproAfpbCh ch, TimproAfpbC
 #ifdef CO_PARAM_CHECK
 	if (afpbCtrl == NULL){
 		Ddim_Assertion(("I:impro_sroafpb_ctrl error. afpbCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroafpb_D_IM_PRO_AFPB_AFPBH_MIN, ImproSroafpb_D_IM_PRO_AFPB_AFPBH_MAX,
 				afpbCtrl->afpbArea.posX, "impro_sroafpb_ctrl : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroafpb_D_IM_PRO_AFPB_AFPBV_MIN, ImproSroafpb_D_IM_PRO_AFPB_AFPBV_MAX,
 				afpbCtrl->afpbArea.posY, "impro_sroafpb_ctrl : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroafpb_D_IM_PRO_AFPB_AFPBHW_MIN, ImproSroafpb_D_IM_PRO_AFPB_AFPBHW_MAX,
 				afpbCtrl->afpbArea.width, "impro_sroafpb_ctrl : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroafpb_D_IM_PRO_AFPB_AFPBVW_MIN, ImproSroafpb_D_IM_PRO_AFPB_AFPBVW_MAX,
 				afpbCtrl->afpbArea.lines, "impro_sroafpb_ctrl : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.afpb[ch].afpbh.bit.afpbh	= afpbCtrl->afpbArea.posX;
 	ioPro.imgPipe[unitNo].sro.afpb[ch].afpbv.bit.afpbv	= afpbCtrl->afpbArea.posY;
 	ioPro.imgPipe[unitNo].sro.afpb[ch].afpbhw.bit.afpbhw	= afpbCtrl->afpbArea.width;
 	ioPro.imgPipe[unitNo].sro.afpb[ch].afpbvw.bit.afpbvw	= afpbCtrl->afpbArea.lines;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }

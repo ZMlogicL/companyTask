@@ -15,8 +15,12 @@
 #define __IM_IIP_PARAM_ENUM_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "ddimtypedef.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,9 +28,13 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_PARAM_ENUM					(im_iip_param_enum_get_type())
-#define IM_IIP_PARAM_ENUM	(obj)					(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipParamEnum))
-#define IM_IS_IIP_PARAM_ENUM	(obj)			(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_PARAM_ENUM	))
+#define IM_TYPE_IIP_PARAM_ENUM			(im_iip_param_enum_struct_get_type ())
+#define IM_IIP_PARAM_ENUM(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_PARAM_ENUM, ImIipParamEnum))
+#define IM_IIP_PARAM_ENUM_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_PARAM_ENUM, ImIipParamEnumClass))
+#define IM_IS_IIP_PARAM_ENUM(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_PARAM_ENUM))
+#define IM_IS_IIP_PARAM_ENUM_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_PARAM_ENUM))
+#define IM_IIP_PARAM_ENUM_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_PARAM_ENUM, ImIipParamEnumClass))
+
 
 typedef enum _EimCtlCode					EimCtlCode;
 typedef enum _EimPortid						EimPortid;
@@ -112,8 +120,9 @@ typedef enum _EimP0selo					EimP0selo;
 typedef enum _EimSzpowh					EimSzpowh;
 typedef enum _EimSzpowv					EimSzpowv;
 
-typedef struct _ImIipParamEnum 						ImIipParamEnum;
-typedef struct _ImIipParamEnumPrivate 			ImIipParamEnumPrivate;
+typedef struct _ImIipParamEnum			ImIipParamEnum;
+typedef struct _ImIipParamEnumClass		ImIipParamEnumClass;
+typedef struct _ImIipParamEnumPrivate 		ImIipParamEnumPrivate;
 
 
 
@@ -867,17 +876,26 @@ enum _EimSzpowv{
 
 struct _ImIipParamEnum
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipParamEnumClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    				im_iip_param_enum_get_type(void);
-ImIipParamEnum*		        im_iip_param_enum_new(void);
+GType						im_iip_param_enum_struct_get_type(void)	G_GNUC_CONST;
+ImIipParamEnum*					im_iip_param_enum_struct_new(void);
+
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_PARAM_ENUM_H__ */

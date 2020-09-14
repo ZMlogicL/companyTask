@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMxicMain1类
 *@rely                :klib
@@ -29,35 +29,63 @@
 
 #include "ctimmxicmain2.h"
 #include "ctimmxicmain.h"
+
 #include "ctimmxicmain1.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicMain1, ct_im_mxic_main1);
-#define CT_IM_MXIC_MAIN1_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicMain1Private,CT_TYPE_IM_MXIC_MAIN1))
+
+G_DEFINE_TYPE(CtImMxicMain1, ct_im_mxic_main1, G_TYPE_OBJECT);
+#define CT_IM_MXIC_MAIN1_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_MAIN1, CtImMxicMain1Private))
 
 struct _CtImMxicMain1Private
 {
+
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_im_mxic_main1_constructor(CtImMxicMain1 *self) 
+
+static void ct_im_mxic_main1_class_init(CtImMxicMain1Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicMain1Private));
 }
 
-static void ct_im_mxic_main1_destructor(CtImMxicMain1 *self) 
+static void ct_im_mxic_main1_init(CtImMxicMain1 *self)
 {
+//	CtImMxicMain1Private *priv = CT_IM_MXIC_MAIN1_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+//	CtImMxicMain1 *self = (CtImMxicMain1*)object;
+//	CtImMxicMain1Private *priv = CT_IM_MXIC_MAIN1_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImMxicMain1 *self = (CtImMxicMain1*)object;
+//	CtImMxicMain1Private *priv = CT_IM_MXIC_MAIN1_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
 */
-void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
+void ct_im_mxic_main1(CtImMxicMain1 *self,gint32 argc, gchar** argv)
 {
-	kuint32	i, j;
-	kuint32	workvalue;
-	kuchar	capability;
-	kuchar*	addr;
+	guint32	i, j;
+	guint32	workvalue;
+	guchar	capability;
+	guchar*	addr;
 
 	T_IM_MXIC_CONFIG_ARBITER				config;
 	T_IM_MXIC_CLOCK							clockCtrl;
@@ -82,7 +110,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 		//           P1 : Target self->unit number. (0-6)
 		self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[2]);
 		self->result = Im_MXIC_Init( self->unit );
-		if (self->result == D_DDIM_OK) {
+		if (self->result == DriverCommon_D_DDIM_OK) {
 			Ddim_Print(("Im_MXIC_Init OK(self->unit=%d).\n", self->unit));
 		}
 		else {
@@ -147,7 +175,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 			config.gr_r7_config_on_flg = atoi((const char *)argv[26]);
 
 			self->result = Im_MXIC_Start_Config( self->unit, &config );
-			if (self->result == D_DDIM_OK) {
+			if (self->result == DriverCommon_D_DDIM_OK) {
 				Ddim_Print(("Im_MXIC_Start_Config OK(self->unit=%d).\n", self->unit));
 			}
 			else {
@@ -221,7 +249,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				clockCtrl.clk_en_monitor   = atoi((const char *)argv[29]);
 
 				self->result = Im_MXIC_Set_Clock_Enable(self->unit, &clockCtrl);
-				if (self->result == D_DDIM_OK) {
+				if (self->result == DriverCommon_D_DDIM_OK) {
 					Ddim_Print(("Im_MXIC_Set_Clock_Enable OK(self->unit=%d).\n",self->unit));
 				}
 				else {
@@ -240,7 +268,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 			if(argc >= 4) {
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 				self->result = Im_MXIC_Get_Clock_Enable(self->unit, &clockCtrl);
-				if (self->result == D_DDIM_OK) {
+				if (self->result == DriverCommon_D_DDIM_OK) {
 					Ddim_Print(("clockCtrl.clk_en_slave_1_0=%d\n", clockCtrl.clk_en_slave_1_0));
 					Ddim_Print(("clockCtrl.clk_en_slave_1_1=%d\n", clockCtrl.clk_en_slave_1_1));
 					Ddim_Print(("clockCtrl.clk_en_slave_1_2=%d\n", clockCtrl.clk_en_slave_1_2));
@@ -297,8 +325,8 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 															  (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[5]),
 															  (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
 															  (E_IM_MXIC_PORT)atoi((const char *)argv[7]),
-															  (kuchar)atoi((const char *)argv[8]));
-					if (self->result == D_DDIM_OK) {
+															  (guchar)atoi((const char *)argv[8]));
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Acceptance_Capability OK.\n"));
 					}
 					else {
@@ -322,7 +350,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 															  (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
 															  (E_IM_MXIC_PORT)atoi((const char *)argv[7]),
 															  &capability);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("capability = %d\n", capability));
 						Ddim_Print(("Im_MXIC_Get_Acceptance_Capability OK.\n"));
 					}
@@ -351,8 +379,8 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 														 (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[4]),
 														 (E_IM_MXIC_SPEC_ARBITER_GR)atoi((const char *)argv[5]),
 														 (E_IM_MXIC_PORT_GR)atoi((const char *)argv[6]),
-														 (kuchar)atoi((const char *)argv[7]));
-					if (self->result == D_DDIM_OK) {
+														 (guchar)atoi((const char *)argv[7]));
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Acceptance_Capability_Group OK.\n"));
 					}
 					else {
@@ -376,7 +404,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 															(E_IM_MXIC_SPEC_ARBITER_GR)atoi((const char *)argv[5]),
 															(E_IM_MXIC_PORT_GR)atoi((const char *)argv[6]),
 															&capability);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("capability = %d\n", capability));
 						Ddim_Print(("Im_MXIC_Get_Acceptance_Capability_Group OK.\n"));
 					}
@@ -435,7 +463,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 					}
 
 					self->result = Im_MXIC_Set_Acceptance_Capability_All_Port(self->unit, &allCapability);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Acceptance_Capability_All_Port OK.\n"));
 					}
 					else {
@@ -453,7 +481,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				if(argc >= 5) {
 					self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					self->result = Im_MXIC_Get_Acceptance_Capability_All_Port(self->unit, &allCapability);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_all_acceptance_capability(&allCapability);
 						Ddim_Print(("Im_MXIC_Get_Acceptance_Capability_All_Port OK.\n"));
 					}
@@ -485,12 +513,12 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 					//           P3: Size of slave area (Hex value)
 					//           P4: Start address of slave area (Hex value)
 					self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
-					slaveArea.size    = (kuint32)ct_im_mxic_print_atoi_hex(argv[6]);
-					slaveArea.address = (kuint32)ct_im_mxic_print_atoi_hex(argv[7]);
+					slaveArea.size    = (guint32)ct_im_mxic_print_atoi_hex(argv[6]);
+					slaveArea.address = (guint32)ct_im_mxic_print_atoi_hex(argv[7]);
 
 					self->result = Im_MXIC_Set_Slave_Area(self->unit,
 							(E_IM_MXIC_SLAVE_NUMBER)atoi((const char *)argv[5]), &slaveArea);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Slave_Area OK.\n"));
 					}
 					else {
@@ -510,7 +538,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 					self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					self->result = Im_MXIC_Get_Slave_Area(self->unit,
 							(E_IM_MXIC_SLAVE_NUMBER)atoi((const char *)argv[5]), &slaveArea);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_slave_area(&slaveArea);
 						Ddim_Print(("Im_MXIC_Get_Slave_Area OK.\n"));
 					}
@@ -541,24 +569,24 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 					//           P9: Slave number-4: Start address of slave area (Hex value)
 					self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].size    =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[5]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[5]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_1].address =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[6]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[6]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].size    =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[7]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[7]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_2].address =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[8]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[8]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].size    =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[9]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[9]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_3].address =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[10]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[10]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].size    =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[11]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[11]);
 					allSlaveArea.slave_area[E_IM_MXIC_SLAVE_NUMBER_4].address =
-							(kuint32)ct_im_mxic_print_atoi_hex(argv[12]);
+							(guint32)ct_im_mxic_print_atoi_hex(argv[12]);
 
 					self->result = Im_MXIC_Set_Slave_Area_All(self->unit, &allSlaveArea);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Slave_Area_All OK.\n"));
 					}
 					else {
@@ -575,7 +603,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				if(argc >= 5) {
 					self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					self->result = Im_MXIC_Get_Slave_Area_All(self->unit, &allSlaveArea);
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_all_slave_area(&allSlaveArea);
 						Ddim_Print(("Im_MXIC_Get_Slave_Area_All OK.\n"));
 					}
@@ -604,8 +632,8 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 			//           P4: Callback function (0:NULL, 1:ct_im_mxic_create_dec_err_cb)
 			if(argc >= 7) {
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
-				decErrInt.w_err_int_en = (kuchar)atoi((const char *)argv[4]);
-				decErrInt.r_err_int_en = (kuchar)atoi((const char *)argv[5]);
+				decErrInt.w_err_int_en = (guchar)atoi((const char *)argv[4]);
+				decErrInt.r_err_int_en = (guchar)atoi((const char *)argv[5]);
 
 				if (atoi((const char *)argv[6]) == 0) {
 					decErrInt.pCallBack = NULL;
@@ -615,7 +643,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				}
 
 				self->result = Im_MXIC_Set_Decode_Error_Int(self->unit, &decErrInt);
-				if (self->result == D_DDIM_OK) {
+				if (self->result == DriverCommon_D_DDIM_OK) {
 					Ddim_Print(("Im_MXIC_Set_Decode_Error_Int OK.\n"));
 				}
 				else {
@@ -632,7 +660,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 			if(argc >= 4) {
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 				self->result = Im_MXIC_Get_Decode_Error_Int(self->unit, &decErrInt);
-				if (self->result == D_DDIM_OK) {
+				if (self->result == DriverCommon_D_DDIM_OK) {
 					ct_im_mxic_print_dec_err_int(&decErrInt);
 					Ddim_Print(("Im_MXIC_Get_Decode_Error_Int OK.\n"));
 				}
@@ -650,7 +678,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 			if(argc >= 4) {
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[3]);
 				self->result = Im_MXIC_Get_Decode_Error(self->unit, &decErr);
-				if (self->result == D_DDIM_OK) {
+				if (self->result == DriverCommon_D_DDIM_OK) {
 					ct_im_mxic_print_dec_err(&decErr);
 					Ddim_Print(("Im_MXIC_Get_Decode_Error OK.\n"));
 				}
@@ -665,7 +693,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 		else if (strcmp((const char *)argv[2], "access") == 0) {
 			// [command] immxic decErr access P1
 			//           P1: Access target address
-			addr = (kuchar*)ct_im_mxic_print_atoi_hex(argv[3]);
+			addr = (guchar*)ct_im_mxic_print_atoi_hex(argv[3]);
 			Ddim_Print(("Read address 0x%08X = %d\n", *addr, *addr));
 	//			Ddim_Print(("Write address 0x%08X\n"));
 			*addr = 0;
@@ -683,11 +711,11 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				// Get parameter for Im_MXIC_Set_Master_W_Arbiter function.
 				self->result = ct_im_mxic_create_master_w_arbiter_param( self->unit, &self->wSlotStatus );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					// Execute function.
 					self->result = Im_MXIC_Set_Master_W_Arbiter( self->unit,
 							(E_IM_MXIC_W_ARBITER)atoi((const char *)argv[5]), &self->wSlotStatus );
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Master_W_Arbiter OK.\n"));
 					}
 					else {
@@ -705,7 +733,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				self->result = Im_MXIC_Get_Master_W_Arbiter( self->unit,
 						(E_IM_MXIC_W_ARBITER)atoi((const char *)argv[5]), &self->wSlotStatus );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					ct_im_mxic_print_w_arbiter_assign(  &self->wSlotStatus );
 					Ddim_Print(("Im_MXIC_Get_Master_W_Arbiter OK.\n"));
 				}
@@ -725,11 +753,11 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				// Get parameter for Im_MXIC_Set_Master_R_Arbiter function.
 				self->result = ct_im_mxic_create_master_r_arbiter_param( self->unit, &self->rSlotStatus );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					// Execute function.
 					self->result = Im_MXIC_Set_Master_R_Arbiter( self->unit,
 							(E_IM_MXIC_R_ARBITER)atoi((const char *)argv[5]), &self->rSlotStatus );
-					if ( self->result == D_DDIM_OK ) {
+					if ( self->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Im_MXIC_Set_Master_R_Arbiter OK.\n"));
 					}
 					else {
@@ -747,7 +775,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				self->result = Im_MXIC_Get_Master_R_Arbiter( self->unit,
 						(E_IM_MXIC_R_ARBITER)atoi((const char *)argv[5]), &self->rSlotStatus );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					ct_im_mxic_print_r_arbiter_assign( &self->rSlotStatus);
 					Ddim_Print(("Im_MXIC_Get_Master_R_Arbiter OK.\n"));
 				}
@@ -766,10 +794,10 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				// Get parameter for Im_MXIC_Set_Master_All_Arbiter function.
 				self->result = ct_im_mxic_create_master_all_arbiter_param( self->unit, &allArbiterAssign );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					// Execute function.
 					self->result = Im_MXIC_Set_Master_All_Arbiter( self->unit, &allArbiterAssign );
-					if (self->result == D_DDIM_OK) {
+					if (self->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Master_All_Arbiter OK.\n"));
 					}
 					else {
@@ -785,7 +813,7 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 				//           P1: Target self->unit number. (0-6)
 				self->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				self->result = Im_MXIC_Get_Master_All_Arbiter( self->unit, &allArbiterAssign );
-				if ( self->result == D_DDIM_OK ) {
+				if ( self->result == DriverCommon_D_DDIM_OK ) {
 					ct_im_mxic_print_all_arbiter_assign(  &allArbiterAssign );
 					Ddim_Print(("Im_MXIC_Get_Master_All_Arbiter OK.\n"));
 				}
@@ -803,8 +831,8 @@ void ct_im_mxic_main1(CtImMxicMain1 *self,kint32 argc, kchar** argv)
 	}
 }
 
-CtImMxicMain1* ct_im_mxic_main1_new(void) 
+CtImMxicMain1 *ct_im_mxic_main1_new(void) 
 {
-    CtImMxicMain1 *self = k_object_new_with_private(CT_TYPE_IM_MXIC_MAIN1, sizeof(CtImMxicMain1Private));
+    CtImMxicMain1 *self = g_object_new(CT_TYPE_IM_MXIC_MAIN1, NULL);
     return self;
 }

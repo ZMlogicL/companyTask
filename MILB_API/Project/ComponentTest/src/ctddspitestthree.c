@@ -19,8 +19,10 @@
 #include "dd_spi.h"
 #include "dd_top.h"
 #include "peripheral.h"
-#include "dd_hdmac1.h"
-#include "dd_tmr32.h"
+// #include "dd_hdmac1.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
 #include "ctddspitest.h"
 #include "ctddspitestthree.h"
 
@@ -105,7 +107,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_1( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -139,7 +141,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_2( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -173,7 +175,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_3( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -188,7 +190,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_3( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -212,7 +214,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_4( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -227,16 +229,16 @@ void ct_dd_spi_testthree_pc_start_recv_dma_4( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -260,7 +262,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_5( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -294,7 +296,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_6( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -329,7 +331,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_7( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -344,7 +346,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_7( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -368,7 +370,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_8( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -385,7 +387,7 @@ void ct_dd_spi_testthree_pc_start_recv_dma_8( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -409,7 +411,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_1( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -445,7 +447,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_2( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -481,7 +483,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_3( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -498,10 +500,10 @@ void ct_dd_spi_testthree_pc_start_full_dma_3( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -525,7 +527,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_4( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -542,28 +544,28 @@ void ct_dd_spi_testthree_pc_start_full_dma_4( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -587,7 +589,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_5( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -623,7 +625,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_6( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -660,7 +662,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_7( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -677,10 +679,10 @@ void ct_dd_spi_testthree_pc_start_full_dma_7( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	ret = priv->test->gctDdSpiResult;
 
@@ -704,7 +706,7 @@ void ct_dd_spi_testthree_pc_start_full_dma_8( CtDdSpiTestthree *self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -723,10 +725,10 @@ void ct_dd_spi_testthree_pc_start_full_dma_8( CtDdSpiTestthree *self )
 	priv->test->gctDdSpiAsync = 0;	// not need data print
 
 	IO_HDMAC1.DMAC[0].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 0 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 0 );
 
 	IO_HDMAC1.DMAC[1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-	Dd_HDMAC1_Int_Handler( 1 );
+	dd_hdmac1_int_handler(dd_hdmac1_get(), 1 );
 
 	ret = priv->test->gctDdSpiResult;
 

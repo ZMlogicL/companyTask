@@ -15,7 +15,8 @@
 #define __IM_FPT_COMMON_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "ddtop.h"
 #include "driver_common.h"
 
@@ -25,9 +26,12 @@ extern "C" {
 #endif	// __cplusplus
 
 
-#define IM_TYPE_FPT_COMMON				(im_fpt_common_get_type())
-#define IM_FPT_COMMON	(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, ImFptCommon))
-#define IM_IS_FPT_COMMON	(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_FPT_COMMON))
+#define IM_TYPE_FPT_COMMON			(im_fpt_common_get_type ())
+#define IM_FPT_COMMON(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_FPT_COMMON, ImFptCommon))
+#define IM_FPT_COMMON_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_FPT_COMMON, ImFptCommonClass))
+#define IM_IS_FPT_COMMON(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_FPT_COMMON))
+#define IM_IS_FPT_COMMON_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_FPT_COMMON))
+#define IM_FPT_COMMON_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_FPT_COMMON, ImFptCommonClass))
 
 /*----------------------------------------------------------------------	*/
 /* Compile option															*/
@@ -198,8 +202,9 @@ typedef struct _TfptModeConfig					TfptModeConfig;
 typedef struct _TfptBrcConfig						TfptBrcConfig;
 typedef struct _TfptInterrupt						TfptInterrupt;
 
-typedef struct _ImFptCommon 						ImFptCommon;
-typedef struct _ImFptCommonPrivate 			ImFptCommonPrivate;
+typedef struct _ImFptCommon					ImFptCommon;
+typedef struct _ImFptCommonClass			ImFptCommonClass;
+typedef struct _ImFptCommonPrivate 		ImFptCommonPrivate;
 
 
 /*----------------------------------------------------------------------	*/
@@ -280,9 +285,9 @@ struct _TfptMode0
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl0.GHSIZE[14:0] register.<br>
 		 */
-		kushort globalWidth;
-		kushort width;
-		kushort lines;
+		gushort globalWidth;
+		gushort width;
+		gushort lines;
 		/**<
 		 LUT control for input iamge.<br>
 		 <ul>
@@ -299,44 +304,44 @@ struct _TfptMode0
 		 <li> @ref ImFptCommon_D_IM_FPT_WINDOW_7x7	[fptfqctl2.sumw=1b]
 		 </ul>
 		 */
-		kuchar windowSize;
+		guchar windowSize;
 		/**<
 		 Horizontal down-sampling.(downSampleX/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptfqctl9.skipxFq[12:0] register.<br>
 		 */
-		kushort downSampleX;
+		gushort downSampleX;
 		/**<
 		 Vertical down-sampling.(downSampleY/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptfqctl9.skipyFq[12:0] register.<br>
 		 */
-		kushort downSampleY;
+		gushort downSampleY;
 		/**<
 		 Beginning address of image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl3.SDAD_FQ_OF[31:0] register.<br>
 		 */
-		kuint32 imgAddr;
+		guint32 imgAddr;
 		/**<
 		 Beginning address of feature amount data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl4.SDAD_FQ_MP[31:0] register.<br>
 		 */
-		kuint32 featureAmountAddr;
+		guint32 featureAmountAddr;
 		/**<
 		 The number of bytes per feature amount data's line.<br>
 		 featureAmountLineByte = [8-byte rounding up(((width/downSampleX)-(12+(windowSize*2)))*2)]<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl8.MAPGHSIZE[14:0] register.<br>
 		 */
-		kushort featureAmountLineByte;
+		gushort featureAmountLineByte;
 		/**<
 		 Beginning address of histgram data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl5.SDAD_FQ_HI[31:0] register.<br>
 		 */
-		kuint32 histgramAddr;
+		guint32 histgramAddr;
 };
 
 /**
@@ -348,7 +353,7 @@ struct _TfptMode1
 		 The number of feature point to be re-calculated.[1~127].<br>
 		 The value is set to fptfqctl2.fpmax[6:0] register.<br>
 		 */
-		kuchar numFeaturePoint;
+		guchar numFeaturePoint;
 		/**<
 		 Control output data.
 		 <ul>
@@ -357,16 +362,16 @@ struct _TfptMode1
 		 </ul>
 		 The value is set to fptfqctl2.outen register.<br>
 		 */
-		kuchar output;
+		guchar output;
 		/**<
 		 The number of pixels of 1 line.<br>
 		 It means line feed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl0.GHSIZE[14:0] register.<br>
 		 */
-		kushort globalWidth;
-		kushort width;
-		kushort lines;
+		gushort globalWidth;
+		gushort width;
+		gushort lines;
 		/**<
 		 LUT control for input iamge.<br>
 		 <ul>
@@ -383,37 +388,37 @@ struct _TfptMode1
 		 <li> @ref ImFptCommon_D_IM_FPT_WINDOW_7x7	[fptfqctl2.sumw=1b]
 		 </ul>
 		 */
-		kuchar windowSize;
+		guchar windowSize;
 		/**<
 		 Horizontal down-sampling.(downSampleX/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptfqctl9.skipxFq[12:0] register.<br>
 		 */
-		kushort downSampleX;
+		gushort downSampleX;
 		/**<
 		 Vertical down-sampling.(downSampleY/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptfqctl9.skipyFq[12:0] register.<br>
 		 */
-		kushort downSampleY;
+		gushort downSampleY;
 		/**<
 		 Beginning address of image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl3.SDAD_FQ_OF[31:0] register.<br>
 		 */
-		kuint32 imgAddr;
+		guint32 imgAddr;
 		/**<
 		 Beginning address of feature point coord data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl6.SDAD_FQ_CXY[31:0] register.<br>
 		 */
-		kuint32 inputCoordAddr;
+		guint32 inputCoordAddr;
 		/**<
 		 Beginning address of output data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl7.SDAD_FQ_RXY[31:0] register.<br>
 		 */
-		kuint32 outputAddr;
+		guint32 outputAddr;
 };
 
 /**
@@ -427,25 +432,25 @@ struct _TfptSearchWindow
 		 4.8 fixed point value. [0x000~0x7FF]<br>
 		 The value is set to fptftctl2.leftlimit register.<br>
 		 */
-		kushort left;
+		gushort left;
 		/**<
 		 Right search range.<br>
 		 4.8 fixed point value. [0x000~0x7FF]<br>
 		 The value is set to fptftctl2.rightlimit register.<br>
 		 */
-		kushort right;
+		gushort right;
 		/**<
 		 Top search range.<br>
 		 4.8 fixed point value. [0x000~0x7FF]<br>
 		 The value is set to fptftctl3.toplimit register.<br>
 		 */
-		kushort top;
+		gushort top;
 		/**<
 		 Bottom search range.<br>
 		 4.8 fixed point value. [0x000~0x7FF]<br>
 		 The value is set to fptftctl3.bottomlimit register.<br>
 		 */
-		kushort bottom;
+		gushort bottom;
 };
 
 /**
@@ -459,19 +464,19 @@ struct _TfptMode2
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl0.ghbsize[14:0] register.<br>
 		 */
-		kushort baseGlobalWidth;
+		gushort baseGlobalWidth;
 		/**<
 		 The number of pixels of target image's 1 line.<br>
 		 It means line feed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl0.ghtsize[14:0] register.<br>
 		 */
-		kushort targetGlobalWidth;
+		gushort targetGlobalWidth;
 		/**<
 		 The number of feature point to be tracked.[1~127].<br>
 		 The value is set to fptftctl1.ftmax[6:0] register.<br>
 		 */
-		kuchar numFeaturePoint;
+		guchar numFeaturePoint;
 		/**<
 		 Control the usage of target image's coord
 		 <ul>
@@ -480,19 +485,19 @@ struct _TfptMode2
 		 </ul>
 		 The value is set to fptftctl1.init0 register.<br>
 		 */
-		kuchar usageTargetCoord;
+		guchar usageTargetCoord;
 		/**<
 		 Horizontal down-sampling.(downSampleX/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptftctl10.skipxFt[12:0] register.<br>
 		 */
-		kushort downSampleX;
+		gushort downSampleX;
 		/**<
 		 Vertical down-sampling.(downSampleY/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptftctl10.skipyFt[12:0] register.<br>
 		 */
-		kushort downSampleY;
+		gushort downSampleY;
 		/**<
 		 LUT control for input iamge.<br>
 		 <ul>
@@ -510,42 +515,42 @@ struct _TfptMode2
 		 4.8 fixed point value. [0x000~0x8FF].<br>
 		 The value is set to fptftctl4.maxerr[11:0] register.<br>
 		 */
-		kushort trackingThreshold;
+		gushort trackingThreshold;
 		/**<
 		 The number of tracking iteration. [1~10]<br>
 		 The value is set to fptftctl4.maxitr[3:0] register.<br>
 		 */
-		kushort numIteration;
+		gushort numIteration;
 		/**<
 		 Beginning address of base image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl5.SDAD_BP_OF[31:0] register.<br>
 		 */
-		kuint32 baseImgAddr;
+		guint32 baseImgAddr;
 		/**<
 		 Beginning address of target image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl6.SDAD_TP_OF[31:0] register.<br>
 		 */
-		kuint32 targetImgAddr;
+		guint32 targetImgAddr;
 		/**<
 		 Beginning address of base image's feature point coord data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl7.SDAD_FT_CXY[31:0] register.<br>
 		 */
-		kuint32 baseCoordAddr;
+		guint32 baseCoordAddr;
 		/**<
 		 Beginning address of target image's feature point coord data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl8.SDAD_FT_BXY[31:0] register.<br>
 		 */
-		kuint32 targetCoordAddr;
+		guint32 targetCoordAddr;
 		/**<
 		 Beginning address of tracking output data, motion vectors. <br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl9.SDAD_FT_TXY[31:0] register.<br>
 		 */
-		kuint32 trackingResultAddr;
+		guint32 trackingResultAddr;
 };
 
 /**
@@ -553,8 +558,8 @@ struct _TfptMode2
 */
 struct _TfptMode3
 {
-		kushort width;
-		kushort lines;
+		gushort width;
+		gushort lines;
 		/**<
 		 The size of sum window.<br>
 		 <ul>
@@ -562,32 +567,32 @@ struct _TfptMode3
 		 <li> @ref ImFptCommon_D_IM_FPT_WINDOW_7x7	[fptfqctl2.sumw=1b]
 		 </ul>
 		 */
-		kuchar windowSize;
+		guchar windowSize;
 		/**<
 		 Beginning address of output data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptfqctl7.SDAD_FQ_RXY[31:0] register.<br>
 		 */
-		kuint32 outputAddr;
+		guint32 outputAddr;
 		/**<
 		 The number of pixels of base image's 1 line.<br>
 		 It means line feed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl0.ghbsize[14:0] register.<br>
 		 */
-		kushort baseGlobalWidth;
+		gushort baseGlobalWidth;
 		/**<
 		 The number of pixels of target image's 1 line.<br>
 		 It means line feed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl0.ghtsize[14:0] register.<br>
 		 */
-		kushort targetGlobalWidth;
+		gushort targetGlobalWidth;
 		/**<
 		 The number of feature point to be tracked.[1~127].<br>
 		 The value is set to fptftctl1.ftmax[6:0] register.<br>
 		 */
-		kuchar numFeaturePoint;
+		guchar numFeaturePoint;
 		/**<
 		 Control the usage of target image's coord
 		 <ul>
@@ -596,20 +601,20 @@ struct _TfptMode3
 		 </ul>
 		 The value is set to fptftctl1.init0 register.<br>
 		 */
-		kuchar usageTargetCoord;
+		guchar usageTargetCoord;
 		/**<
 		 Horizontal down-sampling for tracking.(downSampleX/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptftctl10.skipxFt[12:0] register.<br>
 
 		 */
-		kushort downSampleX;
+		gushort downSampleX;
 		/**<
 		 Vertical down-sampling for tracking.(downSampleY/256)<br>
 		 value range  :[256 - 5120]<br>
 		 The value is set to fptftctl10.skipyFt[12:0] register.<br>
 		 */
-		kushort downSampleY;
+		gushort downSampleY;
 		/**<
 		 LUT control for input iamge.<br>
 		 <ul>
@@ -628,45 +633,45 @@ struct _TfptMode3
 		 4.8 fixed point value. [0x000~0x8FF].<br>
 		 The value is set to fptftctl4.maxerr[11:0] register.<br>
 		 */
-		kushort trackingThreshold;
+		gushort trackingThreshold;
 		/**<
 		 The number of tracking iteration. [1~10]<br>
 		 The value is set to fptftctl4.maxitr[3:0] register.<br>
 		 */
-		kushort numIteration;
+		gushort numIteration;
 		/**<
 		 Beginning address of base image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl5.SDAD_BP_OF[31:0] register.<br>
 		 */
-		kuint32 baseImgAddr;
+		guint32 baseImgAddr;
 		/**<
 		 Beginning address of target image to be processed.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl6.SDAD_TP_OF[31:0] register.<br>
 		 */
-		kuint32 targetImgAddr;
+		guint32 targetImgAddr;
 		/**<
 		 Beginning address of base image's feature point coord data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl7.SDAD_FT_CXY[31:0] register.<br>
 		 */
-		kuint32 baseCoordAddr;
+		guint32 baseCoordAddr;
 		/**<
 		 Beginning address of target image's feature point coord data.<br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl8.SDAD_FT_BXY[31:0] register.<br>
 		 */
-		kuint32 targetCoordAddr;
+		guint32 targetCoordAddr;
 		/**<
 		 Beginning address of tracking output data, motion vectors. <br>
 		 Should be aligned on 8.<br>
 		 The value is set to fptftctl9.SDAD_FT_TXY[31:0] register.<br>*/
-		kuint32 trackingResultAddr;
+		guint32 trackingResultAddr;
 };
 
 /**
-   Parameters of im_fpt_ctrl_mode_config().
+   Parameters of im_fpt_common_ctrl_mode_config().
  */
 struct _TfptModeConfig
 {
@@ -690,24 +695,24 @@ struct _TfptBrcConfig
 		 This value is signed.<br>
 		 The value is set to fptctl4.offsetB[24:16], fptctl5.offsetT[24:16] register.<br>
 		 */
-		kushort imgOffset;
+		gushort imgOffset;
 		/**< Upper limit clip value after the offset for the brightness correction of the base and target image.<br>
 		 The value is set to fptctl4.clpmaxB[15:8], fptctl5.clpmaxT[15:8] register.<br>
 		 */
-		kuchar imClipMax;
+		guchar imClipMax;
 		/**< Lower limit clip value after the offset for the brightness correction of the base and target image.<br>
 		 The value is set to fptctl4.clpminB[7:0], fptctl5.clpminT[7:0] register.<br>
 		 */
-		kuchar imgClipMin;
+		guchar imgClipMin;
 };
 
 /**
-   Parameters of im_fpt_ctrl_interrupt().
+   Parameters of im_fpt_common_ctrl_interrupt().
  */
 struct _TfptInterrupt
 {
-		kuint32 flag;
-		void(*callback)(kuint32 intFactor, kuchar ch);
+		guint32 flag;
+		void(*callback)(guint32 intFactor, guchar ch);
 };
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -727,12 +732,19 @@ struct _TfptInterrupt
 
 struct _ImFptCommon
 {
-	KObject parent;
+	GObject parent;
+	ImFpt *fpt;
+	DdimUserCustomTest *ddimUserCustomTest;
+};
+
+struct _ImFptCommonClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    			im_fpt_common_get_type(void);
-ImFptCommon*		        im_fpt_common_new(void);
+GType										im_fpt_common_get_type(void)	G_GNUC_CONST;
+ImFptCommon*					im_fpt_common_new(void);
 /**
  Configure the mode.<br>
  @param[in]	ch :Channel number(0/1)
@@ -740,7 +752,7 @@ ImFptCommon*		        im_fpt_common_new(void);
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptModeConfig* const param);
+extern gint32 im_fpt_common_ctrl_mode_config(ImFptCommon*self, guchar ch, const TfptModeConfig* const param);
 
 /**
  Configure BRC(BRightness Correction) of the base image.<br>
@@ -749,7 +761,7 @@ extern kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptMod
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const TfptBrcConfig* const param);
+extern gint32 im_fpt_common_ctrl_brc_config_base_img(ImFptCommon*self, guchar ch, const TfptBrcConfig* const param);
 
 /**
  Configure BRC(BRightness Correction) of the target image.<br>
@@ -759,7 +771,7 @@ extern kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, const TfptBrcConfig* const param);
+extern gint32 im_fpt_common_ctrl_brc_config_target_img(ImFptCommon*self, guchar ch, const TfptBrcConfig* const param);
 
 /**
  Configure Interrupt.<br>
@@ -768,7 +780,7 @@ extern kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, con
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_interrupt(ImFptCommon*self, kuchar ch, const TfptInterrupt* const param);
+extern gint32 im_fpt_common_ctrl_interrupt(ImFptCommon*self, guchar ch, const TfptInterrupt* const param);
 
 /**
  Configure LUTRAM.<br>
@@ -786,7 +798,7 @@ extern kint32 im_fpt_ctrl_interrupt(ImFptCommon*self, kuchar ch, const TfptInter
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_ctrl_lutram(ImFptCommon*self, kuchar ch, kint32 lutSel, const kuchar* lut);
+extern gint32 im_fpt_common_ctrl_lutram(ImFptCommon*self, guchar ch, gint32 lutSel, const guchar* lut);
 
 /**
  Set REGRAM.<br>
@@ -802,7 +814,7 @@ extern kint32 im_fpt_ctrl_lutram(ImFptCommon*self, kuchar ch, kint32 lutSel, con
  @retval		ImFptCommon_D_IM_FPT_RETVAL_OK : @ref ImFptCommon_D_IM_FPT_RETVAL_OK
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  */
-extern kint32 im_fpt_set_regram(ImFptCommon*self, kuchar ch, kint32 regSel, const kuchar* reg);
+extern gint32 im_fpt_common_set_regram(ImFptCommon*self, guchar ch, gint32 regSel, const guchar* reg);
 
 /**
  Get REGRAM.<br>
@@ -819,7 +831,7 @@ extern kint32 im_fpt_set_regram(ImFptCommon*self, kuchar ch, kint32 regSel, cons
  @retval		ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR	: @ref ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR
  @remarks	This API uses DDIM_User_Clr_Flg().
  */
-extern kint32 im_fpt_get_regram(ImFptCommon*self, kuchar ch, kint32 regSel, kulong* bufAddr);
+extern gint32 im_fpt_common_get_regram(ImFptCommon*self, guchar ch, gint32 regSel, gulong* bufAddr);
 
 /**
  Start FPT.<br>
@@ -828,7 +840,7 @@ extern kint32 im_fpt_get_regram(ImFptCommon*self, kuchar ch, kint32 regSel, kulo
  @retval		ImFptCommon_D_IM_FPT_RETVAL_ERR : @ref ImFptCommon_D_IM_FPT_RETVAL_ERR(FPT is running.)
  @remarks	It should be called when FPT is not running.
  */
-extern kint32 im_fpt_start(ImFptCommon*self, kuchar ch);
+extern gint32 im_fpt_common_start(ImFptCommon*self, guchar ch);
 
 /**
  Force stop FPT.<br>
@@ -839,7 +851,7 @@ extern kint32 im_fpt_start(ImFptCommon*self, kuchar ch);
  @remarks	It should be called when FPT is running.
  @remarks	This API uses DDIM_User_Set_Flg().
  */
-extern kint32 im_fpt_stop(ImFptCommon*self, kuchar ch);
+extern gint32 im_fpt_common_stop(ImFptCommon*self, guchar ch);
 
 /**
  Wait process until FPT interrupt occurs.<br>
@@ -849,7 +861,7 @@ extern kint32 im_fpt_stop(ImFptCommon*self, kuchar ch);
  <li>bit0  : If bit0  is set to 1, FPT completion interrupt has occured.
  <li>bit4  : If bit4  is set to 1, AXI error interrupt has occured.
  <li>bit8  : If bit8  is set to 1, parameter error interrupt has occured.
- <li>bit12 : If bit12 is set to 1, force stop has occured. It means that im_fpt_stop() is called while im_fpt_waitend().
+ <li>bit12 : If bit12 is set to 1, force stop has occured. It means that im_fpt_common_stop() is called while im_fpt_common_waitend().
  </ul>
  @param[in]	waitTime : Wait time [msec]. The valid range is -1, 0, ... .
  If this parameter is set to -1, driver waits permanently unless system-call sets event-flag.
@@ -859,7 +871,7 @@ extern kint32 im_fpt_stop(ImFptCommon*self, kuchar ch);
  @remarks	This API uses DDIM_User_Clr_Flg().
  @remarks	This API uses DDIM_User_Twai_Flg().
  */
-extern kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint32 waitTime);
+extern gint32 im_fpt_common_waitend(ImFptCommon*self, guchar ch, guint32* status, gint32 waitTime);
 
 /**
  Interrupt Handler.<br>
@@ -870,7 +882,7 @@ extern kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint3
  @remarks	If the address of callback funtion is set to TfptInterrupt::callback, this api calls callback function.
  @remarks	This API uses DDIM_User_Set_Flg().
  */
-extern kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch);
+extern gint32 im_fpt_common_int_handler(ImFptCommon*self, guchar ch);
 
 /**
  Get AXI response.<br>
@@ -884,38 +896,41 @@ extern kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch);
  @remarks	This API should be used only for the purpose of debug.<br>
  @remarks	This API should be used right after AXI Error interrupt has occured.<br>
  */
-extern kint32 im_fpt_get_axi_response(ImFptCommon*self, kuchar ch, kuchar* readResponse, kuchar* writeResponse);
+extern gint32 im_fpt_common_get_axi_response(ImFptCommon*self, guchar ch, guchar* readResponse, guchar* writeResponse);
 
 /**
  Dump the value of all FPT's register.<br>
  @param[in]	ch :Channel number(0/1)
- @param[in]	buf0_addr : Beginning address of buffer [256Bytes].<br>
+ @param[in]	buf0Addr : Beginning address of buffer [256Bytes].<br>
  The value of APB registers is copied on the buffer.<br>
  Should be aligned on 4.<br>
- @param[in]	buf1_addr : Beginning address of buffer [256Bytes x2 = 512Bytes].<br>
+ @param[in]	buf1Addr : Beginning address of buffer [256Bytes x2 = 512Bytes].<br>
  The value of AHB registers is copied on the buffer.<br>
  Should be aligned on 4.<br>
  @remarks	This API should be used only for the purpose of debug.<br>
  */
-extern void im_fpt_debugdump_all_registers(ImFptCommon*self, kuchar ch, kuint32 buf0_addr, kuint32 buf1_addr);
+extern void im_fpt_common_debugdump_all_registers(ImFptCommon*self, guchar ch, guint32 buf0Addr, guint32 buf1Addr);
 
 /**
  Get version info.<br>
  @code
- kchar *str;
- im_fpt_get_version( &str );
+ gchar *str;
+ im_fpt_common_get_version( &str );
  printf("%s\n", str);
  @endcode
  @param[out]	str : The pointer of version string.<br>
  @remarks	This API should be used only for the purpose of debug.<br>
  */
-extern void im_fpt_get_version(ImFptCommon*self, kchar** str);
+extern void im_fpt_common_get_version(ImFptCommon*self, gchar** str);
 #ifdef CO_DDIM_UTILITY_USE
 
 
 #ifdef __cplusplus
 }
 #endif	// __cplusplus
+
+
+G_END_DECLS
 
 
 #endif /* __IM_FPT_COMMON_H__ */

@@ -61,16 +61,16 @@ struct _ImproSroffPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const UINT32	gIM_PRO_FF_Status_Tbl[E_IM_PRO_UNIT_NUM_MAX][ImproSroff_D_IM_PRO_SRO_FF_CH_NUM] = {
-	// E_IM_PRO_UNIT_NUM_1
+static const UINT32	gIM_PRO_FF_Status_Tbl[ImproBase_E_IM_PRO_UNIT_NUM_MAX][ImproSroff_D_IM_PRO_SRO_FF_CH_NUM] = {
+	// ImproBase_E_IM_PRO_UNIT_NUM_1
 	{
 		ImproSroff_D_IM_SRO1_STATUS_FF0,		ImproSroff_D_IM_SRO1_STATUS_FF1,
 	},
-	// E_IM_PRO_UNIT_NUM_2
+	// ImproBase_E_IM_PRO_UNIT_NUM_2
 	{
 		ImproSroff_D_IM_SRO2_STATUS_FF0,		ImproSroff_D_IM_SRO2_STATUS_FF1,
 	},
-	// E_IM_PRO_BOTH_UNIT
+	// ImproBase_E_IM_PRO_BOTH_UNIT
 	{
 		ImproSroff_D_IM_SRO_STATUS_FF0_BOTH,	ImproSroff_D_IM_SRO_STATUS_FF1_BOTH,
 	},
@@ -108,15 +108,15 @@ FF start.
 @param[in]	unitNo : Unit number.
 @param[in]	ch : FFSH channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sroff_start( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.ff[ch].fftrg.bit.fftrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(gIM_PRO_FF_Status_Tbl[unitNo][ch], 0);
 
@@ -129,12 +129,12 @@ FF stop.
 @param[in]	ch : FFSH channel
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sroff_stop( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
 		ioPro.imgPipe[unitNo].sro.ff[ch].fftrg.bit.fftrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -144,7 +144,7 @@ INT32 impro_sroff_stop( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, UCHAR force )
 		ioPro.imgPipe[unitNo].sro.ff[ch].fftrg.bit.fftrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(gIM_PRO_FF_Status_Tbl[unitNo][ch], 0);
 
@@ -157,24 +157,24 @@ Setup of FF control parameter.
 @param[in]	ch : FFSH channel
 @param[in]	ffCtrl : FF Controller
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sroff_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproFfCtrl* ffCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ffCtrl == NULL){
 		Ddim_Assertion(("I:impro_sroff_ctrl error. ffCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.ff[ch].FFDEFTS.bit.FFDEFTS	= ffCtrl->ffdefts;
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.ff[ch].ffmnwgt, union io_ffmnwgt, ffmnwgt, ffCtrl->mnwgt );
 	im_pro_set_reg_signed( ioPro.imgPipe[unitNo].sro.ff[ch].ffsbwgt, union io_ffsbwgt, ffsbwgt, ffCtrl->sbwgt );
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -193,41 +193,41 @@ Setup of input position .
 					value range :lines[4 - 8192] 4pixel boundary<br>
 					target registor :@@FFVW<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_sroff_area( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, T_IM_PRO_AREA_INFO* ffArea )
+INT32 impro_sroff_area( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproAreaInfo* ffArea )
 {
 #ifdef CO_PARAM_CHECK
 	if (ffArea == NULL){
 		Ddim_Assertion(("I:impro_sroff_area error. ffArea=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroff_D_IM_PRO_FF_FFH_MIN, ImproSroff_D_IM_PRO_FF_FFH_MAX,
 			ffArea->posX, "impro_sroff_area : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroff_D_IM_PRO_FF_FFV_MIN, ImproSroff_D_IM_PRO_FF_FFV_MAX,
 			ffArea->posY, "impro_sroff_area : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroff_D_IM_PRO_FF_FFHW_MIN, ImproSroff_D_IM_PRO_FF_FFHW_MAX,
 			ffArea->width, "impro_sroff_area : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSroff_D_IM_PRO_FF_FFVW_MIN, ImproSroff_D_IM_PRO_FF_FFVW_MAX,
 			ffArea->lines, "impro_sroff_area : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.ff[ch].ffh.bit.ffh		= ffArea->posX;
 	ioPro.imgPipe[unitNo].sro.ff[ch].ffv.bit.ffv		= ffArea->posY;
 	ioPro.imgPipe[unitNo].sro.ff[ch].ffhw.bit.ffhw	= ffArea->width;
 	ioPro.imgPipe[unitNo].sro.ff[ch].ffvw.bit.ffvw	= ffArea->lines;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -238,28 +238,28 @@ FIR coefficient setting.
 @param[in]	ch : FFSH channel
 @param[in]	ffCtrl :LPF Control information.<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_sroff_set_fir_filter( E_IM_PRO_UNIT_NUM unitNo, EimproFfCh ch, TimproFfLpfCtrl* ffCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (ffCtrl == NULL){
 		Ddim_Assertion(("I:impro_sroff_set_fir_filter error. ffCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( ( ffCtrl->b0 + 2 * ( ffCtrl->b1 + ffCtrl->b2 ) ) != 128 ) {
 		Ddim_Assertion(("I:impro_sroff_set_fir_filter parameter error. Please satisfy following relationship."
 				" ffCtrl->b0 + 2*(ffCtrl->b1 + ffCtrl->b2) == 128  (%u %u %u)\n", ffCtrl->b0, ffCtrl->b1, ffCtrl->b2));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.ff[ch].fflpb0.bit.fflpb0	= ffCtrl->b0;
 	ioPro.imgPipe[unitNo].sro.ff[ch].fflpb1.bit.fflpb1	= ffCtrl->b1;
 	ioPro.imgPipe[unitNo].sro.ff[ch].fflpb2.bit.fflpb2	= ffCtrl->b2;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }

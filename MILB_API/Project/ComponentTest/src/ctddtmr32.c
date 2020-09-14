@@ -20,7 +20,7 @@
  * <B><I>Copyright 2015 Socionext Inc.</I></B>
  */
 
-#include "dd_tmr32.h"
+#include "ddtmr32.h"
 #include "peripheral.h"
 #include "ddtop.h"
 #include "chiptop.h"
@@ -34,7 +34,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtDdTmr32, ct_dd_tmr32);
 #define CT_DD_TMR32_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdTmr32Private,CT_TYPE_DD_TMR32))
 
 struct _CtDdTmr32Private {
-    kulong hCount;
+    
 };
 
 /*----------------------------------------------------------------------*/
@@ -49,22 +49,22 @@ struct _CtDdTmr32Private {
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
-static DdimUserCustom_SYSTIM	S_GDD_TIMER32_TIM1;
-static DdimUserCustom_SYSTIM	S_GDD_TIMER32_TIM2;
+static kulonglong	S_GDD_TIMER32_TIM1;
+static kulonglong	S_GDD_TIMER32_TIM2;
 
 #if 0
 static kulong gDD_Timer32_Spin_Lock __attribute__((section(".LOCK_SECTION"), aligned(64)));
 #endif
-
-/*DECLS*/
-
+/*
+ *DECLS
+ */
 /*----------------------------------------------------------------------*/
 /* Function																*/
 /*----------------------------------------------------------------------*/
 #ifdef	CO_CT_DD_TMR32_USTIME
 static kulong       ctDdTmr32GetTimeUs(void);
 #endif
-static void  ctTimer32Cb(void);
+static void  		ctTimer32Cb(void);
 
 static void ct_dd_tmr32_constructor(CtDdTmr32 *self) 
 {
@@ -75,17 +75,18 @@ static void ct_dd_tmr32_destructor(CtDdTmr32 *self)
 {
 // CtDdTmr32Private *priv = CT_DD_TMR32_GET_PRIVATE(self);
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*-------------*/
 /* 32bit Timer */
 /*-------------*/
 static void ctTimer32Cb(void)
 {
+	DdimUserCustom *ddimUserCus = ddim_user_custom_new();
 #ifdef	CO_CT_DD_TMR32_USTIME
 #else	// CO_CT_DD_TMR32_USTIME
-	DdimUserCustom_ER	er;
+	kint32	er;
 #endif	// CO_CT_DD_TMR32_USTIME
 
 #if 0	// for Debug code
@@ -107,34 +108,36 @@ static void ctTimer32Cb(void)
 #ifdef	CO_CT_DD_TMR32_USTIME
 	S_GDD_TIMER32_TIM2 = ctDdTmr32GetTimeUs();
 #else	// CO_CT_DD_TMR32_USTIME
-	er = ddim_user_custom_get_tim(&S_GDD_TIMER32_TIM2);
+	er = ddim_user_custom_get_tim(ddimUserCus, &S_GDD_TIMER32_TIM2);
 	if(er != DdimUserCustom_E_OK){
 		Ddim_Print(("get_tim() er=%d\n",er));
 	}
 #endif	// CO_CT_DD_TMR32_USTIME
 	Ddim_Print(("TMR32 INT. %lu\n", (kulong)(S_GDD_TIMER32_TIM2 - S_GDD_TIMER32_TIM1)));
 	S_GDD_TIMER32_TIM1 = S_GDD_TIMER32_TIM2 ;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 #ifdef	CO_CT_DD_TMR32_USTIME
 //Get_Time_us
 static kulong ctDdTmr32GetTimeUs(void)
 {
-	CtDdTmr32Private *priv = CT_DD_TMR32_GET_PRIVATE(self);
+	kulong hCount;
 	kulong 		sCount;
 	kulonglong 	hCountLong;
 	static kuint32 S_GET_TIME_CH =2;
-	Dd_TMR32_Get_Counter(S_GET_TIME_CH, &priv->hCount, &sCount);
-	priv->hCount = 0xFFFFFFFF - priv->hCount;
-	hCountLong = (kulonglong)priv->hCount;
+	dd_tmr32_get_counter(S_GET_TIME_CH, &hCount, &sCount);
+	hCount = 0xFFFFFFFF - hCount;
+	hCountLong = (kulonglong)hCount;
 	hCountLong = hCountLong * 32;
 	
 	return (kulong)(hCountLong / 54);
 }
 #endif	// CO_CT_DD_TMR32_USTIME
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /**
  * @brief  Command main function for timer32 test.
  * @param  int argc		:The number of parameters
@@ -145,9 +148,11 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 {
 	kint32				ret;
 	kuint32				ch;
-	T_DD_TMR32_CTRL		tmr32Ctrl = {{0}};
+	TDdTmr32Ctrl		tmr32Ctrl = {{0}};
+	DdTmr32 *			ddTmr32 = dd_tmr32_get();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 #ifndef	CO_CT_DD_TMR32_USTIME
-	DdimUserCustom_ER	er;
+	kint32				er;
 #endif	// CO_CT_DD_TMR32_USTIME
 
 	/*-------*/
@@ -195,12 +200,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		k_object_unref(ddGic);
 		ddGic = NULL;
 		/* Open */
-		ret = Dd_TMR32_Open(ch, (kint32)atoi(argv[3]));
+		ret = dd_tmr32_open(ddTmr32, ch, (kint32)atoi(argv[3]));
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Open[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_open[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Open[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_open[%d] ERR=%d\n", ch, ret));
 		}
 #if 0	// for Debug code
 		S_GDD_TIMER32_TIM1 = ctDdTmr32GetTimeUs();
@@ -221,12 +226,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 
 		/* Close */
-		ret = Dd_TMR32_Close(ch);
+		ret = dd_tmr32_close(ddTmr32, ch);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Close[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_close[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Close[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_close[%d] ERR=%d\n", ch, ret));
 		}
 	}
 	/*------*/
@@ -267,7 +272,7 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		
 		tmr32Ctrl.rlr1 = (kulong)atoi(argv[5]);
 		tmr32Ctrl.rlr2 = (kulong)atoi(argv[6]);
-		tmr32Ctrl.soft_counter = (kuchar)atoi(argv[7]);
+		tmr32Ctrl.softCounter = (kuchar)atoi(argv[7]);
 		tmr32Ctrl.pcallback = ctTimer32Cb;
 		
 		// Edge hunt MODE
@@ -288,10 +293,10 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		}
 
 
-		Ddim_Print(("Dd_TMR32_Ctrl Arg(T_DD_TMR32_CTRL)///\n"));
-		Ddim_Print(("csr.trg_fixed0 = %d\n", tmr32Ctrl.csr.bit.trg_fixed0));/* pgr0872 */
+		Ddim_Print(("dd_tmr32_ctrl Arg(TDdTmr32Ctrl)///\n"));
+		Ddim_Print(("csr.trg_fixed0 = %d\n", tmr32Ctrl.csr.bit.trgFixed0));/* pgr0872 */
 		Ddim_Print(("csr.cnte       = %d\n", tmr32Ctrl.csr.bit.cnte));		/* pgr0872 */
-		Ddim_Print(("csr.uf_fixed1  = %d\n", tmr32Ctrl.csr.bit.uf_fixed1));	/* pgr0872 */
+		Ddim_Print(("csr.uf_fixed1  = %d\n", tmr32Ctrl.csr.bit.ufFixed1));	/* pgr0872 */
 		Ddim_Print(("csr.inte       = %d\n", tmr32Ctrl.csr.bit.inte));		/* pgr0872 */
 		Ddim_Print(("csr.reld       = %d\n", tmr32Ctrl.csr.bit.reld));
 		Ddim_Print(("csr.outl       = %d\n", tmr32Ctrl.csr.bit.outl));		/* pgr0872 */
@@ -300,17 +305,17 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		Ddim_Print(("csr.rels       = %d\n", tmr32Ctrl.csr.bit.rels));		/* pgr0872 */
 		Ddim_Print(("rlr1           = %lu\n", tmr32Ctrl.rlr1));
 		Ddim_Print(("rlr2           = %lu\n", tmr32Ctrl.rlr2));
-		Ddim_Print(("soft_counter   = %lu\n", tmr32Ctrl.soft_counter));
+		Ddim_Print(("soft_counter   = %lu\n", tmr32Ctrl.softCounter));
 		Ddim_Print(("pcallback      = %p\n", tmr32Ctrl.pcallback));
 		Ddim_Print(("///////////////////////////////////////\n"));
 
 		/* Ctrl */
-		ret = Dd_TMR32_Ctrl(ch, &tmr32Ctrl);
+		ret = dd_tmr32_ctrl(ddTmr32, ch, &tmr32Ctrl);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Ctrl[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_ctrl[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("timer Dd_TMR32_Ctrl[%d] error=%d\n", ch, ret));
+			Ddim_Print(("timer dd_tmr32_ctrl[%d] error=%d\n", ch, ret));
 		}
 		Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 	}
@@ -320,25 +325,25 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 	else if(strcmp(argv[1], "cal") == 0){
 		self->usec = (kulong)atoi(argv[2]);
 
-		ret = Dd_TMR32_Calculate(self->usec, &tmr32Ctrl);
+		ret = dd_tmr32_calculate(ddTmr32, self->usec, &tmr32Ctrl);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Calculate OK\n"));
+			Ddim_Print(("dd_tmr32_calculate OK\n"));
 			Ddim_Print(("rels         = %d\n", tmr32Ctrl.csr.bit.rels));
 			Ddim_Print(("csl          = %d\n", tmr32Ctrl.csr.bit.csl));
 			Ddim_Print(("mod          = %d\n", tmr32Ctrl.csr.bit.mod));
 			Ddim_Print(("outl         = %d\n", tmr32Ctrl.csr.bit.outl));
 			Ddim_Print(("reld         = %d\n", tmr32Ctrl.csr.bit.reld));
 			Ddim_Print(("inte         = %d\n", tmr32Ctrl.csr.bit.inte));
-			Ddim_Print(("uf_fixed1    = %d\n", tmr32Ctrl.csr.bit.uf_fixed1));
+			Ddim_Print(("uf_fixed1    = %d\n", tmr32Ctrl.csr.bit.ufFixed1));
 			Ddim_Print(("cnte         = %d\n", tmr32Ctrl.csr.bit.cnte));
-			Ddim_Print(("trg_fixed0   = %d\n", tmr32Ctrl.csr.bit.trg_fixed0));
+			Ddim_Print(("trg_fixed0   = %d\n", tmr32Ctrl.csr.bit.trgFixed0));
 			Ddim_Print(("rlr1         = %lu\n", tmr32Ctrl.rlr1));
 			Ddim_Print(("rlr2         = %lu\n", tmr32Ctrl.rlr2));
-			Ddim_Print(("soft_counter = %lu\n", tmr32Ctrl.soft_counter));
+			Ddim_Print(("soft_counter = %lu\n", tmr32Ctrl.softCounter));
 			Ddim_Print(("pcallback    = %p\n", tmr32Ctrl.pcallback));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Calculate ERR=%d\n", ret));
+			Ddim_Print(("dd_tmr32_calculate ERR=%d\n", ret));
 		}
 	}
 	/*----------------*/
@@ -349,7 +354,7 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 		
 		/* Start */
-		ret = Dd_TMR32_Start(ch);
+		ret = dd_tmr32_start(ddTmr32, ch);
 			/* Debug: Time(msec) */
 #if 0	// for Debug code
 			// DSR_S is not used.
@@ -361,7 +366,7 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 #ifdef	CO_CT_DD_TMR32_USTIME
 			S_GDD_TIMER32_TIM1 = ctDdTmr32GetTimeUs();
 #else	// CO_CT_DD_TMR32_USTIME
-			er = ddim_user_custom_get_tim(&S_GDD_TIMER32_TIM1);
+			er = ddim_user_custom_get_tim(ddimUserCus, &S_GDD_TIMER32_TIM1);
 			if(er != DdimUserCustom_E_OK){
 				Ddim_Print(("get_tim() er=%d\n",er));
 			}
@@ -402,10 +407,10 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 	Dd_ARM_Critical_Section_End(gDD_Timer32_Spin_Lock);
 #endif	// for Debug code
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Start[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_start[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Start[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_start[%d] ERR=%d\n", ch, ret));
 		}
 		Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 	}
@@ -417,21 +422,21 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 		
 		/* Start */
-		ret = Dd_TMR32_External_Start(ch);
+		ret = dd_tmr32_external_start(ddTmr32, ch);
 			/* Debug: Time(msec) */
 #ifdef	CO_CT_DD_TMR32_USTIME
 			S_GDD_TIMER32_TIM1 = ctDdTmr32GetTimeUs();
 #else	// CO_CT_DD_TMR32_USTIME
-			er = ddim_user_custom_get_tim(&S_GDD_TIMER32_TIM1);
+			er = ddim_user_custom_get_tim(ddimUserCus, &S_GDD_TIMER32_TIM1);
 			if(er != DdimUserCustom_E_OK){
 				Ddim_Print(("get_tim() er=%d\n",er));
 			}
 #endif	// CO_CT_DD_TMR32_USTIME
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_External_Start[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_external_start[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_External_Start[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_external_start[%d] ERR=%d\n", ch, ret));
 		}
 //		Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 	}
@@ -443,12 +448,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 
 		/* Stop */
-		ret = Dd_TMR32_Stop(ch);
+		ret = dd_tmr32_stop(ddTmr32, ch);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Stop[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_stop[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Stop[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_stop[%d] ERR=%d\n", ch, ret));
 		}
 		Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 	}
@@ -460,12 +465,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 
 		/* Pause */
-		ret = Dd_TMR32_Pause(ch);
+		ret = dd_tmr32_pause(ddTmr32, ch);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Pause[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_pause[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Pause[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_pause[%d] ERR=%d\n", ch, ret));
 		}
 		Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 	}
@@ -480,13 +485,13 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 
 		/* Get H/W & S/W Counter */
-		ret = Dd_TMR32_Get_Counter(ch, &hwCount, &swCount);
+		ret = dd_tmr32_get_counter(ddTmr32, ch, &hwCount, &swCount);
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Get_Counter[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_get_counter[%d] OK\n", ch));
 			Ddim_Print(("H/W counter = 0x%lx, S/W Counter=%lu\n", hwCount, swCount));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Get_Counter[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_get_counter[%d] ERR=%d\n", ch, ret));
 		}
 	}
 	/*------------------------*/
@@ -497,18 +502,18 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch = atoi(argv[2]);
 
 		/* Get H/W & S/W Counter */
-		ret = Dd_TMR32_Get_Ctrl(ch, &tmr32Ctrl) ;
+		ret = dd_tmr32_get_ctrl(ddTmr32, ch, &tmr32Ctrl) ;
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Get_Ctrl[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_get_ctrl[%d] OK\n", ch));
 			Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", ch, ioPeri.tmr[ch].tmcsr.word));
 			Ddim_Print(("csr         =0x%lx\n", tmr32Ctrl.csr.word));
 			Ddim_Print(("rlr1        =%lu\n", tmr32Ctrl.rlr1));
 			Ddim_Print(("rlr2        =%lu\n", tmr32Ctrl.rlr2));
-			Ddim_Print(("soft_counter=%lu\n", tmr32Ctrl.soft_counter));
+			Ddim_Print(("soft_counter=%lu\n", tmr32Ctrl.softCounter));
 			Ddim_Print(("pcallback   =%p\n", tmr32Ctrl.pcallback));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Get_Ctrl ERR=%d\n", ret));
+			Ddim_Print(("dd_tmr32_get_ctrl ERR=%d\n", ret));
 		}
 	}
 	/*------------------*/
@@ -520,12 +525,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		self->num = atoi(argv[3]);
 
 		/* Set H/W & S/W Counter */
-		ret = Dd_TMR32_Set_Softcounter(ch, self->num) ;
+		ret = dd_tmr32_set_soft_counter_value(ddTmr32, ch, self->num) ;
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Set_Softcounter[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_set_soft_counter_value[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Set_Softcounter[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_set_soft_counter_value[%d] ERR=%d\n", ch, ret));
 		}
 	}
 	/*------------------*/
@@ -536,7 +541,7 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch  = atoi(argv[2]);
 
 		/* Get H/W & S/W Counter */
-		self->num = Dd_TMR32_Get_Softcounter(ch) ;
+		self->num = dd_tmr32_get_soft_counter_vlaue(ddTmr32, ch) ;
 		Ddim_Print(("Soft counter[%d]=%lu\n", ch, self->num));
 	}
 	/*-----------------*/
@@ -548,12 +553,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		self->num = atoi(argv[3]);
 
 		/* Get H/W & S/W Counter */
-		ret = Dd_TMR32_Set_Reload_Flg(ch, self->num) ;
+		ret = dd_tmr32_set_reload_flg_value(ddTmr32, ch, self->num) ;
 		if(ret == D_DDIM_OK){
-			Ddim_Print(("Dd_TMR32_Set_Reload_Flg[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_set_reload_flg_value[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Set_Reload_Flg[%d] ERR=%d\n", ch, ret));
+			Ddim_Print(("dd_tmr32_set_reload_flg_value[%d] ERR=%d\n", ch, ret));
 		}
 	}
 	/*-----------------*/
@@ -564,7 +569,7 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		ch  = atoi(argv[2]);
 
 		/* Get H/W & S/W Counter */
-		self->num = Dd_TMR32_Get_Reload_Flg(ch) ;
+		self->num = dd_tmr32_get_reload_flg_value(ddTmr32, ch) ;
 		Ddim_Print(("Reload Flag[%d]=%lu\n", ch, self->num));
 	}
 	/*---------------------*/
@@ -576,12 +581,12 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		
 		Ddim_Print(("Peri CLK=%lu\n", dd_topone_get_rclk()));
 		
-		ret = Dd_TMR32_SetTimer(ch, self->usec, ctTimer32Cb);
+		ret = dd_tmr32_set_timer(ddTmr32, ch, self->usec, ctTimer32Cb);
 		if (ret == 0) {
-			Ddim_Print(("Dd_TMR32_SetTimer[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_set_timer[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_SetTimer[%d] ERR. ret=0x%x\n", ch, ret));
+			Ddim_Print(("dd_tmr32_set_timer[%d] ERR. ret=0x%x\n", ch, ret));
 		}
 	}
 	/*------------------------*/
@@ -594,17 +599,17 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 #ifdef	CO_CT_DD_TMR32_USTIME
 		S_GDD_TIMER32_TIM1 = ctDdTmr32GetTimeUs();
 #else	// CO_CT_DD_TMR32_USTIME
-		er = ddim_user_custom_get_tim(&S_GDD_TIMER32_TIM1);
+		er = ddim_user_custom_get_tim(ddimUserCus, &S_GDD_TIMER32_TIM1);
 		if(er != DdimUserCustom_E_OK){
 			Ddim_Print(("get_tim() er=%d\n",er));
 		}
 #endif	// CO_CT_DD_TMR32_USTIME
-		ret = Dd_TMR32_StartReload(ch);
+		ret = dd_tmr32_start_reload(ddTmr32, ch);
 		if (ret == 0) {
-			Ddim_Print(("Dd_TMR32_StartReload[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_start_reload[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_StartReload[%d] ERR. ret=0x%x\n", ch, ret));
+			Ddim_Print(("dd_tmr32_start_reload[%d] ERR. ret=0x%x\n", ch, ret));
 		}
 	}
 	/*--------------------------*/
@@ -617,17 +622,17 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 #ifdef	CO_CT_DD_TMR32_USTIME
 		S_GDD_TIMER32_TIM1 = ctDdTmr32GetTimeUs();
 #else	// CO_CT_DD_TMR32_USTIME
-		er = ddim_user_custom_get_tim(&S_GDD_TIMER32_TIM1);
+		er = ddim_user_custom_get_tim(ddimUserCus, &S_GDD_TIMER32_TIM1);
 		if(er != DdimUserCustom_E_OK){
 			Ddim_Print(("get_tim() er=%d\n",er));
 		}
 #endif	// CO_CT_DD_TMR32_USTIME
-		ret = Dd_TMR32_StartOneshot(ch);
+		ret = dd_tmr32_start_one_shot(ddTmr32, ch);
 		if (ret == 0) {
-			Ddim_Print(("Dd_TMR32_StartOneshot[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_start_one_shot[%d] OK\n", ch));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_StartOneshot[%d] ERR. ret=0x%x\n", ch, ret));
+			Ddim_Print(("dd_tmr32_start_one_shot[%d] ERR. ret=0x%x\n", ch, ret));
 		}
 	}
 	/*---------------*/
@@ -637,13 +642,13 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 
 		ch   = atoi(argv[2]);
 
-		ret = Dd_TMR32_Set_Outlevel(atoi(argv[3]));
+		ret = dd_tmr32_set_out_level(ddTmr32, atoi(argv[3]));
 		if (ret == 0) {
-			Ddim_Print(("Dd_TMR32_Set_Outlevel[%d] OK\n", ch));
+			Ddim_Print(("dd_tmr32_set_out_level[%d] OK\n", ch));
 			Ddim_Print(("OUTL = [0x%lx] \n", ioPeri.tmr[3].tmcsr.word));
 		}
 		else {
-			Ddim_Print(("Dd_TMR32_Set_Outlevel[%d] ERR. ret=0x%x\n", ch, ret));
+			Ddim_Print(("dd_tmr32_set_out_level[%d] ERR. ret=0x%x\n", ch, ret));
 		}
 	}
 	/*------------*/
@@ -655,57 +660,57 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 		kulong	swCount ;
 
 		// Open/Close check
-		for(chRoop=0; chRoop<D_DD_TMR32_CH_NUM_MAX; chRoop++){
+		for(chRoop=0; chRoop < DdTmr32_CH_NUM_MAX; chRoop++){
 			Ddim_Print(("test_1_all : %d /////////////////////////\n", chRoop));
 			/* Open */
-			ret = Dd_TMR32_Open(chRoop, 0);
+			ret = dd_tmr32_open(ddTmr32, chRoop, 0);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Open[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_open[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Open[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_open[%d] ERR=%d\n", chRoop, ret));
 			}
 
 			/* Calculate */
-			Dd_TMR32_Calculate(3000, &tmr32Ctrl);
+			dd_tmr32_calculate(ddTmr32, 3000, &tmr32Ctrl);
 			/* Ctrl */
-			ret = Dd_TMR32_Ctrl(chRoop, &tmr32Ctrl);
+			ret = dd_tmr32_ctrl(ddTmr32, chRoop, &tmr32Ctrl);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Ctrl[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_ctrl[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("timer Dd_TMR32_Ctrl[%d] error=%d\n", chRoop, ret));
+				Ddim_Print(("timer dd_tmr32_ctrl[%d] error=%d\n", chRoop, ret));
 			}
 
 			/* Start */
-			ret = Dd_TMR32_Start(chRoop);
+			ret = dd_tmr32_start(ddTmr32, chRoop);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Start[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_start[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Start[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_start[%d] ERR=%d\n", chRoop, ret));
 			}
 			Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", 
 				chRoop, ioPeri.tmr[chRoop].tmcsr.word));
 
 			/* Pause */
-			ret = Dd_TMR32_Pause(chRoop);
+			ret = dd_tmr32_pause(ddTmr32, chRoop);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Pause[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_pause[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Pause[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_pause[%d] ERR=%d\n", chRoop, ret));
 			}
 			Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", 
 				chRoop, ioPeri.tmr[chRoop].tmcsr.word));
 
 			/* ReStart */
-			ret = Dd_TMR32_Start(chRoop);
+			ret = dd_tmr32_start(ddTmr32, chRoop);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Start[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_start[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Start[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_start[%d] ERR=%d\n", chRoop, ret));
 			}
 			Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", 
 				chRoop, ioPeri.tmr[chRoop].tmcsr.word));
@@ -715,77 +720,81 @@ void ct_dd_tmr32_main(CtDdTmr32 *self, kint argc, KType* argv)
 #endif	// CO_DEBUG_ON_PC
 
 			/* Get H/W & S/W Counter */
-			ret = Dd_TMR32_Get_Counter(chRoop, &hwCount, &swCount);
+			ret = dd_tmr32_get_counter(ddTmr32, chRoop, &hwCount, &swCount);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Get_Counter[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_get_counter[%d] OK\n", chRoop));
 				Ddim_Print(("H/W counter = 0x%lx, S/W Counter=%lu\n", hwCount, swCount));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Get_Counter[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_get_counter[%d] ERR=%d\n", chRoop, ret));
 			}
 
 			/* Get H/W & S/W Counter */
-			ret = Dd_TMR32_Get_Ctrl(chRoop, &tmr32Ctrl) ;
+			ret = dd_tmr32_get_ctrl(ddTmr32, chRoop, &tmr32Ctrl) ;
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Get_Ctrl[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_get_ctrl[%d] OK\n", chRoop));
 				Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", 
 					chRoop, ioPeri.tmr[chRoop].tmcsr.word));
 				Ddim_Print(("csr         =0x%lx\n", tmr32Ctrl.csr.word));
 				Ddim_Print(("rlr1        =%lu\n", tmr32Ctrl.rlr1));
 				Ddim_Print(("rlr2        =%lu\n", tmr32Ctrl.rlr2));
-				Ddim_Print(("soft_counter=%lu\n", tmr32Ctrl.soft_counter));
+				Ddim_Print(("soft_counter=%lu\n", tmr32Ctrl.softCounter));
 				Ddim_Print(("pcallback   =%p\n", tmr32Ctrl.pcallback));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Get_Ctrl ERR=%d\n", ret));
+				Ddim_Print(("dd_tmr32_get_ctrl ERR=%d\n", ret));
 			}
 
 			/* Stop */
-			ret = Dd_TMR32_Stop(chRoop);
+			ret = dd_tmr32_stop(ddTmr32, chRoop);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Stop[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_stop[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Stop[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_stop[%d] ERR=%d\n", chRoop, ret));
 			}
 			Ddim_Print(("Timer32 IO_PERI.TMR[%d].TMCSR.word =[%lx].\n", 
 				chRoop, ioPeri.tmr[chRoop].tmcsr.word));
 
 			/* Close */
-			ret = Dd_TMR32_Close(chRoop);
+			ret = dd_tmr32_close(ddTmr32, chRoop);
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Close[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_close[%d] OK\n", chRoop));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Close[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_close[%d] ERR=%d\n", chRoop, ret));
 			}
 
 			/* Check SoftCounter */
-			ret = Dd_TMR32_Set_Softcounter(chRoop, (0x11111111*(chRoop+1)));
+			ret = dd_tmr32_set_soft_counter_value(ddTmr32, chRoop, (0x11111111*(chRoop+1)));
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Set_Softcounter[%d] OK\n", chRoop));
-				Ddim_Print(("Dd_TMR32_Get_Softcounter[%d] %lx\n", 
-					chRoop, Dd_TMR32_Get_Softcounter(chRoop)));
+				Ddim_Print(("dd_tmr32_set_soft_counter_value[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_get_soft_counter_vlaue[%d] %lx\n", 
+					chRoop, dd_tmr32_get_soft_counter_vlaue(ddTmr32, chRoop)));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Set_Softcounter[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_set_soft_counter_value[%d] ERR=%d\n", chRoop, ret));
 			}
 
 			/* Check Reload_Flg */
-			ret = Dd_TMR32_Set_Reload_Flg(chRoop, (0x11*(chRoop+1))) ;
+			ret = dd_tmr32_set_reload_flg_value(ddTmr32, chRoop, (0x11*(chRoop+1))) ;
 			if(ret == D_DDIM_OK){
-				Ddim_Print(("Dd_TMR32_Set_Reload_Flg[%d] OK\n", chRoop));
-				Ddim_Print(("Dd_TMR32_Get_Reload_Flg[%d] %x\n", 
-					chRoop, Dd_TMR32_Get_Reload_Flg(chRoop)));
+				Ddim_Print(("dd_tmr32_set_reload_flg_value[%d] OK\n", chRoop));
+				Ddim_Print(("dd_tmr32_get_reload_flg_value[%d] %x\n", 
+					chRoop, dd_tmr32_get_reload_flg_value(ddTmr32, chRoop)));
 			}
 			else {
-				Ddim_Print(("Dd_TMR32_Set_Reload_Flg[%d] ERR=%d\n", chRoop, ret));
+				Ddim_Print(("dd_tmr32_set_reload_flg_value[%d] ERR=%d\n", chRoop, ret));
 			}
 		}
 	}
 	else{
 		Ddim_Print(("please check 2nd parameter!!\n"));
 	}
+	k_object_unref(ddTmr32);
+	ddTmr32 = NULL; 
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 CtDdTmr32 *ct_dd_tmr32_new(void)

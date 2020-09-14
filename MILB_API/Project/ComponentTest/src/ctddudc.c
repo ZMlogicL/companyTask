@@ -13,9 +13,9 @@
 */
 #include "ddimusercustom.h"
 #include "peripheral.h"
-#include "dd_udc.h"
+#include "ddudc.h"
 #include "ddtop.h"
-#include "dd_tmr32.h"
+#include "ddtmr32.h"
 #include "stdlib.h"
 #include "string.h"
 
@@ -28,6 +28,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtDdUdc, ct_dd_udc);
 
 struct _CtDdUdcPrivate {
 	CtDdUdc *cdUdc;
+	DdimUserCustom *ddimUserCus;
 };
 
 // /*----------------------------------------------------------------------*/
@@ -39,18 +40,18 @@ struct _CtDdUdcPrivate {
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
 // Control data of virtual AIN input
-static DdimUserCustom_SYSTIM	S_GCT_DD_UDC_TIM_A_STA;
-static DdimUserCustom_SYSTIM	S_GCT_DD_UDC_TIM_A_END;
+static kulonglong	S_GCT_DD_UDC_TIM_A_STA;
+static kulonglong	S_GCT_DD_UDC_TIM_A_END;
 
 // Control data of virtual BIN input.
-static DdimUserCustom_SYSTIM	S_GCT_DD_UDC_TIM_B_STA;
-static DdimUserCustom_SYSTIM	S_GCT_DD_UDC_TIM_B_END;
+static kulonglong	S_GCT_DD_UDC_TIM_B_STA;
+static kulonglong	S_GCT_DD_UDC_TIM_B_END;
 
 //Save system time for UDC utility function
-static DdimUserCustom_SYSTIM	S_GCT_DD_UDC_TIM_UTIL_END;
-
-/*DECLS*/
-
+static kulonglong	S_GCT_DD_UDC_TIM_UTIL_END;
+/*
+ *DECLS
+ */
 static kint32 	ctDdUdcGetPdr(kuchar ch, CtDdUdcTrgKind trg, kuchar* val);
 static void 	ctDdUdcSinHandler(void);
 static void 	ctDdUdcBinHandler(void);
@@ -59,6 +60,7 @@ static void ct_dd_udc_constructor(CtDdUdc *self)
 {
 	CtDdUdcPrivate *priv = CT_DD_UDC_GET_PRIVATE(self);
 	priv->cdUdc = ct_dd_udc_new();
+	priv->ddimUserCus = ddim_user_custom_new();
 }
 
 static void ct_dd_udc_destructor(CtDdUdc *self)
@@ -68,10 +70,15 @@ static void ct_dd_udc_destructor(CtDdUdc *self)
 		k_object_unref(priv->cdUdc);
 	}
 	priv->cdUdc = NULL;
+	
+	if(priv->ddimUserCus){
+		k_object_unref(priv->ddimUserCus);
+	}
+	priv->ddimUserCus = NULL;
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*
 Get value of PDR register value.
 */
@@ -79,140 +86,140 @@ static kint32 ctDdUdcGetPdr(kuchar ch, CtDdUdcTrgKind trg, kuchar* val)
 {
 	DdTopfour *ddTop4 = dd_topfour_new();
 	switch (ch) {
-		case D_DD_UDC_CH0:
+		case DdUdc_CH0:
 			// UDC ch0
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH0_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH0_BIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN:
+				case CtDdUdc_TRG_KIND_ZIN:
 					// ZIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_ZIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH0_ZIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH1:
+		case DdUdc_CH1:
 			// UDC ch1
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH1_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH1_BIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN:
+				case CtDdUdc_TRG_KIND_ZIN:
 					// ZIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_ZIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH1_ZIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH2:
+		case DdUdc_CH2:
 			// UDC ch2
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH2_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH2_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH1_BIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH3:
+		case DdUdc_CH3:
 			// UDC ch3
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH3_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH3_BIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH4:
+		case DdUdc_CH4:
 			// UDC ch4
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH4_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH4_BIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH5:
+		case DdUdc_CH5:
 			// UDC ch5
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_AIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH5_AIN, val);
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_BIN, val);
+					dd_topfour_get_gpio_status(ddTop4, CtDdUdc_D_CH5_BIN, val);
 					break;
 
 				default:
 					// Parameter error.
 					Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
 		default:
 			// Parameter error.
 			Ddim_Print(("ct_dd_udc_get_pdr(): Parameter error. ch=%d, trg=%d\n", ch, trg));
-			return D_DD_UDC_INPUT_PARAM_ERROR;
+			return DdUdc_INPUT_PARAM_ERROR;
 	}
 	k_object_unref(ddTop4);
 	ddTop4 = NULL;
@@ -224,17 +231,19 @@ Callback function for virtual AIN control.
 */
 static void ctDdUdcSinHandler(void)
 {
-	DdimUserCustom_ER	ercd;
+	kint32				ercd;
 	kuchar 				pdr;
+	DdUdc *				ddUdc = dd_udc_get();
 	CtDdUdc *			cdUdc = ct_dd_udc_new();
+	DdimUserCustom*		ddimUserCus = ddim_user_custom_new();
 
-	ercd = DDIM_User_Get_Tim(&S_GCT_DD_UDC_TIM_A_END);
+	ercd = ddim_user_custom_get_tim(ddimUserCus, &S_GCT_DD_UDC_TIM_A_END);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_ain_handler(): get_tim NG. ercd=%d\n", ercd));
 		return;
 	}
 
-	ercd = (DdimUserCustom_ER)ctDdUdcGetPdr(cdUdc->gctDdUdcAinCh, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, &pdr);
+	ercd = (kint32)ctDdUdcGetPdr(cdUdc->gctDdUdcAinCh, CtDdUdc_TRG_KIND_AIN, &pdr);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_ain_handler(): ct_dd_udc_get_pdr NG. ercd=%d\n", ercd));
 		return;
@@ -249,8 +258,8 @@ static void ctDdUdcSinHandler(void)
 		pdr = 0;
 	}
 	cdUdc->ch = cdUdc->gctDdUdcAinCh;
-	ercd = (DdimUserCustom_ER)ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, 
-			CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, pdr);
+	ercd = (kint32)ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, 
+			CtDdUdc_PORT_KIND_PDR, pdr);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_ain_handler(): ct_dd_udc_set_port NG. ercd=%d\n", ercd));
 		return;
@@ -260,12 +269,16 @@ static void ctDdUdcSinHandler(void)
 		"[AIN] (Ch=%d) (TIM=%lu) (UDCR=%d) (PDR=%d)\n",
 		cdUdc->gctDdUdcAinCh,
 		(kulong)(S_GCT_DD_UDC_TIM_A_END - S_GCT_DD_UDC_TIM_A_STA), 
-		Dd_UDC_Get_UDCR_Counter(cdUdc->gctDdUdcAinCh), 
+		dd_udc_get_udcr_counter(ddUdc, cdUdc->gctDdUdcAinCh), 
 		pdr
 	));
 	S_GCT_DD_UDC_TIM_A_STA = S_GCT_DD_UDC_TIM_A_END;
+	k_object_unref(ddUdc);
+	ddUdc = NULL;
 	k_object_unref(cdUdc);
 	cdUdc = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 /**
@@ -273,17 +286,19 @@ Callback function for virtual BIN control.
 */
 static void ctDdUdcBinHandler(void)
 {
-	DdimUserCustom_ER	ercd;
+	kint32				ercd;
 	kuchar 				pdr;
+	DdUdc *				ddUdc = dd_udc_get();
 	CtDdUdc *			cdUdc = ct_dd_udc_new();
+	DdimUserCustom * 	ddimUserCus = ddim_user_custom_new();
 
-	ercd = DDIM_User_Get_Tim(&S_GCT_DD_UDC_TIM_B_END);
+	ercd = ddim_user_custom_get_tim(ddimUserCus, &S_GCT_DD_UDC_TIM_B_END);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_bin_handler(): get_tim NG. ercd=%d\n", ercd));
 		return;
 	}
 
-	ercd = (DdimUserCustom_ER)ctDdUdcGetPdr(cdUdc->gctDdUdcBinCh, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, &pdr);
+	ercd = (kint32)ctDdUdcGetPdr(cdUdc->gctDdUdcBinCh, CtDdUdc_TRG_KIND_BIN, &pdr);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_bin_handler(): ct_dd_udc_get_pdr NG. ercd=%d\n", ercd));
 		return;
@@ -298,8 +313,8 @@ static void ctDdUdcBinHandler(void)
 		pdr = 0;
 	}
 	cdUdc->ch = cdUdc->gctDdUdcBinCh;
-	ercd = (DdimUserCustom_ER)ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, 
-			CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, pdr);
+	ercd = (kint32)ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, 
+			CtDdUdc_PORT_KIND_PDR, pdr);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_bin_handler(): ct_dd_udc_set_port NG. ercd=%d\n", ercd));
 		return;
@@ -309,16 +324,20 @@ static void ctDdUdcBinHandler(void)
 		"[BIN] (Ch=%d) (TIM=%lu) (UDCR=%d) (PDR=%d)\n",
 		cdUdc->gctDdUdcBinCh,
 		(kulong)(S_GCT_DD_UDC_TIM_B_END - S_GCT_DD_UDC_TIM_B_STA), 
-		Dd_UDC_Get_UDCR_Counter(cdUdc->gctDdUdcBinCh), 
+		dd_udc_get_udcr_counter(ddUdc, cdUdc->gctDdUdcBinCh), 
 		pdr
 	));
 	S_GCT_DD_UDC_TIM_B_STA = S_GCT_DD_UDC_TIM_B_END;
+	k_object_unref(ddUdc);
+	ddUdc = NULL;
 	k_object_unref(cdUdc);
 	cdUdc = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Local Function														*/
 /*----------------------------------------------------------------------*/
@@ -330,51 +349,51 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 	DdTopthree 	*ddTop3 = dd_topthree_new();
 	DdTopfour 	*ddTop4 = dd_topfour_new();
 	switch (self->ch) {
-		case D_DD_UDC_CH0:
+		case DdUdc_CH0:
 			// UDC ch0
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_AIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH0_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH0_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH0_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH0_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_BIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH0_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH0_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH0_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH0_BIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN:
+				case CtDdUdc_TRG_KIND_ZIN:
 					// ZIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_ZIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH0_ZIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH0_ZIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH0_ZIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//★						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH0_ZIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//★						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH0_ZIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
@@ -385,55 +404,55 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH1:
+		case DdUdc_CH1:
 			// UDC ch1
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_AIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH1_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH1_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH1_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-/*★*/					dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+/*★*/					dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH1_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_BIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH1_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH1_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH1_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH1_BIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN:
+				case CtDdUdc_TRG_KIND_ZIN:
 					// ZIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_ZIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH1_ZIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH1_ZIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH1_ZIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH1_ZIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH1_ZIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
@@ -444,39 +463,39 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH2:
+		case DdUdc_CH2:
 			// UDC ch2
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH2_AIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH2_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH2_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH2_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH2_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH2_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH2_BIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH2_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH2_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH2_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//★						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH2_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//★						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH2_BIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
@@ -487,39 +506,39 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH3:
+		case DdUdc_CH3:
 			// UDC ch3
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_AIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH3_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH3_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH3_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH3_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_BIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH3_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH3_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH3_BIN, writeVal);
 					}
 					else {
-						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH3_BIN, writeVal);
+						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH3_BIN, writeVal);
 					}
 					break;
 
@@ -527,39 +546,39 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH4:
+		case DdUdc_CH4:
 			// UDC ch4
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_AIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH4_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH4_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH4_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH4_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_BIN, writeVal);
+					if (port == CtDdUdc_PORT_KIND_PDR) {
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH4_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH4_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH4_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH4_BIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH4_BIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
@@ -570,44 +589,44 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
-		case D_DD_UDC_CH5:
+		case DdUdc_CH5:
 			// UDC ch5
 			switch (trg) {
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN:
+				case CtDdUdc_TRG_KIND_AIN:
 					// AIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
+					if (port == CtDdUdc_PORT_KIND_PDR) {
 						//IO_CHIPTOP.PDR.bit.PR2 = writeVal;
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_AIN, writeVal);
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH5_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
 						//IO_CHIPTOP.DDR.bit.PR2 = writeVal;
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH5_AIN, writeVal);
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH5_AIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
-//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_AIN, writeVal);
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
+//						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH5_AIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
 					}
 					break;
 
-				case CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN:
+				case CtDdUdc_TRG_KIND_BIN:
 					// BIN
-					if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR) {
+					if (port == CtDdUdc_PORT_KIND_PDR) {
 						//IO_CHIPTOP.PDR.bit.PR3 = writeVal;
-						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_BIN, writeVal);
+						dd_toptwo_set_gpio_status(ddTop4, CtDdUdc_D_CH5_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR) {
+					else if (port == CtDdUdc_PORT_KIND_DDR) {
 						//IO_CHIPTOP.DDR.bit.PR3 = writeVal;
-						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CT_DD_UDC_CH5_BIN, writeVal);
+						dd_topthree_set_gpio_direction(ddTop3, CtDdUdc_D_CH5_BIN, writeVal);
 					}
-					else if (port == CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR) {
+					else if (port == CtDdUdc_PORT_KIND_EPCR) {
 						//IO_CHIPTOP.EPCR.bit.PR3 = writeVal;
-						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CT_DD_UDC_CH5_BIN, writeVal);
+						dd_topfour_set_gpio_function(ddTop4, CtDdUdc_D_CH5_BIN, writeVal);
 					}
 					else {
 						;	// DO NOTHING
@@ -618,14 +637,14 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 					// Parameter error.
 					Ddim_Print((
 						"ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-					return D_DD_UDC_INPUT_PARAM_ERROR;
+					return DdUdc_INPUT_PARAM_ERROR;
 			}
 			break;
 
 		default:
 			// Parameter error.
 			Ddim_Print(("ct_dd_udc_set_port(): Parameter error. ch=%d, trg=%d\n", self->ch, trg));
-			return D_DD_UDC_INPUT_PARAM_ERROR;
+			return DdUdc_INPUT_PARAM_ERROR;
 	}
 	k_object_unref(ddTop3);
 	k_object_unref(ddTop4);
@@ -637,33 +656,34 @@ kint32 ct_dd_udc_set_port(CtDdUdc *self, CtDdUdcTrgKind trg, CtDdUdcPortKind por
 /**
 Callback function for interrupt of UDC.
 */
-void ct_dd_udc_callback(kuchar ch, kint32 factor)
+void ctDdUdcCallback_cd(kuchar ch, kint32 factor)
 {
 	kushort udcr;
+	DdUdc *	ddUdc = dd_udc_get();
 
 	// Get UDCR
-	udcr = Dd_UDC_Get_UDCR_Counter(ch);
+	udcr = dd_udc_get_udcr_counter(ddUdc, ch);
 
 	switch (factor) {
-		case D_DD_UDC_CMPF_OK:
+		case DdUdc_CMPF_OK:
 			// Compare
-			Ddim_Print(("[UDC#%d INT] D_DD_UDC_CMPF_OK. UDCR=%d\n", ch, udcr));
+			Ddim_Print(("[UDC#%d INT] DdUdc_CMPF_OK. UDCR=%d\n", ch, udcr));
 			break;
 
-		case D_DD_UDC_OVER_FLOW:
+		case DdUdc_OVER_FLOW:
 			// Overflow
-			Ddim_Print(("[UDC#%d INT] D_DD_UDC_OVER_FLOW. UDCR=%d\n", ch, udcr));
+			Ddim_Print(("[UDC#%d INT] DdUdc_OVER_FLOW. UDCR=%d\n", ch, udcr));
 			break;
 
-		case D_DD_UDC_UNDER_FLOW:
+		case DdUdc_UNDER_FLOW:
 			// Underflow
-			Ddim_Print(("[UDC#%d INT] D_DD_UDC_UNDER_FLOW. UDCR=%d\n", ch, udcr));
+			Ddim_Print(("[UDC#%d INT] DdUdc_UNDER_FLOW. UDCR=%d\n", ch, udcr));
 			break;
 
-		case D_DD_UDC_COUNT_DIRECTION:
+		case DdUdc_COUNT_DIRECTION:
 			// Count direction change
-			Ddim_Print(("[UDC#%d INT] D_DD_UDC_COUNT_DIRECTION. UDCR=%d DIR=%d\n", ch, 
-					udcr, Dd_UDC_Get_Up_Down_Flg(ch)));
+			Ddim_Print(("[UDC#%d INT] DdUdc_COUNT_DIRECTION. UDCR=%d DIR=%d\n", ch, 
+					udcr, dd_udc_get_up_down_flg(ddUdc, ch)));
 			break;
 
 		default:
@@ -671,27 +691,30 @@ void ct_dd_udc_callback(kuchar ch, kint32 factor)
 			Ddim_Print(("[UDC#%d INT] Unknown factor. factor=%d UDCR=%d\n", ch, factor, udcr));
 			break;
 	}
+	k_object_unref(ddUdc);
+	ddUdc = NULL;
 }
 
 /**
 Callback sub function for interrupt of UDC.
 */
-void ct_dd_udc_callback_sub(kuchar ch, kint32 factor)
+void ctDdUdcCallbackSub_cd(kuchar ch, kint32 factor)
 {
-	Ddim_Print(("[UDC#%d INT] ct_dd_udc_callback_sub() Start!!\n", ch));
-	ct_dd_udc_callback(ch, factor);
-	Ddim_Print(("[UDC#%d INT] ct_dd_udc_callback_sub() End!!\n", ch));
+	Ddim_Print(("[UDC#%d INT] ctDdUdcCallbackSub_cd() Start!!\n", ch));
+	ctDdUdcCallback_cd(ch, factor);
+	Ddim_Print(("[UDC#%d INT] ctDdUdcCallbackSub_cd() End!!\n", ch));
 }
 
 /**
 Callback function for interrupt of UDC utility function
 */
-void ct_dd_udc_utility_callback(kuchar ch)
+void ctDdUdcUtilityCallback_cd(kuchar ch)
 {
-	DdimUserCustom_ER	ercd;
-	CtDdUdc1 			*cdUdc1 = ct_dd_udc1_new();
+	kint32				ercd;
+	CtDdUdc1 *			cdUdc1 = ct_dd_udc1_new();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 
-	ercd = DDIM_User_Get_Tim(&S_GCT_DD_UDC_TIM_UTIL_END);
+	ercd = ddim_user_custom_get_tim(ddimUserCus, &S_GCT_DD_UDC_TIM_UTIL_END);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("UDC utility function: get end time NG. ercd=%d\n", ercd));
 		return;
@@ -704,19 +727,24 @@ void ct_dd_udc_utility_callback(kuchar ch)
 	return;
 	k_object_unref(cdUdc1);
 	cdUdc1 = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
 }
 
 /**
 Callback function for UDCR observer.
 */
-void ct_dd_udc_observe_udcr(void)
+void ctDdUdcObserveUdcr_cd(void)
 {
-	CtDdUdc1 *cdUdc1 = ct_dd_udc1_new();
+	DdUdc *		ddUdc = dd_udc_get();
+	CtDdUdc1 *	cdUdc1 = ct_dd_udc1_new();
 	Ddim_Print((
 		"[Observer] (Ch=%d) (UDCR=%d)\n", 
 		ct_dd_udc1_get_obs_ch(cdUdc1), 
-		Dd_UDC_Get_UDCR_Counter(ct_dd_udc1_get_obs_ch(cdUdc1))
+		dd_udc_get_udcr_counter(ddUdc, ct_dd_udc1_get_obs_ch(cdUdc1))
 	));
+	k_object_unref(ddUdc);
+	ddUdc = NULL;
 	k_object_unref(cdUdc1);
 	cdUdc1 = NULL;
 }
@@ -724,7 +752,7 @@ void ct_dd_udc_observe_udcr(void)
 /**
 Start 32bit timer
 */
-kint32 ct_dd_udc_start_timer32(CtDdUdc *self, kulong interval, VP_CALLBACK cbFunc)
+kint32 ct_dd_udc_start_timer32(CtDdUdc *self, kulong interval, VpCallback cbFunc)
 {
 	kint32 ercd;
 
@@ -763,8 +791,13 @@ Stop 32bit timer
 */
 void ct_dd_udc_stop_timer32(CtDdUdc *self)
 {
-	Dd_TMR32_Stop(self->tmrCh);
-	Dd_TMR32_Close(self->tmrCh);
+	DdTmr32 *ddTmr32 = dd_tmr32_get();
+
+	dd_tmr32_stop(ddTmr32, self->tmrCh);
+	dd_tmr32_close(ddTmr32, self->tmrCh);
+
+	k_object_unref(ddTmr32);
+	ddTmr32 = NULL;
 }
 
 /**
@@ -772,14 +805,14 @@ Start virtual AIN input timer.
 */
 kint32 ct_dd_udc_start_virtual_ain(CtDdUdc *self, kuchar udcCh, kulong tmrInterval)
 {
-	DdimUserCustom_ER	ercd;
+	kint32	ercd;
 
 	self->gctDdUdcAinCh = udcCh; // UDC channel number
 	CtDdUdcPrivate *priv = CT_DD_UDC_GET_PRIVATE(self);
 
 	// Start timer
 	priv->cdUdc->tmrCh = self->tmrChA;
-	ercd = (DdimUserCustom_ER)ct_dd_udc_start_timer32(
+	ercd = (kint32)ct_dd_udc_start_timer32(
 		priv->cdUdc, 
 		tmrInterval, 
 		ctDdUdcSinHandler
@@ -790,7 +823,7 @@ kint32 ct_dd_udc_start_virtual_ain(CtDdUdc *self, kuchar udcCh, kulong tmrInterv
 		return((kint32)ercd);
 	}
 	// Save start time
-	ercd = DDIM_User_Get_Tim(&S_GCT_DD_UDC_TIM_A_STA);
+	ercd = ddim_user_custom_get_tim(priv->ddimUserCus, &S_GCT_DD_UDC_TIM_A_STA);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_start_virtual_ain(): get_tim NG. ercd=%d\n", ercd));
 		return((kint32)ercd);
@@ -813,21 +846,21 @@ Start virtual BIN input timer.
 */
 kint32 ct_dd_udc_start_virtual_bin(CtDdUdc *self, kuchar udcCh, kulong tmrInterval)
 {
-	DdimUserCustom_ER	ercd;
+	kint32			ercd;
 	CtDdUdcPrivate *priv = CT_DD_UDC_GET_PRIVATE(self);
 
 	// Check UDCTRG setting
 	if ((DdTopothree_GET_PERSEL2_UDCTRG() == 1) && ((udcCh == 2) || (udcCh == 3))) {
 		Ddim_Print((
 			"ct_dd_udc_start_virtual_bin(): UDCTRG setting error. BIN can't use in ch2~3.\n"));
-		return D_DD_UDC_INPUT_PARAM_ERROR;
+		return DdUdc_INPUT_PARAM_ERROR;
 	}
 
 	self->gctDdUdcBinCh = udcCh; // UDC channel number
 
 	// Start timer
 	priv->cdUdc->tmrCh = self->tmrChB;
-	ercd = (DdimUserCustom_ER)ct_dd_udc_start_timer32(
+	ercd = (kint32)ct_dd_udc_start_timer32(
 		priv->cdUdc, 
 		tmrInterval, 
 		ctDdUdcBinHandler
@@ -838,7 +871,7 @@ kint32 ct_dd_udc_start_virtual_bin(CtDdUdc *self, kuchar udcCh, kulong tmrInterv
 		return((kint32)ercd);
 	}
 	// Save start time
-	ercd = DDIM_User_Get_Tim(&S_GCT_DD_UDC_TIM_B_STA);
+	ercd = ddim_user_custom_get_tim(priv->ddimUserCus, &S_GCT_DD_UDC_TIM_B_STA);
 	if (ercd != DdimUserCustom_E_OK) {
 		Ddim_Print(("ct_dd_udc_start_virtual_bin(): get_tim NG. ercd=%d\n", ercd));
 		return((kint32)ercd);
@@ -853,25 +886,26 @@ void ct_dd_udc_stop_virtual_bin(CtDdUdc *self)
 {
 	CtDdUdcPrivate *priv = CT_DD_UDC_GET_PRIVATE(self);
 	priv->cdUdc->tmrCh = self->tmrChB;
+	
 	ct_dd_udc_stop_timer32(priv->cdUdc);
 }
 
 /**
-Print T_DD_UDC_CTRL_CMN data.
+Print DdUdcCtrlCmn data.
 */
-void ct_dd_udc_print_crl_common(CtDdUdc *self, T_DD_UDC_CTRL_CMN const* const udcCrl)
+void ct_dd_udc_print_crl_common(CtDdUdc *self, DdUdcCtrlCmn const* const udcCrl)
 {
-	Ddim_Print(("---- T_DD_UDC_CTRL_CMN(Ch%d) ----\n", self->ch));
+	Ddim_Print(("---- DdUdcCtrlCmn(Ch%d) ----\n", self->ch));
 	Ddim_Print(("UDCR     = 0x%x\n", udcCrl->udcr		));
 	Ddim_Print(("RCR      = 0x%x\n", udcCrl->rcr		));
-	Ddim_Print(("CCR.CMS  = 0x%x\n", udcCrl->count_mode	));
-	Ddim_Print(("CCR.UCRE = 0x%x\n", udcCrl->comp_clear	));
+	Ddim_Print(("CCR.CMS  = 0x%x\n", udcCrl->countMode	));
+	Ddim_Print(("CCR.UCRE = 0x%x\n", udcCrl->compClear	));
 	Ddim_Print(("CCR.RLDE = 0x%x\n", udcCrl->reload		));
-	Ddim_Print(("CCR.CGSC = 0x%x\n", udcCrl->zin_mode	));
-	Ddim_Print(("CCR.CGE  = 0x%x\n", udcCrl->zin_edge	));
-	Ddim_Print(("CSR.CITE = 0x%x\n", udcCrl->cmp_int	));
-	Ddim_Print(("CSR.UDIE = 0x%x\n", udcCrl->under_over	));
-	Ddim_Print(("CCR.CFIE = 0x%x\n", udcCrl->cnt_dir_int));
+	Ddim_Print(("CCR.CGSC = 0x%x\n", udcCrl->zinMode	));
+	Ddim_Print(("CCR.CGE  = 0x%x\n", udcCrl->zinEdge	));
+	Ddim_Print(("CSR.CITE = 0x%x\n", udcCrl->cmpInt	));
+	Ddim_Print(("CSR.UDIE = 0x%x\n", udcCrl->underOver	));
+	Ddim_Print(("CCR.CFIE = 0x%x\n", udcCrl->cntDirInt));
 	Ddim_Print(("udcCrl.pCallBack = %p\n", udcCrl->pCallBack));
 	Ddim_Print(("---------------------------------\n"));
 }

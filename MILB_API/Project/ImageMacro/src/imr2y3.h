@@ -50,53 +50,53 @@ ImR2y3*		        im_r2y3_new(void);
 @section im_r2y_iq_sample_section1	Sample code of data setting for White Balance Gain.
 	The precondition of the this sample is as follows.<br>
 	@code
-	T_IM_R2Y_RGB_COLOR r2y_wb;
+	R2yRgbColor r2y_wb;
 	FLGPTN flgptn;
 
 	r2y_wb.R = 400;
 	r2y_wb.G = 256;
 	r2y_wb.B = 480;
 
-	im_r2y_ctrl2_set_wb_gain( D_IM_R2Y_PIPE1, &r2y_wb );
+	im_r2y_ctrl2_set_wb_gain( ImR2yCtrl_PIPE1, &r2y_wb );
 
 	r2y_wb.R = 0xFFF;
 	r2y_wb.G = 0xFFF;
 	r2y_wb.B = 0xFFF;
 
-	im_r2y_ctrl2_set_wb_clip_level( D_IM_R2Y_PIPE1, &r2y_wb );
+	im_r2y_ctrl2_set_wb_clip_level( ImR2yCtrl_PIPE1, &r2y_wb );
 
-	im_r2y_proc_start(im_r2y_proc_new(),  D_IM_R2Y_PIPE1 );
-	im_r2y_proc_waitend(im_r2y_proc_new(),  &flgptn, (D_IM_R2Y1_INT_STATE_YYW0_END | D_IM_R2Y1_INT_STATE_YYW_ERR), 1000 );
+	im_r2y_proc_start(im_r2y_proc_new(),  ImR2yCtrl_PIPE1 );
+	im_r2y_proc_waitend(im_r2y_proc_new(),  &flgptn, (ImR2yCtrl_INT_STATE_YYW0_END1 | ImR2yCtrl_INT_STATE_YYW_ERR1), 1000 );
 	@endcode
 	<br><br>
 
 @section im_r2y_iq_sample_section2	Sample code of data setting for imaging.
 	@code
 
-	T_IM_R2Y_OFS r2y_ctrl_ofs;
-	T_IM_R2Y_CTRL_MULTI_AXIS r2y_ctrl_multi_axis;
-	T_IM_R2Y_TCOF r2y_ctrl_btc_offset;
-	T_IM_R2Y_TCT r2y_ctrl_btc_tct;
-	T_IM_R2Y_TCHS r2y_ctrl_btc_tchs;
-	T_IM_R2Y_CTRL_TONE r2y_ctrl_tone;
-	T_IM_R2Y_CTRL_GAMMA r2y_ctrl_gamma;
-	T_IM_R2Y_CTRL_YNR r2y_ctrl_ynr;
-	T_IM_R2Y_CTRL_EDGE_CMN r2y_ctrl_edge_cmn;
-	T_IM_R2Y_CTRL_HEDGE r2y_ctrl_high_edge;
-	T_IM_R2Y_CTRL_MEDGE r2y_ctrl_medium_edge;
-	T_IM_R2Y_CTRL_LEDGE r2y_ctrl_low_edge;
-	T_IM_R2Y_CTRL_EDGE_DOT_NOISE r2y_ctrl_edge_dot_noise;
-	T_IM_R2Y_CTRL_MAPSCL r2y_ctrl_mapscl;
-	T_IM_R2Y_CTRL_EDGE_BLEND r2y_ctrl_edge_blend;
-	T_IM_R2Y_CTRL_C_REF_EDGE_TEXTURE_ADJ_COMMON r2y_ctrl_edge_texture;
-	T_IM_R2Y_CTRL_C_REF_EDGE_ADJ r2y_ctrl_edge_adj;
-	T_IM_R2Y_CTRL_C_REF_YB_BLEND r2y_ctrl_yb_blend;
-	T_IM_R2Y_CTRL_CLPF r2y_ctrl_clpf;
-	T_IM_R2Y_CTRL_CS r2y_ctrl_cs;
+	ImR2yCtrlOfs r2y_ctrl_ofs;
+	CtrlMultiAxis r2y_ctrl_multi_axis;
+	TImR2yTcof r2y_ctrl_btc_offset;
+	TImR2yTct r2y_ctrl_btc_tct;
+	TImR2yTchs r2y_ctrl_btc_tchs;
+	ImR2yCtrlTone r2y_ctrl_tone;
+	ImR2yCtrlGamma r2y_ctrl_gamma;
+	R2yCtrlYnr r2y_ctrl_ynr;
+	CtrlEdgeCmn r2y_ctrl_edge_cmn;
+	R2yCtrlHedge r2y_ctrl_high_edge;
+	R2yCtrlMedge r2y_ctrl_medium_edge;
+	R2yCtrlLedge r2y_ctrl_low_edge;
+	CtrlEdgeDotNoise r2y_ctrl_edge_dot_noise;
+	R2yCtrlMapScl r2y_ctrl_mapscl;
+	CtrlEdgeBlend r2y_ctrl_edge_blend;
+	CtrlCrefEdgeTexture r2y_ctrl_edge_texture;
+	CtrlCrefEdgeAdj r2y_ctrl_edge_adj;
+	CtrlCrefYbBlend r2y_ctrl_yb_blend;
+	R2yCtrlClpf r2y_ctrl_clpf;
+	R2yCtrlCs r2y_ctrl_cs;
 
 	UINT32	loop_cnt, loop_cnt2;
 
-	const USHORT gTone_Tbl[D_IM_R2Y_TABLE_MAX_TONE] = {
+	const kuint16 gTone_Tbl[ImR2yCtrl_TABLE_MAX_TONE] = {
 		 279,  292,  305,  318,  331,  344,  357,  370,  383,  396,  409,  423,  436,  450,  463,  477,
 		 491,  506,  520,  534,  548,  563,  577,  591,  605,  619,  633,  646,  659,  672,  685,  697,
 		 709,  720,  731,  742,  751,  761,  770,  778,  786,  794,  801,  808,  814,  820,  826,  832,
@@ -163,7 +163,7 @@ ImR2y3*		        im_r2y3_new(void);
 		1025, 1025, 1025, 1025, 1025, 1025, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024,
 	};
 
-	const USHORT gGamma_Tbl[D_IM_R2Y_TABLE_MAX_GAMMA] = {
+	const kuint16 gGamma_Tbl[ImR2yCtrl_TABLE_MAX_GAMMA] = {
 		  0,   1,   3,   4,   5,   7,   8,   9,  10,  12,  13,  14,  15,  16,  17,  18,
 		 20,  21,  21,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,
 		 36,  37,  38,  38,  39,  40,  41,  42,  43,  44,  45,  46,  46,  47,  48,  49,
@@ -230,7 +230,7 @@ ImR2y3*		        im_r2y3_new(void);
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	};
 
-	const ULLONG gGamma_Diff_Tbl[D_IM_R2Y_TABLE_MAX_GAMMA] = {
+	const ULLONG gGamma_Diff_Tbl[ImR2yCtrl_TABLE_MAX_GAMMA] = {
 		  0,   1,   3,   4,   5,   7,   8,   9,  10,  12,  13,  14,  15,  16,  17,  18,
 		 20,  21,  21,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,
 		 36,  37,  38,  38,  39,  40,  41,  42,  43,  44,  45,  46,  46,  47,  48,  49,
@@ -297,7 +297,7 @@ ImR2y3*		        im_r2y3_new(void);
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	}
 
-	static const UCHAR gHE_SCL_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_HI] = {
+	static const kuint16 gHE_SCL_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_SCALE_HI] = {
 	// Plus
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -335,7 +335,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192,
 	};
 
-	static const USHORT gHE_STEP_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_HI] = {
+	static const kuint16 gHE_STEP_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_TC_HI] = {
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -354,7 +354,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 158, 157, 157, 156, 155, 154, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144,
 	};
 
-	static const UCHAR gME_SCL_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM] = {
+	static const kuint16 gME_SCL_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_SCALE_MEDIUM] = {
 	// Plus
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -392,7 +392,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192,
 	};
 
-	static const USHORT gME_STEP_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM] = {
+	static const kuint16 gME_STEP_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_TC_MEDIUM] = {
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -411,7 +411,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 158, 157, 157, 156, 155, 154, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144,
 	};
 
-	static const UCHAR gLE_SCL_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO] = {
+	static const kuint16 gLE_SCL_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_SCALE_LO] = {
 	// Plus
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -449,7 +449,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192, 192,
 	};
 
-	static const USHORT gLE_STEP_Tbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_LO] = {
+	static const kuint16 gLE_STEP_Tbl[ImR2yCtrl_TABLE_MAX_EDGE_TC_LO] = {
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
 		 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207, 207,
@@ -468,7 +468,7 @@ ImR2y3*		        im_r2y3_new(void);
 		 158, 157, 157, 156, 155, 154, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144,
 	};
 
-	static const USHORT gMAP_SCL_Tbl[12][16] = {
+	static const kuint16 gMAP_SCL_Tbl[12][16] = {
 		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
 		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
 		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
@@ -491,18 +491,18 @@ ImR2y3*		        im_r2y3_new(void);
 	r2y_ctrl_ofs.G = 0;
 	r2y_ctrl_ofs.B = 0;
 
-	im_r2y_set_offset( D_IM_R2Y_PIPE1, &r2y_ctrl_ofs );
+	im_r2y_set_offset( ImR2yCtrl_PIPE1, &r2y_ctrl_ofs );
 
 	// MCYC00~MCYC22
-	r2y_ctrl_multi_axis.cyc_coeff[0] = 0x4D;
-	r2y_ctrl_multi_axis.cyc_coeff[1] = 0x96;
-	r2y_ctrl_multi_axis.cyc_coeff[2] = 0x1D;
-	r2y_ctrl_multi_axis.cyc_coeff[3] = 0x1D5;
-	r2y_ctrl_multi_axis.cyc_coeff[4] = 0x1AB;
-	r2y_ctrl_multi_axis.cyc_coeff[5] = 0x80;
-	r2y_ctrl_multi_axis.cyc_coeff[6] = 0x80;
-	r2y_ctrl_multi_axis.cyc_coeff[7] = 0x195;
-	r2y_ctrl_multi_axis.cyc_coeff[8] = 0x1EB;
+	r2y_ctrl_multi_axis.cycCoeff[0] = 0x4D;
+	r2y_ctrl_multi_axis.cycCoeff[1] = 0x96;
+	r2y_ctrl_multi_axis.cycCoeff[2] = 0x1D;
+	r2y_ctrl_multi_axis.cycCoeff[3] = 0x1D5;
+	r2y_ctrl_multi_axis.cycCoeff[4] = 0x1AB;
+	r2y_ctrl_multi_axis.cycCoeff[5] = 0x80;
+	r2y_ctrl_multi_axis.cycCoeff[6] = 0x80;
+	r2y_ctrl_multi_axis.cycCoeff[7] = 0x195;
+	r2y_ctrl_multi_axis.cycCoeff[8] = 0x1EB;
 
 	// MCB1A~MCB4D
 	memset( r2y_ctrl_multi_axis.boundary, 0, 32 );
@@ -510,135 +510,135 @@ ImR2y3*		        im_r2y3_new(void);
 	// MCID1A~MCID4E
 	for (loop_cnt = 0; loop_cnt < 4; loop_cnt++) {
 		for (loop_cnt2 = 0; loop_cnt2 < 5; loop_cnt2++) {
-			r2y_ctrl_multi_axis.area_index[loop_cnt][loop_cnt2] = 0;
+			r2y_ctrl_multi_axis.areaIndex[loop_cnt][loop_cnt2] = 0;
 		}
 	}
 
 	// MCKA_0_00~MCKA_4_22
-	r2y_ctrl_multi_axis.area_a_k[0][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[0][0][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[0][0][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[0][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[0][1][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[0][1][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[0][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[0][2][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[0][2][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[1][0][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][0][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[1][1][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][1][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[1][2][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[1][2][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[2][0][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][0][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[2][1][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][1][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[2][2][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[2][2][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[3][0][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][0][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[3][1][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][1][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[3][2][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[3][2][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[4][0][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][0][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[4][1][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][1][2] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_k[4][2][1] = 0;
-	r2y_ctrl_multi_axis.area_a_k[4][2][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[0][0][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][0][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[0][1][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][1][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[0][2][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[0][2][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[1][0][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][0][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[1][1][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][1][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[1][2][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[1][2][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[2][0][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][0][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[2][1][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][1][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[2][2][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[2][2][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[3][0][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][0][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[3][1][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][1][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[3][2][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[3][2][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[4][0][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][0][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[4][1][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][1][2] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAK[4][2][1] = 0;
+	r2y_ctrl_multi_axis.areaAK[4][2][2] = 0;
 
 	// MCLA_0_00~MCLA_4_21
-	r2y_ctrl_multi_axis.area_a_l[0][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[0][0][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[0][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[0][1][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[0][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[0][2][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][0][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][1][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[1][2][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][0][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][1][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[2][2][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][0][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][1][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[3][2][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][0][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][0][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][1][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][1][1] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][2][0] = 1024;
-	r2y_ctrl_multi_axis.area_a_l[4][2][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][0][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][1][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[0][2][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][0][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][1][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[1][2][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][0][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][1][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[2][2][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][0][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][1][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[3][2][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][0][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][0][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][1][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][1][1] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][2][0] = 1024;
+	r2y_ctrl_multi_axis.areaAL[4][2][1] = 1024;
 
 	// MCKB_0_00~MCKB_4_22, MCLB_0_00~MCKB_4_21
-	memcpy( r2y_ctrl_multi_axis.area_b_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_b_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaBK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaBL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKC_0_00~MCKC_4_22, MCLC_0_00~MCKC_4_21
-	memcpy( r2y_ctrl_multi_axis.area_c_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_c_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaCK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaCL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKD_0_00~MCKD_4_22, MCLD_0_00~MCKD_4_21
-	memcpy( r2y_ctrl_multi_axis.area_d_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_d_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaDK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaDL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKE_0_00~MCKE_4_22, MCLE_0_00~MCKE_4_21
-	memcpy( r2y_ctrl_multi_axis.area_e_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_e_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaEK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaEL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKF_0_00~MCKF_4_22, MCLF_0_00~MCKF_4_21
-	memcpy( r2y_ctrl_multi_axis.area_f_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_f_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaFK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaFL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKG_0_00~MCKG_4_22, MCLG_0_00~MCKG_4_21
-	memcpy( r2y_ctrl_multi_axis.area_g_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_g_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaGK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaGL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKH_0_00~22, MCLH_0_00~21
-	memcpy( r2y_ctrl_multi_axis.area_h_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_h_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaHK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaHL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKI_0_00~22, MCLI_0_00~21
-	memcpy( r2y_ctrl_multi_axis.area_i_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_i_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaIK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaIL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKJ_0_00~22, MCLJ_0_00~21
-	memcpy( r2y_ctrl_multi_axis.area_j_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_j_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaJK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaJL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKK_0_00~22, MCLK_0_00~21
-	memcpy( r2y_ctrl_multi_axis.area_k_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_k_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaKK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaKL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCKL_0_00~22, MCLL_0_00~21
-	memcpy( r2y_ctrl_multi_axis.area_l_k, r2y_ctrl_multi_axis.area_a_k, sizeof(r2y_ctrl_multi_axis.area_a_k) );
-	memcpy( r2y_ctrl_multi_axis.area_l_l, r2y_ctrl_multi_axis.area_a_l, sizeof(r2y_ctrl_multi_axis.area_a_l) );
+	memcpy( r2y_ctrl_multi_axis.areaLK, r2y_ctrl_multi_axis.areaAK, sizeof(r2y_ctrl_multi_axis.areaAK) );
+	memcpy( r2y_ctrl_multi_axis.areaLL, r2y_ctrl_multi_axis.areaAL, sizeof(r2y_ctrl_multi_axis.areaAL) );
 
 	// MCYCBALP.MCYCBALP
-	r2y_ctrl_multi_axis.cyc_alpha_blend = 0;
+	r2y_ctrl_multi_axis.cycAlphaBlend = 0;
 
 	// MCYCBOF
 	r2y_ctrl_multi_axis.cyc_blend_offset[0] = 0;
@@ -646,48 +646,48 @@ ImR2y3*		        im_r2y3_new(void);
 	r2y_ctrl_multi_axis.cyc_blend_offset[2] = 0;
 
 	// MCYCBGA
-	r2y_ctrl_multi_axis.cyc_blend_gain[0] = 0;
-	r2y_ctrl_multi_axis.cyc_blend_gain[1] = 0;
-	r2y_ctrl_multi_axis.cyc_blend_gain[2] = 0;
+	r2y_ctrl_multi_axis.cycBlendGain[0] = 0;
+	r2y_ctrl_multi_axis.cycBlendGain[1] = 0;
+	r2y_ctrl_multi_axis.cycBlendGain[2] = 0;
 
 	// MCYCBGA
-	r2y_ctrl_multi_axis.cyc_blend_border[0] = 0;
-	r2y_ctrl_multi_axis.cyc_blend_border[1] = 0;
+	r2y_ctrl_multi_axis.cycBlendBorder[0] = 0;
+	r2y_ctrl_multi_axis.cycBlendBorder[1] = 0;
 
-	im_r2y_ctrl4_multi_axis( D_IM_R2Y_PIPE1, &r2y_ctrl_multi_axis );
+	im_r2y_ctrl4_multi_axis( ImR2yCtrl_PIPE1, &r2y_ctrl_multi_axis );
 
 	// BTC
 	r2y_ctrl_btc_offset.R = 0;
 	r2y_ctrl_btc_offset.G = 0;
 	r2y_ctrl_btc_offset.B = 0;
 	r2y_ctrl_btc_offset.Yb = 0;
-	r2y_ctrl_btc_tct.tct_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_btc_tct.start_x = 0;
-	r2y_ctrl_btc_tct.start_y = 0;
-	r2y_ctrl_btc_tct.block_hsiz = 8;
-	r2y_ctrl_btc_tct.block_vsiz = 8;
-	r2y_ctrl_btc_tct.block_hnum = 2;
-	r2y_ctrl_btc_tct.block_vnum = 2;
-	r2y_ctrl_btc_tchs.hist_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_btc_tchs.sampling_hcyc = D_IM_R2Y_HIST_HCYC_4;
-	r2y_ctrl_btc_tchs.sampling_vcyc = D_IM_R2Y_HIST_VCYC_1;
-	r2y_ctrl_btc_tchs.histogram_mode = D_IM_R2Y_HIST_BIT_WIDTH_7_0;
-	r2y_ctrl_btc_tchs.hist_minus_mode = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_btc_tchs.tchs_window.img_top = 0;
-	r2y_ctrl_btc_tchs.tchs_window.img_left = 0;
-	r2y_ctrl_btc_tchs.tchs_window.img_width = 2;
-	r2y_ctrl_btc_tchs.tchs_window.img_lines = 1;
+	r2y_ctrl_btc_tct.tctEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_btc_tct.startX = 0;
+	r2y_ctrl_btc_tct.startY = 0;
+	r2y_ctrl_btc_tct.blockHsiz = 8;
+	r2y_ctrl_btc_tct.blockVsiz = 8;
+	r2y_ctrl_btc_tct.blockHnum = 2;
+	r2y_ctrl_btc_tct.blockVnum = 2;
+	r2y_ctrl_btc_tchs.histEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_btc_tchs.samplingHcyc = ImR2yCtrl_HIST_HCYC_4;
+	r2y_ctrl_btc_tchs.samplingVcyc = ImR2yCtrl_HIST_VCYC_1;
+	r2y_ctrl_btc_tchs.histogramMode = ImR2yCtrl_HIST_BIT_WIDTH_7_0;
+	r2y_ctrl_btc_tchs.histMinusMode = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_btc_tchs.tchsWindow.imgTop = 0;
+	r2y_ctrl_btc_tchs.tchsWindow.imgLeft = 0;
+	r2y_ctrl_btc_tchs.tchsWindow.imgWidth = 2;
+	r2y_ctrl_btc_tchs.tchsWindow.imgLines = 1;
 
-	im_r2y_ctrl2_before_tone_offset( D_IM_R2Y_PIPE1, &r2y_ctrl_btc_offset );
-	im_r2y_ctrl2_before_tone_tct( D_IM_R2Y_PIPE1, &r2y_ctrl_btc_tct );
-	im_r2y_ctrl2_before_tone_tchs( D_IM_R2Y_PIPE1, &r2y_ctrl_btc_tchs );
+	im_r2y_ctrl2_before_tone_offset( ImR2yCtrl_PIPE1, &r2y_ctrl_btc_offset );
+	im_r2y_ctrl2_before_tone_tct( ImR2yCtrl_PIPE1, &r2y_ctrl_btc_tct );
+	im_r2y_ctrl2_before_tone_tchs( ImR2yCtrl_PIPE1, &r2y_ctrl_btc_tchs );
 
-	r2y_ctrl_tone.tone_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_tone.tone_y_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_tone.table_blend_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_tone.table_resol = D_IM_R2Y_TC_RESOLUTION_1024;
+	r2y_ctrl_tone.tone_enable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_tone.tone_y_enable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_tone.table_blend_enable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_tone.table_resol = ImR2yCtrl_TC_RESOLUTION_1024;
 	r2y_ctrl_tone.table_select = 0;
-	r2y_ctrl_tone.ytc_out = D_IM_R2Y_ENABLE_OFF;
+	r2y_ctrl_tone.ytc_out = ImR2yCtrl_ENABLE_OFF;
 	r2y_ctrl_tone.int_bit = 0;
 	r2y_ctrl_tone.table_blend_ratio = 0;
 	r2y_ctrl_tone.yc_matrix[0] = 77;
@@ -697,23 +697,23 @@ ImR2y3*		        im_r2y3_new(void);
 	r2y_ctrl_tone.table_endp[1] = 0;
 	r2y_ctrl_tone.table_endp[2] = 0;
 	r2y_ctrl_tone.table_endp[3] = 0;
-	r2y_ctrl_tone.clip_p_r = 0xFFF;
-	r2y_ctrl_tone.clip_m_r = 0xFFF;
-	r2y_ctrl_tone.clip_p_g = 0xFFF;
-	r2y_ctrl_tone.clip_m_g = 0xFFF;
-	r2y_ctrl_tone.clip_p_b = 0xFFF;
-	r2y_ctrl_tone.clip_m_b = 0xFFF;
+	r2y_ctrl_tone.clipPR = 0xFFF;
+	r2y_ctrl_tone.clipMR = 0xFFF;
+	r2y_ctrl_tone.clipPG = 0xFFF;
+	r2y_ctrl_tone.clipMG = 0xFFF;
+	r2y_ctrl_tone.clipPB = 0xFFF;
+	r2y_ctrl_tone.clipMB = 0xFFF;
 
-	im_r2y_ctrl_tone( D_IM_R2Y_PIPE1, &r2y_ctrl_tone );
+	im_r2y_ctrl_tone( ImR2yCtrl_PIPE1, &r2y_ctrl_tone );
 
-	r2y_ctrl_gamma.gamma_enable = D_IM_R2Y_ENABLE_ON;
-	r2y_ctrl_gamma.gamma_mode = D_IM_R2Y_GAMMA_MODE_12;
-	r2y_ctrl_gamma.gamma_yb_tbl_simul = D_IM_R2Y_ENABLE_OFF;
+	r2y_ctrl_gamma.gammaEnable = ImR2yCtrl_ENABLE_ON;
+	r2y_ctrl_gamma.gammaMode = ImR2yCtrl_GAMMA_MODE_12;
+	r2y_ctrl_gamma.gammaYbTblSimul = ImR2yCtrl_ENABLE_OFF;
 
-	im_r2y_ctrl2_gamma(im_r2y_ctrl2_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_gamma );
+	im_r2y_ctrl2_gamma(im_r2y_ctrl2_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_gamma );
 
-	r2y_ctrl_ynr.nr_mode = 1;
-	r2y_ctrl_ynr.blend_ratio = 0;
+	r2y_ctrl_ynr.nrMode = 1;
+	r2y_ctrl_ynr.blendRatio = 0;
 	r2y_ctrl_ynr.offset[0] = 0;
 	r2y_ctrl_ynr.offset[1] = 0;
 	r2y_ctrl_ynr.offset[2] = 0;
@@ -726,335 +726,335 @@ ImR2y3*		        im_r2y3_new(void);
 	r2y_ctrl_ynr.border[1] = 0;
 	r2y_ctrl_ynr.border[2] = 0;
 
-	im_r2y_ctrl2_ynr(im_r2y_ctrl2_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_ynr );
+	im_r2y_ctrl2_ynr(im_r2y_ctrl2_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_ynr );
 
-	r2y_ctrl_edge_cmn.reduction_mode = D_IM_R2Y_EGSMT_VERSION1;
+	r2y_ctrl_edge_cmn.reductionMode = ImR2yCtrl_EGSMT_VERSION1;
 	r2y_ctrl_edge_cmn.threshold = 0x10;
 	r2y_ctrl_edge_cmn.texture_priority = 0x10;
 
-	im_r2y_edge_noise_reduction(im_r2y_edge_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_edge_cmn );
+	im_r2y_edge_noise_reduction(im_r2y_edge_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_edge_cmn );
 
-	r2y_ctrl_high_edge.edge_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_high_edge.scale_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_high_edge.table_clip_select = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_high_edge.scale_table_resol = 0;
-	r2y_ctrl_high_edge.scale_table_select = 0;
-	r2y_ctrl_high_edge.gradation_table_resol = 0;
-	r2y_ctrl_high_edge.gradation_table_select = 0;
-	r2y_ctrl_high_edge.nr_level = 0;
-	r2y_ctrl_high_edge.hpf_k[0] = 0x100;
-	r2y_ctrl_high_edge.hpf_k[1] = 0xC0;
-	r2y_ctrl_high_edge.hpf_k[2] = 0;
-	r2y_ctrl_high_edge.hpf_k[3] = 0;
-	r2y_ctrl_high_edge.hpf_k[4] = 0;
-	r2y_ctrl_high_edge.hpf_k[5] = 0;
-	r2y_ctrl_high_edge.corp_offset[0] = 0;
-	r2y_ctrl_high_edge.corp_offset[1] = 0;
-	r2y_ctrl_high_edge.corp_offset[2] = 0;
-	r2y_ctrl_high_edge.corp_offset[3] = 0;
-	r2y_ctrl_high_edge.corp_gain[0] = 0;
-	r2y_ctrl_high_edge.corp_gain[1] = 0;
-	r2y_ctrl_high_edge.corp_gain[2] = 0;
-	r2y_ctrl_high_edge.corp_gain[3] = 0;
-	r2y_ctrl_high_edge.corp_border[0] = 0;
-	r2y_ctrl_high_edge.corp_border[1] = 0;
-	r2y_ctrl_high_edge.corp_border[2] = 0;
-	r2y_ctrl_high_edge.corm_offset[0] = 0;
-	r2y_ctrl_high_edge.corm_offset[1] = 0;
-	r2y_ctrl_high_edge.corm_offset[2] = 0;
-	r2y_ctrl_high_edge.corm_offset[3] = 0;
-	r2y_ctrl_high_edge.corm_gain[0] = 0;
-	r2y_ctrl_high_edge.corm_gain[1] = 0;
-	r2y_ctrl_high_edge.corm_gain[2] = 0;
-	r2y_ctrl_high_edge.corm_gain[3] = 0;
-	r2y_ctrl_high_edge.corm_border[0] = 0;
-	r2y_ctrl_high_edge.corm_border[1] = 0;
-	r2y_ctrl_high_edge.corm_border[2] = 0;
-	r2y_ctrl_high_edge.sup_scl = 0x10;
-	r2y_ctrl_high_edge.level_clip_p_offset[0] = 0;
-	r2y_ctrl_high_edge.level_clip_p_offset[1] = 0;
-	r2y_ctrl_high_edge.level_clip_p_offset[2] = 0x1FF;
-	r2y_ctrl_high_edge.level_clip_p_gain[0] = 0;
-	r2y_ctrl_high_edge.level_clip_p_gain[1] = 0;
-	r2y_ctrl_high_edge.level_clip_p_gain[2] = 0;
-	r2y_ctrl_high_edge.level_clip_p_border[0] = 0;
-	r2y_ctrl_high_edge.level_clip_p_border[1] = 0;
-	r2y_ctrl_high_edge.level_clip_m_offset[0] = 0;
-	r2y_ctrl_high_edge.level_clip_m_offset[1] = 0;
-	r2y_ctrl_high_edge.level_clip_m_offset[2] = 0x1FF;
-	r2y_ctrl_high_edge.level_clip_m_gain[0] = 0;
-	r2y_ctrl_high_edge.level_clip_m_gain[1] = 0;
-	r2y_ctrl_high_edge.level_clip_m_gain[2] = 0;
-	r2y_ctrl_high_edge.level_clip_m_border[0] = 0;
-	r2y_ctrl_high_edge.level_clip_m_border[1] = 0;
+	r2y_ctrl_high_edge.edgeEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_high_edge.scaleEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_high_edge.tableClipSelect = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_high_edge.scaleTableResol = 0;
+	r2y_ctrl_high_edge.scaleTableSelect = 0;
+	r2y_ctrl_high_edge.gradationTableResol = 0;
+	r2y_ctrl_high_edge.gradationTableSelect = 0;
+	r2y_ctrl_high_edge.nrLevel = 0;
+	r2y_ctrl_high_edge.hpfK[0] = 0x100;
+	r2y_ctrl_high_edge.hpfK[1] = 0xC0;
+	r2y_ctrl_high_edge.hpfK[2] = 0;
+	r2y_ctrl_high_edge.hpfK[3] = 0;
+	r2y_ctrl_high_edge.hpfK[4] = 0;
+	r2y_ctrl_high_edge.hpfK[5] = 0;
+	r2y_ctrl_high_edge.corpOffset[0] = 0;
+	r2y_ctrl_high_edge.corpOffset[1] = 0;
+	r2y_ctrl_high_edge.corpOffset[2] = 0;
+	r2y_ctrl_high_edge.corpOffset[3] = 0;
+	r2y_ctrl_high_edge.corpGain[0] = 0;
+	r2y_ctrl_high_edge.corpGain[1] = 0;
+	r2y_ctrl_high_edge.corpGain[2] = 0;
+	r2y_ctrl_high_edge.corpGain[3] = 0;
+	r2y_ctrl_high_edge.corpBorder[0] = 0;
+	r2y_ctrl_high_edge.corpBorder[1] = 0;
+	r2y_ctrl_high_edge.corpBorder[2] = 0;
+	r2y_ctrl_high_edge.cormOffset[0] = 0;
+	r2y_ctrl_high_edge.cormOffset[1] = 0;
+	r2y_ctrl_high_edge.cormOffset[2] = 0;
+	r2y_ctrl_high_edge.cormOffset[3] = 0;
+	r2y_ctrl_high_edge.cormGain[0] = 0;
+	r2y_ctrl_high_edge.cormGain[1] = 0;
+	r2y_ctrl_high_edge.cormGain[2] = 0;
+	r2y_ctrl_high_edge.cormGain[3] = 0;
+	r2y_ctrl_high_edge.cormBorder[0] = 0;
+	r2y_ctrl_high_edge.cormBorder[1] = 0;
+	r2y_ctrl_high_edge.cormBorder[2] = 0;
+	r2y_ctrl_high_edge.supScl = 0x10;
+	r2y_ctrl_high_edge.levelClipPOffset[0] = 0;
+	r2y_ctrl_high_edge.levelClipPOffset[1] = 0;
+	r2y_ctrl_high_edge.levelClipPOffset[2] = 0x1FF;
+	r2y_ctrl_high_edge.levelClipPGain[0] = 0;
+	r2y_ctrl_high_edge.levelClipPGain[1] = 0;
+	r2y_ctrl_high_edge.levelClipPGain[2] = 0;
+	r2y_ctrl_high_edge.levelClipPBorder[0] = 0;
+	r2y_ctrl_high_edge.levelClipPBorder[1] = 0;
+	r2y_ctrl_high_edge.levelClipMOffset[0] = 0;
+	r2y_ctrl_high_edge.levelClipMOffset[1] = 0;
+	r2y_ctrl_high_edge.levelClipMOffset[2] = 0x1FF;
+	r2y_ctrl_high_edge.levelClipMGain[0] = 0;
+	r2y_ctrl_high_edge.levelClipMGain[1] = 0;
+	r2y_ctrl_high_edge.levelClipMGain[2] = 0;
+	r2y_ctrl_high_edge.levelClipMBorder[0] = 0;
+	r2y_ctrl_high_edge.levelClipMBorder[1] = 0;
 
-	im_r2y_edge_high_edge(im_r2y_edge_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_high_edge );
+	im_r2y_edge_high_edge(im_r2y_edge_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_high_edge );
 
-	r2y_ctrl_medium_edge.edge_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_medium_edge.scale_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_medium_edge.table_clip_select = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_medium_edge.scale_table_resol = 0;
-	r2y_ctrl_medium_edge.scale_table_select = 0;
-	r2y_ctrl_medium_edge.gradation_table_resol = 0;
-	r2y_ctrl_medium_edge.gradation_table_select = 0;
-	r2y_ctrl_medium_edge.nr_level = 0;
-	r2y_ctrl_medium_edge.hpf_k[0] = 0x100;
-	r2y_ctrl_medium_edge.hpf_k[1] = 0xC0;
-	r2y_ctrl_medium_edge.hpf_k[2] = 0;
-	r2y_ctrl_medium_edge.hpf_k[3] = 0;
-	r2y_ctrl_medium_edge.hpf_k[4] = 0;
-	r2y_ctrl_medium_edge.hpf_k[5] = 0;
-	r2y_ctrl_medium_edge.corp_offset[0] = 0;
-	r2y_ctrl_medium_edge.corp_offset[1] = 0;
-	r2y_ctrl_medium_edge.corp_offset[2] = 0;
-	r2y_ctrl_medium_edge.corp_offset[3] = 0;
-	r2y_ctrl_medium_edge.corp_gain[0] = 0;
-	r2y_ctrl_medium_edge.corp_gain[1] = 0;
-	r2y_ctrl_medium_edge.corp_gain[2] = 0;
-	r2y_ctrl_medium_edge.corp_gain[3] = 0;
-	r2y_ctrl_medium_edge.corp_border[0] = 0;
-	r2y_ctrl_medium_edge.corp_border[1] = 0;
-	r2y_ctrl_medium_edge.corp_border[2] = 0;
-	r2y_ctrl_medium_edge.corm_offset[0] = 0;
-	r2y_ctrl_medium_edge.corm_offset[1] = 0;
-	r2y_ctrl_medium_edge.corm_offset[2] = 0;
-	r2y_ctrl_medium_edge.corm_offset[3] = 0;
-	r2y_ctrl_medium_edge.corm_gain[0] = 0;
-	r2y_ctrl_medium_edge.corm_gain[1] = 0;
-	r2y_ctrl_medium_edge.corm_gain[2] = 0;
-	r2y_ctrl_medium_edge.corm_gain[3] = 0;
-	r2y_ctrl_medium_edge.corm_border[0] = 0;
-	r2y_ctrl_medium_edge.corm_border[1] = 0;
-	r2y_ctrl_medium_edge.corm_border[2] = 0;
-	r2y_ctrl_medium_edge.sup_scl = 0x10;
-	r2y_ctrl_medium_edge.level_clip_p_offset[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_offset[1] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_offset[2] = 0x1FF;
-	r2y_ctrl_medium_edge.level_clip_p_gain[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_gain[1] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_gain[2] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_border[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_p_border[1] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_offset[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_offset[1] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_offset[2] = 0x1FF;
-	r2y_ctrl_medium_edge.level_clip_m_gain[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_gain[1] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_gain[2] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_border[0] = 0;
-	r2y_ctrl_medium_edge.level_clip_m_border[1] = 0;
+	r2y_ctrl_medium_edge.edgeEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_medium_edge.scaleEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_medium_edge.tableClipSelect = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_medium_edge.scaleTableResol = 0;
+	r2y_ctrl_medium_edge.scaleTableSelect = 0;
+	r2y_ctrl_medium_edge.gradationTableResol = 0;
+	r2y_ctrl_medium_edge.gradationTableSelect = 0;
+	r2y_ctrl_medium_edge.nrLevel = 0;
+	r2y_ctrl_medium_edge.hpfK[0] = 0x100;
+	r2y_ctrl_medium_edge.hpfK[1] = 0xC0;
+	r2y_ctrl_medium_edge.hpfK[2] = 0;
+	r2y_ctrl_medium_edge.hpfK[3] = 0;
+	r2y_ctrl_medium_edge.hpfK[4] = 0;
+	r2y_ctrl_medium_edge.hpfK[5] = 0;
+	r2y_ctrl_medium_edge.corpOffset[0] = 0;
+	r2y_ctrl_medium_edge.corpOffset[1] = 0;
+	r2y_ctrl_medium_edge.corpOffset[2] = 0;
+	r2y_ctrl_medium_edge.corpOffset[3] = 0;
+	r2y_ctrl_medium_edge.corpGain[0] = 0;
+	r2y_ctrl_medium_edge.corpGain[1] = 0;
+	r2y_ctrl_medium_edge.corpGain[2] = 0;
+	r2y_ctrl_medium_edge.corpGain[3] = 0;
+	r2y_ctrl_medium_edge.corpBorder[0] = 0;
+	r2y_ctrl_medium_edge.corpBorder[1] = 0;
+	r2y_ctrl_medium_edge.corpBorder[2] = 0;
+	r2y_ctrl_medium_edge.cormOffset[0] = 0;
+	r2y_ctrl_medium_edge.cormOffset[1] = 0;
+	r2y_ctrl_medium_edge.cormOffset[2] = 0;
+	r2y_ctrl_medium_edge.cormOffset[3] = 0;
+	r2y_ctrl_medium_edge.cormGain[0] = 0;
+	r2y_ctrl_medium_edge.cormGain[1] = 0;
+	r2y_ctrl_medium_edge.cormGain[2] = 0;
+	r2y_ctrl_medium_edge.cormGain[3] = 0;
+	r2y_ctrl_medium_edge.cormBorder[0] = 0;
+	r2y_ctrl_medium_edge.cormBorder[1] = 0;
+	r2y_ctrl_medium_edge.cormBorder[2] = 0;
+	r2y_ctrl_medium_edge.supScl = 0x10;
+	r2y_ctrl_medium_edge.levelClipPOffset[0] = 0;
+	r2y_ctrl_medium_edge.levelClipPOffset[1] = 0;
+	r2y_ctrl_medium_edge.levelClipPOffset[2] = 0x1FF;
+	r2y_ctrl_medium_edge.levelClipPGain[0] = 0;
+	r2y_ctrl_medium_edge.levelClipPGain[1] = 0;
+	r2y_ctrl_medium_edge.levelClipPGain[2] = 0;
+	r2y_ctrl_medium_edge.levelClipPBorder[0] = 0;
+	r2y_ctrl_medium_edge.levelClipPBorder[1] = 0;
+	r2y_ctrl_medium_edge.levelClipMOffset[0] = 0;
+	r2y_ctrl_medium_edge.levelClipMOffset[1] = 0;
+	r2y_ctrl_medium_edge.levelClipMOffset[2] = 0x1FF;
+	r2y_ctrl_medium_edge.levelClipMGain[0] = 0;
+	r2y_ctrl_medium_edge.levelClipMGain[1] = 0;
+	r2y_ctrl_medium_edge.levelClipMGain[2] = 0;
+	r2y_ctrl_medium_edge.levelClipMBorder[0] = 0;
+	r2y_ctrl_medium_edge.levelClipMBorder[1] = 0;
 
-	im_r2y_edge_medium_edge(im_r2y_edge_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_medium_edge );
+	im_r2y_edge_medium_edge(im_r2y_edge_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_medium_edge );
 
-	r2y_ctrl_low_edge.edge_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_low_edge.scale_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_low_edge.table_clip_select = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_low_edge.scale_table_resol = 0;
-	r2y_ctrl_low_edge.scale_table_select = 0;
-	r2y_ctrl_low_edge.gradation_table_resol = 0;
-	r2y_ctrl_low_edge.gradation_table_select = 0;
-	r2y_ctrl_low_edge.hpf_k[0] = 0x100;
-	r2y_ctrl_low_edge.hpf_k[1] = 0xC0;
-	r2y_ctrl_low_edge.hpf_k[2] = 0;
-	r2y_ctrl_low_edge.hpf_k[3] = 0;
-	r2y_ctrl_low_edge.hpf_k[4] = 0;
-	r2y_ctrl_low_edge.hpf_k[5] = 0;
-	r2y_ctrl_low_edge.hpf_k[6] = 0;
-	r2y_ctrl_low_edge.hpf_k[7] = 0;
-	r2y_ctrl_low_edge.hpf_k[8] = 0;
-	r2y_ctrl_low_edge.hpf_k[9] = 0;
-	r2y_ctrl_low_edge.corp_offset[0] = 0;
-	r2y_ctrl_low_edge.corp_offset[1] = 0;
-	r2y_ctrl_low_edge.corp_offset[2] = 0;
-	r2y_ctrl_low_edge.corp_offset[3] = 0;
-	r2y_ctrl_low_edge.corp_gain[0] = 0;
-	r2y_ctrl_low_edge.corp_gain[1] = 0;
-	r2y_ctrl_low_edge.corp_gain[2] = 0;
-	r2y_ctrl_low_edge.corp_gain[3] = 0;
-	r2y_ctrl_low_edge.corp_border[0] = 0;
-	r2y_ctrl_low_edge.corp_border[1] = 0;
-	r2y_ctrl_low_edge.corp_border[2] = 0;
-	r2y_ctrl_low_edge.corm_offset[0] = 0;
-	r2y_ctrl_low_edge.corm_offset[1] = 0;
-	r2y_ctrl_low_edge.corm_offset[2] = 0;
-	r2y_ctrl_low_edge.corm_offset[3] = 0;
-	r2y_ctrl_low_edge.corm_gain[0] = 0;
-	r2y_ctrl_low_edge.corm_gain[1] = 0;
-	r2y_ctrl_low_edge.corm_gain[2] = 0;
-	r2y_ctrl_low_edge.corm_gain[3] = 0;
-	r2y_ctrl_low_edge.corm_border[0] = 0;
-	r2y_ctrl_low_edge.corm_border[1] = 0;
-	r2y_ctrl_low_edge.corm_border[2] = 0;
-	r2y_ctrl_low_edge.sup_scl = 0x10;
-	r2y_ctrl_low_edge.level_clip_p_offset[0] = 0;
-	r2y_ctrl_low_edge.level_clip_p_offset[1] = 0;
-	r2y_ctrl_low_edge.level_clip_p_offset[2] = 0x1FF;
-	r2y_ctrl_low_edge.level_clip_p_gain[0] = 0;
-	r2y_ctrl_low_edge.level_clip_p_gain[1] = 0;
-	r2y_ctrl_low_edge.level_clip_p_gain[2] = 0;
-	r2y_ctrl_low_edge.level_clip_p_border[0] = 0;
-	r2y_ctrl_low_edge.level_clip_p_border[1] = 0;
-	r2y_ctrl_low_edge.level_clip_m_offset[0] = 0;
-	r2y_ctrl_low_edge.level_clip_m_offset[1] = 0;
-	r2y_ctrl_low_edge.level_clip_m_offset[2] = 0x1FF;
-	r2y_ctrl_low_edge.level_clip_m_gain[0] = 0;
-	r2y_ctrl_low_edge.level_clip_m_gain[1] = 0;
-	r2y_ctrl_low_edge.level_clip_m_gain[2] = 0;
-	r2y_ctrl_low_edge.level_clip_m_border[0] = 0;
-	r2y_ctrl_low_edge.level_clip_m_border[1] = 0;
+	r2y_ctrl_low_edge.edgeEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_low_edge.scaleEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_low_edge.tableClipSelect = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_low_edge.scaleTableResol = 0;
+	r2y_ctrl_low_edge.scaleTableSelect = 0;
+	r2y_ctrl_low_edge.gradationTableResol = 0;
+	r2y_ctrl_low_edge.gradationTableSelect = 0;
+	r2y_ctrl_low_edge.hpfK[0] = 0x100;
+	r2y_ctrl_low_edge.hpfK[1] = 0xC0;
+	r2y_ctrl_low_edge.hpfK[2] = 0;
+	r2y_ctrl_low_edge.hpfK[3] = 0;
+	r2y_ctrl_low_edge.hpfK[4] = 0;
+	r2y_ctrl_low_edge.hpfK[5] = 0;
+	r2y_ctrl_low_edge.hpfK[6] = 0;
+	r2y_ctrl_low_edge.hpfK[7] = 0;
+	r2y_ctrl_low_edge.hpfK[8] = 0;
+	r2y_ctrl_low_edge.hpfK[9] = 0;
+	r2y_ctrl_low_edge.corpOffset[0] = 0;
+	r2y_ctrl_low_edge.corpOffset[1] = 0;
+	r2y_ctrl_low_edge.corpOffset[2] = 0;
+	r2y_ctrl_low_edge.corpOffset[3] = 0;
+	r2y_ctrl_low_edge.corpGain[0] = 0;
+	r2y_ctrl_low_edge.corpGain[1] = 0;
+	r2y_ctrl_low_edge.corpGain[2] = 0;
+	r2y_ctrl_low_edge.corpGain[3] = 0;
+	r2y_ctrl_low_edge.corpBorder[0] = 0;
+	r2y_ctrl_low_edge.corpBorder[1] = 0;
+	r2y_ctrl_low_edge.corpBorder[2] = 0;
+	r2y_ctrl_low_edge.cormOffset[0] = 0;
+	r2y_ctrl_low_edge.cormOffset[1] = 0;
+	r2y_ctrl_low_edge.cormOffset[2] = 0;
+	r2y_ctrl_low_edge.cormOffset[3] = 0;
+	r2y_ctrl_low_edge.cormGain[0] = 0;
+	r2y_ctrl_low_edge.cormGain[1] = 0;
+	r2y_ctrl_low_edge.cormGain[2] = 0;
+	r2y_ctrl_low_edge.cormGain[3] = 0;
+	r2y_ctrl_low_edge.cormBorder[0] = 0;
+	r2y_ctrl_low_edge.cormBorder[1] = 0;
+	r2y_ctrl_low_edge.cormBorder[2] = 0;
+	r2y_ctrl_low_edge.supScl = 0x10;
+	r2y_ctrl_low_edge.levelClipPOffset[0] = 0;
+	r2y_ctrl_low_edge.levelClipPOffset[1] = 0;
+	r2y_ctrl_low_edge.levelClipPOffset[2] = 0x1FF;
+	r2y_ctrl_low_edge.levelClipPGain[0] = 0;
+	r2y_ctrl_low_edge.levelClipPGain[1] = 0;
+	r2y_ctrl_low_edge.levelClipPGain[2] = 0;
+	r2y_ctrl_low_edge.levelClipPBorder[0] = 0;
+	r2y_ctrl_low_edge.levelClipPBorder[1] = 0;
+	r2y_ctrl_low_edge.levelClipMOffset[0] = 0;
+	r2y_ctrl_low_edge.levelClipMOffset[1] = 0;
+	r2y_ctrl_low_edge.levelClipMOffset[2] = 0x1FF;
+	r2y_ctrl_low_edge.levelClipMGain[0] = 0;
+	r2y_ctrl_low_edge.levelClipMGain[1] = 0;
+	r2y_ctrl_low_edge.levelClipMGain[2] = 0;
+	r2y_ctrl_low_edge.levelClipMBorder[0] = 0;
+	r2y_ctrl_low_edge.levelClipMBorder[1] = 0;
 
-	im_r2y_edge_ctrl_low_edge(im_r2y_edge_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_low_edge );
+	im_r2y_edge_ctrl_low_edge(im_r2y_edge_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_low_edge );
 
-	r2y_ctrl_edge_dot_noise.hf_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_edge_dot_noise.mf_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_edge_dot_noise.hf_p_threshold = 0;
-	r2y_ctrl_edge_dot_noise.hf_m_threshold = 0;
-	r2y_ctrl_edge_dot_noise.hf_p_coef = 0;
-	r2y_ctrl_edge_dot_noise.hf_m_coef = 0;
-	r2y_ctrl_edge_dot_noise.mf_p_threshold = 0;
-	r2y_ctrl_edge_dot_noise.mf_m_threshold = 0;
-	r2y_ctrl_edge_dot_noise.mf_p_coef = 0;
-	r2y_ctrl_edge_dot_noise.mf_m_coef = 0;
+	r2y_ctrl_edge_dot_noise.hfEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_edge_dot_noise.mfEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_edge_dot_noise.hfPThreshold = 0;
+	r2y_ctrl_edge_dot_noise.hfMThreshold = 0;
+	r2y_ctrl_edge_dot_noise.hfPCoef = 0;
+	r2y_ctrl_edge_dot_noise.hfMCoef = 0;
+	r2y_ctrl_edge_dot_noise.mfPThreshold = 0;
+	r2y_ctrl_edge_dot_noise.mfMThreshold = 0;
+	r2y_ctrl_edge_dot_noise.mfPCoef = 0;
+	r2y_ctrl_edge_dot_noise.mfMCoef = 0;
 
-	im_r2y_edge_ctrl_dot_noise( D_IM_R2Y_PIPE1, &r2y_ctrl_edge_dot_noise );
+	im_r2y_edge_ctrl_dot_noise( ImR2yCtrl_PIPE1, &r2y_ctrl_edge_dot_noise );
 
-	r2y_ctrl_mapscl.block_size_h = 0x10;
-	r2y_ctrl_mapscl.block_size_v = 0x10;
-	r2y_ctrl_mapscl.recip_multipli_h = 0;
-	r2y_ctrl_mapscl.recip_multipli_shift_h = 0;
-	r2y_ctrl_mapscl.recip_multipli_v = 0;
-	r2y_ctrl_mapscl.recip_multipli_shift_v = 0;
-	r2y_ctrl_mapscl.block_start_h = 0;
-	r2y_ctrl_mapscl.block_start_coord_h = 0;
-	r2y_ctrl_mapscl.block_start_v = 0;
-	r2y_ctrl_mapscl.block_start_coord_v = 0;
+	r2y_ctrl_mapscl.blockSizeH = 0x10;
+	r2y_ctrl_mapscl.blockSizeV = 0x10;
+	r2y_ctrl_mapscl.recipMultipliH = 0;
+	r2y_ctrl_mapscl.recipMultipliShiftH = 0;
+	r2y_ctrl_mapscl.recipMultipliV = 0;
+	r2y_ctrl_mapscl.recipMultipliShiftV = 0;
+	r2y_ctrl_mapscl.blockStartH = 0;
+	r2y_ctrl_mapscl.blockStartCoordH = 0;
+	r2y_ctrl_mapscl.blockStartV = 0;
+	r2y_ctrl_mapscl.blockStartCoordV = 0;
 
-	im_r2y_ctrl3_map_scl(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_mapscl );
+	im_r2y_ctrl3_map_scl(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_mapscl );
 
-	memset( &r2y_ctrl_edge_blend, 0x00, sizeof(T_IM_R2Y_CTRL_EDGE_BLEND) );
-	r2y_ctrl_edge_blend.blend_type = 0;
+	memset( &r2y_ctrl_edge_blend, 0x00, sizeof(CtrlEdgeBlend) );
+	r2y_ctrl_edge_blend.blendType = 0;
 	r2y_ctrl_edge_blend.border[0] = 0;
 	r2y_ctrl_edge_blend.border[1] = 0;
 	r2y_ctrl_edge_blend.border[2] = 0;
-	r2y_ctrl_edge_blend.alpha_offset[0] = 0;
-	r2y_ctrl_edge_blend.alpha_offset[1] = 0;
-	r2y_ctrl_edge_blend.alpha_offset[2] = 0;
-	r2y_ctrl_edge_blend.alpha_offset[3] = 0;
-	r2y_ctrl_edge_blend.alpha_gain[0] = 0;
-	r2y_ctrl_edge_blend.alpha_gain[1] = 0;
-	r2y_ctrl_edge_blend.alpha_gain[2] = 0;
-	r2y_ctrl_edge_blend.alpha_gain[3] = 0;
-	r2y_ctrl_edge_blend.beta_offset[0] = 0;
-	r2y_ctrl_edge_blend.beta_offset[1] = 0;
-	r2y_ctrl_edge_blend.beta_offset[2] = 0;
-	r2y_ctrl_edge_blend.beta_offset[3] = 0;
-	r2y_ctrl_edge_blend.beta_gain[0] = 0;
-	r2y_ctrl_edge_blend.beta_gain[1] = 0;
-	r2y_ctrl_edge_blend.beta_gain[2] = 0;
-	r2y_ctrl_edge_blend.beta_gain[3] = 0;
-	r2y_ctrl_edge_blend.level_clip_p = 0x1FF;
-	r2y_ctrl_edge_blend.level_clip_m = 0x1FF;
+	r2y_ctrl_edge_blend.alphaOffset[0] = 0;
+	r2y_ctrl_edge_blend.alphaOffset[1] = 0;
+	r2y_ctrl_edge_blend.alphaOffset[2] = 0;
+	r2y_ctrl_edge_blend.alphaOffset[3] = 0;
+	r2y_ctrl_edge_blend.alphaGain[0] = 0;
+	r2y_ctrl_edge_blend.alphaGain[1] = 0;
+	r2y_ctrl_edge_blend.alphaGain[2] = 0;
+	r2y_ctrl_edge_blend.alphaGain[3] = 0;
+	r2y_ctrl_edge_blend.betaOffset[0] = 0;
+	r2y_ctrl_edge_blend.betaOffset[1] = 0;
+	r2y_ctrl_edge_blend.betaOffset[2] = 0;
+	r2y_ctrl_edge_blend.betaOffset[3] = 0;
+	r2y_ctrl_edge_blend.betaGain[0] = 0;
+	r2y_ctrl_edge_blend.betaGain[1] = 0;
+	r2y_ctrl_edge_blend.betaGain[2] = 0;
+	r2y_ctrl_edge_blend.betaGain[3] = 0;
+	r2y_ctrl_edge_blend.levelClipP = 0x1FF;
+	r2y_ctrl_edge_blend.levelClipM = 0x1FF;
 
-	im_r2y_edge_ctrl_blend( D_IM_R2Y_PIPE1, &r2y_ctrl_edge_blend );
+	im_r2y_edge_ctrl_blend( ImR2yCtrl_PIPE1, &r2y_ctrl_edge_blend );
 
-	r2y_ctrl_edge_texture.cb_a_focus1_pos = 0;
-	r2y_ctrl_edge_texture.cr_a_focus1_pos = 0;
-	r2y_ctrl_edge_texture.cb_a_focus2_pos = 0;
-	r2y_ctrl_edge_texture.cr_a_focus2_pos = 0;
-	r2y_ctrl_edge_texture.cb_b_focus1_pos = 0;
-	r2y_ctrl_edge_texture.cr_b_focus1_pos = 0;
-	r2y_ctrl_edge_texture.cb_b_focus2_pos = 0;
-	r2y_ctrl_edge_texture.cr_b_focus2_pos = 0;
+	r2y_ctrl_edge_texture.cbAFocus1Pos = 0;
+	r2y_ctrl_edge_texture.crAFocus1Pos = 0;
+	r2y_ctrl_edge_texture.cbAFocus2Pos = 0;
+	r2y_ctrl_edge_texture.crAFocus2Pos = 0;
+	r2y_ctrl_edge_texture.cbBFocus1Pos = 0;
+	r2y_ctrl_edge_texture.crBFocus1Pos = 0;
+	r2y_ctrl_edge_texture.cbBFocus2Pos = 0;
+	r2y_ctrl_edge_texture.crBFocus2Pos = 0;
 
-	im_r2y_ctrl3_cref_edge_texture_adj_common(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_edge_texture );
+	im_r2y_ctrl3_cref_edge_texture_adj_common(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_edge_texture );
 
-	r2y_ctrl_edge_adj.area_a_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_edge_adj.area_b_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_edge_adj.merge_method = 0;
-	r2y_ctrl_edge_adj.area_a_scale_offset = 0x80;
-	r2y_ctrl_edge_adj.area_a_scale_gain[0] = 0;
-	r2y_ctrl_edge_adj.area_a_scale_gain[1] = 0;
-	r2y_ctrl_edge_adj.area_a_scale_border = 0;
-	r2y_ctrl_edge_adj.area_a_scale_clip_lo = 0;
-	r2y_ctrl_edge_adj.area_a_scale_clip_hi = 0xFF;
-	r2y_ctrl_edge_adj.area_a_y_scale_gain_p = 0;
-	r2y_ctrl_edge_adj.area_a_y_scale_gain_m = 0;
-	r2y_ctrl_edge_adj.area_a_y_scale_border[0] = 0;
-	r2y_ctrl_edge_adj.area_a_y_scale_border[1] = 0;
-	r2y_ctrl_edge_adj.area_a_y_scale_clip_lo = 0;
-	r2y_ctrl_edge_adj.area_a_y_scale_clip_hi = 0x100;
-	r2y_ctrl_edge_adj.area_b_scale_offset = 0x80;
-	r2y_ctrl_edge_adj.area_b_scale_gain[0] = 0;
-	r2y_ctrl_edge_adj.area_b_scale_gain[1] = 0;
-	r2y_ctrl_edge_adj.area_b_scale_border = 0;
-	r2y_ctrl_edge_adj.area_b_scale_clip_lo = 0;
-	r2y_ctrl_edge_adj.area_b_scale_clip_hi = 0xFF;
-	r2y_ctrl_edge_adj.area_b_y_scale_gain_p = 0;
-	r2y_ctrl_edge_adj.area_b_y_scale_gain_m = 0;
-	r2y_ctrl_edge_adj.area_b_y_scale_border[0] = 0;
-	r2y_ctrl_edge_adj.area_b_y_scale_border[1] = 0;
-	r2y_ctrl_edge_adj.area_b_y_scale_clip_lo = 0;
-	r2y_ctrl_edge_adj.area_b_y_scale_clip_hi = 0x100;
-	r2y_ctrl_edge_adj.level_clip_p = 0x1FF;
-	r2y_ctrl_edge_adj.level_clip_m = 0x1FF;
+	r2y_ctrl_edge_adj.areaAEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_edge_adj.areaBEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_edge_adj.mergeMethod = 0;
+	r2y_ctrl_edge_adj.areaAScaleOffset = 0x80;
+	r2y_ctrl_edge_adj.areaAScaleGain[0] = 0;
+	r2y_ctrl_edge_adj.areaAScaleGain[1] = 0;
+	r2y_ctrl_edge_adj.areaAScaleBorder = 0;
+	r2y_ctrl_edge_adj.areaAScaleClipLo = 0;
+	r2y_ctrl_edge_adj.areaAScaleClipHi = 0xFF;
+	r2y_ctrl_edge_adj.areaAYScaleGainP = 0;
+	r2y_ctrl_edge_adj.areaAYScaleGainM = 0;
+	r2y_ctrl_edge_adj.areaAYScaleBorder[0] = 0;
+	r2y_ctrl_edge_adj.areaAYScaleBorder[1] = 0;
+	r2y_ctrl_edge_adj.areaAYScaleClipLo = 0;
+	r2y_ctrl_edge_adj.areaAYScaleClipHi = 0x100;
+	r2y_ctrl_edge_adj.areaBScaleOffset = 0x80;
+	r2y_ctrl_edge_adj.areaBScaleGain[0] = 0;
+	r2y_ctrl_edge_adj.areaBScaleGain[1] = 0;
+	r2y_ctrl_edge_adj.areaBScaleBoarder = 0;
+	r2y_ctrl_edge_adj.areaBScaleClipLo = 0;
+	r2y_ctrl_edge_adj.areaBScaleClipHi = 0xFF;
+	r2y_ctrl_edge_adj.areaBYScaleGainP = 0;
+	r2y_ctrl_edge_adj.areaBYScaleGainM = 0;
+	r2y_ctrl_edge_adj.areaBYScaleBorder[0] = 0;
+	r2y_ctrl_edge_adj.areaBYScaleBorder[1] = 0;
+	r2y_ctrl_edge_adj.areaBYScaleClipLo = 0;
+	r2y_ctrl_edge_adj.areaBYScaleClipHi = 0x100;
+	r2y_ctrl_edge_adj.levelClipP = 0x1FF;
+	r2y_ctrl_edge_adj.levelClipM = 0x1FF;
 
-	im_r2y_ctrl3_cref_edge_adj(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_edge_adj );
+	im_r2y_ctrl3_cref_edge_adj(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_edge_adj );
 
-	r2y_ctrl_yb_blend.area_a_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_yb_blend.area_b_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_yb_blend.area_a_offset = 0;
-	r2y_ctrl_yb_blend.area_a_gain[0] = 0;
-	r2y_ctrl_yb_blend.area_a_gain[1] = 0;
-	r2y_ctrl_yb_blend.area_a_border = 0;
-	r2y_ctrl_yb_blend.area_a_scale_clip_lo = 0;
-	r2y_ctrl_yb_blend.area_a_scale_clip_hi = 0x80;
-	r2y_ctrl_yb_blend.area_a_correct_gain_p = 0;
-	r2y_ctrl_yb_blend.area_a_correct_gain_m = 0;
-	r2y_ctrl_yb_blend.area_a_correct_border[0] = 0;
-	r2y_ctrl_yb_blend.area_a_correct_border[1] = 0;
-	r2y_ctrl_yb_blend.area_a_correct_clip_lo = 0;
-	r2y_ctrl_yb_blend.area_a_correct_clip_hi = 0x80;
-	r2y_ctrl_yb_blend.area_b_offset = 0;
-	r2y_ctrl_yb_blend.area_b_gain[0] = 0;
-	r2y_ctrl_yb_blend.area_b_gain[1] = 0;
-	r2y_ctrl_yb_blend.area_b_border = 0;
-	r2y_ctrl_yb_blend.area_b_scale_clip_lo = 0;
-	r2y_ctrl_yb_blend.area_b_scale_clip_hi = 0x80;
-	r2y_ctrl_yb_blend.area_b_correct_gain_p = 0;
-	r2y_ctrl_yb_blend.area_b_correct_gain_m = 0;
-	r2y_ctrl_yb_blend.area_b_correct_border[0] = 0;
-	r2y_ctrl_yb_blend.area_b_correct_border[1] = 0;
-	r2y_ctrl_yb_blend.area_b_correct_clip_lo = 0;
-	r2y_ctrl_yb_blend.area_b_correct_clip_hi = 0x80;
+	r2y_ctrl_yb_blend.areaAEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_yb_blend.areaBEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_yb_blend.areaAOffset = 0;
+	r2y_ctrl_yb_blend.areaAGain[0] = 0;
+	r2y_ctrl_yb_blend.areaAGain[1] = 0;
+	r2y_ctrl_yb_blend.areaABoarder = 0;
+	r2y_ctrl_yb_blend.areaAScaleClipLo = 0;
+	r2y_ctrl_yb_blend.areaAScaleClipHi = 0x80;
+	r2y_ctrl_yb_blend.areaACorrectGainP = 0;
+	r2y_ctrl_yb_blend.areaACorrectGainM = 0;
+	r2y_ctrl_yb_blend.areaACorrectBorder[0] = 0;
+	r2y_ctrl_yb_blend.areaACorrectBorder[1] = 0;
+	r2y_ctrl_yb_blend.areaACorrectClipLo = 0;
+	r2y_ctrl_yb_blend.areaACorrectClipHi = 0x80;
+	r2y_ctrl_yb_blend.areaBOffset = 0;
+	r2y_ctrl_yb_blend.areaBGain[0] = 0;
+	r2y_ctrl_yb_blend.areaBGain[1] = 0;
+	r2y_ctrl_yb_blend.areaBBoarder = 0;
+	r2y_ctrl_yb_blend.areaBScaleClipLo = 0;
+	r2y_ctrl_yb_blend.areaBScaleClipHi = 0x80;
+	r2y_ctrl_yb_blend.areaBCorrectGainP = 0;
+	r2y_ctrl_yb_blend.areaBCorrectGainM = 0;
+	r2y_ctrl_yb_blend.areaBCorrectBoarder[0] = 0;
+	r2y_ctrl_yb_blend.areaBCorrectBoarder[1] = 0;
+	r2y_ctrl_yb_blend.areaBCorrectClipLo = 0;
+	r2y_ctrl_yb_blend.areaBCorrectClipHi = 0x80;
 
-	im_r2y_ctrl3_cref_yb_blend(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_yb_blend );
+	im_r2y_ctrl3_cref_yb_blend(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_yb_blend );
 
-	r2y_ctrl_clpf.clpf_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_clpf.interlock_blend_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_clpf.lpf_k[0] = 0;
-	r2y_ctrl_clpf.lpf_k[1] = 0;
-	r2y_ctrl_clpf.lpf_k[2] = 0;
-	r2y_ctrl_clpf.lpf_k[3] = 0;
-	r2y_ctrl_clpf.lpf_k[4] = 0;
-	r2y_ctrl_clpf.lpf_k[5] = 0;
-	r2y_ctrl_clpf.lpf_k[6] = 0;
-	r2y_ctrl_clpf.lpf_k[7] = 0;
-	r2y_ctrl_clpf.lpf_k[8] = 0;
-	r2y_ctrl_clpf.lpf_ib_offset[0] = 0;
-	r2y_ctrl_clpf.lpf_ib_offset[1] = 0;
-	r2y_ctrl_clpf.lpf_ib_offset[2] = 0;
-	r2y_ctrl_clpf.lpf_ib_offset[3] = 0;
-	r2y_ctrl_clpf.lpf_ib_gain[0] = 0;
-	r2y_ctrl_clpf.lpf_ib_gain[1] = 0;
-	r2y_ctrl_clpf.lpf_ib_gain[2] = 0;
-	r2y_ctrl_clpf.lpf_ib_gain[3] = 0;
-	r2y_ctrl_clpf.lpf_ib_border[0] = 0;
-	r2y_ctrl_clpf.lpf_ib_border[1] = 0;
-	r2y_ctrl_clpf.lpf_ib_border[2] = 0;
+	r2y_ctrl_clpf.clpfEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_clpf.interlockBlendEnable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_clpf.lpfK[0] = 0;
+	r2y_ctrl_clpf.lpfK[1] = 0;
+	r2y_ctrl_clpf.lpfK[2] = 0;
+	r2y_ctrl_clpf.lpfK[3] = 0;
+	r2y_ctrl_clpf.lpfK[4] = 0;
+	r2y_ctrl_clpf.lpfK[5] = 0;
+	r2y_ctrl_clpf.lpfK[6] = 0;
+	r2y_ctrl_clpf.lpfK[7] = 0;
+	r2y_ctrl_clpf.lpfK[8] = 0;
+	r2y_ctrl_clpf.lpfIbOffset[0] = 0;
+	r2y_ctrl_clpf.lpfIbOffset[1] = 0;
+	r2y_ctrl_clpf.lpfIbOffset[2] = 0;
+	r2y_ctrl_clpf.lpfIbOffset[3] = 0;
+	r2y_ctrl_clpf.lpfIbGain[0] = 0;
+	r2y_ctrl_clpf.lpfIbGain[1] = 0;
+	r2y_ctrl_clpf.lpfIbGain[2] = 0;
+	r2y_ctrl_clpf.lpfIbGain[3] = 0;
+	r2y_ctrl_clpf.lpfIbBorder[0] = 0;
+	r2y_ctrl_clpf.lpfIbBorder[1] = 0;
+	r2y_ctrl_clpf.lpfIbBorder[2] = 0;
 
-	im_r2y_ctrl3_color_nr(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_clpf );
+	im_r2y_ctrl3_color_nr(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_clpf );
 
-	r2y_ctrl_cs.csy_enable = D_IM_R2Y_ENABLE_OFF;
+	r2y_ctrl_cs.csyEnable = ImR2yCtrl_ENABLE_OFF;
 	r2y_ctrl_cs.csy_mix_ratio = 8;
 	r2y_ctrl_cs.csy_select_table = 0;
 	r2y_ctrl_cs.csy_offset[0] = 0;
@@ -1068,36 +1068,36 @@ ImR2y3*		        im_r2y3_new(void);
 	r2y_ctrl_cs.csy_border[0] = 0;
 	r2y_ctrl_cs.csy_border[1] = 0;
 	r2y_ctrl_cs.csy_border[2] = 0;
-	r2y_ctrl_cs.y_rev_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_cs.c_rev_enable = D_IM_R2Y_ENABLE_OFF;
-	r2y_ctrl_cs.c_fixed_enable = D_IM_R2Y_ENABLE_OFF;
+	r2y_ctrl_cs.y_rev_enable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_cs.c_rev_enable = ImR2yCtrl_ENABLE_OFF;
+	r2y_ctrl_cs.c_fixed_enable = ImR2yCtrl_ENABLE_OFF;
 	r2y_ctrl_cs.cb_fixed = 0;
 	r2y_ctrl_cs.cr_fixed = 0;
 	r2y_ctrl_cs.y_offset = 0;
 	r2y_ctrl_cs.cb_offset = 0;
 	r2y_ctrl_cs.cr_offset = 0;
 
-	im_r2y_ctrl3_chroma_suppress(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_cs );
+	im_r2y_ctrl3_chroma_suppress(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_cs );
 
 
-	im_r2y_ctrl3_set_tone_control_table(im_r2y_ctrl3_new(),  D_IM_R2Y_PIPE1, &gTone_Tbl, 0, D_IM_R2Y_TABLE_MAX_TONE );
+	im_r2y_ctrl3_set_tone_control_table(im_r2y_ctrl3_new(),  ImR2yCtrl_PIPE1, &gTone_Tbl, 0, ImR2yCtrl_TABLE_MAX_TONE );
 
-	im_r2y_set_gamma_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, 0, &gGamma_Tbl, &gGamma_Diff_Tbl );
-	im_r2y_set_gamma_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, 1, &gGamma_Tbl, &gGamma_Diff_Tbl );
-	im_r2y_set_gamma_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, 2, &gGamma_Tbl, &gGamma_Diff_Tbl );
-	im_r2y_set_gamma_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, 3, &gGamma_Tbl, &gGamma_Diff_Tbl );
-	im_r2y_set_gamma_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, 4, &gGamma_Tbl, &gGamma_Diff_Tbl );
+	im_r2y_set_gamma_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, 0, &gGamma_Tbl, &gGamma_Diff_Tbl );
+	im_r2y_set_gamma_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, 1, &gGamma_Tbl, &gGamma_Diff_Tbl );
+	im_r2y_set_gamma_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, 2, &gGamma_Tbl, &gGamma_Diff_Tbl );
+	im_r2y_set_gamma_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, 3, &gGamma_Tbl, &gGamma_Diff_Tbl );
+	im_r2y_set_gamma_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, 4, &gGamma_Tbl, &gGamma_Diff_Tbl );
 
-	im_r2y_set_high_edge_scale_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gHE_SCL_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_SCALE_HI );
-	im_r2y_set_high_edge_step_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gHE_STEP_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_TC_HI );
+	im_r2y_set_high_edge_scale_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gHE_SCL_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_SCALE_HI );
+	im_r2y_set_high_edge_step_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gHE_STEP_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_TC_HI );
 
-	im_r2y_set_medium_edge_scale_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gME_SCL_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM );
-	im_r2y_set_medium_edge_step_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gME_STEP_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM );
+	im_r2y_set_medium_edge_scale_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gME_SCL_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_SCALE_MEDIUM );
+	im_r2y_set_medium_edge_step_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gME_STEP_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_TC_MEDIUM );
 
-	im_r2y_set_low_edge_scale_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gLE_SCL_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO );
-	im_r2y_set_low_edge_step_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gLE_STEP_Tbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_TC_LO );
+	im_r2y_set_low_edge_scale_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gLE_SCL_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_SCALE_LO );
+	im_r2y_set_low_edge_step_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gLE_STEP_Tbl, 0, ImR2yCtrl_TABLE_MAX_EDGE_TC_LO );
 
-	im_r2y_set_map_scl_table(im_r2y_set_new(),  D_IM_R2Y_PIPE1, &gMAP_SCL_Tbl, 0, D_IM_R2Y_TABLE_MAX_MAPSCL );
+	im_r2y_set_map_scl_table(im_r2y_set_new(),  ImR2yCtrl_PIPE1, &gMAP_SCL_Tbl, 0, ImR2yCtrl_TABLE_MAX_MAPSCL );
 
 	@endcode
 	<br><br>
@@ -1105,39 +1105,39 @@ ImR2y3*		        im_r2y3_new(void);
 
 @section im_r2y_iq_sample_section3	Sample code of data setting for YC Matrix.
 	@code
-	T_IM_R2Y_CTRL_YCC r2y_ctrl_ycc;
+	R2yCtrlYcc r2y_ctrl_ycc;
 
-	r2y_ctrl_ycc.yc_coeff[0][0] = 77;
-	r2y_ctrl_ycc.yc_coeff[0][1] = 150;
-	r2y_ctrl_ycc.yc_coeff[0][2] = 29;
-	r2y_ctrl_ycc.yc_coeff[1][0] = -43;
-	r2y_ctrl_ycc.yc_coeff[1][1] = -85;
-	r2y_ctrl_ycc.yc_coeff[1][2] = 128;
-	r2y_ctrl_ycc.yc_coeff[2][0] = 128;
-	r2y_ctrl_ycc.yc_coeff[2][1] = -107;
-	r2y_ctrl_ycc.yc_coeff[2][2] = -21;
-	r2y_ctrl_ycc.y_blend_ratio = 0;
-	r2y_ctrl_ycc.yb_blend_ratio = 0;
+	r2y_ctrl_ycc.ycCoeff[0][0] = 77;
+	r2y_ctrl_ycc.ycCoeff[0][1] = 150;
+	r2y_ctrl_ycc.ycCoeff[0][2] = 29;
+	r2y_ctrl_ycc.ycCoeff[1][0] = -43;
+	r2y_ctrl_ycc.ycCoeff[1][1] = -85;
+	r2y_ctrl_ycc.ycCoeff[1][2] = 128;
+	r2y_ctrl_ycc.ycCoeff[2][0] = 128;
+	r2y_ctrl_ycc.ycCoeff[2][1] = -107;
+	r2y_ctrl_ycc.ycCoeff[2][2] = -21;
+	r2y_ctrl_ycc.yBlendRatio = 0;
+	r2y_ctrl_ycc.ybBlendRatio = 0;
 
-	im_r2y_ctrl2_yc_convert(im_r2y_ctrl2_new(),  D_IM_R2Y_PIPE1, &r2y_ctrl_ycc );
+	im_r2y_ctrl2_yc_convert(im_r2y_ctrl2_new(),  ImR2yCtrl_PIPE1, &r2y_ctrl_ycc );
 	@endcode
 	<br><br>
 
 @section im_r2y_iq_sample_section4	Sample code of data setting for CC Matrix.
 	@code
-	T_IM_R2Y_CTRL_CC0 t_r2y_ctrl_cc0;
-	T_IM_R2Y_CTRL_CC1 t_r2y_ctrl_cc1;
+	R2yCtrlCc0 t_r2y_ctrl_cc0;
+	R2yCtrlCc1 t_r2y_ctrl_cc1;
 
-	t_r2y_ctrl_cc0.posi_dec = 0;
-	t_r2y_ctrl_cc0.cc_matrix[0][0] = 512;
-	t_r2y_ctrl_cc0.cc_matrix[0][1] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[0][2] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[1][0] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[1][1] = 512;
-	t_r2y_ctrl_cc0.cc_matrix[1][2] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[2][0] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[2][1] = 0;
-	t_r2y_ctrl_cc0.cc_matrix[2][2] = 512;
+	t_r2y_ctrl_cc0.posiDec = 0;
+	t_r2y_ctrl_cc0.ccMatrix[0][0] = 512;
+	t_r2y_ctrl_cc0.ccMatrix[0][1] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[0][2] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[1][0] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[1][1] = 512;
+	t_r2y_ctrl_cc0.ccMatrix[1][2] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[2][0] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[2][1] = 0;
+	t_r2y_ctrl_cc0.ccMatrix[2][2] = 512;
 	t_r2y_ctrl_cc0.cybof[0] = 0;
 	t_r2y_ctrl_cc0.cybof[1] = 0;
 	t_r2y_ctrl_cc0.cybof[2] = 0x400;
@@ -1150,26 +1150,26 @@ ImR2y3*		        im_r2y3_new(void);
 	t_r2y_ctrl_cc0.cyc[1] = 150;
 	t_r2y_ctrl_cc0.cyc[2] = 29;
 
-	im_r2y_ctrl2_cc0_matrix( D_IM_R2Y_PIPE1, &t_r2y_ctrl_cc0 );
+	im_r2y_ctrl2_cc0_matrix( ImR2yCtrl_PIPE1, &t_r2y_ctrl_cc0 );
 
-	t_r2y_ctrl_cc1.posi_dec = 0;
-	t_r2y_ctrl_cc1.cc_matrix[0][0] = 512;
-	t_r2y_ctrl_cc1.cc_matrix[0][1] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[0][2] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[1][0] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[1][1] = 512;
-	t_r2y_ctrl_cc1.cc_matrix[1][2] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[2][0] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[2][1] = 0;
-	t_r2y_ctrl_cc1.cc_matrix[2][2] = 512;
-	t_r2y_ctrl_cc1.clip_p_r = 0xFFF;
-	t_r2y_ctrl_cc1.clip_m_r = 0xFFF;
-	t_r2y_ctrl_cc1.clip_p_g = 0xFFF;
-	t_r2y_ctrl_cc1.clip_m_g = 0xFFF;
-	t_r2y_ctrl_cc1.clip_p_b = 0xFFF;
-	t_r2y_ctrl_cc1.clip_m_b = 0xFFF;
+	t_r2y_ctrl_cc1.posiDec = 0;
+	t_r2y_ctrl_cc1.ccMatrix[0][0] = 512;
+	t_r2y_ctrl_cc1.ccMatrix[0][1] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[0][2] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[1][0] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[1][1] = 512;
+	t_r2y_ctrl_cc1.ccMatrix[1][2] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[2][0] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[2][1] = 0;
+	t_r2y_ctrl_cc1.ccMatrix[2][2] = 512;
+	t_r2y_ctrl_cc1.clipPR = 0xFFF;
+	t_r2y_ctrl_cc1.clipMR = 0xFFF;
+	t_r2y_ctrl_cc1.clipPG = 0xFFF;
+	t_r2y_ctrl_cc1.clipMG = 0xFFF;
+	t_r2y_ctrl_cc1.clipPB = 0xFFF;
+	t_r2y_ctrl_cc1.clipMB = 0xFFF;
 
-	im_r2y_ctrl2_cc1_matrix(im_r2y_ctrl2_new(),  D_IM_R2Y_PIPE1, &t_r2y_ctrl_cc1 );
+	im_r2y_ctrl2_cc1_matrix(im_r2y_ctrl2_new(),  ImR2yCtrl_PIPE1, &t_r2y_ctrl_cc1 );
 	@endcode
 	<br><br>
 
@@ -1177,209 +1177,209 @@ ImR2y3*		        im_r2y3_new(void);
 
 /**
 Set bank index value
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
-@param[in]		yyw_no					: YYW number
-@param[in]		bank_index				: Output bank index.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		yywNo					: YYW number
+@param[in]		bankIndex				: Output bank index.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_outbank_index(ImR2y3 *self, UCHAR pipe_no, UCHAR yyw_no, UCHAR bank_index );
+INT32 im_r2y3_set_outbank_index(ImR2y3 *self, kuint16 pipeNo, kuint16 yywNo, kuint16 bankIndex );
 
 /**
 Increment bank index value
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
-@param[in]		yyw_no					: YYW number
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		yywNo					: YYW number
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_inc_outbank_index(ImR2y3 *self, UCHAR pipe_no, UCHAR yyw_no );
+INT32 im_r2y3_inc_outbank_index(ImR2y3 *self, kuint16 pipeNo, kuint16 yywNo );
 
 /**
 R2Y Control (B2R/LTM direct control mode control)
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_ctrl_direct			: Control information.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro busy error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro busy error.
 */
-INT32 im_r2y3_ctrl_mode_direct(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_DIRECT* const r2y_ctrl_direct );
+INT32 im_r2y3_ctrl_mode_direct(ImR2y3 *self, kuint16 pipeNo, const R2CtrlDirect* const r2y_ctrl_direct );
 
 /**
 Set YYW Right side offset(for video format).
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
-@param[in]		yyw_no					: YYW number.
-@param[in]		offset_byte				: Offset byte information.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
+@param[in]		yywNo					: YYW number.
+@param[in]		offsetByte				: Offset byte information.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_right_side_offset(ImR2y3 *self, UCHAR pipe_no, UCHAR yyw_no, T_IM_R2Y_RIGHTSIDE_OFFSET* offset_byte );
+INT32 im_r2y3_set_right_side_offset(ImR2y3 *self, kuint16 pipeNo, kuint16 yywNo, R2yRightsideOffset* offsetByte );
 
 /**
 Get Next Address information
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
-@param[in]		yyw_no					: YYW number.
-@param[out]		r2y_addr				: Pointer of Output address information.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
+@param[in]		yywNo					: YYW number.
+@param[out]		r2yAddr				: Pointer of Output address information.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_get_next_outaddr(ImR2y3 *self, UCHAR pipe_no, const UINT32 yyw_no, T_IM_R2Y_OUTADDR_INFO* const r2y_addr );
+INT32 im_r2y3_get_next_outaddr(ImR2y3 *self, kuint16 pipeNo, const UINT32 yywNo, R2yOutaddrInfo* const r2yAddr );
 
 /**
 Get Latest Address information
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
-@param[in]		yyw_no					: YYW number.
-@param[out]		latest_bank_idx			: Pointer of Output address information.
-@param[out]		latest_addr				: Pointer of Output address information.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
+@param[in]		yywNo					: YYW number.
+@param[out]		latestBankIdx			: Pointer of Output address information.
+@param[out]		latestAddr				: Pointer of Output address information.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_get_latest_outaddr(ImR2y3 *self, UCHAR pipe_no, UINT32 yyw_no, UCHAR* const latest_bank_idx, T_IM_R2Y_OUTADDR_INFO* const latest_addr );
+INT32 im_r2y3_get_latest_outaddr(ImR2y3 *self, kuint16 pipeNo, UINT32 yywNo, kuint16* const latestBankIdx, R2yOutaddrInfo* const latestAddr );
 
 /**
 Set YYW0 External I/F output.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		output_onoff_ipu		: 0:disable External I/F(B) output 1:enable External I/F(B) output
 @param[in]		output_onoff_cnr		: 0:disable External I/F(C) output 1:enable External I/F(C) output
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_external_if_output(ImR2y3 *self, UCHAR pipe_no, UCHAR output_onoff_ipu, UCHAR output_onoff_cnr );
+INT32 im_r2y3_set_external_if_output(ImR2y3 *self, kuint16 pipeNo, kuint16 output_onoff_ipu, kuint16 output_onoff_cnr );
 
 /**
 Get YYW0 External I/F output status.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
 @param[out]		output_onoff_ipu		: 0:disable External I/F(B) output 1:enable External I/F(B) output
 @param[out]		output_onoff_cnr		: 0:disable External I/F(C) output 1:enable External I/F(C) output
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_get_external_if_output(ImR2y3 *self, UCHAR pipe_no, UCHAR* const output_onoff_ipu, UCHAR* const output_onoff_cnr );
+INT32 im_r2y3_get_external_if_output(ImR2y3 *self, kuint16 pipeNo, kuint16* const output_onoff_ipu, kuint16* const output_onoff_cnr );
 
 /**
 Set Frame stop
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		onoff					: 0:Frame stop disable 1:Frame stop enable
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_frame_stop(ImR2y3 *self, UCHAR pipe_no, UCHAR onoff );
+INT32 im_r2y3_set_frame_stop(ImR2y3 *self, kuint16 pipeNo, kuint16 onoff );
 
 /**
 Get YYRch busy status.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
 @param[out]		busy_status				: TRUE : YYR is running. (YYRTRG is on). / FALSE : YYR is not running. (YYRTRG is off).
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_get_yyr_busy(ImR2y3 *self, UCHAR pipe_no, BOOL* const busy_status );
+INT32 im_r2y3_get_yyr_busy(ImR2y3 *self, kuint16 pipeNo, BOOL* const busy_status );
 
 /**
 Get Horizontal ring pixel padding number
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
-@param[out]		ring_pixs				: Ring pixel padding number.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
+@param[out]		ringPixs				: Ring pixel padding number.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_get_h_ring_pixs(ImR2y3 *self, UCHAR pipe_no, USHORT* const ring_pixs );
+INT32 im_r2y3_get_h_ring_pixs(ImR2y3 *self, kuint16 pipeNo, kuint16* const ringPixs );
 
 /**
 Trimming control
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
-@param[in]		yyw_no					: YYW number.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		yywNo					: YYW number.
 @param[in]		r2y_ctrl_trimming		: pointer of trimming control parameters.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_ctrl_trimming(ImR2y3 *self, UCHAR pipe_no, UCHAR yyw_no, const T_IM_R2Y_CTRL_TRIMMING* const r2y_ctrl_trimming );
+INT32 im_r2y3_ctrl_trimming(ImR2y3 *self, kuint16 pipeNo, kuint16 yywNo, const R2yCtrlTrimming* const r2y_ctrl_trimming );
 
 /**
 Trimming control(for external I/F)
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_ctrl_trimming		: pointer of trimming control parameters.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_ctrl_trimming_external(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_TRIMMING_EXT* const r2y_ctrl_trimming );
+INT32 im_r2y3_ctrl_trimming_external(ImR2y3 *self, kuint16 pipeNo, const CtrlTrimmingExt* const r2y_ctrl_trimming );
 
 /**
 Histogram control register
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_ctrl_hist			: Histogram control register value.
 @retval			D_DDIM_OK				: Success
-@retval			D_IM_R2Y_PARAM_ERROR	: Parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro is running. only "r2y_ctrl_hist->enable" is reflected.
+@retval			ImR2yUtils_PARAM_ERROR	: Parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro is running. only "r2y_ctrl_hist->enable" is reflected.
 */
-INT32 im_r2y3_ctrl_histogram(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_HISTOGRAM* const r2y_ctrl_hist );
+INT32 im_r2y3_ctrl_histogram(ImR2y3 *self, kuint16 pipeNo, const R2yCtrlHistogram* const r2y_ctrl_hist );
 
 /**
 Get Histogram value
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2).
 @param[out]		status					: histogram status.
-@param[out]		dst_addr				: Histogram value return buffer address. Array number is D_IM_R2Y_TABLE_MAX_HISTOGRAM.
+@param[out]		dst_addr				: Histogram value return buffer address. Array number is ImR2yCtrl_TABLE_MAX_HISTOGRAM.
 @retval			D_DDIM_OK				: Success
-@retval			D_IM_R2Y_PARAM_ERROR	: Parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro is running. Do not update "dst_addr".
+@retval			ImR2yUtils_PARAM_ERROR	: Parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro is running. Do not update "dst_addr".
 */
-INT32 im_r2y3_get_histogram(ImR2y3 *self, UCHAR pipe_no, T_IM_R2Y_HISTOGRAM_STAT* const status, T_IM_R2Y_HISTOGRAM_ADDR* const dst_addr );
+INT32 im_r2y3_get_histogram(ImR2y3 *self, kuint16 pipeNo, R2yHistogramStat* const status, R2yHistogramAddr* const dst_addr );
 
 /**
 Set Histogram ram access enable
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
-@param[in]		hist_enable				: D_IM_R2Y_ENABLE_OFF : Access disable. / D_IM_R2Y_ENABLE_ON : Access enable.
-@param[in]		wait_enable				: D_IM_R2Y_WAIT_OFF : Turn off wait. / D_IM_R2Y_WAIT_ON : Wait 1usec if needed.
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		histEnable				: ImR2yCtrl_ENABLE_OFF : Access disable. / ImR2yCtrl_ENABLE_ON : Access enable.
+@param[in]		wait_enable				: ImR2yCtrl_WAIT_OFF : Turn off wait. / ImR2yCtrl_WAIT_ON : Wait 1usec if needed.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: Parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro busy error.
+@retval			ImR2yUtils_PARAM_ERROR	: Parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro busy error.
 */
-INT32 im_r2y3_set_histogram_access_enable(ImR2y3 *self, UCHAR pipe_no, UCHAR hist_enable, UCHAR wait_enable );
+INT32 im_r2y3_set_histogram_access_enable(ImR2y3 *self, kuint16 pipeNo, kuint16 histEnable, kuint16 wait_enable );
 
 /**
 Set a partial color extraction
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_color_extract		: pointer of color extraction parameter.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error or R2Y is active.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error or R2Y is active.
 */
-INT32 im_r2y3_set_color_extract(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_COLOR_EXTRACT* const r2y_color_extract );
+INT32 im_r2y3_set_color_extract(ImR2y3 *self, kuint16 pipeNo, const R2yColorExtract* const r2y_color_extract );
 
 /**
 Set chroma scale value
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_chroma_scale		: pointer of chroma scale parameter.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_chroma(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_CHROMA_SCALE* const r2y_chroma_scale );
+INT32 im_r2y3_set_chroma(ImR2y3 *self, kuint16 pipeNo, const R2yChRomaScale* const r2y_chroma_scale );
 
 /**
 Set hue scale value
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		r2y_hue_scale			: pointer of hue scale parameter.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y3_set_hue(ImR2y3 *self, UCHAR pipe_no, const T_IM_R2Y_HUE_SCALE* const r2y_hue_scale );
+INT32 im_r2y3_set_hue(ImR2y3 *self, kuint16 pipeNo, const R2yHueScale* const r2y_hue_scale );
 
 /** Set RGB Deknee table.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		tbl_type				: Table type (R, G, B).
-@param[in]		src_tbl					: Pointer of Table data (Type of USHORT, Maximum array number is D_IM_R2Y_TABLE_MAX_RGB_DEKNEE)
+@param[in]		src_tbl					: Pointer of Table data (Type of kuint16, Maximum array number is ImR2yCtrl_TABLE_MAX_RGB_DEKNEE)
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro busy error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro busy error.
 */
-INT32 im_r2y3_set_rgb_deknee_table(ImR2y3 *self, UCHAR pipe_no, E_R2Y_DKN_RGBTBL tbl_type, const USHORT* const src_tbl );
+INT32 im_r2y3_set_rgb_deknee_table(ImR2y3 *self, kuint16 pipeNo, ER2yDknRgbtbl tbl_type, const kuint16* const src_tbl );
 
 /**
 Set RGB Deknee access enable
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		access_enable			: set enable/disable Deknee table access control parameters.
-@param[in]		wait_enable				: D_IM_R2Y_WAIT_OFF : Turn off wait. / D_IM_R2Y_WAIT_ON : Wait 1usec if needed.
+@param[in]		wait_enable				: ImR2yCtrl_WAIT_OFF : Turn off wait. / ImR2yCtrl_WAIT_ON : Wait 1usec if needed.
 @retval			D_DDIM_OK				: success.
-@retval			D_IM_R2Y_PARAM_ERROR	: parameter error.
-@retval			D_IM_R2Y_MACRO_BUSY		: Macro busy error.
+@retval			ImR2yUtils_PARAM_ERROR	: parameter error.
+@retval			ImR2yUtils_MACRO_BUSY		: Macro busy error.
 */
-INT32 im_r2y3_set_rgb_deknee_access_enable(ImR2y3 *self, UCHAR pipe_no, UCHAR access_enable, UCHAR wait_enable );
+INT32 im_r2y3_set_rgb_deknee_access_enable(ImR2y3 *self, kuint16 pipeNo, kuint16 access_enable, kuint16 wait_enable );
 
 
 #endif /* __IM_R2Y3_H__ */

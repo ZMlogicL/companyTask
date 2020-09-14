@@ -114,7 +114,7 @@ ImproSensg*		impro_sensg_new();
 The SG operation(Trigger) started.
 @param[in]	ch : SG ch number
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32		impro_sensg_start( EimproSgCh ch );
 /**
@@ -122,7 +122,7 @@ The SG operation(Trigger) stopped(Frame).
 @param[in]	ch : SG ch number
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32		impro_sensg_stop( EimproSgCh ch, UCHAR force );
 /**
@@ -130,7 +130,7 @@ The SG operation condition is set.
 @param[in]	ch : SG ch number
 @param[in]	sgCtrl : SG Control info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32		impro_sensg_ctrl( EimproSgCh ch, TimproSgCtrl* sgCtrl );
 /**
@@ -138,7 +138,7 @@ The SG operation condition is get.
 @param[in]	ch : SG ch number
 @param[out]	sgCtrl : SG Control info
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32		impro_sensg_get_cycle( EimproSgCh ch, TimproSgCtrl* sgCtrl );
 /**
@@ -146,7 +146,7 @@ Get monitoring result of the input VD and HD signals.
 @param[in]	ch : SG ch number
 @param[out]	sgMoniInfo : SG monitor information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32		impro_sensg_get_monitor_info( EimproSgCh ch, TimproSgMoniInfo* sgMoniInfo );
 

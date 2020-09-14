@@ -20,8 +20,8 @@
 
 #include <klib.h>
 #include "jdspro.h"
-#include "im_pro_common.h"
-#include "dd_top.h"
+#include "improcommon.h"
+#include "ddtop.h"
 
 
 #define IMPRO_TYPE_PASTOP        (impro_pastop_get_type())
@@ -84,7 +84,7 @@ extern	VOID			impro_pastop_init( VOID );
 /**
 PASTOP Macro software reset
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
 */
 extern	INT32			impro_pastop_sw_reset( VOID );
 /**
@@ -93,14 +93,14 @@ PASTOP Macro clock control
 @param[in]	onOff		: 0:clock on 1:clock off
 @param[in]	waitSkip	: 0:non wait 1:wait 1ms. for wait PROCLK/CDK 5 cycle.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_pastop_control_clock(EimproPastopClkType clkType, UCHAR onOff, UCHAR waitSkip );
 /**
 PASTOP macro control data setting
 @param[in]	ctrl : PASTOP macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_pastop_ctrl( TimproPastopCtrl* ctrl );
 

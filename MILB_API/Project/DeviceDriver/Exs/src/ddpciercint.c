@@ -637,7 +637,7 @@ kint32	dd_pcie_rc_int_set_int_trs_ics_msi_func(DdPcieRcInt *self, DdPcieCh ch,
  */
 void dd_pcie_rc_int_ch0_int_exs_handler(DdPcieRcInt *self, kulong intst)
 {
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	if ((intst & DdExsBranch_PCIe0_RIS_BIT) != 0) {
 		DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] dd_pcie_rc_int_ch0_int_exs_handler : Rising Interrupt.\n"));
@@ -662,7 +662,7 @@ void dd_pcie_rc_int_ch0_int_exs_handler(DdPcieRcInt *self, kulong intst)
  */
 void dd_pcie_rc_int_ch1_int_exs_handler(DdPcieRcInt *self, kulong intst)
 {
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	if ((intst & DdExsBranch_PCIe1_RIS_BIT) != 0) {
 		DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] dd_pcie_rc_int_ch1_int_exs_handler : Rising Interrupt.\n"));
@@ -687,7 +687,7 @@ void dd_pcie_rc_int_ch1_int_exs_handler(DdPcieRcInt *self, kulong intst)
 void dd_pcie_rc_int_ch0_int_sys_err_handler(void)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH0 INT_SYS_ERR Occurred.\n"));
 
@@ -721,7 +721,7 @@ void dd_pcie_rc_int_ch0_int_sys_err_handler(void)
 void dd_pcie_rc_int_ch0_int_dma_handler(DdPcieRcInt *self)
 {
 	kuint32 status;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH0 INT_DMA Occurred.\n"));
 
@@ -766,7 +766,7 @@ void dd_pcie_rc_int_ch0_int_dma_handler(DdPcieRcInt *self)
 void dd_pcie_rc_int_ch0_int_trs_ics_msi_handler(void)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH0 INT_TRS_ICS_MSI Occurred.\n"));
 
@@ -823,7 +823,7 @@ void dd_pcie_rc_int_ch0_int_trs_ics_msi_handler(void)
  */
 void dd_pcie_rc_int_ch1_int_own_handler(void)
 {
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH1 INT_OWN Occurred.\n"));
 
@@ -915,7 +915,7 @@ void dd_pcie_rc_int_ch1_int_own_handler(void)
 void dd_pcie_rc_int_ch1_int_ep_handler(void)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH1 INT_EP Occurred.\n"));
 
@@ -997,7 +997,7 @@ void dd_pcie_rc_int_ch1_int_ep_handler(void)
 void dd_pcie_rc_int_ch1_int_sys_err_handler(void)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH1 INT_SYS_ERR Occurred.\n"));
 
@@ -1031,7 +1031,7 @@ void dd_pcie_rc_int_ch1_int_sys_err_handler(void)
 void dd_pcie_rc_int_ch1_int_dma_handler(void)
 {
 	kuint32 status;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH1 INT_DMA Occurred.\n"));
 
@@ -1076,7 +1076,7 @@ void dd_pcie_rc_int_ch1_int_dma_handler(void)
 void dd_pcie_rc_int_ch1_int_trs_ics_msi_handler(void)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH1 INT_TRS_ICS_MSI Occurred.\n"));
 

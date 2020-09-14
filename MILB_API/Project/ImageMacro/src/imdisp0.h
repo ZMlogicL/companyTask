@@ -21,7 +21,6 @@ typedef struct   _ImDisp0Private		ImDisp0Private;
 
 struct _ImDisp0 {
 	KObject parent;
-
 };
 
 
@@ -394,10 +393,10 @@ typedef struct {
 	U_IM_DISP_TRSCODE				trscode[2];								/**< TRSCODE0: SAV/EAV code setting 0 register.<br>
 																				 TRSCODE1: SAV/EAV code setting 1 register.<br>							*/
 	U_IM_DISP_YR_MATRIX_COEFFICIENT	y2r[D_IM_DISP_MATRIX_SIZE];				/**< Y2R0/1/2: YCbCr->RGB matrix coefficient setting register.				*/
-	E_IM_DISP_CORRECT_PROC			tblaset_gmen;							/**< TBLASET.GMEN: Gamma correction enable.<br>
+	E_IM_DISP_CORRECT_PROC			tblaset_gmen;							/**< TBLASET.gmen: Gamma correction enable.<br>
 																				 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
 																					 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>						*/
-	BYTE							tblaset_gmtsl;							/**< TBLASET.GMTSL: Gamma correction table surface.<br>
+	BYTE							tblaset_gmtsl;							/**< TBLASET.gmtsl: Gamma correction table surface.<br>
 																				 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 																					 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>							*/
 	E_IM_DISP_CORRECT_PROC			tblaset_ysaten;							/**< TBLASET.YSATEN: Luminance and chroma correction enable.<br>
@@ -409,39 +408,37 @@ typedef struct {
 	// Face frame
 	T_IM_DISP_FACE_FRAME			face;									/**< Face frame data.<br>													*/
 	// Interrupt callback functions.
-	VP_CALLBACK						int_callback[E_IM_DISP_INT_CB_MAX];		/**< Interrupt callback functions.											*/
+	VP_CALLBACK						int_callback[ImDisp_E_IM_DISP_INT_CB_MAX];		/**< Interrupt callback functions.											*/
 } T_IM_DISP_CTRL_OUTPUT;
 
 
-void im_disp0_memcpy(ImDisp0 * self,E_IM_DISP_SEL block , T_IM_DISP_CTRL_OUTPUT const *const ctrl);
-void im_disp0_memcpy1(ImDisp0 * self,E_IM_DISP_SEL block , T_IM_DISP_CTRL_OUTPUT *const ctrl);
+void im_disp0_memcpy(ImDisp0 * self,ImDispEImDispSel block , T_IM_DISP_CTRL_OUTPUT const *const ctrl);
+void im_disp0_memcpy1(ImDisp0 * self,ImDispEImDispSel block , T_IM_DISP_CTRL_OUTPUT *const ctrl);
 void im_disp0_gim_Disp_Interrupt_Callback1(ImDisp0 * self);
-
-extern INT32 Im_DISP_Set_Int_Callback(E_IM_DISP_SEL block, UINT32 interruption_select, VP_CALLBACK vp_callback);
+ INT32 im_disp0_set_int_callback(ImDisp0 * self, ImDispEImDispSel block, UINT32 interruption_select, VP_CALLBACK vp_callback);
 
 /**
 Get interruption's call-back function pointer.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	interruption_select	Bit map to select set item. <br>
-								It must be set to a value exclude @ref E_IM_DISP_CORRECT_SELECT_ALL.<br>
+								It must be set to a value exclude @ref ImDisp_E_IM_DISP_CORRECT_SELECT_ALL.<br>
 @param[out]	vp_callback			The call-back pointer.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Int_Callback(E_IM_DISP_SEL block, E_IM_DISP_INTERRUPTION_SELECT interruption_select, VP_CALLBACK *vp_callback);
+ INT32 im_disp0_get_int_callback(ImDisp0 * self, ImDispEImDispSel block, ImDispEImDispInterruptionSelect interruption_select, VP_CALLBACK *vp_callback);
 
 /**
 Get AXI state.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	axi_state		AXI state.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-
 #endif /* __IM_DISP0_H__ */
 /** @}*//* end of im_disp*/
 
@@ -465,7 +462,7 @@ VOID im_disp_sample_initialize(VOID)
 	T_IM_DISP_CTRL_OUTPUT_TRG_LIMIT			ctrl_trg_limit_out_lcd;
 	T_IM_DISP_CTRL_OUTPUT					ctrl_out_lcd;
 
-	E_IM_DISP_RPGTMG						grrpgctl;
+	ImDispEImDispRpgtmg						grrpgctl;
 	T_IM_DISP_CTRL_OSD_LAYER				ctrl_osd_lcd;
 
 	UINT32 r_anti_tbl_a[32/2] = {	0x00040000, 0x000C0008, 0x00140010, 0x001C0018,
@@ -580,10 +577,10 @@ VOID im_disp_sample_initialize(VOID)
 	};
 
 	// Set display I/F selection
-	Im_DISP_Set_Display_Interface(E_IM_DISP_LCD_MIPI, D_IM_DISP_IFS_LCD);
+	im_disp4_set_display_interface(im_disp4_new(),ImDisp_E_IM_DISP_LCD_MIPI, D_IM_DISP_IFS_LCD);
 
 	// Clear software reset of DISP
-	Im_DISP_Init();
+	im_disp1_init(im_disp1_new());
 
 	// DISP is initialize by default setting
 	// Set main data input block table
@@ -601,9 +598,9 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_tbl_main_lcd.gamma_b.g_data	= (USHORT*)g_gamma_tbl_b_in;
 	ctrl_tbl_main_lcd.gamma_b.b_data	= (USHORT*)b_gamma_tbl_b_in;
 
-	ret = Im_DISP_Ctrl_Main_Tbl(E_IM_DISP_LCD_MIPI, &ctrl_tbl_main_lcd);
+	ret = im_disp2_ctrl_main_tbl(im_disp2_new(),ImDisp_E_IM_DISP_LCD_MIPI, &ctrl_tbl_main_lcd);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Ctrl_Main_Tbl error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp2_ctrl_main_tbl error ret=%08X\n", ret));
 	}
 
 	// Set main data input block table
@@ -619,27 +616,27 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_tbl_out_lcd.luminance_b	= (USHORT*)&luminance_b;
 	ctrl_tbl_out_lcd.chroma_b		= (USHORT*)&chroma_b;
 
-	ret = Im_DISP_Ctrl_Output_Tbl(E_IM_DISP_LCD_MIPI, &ctrl_tbl_out_lcd);
+	ret = im_disp2_ctrl_output_tbl(im_disp2_new(),ImDisp_E_IM_DISP_LCD_MIPI, &ctrl_tbl_out_lcd);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Ctrl_Output_Tbl error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp2_ctrl_output_tbl error ret=%08X\n", ret));
 	}
 
 	// Set main data input block
 	memset(&ctrl_trg_limit_main_lcd, 0, sizeof(ctrl_trg_limit_main_lcd));
-	ctrl_trg_limit_main_lcd.lrpgctl			= E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
-	ctrl_trg_limit_main_lcd.ltblaset_igtaen	= E_IM_DISP_TABLE_ACCESS_ENABLE;
-	ctrl_trg_limit_main_lcd.ltblaset_gtaen	= E_IM_DISP_TABLE_ACCESS_ENABLE;
+	ctrl_trg_limit_main_lcd.lrpgctl			= ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
+	ctrl_trg_limit_main_lcd.ltblaset_igtaen	= ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE;
+	ctrl_trg_limit_main_lcd.ltblaset_gtaen	= ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE;
 
 	memset(&ctrl_main_lcd, 0, sizeof(ctrl_main_lcd));
-	ctrl_main_lcd.lidt.bit.IFMT			= D_IM_DISP_LIDT_IFMT_YCC422_RP_8BIT;
-	ctrl_main_lcd.lidt.bit.NBT			= D_IM_DISP_NBT_128BYTE;
-	ctrl_main_lcd.lidt.bit.IFEW			= D_IM_DISP_IFEW_16BIT;
-	ctrl_main_lcd.lidt.bit.LVFM			= D_IM_DISP_FORMAT_NORMAL;
-	ctrl_main_lcd.lidt.bit.PKGDV		= 0;
-	ctrl_main_lcd.lidt.bit.CACHE		= 0;
-	ctrl_main_lcd.lidt.bit.PROT			= 0;
-	ctrl_main_lcd.lidt.bit.YSLVSL		= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
-	ctrl_main_lcd.lidt.bit.CSLVSL		= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
+	ctrl_main_lcd.lidt.bit.ifmt			= D_IM_DISP_LIDT_IFMT_YCC422_RP_8BIT;
+	ctrl_main_lcd.lidt.bit.nbt			= D_IM_DISP_NBT_128BYTE;
+	ctrl_main_lcd.lidt.bit.ifew			= D_IM_DISP_IFEW_16BIT;
+	ctrl_main_lcd.lidt.bit.lvfm			= D_IM_DISP_FORMAT_NORMAL;
+	ctrl_main_lcd.lidt.bit.pkgdv		= 0;
+	ctrl_main_lcd.lidt.bit.cache		= 0;
+	ctrl_main_lcd.lidt.bit.pROT			= 0;
+	ctrl_main_lcd.lidt.bit.yslvsl		= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
+	ctrl_main_lcd.lidt.bit.cslvsl		= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
 	ctrl_main_lcd.lisize.size.width		= 640;
 	ctrl_main_lcd.lisize.size.lines		= 480;
 	ctrl_main_lcd.laddr[0].y_addr		= 0x50000000;
@@ -655,59 +652,59 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_main_lcd.libctl_iben			= 0;
 	ctrl_main_lcd.libctl_ibset			= E_IM_DISP_BANK_00;
 	ctrl_main_lcd.lercv					= E_IM_DISP_ERCV_ON;
-	ctrl_main_lcd.lrsz0					= E_IM_DISP_RSZSL_PADDING_THINNING;
-	ctrl_main_lcd.lrsz1.bit.HRSZM		= 1;
-	ctrl_main_lcd.lrsz1.bit.HRSZN		= 1;
-	ctrl_main_lcd.lrsz1.bit.HRSZOF		= 0;
-	ctrl_main_lcd.lrsz2.bit.VRSZM		= 1;
-	ctrl_main_lcd.lrsz2.bit.VRSZN		= 1;
-	ctrl_main_lcd.lrsz2.bit.VRSZOF		= 0;
-	ctrl_main_lcd.lrsz3.bit.HCSTA		= 0;
-	ctrl_main_lcd.lrsz3.bit.VCSTA		= 0;
-	ctrl_main_lcd.yhlp.lyhlpcl.bit.YHLPEN		= 0;
-	ctrl_main_lcd.yhlp.lyhlpcl.bit.YHLPMD		= E_IM_DISP_YHLPMD_HORIZONTAL_SPACE_FILTER;
-	ctrl_main_lcd.yhlp.lyhlpk.bit.YHLPK0		= 0;
-	ctrl_main_lcd.yhlp.lyhlpk.bit.YHLPK1		= 0;
-	ctrl_main_lcd.yhlp.lyhlpk.bit.YHLPK2		= 0;
-	ctrl_main_lcd.yhlp.lyhlpk.bit.YHLPK3		= 0;
-	ctrl_main_lcd.yhlp.lyhlpol.bit.YHLPCOR		= 0;
-	ctrl_main_lcd.yhlp.lyhlpol.bit.YHLPTH		= 0;
-	ctrl_main_lcd.yhlp.lyhlpclr.bit.YHLPY		= 0;
-	ctrl_main_lcd.yhlp.lyhlpclr.bit.YHLPCB		= 0;
-	ctrl_main_lcd.yhlp.lyhlpclr.bit.YHLPCR		= 0;
-	ctrl_main_lcd.warning.lywctl.bit.YWEN		= D_IM_DISP_ENABLE_OFF;
-	ctrl_main_lcd.warning.lywctl.bit.YWSL		= E_IM_DISP_YWSL_BRIGHTNESS_SPECIFIED_COLOR;
-	ctrl_main_lcd.warning.lyw0th.bit.YWTHH		= 0;
-	ctrl_main_lcd.warning.lyw0th.bit.YWTHL		= 0;
-	ctrl_main_lcd.warning.lyw1th.bit.YWTHH		= 0;
-	ctrl_main_lcd.warning.lyw1th.bit.YWTHL		= 0;
-	ctrl_main_lcd.warning.lyw0st				= E_IM_DISP_YWMD_BR_RGB;
-	ctrl_main_lcd.warning.lyw0ca.bit.YWY		= 0;
-	ctrl_main_lcd.warning.lyw0ca.bit.YWCB		= 0;
-	ctrl_main_lcd.warning.lyw0ca.bit.YWCR		= 0;
-	ctrl_main_lcd.warning.lyw0ca.bit.YWA		= 0;
-	ctrl_main_lcd.warning.lyw0cb.bit.YWY		= 0;
-	ctrl_main_lcd.warning.lyw0cb.bit.YWCB		= 0;
-	ctrl_main_lcd.warning.lyw0cb.bit.YWCR		= 0;
-	ctrl_main_lcd.warning.lyw0cb.bit.YWA		= 0;
-	ctrl_main_lcd.warning.lyw1st				= E_IM_DISP_YWMD_BR_RGB;
-	ctrl_main_lcd.warning.lyw1ca.bit.YWY		= 0;
-	ctrl_main_lcd.warning.lyw1ca.bit.YWCB		= 0;
-	ctrl_main_lcd.warning.lyw1ca.bit.YWCR		= 0;
-	ctrl_main_lcd.warning.lyw1ca.bit.YWA		= 0;
-	ctrl_main_lcd.warning.lyw1cb.bit.YWY		= 0;
-	ctrl_main_lcd.warning.lyw1cb.bit.YWCB		= 0;
-	ctrl_main_lcd.warning.lyw1cb.bit.YWCR		= 0;
-	ctrl_main_lcd.warning.lyw1cb.bit.YWA		= 0;
+	ctrl_main_lcd.lrsz0					= ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING;
+	ctrl_main_lcd.lrsz1.bit.hrszm		= 1;
+	ctrl_main_lcd.lrsz1.bit.hrszn		= 1;
+	ctrl_main_lcd.lrsz1.bit.hrszof		= 0;
+	ctrl_main_lcd.lrsz2.bit.vrszm		= 1;
+	ctrl_main_lcd.lrsz2.bit.vrszn		= 1;
+	ctrl_main_lcd.lrsz2.bit.vrszof		= 0;
+	ctrl_main_lcd.lrsz3.bit.hcsta		= 0;
+	ctrl_main_lcd.lrsz3.bit.vcsta		= 0;
+	ctrl_main_lcd.yhlp.lyhlpcl.bit.yhlpen		= 0;
+	ctrl_main_lcd.yhlp.lyhlpcl.bit.yhlpmd		= E_IM_DISP_YHLPMD_HORIZONTAL_SPACE_FILTER;
+	ctrl_main_lcd.yhlp.lyhlpk.bit.yhlpk0		= 0;
+	ctrl_main_lcd.yhlp.lyhlpk.bit.yhlpk1		= 0;
+	ctrl_main_lcd.yhlp.lyhlpk.bit.yhlpk2		= 0;
+	ctrl_main_lcd.yhlp.lyhlpk.bit.yhlpk3		= 0;
+	ctrl_main_lcd.yhlp.lyhlpol.bit.yhlpcor		= 0;
+	ctrl_main_lcd.yhlp.lyhlpol.bit.yhlpth		= 0;
+	ctrl_main_lcd.yhlp.lyhlpclr.bit.yhlpy		= 0;
+	ctrl_main_lcd.yhlp.lyhlpclr.bit.yhlpcb		= 0;
+	ctrl_main_lcd.yhlp.lyhlpclr.bit.yhlpcr		= 0;
+	ctrl_main_lcd.warning.lywctl.bit.ywen		= D_IM_DISP_ENABLE_OFF;
+	ctrl_main_lcd.warning.lywctl.bit.ywsl		= E_IM_DISP_YWSL_BRIGHTNESS_SPECIFIED_COLOR;
+	ctrl_main_lcd.warning.lyw0th.bit.ywthh		= 0;
+	ctrl_main_lcd.warning.lyw0th.bit.ywthl		= 0;
+	ctrl_main_lcd.warning.lyw1th.bit.ywthh		= 0;
+	ctrl_main_lcd.warning.lyw1th.bit.ywthl		= 0;
+	ctrl_main_lcd.warning.lyw0st				= ImDisp_E_IM_DISP_YWMD_BR_RGB;
+	ctrl_main_lcd.warning.lyw0ca.bit.ywy		= 0;
+	ctrl_main_lcd.warning.lyw0ca.bit.ywcb		= 0;
+	ctrl_main_lcd.warning.lyw0ca.bit.ywcr		= 0;
+	ctrl_main_lcd.warning.lyw0ca.bit.ywa		= 0;
+	ctrl_main_lcd.warning.lyw0cb.bit.ywy		= 0;
+	ctrl_main_lcd.warning.lyw0cb.bit.ywcb		= 0;
+	ctrl_main_lcd.warning.lyw0cb.bit.ywcr		= 0;
+	ctrl_main_lcd.warning.lyw0cb.bit.ywa		= 0;
+	ctrl_main_lcd.warning.lyw1st				= ImDisp_E_IM_DISP_YWMD_BR_RGB;
+	ctrl_main_lcd.warning.lyw1ca.bit.ywy		= 0;
+	ctrl_main_lcd.warning.lyw1ca.bit.ywcb		= 0;
+	ctrl_main_lcd.warning.lyw1ca.bit.ywcr		= 0;
+	ctrl_main_lcd.warning.lyw1ca.bit.ywa		= 0;
+	ctrl_main_lcd.warning.lyw1cb.bit.ywy		= 0;
+	ctrl_main_lcd.warning.lyw1cb.bit.ywcb		= 0;
+	ctrl_main_lcd.warning.lyw1cb.bit.ywcr		= 0;
+	ctrl_main_lcd.warning.lyw1cb.bit.ywa		= 0;
 	ctrl_main_lcd.warning.lbost					= D_IM_DISP_BOMD_MASTER;
-	ctrl_main_lcd.lbltmr.bit.BTIMH		= 0;
-	ctrl_main_lcd.lbltmr.bit.BTIML		= 0;
-	ctrl_main_lcd.lbltmr.bit.BTIMD		= D_IM_DISP_BTIMD_NORMAL;
-	ctrl_main_lcd.zebra.lzbwid.bit.ZBHH	= 2;
-	ctrl_main_lcd.zebra.lzbwid.bit.ZBHL	= 2;
-	ctrl_main_lcd.zebra.lzbv.bit.ZBVSTA	= 0;
-	ctrl_main_lcd.zebra.lzbv.bit.ZBVCYC	= 0;
-	ctrl_main_lcd.zebra.lzbpt.bit.ZBDIR	= 0;
+	ctrl_main_lcd.lbltmr.bit.btimh		= 0;
+	ctrl_main_lcd.lbltmr.bit.btiml		= 0;
+	ctrl_main_lcd.lbltmr.bit.btimd		= D_IM_DISP_BTIMD_NORMAL;
+	ctrl_main_lcd.zebra.lzbwid.bit.zbhh	= 2;
+	ctrl_main_lcd.zebra.lzbwid.bit.zbhl	= 2;
+	ctrl_main_lcd.zebra.lzbv.bit.zbvsta	= 0;
+	ctrl_main_lcd.zebra.lzbv.bit.zbvcyc	= 0;
+	ctrl_main_lcd.zebra.lzbpt.bit.zbdir	= 0;
 	ctrl_main_lcd.ly2r[0].dword			= 0x0000001f00eb002a;
 	ctrl_main_lcd.ly2r[1].dword			= 0x000000d300f70048;
 	ctrl_main_lcd.ly2r[2].dword			= 0x000000fc00720046;
@@ -725,14 +722,14 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_main_lcd.lrevdisp.bit.HREV		= D_IM_DISP_REV_NORMAL;
 	ctrl_main_lcd.lrevdisp.bit.VREV		= D_IM_DISP_REV_NORMAL;
 
-	ret = Im_DISP_Ctrl_Main_Layer(E_IM_DISP_LCD_MIPI, &ctrl_trg_limit_main_lcd, &ctrl_main_lcd);
+	ret = im_disp1_ctrl_main_layer(im_disp1_new(),ImDisp_E_IM_DISP_LCD_MIPI, &ctrl_trg_limit_main_lcd, &ctrl_main_lcd);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Ctrl_Main_Layer error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp1_ctrl_main_layer error ret=%08X\n", ret));
 	}
 
 	// Set data output block
 	memset(&ctrl_trg_limit_out_lcd, 0, sizeof(ctrl_trg_limit_out_lcd));
-	ctrl_trg_limit_out_lcd.tgkmd			= E_IM_DISP_TGKMD_NORMAL;
+	ctrl_trg_limit_out_lcd.tgkmd			= ImDisp_E_IM_DISP_TGKMD_NORMAL;
 	ctrl_trg_limit_out_lcd.tgkst			= 0;
 	ctrl_trg_limit_out_lcd.toctl.bit.CON	= D_IM_DISP_CON_EXTERNAL;
 	ctrl_trg_limit_out_lcd.toctl.bit.CKOEN	= D_IM_DISP_ENABLE_OFF;
@@ -742,7 +739,7 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_trg_limit_out_lcd.polsel.bit.VEPS	= D_IM_DISP_POLARITY_POSITIVE;
 	ctrl_trg_limit_out_lcd.polsel.bit.HEPS	= D_IM_DISP_POLARITY_POSITIVE;
 	ctrl_trg_limit_out_lcd.polsel.bit.CKEG	= D_IM_DISP_CKEG_FALL;
-	ctrl_trg_limit_out_lcd.rpgctl			= E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
+	ctrl_trg_limit_out_lcd.rpgctl			= ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
 	ctrl_trg_limit_out_lcd.tsl				= D_IM_DISP_TSL_PROGRESSIVE;
 	ctrl_trg_limit_out_lcd.vcyc.bit.VCYC1	= 482;
 	ctrl_trg_limit_out_lcd.vcyc.bit.VCYC2	= 482;
@@ -763,8 +760,8 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_trg_limit_out_lcd.domd.bit.MODE	= D_IM_DISP_MODE_RGB888_24BIT;
 	ctrl_trg_limit_out_lcd.domd.bit.OBPSL	= D_IM_DISP_OBPSL_LSB;
 	ctrl_trg_limit_out_lcd.domd.bit.OBUSL	= D_IM_DISP_OBUSL_8BIT;
-	ctrl_trg_limit_out_lcd.tblaset_gmtaen	= E_IM_DISP_TABLE_ACCESS_ENABLE;
-	ctrl_trg_limit_out_lcd.tblaset_ysatta	= E_IM_DISP_TABLE_ACCESS_ENABLE;
+	ctrl_trg_limit_out_lcd.tblaset_gmtaen	= ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE;
+	ctrl_trg_limit_out_lcd.tblaset_ysatta	= ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE;
 
 	memset(&ctrl_out_lcd, 0, sizeof(ctrl_out_lcd));
 	ctrl_out_lcd.intc						= D_IM_DISP_VFTMG_1ST;
@@ -875,32 +872,32 @@ VOID im_disp_sample_initialize(VOID)
 	}
 	ctrl_out_lcd.face.ffden					= 0x0000;
 	ctrl_out_lcd.face.msff					= 0;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_VE]		= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_VE2]		= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GR0EE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GR1EE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GA0EE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GA1EE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_LEE]		= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GR0REE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GR1REE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GA0REE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_GA1REE]	= NULL;
-	ctrl_out_lcd.int_callback[E_IM_DISP_INT_CB_LREE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_VE]		= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_VE2]		= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GR0EE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GR1EE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GA0EE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GA1EE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_LEE]		= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GR0REE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GR1REE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GA0REE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_GA1REE]	= NULL;
+	ctrl_out_lcd.int_callback[ImDisp_E_IM_DISP_INT_CB_LREE]	= NULL;
 
-	ret = im_disp1_ctrl_output(im_disp1_new(), E_IM_DISP_LCD_MIPI, &ctrl_trg_limit_out_lcd, &ctrl_out_lcd);
+	ret = im_disp1_ctrl_output(ImDisp_E_IM_DISP_LCD_MIPI, &ctrl_trg_limit_out_lcd, &ctrl_out_lcd);
 	if (ret != D_DDIM_OK){
 		Ddim_Print(("I:im_disp1_ctrl_output error ret=%08X\n", ret));
 	}
 
 	// Set OSD data input block
-	grrpgctl = E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
+	grrpgctl = ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP;
 
 	memset(&ctrl_osd_lcd, 0, sizeof(ctrl_osd_lcd));
-	ctrl_osd_lcd.gridt.bit.IFMT				= D_IM_DISP_GRIDT_IFMT_RGBA8888;
-	ctrl_osd_lcd.gridt.bit.NBT				= D_IM_DISP_NBT_128BYTE;
-	ctrl_osd_lcd.gridt.bit.CACHE			= 0;
-	ctrl_osd_lcd.gridt.bit.PROT				= 0;
+	ctrl_osd_lcd.gridt.bit.ifmt				= D_IM_DISP_GRIDT_IFMT_RGBA8888;
+	ctrl_osd_lcd.gridt.bit.nbt				= D_IM_DISP_NBT_128BYTE;
+	ctrl_osd_lcd.gridt.bit.cache			= 0;
+	ctrl_osd_lcd.gridt.bit.pROT				= 0;
 	ctrl_osd_lcd.gridt.bit.SLVSL			= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
 	ctrl_osd_lcd.gridt.bit.ASLVSL			= D_IM_DISP_SLVSL_MASTER_INTERFACE_0;
 	ctrl_osd_lcd.gridt.bit.IFBTMU			= D_IM_DISP_IFBTMU_UP_TO_BOTTOM;
@@ -912,8 +909,8 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_osd_lcd.gripo.bit.IPO2				= D_IM_DISP_IPO_RGBA8888_G;
 	ctrl_osd_lcd.gripo.bit.IPO3				= D_IM_DISP_IPO_RGBA8888_B;
 	ctrl_osd_lcd.gripo.bit.IPO4				= D_IM_DISP_IPO_RGBA8888_A;
-	ctrl_osd_lcd.grscctl_idset				= E_IM_DISP_INPUT_DATA_AREA_0;
-	for(i = 0; i < D_IM_DISP_OSD_DISPLAY_AREA_COUNT; i++) {
+	ctrl_osd_lcd.grscctl_idset				= ImDisp_E_IM_DISP_INPUT_DATA_AREA_0;
+	for(i = 0; i < ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT; i++) {
 		ctrl_osd_lcd.grisize[i].size.width	= 8;
 		ctrl_osd_lcd.grisize[i].size.lines	= 8;
 		ctrl_osd_lcd.grhga[i]				= 8;
@@ -953,15 +950,15 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_osd_lcd.grblink.bit.BTIML_9		= 0;
 	ctrl_osd_lcd.grbinit					= 0;
 	ctrl_osd_lcd.grbitrg					= D_IM_DISP_BITRG_NON;
-	ctrl_osd_lcd.grrsz0						= E_IM_DISP_RSZSL_PADDING_THINNING;
-	ctrl_osd_lcd.grrsz1.bit.HRSZM			= 1;
-	ctrl_osd_lcd.grrsz1.bit.HRSZN			= 1;
-	ctrl_osd_lcd.grrsz1.bit.HRSZOF			= 0;
-	ctrl_osd_lcd.grrsz2.bit.VRSZM			= 1;
-	ctrl_osd_lcd.grrsz2.bit.VRSZN			= 1;
-	ctrl_osd_lcd.grrsz2.bit.VRSZOF			= 0;
-	ctrl_osd_lcd.grrsz3.bit.HCSTA			= 0;
-	ctrl_osd_lcd.grrsz3.bit.VCSTA			= 0;
+	ctrl_osd_lcd.grrsz0						= ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING;
+	ctrl_osd_lcd.grrsz1.bit.hrszm			= 1;
+	ctrl_osd_lcd.grrsz1.bit.hrszn			= 1;
+	ctrl_osd_lcd.grrsz1.bit.hrszof			= 0;
+	ctrl_osd_lcd.grrsz2.bit.vrszm			= 1;
+	ctrl_osd_lcd.grrsz2.bit.vrszn			= 1;
+	ctrl_osd_lcd.grrsz2.bit.vrszof			= 0;
+	ctrl_osd_lcd.grrsz3.bit.hcsta			= 0;
+	ctrl_osd_lcd.grrsz3.bit.vcsta			= 0;
 	ctrl_osd_lcd.gry2r[0].bit.YR0			= 0;
 	ctrl_osd_lcd.gry2r[0].bit.YR1			= 0;
 	ctrl_osd_lcd.gry2r[0].bit.YR2			= 0;
@@ -973,26 +970,26 @@ VOID im_disp_sample_initialize(VOID)
 	ctrl_osd_lcd.gry2r[2].bit.YR2			= 0;
 	ctrl_osd_lcd.gralp						= 0;
 
-	ret = Im_DISP_Ctrl_OSD_Layer(E_IM_DISP_LCD_MIPI, E_IM_DISP_SEL_LAYER_OSD_0, &grrpgctl, &ctrl_osd_lcd);
+	ret = im_disp1_ctrl_osd_layer(im_disp1_new(),ImDisp_E_IM_DISP_LCD_MIPI, E_IM_DISP_SEL_LAYER_OSD_0, &grrpgctl, &ctrl_osd_lcd);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Ctrl_OSD_Layer error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp1_ctrl_osd_layer error ret=%08X\n", ret));
 	}
 
-	ret = Im_DISP_Ctrl_OSD_Layer(E_IM_DISP_LCD_MIPI, E_IM_DISP_SEL_LAYER_OSD_1, &grrpgctl, &ctrl_osd_lcd);
+	ret = im_disp1_ctrl_osd_layer(im_disp1_new(),ImDisp_E_IM_DISP_LCD_MIPI, E_IM_DISP_SEL_LAYER_OSD_1, &grrpgctl, &ctrl_osd_lcd);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Ctrl_OSD_Layer error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp1_ctrl_osd_layer error ret=%08X\n", ret));
 	}
 
 	// Start.
-	ret = Im_DISP_Start(E_IM_DISP_SEL_LAYER_NONE, E_IM_DISP_SEL_LAYER_ALL, 0);
+	ret = im_disp2_start(im_disp2_new(),E_IM_DISP_SEL_LAYER_NONE, E_IM_DISP_SEL_LAYER_ALL, 0);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Start error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp2_start error ret=%08X\n", ret));
 	}
 
 	// Wait VSYNC
-	ret = Im_DISP_Wait_Vsync(E_IM_DISP_LCD_MIPI, E_IM_DISP_INTERRUPTION_SELECT_VE, E_IM_DISP_WAIT_1_TIME);
+	ret = im_disp2_wait_vsync(im_disp2_new(),ImDisp_E_IM_DISP_LCD_MIPI, ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE, E_IM_DISP_WAIT_1_TIME);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("I:Im_DISP_Wait_Vsync error ret=%08X\n", ret));
+		Ddim_Print(("I:im_disp2_wait_vsync error ret=%08X\n", ret));
 	}
 }
 @endcode

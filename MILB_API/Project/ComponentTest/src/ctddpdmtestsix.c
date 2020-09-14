@@ -15,13 +15,20 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pdm.h"
-#include "dd_pdm.h"
+// #include "dd_pdm.h"
 #include "ct_dd_pdm.h"
-#include "dd_top.h"
-#include "dd_cache.h"
-#include "dd_gic.h"
-#include "dd_audio.h"
-#include "dd_hdmac0.h"
+// #include "dd_top.h"
+// #include "dd_cache.h"
+// #include "dd_gic.h"
+// #include "dd_audio.h"
+// #include "dd_hdmac0.h"
+#include "../../DeviceDriver/Peripheral/src/ddpdm.h"
+#include "../../DeviceDriver/LSITop/src/ddtopone.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudioctrl.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudiodma.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudioi2s.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudio.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac0.h"
 #include "peripheral.h"
 #include "ctddpdmtestone.h"
 #include "ctddpdmtestfive.h"
@@ -59,74 +66,74 @@ void ct_dd_pdm_testsix_set_addr(CtDdPdmTestsix *self,CtDdPdmTestone *testone)
 void ct_dd_pdm_testsix_037(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_8_192;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_1;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_8_192;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_1;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
 	Ddim_Print(("> pdm(ES3) 031 : PDM0(DMA) Clock:8.192MHz(AUCLK) FS:16kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -135,73 +142,73 @@ void ct_dd_pdm_testsix_037(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_038(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_24_576;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_2;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DDAUDIOI2S_MASTER_CLOCK_24_576;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_2;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 12;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 12;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 032 : PDM0(DMA) Clock:12.288MHz(AUCLK/2) FS:8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -210,75 +217,75 @@ void ct_dd_pdm_testsix_038(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_039(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_8_192;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_1;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_8_192;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_1;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
 	Ddim_Print(("> pdm(ES3) 033 : PDM0(DMA) Clock:8.192MHz(AUCLK) FS:8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -287,75 +294,75 @@ void ct_dd_pdm_testsix_039(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_040(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_8_192;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_1;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_8_192;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_1;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize = 0x400;
 	self->pdmLen.tsize = 0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
 	Ddim_Print(("> pdm(ES3) 034 : PDM0(DMA) Clock:4.096MHz(AUCLK) FS:8kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -364,74 +371,74 @@ void ct_dd_pdm_testsix_040(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_041(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_1;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_1;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 16;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 16;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
 	Ddim_Print(("> pdm(ES3) 035 : PDM0(DMA) Clock:22.5792MHz(AUCLK) FS:44.1kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -440,73 +447,73 @@ void ct_dd_pdm_testsix_041(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_042(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_2;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_2;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 16;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 16;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 036 : PDM0(DMA) Clock:11.2896MHz(AUCLK/2) FS:44.1kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -515,74 +522,74 @@ void ct_dd_pdm_testsix_042(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_043(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK
-	Dd_Top_Set_CLKSEL7_PDM0SEL(5);
+	DdTopone_SET_CLKSEL7_PDM0SEL(5);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_1;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_1;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 8;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 8;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize =0x400;
 	self->pdmLen.tsize =0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 	DDIM_User_Dly_Tsk(2000);
 
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
-	Dd_Audio_Close_Input(4);
+	dd_audio_close_input(dd_audio_get(),4);
 	
 	Ddim_Print(("> pdm(ES3) 037 : PDM0(DMA) Clock:22.5792MHz(AUCLK) FS:22.05kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));
@@ -591,72 +598,72 @@ void ct_dd_pdm_testsix_043(CtDdPdmTestsix *self)
 void ct_dd_pdm_testsix_044(CtDdPdmTestsix *self)
 {
 	kuint8 ch = 0;
-	T_DD_AUDIO_I2S_CMMN	i2sCommon;
+	AUDIOI2SCMMN	i2sCommon;
 	
 	// Select AUCLK/2
-	Dd_Top_Set_CLKSEL7_PDM0SEL(6);
+	DdTopone_SET_CLKSEL7_PDM0SEL(6);
 	
-	Dd_Audio_Init();
+	dd_audio_init(dd_audio_get());
 	
-	Dd_Audio_Open_Input(4, D_DDIM_USER_SEM_WAIT_FEVR);
+	dd_audio_open_input(dd_audio_get(),4, D_DDIM_USER_SEM_WAIT_FEVR);
 	
-	Dd_Audio_Get_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	i2sCommon.aumclki = E_DD_AUDIO_MASTER_CLOCK_22_5792;
-	i2sCommon.div_aumclko = E_DD_AUDIO_AUMCLKO_DIV_2;
-	i2sCommon.div_auclk = E_DD_AUDIO_AUCLK_DIV_4;
-	i2sCommon.div_lrclk = E_DD_AUDIO_AULR_DIV_64;
-	i2sCommon.clk_div_enable = D_DD_AUDIO_ENABLE;
-	i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
+	i2sCommon.aumclki = DdAudioI2s_MASTER_CLOCK_22_5792;
+	i2sCommon.divaumclko = DdAudioI2s_AUMCLKO_DIV_2;
+	i2sCommon.divAuclk = DdAudioI2s_AUCLK_DIV_4;
+	i2sCommon.divLrclk = DdAudioI2s_AULR_DIV_64;
+	i2sCommon.clkDivEnable = DdAudio_ENABLE;
+	i2sCommon.masterSlave = DdAudioI2s_CLK_MASTER;
 	
-	Dd_Audio_Ctrl_I2sCmmn(4, &i2sCommon);
+	dd_audio_ctrl_i2s_cmmn(dd_audio_get(),4, &i2sCommon);
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	if(Dd_Pdm_Open(ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
+	if(dd_pdm_open(dd_pdm_get(),ch, D_DDIM_USER_SEM_WAIT_FEVR) != D_DDIM_OK) {
 		Ddim_Print(("Dd_Pdm_Open Error(ch0)\n"));
 	}
 	
-	Dd_Pdm_Get_Ctrl_Core(ch, &self->pdmCfg);
-	self->pdmCfg.mclk_div = 4;
-	self->pdmCfg.sinc_rate = 32;
-	self->pdmCfg.pga_r = 0;
-	self->pdmCfg.pga_l = 0;
+	dd_pdm_get_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
+	self->pdmCfg.mclkDiv = 4;
+	self->pdmCfg.sincRate = 32;
+	self->pdmCfg.pgaR = 0;
+	self->pdmCfg.pgaL = 0;
 	
-	Dd_Pdm_Ctrl_Core(ch, &self->pdmCfg);
+	dd_pdm_ctrl_core(dd_pdm_get(),ch, &self->pdmCfg);
 	
-	Dd_Pdm_Get_Ctrl_Dma(ch, &self->pdmDmaCfg);
-	self->pdmDmaCfg.pcm_chset = E_DD_PDM_DMA_PCM_CH_LEFT;
-	self->pdmDmaCfg.pcm_wdlen = E_DD_PDM_DMA_PCM_WD_16;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	dd_pdm_get_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.pcmChset = DdPdm_DMA_PCM_CH_LEFT;
+	self->pdmDmaCfg.pcmWdlen = DdPdm_DMA_PCM_WD_16;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
-	Dd_Pdm_Start_Streaming(ch);
+	dd_pdm_start_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Set_CallbackDma0Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
-	Dd_Pdm_Set_EnableDma0Intr(ch, D_DD_PDM_ENABLE);
-	Dd_Pdm_Set_CallbackDma1Intr(ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
-	Dd_Pdm_Set_EnableDma1Intr(ch, D_DD_PDM_ENABLE);
+	dd_pdm_set_callback_dma0_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_0_cb);
+	dd_pdm_set_enable_dma0_intr(ch, DdAudio_ENABLE);
+	dd_pdm_set_callback_dma1_intr(dd_pdm_get(),ch, (T_DD_PDM_CALLBACK)ct_dd_pdm_testfive_dma_int_handler026_1_cb);
+	dd_pdm_set_enable_dma1_intr(dd_pdm_get(),ch, DdAudio_ENABLE);
 	
-	Dd_Pdm_Flush_Dma_Fifo(0);
+	dd_pdm_flush_dma_fifo(dd_pdm_get(),0);
 	
-	Dd_Pdm_Set_DMA0_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA);
-	Dd_Pdm_Set_DMA1_Dst_Addr(ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
+	dd_pdm_set_dma0_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA);
+	dd_pdm_set_dma1_dst_addr(dd_pdm_get(),ch, CtDdPdmTestone_WORK_AREA+(0x400 * 4));
 	
 	self->pdmLen.ttsize = 0x400;
 	self->pdmLen.tsize = 0x10;
 	
-	Dd_Pdm_Set_Dma_TransLength(ch, &self->pdmLen);
+	dd_pdm_set_dma_trans_length(dd_pdm_get(),ch, &self->pdmLen);
 	
 	*S_GCT_DD_PDM_DMA_INT_CNT6 = 1;
 	
-	self->pdmDmaCfg.dma_en = D_DD_PDM_ENABLE;
-	Dd_Pdm_Ctrl_Dma(ch, &self->pdmDmaCfg);
+	self->pdmDmaCfg.dmaEn = DdAudio_ENABLE;
+	dd_pdm_ctrl_dma(dd_pdm_get(),ch, &self->pdmDmaCfg);
 	
 	DDIM_User_Dly_Tsk(2000);
 	
-	Dd_Pdm_Stop_Streaming(ch);
+	dd_pdm_stop_streaming(dd_pdm_get(),ch);
 	
-	Dd_Pdm_Close(ch);
+	dd_pdm_close(dd_pdm_get(),ch);
 	
 	Ddim_Print(("> pdm(ES3) 038 : PDM0(DMA) Clock:11.2896MHz(AUCLK/2) FS:22.05kHz test\n"));
 	memset(self,0,sizeof(CtDdPdmTestsix));

@@ -1,7 +1,7 @@
 /*
  *ctimdisp1a.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -26,25 +29,49 @@
 #include "imdisp1group.h"
 #include "ctimdisp1a.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp1a, ct_im_disp1a, IM_TYPE_DISP1_PARENT)
-#define CT_IM_DISP1A_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp1aPrivate, CT_TYPE_IM_DISP1A))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp1a, ct_im_disp1a, IM_TYPE_DISP1_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP1A_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP1A, CtImDisp1aPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp1aPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static kboolean imDisp1aDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo);
+static gboolean imDisp1aDoPctest_od(ImDisp1Parent *parent, gint32 *pSeqNo);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp1a_constructor(CtImDisp1a *self)
+static void ct_im_disp1a_class_init(CtImDisp1aClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp1aPrivate));
+}
+
+static void ct_im_disp1a_init(CtImDisp1a *self)
 {
 	//CtImDisp1aPrivate *priv = CT_IM_DISP1A_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -53,19 +80,36 @@ static void ct_im_disp1a_constructor(CtImDisp1a *self)
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 }
 
-static void ct_im_disp1a_destructor(CtImDisp1a *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp1a *self = CT_IM_DISP1A(object);
+//	CtImDisp1aPrivate *priv = CT_IM_DISP1A_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp1a_parent_class)->dispose(object);
 }
 
-/*
- * PUBLIC
- * */
+static void finalize_od(GObject *object)
+{
+//	CtImDisp1a *self = CT_IM_DISP1A(object);
+//	CtImDisp1aPrivate *priv = CT_IM_DISP1A_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp1a_parent_class)->finalize(object);
+}
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static kboolean imDisp1aDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
+static gboolean imDisp1aDoPctest_od(ImDisp1Parent *parent, gint32 *pSeqNo)
 {
 //	CtImDisp1a *self = (CtImDisp1a *)parent;
-	kint32 seqNo = *pSeqNo;
+	gint32 seqNo = *pSeqNo;
 	ImDisp1Group *imDisp1Group = (ImDisp1Group *)im_disp1_parent_get_group(parent);
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, E_IM_DISP_SEL_LAYER_OSD_0
@@ -924,13 +968,17 @@ static kboolean imDisp1aDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 	im_disp1_parent_pctest_wrap(parent, "imdisp IntHndl");
 
 	*pSeqNo = seqNo;
-	return ktrue;
+	return gtrue;
 }
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
+/*
+ * PUBLIC
+ * */
+
 CtImDisp1a *ct_im_disp1a_new()
 {
-	CtImDisp1a *self = (CtImDisp1a *) k_object_new_with_private(CT_TYPE_IM_DISP1A,sizeof(CtImDisp1aPrivate));
+	CtImDisp1a *self = (CtImDisp1a *) g_object_new(CT_TYPE_IM_DISP1A, NULL);
 	if(!self){//Ddim_Assertion(self)
 		Ddim_Print(("!! new CtImDisp1a NULL: %s (%d)", __FILE__, __LINE__));
 		return NULL;

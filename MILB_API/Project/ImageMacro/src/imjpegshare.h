@@ -15,8 +15,12 @@
 #define __IM_JPEG_SHARE_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imjpegcommon.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,23 +28,33 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_JPEG_SHARE				(im_jpeg_share_get_type())
-#define IM_JPEG_SHARE	(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, ImJpegShare))
-#define IM_IS_JPEG_SHARE(obj)			(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_JPEG_SHARE))
+#define IM_TYPE_JPEG_SHARE							(im_jpeg_share_struct_get_type ())
+#define IM_JPEG_SHARE(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_JPEG_SHARE, ImJpegShare))
+#define IM_JPEG_SHARE_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_JPEG_SHARE, ImJpegShareClass))
+#define IM_IS_JPEG_SHARE(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_JPEG_SHARE))
+#define IM_IS_JPEG_SHARE_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_JPEG_SHARE))
+#define IM_JPEG_SHARE_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_JPEG_SHARE, ImJpegShareClass))
 
 
-typedef struct _ImJpegShare 				ImJpegShare;
-typedef struct _ImJpegSharePrivate 	ImJpegSharePrivate;
+typedef struct _ImJpegShare							ImJpegShare;
+typedef struct _ImJpegShareClass					ImJpegShareClass;
+typedef struct _ImJpegSharePrivate 				ImJpegSharePrivate;
 
 
 struct _ImJpegShare
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustom *ddimUserCustom;
 };
 
+struct _ImJpegShareClass
+{
+	GObjectClass parentClass;
+};
 
-KConstType 		    		im_jpeg_share_get_type(void);
-ImJpegShare*		        im_jpeg_share_new(void);
+GType									im_jpeg_share_struct_get_type(void)	G_GNUC_CONST;
+ImJpegShare*					im_jpeg_share_struct_new(void);
+
 /**
   This function set Jpeg encode frame management table data.
   @param [in]	pJpgEncFrmMng		: Pointer to Jpeg encode frame management table
@@ -50,7 +64,7 @@ ImJpegShare*		        im_jpeg_share_new(void);
 				It can set during the encoding process, If the same base configuration to encode.<br>
 				If you want to set in during Jpeg encoding process, please set after PBUF and JBUF is running.<br>
 */
-extern	kint32	im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
+extern	gint32	im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
 
 /**
   This function get the base settings for Jpeg encode.
@@ -58,7 +72,7 @@ extern	kint32	im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncF
   @retval		ImJpegCommon_D_IM_JPEG_OK			: Success.
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
 */
-extern	kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng );
+extern	gint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng );
 
 /**
   This function get the frame settings for Jpeg encode.
@@ -66,7 +80,7 @@ extern	kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng );
   @retval		ImJpegCommon_D_IM_JPEG_OK			: Success.
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
 */
-extern	kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
+extern	gint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
 
 /**
   This function starts as asynchronous processing Jpeg encoded.
@@ -76,7 +90,7 @@ extern	kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpg
   @remarks		This API uses DDIM_User_Clr_Flg().<br><br>
   				If you want to synchronize, please call im_jpeg_wait_end_enc().
 */
-extern	kint32	im_jpeg_start_enc( ImJpegShare*self );
+extern	gint32	im_jpeg_start_enc( ImJpegShare*self );
 
 /**
   This function wait end of Jpeg encode process.
@@ -90,7 +104,7 @@ extern	kint32	im_jpeg_start_enc( ImJpegShare*self );
   @retval		ImJpegCommon_D_IM_JPEG_ENCODE_ERR		: Encode error.
   @remarks		This API uses DDIM_User_Twai_Flg().
 */
-extern	kint32	im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, kint32 timeOut );
+extern	gint32	im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, gint32 timeOut );
 
 /**
   This function is restarted from the paused state of Jpeg macro.
@@ -101,7 +115,7 @@ extern	kint32	im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, kin
   @retval		ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR	: System call error.
   @remarks		This API uses DDIM_User_Clr_Flg().
 */
-extern	kint32	im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
+extern	gint32	im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng );
 
 /**
   This function set Jpeg decode for skip marker mode.
@@ -110,7 +124,7 @@ extern	kint32	im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmM
   @remarks		Please use the skip marker mode after decoding normally once.<br>
   				It can be used to decode the compressed file from the skip marker mode.<br>
 */
-extern	kint32	im_jpeg_set_skip_marker_dec( ImJpegShare*self );
+extern	gint32	im_jpeg_set_skip_marker_dec( ImJpegShare*self );
 
 /**
   This function set Jpeg decode base management table data before decode process start.
@@ -118,7 +132,7 @@ extern	kint32	im_jpeg_set_skip_marker_dec( ImJpegShare*self );
   @retval		ImJpegCommon_D_IM_JPEG_OK			: Normal end.
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
 */
-extern	kint32	im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng );
+extern	gint32	im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng );
 
 /**
   This function set Jpeg decode frame management table data.
@@ -135,7 +149,7 @@ extern	kint32	im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng );
 				:: YCC422 tile format<br>
 				:: YCC400 planer format
 */
-extern	kint32	im_jpeg_ctrl_dec_frame(ImJpegShare*self, TimgDecFrameMng* pJpgDecFrmMng );
+extern	gint32	im_jpeg_ctrl_dec_frame(ImJpegShare*self, TimgDecFrameMng* pJpgDecFrmMng );
 
 /**
   This function get the base settings for Jpeg decode.
@@ -143,12 +157,15 @@ extern	kint32	im_jpeg_ctrl_dec_frame(ImJpegShare*self, TimgDecFrameMng* pJpgDecF
   @retval		ImJpegCommon_D_IM_JPEG_OK			: Success.
   @retval		ImJpegCommon_D_IM_JPEG_PARAM_ERROR	: Parameter error.
 */
-extern	kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng );
+extern	gint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng );
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_JPEG_SHARE_H__ */

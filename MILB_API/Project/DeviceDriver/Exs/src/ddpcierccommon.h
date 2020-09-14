@@ -51,11 +51,11 @@ extern volatile DdPcieRcIntTrsIcsMsiCb gddPcieRcIntTrsIcsMsiCb[C_PCIE_RC_MAX_CH]
 extern volatile DdPcieRcIntSysErrCb gddPcieRcIntSysErrCb[C_PCIE_RC_MAX_CH];
 extern volatile DdPcieRcIntEpCb gddPcieRcIntEpCb[C_PCIE_RC_MAX_CH];
 extern volatile DdPciRcIntOwnCb gddPcieRcIntOwnCb[C_PCIE_RC_MAX_CH];
-extern volatile vpCallbackPcieFunc gddPcieRcHpDetectCard[C_PCIE_RC_MAX_CH];
+extern volatile VpCallbackPcieFunc gddPcieRcHpDetectCard[C_PCIE_RC_MAX_CH];
 extern volatile kuint16 gddPcieRcConfigAdr[C_PCIE_RC_MAX_CH];
 extern volatile kuchar	gddPcieRcReType;
 extern volatile DdPcieIntDmaCb gddPcieRcIntDmaCb[C_PCIE_RC_MAX_CH];
-extern volatile vpCallbackPcieFunc gddPcieRcIntMsiCb[C_PCIE_RC_MAX_CH];;
+extern volatile VpCallbackPcieFunc gddPcieRcIntMsiCb[C_PCIE_RC_MAX_CH];;
 
 
 KConstType					dd_pcie_rc_common_get_type(void);

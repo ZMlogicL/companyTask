@@ -25,15 +25,17 @@ typedef struct _CtImR2yClassiPrivate CtImR2yClassiPrivate;
 struct _CtImR2yClassi
 {
 	KObject parent;
+	ImR2yEdge*imR2yEdge;
+	ImR2yClk*imR2yClk;
 };
 
 KConstType ct_im_r2y_classi_get_type(void);
 CtImR2yClassi* ct_im_r2y_classi_new(void);
 CtImR2yClassi* ct_im_r2y_classi_get(void);
 
-INT32 ct_im_r2y_classi_1_70(UCHAR pipeNo);
-INT32 ct_im_r2y_classi_1_71(UCHAR pipeNo);
-INT32 ct_im_r2y_classi_1_72(UCHAR pipeNo);
-INT32 ct_im_r2y_classi_1_73(UCHAR pipeNo);
+INT32 ct_im_r2y_classi_1_70(CtImR2yClassi *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classi_1_71(CtImR2yClassi *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classi_1_72(CtImR2yClassi *self,UCHAR pipeNo);
+INT32 ct_im_r2y_classi_1_73(CtImR2yClassi *self,UCHAR pipeNo);
 
 #endif /* __CT_IM_R2Y_CLASSI_H__ */

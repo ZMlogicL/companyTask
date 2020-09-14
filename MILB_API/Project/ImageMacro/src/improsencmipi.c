@@ -73,16 +73,16 @@ static void impro_sencmipi_destructor(ImproSencmipi *self)
 MIPI-CPHY initialize
 @param[in]	ch : MIPI-CPHY channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_sencmipi_init( E_IM_PRO_CMIPI_CH ch )
+INT32 impro_sencmipi_init( EimproCmipiCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	// Software release
 	ioPro.sen.mipic[ch].mpicsr.bit.sr  = D_IM_PRO_SR_RELEASE;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -91,16 +91,16 @@ INT32 impro_sencmipi_init( E_IM_PRO_CMIPI_CH ch )
 Software reset of MIPI-CPHY
 @param[in]	ch : MIPI-CPHY channel
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_sencmipi_sr( E_IM_PRO_CMIPI_CH ch )
+INT32 impro_sencmipi_sr( EimproCmipiCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	// Software reset
 	ioPro.sen.mipic[ch].mpicsr.bit.sr  = D_IM_PRO_SR_RESET;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -109,21 +109,21 @@ INT32 impro_sencmipi_sr( E_IM_PRO_CMIPI_CH ch )
 MIPI-CPHY macro start.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Macro Start OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: C-MIPI has not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: C-MIPI has not stopped NG
 */
-INT32 impro_sencmipi_start( E_IM_PRO_CMIPI_CH ch )
+INT32 impro_sencmipi_start( EimproCmipiCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if( ioPro.sen.mipic[ch].mpictrg.bit.mpictrg == D_IM_PRO_TRG_STATUS_RUNNING ) {
 		Ddim_Print(( "impro_sencmipi_start C-MIPI macro is not stopped error.\n" ));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 	ioPro.sen.mipic[ch].mpictrg.bit.mpictrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_start_status(D_IM_SEN_STATUS_CMIPI0, ch);
+	im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_CMIPI0, ch);
 
 	return D_DDIM_OK;
 }
@@ -134,10 +134,10 @@ MIPI-CPHY macro stop.
 @retval		D_DDIM_OK					: Macro Stop OK
 @retval		D_IM_PRO_NG					: Macro Stop NG
 */
-INT32 impro_sencmipi_stop( E_IM_PRO_CMIPI_CH ch, UCHAR force )
+INT32 impro_sencmipi_stop( EimproCmipiCh ch, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if (force == 0){
 		// frame stop
 		ioPro.sen.mipic[ch].mpictrg.bit.mpictrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -147,9 +147,9 @@ INT32 impro_sencmipi_stop( E_IM_PRO_CMIPI_CH ch, UCHAR force )
 		ioPro.sen.mipic[ch].mpictrg.bit.mpictrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_stop_status(D_IM_SEN_STATUS_CMIPI0, ch);
+	im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_CMIPI0, ch);
 
 	return D_DDIM_OK;
 }
@@ -159,23 +159,23 @@ The control parameter of MIPI-CPHY is set.
 @param[in]	ch : Channel No.
 @param[in]	cmipiCtrl : MIPI-CPHY control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_sencmipi_ctrl( E_IM_PRO_CMIPI_CH ch, TimproCmipiCtrl* cmipiCtrl )
+INT32 impro_sencmipi_ctrl( EimproCmipiCh ch, TimproCmipiCtrl* cmipiCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (cmipiCtrl == NULL){
 		Ddim_Assertion(("I:impro_sencmipi_ctrl error. cmipiCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	//not Stopped
-	if (im_pro_sen_get_start_status( D_IM_SEN_STATUS_CMIPI0, ch ) == TRUE) {
+	if (im_pro_common_fig_im_pro_sen_get_start_status( D_IM_SEN_STATUS_CMIPI0, ch ) == TRUE) {
 		Ddim_Print(("I:impro_sencmipi_ctrl. macro not stopped error. \n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.mipic[ch].mpiclmode.bit.lane					= cmipiCtrl->laneSel;
 	ioPro.sen.mipic[ch].mpiciomd0.bit.dtmd0				= cmipiCtrl->inputDataMode[0];
 	ioPro.sen.mipic[ch].mpiciomd0.bit.outmd0				= cmipiCtrl->outputDataMode[0];
@@ -202,7 +202,7 @@ INT32 impro_sencmipi_ctrl( E_IM_PRO_CMIPI_CH ch, TimproCmipiCtrl* cmipiCtrl )
 
 	ioPro.sen.mipic[ch].mpiccpi1.bit.cpen					= cmipiCtrl->phyCtrl.rxenable;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	im_pro_wait_usec( ImproSencmipi_D_IM_PRO_CMIPI_WAIT_PHY_STARTUP );
 
@@ -218,24 +218,24 @@ A setup of enable access to the built-in RAM of MIPI-CPHY.
 @param[in]	paen1Trg : RAM1 access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_sencmipi_set_pean( E_IM_PRO_CMIPI_CH ch, UCHAR paen0Trg, UCHAR paen1Trg )
+INT32 impro_sencmipi_set_pean( EimproCmipiCh ch, UCHAR paen0Trg, UCHAR paen1Trg )
 {
 #ifdef CO_PARAM_CHECK
 	if( ( paen0Trg == 0 ) && ( paen1Trg == 0 )
-										&& ( ioPro.sen.mipic[ch].MPICTRG.bit.MPICTRG
+										&& ( ioPro.sen.mipic[ch].mpictrg.bit.mpictrg
 										!= D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_sencmipi_set_pean. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.mipic[ch].mpicpaen0.bit.paen0 = paen0Trg;
 	ioPro.sen.mipic[ch].mpicpaen1.bit.paen1 = paen1Trg;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -246,20 +246,20 @@ Get MIPI C-PHY status..
 @param[in]	ch : Channel No.
 @param[out]	status : MIPI-CPHY status information
 */
-INT32 impro_sencmipi_get_status( E_IM_PRO_CMIPI_CH ch, TimproCmipiStatus* status )
+INT32 impro_sencmipi_get_status( EimproCmipiCh ch, TimproCmipiStatus* status )
 {
 #ifdef CO_PARAM_CHECK
 	if (status == NULL){
 		Ddim_Assertion(("I:impro_sencmipi_get_status error. status=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if (status == NULL){
 		Ddim_Assertion(("I:impro_sencmipi_get_status error. status=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	status->rxstopstateL0	= ioPro.sen.mipic[ch].mpicpvr.bit.ssl0;
 	status->rxstopstateL1	= ioPro.sen.mipic[ch].mpicpvr.bit.ssl1;
 	status->rxstopstateL2	= ioPro.sen.mipic[ch].mpicpvr.bit.ssl2;
@@ -279,7 +279,7 @@ INT32 impro_sencmipi_get_status( E_IM_PRO_CMIPI_CH ch, TimproCmipiStatus* status
 	status->syerrloc1		= ioPro.sen.mipic[ch].mpicprlrserrloc1.bit.cpRlrSyerrloc1;
 	status->syerrloc2		= ioPro.sen.mipic[ch].mpicprlrserrloc2.bit.cpRlrSyerrloc2;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }

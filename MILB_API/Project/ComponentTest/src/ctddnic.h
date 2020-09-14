@@ -23,7 +23,7 @@
 #define __CT_DD_NIC_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_DD_NIC                  (ct_dd_nic_get_type())
 #define CT_DD_NIC(obj)                  (K_TYPE_CHECK_INSTANCE_CAST (obj, CtDdNic)) 

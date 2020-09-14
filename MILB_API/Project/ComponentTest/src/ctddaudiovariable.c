@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :zhaoxin
 *@brief               :CtDdAudioVariable类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -23,9 +23,8 @@
 #include "peripheral.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioVariable, ct_dd_audio_variable);
-#define CT_DD_AUDIO_VARIABLE_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o), \
-		CtDdAudioVariablePrivate,CT_TYPE_DD_AUDIO_VARIABLE))
+G_DEFINE_TYPE(CtDdAudioVariable, ct_dd_audio_variable, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_VARIABLE_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_VARIABLE, CtDdAudioVariablePrivate))
 
 struct _CtDdAudioVariablePrivate
 {
@@ -38,17 +37,36 @@ struct _CtDdAudioVariablePrivate
 /*
 *DECLS
 */
-static void ct_dd_audio_variable_constructor(CtDdAudioVariable *self);
-static void ct_dd_audio_variable_destructor(CtDdAudioVariable *self);
+static void ct_dd_audio_variable_class_init(CtDdAudioVariableClass *klass);
+static void ct_dd_audio_variable_init(CtDdAudioVariable *self);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 /*
  * IMPL
  */
-static void ct_dd_audio_variable_constructor(CtDdAudioVariable *self) 
+static void ct_dd_audio_variable_class_init(CtDdAudioVariableClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioVariablePrivate));
 }
 
-static void ct_dd_audio_variable_destructor(CtDdAudioVariable *self) 
+static void ct_dd_audio_variable_init(CtDdAudioVariable *self)
 {
+	CtDdAudioVariablePrivate *priv = CT_DD_AUDIO_VARIABLE_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioVariable *self = (CtDdAudioVariable*)object;
+	CtDdAudioVariablePrivate *priv = CT_DD_AUDIO_VARIABLE_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioVariable *self = (CtDdAudioVariable*)object;
+	CtDdAudioVariablePrivate *priv = CT_DD_AUDIO_VARIABLE_GET_PRIVATE(self);
 }
 /*
  * PUBLIC
@@ -106,13 +124,13 @@ kuint8 ct_dd_audio_get_dma_int_cnt_out(CtDdAudioVariable *self)
 }
 
 //gCtDdAudioFifoMonitor[2048]:
-void ct_dd_audio_set_gct_dd_audio_fifomonitor(CtDdAudioVariable *self, kint i ,kuint32 ct5)
+void ct_dd_audio_set_gct_dd_audio_fifomonitor(CtDdAudioVariable *self, gint i ,kuint32 ct5)
 {
 	CtDdAudioVariablePrivate *priv = CT_DD_AUDIO_VARIABLE_GET_PRIVATE(self);
 	priv->gCtDdAudioFifoMonitor[i] = ct5;
 }
 
-kuint32 ct_dd_audio_get_gct_dd_audio_fifomonitor(CtDdAudioVariable *self, kint j)
+kuint32 ct_dd_audio_get_gct_dd_audio_fifomonitor(CtDdAudioVariable *self, gint j)
 {
 	CtDdAudioVariablePrivate *priv = CT_DD_AUDIO_VARIABLE_GET_PRIVATE(self);
 	return priv->gCtDdAudioFifoMonitor[j];
@@ -123,7 +141,7 @@ CtDdAudioVariable *ct_dd_audio_variable_new(void)
 	static CtDdAudioVariable *self = NULL;
 	if(!self)
 	{
-		self = k_object_new(CT_TYPE_DD_AUDIO_VARIABLE);
+		self = g_object_new(CT_TYPE_DD_AUDIO_VARIABLE, NULL);
 	}
     return self;
 }

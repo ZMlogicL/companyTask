@@ -10,6 +10,42 @@
 *@version
 *1.0.0 2020年09月开始开发
 */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "milb.h"
+#include "chiptop.h"
+#if 0
+#include "arm.h"
+#include "chiptop.h"
+#include "exstop.h"
+#include "jdsb2r.h"
+#include "jdscnr.h"
+#include "jdsdisp.h"
+#include "jdsela.h"
+#include "jdsfpt.h"
+#include "jdsiip.h"
+#include "jdsimg.h"
+#include "jdsjpgdec.h"
+#include "jdsjpgenc.h"
+#include "jdsltm.h"
+#include "jdsmxic.h"
+#include "jdspro.h"
+#include "jdsr2y.h"
+#include "jdsraw.h"
+#include "jdsshdr.h"
+#include "jdsxch.h"
+#include "jmilaum.h"
+#include "jmilhdmi.h"
+#include "jmlbmh.h"
+#include "jsrlot.h"
+#include "peripheral.h"
+#include "slimbus.h"
+#include "sdramc.h"
+#include "uart_csio.h"
+#include "jdsme.h"
+#endif
 #include "defs.h"
 #include "mmctest.h"
 
@@ -23,7 +59,6 @@ struct _MmcTestPrivate
 {
 	 gint preserved;
 };
-
 /**
  * DECLS
  */
@@ -70,20 +105,19 @@ static void run_od(AbsHeaderTest *self)
 /**
  * PUBLIC
  */
-/*************************************************************************/
-void mcc_test()
+void mcc_test(MmcTest* self)
 {
 	RS_printf("MCC\n");
 #if 0
-	RS_printf("IO_MCC        = %p\n", &IO_MCC );
-	RS_printf("Reserved      = %p\n", &IO_MCC.dmy_A000_A00F );
-	RS_printf("IO_MCC.MCSWFI = %p\n", &IO_MCC.MCSWFI );
-	RS_printf("Reserved      = %p\n", &IO_MCC.dmy_A014_AFFF );
+	RS_printf("ioMcc         = %p\n", &ioMcc );
+	RS_printf("Reserved      = %p\n", &ioMcc.dmyA000A00f );
+	RS_printf("ioMcc.mcswfi  = %p\n", &ioMcc.mcswfi );
+	RS_printf("Reserved      = %p\n", &ioMcc.dmyA014Afff );
 	RS_printf(" \n");
 #endif
 }
 
-MmcTest *mmc_test_new()
+MmcTest *mmc_test_new(void)
 {
 	MmcTest *self = g_object_new(MMC_TYPE_TEST, NULL);
 	return self;

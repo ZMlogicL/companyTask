@@ -57,84 +57,84 @@ static void im_iip_main_destructor(ImIipMain *self)
 //	priv-> a =  0;
 }
 
-INT32 Im_IIP_Stop( const UINT32 stop_type )
+INT32 im_iip_main_stop( const UINT32 stop_type )
 {
-	INT32			retval = D_IM_IIP_OK;
+	INT32			retval = ImIipDefine_D_IM_IIP_OK;
 	DDIM_USER_ER	ercd;
 	UINT32			loopcnt;
 	UINT32			irq_mask;
 
-	im_iip_On_Iipclk();
-	im_iip_On_Iclk();
+	im_iip_counter_on_lipclk(NULL);
+	im_iip_struct_on_lclk(NULL);
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	irq_mask = im_iip_irq_disable();
+	irq_mask = im_iip_static_irq_disable();
 
-	if( IO_IIP.IZACTL1.bit.TRG == D_IM_IIP_RUNNING ) {
-		if( stop_type == D_IM_IIP_STOP ) {
-			IO_IIP.IZACTL1.bit.TRG = D_IM_IIP_STOP;
+	if( IO_IIP.IZACTL1.bit.TRG == ImIipDefine_D_IM_IIP_RUNNING ) {
+		if( stop_type == ImIipDefine_D_IM_IIP_STOP ) {
+			IO_IIP.IZACTL1.bit.TRG = ImIipDefine_D_IM_IIP_STOP;
 
 #ifdef CO_DEBUG_ON_PC
-			IO_IIP.IZACTL1.bit.TRG = D_IM_IIP_STOPPED;
-			IO_IIP.IZACTL2.bit.ABORT = D_IM_IIP_STOPPED;
-			Im_IIP_Print_Pcdbg(( "Im_IIP_Stop: IZACTL1.bit.TRG = %u\n", IO_IIP.IZACTL1.bit.TRG ));
+			IO_IIP.IZACTL1.bit.TRG = ImIipDefine_D_IM_IIP_STOPPED;
+			IO_IIP.IZACTL2.bit.ABORT = ImIipDefine_D_IM_IIP_STOPPED;
+			ImIipDefine_IM_IIP_PRINT_PCDBG(( "im_iip_main_stop: IZACTL1.bit.TRG = %u\n", IO_IIP.IZACTL1.bit.TRG ));
 #endif //CO_DEBUG_ON_PC
 
-			if( IO_IIP.IZACTL1.bit.TRG == D_IM_IIP_STOPPED ) {
-				// off clock on from Im_IIP_Start() or Im_IIP_Start_SWTRG().
-				im_iip_Off_izarac_caxrac();
-				im_iip_Off_Iclk();
-				im_iip_Off_Iipclk();
+			if( IO_IIP.IZACTL1.bit.TRG == ImIipDefine_D_IM_IIP_STOPPED ) {
+				// off clock on from im_iip_sub_start() or Im_IIP_Start_SWTRG().
+				im_iip_counter_off_izarac_caxrac(NULL);
+				im_iip_struct_off_iclk(NULL);
+				im_iip_counter_off_lipclk(NULL);
 			}
 		}
-		else if( stop_type == D_IM_IIP_ABORT ) {
+		else if( stop_type == ImIipDefine_D_IM_IIP_ABORT ) {
 			IO_IIP.IZACTL2.bit.ABORT = 0;
 
 #ifdef CO_DEBUG_ON_PC
-			IO_IIP.IZACTL1.bit.TRG = D_IM_IIP_STOPPED;
-			IO_IIP.IZACTL2.bit.ABORT = D_IM_IIP_STOPPED;
-			Im_IIP_Print_Pcdbg(( "Im_IIP_Stop: IZACTL1.bit.ABORT = %u\n", IO_IIP.IZACTL2.bit.ABORT ));
+			IO_IIP.IZACTL1.bit.TRG = ImIipDefine_D_IM_IIP_STOPPED;
+			IO_IIP.IZACTL2.bit.ABORT = ImIipDefine_D_IM_IIP_STOPPED;
+			ImIipDefine_IM_IIP_PRINT_PCDBG(( "im_iip_main_stop: IZACTL1.bit.ABORT = %u\n", IO_IIP.IZACTL2.bit.ABORT ));
 #endif //CO_DEBUG_ON_PC
 
-			for( loopcnt = 0; loopcnt < D_IM_IIP_TRIG_STOP_CHK_RETRY_COUNT; loopcnt++ ) {
-				if( IO_IIP.IZACTL1.bit.TRG == D_IM_IIP_STOPPED ) {
+			for( loopcnt = 0; loopcnt < ImIipDefine_D_IM_IIP_TRIG_STOP_CHK_RETRY_COUNT; loopcnt++ ) {
+				if( IO_IIP.IZACTL1.bit.TRG == ImIipDefine_D_IM_IIP_STOPPED ) {
 					break;
 				}
 			}
-			if( loopcnt >= D_IM_IIP_TRIG_STOP_CHK_RETRY_COUNT ) {
-				retval = D_IM_IIP_ABORT_FAILED_ERR;
-				Ddim_Print(("I:Im_IIP_Stop abort Failed.\n"));
-//				Ddim_Assertion(("I:Im_IIP_Stop abort Failed.\n"));
+			if( loopcnt >= ImIipDefine_D_IM_IIP_TRIG_STOP_CHK_RETRY_COUNT ) {
+				retval = ImIipDefine_D_IM_IIP_ABORT_FAILED_ERR;
+				Ddim_Print(("I:im_iip_main_stop abort Failed.\n"));
+//				Ddim_Assertion(("I:im_iip_main_stop abort Failed.\n"));
 			}
 
-			// off clock on from Im_IIP_Start() or Im_IIP_Start_SWTRG().
-			im_iip_Off_izarac_caxrac();
-			im_iip_Off_Iclk();
-			im_iip_Off_Iipclk();
+			// off clock on from im_iip_sub_start() or Im_IIP_Start_SWTRG().
+			im_iip_counter_off_izarac_caxrac(NULL);
+			im_iip_struct_off_iclk(NULL);
+			im_iip_counter_off_lipclk(NULL);
 		}
 		else {
-			retval = D_IM_IIP_INVALID_ARG_ERR;
+			retval = ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 		}
 	}
 
-	if( (stop_type == D_IM_IIP_ABORT) && (retval == D_IM_IIP_OK) ) {
+	if( (stop_type == ImIipDefine_D_IM_IIP_ABORT) && (retval == ImIipDefine_D_IM_IIP_OK) ) {
 		// Clear all interrupt flag.
 		// And **ENABLE** Interrupt in service call.
-		ercd = DDIM_User_Clr_Flg( FID_IM_IIP, ~D_IM_IIP_FLG_USED_BIT_PATTERN );
+		ercd = DDIM_User_Clr_Flg( FID_IM_IIP, ~ImIipDefine_D_IM_IIP_FLG_USED_BIT_PATTERN );
 		if( ercd != D_DDIM_USER_E_OK ) {
-			retval = D_IM_IIP_SYSTEMCALL_ERR;
+			retval = ImIipDefine_D_IM_IIP_SYSTEMCALL_ERR;
 		}
 		else {
 		}
 	}
 
-	im_iip_irq_enable( irq_mask );
+	im_iip_static_irq_enable(NULL, irq_mask );
 
 	Im_IIP_Off_Pclk();
-	im_iip_Off_Iclk();
-	im_iip_Off_Iipclk();
-	Im_IIP_Dsb();
+	im_iip_struct_off_iclk(NULL);
+	im_iip_counter_off_lipclk(NULL);
+	ImIipDefine_IM_IIP_DSB();
 
 	return retval;
 }
@@ -142,16 +142,16 @@ INT32 Im_IIP_Stop( const UINT32 stop_type )
 /**
 *	Wait
 */
-INT32 Im_IIP_Wait_End( UINT32* const p_wait_factor, const UINT32 wait_factor, const UINT32 wait_mode, const INT32 wait_time )
+INT32 Im_IIP_Wait_End( UINT32* const p_wait_factor, const UINT32 wait_factor, const UINT32 wait_mode, const INT32 waitTime )
 {
 	DDIM_USER_ER		ercd;
 	DDIM_USER_FLGPTN	flgptn;
 
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( (p_wait_factor == NULL) ||
-		 (im_iip_check_wait_time(wait_time) == D_IM_IIP_FALSE) ) {
+		 (im_iip_counter_check_wait_time(NULL,waitTime) == ImIipDefine_D_IM_IIP_FALSE) ) {
 		Ddim_Assertion(("I:Im_IIP_Wait_End INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
@@ -159,24 +159,24 @@ INT32 Im_IIP_Wait_End( UINT32* const p_wait_factor, const UINT32 wait_factor, co
 	imIipPseudoInterrupt( wait_factor );
 #endif
 
-	ercd = DDIM_User_Twai_Flg( FID_IM_IIP, wait_factor, wait_mode, &flgptn, wait_time );
+	ercd = DDIM_User_Twai_Flg( FID_IM_IIP, wait_factor, wait_mode, &flgptn, waitTime );
 	switch( ercd ) {
 		case D_DDIM_USER_E_OK:
 			break;
 		case D_DDIM_USER_E_TMOUT:
-			return D_IM_IIP_TIMEOUT_ERR;
+			return ImIipDefine_D_IM_IIP_TIMEOUT_ERR;
 		default:
-			return D_IM_IIP_SYSTEMCALL_ERR;
+			return ImIipDefine_D_IM_IIP_SYSTEMCALL_ERR;
 	}
 
 	ercd = DDIM_User_Clr_Flg( FID_IM_IIP, ~(flgptn & wait_factor) );
 	if( ercd != D_DDIM_USER_E_OK ) {
-		return D_IM_IIP_SYSTEMCALL_ERR;
+		return ImIipDefine_D_IM_IIP_SYSTEMCALL_ERR;
 	}
 
-	*p_wait_factor = D_IM_IIP_FLG_USED_BIT_PATTERN & (flgptn & wait_factor);
+	*p_wait_factor = ImIipDefine_D_IM_IIP_FLG_USED_BIT_PATTERN & (flgptn & wait_factor);
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
@@ -191,51 +191,51 @@ INT32 Im_IIP_Clear_HISTGRAM( const UINT32 histgram_a_clr_flag, const UINT32 hist
 
 	Im_IIP_On_Hclk();
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	hissts = IO_IIP.AHBSTS.bit.HISSTS;
 	if( hissts != 0 ) {
-		retval = D_IM_IIP_ERR;
+		retval = ImIipDefine_D_IM_IIP_ERR;
 	}
 	else {
 		IO_IIP.MONINIT.bit.INIT = 1;
 
-		im_iip_wait_usec( 1 );
+		ImIipDefine_IM_IIP_WAIT_USEC( 1 );
 
 		if( 0 != histgram_a_clr_flag ) {
-			im_iip_fill_word( &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[0][0],
+			im_iip_sub_fill_word(NULL, &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[0][0],
 							  0,
-							  D_IM_IIP_NUM_HISTGRAM,
+							  ImIipDefine_D_IM_IIP_NUM_HISTGRAM,
 							  0x0UL );
 		}
 
 		if( 0 != histgram_b_clr_flag ) {
-			im_iip_fill_word( &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[1][0],
+			im_iip_sub_fill_word(NULL, &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[1][0],
 							  0,
-							  D_IM_IIP_NUM_HISTGRAM,
+							  ImIipDefine_D_IM_IIP_NUM_HISTGRAM,
 							  0x0UL );
 		}
 
 		if( 0 != histgram_c_clr_flag ) {
-			im_iip_fill_word( &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[2][0],
+			im_iip_sub_fill_word( NULL,&IO_IIP_TBL.HISTGRAM.HISTGRAM.word[2][0],
 							  0,
-							  D_IM_IIP_NUM_HISTGRAM,
+							  ImIipDefine_D_IM_IIP_NUM_HISTGRAM,
 							  0x0UL );
 		}
 
 		if( 0 != histgram_d_clr_flag ) {
-			im_iip_fill_word( &IO_IIP_TBL.HISTGRAM.HISTGRAM.word[3][0],
+			im_iip_sub_fill_word( NULL,&IO_IIP_TBL.HISTGRAM.HISTGRAM.word[3][0],
 							  0,
-							  D_IM_IIP_NUM_HISTGRAM,
+							  ImIipDefine_D_IM_IIP_NUM_HISTGRAM,
 							  0x0UL );
 		}
 
-		retval = D_IM_IIP_OK;
+		retval = ImIipDefine_D_IM_IIP_OK;
 	}
 
 	Im_IIP_Off_Pclk();
 	Im_IIP_Off_Hclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	DDIM_User_AhbReg_SpinUnLock();	// JPEG issue work around.
 
@@ -254,44 +254,44 @@ INT32 Im_IIP_Get_HISTGRAM( ULONG* const buffer_histgram_a, ULONG* const buffer_h
 
 	Im_IIP_On_Hclk();
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	hissts = IO_IIP.AHBSTS.bit.HISSTS;
 	if( hissts != 0 ) {
-		retval = D_IM_IIP_ERR;
+		retval = ImIipDefine_D_IM_IIP_ERR;
 	}
 	else {
-		im_iip_wait_usec( 1 );
+		ImIipDefine_IM_IIP_WAIT_USEC( 1 );
 
 		if( buffer_histgram_a != NULL ) {
-			im_iip_get_regword( buffer_histgram_a,	// Read access only support Word-width. (Hardware specification.)
+			im_iip_sub_get_regword(NULL, buffer_histgram_a,	// Read access only support Word-width. (Hardware specification.)
 								IO_IIP_TBL.HISTGRAM.HISTGRAM.word[0],
-								D_IM_IIP_HISTGRAM_BYTES );
+								ImIipDefine_D_IM_IIP_HISTGRAM_BYTES );
 		}
 
 		if( buffer_histgram_b != NULL ) {
-			im_iip_get_regword( buffer_histgram_b,	// Read access only support Word-width. (Hardware specification.)
+			im_iip_sub_get_regword(NULL, buffer_histgram_b,	// Read access only support Word-width. (Hardware specification.)
 								IO_IIP_TBL.HISTGRAM.HISTGRAM.word[1],
-								D_IM_IIP_HISTGRAM_BYTES );
+								ImIipDefine_D_IM_IIP_HISTGRAM_BYTES );
 		}
 
 		if( buffer_histgram_c != NULL ) {
-			im_iip_get_regword( buffer_histgram_c,	// Read access only support Word-width. (Hardware specification.)
+			im_iip_sub_get_regword(NULL, buffer_histgram_c,	// Read access only support Word-width. (Hardware specification.)
 								IO_IIP_TBL.HISTGRAM.HISTGRAM.word[2],
-								D_IM_IIP_HISTGRAM_BYTES );
+								ImIipDefine_D_IM_IIP_HISTGRAM_BYTES );
 		}
 
 		if( buffer_histgram_d != NULL ) {
-			im_iip_get_regword( buffer_histgram_d,	// Read access only support Word-width. (Hardware specification.)
+			im_iip_sub_get_regword(NULL, buffer_histgram_d,	// Read access only support Word-width. (Hardware specification.)
 								IO_IIP_TBL.HISTGRAM.HISTGRAM.word[3],
-								D_IM_IIP_HISTGRAM_BYTES );
+								ImIipDefine_D_IM_IIP_HISTGRAM_BYTES );
 		}
-		retval = D_IM_IIP_OK;
+		retval = ImIipDefine_D_IM_IIP_OK;
 	}
 
 	Im_IIP_Off_Pclk();
 	Im_IIP_Off_Hclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	DDIM_User_AhbReg_SpinUnLock();	// JPEG issue work around.
 
@@ -304,7 +304,7 @@ INT32 Im_IIP_Get_HISTGRAM( ULONG* const buffer_histgram_a, ULONG* const buffer_h
 INT32 Im_IIP_Get_HISTMAX( UCHAR* const histmax_a, UCHAR* const histmax_b, UCHAR* const histmax_c, UCHAR* const histmax_d )
 {
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	if( histmax_a != NULL ) {
 		*histmax_a = IO_IIP.HISTMAX.HISTMAX1.bit.HISTMAX_0;
@@ -323,143 +323,143 @@ INT32 Im_IIP_Get_HISTMAX( UCHAR* const histmax_a, UCHAR* const histmax_b, UCHAR*
 	}
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
 *	Get MINMON info
 */
-INT32 Im_IIP_Get_MINMON( T_IM_IIP_MINMON* const mon )
+INT32 Im_IIP_Get_MINMON( TImIipMinmon* const mon )
 {
 	UINT32 loopcnt;
 
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( mon == NULL ) {
 		Ddim_Assertion(("I:Im_IIP_Get_MINMON INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	for( loopcnt = 0; loopcnt < 4; loopcnt++ ) {
-		mon->min[loopcnt].pos_x = IO_IIP.MINMON[loopcnt].bit.HPOINTMIN;
-		mon->min[loopcnt].pos_y = IO_IIP.MINMON[loopcnt].bit.VPOINTMIN;
-		im_iip_get_reg_signed_a( mon->min[loopcnt].value, IO_IIP.MINMON[loopcnt], union io_iip_minmon, MINVAL );
+		mon->min[loopcnt].posX = IO_IIP.MINMON[loopcnt].bit.HPOINTMIN;
+		mon->min[loopcnt].posY = IO_IIP.MINMON[loopcnt].bit.VPOINTMIN;
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( mon->min[loopcnt].value, IO_IIP.MINMON[loopcnt], union io_iip_minmon, MINVAL );
 	}
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
 *	Get ADDMON info
 */
-INT32 Im_IIP_Get_ADDMON( T_IM_IIP_ADDMON* const mon )
+INT32 Im_IIP_Get_ADDMON( TImIipAddmon* const mon )
 {
 	UINT32 loopcnt;
 
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( mon == NULL ) {
 		Ddim_Assertion(("I:Im_IIP_Get_ADDMON INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	for( loopcnt = 0; loopcnt < 4; loopcnt++ ) {
-		mon->add[loopcnt].pos_x = IO_IIP.ADDMON[loopcnt].bit.HPOINTADD;
-		mon->add[loopcnt].pos_y = IO_IIP.ADDMON[loopcnt].bit.VPOINTADD;
+		mon->add[loopcnt].posX = IO_IIP.ADDMON[loopcnt].bit.HPOINTADD;
+		mon->add[loopcnt].posY = IO_IIP.ADDMON[loopcnt].bit.VPOINTADD;
 		mon->add[loopcnt].value = IO_IIP.ADDMON[loopcnt].bit.ADDVAL;
-		im_iip_get_reg_signed_a( mon->add[loopcnt].value, IO_IIP.ADDMON[loopcnt], union io_iip_addmon, ADDVAL );
+		ImIipDefine_IM_IIP_GET_REG_SIGNED_A( mon->add[loopcnt].value, IO_IIP.ADDMON[loopcnt], union io_iip_addmon, ADDVAL );
 	}
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
 *	Get Image Cache Access info
 */
-INT32 Im_IIP_Get_ImgCache_Access_Info( const E_IM_IIP_CACHE_CH cache_ch, T_IM_IIP_ACCESS_INFO* const info )
+INT32 Im_IIP_Get_ImgCache_Access_Info( const EImIipCacheCh cache_ch, TImIipAccessInfo* const info )
 {
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( info == NULL ) {
 		Ddim_Assertion(("I:Im_IIP_Get_ImgCache_Access_Info INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 	if( cache_ch >= E_IM_IIP_CACHE_CH_MAX ) {
 		Ddim_Assertion(("I:Im_IIP_Get_ImgCache_Access_Info INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	info->real_access_counter	= IO_IIP.PDCRAC[cache_ch].word;
-	info->real_miss_counter		= IO_IIP.PDCRMC[cache_ch].word;
+	info->realAccessCounter	= IO_IIP.PDCRAC[cache_ch].word;
+	info->realMissCounter		= IO_IIP.PDCRMC[cache_ch].word;
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
 *	Get AXI Status info
 */
-INT32 Im_IIP_Get_AXI_Status( T_IM_IIP_AXI_STATUS* const sts )
+INT32 Im_IIP_Get_AXI_Status( TImIipAxiStatus* const sts )
 {
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( sts == NULL ) {
 		Ddim_Assertion(("I:Im_IIP_Get_AXI_Status INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	sts->read_channel_status  = IO_IIP.AXRSTS.word;
-	sts->write_channel_status = IO_IIP.AXWSTS.word;
+	sts->readChannelStatus  = IO_IIP.AXRSTS.word;
+	sts->writeChannelStatus = IO_IIP.AXWSTS.word;
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 /**
 *	Get SL UNIT status
 */
-INT32 Im_IIP_Get_SL_Status( UINT32* const sl_status )
+INT32 im_iip_main_get_sl_status( UINT32* const sl_status )
 {
-#ifdef CO_PARAM_CHECK
+#ifdef ImIipStruct_CO_PARAM_CHECK
 	if( sl_status == NULL ) {
-		Ddim_Assertion(("I:Im_IIP_Get_SL_Status INVALID_ARG_ERR\n"));
-		return D_IM_IIP_INVALID_ARG_ERR;
+		Ddim_Assertion(("I:im_iip_main_get_sl_status INVALID_ARG_ERR\n"));
+		return ImIipDefine_D_IM_IIP_INVALID_ARG_ERR;
 	}
 #endif
 
 	Im_IIP_On_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
 	*sl_status = IO_IIP.IZACTL1.bit.SLALE;
 
 	Im_IIP_Off_Pclk();
-	Im_IIP_Dsb();
+	ImIipDefine_IM_IIP_DSB();
 
-	return D_IM_IIP_OK;
+	return ImIipDefine_D_IM_IIP_OK;
 }
 
 ImIipMain *im_iip_main_new(void)

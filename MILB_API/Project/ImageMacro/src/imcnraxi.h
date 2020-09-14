@@ -54,7 +54,7 @@ Suppre Control set AXI bus I/F Control for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_axi_ofl_ctrl_axi(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_OFL_AXI* const axi_ctrl );
+INT32 im_cnr_axi_ofl_ctrl_axi(ImCnrAxi*self, UCHAR ch, const TImCnrOflAxi* const axi_ctrl );
 
 /**
 Suppre Control set AXI bus I/F Control for On The Fly
@@ -63,7 +63,7 @@ Suppre Control set AXI bus I/F Control for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_axi_otf_ctrl_axi(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_OTF_AXI* const axi_ctrl );
+INT32 im_cnr_axi_otf_ctrl_axi(ImCnrAxi*self, UCHAR ch, const TImCnrOtfAxi* const axi_ctrl );
 
 /**
 Get AXI bus I/F Status for Off Line
@@ -72,7 +72,7 @@ Get AXI bus I/F Status for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_axi_ofl_get_axi_status(ImCnrAxi*self, UCHAR ch, T_IM_CNR_OFL_AXI_STATUS* const sts );
+INT32 im_cnr_axi_ofl_get_axi_status(ImCnrAxi*self, UCHAR ch, TImCnrOflAxiStatus* const sts );
 
 /**
 Get AXI bus I/F Status for On The Fly
@@ -81,7 +81,7 @@ Get AXI bus I/F Status for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 im_cnr_axi_otf_get_axi_status(ImCnrAxi*self, UCHAR ch, T_IM_CNR_OTF_AXI_STATUS* const sts );
+INT32 im_cnr_axi_otf_get_axi_status(ImCnrAxi*self, UCHAR ch, TImCnrOtfAxiStatus* const sts );
 
 /**
 Set SPR setting for CbCr for Off Line
@@ -91,7 +91,7 @@ Set SPR setting for CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for CbCr is set.
 */
-INT32 im_cnr_axi_ofl_ctrl_c(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_C* const cnr_ctrl_c );
+INT32 im_cnr_axi_ofl_ctrl_c(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlC* const cnr_ctrl_c );
 
 /**
 Set SPR setting for CbCr for On The Fly
@@ -101,7 +101,7 @@ Set SPR setting for CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for CbCr is set.
 */
-INT32 im_cnr_axi_otf_ctrl_c(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_C* const cnr_ctrl_c );
+INT32 im_cnr_axi_otf_ctrl_c(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlC* const cnr_ctrl_c );
 
 /**
 Set SPR setting for Y for Off Line
@@ -111,7 +111,7 @@ Set SPR setting for Y for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for Y is set.
 */
-INT32 im_cnr_axi_ofl_ctrl_y(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_OFL_CTRL_Y* const cnr_ctrl_y );
+INT32 im_cnr_axi_ofl_ctrl_y(ImCnrAxi*self, UCHAR ch, const TImCnrOflCtrlY* const cnr_ctrl_y );
 
 /**
 Set CbCr setting of source for Off Line
@@ -121,7 +121,7 @@ Set CbCr setting of source for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the source CbCr Adjustment is set.
 */
-INT32 im_cnr_axi_ofl_ctrl_sprs_cc(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_CC_SRC_DST* const sprs_ctrl );
+INT32 im_cnr_axi_ofl_ctrl_sprs_cc(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlCcSrcDst* const sprs_ctrl );
 
 /**
 Set CbCr setting of source for On The Fly
@@ -131,7 +131,7 @@ Set CbCr setting of source for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the source CbCr Adjustment is set.
 */
-INT32 im_cnr_axi_otf_ctrl_sprs_cc(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_CC_SRC_DST* const sprs_ctrl );
+INT32 im_cnr_axi_otf_ctrl_sprs_cc(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlCcSrcDst* const sprs_ctrl );
 
 /**
 Set CbCr setting of destination for Off Line
@@ -141,7 +141,7 @@ Set CbCr setting of destination for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the destination CbCr Adjustment is set.
 */
-INT32 im_cnr_axi_ofl_ctrl_sprd_cc(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_CC_SRC_DST* const sprd_ctrl );
+INT32 im_cnr_axi_ofl_ctrl_sprd_cc(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlCcSrcDst* const sprd_ctrl );
 
 /**
 Set CbCr setting of destination for On The Fly
@@ -151,6 +151,6 @@ Set CbCr setting of destination for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the destination CbCr Adjustment is set.
 */
-INT32 im_cnr_axi_otf_ctrl_sprd_cc(ImCnrAxi*self, UCHAR ch, const T_IM_CNR_CTRL_CC_SRC_DST* const sprd_ctrl );
+INT32 im_cnr_axi_otf_ctrl_sprd_cc(ImCnrAxi*self, UCHAR ch, const TImCnrCtrlCcSrcDst* const sprd_ctrl );
 
 #endif// _IM_CNR_AXI_H_

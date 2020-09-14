@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :zhaoxin
 *@brief               :CtDdAudioFifo3类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -64,8 +64,8 @@
 #include "ctddaudiofifo3.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioFifo3, ct_dd_audio_fifo3);
-#define CT_DD_AUDIO_FIFO3_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdAudioFifo3Private,CT_TYPE_DD_AUDIO_FIFO3))
+G_DEFINE_TYPE(CtDdAudioFifo3, ct_dd_audio_fifo3, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_FIFO3_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_FIFO3, CtDdAudioFifo3Private))
 
 struct _CtDdAudioFifo3Private
 {
@@ -79,8 +79,10 @@ static kuint32 S_DD_CT_AUDIO_PDM_DMA_INT_CNT1;
 /*
  * DECLS
  */
-static void 	ct_dd_audio_fifo3_constructor(CtDdAudioFifo3 *self);
-static void 	ct_dd_audio_fifo3_destructor(CtDdAudioFifo3 *self);
+static void 	ct_dd_audio_fifo3_class_init(CtDdAudioFifo3Class *klass);
+static void 	ct_dd_audio_fifo3_init(CtDdAudioFifo3 *self);
+static void	 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 static void 	ctDdAudioDmaIntHandlerFifoMonitorPlay0_cb( void );
 static void 	ctDdAudioDmaIntHandlerFifoMonitorPlay1_cb( void );
 static void 	ctDdAudioDmaIntHandlerFifoMonitorPlay01_cb( void );
@@ -93,12 +95,29 @@ static void 	ctDdAudioDmaIntHandlerPdm11_cb( void );
 /*
  * IMPL
  */
-static void ct_dd_audio_fifo3_constructor(CtDdAudioFifo3 *self) 
+static void ct_dd_audio_fifo3_class_init(CtDdAudioFifo3Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioFifo3Private));
 }
 
-static void ct_dd_audio_fifo3_destructor(CtDdAudioFifo3 *self) 
+static void ct_dd_audio_fifo3_init(CtDdAudioFifo3 *self)
 {
+	CtDdAudioFifo3Private *priv = CT_DD_AUDIO_FIFO3_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioFifo3 *self = (CtDdAudioFifo3*)object;
+	CtDdAudioFifo3Private *priv = CT_DD_AUDIO_FIFO3_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioFifo3 *self = (CtDdAudioFifo3*)object;
+	CtDdAudioFifo3Private *priv = CT_DD_AUDIO_FIFO3_GET_PRIVATE(self);
 }
 
 //回调方法
@@ -919,7 +938,7 @@ void ct_dd_audio_fifo3_sync_pdm(void)
 
 CtDdAudioFifo3 *ct_dd_audio_fifo3_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioFifo3 *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_FIFO3, sizeof(CtDdAudioFifo3Private));
+    CtDdAudioFifo3 *self = g_object_new(CT_TYPE_DD_AUDIO_FIFO3, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

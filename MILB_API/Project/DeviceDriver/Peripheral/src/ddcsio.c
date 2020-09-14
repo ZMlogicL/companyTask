@@ -97,10 +97,10 @@ PUBLIC
  */
 kint32 dd_csio_open (DdCsio *self, kuchar ch, kint32 tmout)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -110,23 +110,23 @@ kint32 dd_csio_open (DdCsio *self, kuchar ch, kint32 tmout)
 	}
 #endif
 
-	if (tmout == D_DDIM_USER_SEM_WAIT_POL) {
-		ercd = DDIM_User_Pol_Sem(SID_DD_USIO(ch));
+	if (tmout == DdimUserCustom_SEM_WAIT_POL) {
+		ercd = ddim_user_custom_pol_sem(NULL, SID_DD_USIO(ch));
 	} else {
-		ercd = DDIM_User_Twai_Sem(SID_DD_USIO(ch), (DDIM_USER_TMO) tmout);
+		ercd = ddim_user_custom_twai_sem(NULL, SID_DD_USIO(ch), (DdimUserCustom_TMO) tmout);
 	}
 
-	if (ercd != D_DDIM_USER_E_OK) {
-		if ( D_DDIM_USER_E_TMOUT == ercd) {
+	if (ercd != DdimUserCustom_E_OK) {
+		if ( DdimUserCustom_E_TMOUT == ercd) {
 			return C_CSIO_SEM_TIMEOUT;
 		}
 		return C_CSIO_SEM_NG;
 	}
 
-	gDD_USIO_State[ch] = D_DD_USIO_EXC_CSIO;
+//	gDD_USIO_State[ch] = DdUart_D_DD_USIO_EXC_CSIO;
+	dd_uart_set_usio_state(dd_uart_get(), ch, DdUart_D_DD_USIO_EXC_CSIO);
 	return D_DDIM_OK;
 }
-
 
 /**
  * @brief	Close the specified channel.
@@ -135,25 +135,25 @@ kint32 dd_csio_open (DdCsio *self, kuchar ch, kint32 tmout)
  */
 kint32 dd_csio_close(DdCsio *self, kuchar ch)
 {
-	DDIM_USER_ER	ercd;
+	DdimUserCustom_ER	ercd;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	gDD_USIO_State[ch] = D_DD_USIO_EXC_OFF;
-	ercd = DDIM_User_Sig_Sem(SID_DD_USIO(ch));
+//	gDD_USIO_State[ch] = DdUart_D_DD_USIO_EXC_OFF;
+	dd_uart_set_usio_state(dd_uart_get(), ch, DdUart_D_DD_USIO_EXC_OFF);
+	ercd = ddim_user_custom_sig_sem(NULL, SID_DD_USIO(ch));
 
-	if ( D_DDIM_USER_E_OK != ercd) {
+	if ( DdimUserCustom_E_OK != ercd) {
 		return C_CSIO_SEM_NG;
 	}
 
 	return D_DDIM_OK;
 }
-
 
 /**
  * @brief	Set CSIO operation condition and callback function for the specified channel
@@ -164,7 +164,7 @@ kint32 dd_csio_close(DdCsio *self, kuchar ch)
 kint32 dd_csio_ctrl(kuchar ch, DdCsio const* const self)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -178,45 +178,45 @@ kint32 dd_csio_ctrl(kuchar ch, DdCsio const* const self)
 
 	// Setting register for each CSIO channel.
 	//Initialize
-	IO_USIO.CSIO[ch].SCR.byte = 0x00;
-	/*	IO_USIO.CSIO[ch].SMR.byte = 0x00;*/
-	IO_USIO.CSIO[ch].ESCR.byte = 0x00;
-	IO_USIO.CSIO[ch].DR.hword = 0x0000;
-	IO_USIO.CSIO[ch].BGR.hword = 0x0000;
-	IO_USIO.CSIO[ch].SCR.bit.UPCL = 1; // Soft-Reset
-	IO_USIO.CSIO[ch].SMR.bit.MD = 2; // fixed, CSIO Transferring
+	ioUsio.csio[ch].scr.byte = 0x00;
+	/*	ioUsio.csio[ch].smr.byte = 0x00;*/
+	ioUsio.csio[ch].escr.byte = 0x00;
+	ioUsio.csio[ch].dr.hword = 0x0000;
+	ioUsio.csio[ch].bgr.hword = 0x0000;
+	ioUsio.csio[ch].scr.bit.upcl = 1; // Soft-Reset
+	ioUsio.csio[ch].smr.bit.md = 2; // fixed, CSIO Transferring
 
 	// SCR register setting
-	IO_USIO.CSIO[ch].SCR.bit.MS = self->type; //Master/Slave selection bit
+	ioUsio.csio[ch].scr.bit.ms = self->type; //Master/Slave selection bit
 
 	// SMR register setting
-	IO_USIO.CSIO[ch].SMR.bit.BDS = (kuchar) self->bitDirection; // Bit Direction, LSB first or MSB first
+	ioUsio.csio[ch].smr.bit.bds = (kuchar) self->bitDirection; // Bit Direction, LSB first or MSB first
 
-	// Set SMR.SCKE=1 if using CSIO as master, else SCKE=0
+	// Set SMR.scke=1 if using CSIO as master, else scke=0
 	if (self->type == DdCsio_DD_CSIO_TYPE_MASTER) {
-		IO_USIO.CSIO[ch].SMR.bit.SCKE = 1;
+		ioUsio.csio[ch].smr.bit.scke = 1;
 	} else {
-		IO_USIO.CSIO[ch].SMR.bit.SCKE = 0;
+		ioUsio.csio[ch].smr.bit.scke = 0;
 	}
 
 	// ESCR register setting
-	IO_USIO.CSIO[ch].ESCR.bit.L = self->dataLength;
-	IO_USIO.CSIO[ch].ESCR.bit.SOP = self->sop;
+	ioUsio.csio[ch].escr.bit.l = self->dataLength;
+	ioUsio.csio[ch].escr.bit.sop = self->sop;
 
 	// BGR register setting
-	IO_USIO.CSIO[ch].BGR.hword = self->baudrate;
+	ioUsio.csio[ch].bgr.hword = self->baudrate;
 
 	// Transmit mode setting. Set register related to transmit mode
 	if (self->mode == DdCsio_DD_CSIO_MODE_NORMAL_SC_H) {
-		IO_USIO.CSIO[ch].SMR.bit.SCINV = 0;
+		ioUsio.csio[ch].smr.bit.scinv = 0;
 	} else if (self->mode == DdCsio_DD_CSIO_MODE_NORMAL_SC_L) {
-		IO_USIO.CSIO[ch].SMR.bit.SCINV = 1;
+		ioUsio.csio[ch].smr.bit.scinv = 1;
 	} else if (self->mode == DdCsio_DD_CSIO_MODE_SPI_SC_H) {
-		IO_USIO.CSIO[ch].SCR.bit.SPI = 1;
-		IO_USIO.CSIO[ch].SMR.bit.SCINV = 0;
+		ioUsio.csio[ch].scr.bit.spi = 1;
+		ioUsio.csio[ch].smr.bit.scinv = 0;
 	} else {	// DdCsio_DD_CSIO_MODE_SPI_SC_L
-		IO_USIO.CSIO[ch].SCR.bit.SPI = 1;
-		IO_USIO.CSIO[ch].SMR.bit.SCINV = 1;
+		ioUsio.csio[ch].scr.bit.spi = 1;
+		ioUsio.csio[ch].smr.bit.scinv = 1;
 	}
 
 	// Callback function
@@ -224,21 +224,21 @@ kint32 dd_csio_ctrl(kuchar ch, DdCsio const* const self)
 
 	// FIFO setting
 	if (self->fifoCtrl == NULL) {
-		IO_USIO.CSIO[ch].FCR.hword = 0x000C; //FIFO not used and FIFO reset
+		ioUsio.csio[ch].fcr.hword = 0x000C; //FIFO not used and FIFO reset
 		return D_DDIM_OK;
 	}
-	IO_USIO.CSIO[ch].FCR.hword = 0x000C; // Initialize
-	IO_USIO.CSIO[ch].FCR.bit.FSEL = self->fifoCtrl->fsel; //fifo selection bit
-	IO_USIO.CSIO[ch].FCR.bit.FSET = self->fifoCtrl->fset; //fifo transfer reload pointer storing bit
-	IO_USIO.CSIO[ch].FCR.bit.FLSTE = self->fifoCtrl->flste; //data-lost check permmision bit
-	IO_USIO.CSIO[ch].FCR.bit.FE1 = self->fifoCtrl->fe1; //FIFO1 enable
-	IO_USIO.CSIO[ch].FCR.bit.FE2 = self->fifoCtrl->fe2; //FIFO2 enable
-	IO_USIO.CSIO[ch].FBYTE.hword = 0x0000; //FBYE initial value
+	ioUsio.csio[ch].fcr.hword = 0x000C; // Initialize
+	ioUsio.csio[ch].fcr.bit.fsel = self->fifoCtrl->fsel; //fifo selection bit
+	ioUsio.csio[ch].fcr.bit.fset = self->fifoCtrl->fset; //fifo transfer reload pointer storing bit
+	ioUsio.csio[ch].fcr.bit.flste = self->fifoCtrl->flste; //data-lost check permmision bit
+	ioUsio.csio[ch].fcr.bit.fe1 = self->fifoCtrl->fe1; //FIFO1 enable
+	ioUsio.csio[ch].fcr.bit.fe2 = self->fifoCtrl->fe2; //FIFO2 enable
+	ioUsio.csio[ch].fbyte.hword = 0x0000; //FBYE initial value
 
 	if (self->fifoCtrl->fsel == 0) {
-		IO_USIO.CSIO[ch].FBYTE.byte[1] = self->fifoCtrl->fbyteRecv; //FIFO2
+		ioUsio.csio[ch].fbyte.byte[1] = self->fifoCtrl->fbyteRecv; //FIFO2
 	} else {
-		IO_USIO.CSIO[ch].FBYTE.byte[0] = self->fifoCtrl->fbyteRecv; //FIFO1
+		ioUsio.csio[ch].fbyte.byte[0] = self->fifoCtrl->fbyteRecv; //FIFO1
 	}
 
 	return D_DDIM_OK;
@@ -253,7 +253,7 @@ kint32 dd_csio_ctrl(kuchar ch, DdCsio const* const self)
 kint32 dd_csio_get_ctrl(kuchar ch, DdCsio* const self)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -263,20 +263,20 @@ kint32 dd_csio_get_ctrl(kuchar ch, DdCsio* const self)
 	}
 #endif
 
-	self->type = (DdCsioType) IO_USIO.CSIO[ch].SCR.bit.MS;
-	self->bitDirection = (DdCsioBitDir) IO_USIO.CSIO[ch].SMR.bit.BDS;
-	self->dataLength = (DdCsioDataLength) IO_USIO.CSIO[ch].ESCR.bit.L;
-	self->sop = IO_USIO.CSIO[ch].ESCR.bit.SOP;
-	self->baudrate = IO_USIO.CSIO[ch].BGR.hword;
+	self->type = (DdCsioType) ioUsio.csio[ch].scr.bit.ms;
+	self->bitDirection = (DdCsioBitDir) ioUsio.csio[ch].smr.bit.bds;
+	self->dataLength = (DdCsioDataLength) ioUsio.csio[ch].escr.bit.l;
+	self->sop = ioUsio.csio[ch].escr.bit.sop;
+	self->baudrate = ioUsio.csio[ch].bgr.hword;
 
-	if (IO_USIO.CSIO[ch].SCR.bit.SPI == 1) {
-		if (IO_USIO.CSIO[ch].SMR.bit.SCINV == 1) {
+	if (ioUsio.csio[ch].scr.bit.spi == 1) {
+		if (ioUsio.csio[ch].smr.bit.scinv == 1) {
 			self->mode = DdCsio_DD_CSIO_MODE_SPI_SC_L;
 		} else {
 			self->mode = DdCsio_DD_CSIO_MODE_SPI_SC_H;
 		}
 	} else {
-		if (IO_USIO.CSIO[ch].SMR.bit.SCINV == 1) {
+		if (ioUsio.csio[ch].smr.bit.scinv == 1) {
 			self->mode = DdCsio_DD_CSIO_MODE_NORMAL_SC_L;
 		} else {
 			self->mode = DdCsio_DD_CSIO_MODE_NORMAL_SC_H;
@@ -289,16 +289,16 @@ kint32 dd_csio_get_ctrl(kuchar ch, DdCsio* const self)
 		return D_DDIM_OK;
 	}
 
-	self->fifoCtrl->flste = IO_USIO.CSIO[ch].FCR.bit.FLSTE;
-	self->fifoCtrl->fsel = IO_USIO.CSIO[ch].FCR.bit.FSEL;
-	self->fifoCtrl->fset = IO_USIO.CSIO[ch].FCR.bit.FSET;
-	self->fifoCtrl->fe2 = IO_USIO.CSIO[ch].FCR.bit.FE2;
-	self->fifoCtrl->fe1 = IO_USIO.CSIO[ch].FCR.bit.FE1;
+	self->fifoCtrl->flste = ioUsio.csio[ch].fcr.bit.flste;
+	self->fifoCtrl->fsel = ioUsio.csio[ch].fcr.bit.fsel;
+	self->fifoCtrl->fset = ioUsio.csio[ch].fcr.bit.fset;
+	self->fifoCtrl->fe2 = ioUsio.csio[ch].fcr.bit.fe2;
+	self->fifoCtrl->fe1 = ioUsio.csio[ch].fcr.bit.fe1;
 
 	if (self->fifoCtrl->fsel == 0) {
-		self->fifoCtrl->fbyteRecv = IO_USIO.CSIO[ch].FBYTE.bit.__FIFO2;
+		self->fifoCtrl->fbyteRecv = ioUsio.csio[ch].fbyte.bit.__fifo2;
 	} else {
-		self->fifoCtrl->fbyteRecv = IO_USIO.CSIO[ch].FBYTE.bit.__FIFO1;
+		self->fifoCtrl->fbyteRecv = ioUsio.csio[ch].fbyte.bit.__fifo1;
 	}
 
 	return D_DDIM_OK;
@@ -308,12 +308,12 @@ kint32 dd_csio_get_ctrl(kuchar ch, DdCsio* const self)
 kint32 dd_csio_set_baudrate(DdCsio *self, kuchar ch, kuint16 baudRate )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
-	IO_USIO.CSIO[ch].BGR.hword = baudRate;
+	ioUsio.csio[ch].bgr.hword = baudRate;
 	return D_DDIM_OK;
 }
 
@@ -321,7 +321,7 @@ kint32 dd_csio_set_baudrate(DdCsio *self, kuchar ch, kuint16 baudRate )
 kint32 dd_csio_get_baudrate(DdCsio *self,kuchar ch, kuint16* baudRate )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -330,14 +330,14 @@ kint32 dd_csio_get_baudrate(DdCsio *self,kuchar ch, kuint16* baudRate )
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
-	*baudRate = IO_USIO.CSIO[ch].BGR.hword;
+	*baudRate = ioUsio.csio[ch].bgr.hword;
 	return D_DDIM_OK;
 }
 
 kint32 dd_csio_save_send_fifo_pointer(DdCsio *self, kuchar ch, kuchar lostDetect )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -348,15 +348,15 @@ kint32 dd_csio_save_send_fifo_pointer(DdCsio *self, kuchar ch, kuchar lostDetect
 #endif
 
 	// Check exist data in send fifo
-	if (IO_USIO.CSIO[ch].FBYTE.byte[IO_USIO.CSIO[ch].FCR.bit.FSEL] != 0) {
+	if (ioUsio.csio[ch].fbyte.byte[ioUsio.csio[ch].fcr.bit.fsel] != 0) {
 		return C_CSIO_DATA_EXIST_ERROR;
 	}
 
 	// Save Read Pointer
-	IO_USIO.CSIO[ch].FCR.bit.FSET = 1;
+	ioUsio.csio[ch].fcr.bit.fset = 1;
 
-	// Enable/Disable data lost detection (FLST)
-	IO_USIO.CSIO[ch].FCR.bit.FLSTE = lostDetect;
+	// Enable/Disable data lost detection (flst)
+	ioUsio.csio[ch].fcr.bit.flste = lostDetect;
 	return D_DDIM_OK;
 }
 
@@ -369,50 +369,50 @@ kint32 dd_csio_reload_send_fifo_pointer(DdCsio *self, kuchar ch )
 	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	if (IO_USIO.CSIO[ch].FCR.bit.FLST == 1) {
+	if (ioUsio.csio[ch].fcr.bit.flst == 1) {
 		// Reload data lost
 		return C_CSIO_OVERWRITE_ERROR;
 	}
 
 	// Keep to temporary
-	fe1 = IO_USIO.CSIO[ch].FCR.bit.FE1;
-	fe2 = IO_USIO.CSIO[ch].FCR.bit.FE2;
+	fe1 = ioUsio.csio[ch].fcr.bit.fe1;
+	fe2 = ioUsio.csio[ch].fcr.bit.fe2;
 
 	// Disable send/receive
-	IO_USIO.CSIO[ch].FCR.bit.FE1 = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FE2 = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TIE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TBIE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FTIE = 0;
+	ioUsio.csio[ch].fcr.bit.fe1 = 0;
+	ioUsio.csio[ch].fcr.bit.fe2 = 0;
+	ioUsio.csio[ch].scr.bit.tie = 0;
+	ioUsio.csio[ch].scr.bit.tbie = 0;
+	ioUsio.csio[ch].fcr.bit.ftie = 0;
 
 	// Reload Send FIFO
-	IO_USIO.CSIO[ch].FCR.bit.FLD = 1;
+	ioUsio.csio[ch].fcr.bit.fld = 1;
 
 	// Enable send permission
-	IO_USIO.CSIO[ch].SMR.bit.SOE = 1;
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 1;
+	ioUsio.csio[ch].smr.bit.soe = 1;
+	ioUsio.csio[ch].scr.bit.txe = 1;
 
 	// Set keep value
-	IO_USIO.CSIO[ch].FCR.bit.FE1 = fe1;
-	IO_USIO.CSIO[ch].FCR.bit.FE2 = fe2;
+	ioUsio.csio[ch].fcr.bit.fe1 = fe1;
+	ioUsio.csio[ch].fcr.bit.fe2 = fe2;
 
 	// Subtract the number of resend   ???
-//	if( IO_USIO.CSIO[ch].FBYTE.byte[IO_USIO.CSIO[ch].FCR.bit.FSEL] >= gddCsioInfo[ch].sendPos ){
-//		gddCsioInfo[ch].sendPos -= IO_USIO.CSIO[ch].FBYTE.byte[IO_USIO.CSIO[ch].FCR.bit.FSEL];
+//	if( ioUsio.csio[ch].fbyte.byte[ioUsio.csio[ch].fcr.bit.fsel] >= gddCsioInfo[ch].sendPos ){
+//		gddCsioInfo[ch].sendPos -= ioUsio.csio[ch].fbyte.byte[ioUsio.csio[ch].fcr.bit.fsel];
 //	}
 
 	if (gddCsioInfo[ch].pcallback) {	// Interrupt enable?
-		IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
-		IO_USIO.CSIO[ch].FCR.bit.FTIE = 1;
+		ioUsio.csio[ch].fcr.bit.fdrq = 0;
+		ioUsio.csio[ch].fcr.bit.ftie = 1;
 		DdCsioCommon_DD_CSIO_DSB();
 	} else {	// Interrupt is disable
-		while (IO_USIO.CSIO[ch].SSR.bit.__TBI == 0) {
+		while (ioUsio.csio[ch].ssr.bit.__tbi == 0) {
 			// wait until TDR empty
 			ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 			if (ret != D_DDIM_OK) {
@@ -435,20 +435,20 @@ kint32 dd_csio_reload_send_fifo_pointer(DdCsio *self, kuchar ch )
 kint32 dd_csio_get_reload_status(DdCsio *self, kuchar ch )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	return IO_USIO.CSIO[ch].FCR.bit.FLD;
+	return ioUsio.csio[ch].fcr.bit.fld;
 }
 
 
 kint32 dd_csio_reset_fifo(DdCsio *self, kuchar ch, kuchar fifoNum )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -458,12 +458,12 @@ kint32 dd_csio_reset_fifo(DdCsio *self, kuchar ch, kuchar fifoNum )
 	}
 #endif
 
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FTIE = 0;
+	ioUsio.csio[ch].scr.bit.txe = 0;
+	ioUsio.csio[ch].scr.bit.rxe = 0;
+	ioUsio.csio[ch].fcr.bit.ftie = 0;
 
 	// Reset FIFO
-	IO_USIO.CSIO[ch].FCR.hword |= fifoNum << 2;
+	ioUsio.csio[ch].fcr.hword |= fifoNum << 2;
 	// C_CSIO_SELECT_FIFO_1		(1)// C_CSIO_SELECT_FIFO_2		(2)// C_CSIO_SELECT_FIFO_BOTH	(3)
 	DdCsioCommon_DD_CSIO_DSB();
 	return D_DDIM_OK;
@@ -479,7 +479,7 @@ kint32 dd_csio_reset_fifo(DdCsio *self, kuchar ch, kuchar fifoNum )
 kint32 dd_csio_set_send_data(DdCsio *self, kuchar ch, void const* const sendAddr, kuint32 num)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -493,7 +493,7 @@ kint32 dd_csio_set_send_data(DdCsio *self, kuchar ch, void const* const sendAddr
 	}
 #endif
 
-	if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+	if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 		gddCsioInfo[ch].sendAddr16 = (kuint16*) sendAddr;
 	} else {
 		gddCsioInfo[ch].sendAddr8 = (kuchar*) sendAddr;
@@ -516,20 +516,20 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	IO_USIO.CSIO[ch].SMR.bit.SOE = 1; //Serial data output permission bit
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 0; //Disable receive permission bit
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 1; //Enable transfer permission bit
+	ioUsio.csio[ch].smr.bit.soe = 1; //Serial data output permission bit
+	ioUsio.csio[ch].scr.bit.rxe = 0; //Disable receive permission bit
+	ioUsio.csio[ch].scr.bit.txe = 1; //Enable transfer permission bit
 
-	if (((IO_USIO.CSIO[ch].FCR.bit.FSEL == 0) && (IO_USIO.CSIO[ch].FCR.bit.FE1 == 1))
-			|| ((IO_USIO.CSIO[ch].FCR.bit.FSEL == 1) && (IO_USIO.CSIO[ch].FCR.bit.FE2 == 1))) {
+	if (((ioUsio.csio[ch].fcr.bit.fsel == 0) && (ioUsio.csio[ch].fcr.bit.fe1 == 1))
+			|| ((ioUsio.csio[ch].fcr.bit.fsel == 1) && (ioUsio.csio[ch].fcr.bit.fe2 == 1))) {
 		// FIFO use
-		while (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+		while (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 			// wait until FIFO empty
 			ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 			if (ret != D_DDIM_OK) {
@@ -539,22 +539,22 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 		}
 		waitCnt = 0;
 
-		if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+		if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 			while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				IO_USIO.CSIO[ch].DR.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
+				ioUsio.csio[ch].dr.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
 				DdCsioCommon_DD_CSIO_DSB();
 				gddCsioInfo[ch].sendPos++;
 
-				if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 1) {// FIFO is not full? (0:full, 1:empty)
+				if (ioUsio.csio[ch].fcr.bit.fdrq == 1) {// FIFO is not full? (0:full, 1:empty)
 					continue;
 				} else {	//FIFO is full
 					if(gddCsioInfo[ch].pcallback){	// Interrupt enable?
-						IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
-						IO_USIO.CSIO[ch].FCR.bit.FTIE = 1;
+						ioUsio.csio[ch].fcr.bit.fdrq = 0;
+						ioUsio.csio[ch].fcr.bit.ftie = 1;
 						DdCsioCommon_DD_CSIO_DSB();
 						return D_DDIM_OK;
 					} else {	// Interrupt is disable
-						while (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+						while (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 							// wait until FIFO empty
 							ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 							if (ret != D_DDIM_OK) {
@@ -568,20 +568,20 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 			}
 		} else {
 			while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				IO_USIO.CSIO[ch].DR.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
+				ioUsio.csio[ch].dr.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
 				DdCsioCommon_DD_CSIO_DSB();
 				gddCsioInfo[ch].sendPos++;
 
-				if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 1) {// FIFO is not full? (0:full, 1:empty)
+				if (ioUsio.csio[ch].fcr.bit.fdrq == 1) {// FIFO is not full? (0:full, 1:empty)
 					continue;
 				} else {	//FIFO is full
 					if (gddCsioInfo[ch].pcallback) {	// Interrupt enable?
-						IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
-						IO_USIO.CSIO[ch].FCR.bit.FTIE = 1;
+						ioUsio.csio[ch].fcr.bit.fdrq = 0;
+						ioUsio.csio[ch].fcr.bit.ftie = 1;
 						DdCsioCommon_DD_CSIO_DSB();
 						return D_DDIM_OK;
 					} else {	// Interrupt is disable
-						while (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+						while (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 							// wait until FIFO empty
 							ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 							if (ret != D_DDIM_OK) {
@@ -598,14 +598,14 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 		// All data was written
 		if (gddCsioInfo[ch].pcallback) {	// Interrupt enable?
 			if (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
-				IO_USIO.CSIO[ch].FCR.bit.FTIE = 1;
+				ioUsio.csio[ch].fcr.bit.fdrq = 0;
+				ioUsio.csio[ch].fcr.bit.ftie = 1;
 			} else {
-				IO_USIO.CSIO[ch].SCR.bit.TBIE = 1;
+				ioUsio.csio[ch].scr.bit.tbie = 1;
 			}
 			DdCsioCommon_DD_CSIO_DSB();
 		} else {	// Interrupt is disable
-			while (IO_USIO.CSIO[ch].SSR.bit.__TBI == 0) {
+			while (ioUsio.csio[ch].ssr.bit.__tbi == 0) {
 				// wait until TDR empty
 				ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 				if (ret != D_DDIM_OK) {
@@ -623,9 +623,9 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 		}
 	} else {
 		// FIFO not use
-		if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+		if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 			while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				while (IO_USIO.CSIO[ch].SSR.bit.__TDRE == 0) {
+				while (ioUsio.csio[ch].ssr.bit.__tdre == 0) {
 					// wait until TDR empty
 					ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 					if (ret != D_DDIM_OK) {
@@ -639,19 +639,19 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 					return C_CSIO_FORCE_STOP;
 				}
 
-				IO_USIO.CSIO[ch].DR.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
+				ioUsio.csio[ch].dr.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
 				DdCsioCommon_DD_CSIO_DSB();
 				gddCsioInfo[ch].sendPos++;
 
 				if (gddCsioInfo[ch].pcallback) {	// Interrupt enable?
-					IO_USIO.CSIO[ch].SCR.bit.TIE = 1;
+					ioUsio.csio[ch].scr.bit.tie = 1;
 					DdCsioCommon_DD_CSIO_DSB();
 					return D_DDIM_OK;
 				}
 			}
 		} else {
 			while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				while (IO_USIO.CSIO[ch].SSR.bit.__TDRE == 0) {
+				while (ioUsio.csio[ch].ssr.bit.__tdre == 0) {
 					// wait until TDR empty
 					ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 					if (ret != D_DDIM_OK) {
@@ -665,12 +665,12 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 					return C_CSIO_FORCE_STOP;
 				}
 
-				IO_USIO.CSIO[ch].DR.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
+				ioUsio.csio[ch].dr.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
 				DdCsioCommon_DD_CSIO_DSB();
 				gddCsioInfo[ch].sendPos++;
 
 				if (gddCsioInfo[ch].pcallback) {	 //Interrupt enable?
-					IO_USIO.CSIO[ch].SCR.bit.TIE = 1;
+					ioUsio.csio[ch].scr.bit.tie = 1;
 					DdCsioCommon_DD_CSIO_DSB();
 					return D_DDIM_OK;
 				}
@@ -680,13 +680,13 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 		// All data was written
 		if (gddCsioInfo[ch].pcallback) {	// Interrupt enable?
 			if (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-				IO_USIO.CSIO[ch].SCR.bit.TIE = 1;
+				ioUsio.csio[ch].scr.bit.tie = 1;
 			} else {
-				IO_USIO.CSIO[ch].SCR.bit.TBIE = 1;
+				ioUsio.csio[ch].scr.bit.tbie = 1;
 			}
 			DdCsioCommon_DD_CSIO_DSB();
 		} else { //Interrupt is disable
-			while (IO_USIO.CSIO[ch].SSR.bit.__TBI == 0) {
+			while (ioUsio.csio[ch].ssr.bit.__tbi == 0) {
 				// wait until TDR empty
 				ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 				if (ret != D_DDIM_OK) {
@@ -718,7 +718,7 @@ kint32 dd_csio_start_send(DdCsio *self, kuchar ch)
 kint32 dd_csio_set_recv_data(DdCsio *self, kuchar ch, void const* const recvAddr, kuint32 num)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
@@ -732,7 +732,7 @@ kint32 dd_csio_set_recv_data(DdCsio *self, kuchar ch, void const* const recvAddr
 	}
 #endif
 
-	if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+	if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 		gddCsioInfo[ch].recvAddr16 = (kuint16*) recvAddr;
 	} else {
 		gddCsioInfo[ch].recvAddr8 = (kuchar*) recvAddr;
@@ -756,35 +756,35 @@ kint32 dd_csio_start_recv(DdCsio *self, kuchar ch)
 	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	IO_USIO.CSIO[ch].SMR.bit.SOE = 0; //Serial data output permission bit
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 1; //Enable receive permission bit
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 1; //Disable transfer permission bit
+	ioUsio.csio[ch].smr.bit.soe = 0; //Serial data output permission bit
+	ioUsio.csio[ch].scr.bit.rxe = 1; //Enable receive permission bit
+	ioUsio.csio[ch].scr.bit.txe = 1; //Disable transfer permission bit
 
 	if (gddCsioInfo[ch].pcallback) { //Interrupt enable?
 		//Dummy data for master receiving
-		if (IO_USIO.CSIO[ch].SCR.bit.MS == 0) {
-			IO_USIO.CSIO[ch].DR.hword = 0;
+		if (ioUsio.csio[ch].scr.bit.ms == 0) {
+			ioUsio.csio[ch].dr.hword = 0;
 		}
-		IO_USIO.CSIO[ch].FCR.bit.FRIIE = 1;
-		IO_USIO.CSIO[ch].SCR.bit.RIE = 1;
+		ioUsio.csio[ch].fcr.bit.friie = 1;
+		ioUsio.csio[ch].scr.bit.rie = 1;
 		DdCsioCommon_DD_CSIO_DSB();
 	} else { //Interrupt is disble
-		if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+		if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 			while (gddCsioInfo[ch].recvPos < gddCsioInfo[ch].num) {
 				// Dummy data for master receiving
-				if (IO_USIO.CSIO[ch].SCR.bit.MS == 0) {
-					IO_USIO.CSIO[ch].DR.hword = 0;
+				if (ioUsio.csio[ch].scr.bit.ms == 0) {
+					ioUsio.csio[ch].dr.hword = 0;
 					DdCsioCommon_DD_CSIO_DSB();
 				}
 
 				// Wait until RDR filled up with data
-				while (IO_USIO.CSIO[ch].SSR.bit.__RDRF == 0) {
+				while (ioUsio.csio[ch].ssr.bit.__rdrf == 0) {
 					// wait until TDR empty
 					ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 					if (ret != D_DDIM_OK) {
@@ -794,26 +794,26 @@ kint32 dd_csio_start_recv(DdCsio *self, kuchar ch)
 				}
 
 				// Check for buffer overrun error
-				if (IO_USIO.CSIO[ch].SSR.bit.__ORE == 1) {
+				if (ioUsio.csio[ch].ssr.bit.__ore == 1) {
 					// Clear buffer overrun error
-					IO_USIO.CSIO[ch].SSR.byte |= C_CSIO_SSR_REC_BIT;
+					ioUsio.csio[ch].ssr.byte |= C_CSIO_SSR_REC_BIT;
 					DdCsioCommon_DD_CSIO_DSB();
 					return C_CSIO_RECV_OVERRUN_ERROR;
 				}
 
-				*(gddCsioInfo[ch].recvAddr16 + gddCsioInfo[ch].recvPos) = IO_USIO.CSIO[ch].DR.hword;
+				*(gddCsioInfo[ch].recvAddr16 + gddCsioInfo[ch].recvPos) = ioUsio.csio[ch].dr.hword;
 				gddCsioInfo[ch].recvPos++;
 			}
 		} else {
 			while (gddCsioInfo[ch].recvPos < gddCsioInfo[ch].num) {
 				// Dummy data for master receiving
-				if (IO_USIO.CSIO[ch].SCR.bit.MS == 0) {
-					IO_USIO.CSIO[ch].DR.hword = 0;
+				if (ioUsio.csio[ch].scr.bit.ms == 0) {
+					ioUsio.csio[ch].dr.hword = 0;
 					DdCsioCommon_DD_CSIO_DSB();
 				}
 
 				// Wait until RDR filled up with data
-				while (IO_USIO.CSIO[ch].SSR.bit.__RDRF == 0) {
+				while (ioUsio.csio[ch].ssr.bit.__rdrf == 0) {
 					// wait until TDR empty
 					ret = dd_csio_common_check_stopping_conditions(dd_csio_common_get(), ch, waitCnt);
 					if (ret != D_DDIM_OK) {
@@ -823,14 +823,14 @@ kint32 dd_csio_start_recv(DdCsio *self, kuchar ch)
 				}
 
 				// Check for buffer overrun error
-				if (IO_USIO.CSIO[ch].SSR.bit.__ORE == 1) {
+				if (ioUsio.csio[ch].ssr.bit.__ore == 1) {
 					// Clear buffer overrun error
-					IO_USIO.CSIO[ch].SSR.byte |= C_CSIO_SSR_REC_BIT;
+					ioUsio.csio[ch].ssr.byte |= C_CSIO_SSR_REC_BIT;
 					DdCsioCommon_DD_CSIO_DSB();
 					return C_CSIO_RECV_OVERRUN_ERROR;
 				}
 
-				*(gddCsioInfo[ch].recvAddr8 + gddCsioInfo[ch].recvPos) = IO_USIO.CSIO[ch].DR.byte[0];
+				*(gddCsioInfo[ch].recvAddr8 + gddCsioInfo[ch].recvPos) = ioUsio.csio[ch].dr.byte[0];
 				gddCsioInfo[ch].recvPos++;
 			}
 		}
@@ -849,32 +849,32 @@ kint32 dd_csio_start_full_duplex(DdCsio *self, kuchar ch)
 {
 
 #ifdef CO_PARAM_CHECK
-	if(ch >= D_DD_USIO_CH_NUM_MAX){
+	if(ch >= DdUart_D_DD_USIO_CH_NUM_MAX){
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	gddCsioInfo[ch].fullDuplex = 1;
-	IO_USIO.CSIO[ch].SMR.bit.SOE = 1; //Serial data output permission bit
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 1; //Disable receive permission bit
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 1; //Enable transfer permission bit
+	ioUsio.csio[ch].smr.bit.soe = 1; //Serial data output permission bit
+	ioUsio.csio[ch].scr.bit.rxe = 1; //Disable receive permission bit
+	ioUsio.csio[ch].scr.bit.txe = 1; //Enable transfer permission bit
 
 	// FIFO setting (When the user doesn't set by CTRL)
-	if ((IO_USIO.CSIO[ch].FCR.bit.FE1 == 0) || (IO_USIO.CSIO[ch].FCR.bit.FE2 == 0)) {
-		IO_USIO.CSIO[ch].FCR.bit.FSEL = 0; //send:FIFO1, receive:FIFO2
-		IO_USIO.CSIO[ch].FCR.bit.FE1 = 1; //FIFO1 enable
-		IO_USIO.CSIO[ch].FCR.bit.FE2 = 1; //FIFO2 enable
+	if ((ioUsio.csio[ch].fcr.bit.fe1 == 0) || (ioUsio.csio[ch].fcr.bit.fe2 == 0)) {
+		ioUsio.csio[ch].fcr.bit.fsel = 0; //send:FIFO1, receive:FIFO2
+		ioUsio.csio[ch].fcr.bit.fe1 = 1; //FIFO1 enable
+		ioUsio.csio[ch].fcr.bit.fe2 = 1; //FIFO2 enable
 	}
 
 	// Send data
-	if (IO_USIO.CSIO[ch].ESCR.bit.L == DdCsio_DD_CSIO_DATA_LENGTH_9) {
+	if (ioUsio.csio[ch].escr.bit.l == DdCsio_DD_CSIO_DATA_LENGTH_9) {
 		while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-			IO_USIO.CSIO[ch].DR.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
+			ioUsio.csio[ch].dr.hword = *(gddCsioInfo[ch].sendAddr16 + gddCsioInfo[ch].sendPos);
 			DdCsioCommon_DD_CSIO_DSB();
 			gddCsioInfo[ch].sendPos++;
 
-			if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+			if (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 				//FIFO is full (0:full, 1:empty)
 				break;
 			} else {
@@ -884,11 +884,11 @@ kint32 dd_csio_start_full_duplex(DdCsio *self, kuchar ch)
 		}
 	} else {
 		while (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-			IO_USIO.CSIO[ch].DR.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
+			ioUsio.csio[ch].dr.byte[0] = *(gddCsioInfo[ch].sendAddr8 + gddCsioInfo[ch].sendPos);
 			DdCsioCommon_DD_CSIO_DSB();
 			gddCsioInfo[ch].sendPos++;
 
-			if (IO_USIO.CSIO[ch].FCR.bit.FDRQ == 0) {
+			if (ioUsio.csio[ch].fcr.bit.fdrq == 0) {
 				//FIFO is full (0:full, 1:empty)
 				break;
 			} else {
@@ -899,13 +899,13 @@ kint32 dd_csio_start_full_duplex(DdCsio *self, kuchar ch)
 	}
 
 	if (gddCsioInfo[ch].sendPos < gddCsioInfo[ch].num) {
-		IO_USIO.CSIO[ch].FCR.bit.FDRQ = 0;
-		IO_USIO.CSIO[ch].FCR.bit.FTIE = 1;
+		ioUsio.csio[ch].fcr.bit.fdrq = 0;
+		ioUsio.csio[ch].fcr.bit.ftie = 1;
 	} else {
-		IO_USIO.CSIO[ch].SCR.bit.TBIE = 1;
+		ioUsio.csio[ch].scr.bit.tbie = 1;
 	}
 
-	while ((IO_USIO.CSIO[ch].SSR.byte & 0x03) != 0x03) {
+	while ((ioUsio.csio[ch].ssr.byte & 0x03) != 0x03) {
 		// wait until TDR empty
 	}
 
@@ -921,35 +921,35 @@ kint32 dd_csio_start_full_duplex(DdCsio *self, kuchar ch)
 kint32 dd_csio_stop(DdCsio *self, kuchar ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_DD_USIO_CH_NUM_MAX) {
+	if (ch >= DdUart_D_DD_USIO_CH_NUM_MAX) {
 		Ddim_Assertion(("CSIO input param error. [ch] = %d\n", ch));
 		return C_CSIO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	if (gddCsioInfo[ch].dmaWait == 1) {
-		Dd_HDMAC1_Stop(gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
-		Dd_HDMAC1_Close(gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
-		Dd_HDMAC1_Stop(gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
-		Dd_HDMAC1_Close(gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
+		dd_hdmac1_stop(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
+		dd_hdmac1_close(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_SEND].dmaCh);
+		dd_hdmac1_stop(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
+		dd_hdmac1_close(dd_hdmac1_get(), gddCsioDmaInfo[ch][C_CSIO_RECV].dmaCh);
 		gddCsioInfo[ch].dmaWait = 0;
 	}
 
 	// Disable interrupt
-	IO_USIO.CSIO[ch].SCR.bit.RIE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TIE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.TBIE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FTIE = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FRIIE = 0;
+	ioUsio.csio[ch].scr.bit.rie = 0;
+	ioUsio.csio[ch].scr.bit.tie = 0;
+	ioUsio.csio[ch].scr.bit.tbie = 0;
+	ioUsio.csio[ch].fcr.bit.ftie = 0;
+	ioUsio.csio[ch].fcr.bit.friie = 0;
 
 	// Disable FIFO
-	IO_USIO.CSIO[ch].FCR.bit.FE1 = 0;
-	IO_USIO.CSIO[ch].FCR.bit.FE2 = 0;
-	IO_USIO.CSIO[ch].SCR.bit.UPCL = 1; //Soft-Reset
+	ioUsio.csio[ch].fcr.bit.fe1 = 0;
+	ioUsio.csio[ch].fcr.bit.fe2 = 0;
+	ioUsio.csio[ch].scr.bit.upcl = 1; //Soft-Reset
 
 	// Disable send/receive
-	IO_USIO.CSIO[ch].SCR.bit.TXE = 0;
-	IO_USIO.CSIO[ch].SCR.bit.RXE = 0;
+	ioUsio.csio[ch].scr.bit.txe = 0;
+	ioUsio.csio[ch].scr.bit.rxe = 0;
 	gddCsioInfo[ch].forceStopFlg = 1;
 	DdCsioCommon_DD_CSIO_DSB();
 	return D_DDIM_OK;

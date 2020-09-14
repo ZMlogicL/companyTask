@@ -66,7 +66,7 @@ typedef struct {
 	 *   :@@AFPBH value range  :posY[0 - 16380] target registor  :@@AFPBV value
 	 *    range  :width[2 - 16382] target registor  :@@AFPBHW value range
 	 *    :lines[2 - 16382] target registor  :@@AFPBVW */
-	T_IM_PRO_AREA_INFO		afpbArea;
+	TimproAreaInfo		afpbArea;
 } TimproAfpbCtrl;
 
 /*类型定义区域*/

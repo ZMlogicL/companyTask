@@ -41,22 +41,22 @@ struct  _KJdsmxic1
 /*  structure of TSLW		*/
 typedef union _IoMxicTslw
 {
-	unsigned char byte[4][16];
+	kuchar byte[4][16];
 	struct
 	{
-		unsigned char slotw :7;
-		unsigned char :1;
+		kuchar slotw :7;
+		kuchar :1;
 	} bit[4][16];
 } IoMxicTslw;
 
 /*  structure of TSLR		*/
 typedef union _IoMxicTslr
 {
-	unsigned char byte[4][16];
+	kuchar byte[4][16];
 	struct
 	{
-		unsigned char slotr :7;
-		unsigned char :1;
+		kuchar slotr :7;
+		kuchar :1;
 	} bit[4][16];
 } IoMxicTslr;
 
@@ -73,30 +73,30 @@ typedef struct _IoJdsmxicTbl
 	IoMxicTslr tslr3[4]; /* 29x0_(0600 - 06FFh) */
 	IoMxicTslr tslr4[4]; /* 29x0_(0700 - 07FFh) */
 
-	unsigned char dmy29x0080029x0ffff[0x10000 - 0x0800]; /* 29x0_(0800 - FFFFh) */
+	kuchar dmy29x0080029x0ffff[0x10000 - 0x0800]; /* 29x0_(0800 - FFFFh) */
 } IoJdsmxicTbl;
 
 /*	structure of tmirst		*/
 typedef union _IoMxicTmirst
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long sr :1;
-		unsigned long :31;
+		kulong sr :1;
+		kulong :31;
 	} bit;
 } IoMxicTmirst;
 
 /*	structure of tcken		*/
 typedef union _IoMxicTcken
 {
-	unsigned long word;
+	kulong word;
 	struct
 	{
-		unsigned long tcksen :1;
-		unsigned long :7;
-		unsigned long tckmen :1;
-		unsigned long :23;
+		kulong tcksen :1;
+		kulong :7;
+		kulong tckmen :1;
+		kulong :23;
 	} bit;
 } IoMxicTcken;
 

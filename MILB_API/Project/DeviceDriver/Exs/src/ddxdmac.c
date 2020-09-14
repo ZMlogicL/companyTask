@@ -13,13 +13,13 @@
 *1.0.0 2020年06月开始开发
 */
 
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "arm.h"
 //#include "dd_exs.h"
 #include "ddexs.h"
 #include "ddexsbranch.h"
-#include "ddxdmac.h"
 #include "kxdmac.h"
+#include "ddxdmac.h"
 
 K_TYPE_DEFINE_WITH_PRIVATE(DdXdmac, dd_xdmac);
 #define DD_XDMAC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), DdXdmacPrivate, DD_TYPE_XDMAC))
@@ -27,8 +27,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdXdmac, dd_xdmac);
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
-#define D_DD_XDMAC_SYNC				(0)		/* Sync Processing */
-#define D_DD_XDMAC_ASYNC			(1)		/* Async Processing */
+#define C_DD_XDMAC_SYNC				(0)		/* Sync Processing */
+#define C_DD_XDMAC_ASYNC			(1)		/* Async Processing */
 
 struct _DdXdmacPrivate
 {
@@ -54,7 +54,7 @@ struct _DdXdmacPrivate
 //static volatile kint32 gDD_XDMAC_Wait_End_Time[DdXdmac_CH_NUM_MAX];
 
 // Spin Lock
-static kulong gDd_Xdmac_Spin_Lock __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
+static kulong S_DD_XDMAC_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
 
 /*----------------------------------------------------------------------*/
 /* DECLS																		*/
@@ -64,7 +64,7 @@ static void ddXdmacStartClock(DdXdmac *self);
 static void ddXdmacStopClock(DdXdmac *self);
 #endif			// CO_ACT_CLOCK
 static kint32 ddXdmacWaitEnd(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode);
-static kint32 dd_xdmac_start(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode, kuint32 sync);
+static kint32 ddXdmacStart(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode, kuint32 sync);
 
 static void dd_xdmac_constructor(DdXdmac *self)
 {
@@ -102,7 +102,7 @@ Control Clock Stop to start clock.<br>
 static void ddXdmacStartClock(DdXdmac *self)
 {
 	DdXdmacPrivate *priv = DD_XDMAC_GET_PRIVATE(self);
-	DD_ARM_CRITICAL_SECTION_START(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_START(S_DD_XDMAC_SPIN_LOCK);
 
 	priv->gDdXdmacClkCtrlCnt++;
 	if (priv->gDdXdmacClkCtrlCnt == 1){
@@ -127,7 +127,7 @@ static void ddXdmacStartClock(DdXdmac *self)
 		}
 	}
 
-	DD_ARM_CRITICAL_SECTION_END(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_END(S_DD_XDMAC_SPIN_LOCK);
 }
 
 /**
@@ -136,7 +136,7 @@ Control Clock Stop to stop clock.
 static void ddXdmacStopClock(DdXdmac *self)
 {
 	DdXdmacPrivate *priv = DD_XDMAC_GET_PRIVATE(self);
-	DD_ARM_CRITICAL_SECTION_START(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_START(S_DD_XDMAC_SPIN_LOCK);
 
 	if (0 < priv->gDdXdmacClkCtrlCnt){
 		priv->gDdXdmacClkCtrlCnt--;
@@ -163,7 +163,7 @@ static void ddXdmacStopClock(DdXdmac *self)
 		}
 	}
 
-	DD_ARM_CRITICAL_SECTION_END(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_END(S_DD_XDMAC_SPIN_LOCK);
 }
 #endif	// CO_ACT_CLOCK
 
@@ -173,8 +173,8 @@ static void ddXdmacStopClock(DdXdmac *self)
 static kint32 ddXdmacWaitEnd(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode)
 {
 	DdXdmacPrivate *priv = DD_XDMAC_GET_PRIVATE(self);
-	DdimUserCustom_FLGPTN flg_ptn;
-	DDIM_USER_ER ercd = 0;
+	DdimUserCustom_FLGPTN flgPtn;
+	DdimUserCustom_ER ercd = 0;
 
 	// CPU Polling (no use interrupt)
 	if(waitMode == DdXdmac_WAITMODE_CPU){
@@ -197,19 +197,19 @@ static kint32 ddXdmacWaitEnd(DdXdmac *self, kuchar ch, kushort* const status, ku
 		switch(ch){
 			case 0:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, FID_DD_XDMAC, DdXdmac_FLG_CH0,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdXdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdXdmacWaitEndTime[ch]);
 				break;
 			case 1:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, FID_DD_XDMAC, DdXdmac_FLG_CH1,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdXdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdXdmacWaitEndTime[ch]);
 				break;
 			case 2:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, FID_DD_XDMAC, DdXdmac_FLG_CH2,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdXdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdXdmacWaitEndTime[ch]);
 				break;
 			case 3:
 				ercd = ddim_user_custom_twai_flg(priv->ddimUserCustom, FID_DD_XDMAC, DdXdmac_FLG_CH3,\
-						D_DDIM_USER_TWF_ORW, &flg_ptn, priv->gDdXdmacWaitEndTime[ch]);
+						D_DDIM_USER_TWF_ORW, &flgPtn, priv->gDdXdmacWaitEndTime[ch]);
 				break;
 			default:
 				break;
@@ -235,7 +235,7 @@ static kint32 ddXdmacWaitEnd(DdXdmac *self, kuchar ch, kushort* const status, ku
 /**
  * @brief  DMA start.
  */
-static kint32 dd_xdmac_start(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode, kuint32 sync)
+static kint32 ddXdmacStart(DdXdmac *self, kuchar ch, kushort* const status, kuint32 waitMode, kuint32 sync)
 {
 	DdXdmacPrivate *priv = DD_XDMAC_GET_PRIVATE(self);
 	kint32 ret = DriverCommon_DDIM_OK;
@@ -313,7 +313,7 @@ static kint32 dd_xdmac_start(DdXdmac *self, kuchar ch, kushort* const status, ku
 	DD_ARM_DSB_POU();
 
 	// Sync Processing
-	if(sync == D_DD_XDMAC_SYNC){
+	if(sync == C_DD_XDMAC_SYNC){
 		ret = ddXdmacWaitEnd(self, ch, status, waitMode);
 	}
 
@@ -342,13 +342,13 @@ kint32 dd_xdmac_open(DdXdmac *self, kuchar ch, kint32 tmout)
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
 #endif
-	DDIM_USER_ER ercd = 0;
+	DdimUserCustom_ER ercd = 0;
 
 	if(DdimUserCustom_SEM_WAIT_POL == tmout){
 		ercd = ddim_user_custom_pol_sem(priv->ddimUserCustom, SID_DD_XDMAC(ch));				// pol_sem()
 	}
 	else{
-		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, SID_DD_XDMAC(ch), (DDIM_USER_TMO)tmout);	// twai_sem()
+		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, SID_DD_XDMAC(ch), (DdimUserCustom_TMO)tmout);	// twai_sem()
 	}
 
 	if(DdimUserCustom_E_OK != ercd){
@@ -382,7 +382,7 @@ kint32 dd_xdmac_close(DdXdmac *self, kuchar ch)
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
 #endif
-	DDIM_USER_ER ercd = 0;
+	DdimUserCustom_ER ercd = 0;
 
 	// Global variable is clear
 	priv->gDdXdmacCtrl[ch].configOne.word = 0;
@@ -422,14 +422,14 @@ kint32 dd_xdmac_ctrl_common(DdXdmac *self, TDdXdmacCommon const *const dmaCommon
 #endif //CO_ACT_CLOCK
 
 	// SpinLock
-	DD_ARM_CRITICAL_SECTION_START(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_START(S_DD_XDMAC_SPIN_LOCK);
 
 	// The value is set to an external variable
 	ioXdmac.xdacs.bit.cp = dmaCommon->commonConfig.bit.cP;
 	ioXdmac.xdacs.bit.xe = dmaCommon->commonConfig.bit.xE;
 
 	// SpinUnLock
-	DD_ARM_CRITICAL_SECTION_END(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_END(S_DD_XDMAC_SPIN_LOCK);
 
 #ifdef CO_ACT_CLOCK
 	ddXdmacStopClock(self);
@@ -548,7 +548,7 @@ kint32	dd_xdmac_start_sync(DdXdmac *self, kuchar ch, kushort *const status, kuin
 	ddXdmacStartClock(self);
 #endif //CO_ACT_CLOCK
 
-	ret = dd_xdmac_start(self, ch, status, waitMode, D_DD_XDMAC_SYNC);		// DMA Start
+	ret = ddXdmacStart(self, ch, status, waitMode, C_DD_XDMAC_SYNC);		// DMA Start
 
 #ifdef CO_ACT_CLOCK
 	ddXdmacStopClock(self);
@@ -577,7 +577,7 @@ kint32	dd_xdmac_start_async(DdXdmac *self, kuchar ch)
 	ddXdmacStartClock(self);
 #endif //CO_ACT_CLOCK
 
-	dd_xdmac_start(self, ch, &status, DdXdmac_WAITMODE_EVENT, D_DD_XDMAC_ASYNC);	// DMA Start
+	ddXdmacStart(self, ch, &status, DdXdmac_WAITMODE_EVENT, C_DD_XDMAC_ASYNC);	// DMA Start
 
 #ifdef CO_ACT_CLOCK
 	ddXdmacStopClock(self);
@@ -709,24 +709,24 @@ kint32	dd_xdmac_clear_status(DdXdmac *self, kuchar ch)
  * @param  kuchar	ch			Channel number (0 to 3)
  * @return kint32				DriverCommon_DDIM_OK / DdXdmac_INPUT_PARAM_ERR
  */
-kint32	dd_xdmac_get_status(DdXdmac *self, kuchar ch, kushort *const xdmac_status,\
-		kushort *const transfer_status, kushort *const interrupt_status)
+kint32	dd_xdmac_get_status(DdXdmac *self, kuchar ch, kushort *const xdmacStatus,\
+		kushort *const transferStatus, kushort *const interruptStatus)
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if(ch >= DdXdmac_CH_NUM_MAX){
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [ch] = %x\n", ch));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
-	if(xdmac_status == NULL){
+	if(xdmacStatus == NULL){
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [*status] NULL\n"));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
-	if(transfer_status == NULL){
-		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [*transfer_status] NULL\n"));
+	if(transferStatus == NULL){
+		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [*transferStatus] NULL\n"));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
-	if(interrupt_status == NULL){
-		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [*interrupt_status] NULL\n"));
+	if(interruptStatus == NULL){
+		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [*interruptStatus] NULL\n"));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
 #endif
@@ -735,9 +735,9 @@ kint32	dd_xdmac_get_status(DdXdmac *self, kuchar ch, kushort *const xdmac_status
 	ddXdmacStartClock(self);
 #endif //CO_ACT_CLOCK
 
-	*xdmac_status = ioXdmac.xdacs.bit.xs;
-	*transfer_status = ioXdmac.ch[ch].xddsd.bit.ts;
-	*interrupt_status = ioXdmac.ch[ch].xddsd.bit.is;
+	*xdmacStatus = ioXdmac.xdacs.bit.xs;
+	*transferStatus = ioXdmac.ch[ch].xddsd.bit.ts;
+	*interruptStatus = ioXdmac.ch[ch].xddsd.bit.is;
 
 #ifdef CO_ACT_CLOCK
 	ddXdmacStopClock(self);
@@ -854,12 +854,12 @@ kint32	dd_xdmac_set_low_power(DdXdmac *self, kuchar lowpower)
 #endif //CO_ACT_CLOCK
 
 	// SpinLock
-	DD_ARM_CRITICAL_SECTION_START(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_START(S_DD_XDMAC_SPIN_LOCK);
 
 	ioXdmac.xdacs.bit.lp = lowpower;
 
 	// SpinUnLock
-	DD_ARM_CRITICAL_SECTION_END(gDd_Xdmac_Spin_Lock);
+	DD_ARM_CRITICAL_SECTION_END(S_DD_XDMAC_SPIN_LOCK);
 
 #ifdef CO_ACT_CLOCK
 	ddXdmacStopClock(self);
@@ -979,7 +979,7 @@ void  dd_xdmac_set_int_handler(DdXdmac *self, kuchar ch, void (*IntHandlerFunc)(
 void dd_xdmac_int_handler(DdXdmac *self, kuchar ch)
 {
 	DdXdmacPrivate *priv = DD_XDMAC_GET_PRIVATE(self);
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 	kushort status;
 	VpCallback handler;//TODO:VpCallback定义在ddim_typedef.h中,原型为typedef void				(*VP_CALLBACK)();	/**< Type is defined to Callback function pointer */
 

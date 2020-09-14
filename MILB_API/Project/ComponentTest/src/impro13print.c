@@ -50,7 +50,7 @@ static void im_pro_1_3_print_destructor(ImPro13Print *self)
 void im_pro_1_3_print_0(ImPro13Print *self,const char* string, kuchar ch)
 {
     if(((AbsImProPrint*)self)->ioPro->sen.ldiv[ch].ldivtrg.bit.ldivtrg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_LDIV_Start(%u) %s result:trgr (%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensldiv_start(%u) %s result:trgr (%d)\n", 
         ch, string, 
         ((AbsImProPrint*)self)->ioPro->sen.ldiv[ch].ldivtrg.bit.ldivtrg))}; 
 }
@@ -152,7 +152,7 @@ void im_pro_1_3_print_3(ImPro13Print *self,const char* string, kuchar ch, TImPro
 void im_pro_1_3_print_4(ImPro13Print *self,const char* string, kuchar ch, kuchar paenTrg)
 {
     if(((AbsImProPrint*)self)->ioPro->sen.ldiv[ch].ldivpaen.bit.ldpaen != paenTrg) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_LDIV_Set_PAEN(%u) %s result:ldpaen (%d) ldivtrg(%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensldiv_set_paen(%u) %s result:ldpaen (%d) ldivtrg(%d) in(%d)\n", 
         ch, string, 
         ((AbsImProPrint*)self)->ioPro->sen.ldiv[ch].ldivpaen.bit.ldpaen, 
         ((AbsImProPrint*)self)->ioPro->sen.ldiv[ch].ldivtrg.bit.ldivtrg,paenTrg))}; 

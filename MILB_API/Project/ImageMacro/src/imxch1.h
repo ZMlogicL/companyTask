@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -38,19 +38,19 @@ KObject parent;
 KConstType  im_xch1_get_type(void);
 ImXch1* im_xch1_new(void);
 
-INT32 Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn );
-INT32 Im_Xch_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin );
-INT32 Im_Xch_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist );
-INT32 Im_Xch_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_half_thin );
-INT32 Im_Xch_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy );
-INT32 Im_Xch_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR fill_data );
-UCHAR Im_Xch_Get_Histogram_Max( VOID );
-INT32 Im_Xch_Get_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn );
-INT32 Im_Xch_Get_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin );
-INT32 Im_Xch_Get_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist );
-INT32 Im_Xch_Get_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_half_thin );
-INT32 Im_Xch_Get_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy );
-INT32 Im_Xch_Get_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR* fill_data );
-INT32 Im_Xch_Get_Xtrg( E_IM_XCH_CH_SEL xch, E_IM_XCH_ST* status );;
+INT32 im_xch1_ctrl_common( ImXch1*self,ImXchChSel xch, ImXchCtrlCmn* xch_ctrl_cmn );
+INT32 im_xch1_ctrl_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlThin* xch_ctrl_thin );
+INT32 im_xch1_ctrl_hist( ImXch1*self,ImXchChSel xch, ImXchCtrlHist* xch_ctrl_hist );
+INT32 im_xch1_ctrl_half_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlHalfThin* xch_ctrl_half_thin );
+INT32 im_xch1_ctrl_copy( ImXch1*self,ImXchChSel xch, ImXchCtrlCopy* xch_ctrl_copy );
+INT32 im_xch1_ctrl_fill( ImXch1*self,ImXchChSel xch, UCHAR fill_data );
+UCHAR im_xch1_get_histogram_max( ImXch1*self );
+INT32 im_xch1_get_ctrl_common( ImXch1*self,ImXchChSel xch, ImXchCtrlCmn* xch_ctrl_cmn );
+INT32 im_xch1_get_ctrl_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlThin* xch_ctrl_thin );
+INT32 im_xch1_get_ctrl_hist( ImXch1*self,ImXchChSel xch, ImXchCtrlHist* xch_ctrl_hist );
+INT32 im_xch1_get_ctrl_half_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlHalfThin* xch_ctrl_half_thin );
+INT32 im_xch1_get_ctrl_copy( ImXch1*self,ImXchChSel xch, ImXchCtrlCopy* xch_ctrl_copy );
+INT32 im_xch1_get_ctrl_fill( ImXch1*self,ImXchChSel xch, UCHAR* fill_data );
+INT32 im_xch1_get_xtrg( ImXch1*self,ImXchChSel xch, ImXchSt* status );;
 
 #endif /* __IM_XCH1_H__ */

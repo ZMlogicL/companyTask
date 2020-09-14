@@ -21,20 +21,20 @@
 #include "imjpegskip.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImJpegSkip, im_jpeg_skip);
-#define IM_JPEG_SKIP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImJpegSkipPrivate, IM_TYPE_JPEG_SKIP))
+G_DEFINE_TYPE(ImJpegSkip, im_jpeg_skip, G_TYPE_OBJECT);
+#define IM_JPEG_SKIP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_JPEG_SKIP, ImJpegSkipPrivate));
 
 struct _ImJpegSkipPrivate
 {
-	kint a;
+	gint a;
 };
 
 /*----------------------------------------------------------------------*/
 /* Global Data																*/
 /*----------------------------------------------------------------------*/
 // counter
-static volatile kushort S_GIM_JPEG_LINE_CNT = 0;
-static volatile kulong S_GIM_JPEG_SECT_CNT = 0;
+static volatile gushort S_GIM_JPEG_LINE_CNT = 0;
+static volatile gulong S_GIM_JPEG_SECT_CNT = 0;
 
 // encode setting table
 static TimgEncMng S_GIM_JPEG_ENC_MNG;
@@ -42,21 +42,47 @@ static TimgEncMng S_GIM_JPEG_ENC_MNG;
 // decode setting table
 static TimgDecMng S_GIM_JPEG_DEC_MNG;
 
-static kint32 S_GIM_JPEG_RESULT_JUDGE = 0;
+static gint32 S_GIM_JPEG_RESULT_JUDGE = 0;
 
 // Spin Lock
-static kulong S_GIM_JPG_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
+static gulong S_GIM_JPG_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  *IMPL
  */
-static void im_jpeg_skip_constructor(ImJpegSkip *self)
+static void 		im_jpeg_skip_class_init(ImJpegSkipClass *klass)
 {
-//	ImJpegSkipPrivate *priv = IM_JPEG_SKIP_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImJpegSkipPrivate));
 }
 
-static void im_jpeg_skip_destructor(ImJpegSkip *self)
+static void 		im_jpeg_skip_init(ImJpegSkip *self)
 {
-//	ImJpegSkipPrivate *priv = IM_JPEG_SKIP_GET_PRIVATE(self);
+	ImJpegSkipPrivate *priv = IM_JPEG_SKIP_GET_PRIVATE(self);
+	self->ddimUserCustom = ddim_user_custom_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImJpegSkipPrivate *priv = IM_JPEG_SKIP_GET_PRIVATE(object);
+	ImJpegCommon *self = im_jpeg_common_new();
+	if(self->ddimUserCustom){
+		g_object_unref(self->ddimUserCustom);
+		self->ddimUserCustom = NULL;
+	}
+	G_OBJECT_CLASS(im_jpeg_skip_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImJpegSkipPrivate *priv = IM_JPEG_SKIP_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_jpeg_skip_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -65,13 +91,13 @@ static void im_jpeg_skip_destructor(ImJpegSkip *self)
  * @brief		JPEG Decoding process asynchronous for marker skip mode.
  * @param[in]	None
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
  */
-kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
+gint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -82,7 +108,7 @@ kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -90,7 +116,7 @@ kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	// Initialize
 	// Decompression Error Code
@@ -101,12 +127,12 @@ kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 	S_GIM_JPEG_LINE_CNT = 0;
 	S_GIM_JPEG_SECT_CNT = 0;
 
-	ercd = DDIM_User_Clr_Flg( FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom, FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
+	if ( DdimUserCustom_E_OK != ercd) {
 		return ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR;
 	}
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -124,7 +150,7 @@ kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 
@@ -134,15 +160,15 @@ kint32 im_jpeg_start_skip_marker_dec( ImJpegSkip*self )
 /**
  * @brief		Waiting to be processed JPEG decoding.
  * @param[out]	TimgDecMng*	pJpgDecMng		: Result of the JPEG decoding process
- * @param[in]	kint32				timeOut			: Time-out period
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_TIMEOUT /
+ * @param[in]	gint32				timeOut			: Time-out period
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_TIMEOUT /
  * ImJpegCommon_D_IM_JPEG_DECODE_ERR / ImJpegCommon_D_IM_JPEG_PARAM_ERROR / ImJpegCommon_D_IM_JPEG_DECODE_PAUSE
  */
-kint32 im_jpeg_wait_end_dec(ImJpegSkip*self,  TimgDecMng* pJpgDecMng, kint32 timeOut )
+gint32 im_jpeg_wait_end_dec(ImJpegSkip*self,  TimgDecMng* pJpgDecMng, gint32 timeOut )
 {
-	DDIM_USER_FLGPTN flgptn = 0;
-	DDIM_USER_ER ercd;
-	kint32 ret;
+	DdimUserCustom_FLGPTN flgptn = 0;
+	DdimUserCustom_ER ercd;
+	gint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecMng == NULL) {
@@ -155,11 +181,11 @@ kint32 im_jpeg_wait_end_dec(ImJpegSkip*self,  TimgDecMng* pJpgDecMng, kint32 tim
 	}
 #endif // CO_PARAM_CHECK
 
-	ercd = DDIM_User_Twai_Flg( FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END, D_DDIM_USER_TWF_ORW, &flgptn, timeOut);
+	ercd = ddim_user_custom_twai_flg(self->ddimUserCustom, FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END, DdimUserCustom_TWF_ORW, &flgptn, timeOut);
 
 	*pJpgDecMng = S_GIM_JPEG_DEC_MNG;
 
-	if (ercd != D_DDIM_USER_E_OK) {
+	if (ercd != DdimUserCustom_E_OK) {
 		ret = ImJpegCommon_D_IM_JPEG_TIMEOUT;
 	}
 	else {
@@ -190,11 +216,11 @@ kint32 im_jpeg_wait_end_dec(ImJpegSkip*self,  TimgDecMng* pJpgDecMng, kint32 tim
  * @brief		JPEG decode restart.(Restart from the state is paused decoding)
  * @param[in]	TimgDecFrameMng*	pJpgDecFrmMng	: Pointer to JPEG Decode frame management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
+gint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecFrmMng == NULL) {
@@ -203,7 +229,7 @@ kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -212,7 +238,7 @@ kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// Coding not stopped
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -231,19 +257,19 @@ kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
 	}
 	else {
 		ioJpg7.jinten.bit.jcpfen = 1;
-		ioJpg7.jcodsv.word = (kulong) (((pJpgDecFrmMng->codeSize) / ImJpegCommon_D_IM_JPEG_SECT_CNT) + 1);
+		ioJpg7.jcodsv.word = (gulong) (((pJpgDecFrmMng->codeSize) / ImJpegCommon_D_IM_JPEG_SECT_CNT) + 1);
 	}
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
-	ercd = DDIM_User_Clr_Flg( FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom, FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
+	if ( DdimUserCustom_E_OK != ercd) {
 		return ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR;
 	}
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -253,7 +279,7 @@ kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -266,7 +292,7 @@ kint32 im_jpeg_restart_dec(ImJpegSkip*self,  TimgDecFrameMng* pJpgDecFrmMng )
  */
 void im_jpeg_stop( ImJpegSkip*self )
 {
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -276,7 +302,7 @@ void im_jpeg_stop( ImJpegSkip*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	return;
 }
 
@@ -284,9 +310,9 @@ void im_jpeg_stop( ImJpegSkip*self )
  * @brief		Get JPEG AXI (JBUF and PBUF) State of frame processing
  * @param[in]	None
  * @param[out]	EimgAxiSt*	pJpAxiState	:AXI state
- * @return		kint32	D_DDIM_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	D_DDIM_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState )
+gint32 im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpAxiState == NULL) {
@@ -295,7 +321,7 @@ kint32 im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -318,7 +344,7 @@ kint32 im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState )
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return D_DDIM_OK;
 }
@@ -329,16 +355,16 @@ kint32 im_jpeg_get_axi_state(ImJpegSkip*self,  EimgAxiSt* pJpAxiState )
  * @param[out]	None
  * @return		USHOUT	Number of the line counts
  */
-kushort im_jpeg_get_line_cnt( ImJpegSkip*self )
+gushort im_jpeg_get_line_cnt( ImJpegSkip*self )
 {
-	kushort retCnt;
+	gushort retCnt;
 
 	// SpinLock.
-	Dd_ARM_Critical_Section_Start(S_GIM_JPG_SPIN_LOCK);
+	DD_ARM_CRITICAL_SECTION_START(S_GIM_JPG_SPIN_LOCK);
 	retCnt = S_GIM_JPEG_LINE_CNT;
 
 	// SpinUnLock.
-	Dd_ARM_Critical_Section_End(S_GIM_JPG_SPIN_LOCK);
+	DD_ARM_CRITICAL_SECTION_END(S_GIM_JPG_SPIN_LOCK);
 
 	return retCnt;
 }
@@ -347,18 +373,18 @@ kushort im_jpeg_get_line_cnt( ImJpegSkip*self )
  * @brief		Returns the lines of the processed image of the vertical.
  * @param[in]	None
  * @param[out]	None
- * @return		kulong	Number of the sect counts
+ * @return		gulong	Number of the sect counts
  */
-kulong im_jpeg_get_sect_cnt( ImJpegSkip*self )
+gulong im_jpeg_get_sect_cnt( ImJpegSkip*self )
 {
-	kulong retCnt;
+	gulong retCnt;
 
 	// SpinLock.
-	Dd_ARM_Critical_Section_Start(S_GIM_JPG_SPIN_LOCK);
+	DD_ARM_CRITICAL_SECTION_START(S_GIM_JPG_SPIN_LOCK);
 	retCnt = S_GIM_JPEG_SECT_CNT;
 
 	// SpinUnLock.
-	Dd_ARM_Critical_Section_End(S_GIM_JPG_SPIN_LOCK);
+	DD_ARM_CRITICAL_SECTION_END(S_GIM_JPG_SPIN_LOCK);
 
 
 	return retCnt;
@@ -372,17 +398,17 @@ kulong im_jpeg_get_sect_cnt( ImJpegSkip*self )
  */
 void im_jpeg_int_handler( ImJpegSkip*self )
 {
-	kuchar encDecFlg = 0;
-	kint32 result = 0;
-	kuchar procEnd = 0;
-	kuchar forceEnd = 0;
-	kuchar pbufErr = 0;
-	kuchar jbufErr = 0;
-	VpCallback pcallback = NULL;
-	kint32 ret;
+	guchar encDecFlg = 0;
+	gint32 result = 0;
+	guchar procEnd = 0;
+	guchar forceEnd = 0;
+	guchar pbufErr = 0;
+	guchar jbufErr = 0;
+	VpCallbackFunc pcallback = NULL;
+	gint32 ret;
 	IoJpeg7cJint _jint;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -472,13 +498,13 @@ void im_jpeg_int_handler( ImJpegSkip*self )
 				}
 				else {
 					if ((ioJpg7.jpintsta.bit.sizerr != 0) || (ioJpg7.jpintsta.bit.rsterr != 0)) {
-						// check huffman segment error kint
+						// check huffman segment error gint
 						im_jpeg_sub_int_handler_dec_core_segint(NULL, &result);
 						// end of process
 						forceEnd = 1;
 					}
 					else {
-						// check marker kint
+						// check marker gint
 						im_jpeg_sub_int_handler_dec_core_mkint(NULL, &result);
 					}
 				}
@@ -495,11 +521,11 @@ void im_jpeg_int_handler( ImJpegSkip*self )
 			// JIF bit clear
 			ioJpg7.jint.word = 0x00008000;
 			// SpinLock.
-			Dd_ARM_Critical_Section_Start(S_GIM_JPG_SPIN_LOCK);
+			DD_ARM_CRITICAL_SECTION_START(S_GIM_JPG_SPIN_LOCK);
 			// Get processed line
 			S_GIM_JPEG_LINE_CNT = ioJpg7.jisvmn.bit.jisvmn;
 			// SpinUnLock.
-			Dd_ARM_Critical_Section_End(S_GIM_JPG_SPIN_LOCK);
+			DD_ARM_CRITICAL_SECTION_END(S_GIM_JPG_SPIN_LOCK);
 #ifdef CO_IM_JPEG_DEBUG
 			Ddim_Print(("ioJpg7.JISVMN =[0x%X]\n", S_GIM_JPEG_LINE_CNT));
 #endif
@@ -513,11 +539,11 @@ void im_jpeg_int_handler( ImJpegSkip*self )
 			// JCF bit clear
 			ioJpg7.jint.word = 0x00004000;
 			// SpinLock.
-			Dd_ARM_Critical_Section_Start(S_GIM_JPG_SPIN_LOCK);
+			DD_ARM_CRITICAL_SECTION_START(S_GIM_JPG_SPIN_LOCK);
 			// Get processed sect
 			S_GIM_JPEG_SECT_CNT = ioJpg7.jsctc.bit.jsctc;
 			// SpinUnLock.
-			Dd_ARM_Critical_Section_End(S_GIM_JPG_SPIN_LOCK);
+			DD_ARM_CRITICAL_SECTION_END(S_GIM_JPG_SPIN_LOCK);
 #ifdef CO_IM_JPEG_DEBUG
 			Ddim_Print(("ioJpg7.JSCTC =[0x%lX]\n", S_GIM_JPEG_SECT_CNT));
 #endif
@@ -557,7 +583,7 @@ void im_jpeg_int_handler( ImJpegSkip*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	if (forceEnd || (S_GIM_JPEG_RESULT_JUDGE & ImJpegCommon_D_IM_JPEG_PROC_END) == ImJpegCommon_D_IM_JPEG_PROC_END) {
 		procEnd = 1;
@@ -597,7 +623,7 @@ void im_jpeg_int_handler( ImJpegSkip*self )
 
 	if (procEnd != 0) {
 		// Flag set
-		(void) DDIM_User_Set_Flg( FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
+		(void) ddim_user_custom_set_flg(self->ddimUserCustom, FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
 	}
 }
 
@@ -608,14 +634,14 @@ void im_jpeg_int_handler( ImJpegSkip*self )
  * @brief		The decode of jpeg
  * @param[in]	TimgDecInput* inputParam
  * @param[out]	TimgDecOutput* outputParam
- * @return		kint32 D_DDIM_OK / D_IM_JPEG_DECODE_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR /
+ * @return		gint32 D_DDIM_OK / D_IM_JPEG_DECODE_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR /
  *  D_IM_JPEG_DECODE_TIMEOUT / D_IM_JPEG_DECODE_HEADER_NG / D_IM_JPEG_DECODE_16BYTE_NG / D_IM_JPEG_DECODE_ENCODE_NG
  * @note		None
  * @attention	None
  */
-kint32 im_jpeg_decode_sync(ImJpegSkip*self, TimgDecInput* inputParam, TimgDecOutput* outputParam)
+gint32 im_jpeg_decode_sync(ImJpegSkip*self, TimgDecInput* inputParam, TimgDecOutput* outputParam)
 {
-	kint32 ret = 0;
+	gint32 ret = 0;
 	TimgDecMng jpgmng;
 	TimgDecFrameMng jpgfrmmng;
 
@@ -696,7 +722,7 @@ kint32 im_jpeg_decode_sync(ImJpegSkip*self, TimgDecInput* inputParam, TimgDecOut
 
 #ifdef CO_DEBUG_ON_PC
 	{
-		ioJpg7.JPMODE.bit.MMODE = (kuchar)inputParam->smplType;
+		ioJpg7.JPMODE.bit.MMODE = (guchar)inputParam->smplType;
 		ioJpg7.JSTATE.bit.JALLRSTP = 1;
 		ioJpg7.JINT.word = 0x0A000000;
 		ioJpg7.JPINTSTA.word = 0x00000008;
@@ -764,8 +790,8 @@ kint32 im_jpeg_decode_sync(ImJpegSkip*self, TimgDecInput* inputParam, TimgDecOut
 //---------------------- colabo  section -------------------------------
 #endif	// CO_DDIM_UTILITY_USE
 
-ImJpegSkip* im_jpeg_skip_new(void)
+ImJpegSkip* 		im_jpeg_skip_new(void)
 {
-	ImJpegSkip *self = k_object_new_with_private(IM_TYPE_JPEG_SKIP, sizeof(ImJpegSkipPrivate));
+	ImJpegSkip *self = g_object_new(IM_TYPE_JPEG_SKIP, NULL);
 	return self;
 }

@@ -478,6 +478,7 @@ typedef struct 				_ImElaPrivate ImElaPrivate;
 
 struct _ImEla {
 	KObject parent;
+	ImEla *imEla;
 	UCHAR							gImElaStageCnt;
 	UCHAR							gImElaStepCnt;
 	UCHAR							gImElaNextCtrlFlag;
@@ -498,8 +499,8 @@ ImEla*		        im_ela_get(void);
 extern "C" {
 #endif	// __cplusplus
 //---------------------------- driver section ----------------------------
-VOID im_ela_ctrl_eirch_register( TImElaCtrlEirch ctrlEirch );
-VOID im_ela_ctrl_core_register(const TImElaCtrlCore* const ctrl_ela_core);
+VOID im_ela_ctrl_eirch_register(ImEla*self, TImElaCtrlEirch ctrlEirch );
+VOID im_ela_ctrl_core_register(ImEla*self, const TImElaCtrlCore* const ctrl_ela_core);
 
 /**
 The register is set for ELA.<br>
@@ -689,7 +690,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;
@@ -761,7 +762,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;
@@ -776,7 +777,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;
@@ -791,7 +792,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;
@@ -806,7 +807,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;
@@ -821,7 +822,7 @@ The example of executing synchronous processing is as follows.<br>
     }
 
     // Processing is started synchronously
-    result = im_ela_reg_start_sync(NULL);
+    result = im_ela_reg_start_sync(im_ela_reg_new());
     if(result != D_DDIM_OK) {
         // Error processing
         return;

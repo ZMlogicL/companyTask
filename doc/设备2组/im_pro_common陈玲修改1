@@ -1,0 +1,18 @@
+1、im_pro_common.c共有5436行，拆分成了7个类，
+分别为pwchtbl     prchtbl    pkchtbl    improcommonfig    improcommon     improcommoncon   improcommonlist   和一个公有.h文件improcommon.h
+
+
+2、宏定义及结构体没做改动都在improcommon.h中
+
+
+3、共有方法改动   
+extern VOID im_pro_memcpy(VOID *dst, VOID *src, UINT32 cp_size);改成VOID im_pro_common_fig_im_pro_memcpy(ImProCommonFig* self,VOID *dst, VOID *src, UINT32 cp_size);
+extern VOID im_pro_sen_set_start_status(UINT32 status, UINT32 ch);改成 VOID  im_pro_common_fig_im_pro_sen_set_start_status(ImProCommonFig* self,UINT32 status, UINT32 ch);
+extern VOID im_pro_sen_set_stop_status(UINT32 status, UINT32 ch);改成 VOID im_pro_common_fig_im_pro_sen_set_stop_status(ImProCommonFig* self,UINT32 status, UINT32 ch);
+extern BOOL im_pro_sen_get_start_status(UINT32 status, UINT32 ch);改成BOOL im_pro_common_fig_im_pro_sen_get_start_status(ImProCommonFig* self,UINT32 status, UINT32 ch);
+extern BOOL im_pro_sen_get_stop_all(VOID);改成 BOOL im_pro_common_fig_im_pro_sen_get_stop_all(ImProCommonFig* self);
+extern BOOL im_pro_comm_get_start_status( UINT32 status, UINT32 ch );改成 BOOL im_pro_common_fig_im_pro_comm_get_start_status( ImProCommonFig* self,UINT32 status, UINT32 ch );
+extern VOID im_pro_on_drive_clk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );改成 VOID im_pro_common_fig_im_pro_on_drive_clk(E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );
+extern VOID im_pro_on_pclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );改成VOID im_pro_common_fig_im_pro_on_pclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );
+extern VOID im_pro_on_hclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );改成 VOID im_pro_common_fig_im_pro_on_hclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );
+extern VOID im_pro_on_xclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );改成 VOID im_pro_common_fig_im_pro_on_xclk( E_IM_PRO_UNIT_NUM unit_no, E_IM_PRO_CLK_BLOCK_TYPE block_type );

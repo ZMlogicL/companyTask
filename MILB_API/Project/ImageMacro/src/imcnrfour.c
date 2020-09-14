@@ -39,7 +39,7 @@ struct _ImCnrfourPrivate{
 
 #ifdef CO_DDIM_UTILITY_USE
 // CSPR Hue Specified Table address (OTF) ---
-const static ImCnroneRdmaAddrCsprHueTbl gIM_CNR_OTF_CSPR_HUE_TBL[D_IM_CNR_CH_NUM_MAX] = {
+const static ImCnroneRdmaAddrCsprHueTbl S_IM_CNRTHREE_OTF_CSPR_HUE_TBL[ImCnr_CH_NUM_MAX] = {
 	// CPHPT		CPHPTK		CDSCLOF_1	CDSCLOF_2	CDSCLOF_3,	CDSCLGA_1	CDSCLGA_2	CDSCLGA_3	CDSCLBD_1	CDSCLBD_2	CDSCLBD_3
 	{0x28421190,	0x28421194,	0x284211A0,	0x284211A4,	0x284211A8,	0x284211B0,	0x284211B4,	0x284211B8,	0x284211C0,	0x284211C4,	0x284211C8},	// Pipeline-1
 	{0x28521190,	0x28521194,	0x285211A0,	0x285211A4,	0x285211A8,	0x285211B0,	0x285211B4,	0x285211B8,	0x285211C0,	0x285211C4,	0x285211C8},	// Pipeline-2
@@ -47,7 +47,7 @@ const static ImCnroneRdmaAddrCsprHueTbl gIM_CNR_OTF_CSPR_HUE_TBL[D_IM_CNR_CH_NUM
 };
 
 // CSPR SPRD_CC Table address (OTF) ---
-const static ImCnroneRdmaAddrSprdCcTbl gIM_CNR_OTF_SPRD_CC_TBL[D_IM_CNR_CH_NUM_MAX] = {
+const static ImCnroneRdmaAddrSprdCcTbl S_IM_CNRTHREE_OTF_SPRD_CC_TBL[ImCnr_CH_NUM_MAX] = {
 	// SPRD,			SPRDCBOF_1		SPRDCBOF_2		SPRDCBGA_1		SPRDCBGA_2		SPRDCBGA_3,		SPRDCBBD_1		SPRDCBBD_2
 	// SPRDCROF_1		SPRDCROF_2		SPRDCRGA_1		SPRDCRGA_2		SPRDCRGA_3,		SPRDCRBD_1		SPRDCRBD_2
 	// Pipeline-1
@@ -62,7 +62,7 @@ const static ImCnroneRdmaAddrSprdCcTbl gIM_CNR_OTF_SPRD_CC_TBL[D_IM_CNR_CH_NUM_M
 };
 
 // CSPR SPRS_CC Table address (OFL) ---
-const static ImCnroneRdmaAddrSprsCcTbl gIM_CNR_OFL_SPRS_CC_TBL[D_IM_CNR_CH_NUM_MAX] = {
+const static ImCnroneRdmaAddrSprsCcTbl S_IM_CNRTHREE_OFL_SPRS_CC_TBL[ImCnr_CH_NUM_MAX] = {
 	// SPRS,			SPRSCBOF_1		SPRSCBOF_2		SPRSCBGA_1		SPRSCBGA_2		SPRSCBGA_3,		SPRSCBBD_1		SPRSCBBD_2
 	// SPRSCROF_1		SPRSCROF_2		SPRSCRGA_1		SPRSCRGA_2		SPRSCRGA_3,		SPRSCRBD_1		SPRSCRBD_2
 	// Pipeline-1
@@ -77,7 +77,7 @@ const static ImCnroneRdmaAddrSprsCcTbl gIM_CNR_OFL_SPRS_CC_TBL[D_IM_CNR_CH_NUM_M
 };
 
 // CSPR SPRS_CC Table address (OTF) ---
-const static ImCnroneRdmaAddrSprsCcTbl gIM_CNR_OTF_SPRS_CC_TBL[D_IM_CNR_CH_NUM_MAX] = {
+const static ImCnroneRdmaAddrSprsCcTbl S_IM_CNRTHREE_OTF_SPRS_CC_TBL[ImCnr_CH_NUM_MAX] = {
 	// SPRS,			SPRSCBOF_1		SPRSCBOF_2		SPRSCBGA_1		SPRSCBGA_2		SPRSCBGA_3,		SPRSCBBD_1		SPRSCBBD_2
 	// SPRSCROF_1		SPRSCROF_2		SPRSCRGA_1		SPRSCRGA_2		SPRSCRGA_3,		SPRSCRBD_1		SPRSCRBD_2
 	// Pipeline-1
@@ -92,7 +92,7 @@ const static ImCnroneRdmaAddrSprsCcTbl gIM_CNR_OTF_SPRS_CC_TBL[D_IM_CNR_CH_NUM_M
 };
 
 // CSPR SPRD_CC Table address (OFL) ---
-const static ImCnroneRdmaAddrSprdCcTbl gIM_CNR_OFL_SPRD_CC_TBL[D_IM_CNR_CH_NUM_MAX] = {
+const static ImCnroneRdmaAddrSprdCcTbl S_IM_CNRTHREE_OFL_SPRD_CC_TBL[ImCnr_CH_NUM_MAX] = {
 	// SPRD,			SPRDCBOF_1		SPRDCBOF_2		SPRDCBGA_1		SPRDCBGA_2		SPRDCBGA_3,		SPRDCBBD_1		SPRDCBBD_2
 	// SPRDCROF_1		SPRDCROF_2		SPRDCRGA_1		SPRDCRGA_2		SPRDCRGA_3,		SPRDCRBD_1		SPRDCRBD_2
 	// Pipeline-1
@@ -151,63 +151,63 @@ static void finalize_od(GObject *object)
 static INT32 imCnrOtfStartCore( const UCHAR ch, const UCHAR sync, const INT32 waitTime )
 {
 	INT32 ercd;
-	UINT32 flg_ptn;
+	UINT32 flgPtn;
 
 	// SUPPRE End Flag disable
-	if (ch == D_IM_CNR_CH_0) {
-		gim_cnr_mode[D_IM_CNR_CH_0] = D_IM_CNR_MODE_OTF;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~D_IM_CNR_OTF_0_WAIT_FLGPTN );
+	if (ch == ImCnr_CH_0) {
+		S_IM_CNR_MODE[ImCnr_CH_0] = ImCnr_MODE_OTF;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~ImCnr_OTF_0_WAIT_FLGPTN );
 	}
-	else if (ch == D_IM_CNR_CH_1) {
-		gim_cnr_mode[D_IM_CNR_CH_1] = D_IM_CNR_MODE_OTF;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~D_IM_CNR_OTF_1_WAIT_FLGPTN );
+	else if (ch == ImCnr_CH_1) {
+		S_IM_CNR_MODE[ImCnr_CH_1] = ImCnr_MODE_OTF;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~ImCnr_OTF_1_WAIT_FLGPTN );
 	}
 	else {
-		gim_cnr_mode[D_IM_CNR_CH_0] = D_IM_CNR_MODE_OTF;
-		gim_cnr_mode[D_IM_CNR_CH_1] = D_IM_CNR_MODE_OTF;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~(D_IM_CNR_OTF_0_WAIT_FLGPTN|D_IM_CNR_OTF_1_WAIT_FLGPTN) );
+		S_IM_CNR_MODE[ImCnr_CH_0] = ImCnr_MODE_OTF;
+		S_IM_CNR_MODE[ImCnr_CH_1] = ImCnr_MODE_OTF;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~(ImCnr_OTF_0_WAIT_FLGPTN|ImCnr_OTF_1_WAIT_FLGPTN) );
 	}
 
 	imCnrOnSprClk(ch);
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	// Set Acess Enable
 	IO_CNR(ch)->OTF_REG_RW.ACESEN.bit.SPRACS = 1;
 
 	// wait 1us
-	im_cnr_wait_usec(D_IM_CNR_SRAM_WAIT_USEC);
+	ImCnr_WAIT_USEC(ImCnr_SRAM_WAIT_USEC);
 
-	Im_CNR_OTF_Enable(ch);
+	ImCnr_OTF_ENABLE(ch);
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_0 ){
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
+	if( ch == ImCnr_CH_0 ){
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
-	else if( ch == D_IM_CNR_CH_1 ){
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
+	else if( ch == ImCnr_CH_1 ){
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
 	else{
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
 #endif //CO_DEBUG_ON_PC
 
-	if( D_IM_CNR_ASYNC == sync ) {
+	if( ImCnr_ASYNC == sync ) {
 		return D_DDIM_OK;
 	}
 
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_2 ){
-		if( (IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__AXIF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__DRTF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__AXIF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__DRTF != 0) ) {
+	if( ch == ImCnr_CH_2 ){
+		if( (IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF != 0)
+		 || (IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__AXIF != 0)
+		 || (IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__DRTF != 0)
+		 || (IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF != 0)
+		 || (IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__AXIF != 0)
+		 || (IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__DRTF != 0) ) {
 			im_cnr_0_int_handler();
 			im_cnr_1_int_handler();
 		}
@@ -216,7 +216,7 @@ static INT32 imCnrOtfStartCore( const UCHAR ch, const UCHAR sync, const INT32 wa
 		if( (IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__SPDF != 0)
 		 || (IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__AXIF != 0)
 		 || (IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__DRTF != 0) ) {
-			if (ch == D_IM_CNR_CH_0) {
+			if (ch == ImCnr_CH_0) {
 				im_cnr_0_int_handler();
 			}
 			else{
@@ -227,38 +227,38 @@ static INT32 imCnrOtfStartCore( const UCHAR ch, const UCHAR sync, const INT32 wa
 #endif //CO_DEBUG_ON_PC
 
 	// Wait for Process end with Sync
-	ercd = im_cnrfive_otf_wait_end( ch, &flg_ptn, waitTime );
+	ercd = im_cnrfive_otf_wait_end( ch, &flgPtn, waitTime );
 	if( ercd != D_DDIM_OK ) {
 		return ercd;
 	}
-	if (ch == D_IM_CNR_CH_0) {
-		if( (flg_ptn & D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+	if (ch == ImCnr_CH_0) {
+		if( (flgPtn & ImCnr_FLG_0_OTF_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR) != 0 ) {
-			return D_IM_CNR_DRT_ERR;
+		if( (flgPtn & ImCnr_FLG_0_OTF_SPR_DRT_ERR) != 0 ) {
+			return ImCnr_DRT_ERR;
 		}
 	}
-	else if (ch == D_IM_CNR_CH_1) {
-		if( (flg_ptn & D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+	else if (ch == ImCnr_CH_1) {
+		if( (flgPtn & ImCnr_FLG_1_OTF_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR) != 0 ) {
-			return D_IM_CNR_DRT_ERR;
+		if( (flgPtn & ImCnr_FLG_1_OTF_SPR_DRT_ERR) != 0 ) {
+			return ImCnr_DRT_ERR;
 		}
 	}
 	else {
-		if( (flg_ptn & D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+		if( (flgPtn & ImCnr_FLG_0_OTF_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+		if( (flgPtn & ImCnr_FLG_1_OTF_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR) != 0 ) {
-			return D_IM_CNR_DRT_ERR;
+		if( (flgPtn & ImCnr_FLG_0_OTF_SPR_DRT_ERR) != 0 ) {
+			return ImCnr_DRT_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR) != 0 ) {
-			return D_IM_CNR_DRT_ERR;
+		if( (flgPtn & ImCnr_FLG_1_OTF_SPR_DRT_ERR) != 0 ) {
+			return ImCnr_DRT_ERR;
 		}
 	}
 
@@ -269,61 +269,61 @@ static INT32 imCnrOtfStartCore( const UCHAR ch, const UCHAR sync, const INT32 wa
 static INT32 imCnrOflStartCore( const UCHAR ch, const UCHAR sync, const INT32 waitTime )
 {
 	INT32 ercd;
-	UINT32 flg_ptn;
+	UINT32 flgPtn;
 
 	// SUPPRE End Flag disable
-	if (ch == D_IM_CNR_CH_0) {
-		gim_cnr_mode[D_IM_CNR_CH_0] = D_IM_CNR_MODE_OFL;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~D_IM_CNR_OFL_0_WAIT_FLGPTN );
+	if (ch == ImCnr_CH_0) {
+		S_IM_CNR_MODE[ImCnr_CH_0] = ImCnr_MODE_OFL;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~ImCnr_OFL_0_WAIT_FLGPTN );
 	}
-	else if (ch == D_IM_CNR_CH_1) {
-		gim_cnr_mode[D_IM_CNR_CH_1] = D_IM_CNR_MODE_OFL;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~D_IM_CNR_OFL_1_WAIT_FLGPTN );
+	else if (ch == ImCnr_CH_1) {
+		S_IM_CNR_MODE[ImCnr_CH_1] = ImCnr_MODE_OFL;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~ImCnr_OFL_1_WAIT_FLGPTN );
 	}
 	else {
-		gim_cnr_mode[D_IM_CNR_CH_0] = D_IM_CNR_MODE_OFL;
-		gim_cnr_mode[D_IM_CNR_CH_1] = D_IM_CNR_MODE_OFL;
-		DDIM_User_Clr_Flg( FID_IM_CNR, ~(D_IM_CNR_OFL_0_WAIT_FLGPTN|D_IM_CNR_OFL_1_WAIT_FLGPTN) );
+		S_IM_CNR_MODE[ImCnr_CH_0] = ImCnr_MODE_OFL;
+		S_IM_CNR_MODE[ImCnr_CH_1] = ImCnr_MODE_OFL;
+		DDIM_User_Clr_Flg( FID_IM_CNR, ~(ImCnr_OFL_0_WAIT_FLGPTN|ImCnr_OFL_1_WAIT_FLGPTN) );
 	}
 
 	imCnrOnSprClk(ch);
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	// Set Acess Enable
 	IO_CNR(ch)->OFL_REG_RW.ACESEN.bit.SPRACS = 1;
 
 	// wait 1us
-	im_cnr_wait_usec(D_IM_CNR_SRAM_WAIT_USEC);
+	ImCnr_WAIT_USEC(ImCnr_SRAM_WAIT_USEC);
 
-	Im_CNR_OFL_Enable(ch);
+	ImCnr_OFL_ENABLE(ch);
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_0 ){
-		IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
+	if( ch == ImCnr_CH_0 ){
+		IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
-	else if( ch == D_IM_CNR_CH_1 ){
-		IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
+	else if( ch == ImCnr_CH_1 ){
+		IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
 	else{
-		IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
-		IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
+		IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
+		IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 1;
 	}
 #endif //CO_DEBUG_ON_PC
 
-	if( D_IM_CNR_ASYNC == sync ) {
+	if( ImCnr_ASYNC == sync ) {
 		return D_DDIM_OK;
 	}
 
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_2 ){
-		if( (IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__AXIF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF != 0)
-		 || (IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__AXIF != 0) ) {
+	if( ch == ImCnr_CH_2 ){
+		if( (IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF != 0)
+		 || (IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__AXIF != 0)
+		 || (IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF != 0)
+		 || (IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__AXIF != 0) ) {
 			im_cnr_0_int_handler();
 			im_cnr_1_int_handler();
 		}
@@ -331,7 +331,7 @@ static INT32 imCnrOflStartCore( const UCHAR ch, const UCHAR sync, const INT32 wa
 	else{
 		if( (IO_CNR(ch)->OFL_REG_RW.SPRICF.bit.__SPDF != 0)
 		 || (IO_CNR(ch)->OFL_REG_RW.SPRICF.bit.__AXIF != 0) ) {
-			if (ch == D_IM_CNR_CH_0) {
+			if (ch == ImCnr_CH_0) {
 				im_cnr_0_int_handler();
 			}
 			else {
@@ -342,26 +342,26 @@ static INT32 imCnrOflStartCore( const UCHAR ch, const UCHAR sync, const INT32 wa
 #endif //CO_DEBUG_ON_PC
 
 	// Wait for Process end with Sync
-	ercd = im_cnrfive_ofl_wait_end( ch, &flg_ptn, waitTime );
+	ercd = im_cnrfive_ofl_wait_end( ch, &flgPtn, waitTime );
 	if( ercd != D_DDIM_OK ) {
 		return ercd;
 	}
-	if (ch == D_IM_CNR_CH_0) {
-		if( (flg_ptn & D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+	if (ch == ImCnr_CH_0) {
+		if( (flgPtn & ImCnr_FLG_0_OFL_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
 	}
-	else if (ch == D_IM_CNR_CH_1) {
-		if( (flg_ptn & D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+	else if (ch == ImCnr_CH_1) {
+		if( (flgPtn & ImCnr_FLG_1_OFL_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
 	}
 	else {
-		if( (flg_ptn & D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+		if( (flgPtn & ImCnr_FLG_0_OFL_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
-		if( (flg_ptn & D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR) != 0 ) {
-			return D_IM_CNR_AXI_ERR;
+		if( (flgPtn & ImCnr_FLG_1_OFL_SPR_AXI_ERR) != 0 ) {
+			return ImCnr_AXI_ERR;
 		}
 	}
 
@@ -374,64 +374,64 @@ Convert ImCnrCtrlC to ImCnrRdmaDataCtrlC
 static VOID imCnrConvertRdmaValueCtrlC( const ImCnrCtrlC* sprCtrlC, ImCnrRdmaDataCtrlC* rdmaCtrlC )
 {
 	rdmaCtrlC->CSPREN.bit.CSPREN	= sprCtrlC->enable;
-	rdmaCtrlC->CGDKEN.bit.CGDKEN	= sprCtrlC->gradation_keep_en;
-	rdmaCtrlC->MCEN.bit.MCEN		= sprCtrlC->mid_freq_nr.enable;
+	rdmaCtrlC->CGDKEN.bit.CGDKEN	= sprCtrlC->gradationKeepEn;
+	rdmaCtrlC->MCEN.bit.MCEN		= sprCtrlC->midFreqNr.enable;
 
-	rdmaCtrlC->MCYTHH.bit.MCYTHH_0	= sprCtrlC->mid_freq_nr.h_y_threshold[0];
-	rdmaCtrlC->MCYTHH.bit.MCYTHH_1	= sprCtrlC->mid_freq_nr.h_y_threshold[1];
-	rdmaCtrlC->MCYTHH.bit.MCYTHH_2	= sprCtrlC->mid_freq_nr.h_y_threshold[2];
-	rdmaCtrlC->MCYTHH.bit.MCYTHH_3	= sprCtrlC->mid_freq_nr.h_y_threshold[3];
-	rdmaCtrlC->MCYTHV.bit.MCYTHV_0	= sprCtrlC->mid_freq_nr.v_y_threshold[0];
-	rdmaCtrlC->MCYTHV.bit.MCYTHV_1	= sprCtrlC->mid_freq_nr.v_y_threshold[1];
-	rdmaCtrlC->MCYTHV.bit.MCYTHV_2	= sprCtrlC->mid_freq_nr.v_y_threshold[2];
-	rdmaCtrlC->MCYTHV.bit.MCYTHV_3	= sprCtrlC->mid_freq_nr.v_y_threshold[3];
-	rdmaCtrlC->MCCTHH.bit.MCCTHH_0	= sprCtrlC->mid_freq_nr.h_c_threshold[0];
-	rdmaCtrlC->MCCTHH.bit.MCCTHH_1	= sprCtrlC->mid_freq_nr.h_c_threshold[1];
-	rdmaCtrlC->MCCTHH.bit.MCCTHH_2	= sprCtrlC->mid_freq_nr.h_c_threshold[2];
-	rdmaCtrlC->MCCTHH.bit.MCCTHH_3	= sprCtrlC->mid_freq_nr.h_c_threshold[3];
-	rdmaCtrlC->MCCTHV.bit.MCCTHV_0	= sprCtrlC->mid_freq_nr.v_c_threshold[0];
-	rdmaCtrlC->MCCTHV.bit.MCCTHV_1	= sprCtrlC->mid_freq_nr.v_c_threshold[1];
-	rdmaCtrlC->MCCTHV.bit.MCCTHV_2	= sprCtrlC->mid_freq_nr.v_c_threshold[2];
-	rdmaCtrlC->MCCTHV.bit.MCCTHV_3	= sprCtrlC->mid_freq_nr.v_c_threshold[3];
+	rdmaCtrlC->MCYTHH.bit.MCYTHH_0	= sprCtrlC->midFreqNr.hYThreshold[0];
+	rdmaCtrlC->MCYTHH.bit.MCYTHH_1	= sprCtrlC->midFreqNr.hYThreshold[1];
+	rdmaCtrlC->MCYTHH.bit.MCYTHH_2	= sprCtrlC->midFreqNr.hYThreshold[2];
+	rdmaCtrlC->MCYTHH.bit.MCYTHH_3	= sprCtrlC->midFreqNr.hYThreshold[3];
+	rdmaCtrlC->MCYTHV.bit.MCYTHV_0	= sprCtrlC->midFreqNr.vYThreshold[0];
+	rdmaCtrlC->MCYTHV.bit.MCYTHV_1	= sprCtrlC->midFreqNr.vYThreshold[1];
+	rdmaCtrlC->MCYTHV.bit.MCYTHV_2	= sprCtrlC->midFreqNr.vYThreshold[2];
+	rdmaCtrlC->MCYTHV.bit.MCYTHV_3	= sprCtrlC->midFreqNr.vYThreshold[3];
+	rdmaCtrlC->MCCTHH.bit.MCCTHH_0	= sprCtrlC->midFreqNr.hCThreshold[0];
+	rdmaCtrlC->MCCTHH.bit.MCCTHH_1	= sprCtrlC->midFreqNr.hCThreshold[1];
+	rdmaCtrlC->MCCTHH.bit.MCCTHH_2	= sprCtrlC->midFreqNr.hCThreshold[2];
+	rdmaCtrlC->MCCTHH.bit.MCCTHH_3	= sprCtrlC->midFreqNr.hCThreshold[3];
+	rdmaCtrlC->MCCTHV.bit.MCCTHV_0	= sprCtrlC->midFreqNr.vCThreshold[0];
+	rdmaCtrlC->MCCTHV.bit.MCCTHV_1	= sprCtrlC->midFreqNr.vCThreshold[1];
+	rdmaCtrlC->MCCTHV.bit.MCCTHV_2	= sprCtrlC->midFreqNr.vCThreshold[2];
+	rdmaCtrlC->MCCTHV.bit.MCCTHV_3	= sprCtrlC->midFreqNr.vCThreshold[3];
 
-	rdmaCtrlC->MCYDYMDT.bit.MCYDYMYCR	= sprCtrlC->mid_freq_nr.y_threshold_cor;
-	rdmaCtrlC->MCYDYMDT.bit.MCYDYMYG	= sprCtrlC->mid_freq_nr.y_threshold_gain;
-	rdmaCtrlC->MCYDYM.bit.MCYDYM		= sprCtrlC->mid_freq_nr.y_threshold_dym_en;
-	rdmaCtrlC->MCYSCL.bit.MCYSCL		= sprCtrlC->mid_freq_nr.y_threshold_scl_en;
-	rdmaCtrlC->MCSSCL.bit.MCSSCL		= sprCtrlC->mid_freq_nr.c_y_threshold_scl_en;
-	rdmaCtrlC->MCCSCL.bit.MCCSCL		= sprCtrlC->mid_freq_nr.c_threshold_scl_en;
-	rdmaCtrlC->LCEN.bit.LCEN			= sprCtrlC->low_freq_nr.enable;
-	rdmaCtrlC->LCYTHH.bit.LCYTHH_0	= sprCtrlC->low_freq_nr.h_y_threshold[0];
-	rdmaCtrlC->LCYTHH.bit.LCYTHH_1	= sprCtrlC->low_freq_nr.h_y_threshold[1];
-	rdmaCtrlC->LCYTHH.bit.LCYTHH_2	= sprCtrlC->low_freq_nr.h_y_threshold[2];
-	rdmaCtrlC->LCYTHH.bit.LCYTHH_3	= sprCtrlC->low_freq_nr.h_y_threshold[3];
-	rdmaCtrlC->LCYTHV.bit.LCYTHV_0	= sprCtrlC->low_freq_nr.v_y_threshold[0];
-	rdmaCtrlC->LCYTHV.bit.LCYTHV_1	= sprCtrlC->low_freq_nr.v_y_threshold[1];
-	rdmaCtrlC->LCYTHV.bit.LCYTHV_2	= sprCtrlC->low_freq_nr.v_y_threshold[2];
-	rdmaCtrlC->LCYTHV.bit.LCYTHV_3	= sprCtrlC->low_freq_nr.v_y_threshold[3];
-	rdmaCtrlC->LCCTHH.bit.LCCTHH_0	= sprCtrlC->low_freq_nr.h_c_threshold[0];
-	rdmaCtrlC->LCCTHH.bit.LCCTHH_1	= sprCtrlC->low_freq_nr.h_c_threshold[1];
-	rdmaCtrlC->LCCTHH.bit.LCCTHH_2	= sprCtrlC->low_freq_nr.h_c_threshold[2];
-	rdmaCtrlC->LCCTHH.bit.LCCTHH_3	= sprCtrlC->low_freq_nr.h_c_threshold[3];
-	rdmaCtrlC->LCCTHV.bit.LCCTHV_0	= sprCtrlC->low_freq_nr.v_c_threshold[0];
-	rdmaCtrlC->LCCTHV.bit.LCCTHV_1	= sprCtrlC->low_freq_nr.v_c_threshold[1];
-	rdmaCtrlC->LCCTHV.bit.LCCTHV_2	= sprCtrlC->low_freq_nr.v_c_threshold[2];
-	rdmaCtrlC->LCCTHV.bit.LCCTHV_3	= sprCtrlC->low_freq_nr.v_c_threshold[3];
-	rdmaCtrlC->LCYDYMDT.bit.LCYDYMYCR	= sprCtrlC->low_freq_nr.y_threshold_cor;
-	rdmaCtrlC->LCYDYMDT.bit.LCYDYMYG	= sprCtrlC->low_freq_nr.y_threshold_gain;
-	rdmaCtrlC->LCYDYM.bit.LCYDYM	= sprCtrlC->low_freq_nr.y_threshold_dym_en;
-	rdmaCtrlC->LCYSCL.bit.LCYSCL	= sprCtrlC->low_freq_nr.y_threshold_scl_en;
-	rdmaCtrlC->LCSSCL.bit.LCSSCL	= sprCtrlC->low_freq_nr.c_y_threshold_scl_en;
-	rdmaCtrlC->LCCSCL.bit.LCCSCL	= sprCtrlC->low_freq_nr.c_threshold_scl_en;
+	rdmaCtrlC->MCYDYMDT.bit.MCYDYMYCR	= sprCtrlC->midFreqNr.yThresholdCor;
+	rdmaCtrlC->MCYDYMDT.bit.MCYDYMYG	= sprCtrlC->midFreqNr.yThresholdGain;
+	rdmaCtrlC->MCYDYM.bit.MCYDYM		= sprCtrlC->midFreqNr.yThresholdDymEn;
+	rdmaCtrlC->MCYSCL.bit.MCYSCL		= sprCtrlC->midFreqNr.yThresholdSclEn;
+	rdmaCtrlC->MCSSCL.bit.MCSSCL		= sprCtrlC->midFreqNr.cYThresholdSclEn;
+	rdmaCtrlC->MCCSCL.bit.MCCSCL		= sprCtrlC->midFreqNr.cThresholdSclEn;
+	rdmaCtrlC->LCEN.bit.LCEN			= sprCtrlC->lowFreqNr.enable;
+	rdmaCtrlC->LCYTHH.bit.LCYTHH_0	= sprCtrlC->lowFreqNr.hYThreshold[0];
+	rdmaCtrlC->LCYTHH.bit.LCYTHH_1	= sprCtrlC->lowFreqNr.hYThreshold[1];
+	rdmaCtrlC->LCYTHH.bit.LCYTHH_2	= sprCtrlC->lowFreqNr.hYThreshold[2];
+	rdmaCtrlC->LCYTHH.bit.LCYTHH_3	= sprCtrlC->lowFreqNr.hYThreshold[3];
+	rdmaCtrlC->LCYTHV.bit.LCYTHV_0	= sprCtrlC->lowFreqNr.vYThreshold[0];
+	rdmaCtrlC->LCYTHV.bit.LCYTHV_1	= sprCtrlC->lowFreqNr.vYThreshold[1];
+	rdmaCtrlC->LCYTHV.bit.LCYTHV_2	= sprCtrlC->lowFreqNr.vYThreshold[2];
+	rdmaCtrlC->LCYTHV.bit.LCYTHV_3	= sprCtrlC->lowFreqNr.vYThreshold[3];
+	rdmaCtrlC->LCCTHH.bit.LCCTHH_0	= sprCtrlC->lowFreqNr.hCThreshold[0];
+	rdmaCtrlC->LCCTHH.bit.LCCTHH_1	= sprCtrlC->lowFreqNr.hCThreshold[1];
+	rdmaCtrlC->LCCTHH.bit.LCCTHH_2	= sprCtrlC->lowFreqNr.hCThreshold[2];
+	rdmaCtrlC->LCCTHH.bit.LCCTHH_3	= sprCtrlC->lowFreqNr.hCThreshold[3];
+	rdmaCtrlC->LCCTHV.bit.LCCTHV_0	= sprCtrlC->lowFreqNr.vCThreshold[0];
+	rdmaCtrlC->LCCTHV.bit.LCCTHV_1	= sprCtrlC->lowFreqNr.vCThreshold[1];
+	rdmaCtrlC->LCCTHV.bit.LCCTHV_2	= sprCtrlC->lowFreqNr.vCThreshold[2];
+	rdmaCtrlC->LCCTHV.bit.LCCTHV_3	= sprCtrlC->lowFreqNr.vCThreshold[3];
+	rdmaCtrlC->LCYDYMDT.bit.LCYDYMYCR	= sprCtrlC->lowFreqNr.yThresholdCor;
+	rdmaCtrlC->LCYDYMDT.bit.LCYDYMYG	= sprCtrlC->lowFreqNr.yThresholdGain;
+	rdmaCtrlC->LCYDYM.bit.LCYDYM	= sprCtrlC->lowFreqNr.yThresholdDymEn;
+	rdmaCtrlC->LCYSCL.bit.LCYSCL	= sprCtrlC->lowFreqNr.yThresholdSclEn;
+	rdmaCtrlC->LCSSCL.bit.LCSSCL	= sprCtrlC->lowFreqNr.cYThresholdSclEn;
+	rdmaCtrlC->LCCSCL.bit.LCCSCL	= sprCtrlC->lowFreqNr.cThresholdSclEn;
 
-	rdmaCtrlC->WHTMD.bit.WHTEN	= sprCtrlC->whitening_enable;
-	rdmaCtrlC->WHTMD.bit.WHTVAL	= sprCtrlC->whitening_value;
-	rdmaCtrlC->WHTMD.bit.WHTBASE	= sprCtrlC->whitening_base;
+	rdmaCtrlC->WHTMD.bit.WHTEN	= sprCtrlC->whiteningEnable;
+	rdmaCtrlC->WHTMD.bit.WHTVAL	= sprCtrlC->whiteningValue;
+	rdmaCtrlC->WHTMD.bit.WHTBASE	= sprCtrlC->whiteningBase;
 
-	rdmaCtrlC->BLEND.bit.BLENDMD		= sprCtrlC->c_blend_md;
-	rdmaCtrlC->BLEND.bit.CSPRALPBD	= sprCtrlC->c_alpha_blend;
-	rdmaCtrlC->BLEND.bit.CSRGEN		= sprCtrlC->c_range;
-	rdmaCtrlC->BLEND.bit.CSRGMD		= sprCtrlC->c_range_mode;
+	rdmaCtrlC->BLEND.bit.BLENDMD		= sprCtrlC->cBlendMd;
+	rdmaCtrlC->BLEND.bit.CSPRALPBD	= sprCtrlC->cAlphaBlend;
+	rdmaCtrlC->BLEND.bit.CSRGEN		= sprCtrlC->cRange;
+	rdmaCtrlC->BLEND.bit.CSRGMD		= sprCtrlC->cRangeMode;
 }
 
 /*
@@ -452,17 +452,17 @@ static VOID imCnrConvertRdmaCsprMidYTable( const ImCnrTable* sprCsprMidY,
 	rdmaCsprMidYTable->MCYSCLOF.MCYSCLOF2.bit.MCYSCLOF_4	= sprCsprMidY->of4;
 	rdmaCsprMidYTable->MCYSCLOF.MCYSCLOF2.bit.MCYSCLOF_5	= sprCsprMidY->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
 			union io_cnr_cspr_reg_mcysclga_1, MCYSCLGA_0, sprCsprMidY->gain0 );
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
 			union io_cnr_cspr_reg_mcysclga_1, MCYSCLGA_1, sprCsprMidY->gain1 );
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
 			union io_cnr_cspr_reg_mcysclga_1, MCYSCLGA_2, sprCsprMidY->gain2 );
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA1,
 			union io_cnr_cspr_reg_mcysclga_1, MCYSCLGA_3, sprCsprMidY->gain3 );
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA2,
 			union io_cnr_cspr_reg_mcysclga_2, MCYSCLGA_4, sprCsprMidY->gain4 );
-	im_cnr_set_reg_signed( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaCsprMidYTable->MCYSCLGA.MCYSCLGA2,
 			union io_cnr_cspr_reg_mcysclga_2, MCYSCLGA_5, sprCsprMidY->gain5 );
 }
 
@@ -485,17 +485,17 @@ static VOID imCnrConvertRdmaCsprMidCcYTable( const ImCnrTable* csprMidCcY,
 	rdmaMidCcYTable->MCCSCLOF.MCCSCLOF2.bit.MCCSCLOF_5	= csprMidCcY->of5;
 
 	// write signed data
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
 			union io_cnr_cspr_reg_mccsclga_1, MCCSCLGA_0, csprMidCcY->gain0 );
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
 			union io_cnr_cspr_reg_mccsclga_1, MCCSCLGA_1, csprMidCcY->gain1 );
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
 			union io_cnr_cspr_reg_mccsclga_1, MCCSCLGA_2, csprMidCcY->gain2 );
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA1,
 			union io_cnr_cspr_reg_mccsclga_1, MCCSCLGA_3, csprMidCcY->gain3 );
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA2,
 			union io_cnr_cspr_reg_mccsclga_2, MCCSCLGA_4, csprMidCcY->gain4 );
-	im_cnr_set_reg_signed( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcYTable->MCCSCLGA.MCCSCLGA2,
 			union io_cnr_cspr_reg_mccsclga_2, MCCSCLGA_5, csprMidCcY->gain5 );
 }
 
@@ -517,17 +517,17 @@ static VOID imCnrConvertRdmaCsprMidCcCTable( const ImCnrTable* csprMidCcC,
 	rdmaMidCcCTable->MCSSCLOF.MCSSCLOF2.bit.MCSSCLOF_4	= csprMidCcC->of4;
 	rdmaMidCcCTable->MCSSCLOF.MCSSCLOF2.bit.MCSSCLOF_5	= csprMidCcC->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
 			union io_cnr_cspr_reg_mcssclga_1, MCSSCLGA_0, csprMidCcC->gain0 );
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
 			union io_cnr_cspr_reg_mcssclga_1, MCSSCLGA_1, csprMidCcC->gain1 );
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
 			union io_cnr_cspr_reg_mcssclga_1, MCSSCLGA_2, csprMidCcC->gain2 );
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA1,
 			union io_cnr_cspr_reg_mcssclga_1, MCSSCLGA_3, csprMidCcC->gain3 );
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA2,
 			union io_cnr_cspr_reg_mcssclga_2, MCSSCLGA_4, csprMidCcC->gain4 );
-	im_cnr_set_reg_signed( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaMidCcCTable->MCSSCLGA.MCSSCLGA2,
 			union io_cnr_cspr_reg_mcssclga_2, MCSSCLGA_5, csprMidCcC->gain5 );
 }
 
@@ -539,12 +539,12 @@ CNR(OTF) Start Sync
 INT32 im_cnrfour_otf_start_sync(ImCnrfour *self, UCHAR ch, const INT32 waitTime )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_otf_start_sync() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
-	return imCnrOtfStartCore( ch, D_IM_CNR_SYNC, waitTime );
+	return imCnrOtfStartCore( ch, ImCnr_SYNC, waitTime );
 }
 
 /*
@@ -553,12 +553,12 @@ CNR(OTF) Start Async
 INT32 im_cnrfour_otf_start_async(ImCnrfour *self, UCHAR ch )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_otf_start_async() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
-	return imCnrOtfStartCore( ch, D_IM_CNR_ASYNC, 0 );	// waitTime is dummy.
+	return imCnrOtfStartCore( ch, ImCnr_ASYNC, 0 );	// waitTime is dummy.
 }
 
 /*
@@ -567,12 +567,12 @@ CNR(OFL) Start Sync
 INT32 im_cnrfour_ofl_start_sync(ImCnrfour *self, UCHAR ch, const INT32 waitTime )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_ofl_start_sync() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
-	return imCnrOflStartCore( ch, D_IM_CNR_SYNC, waitTime );
+	return imCnrOflStartCore( ch, ImCnr_SYNC, waitTime );
 }
 
 /*
@@ -581,12 +581,12 @@ CNR(OFL) Start Async
 INT32 im_cnrfour_ofl_start_async(ImCnrfour *self, UCHAR ch )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_ofl_start_async() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
-	return imCnrOflStartCore( ch, D_IM_CNR_ASYNC, 0 );	// waitTime is dummy.
+	return imCnrOflStartCore( ch, ImCnr_ASYNC, 0 );	// waitTime is dummy.
 }
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -598,25 +598,25 @@ INT32 im_cnrfour_get_rdmaaddr_otf_cspr_hue_spec_table(ImCnrfour *self, UCHAR ch,
 		const ImCnroneRdmaAddrCsprHueTbl** const csprHueTbl, ULONG* const size )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion
 		(("im_cnrfour_get_rdmaaddr_otf_cspr_hue_spec_table() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( csprHueTbl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_get_rdmaaddr_otf_cspr_hue_spec_table() Parameter(csprHueTbl) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( size == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_otf_cspr_hue_spec_table() Parameter(size) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-	*csprHueTbl	= &gIM_CNR_OTF_CSPR_HUE_TBL[ch];
+	*csprHueTbl	= &S_IM_CNRTHREE_OTF_CSPR_HUE_TBL[ch];
 	*size			= sizeof( ImCnroneRdmaAddrCsprHueTbl );
 
 	return D_DDIM_OK;
@@ -630,23 +630,23 @@ INT32 im_cnrfour_get_rdmaaddr_ofl_cspr_sprs_cc_table(ImCnrfour *self, UCHAR ch,
 		const ImCnroneRdmaAddrSprsCcTbl** const csprSprsCcTbl, ULONG* const size )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_get_rdmaaddr_ofl_cspr_sprs_cc_table() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( csprSprsCcTbl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_ofl_cspr_sprs_cc_table() Parameter(csprSprsCcTbl) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( size == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_ofl_cspr_sprs_cc_table() Parameter(size) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-	*csprSprsCcTbl	= &gIM_CNR_OFL_SPRS_CC_TBL[ch];
+	*csprSprsCcTbl	= &S_IM_CNRTHREE_OFL_SPRS_CC_TBL[ch];
 	*size				= sizeof( ImCnroneRdmaAddrSprsCcTbl );
 
 	return D_DDIM_OK;
@@ -660,23 +660,23 @@ INT32 im_cnrfour_get_rdmaaddr_otf_cspr_sprs_cc_table(ImCnrfour *self, UCHAR ch,
 		const ImCnroneRdmaAddrSprsCcTbl** const csprSprsCcTbl, ULONG* const size )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_get_rdmaaddr_otf_cspr_sprs_cc_table() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( csprSprsCcTbl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_otf_cspr_sprs_cc_table() Parameter(csprSprsCcTbl) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( size == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_otf_cspr_sprs_cc_table() Parameter(size) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-	*csprSprsCcTbl	= &gIM_CNR_OTF_SPRS_CC_TBL[ch];
+	*csprSprsCcTbl	= &S_IM_CNRTHREE_OTF_SPRS_CC_TBL[ch];
 	*size				= sizeof( ImCnroneRdmaAddrSprsCcTbl );
 
 	return D_DDIM_OK;
@@ -690,23 +690,23 @@ INT32 im_cnrfour_get_rdmaaddr_ofl_cspr_sprd_cc_table(ImCnrfour *self, UCHAR ch,
 		const ImCnroneRdmaAddrSprdCcTbl** const csprSprdCcTbl, ULONG* const size )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_get_rdmaaddr_ofl_cspr_sprd_cc_table() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( csprSprdCcTbl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_ofl_cspr_sprd_cc_table() Parameter(csprSprdCcTbl) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( size == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_ofl_cspr_sprd_cc_table() Parameter(size) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-	*csprSprdCcTbl	= &gIM_CNR_OFL_SPRD_CC_TBL[ch];
+	*csprSprdCcTbl	= &S_IM_CNRTHREE_OFL_SPRD_CC_TBL[ch];
 	*size				= sizeof( ImCnroneRdmaAddrSprdCcTbl );
 
 	return D_DDIM_OK;
@@ -720,23 +720,23 @@ INT32 im_cnrfour_get_rdmaaddr_otf_cspr_sprd_cc_table(ImCnrfour *self, UCHAR ch,
 		const ImCnroneRdmaAddrSprdCcTbl** const csprSprdCcTbl, ULONG* const size )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfour_get_rdmaaddr_otf_cspr_sprd_cc_table() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( csprSprdCcTbl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_otf_cspr_sprd_cc_table() Parameter(csprSprdCcTbl) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( size == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_get_rdmaaddr_otf_cspr_sprd_cc_table() Parameter(size) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-	*csprSprdCcTbl	= &gIM_CNR_OTF_SPRD_CC_TBL[ch];
+	*csprSprdCcTbl	= &S_IM_CNRTHREE_OTF_SPRD_CC_TBL[ch];
 	*size				= sizeof( ImCnroneRdmaAddrSprdCcTbl );
 
 	return D_DDIM_OK;
@@ -752,12 +752,12 @@ INT32 im_cnrfour_set_rdmavalue_ofl_ctrl_c(ImCnrfour *self, const ImCnrCtrlC* con
 	if( sprCtrlC == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_ofl_ctrl_c() Parameter(sprCtrlC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCtrlC == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_ofl_ctrl_c() Parameter(rdmaCtrlC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -777,12 +777,12 @@ INT32 im_cnrfour_set_rdmavalue_otf_ctrl_c(ImCnrfour *self, const ImCnrCtrlC* con
 	if( sprCtrlC == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_otf_ctrl_c() Parameter(sprCtrlC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCtrlC == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_otf_ctrl_c() Parameter(rdmaCtrlC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -802,13 +802,13 @@ INT32 im_cnrfour_set_rdmavalue_ofl_cspr_mid_y_table(ImCnrfour *self, const ImCnr
 	if( sprCsprMidY == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_y_table() Parameter(sprCsprMidY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_y_table() Parameter(rdmaCsprMidYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -828,13 +828,13 @@ INT32 im_cnrfour_set_rdmavalue_otf_cspr_mid_y_table(ImCnrfour *self, const ImCnr
 	if( sprCsprMidY == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_y_table() Parameter(sprCsprMidY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_y_table() Parameter(rdmaCsprMidYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -855,13 +855,13 @@ INT32 im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_y_table(ImCnrfour *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_y_table() Parameter(sprCsprMidCcY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidCcYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_y_table() Parameter(rdmaCsprMidCcYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -882,13 +882,13 @@ INT32 im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_y_table(ImCnrfour *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_y_table() Parameter(sprCsprMidCcY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidCcYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_y_table() Parameter(rdmaCsprMidCcYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -909,13 +909,13 @@ INT32 im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_c_table(ImCnrfour *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_c_table() Parameter(sprCsprMidCcC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidCcCTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_ofl_cspr_mid_cc_c_table() Parameter(rdmaCsprMidCcCTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -936,13 +936,13 @@ INT32 im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_c_table(ImCnrfour *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_c_table() Parameter(sprCsprMidCcC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprMidCcCTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfour_set_rdmavalue_otf_cspr_mid_cc_c_table() Parameter(rdmaCsprMidCcCTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 

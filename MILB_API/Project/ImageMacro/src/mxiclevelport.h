@@ -42,7 +42,7 @@ This function set clock supply to a functional block.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_set_clock_enable( MxicLevelPort *self, ImMxicUnit unit, const ImMxicClock* const clock );
+kint32 mxic_level_port_set_clock_enable( MxicLevelPort *self, ImMxicUnit unit, const ImMxicClock* const clock );
 
 /**
 This function get clock supply to a functional block. 
@@ -52,7 +52,7 @@ This function get clock supply to a functional block.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_level_port_get_clock_enable( MxicLevelPort *self, ImMxicUnit unit, ImMxicClock* const clock );
+kint32	mxic_level_port_get_clock_enable( MxicLevelPort *self, ImMxicUnit unit, ImMxicClock* const clock );
 
 /**
 This function set the LevelPort(Port).<br>
@@ -68,8 +68,8 @@ This function set the LevelPort(Port).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_level_port_set_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
-											UCHAR master, ImMxicPort port );
+kint32	mxic_level_port_set_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
+											kuchar master, ImMxicPort port );
 
 /**
 This function get the LevelPort(Port).<br>
@@ -85,8 +85,8 @@ This function get the LevelPort(Port).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_level_port_get_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
-											UCHAR master, ImMxicPort* const port );
+kint32	mxic_level_port_get_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
+											kuchar master, ImMxicPort* const port );
 
 /**
 This function get the LevelPort(Level).<br>
@@ -102,8 +102,8 @@ This function get the LevelPort(Level).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_level_port_get_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
-												UCHAR master, ImMxicLevel* const level );
+kint32	mxic_level_port_get_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
+												kuchar master, ImMxicLevel* const level );
 
 /**
 This function set the LevelPort(Level).<br>
@@ -119,8 +119,8 @@ This function set the LevelPort(Level).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_level_port_set_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
-												UCHAR master, ImMxicLevel level );
+kint32	mxic_level_port_set_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
+												kuchar master, ImMxicLevel level );
 
 /**
 This function set the LevelPort(All).<br>
@@ -131,7 +131,7 @@ This function set the LevelPort(All).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_set_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
+kint32 mxic_level_port_set_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
 
 /**
 This function get the LevelPort(All).<br>
@@ -142,6 +142,6 @@ This function get the LevelPort(All).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_get_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
+kint32 mxic_level_port_get_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
 
 #endif	// __MXIC_LEVEL_PORT_H__

@@ -66,7 +66,7 @@ ImB2r1*		        im_b2r1_get(void);
  * (not im_b2r user)
  */
 //#define IM_B2R_DEBUG_PRINT
-//#define IM_B2R_STATUS_PRINT
+//#define ImB2r_IM_B2R_STATUS_PRINT
 //#define IM_B2R_REG_TYPE_CHECK
 
 // True/False (UCHAR)
@@ -179,8 +179,8 @@ ImB2r1*		        im_b2r1_get(void);
 #define ImB2r1_IM_B2R_MAX( a, b )						(((a) > (b)) ? (a):(b))
 #define ImB2r1_IM_B2R_MIN( a, b )						(((a) < (b)) ? (a):(b))
 
-#define ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_1(a)		(((a) + 1) & (D_IM_B2R_PIPE1 + 1))
-#define ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_2(a)		(((a) + 1) & (D_IM_B2R_PIPE2 + 1))
+#define ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_1(a)		(((a) + 1) & (ImB2r_D_IM_B2R_PIPE1 + 1))
+#define ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_2(a)		(((a) + 1) & (ImB2r_D_IM_B2R_PIPE2 + 1))
 
 
 // The structure type matching check.
@@ -250,7 +250,7 @@ ImB2r1*		        im_b2r1_get(void);
 INT32 Im_B2R_Init( UCHAR pipe_no );
 INT32 Im_B2R_Set_InAddr_Info(UCHAR pipe_no, const T_IM_B2R_INADDR_INFO* const in_addr );
 VOID Im_B2R_Int_Handler(UCHAR pipe_no );
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 VOID Im_B2R_Print_Status( VOID );///////////////////////////////////////////////////////////////////////头文件没有
 VOID Im_B2R_Print_AccEnStatus( VOID );///////////////////////////////////////////////////////////////////////头文件没有
 #endif

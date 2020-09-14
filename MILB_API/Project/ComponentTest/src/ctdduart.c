@@ -9,13 +9,23 @@
 
 #include "stdlib.h"
 #include "string.h"
-#include "dd_uart.h"
-#include "dd_hdmac1.h"
-#include "dd_gic.h"
-#include "dd_top.h"
+// #include "dd_uart.h"
+#include "../../Project/DeviceDriver/Peripheral/src/dduart.h"
+#include "../../DeviceDriver/Peripheral/src/dduartcolabo.h"
+#include "../../Project/DeviceDriver/Peripheral/src/dduartinterrupt.h"
+#include "../../DeviceDriver/Peripheral/src/dduartbranch.h"
+// #include "dd_hdmac1.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+// #include "dd_gic.h"
+#include "../../DeviceDriver/ARM/src/ddgic.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
+
 #include "uart_csio.h"
 #include "ctdduart.h"
-#include "dd_tmr32.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
+
 
 #include "ctdduart.h"
 #include "ctdduart1.h"
@@ -121,8 +131,8 @@ PUBLIC//todo
 	CHAR  receive_data;
 
 	result = (*(kint32*)r_result);
-	if(result == D_DD_UART_INT_STATUS_RECV_CHAR){
-		Dd_UART_Get_Char( gUARTCh, &receive_data);
+	if(result == DdUart_INT_STATUS_RECV_CHAR){
+		dd_uart_branch_get_char( gUARTCh, &receive_data);
 		Ddim_Print(("UART Receive Callback(echo on). data=%d\n", receive_data));
 	}
 	else {
@@ -145,7 +155,7 @@ PUBLIC//todo
 
 	result = (*(kint32*)r_result);
 	if(result == D_DDIM_OK){
-		Dd_UART_Get_Char( gUARTCh, &receive_data);
+		dd_uart_branch_get_char( gUARTCh, &receive_data);
 	}
 }
 
@@ -261,7 +271,7 @@ PUBLIC//todo
  *
  * @return void
  */
-void ct_dd_uart_main( int argc, char** argv )
+void ct_dd_uart_main( CtDdUart* self,int argc, char** argv )
 {	
 	CtDdUart2* ctDdUart2 = ct_dd_uart2_new();
 	CtDdUart3* ctDdUart3 = ct_dd_uart3_new();
@@ -282,7 +292,7 @@ void ct_dd_uart_main( int argc, char** argv )
  * @param	void
  * @return	void
  */
-void ct_dd_uart_pcsim_test( void )
+void ct_dd_uart_pcsim_test( CtDdUart* self )
 {
 #ifdef CO_DEBUG_ON_PC
 	int cmd_cnt = 0;
@@ -309,12 +319,12 @@ void ct_dd_uart_pcsim_test( void )
 	// Dd_UART_Open
 	cmd_cnt = 4;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv1);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 	
 	// Dd_UART_Ctrl
 	cmd_cnt = 21;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv2);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 	
 	// check register
 	ctUartRegDump(1);
@@ -323,19 +333,19 @@ void ct_dd_uart_pcsim_test( void )
 	// Dd_UART_Get_Ctrl
 	cmd_cnt = 3;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv3);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 	
 	Ddim_Print(("\n>> Test 1-3-1\n"));
 	
 	// Get HCLK
-	ULONG hclk = Dd_Top_Get_HCLK();
+	ULONG hclk = dd_toptwo_get_hclk();
 	ULONG baudrate = (hclk / 1200) - 1;
 	Ddim_Print(("HCLK           = %lu\n", hclk));
 	Ddim_Print(("baudrate value = %lu\n", baudrate));
 	// Dd_UART_Reset_Baudrate
 	cmd_cnt = 21;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv4);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 	
 	// check register
 	ctUartRegDump(1);
@@ -344,7 +354,7 @@ void ct_dd_uart_pcsim_test( void )
 	// Dd_UART_Reset_Baudrate
 	cmd_cnt = 3;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv5);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 	
 	// check register
 	ctUartRegDump(1);
@@ -353,7 +363,7 @@ void ct_dd_uart_pcsim_test( void )
 	// Dd_UART_Open (same ch)
 	cmd_cnt = 4;
 	ctUartSetCmd(cmd_cnt, (char*)uart_test_argv1);
-	ct_dd_uart_main(cmd_cnt, S_GCMD_ARGV);
+	ct_dd_uart_main(NULL,cmd_cnt, S_GCMD_ARGV);
 #endif	// CO_DEBUG_ON_PC
 }
 

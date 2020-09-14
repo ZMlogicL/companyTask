@@ -1,7 +1,7 @@
 /*
-*imdisp1parent.c
+ *imdisp1parent.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-08
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,31 +10,60 @@
  *@version: 
  */
 
-#include "driver_common.h"//Ddim_Print
+/*
+ * 以下开始include语句
+ * */
+#include "driver_common.h"
 #include "imdisp1parent.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(ImDisp1Parent, im_disp1_parent, K_TYPE_OBJECT)
-#define IM_DISP1_PARENT_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), ImDisp1ParentPrivate, IM_TYPE_DISP1_PARENT))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (ImDisp1Parent, im_disp1_parent, G_TYPE_OBJECT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define IM_DISP1_PARENT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
+		IM_TYPE_DISP1_PARENT, ImDisp1ParentPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _ImDisp1ParentPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 	ImDisp1Parent *pNext;
 	ImDisp1Parent *pPre;
 	PctestWrapFunc wrapFunc;
 	CtImDisp *wrapObj;
-	KObject *imDisp1Group;
+	GObject *imDisp1Group;
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 static void imDisp1ParentAddPre(ImDisp1Parent *self, ImDisp1Parent *pPre);
+
 
 /*
  * IMPL
  * */
-static void im_disp1_parent_constructor(ImDisp1Parent *self)
+static void im_disp1_parent_class_init(ImDisp1ParentClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(ImDisp1ParentPrivate));
+}
+
+static void im_disp1_parent_init(ImDisp1Parent *self)
 {
 	ImDisp1ParentPrivate *priv = IM_DISP1_PARENT_GET_PRIVATE(self);
 	self->privImDisp1Parent = priv;
@@ -46,32 +75,49 @@ static void im_disp1_parent_constructor(ImDisp1Parent *self)
 	priv->imDisp1Group = NULL;
 }
 
-static void im_disp1_parent_destructor(ImDisp1Parent *self)
+static void dispose_od(GObject *object)
 {
+	ImDisp1Parent *self = IM_DISP1_PARENT(object);
+//	ImDisp1ParentPrivate *priv = IM_DISP1_PARENT_GET_PRIVATE(self);
 	ImDisp1ParentPrivate *priv = self->privImDisp1Parent;
 	if (priv->pNext)
 	{
-		k_object_unref(priv->pNext);
+		g_object_unref(priv->pNext);
 		priv->pNext = NULL;
 	}
 
 	if (priv->pPre)
 	{
-		k_object_unref(priv->pPre);
+		g_object_unref(priv->pPre);
 		priv->pPre = NULL;
 	}
 
 	if (priv->wrapObj)
 	{
-		k_object_unref(priv->wrapObj);
+		g_object_unref(priv->wrapObj);
 		priv->wrapObj = NULL;
 	}
 
 	if (priv->imDisp1Group)
 	{
-		k_object_unref(priv->imDisp1Group);
+		g_object_unref(priv->imDisp1Group);
 		priv->imDisp1Group = NULL;
 	}
+
+	G_OBJECT_CLASS (im_disp1_parent_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	ImDisp1Parent *self = IM_DISP1_PARENT(object);
+//	ImDisp1ParentPrivate *priv = IM_DISP1_PARENT_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (im_disp1_parent_parent_class)->finalize(object);
 }
 
 static void imDisp1ParentAddPre(ImDisp1Parent *self, ImDisp1Parent *pPre)
@@ -79,14 +125,15 @@ static void imDisp1ParentAddPre(ImDisp1Parent *self, ImDisp1Parent *pPre)
 	ImDisp1ParentPrivate *priv = self->privImDisp1Parent;
 	if(pPre && IM_IS_DISP1_PARENT(pPre))
 	{
-		priv->pPre = k_object_ref(pPre);
+		priv->pPre = g_object_ref(pPre);
 	}
 }
 
 /*
  * PUBLIC
  * */
-kboolean im_disp1_parent_do_pctest(ImDisp1Parent *self, kint32 *pSeqNo)
+
+gboolean im_disp1_parent_do_pctest(ImDisp1Parent *self, gint32 *pSeqNo)
 {
 	if(self->pctestFunc)
 	{
@@ -94,7 +141,7 @@ kboolean im_disp1_parent_do_pctest(ImDisp1Parent *self, kint32 *pSeqNo)
 	}
 
 	Ddim_Print(("!! ImDisp1Parent:%p  pctestFunc NULL: %s (%d)", self->parent.string, __FILE__, __LINE__));
-	return kfalse;
+	return gfalse;
 }
 
 void im_disp1_parent_add_next(ImDisp1Parent *self, ImDisp1Parent *pNext)
@@ -102,18 +149,18 @@ void im_disp1_parent_add_next(ImDisp1Parent *self, ImDisp1Parent *pNext)
 	ImDisp1ParentPrivate *priv = self->privImDisp1Parent;
 	if(pNext && IM_IS_DISP1_PARENT(pNext))
 	{
-		priv->pNext = k_object_ref(pNext);
+		priv->pNext = g_object_ref(pNext);
 		imDisp1ParentAddPre(pNext, self);
 	}
 }
 
-void im_disp1_parent_set_pctest_wrap_func(ImDisp1Parent *self, PctestWrapFunc func, KObject *obj)
+void im_disp1_parent_set_pctest_wrap_func(ImDisp1Parent *self, PctestWrapFunc func, GObject *obj)
 {
 	ImDisp1ParentPrivate *priv = self->privImDisp1Parent;
 	if( IM_IS_DISP1_PARENT(self) && !priv->wrapFunc )
 	{
 		priv->wrapFunc = func;
-		priv->wrapObj = k_object_ref(obj);
+		priv->wrapObj = g_object_ref(obj);
 		if(priv->pNext)
 		{
 			im_disp1_parent_set_pctest_wrap_func(priv->pNext, func, obj);
@@ -124,13 +171,13 @@ void im_disp1_parent_set_pctest_wrap_func(ImDisp1Parent *self, PctestWrapFunc fu
 void im_disp1_parent_pctest_wrap(ImDisp1Parent *self, char *cmd)
 {
 	ImDisp1ParentPrivate *priv = self->privImDisp1Parent;
-	kint32 argc = 0;
+	gint32 argc = 0;
 	char *argv[32];
 	char arg[32][32];
-	kint32 pos = 0;
-	kint32 len = 0;
-	kint32 max = strlen(cmd);
-	kint32 i;
+	gint32 pos = 0;
+	gint32 len = 0;
+	gint32 max = strlen(cmd);
+	gint32 i;
 
 	printf("CMD> %s\n", cmd);
 
@@ -169,7 +216,7 @@ void im_disp1_parent_pctest_wrap(ImDisp1Parent *self, char *cmd)
 	}
 }
 
-void im_disp1_parent_set_group(ImDisp1Parent *self, KObject *group)
+void im_disp1_parent_set_group(ImDisp1Parent *self, GObject *group)
 {
 	if (self && group && IM_IS_DISP1_PARENT(self))
 	{
@@ -178,7 +225,7 @@ void im_disp1_parent_set_group(ImDisp1Parent *self, KObject *group)
 	}
 }
 
-KObject * im_disp1_parent_get_group(ImDisp1Parent *self)
+GObject * im_disp1_parent_get_group(ImDisp1Parent *self)
 {
 	if (self && IM_IS_DISP1_PARENT(self))
 	{

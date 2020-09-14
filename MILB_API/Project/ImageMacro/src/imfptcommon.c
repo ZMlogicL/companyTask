@@ -14,12 +14,12 @@
 #include <MILB_Header/Project/Image/src/kjdsfpt.h>
 #include "imfpt.h"
 #include "ddarm.h"
-#include "ddimusercustom.h"
+#include "ddimusercustomtest.h"
 #include "imfptcommon.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImFptCommon, im_fpt_common);
-#define IM_FPT_COMMON_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImFptCommonPrivate, IM_TYPE_FPT_COMMON))
+G_DEFINE_TYPE(ImFptCommon, im_fpt_common, G_TYPE_OBJECT);
+#define IM_FPT_COMMON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_FPT_COMMON, ImFptCommonPrivate));
 
 
 // NULL
@@ -30,24 +30,55 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImFptCommon, im_fpt_common);
 
 struct _ImFptCommonPrivate
 {
-	kint a;
+	gint a;
 };
 
 
-static void(*S_GFPT_CALLBACK[2])(kuint32 intFactor, kuchar ch) = {NULL, NULL };
-volatile kuchar GFptRresp[2] = { 0, 0 };
-volatile kuchar GFptWresp[2] = { 0, 0 };
+static void(*S_GFPT_CALLBACK[2])(guint32 intFactor, guchar ch) = {NULL, NULL };
+volatile guchar GFptRresp[2] = { 0, 0 };
+volatile guchar GFptWresp[2] = { 0, 0 };
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  *IMPL
  */
-static void im_fpt_common_constructor(ImFptCommon *self)
+static void 		im_fpt_common_class_init(ImFptCommonClass *klass)
 {
-//	ImFptCommonPrivate *priv = IM_FPT_COMMON_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImFptCommonPrivate));
 }
 
-static void im_fpt_common_destructor(ImFptCommon *self)
+static void 		im_fpt_common_init(ImFptCommon *self)
 {
-//	ImFptCommonPrivate *priv = IM_FPT_COMMON_GET_PRIVATE(self);
+	ImFptCommonPrivate *priv = IM_FPT_COMMON_GET_PRIVATE(self);
+	self->fpt = im_fpt_new();
+	self->ddimUserCustomTest = ddim_user_custom_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImFptCommonPrivate *priv = IM_FPT_COMMON_GET_PRIVATE(object);
+	ImFptCommon *self = im_fpt_common_new();
+	if(self->fpt){
+		g_object_unref(self->fpt);
+		self->fpt = NULL;
+	}
+	if(self->ddimUserCustomTest){
+		g_object_unref(self->ddimUserCustomTest);
+		self->ddimUserCustomTest = NULL;
+	}
+	G_OBJECT_CLASS(im_fpt_common_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImFptCommonPrivate *priv = IM_FPT_COMMON_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_fpt_common_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -55,7 +86,7 @@ static void im_fpt_common_destructor(ImFptCommon *self)
 /**
  * Configure mode.
  */
-kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptModeConfig* const param)
+gint32 im_fpt_common_ctrl_mode_config(ImFptCommon*self, guchar ch, const TfptModeConfig* const param)
 {
 	IoFptFptctl2 fptctl2;
 
@@ -63,7 +94,7 @@ kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptModeConfig
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	fptctl2.word = ioFpt[ch].fptctl2.word;
 
@@ -102,7 +133,7 @@ kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptModeConfig
 
 	ioFpt[ch].fptctl2.word = fptctl2.word;
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -110,7 +141,7 @@ kint32 im_fpt_ctrl_mode_config(ImFptCommon*self, kuchar ch, const TfptModeConfig
 /**
  *   Configure BRC(BRightness Correction) of the base image.
  */
-kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const TfptBrcConfig* const param)
+gint32 im_fpt_common_ctrl_brc_config_base_img(ImFptCommon*self, guchar ch, const TfptBrcConfig* const param)
 {
 	IoFptFptctl4 fptctl4;
 
@@ -120,7 +151,7 @@ kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const TfptBr
 
 	fptctl4.word = 0;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	if(ioFpt[ch].fptctl3.word &= ImFptCommon_D_IM_FPT_LUT_ON) {
 		fptctl4.bit.offsetB = param->imgOffset;
@@ -135,7 +166,7 @@ kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const TfptBr
 		ioFpt[ch].fptctl4.word = fptctl4.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -143,7 +174,7 @@ kint32 im_fpt_ctrl_brc_config_base_img(ImFptCommon*self, kuchar ch, const TfptBr
 /**
  * Configure BRC(BRightness Correction) of the target image.
  */
-kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, const TfptBrcConfig* const param)
+gint32 im_fpt_common_ctrl_brc_config_target_img(ImFptCommon*self, guchar ch, const TfptBrcConfig* const param)
 {
 	IoFptFptctl5 fptctl5;
 
@@ -153,7 +184,7 @@ kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, const Tfpt
 
 	fptctl5.word = 0;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	if(ioFpt[ch].fptctl3.word &= ImFptCommon_D_IM_FPT_LUT_ON) {
 		fptctl5.bit.offsetT = param->imgOffset;
@@ -168,7 +199,7 @@ kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, const Tfpt
 		ioFpt[ch].fptctl5.word = fptctl5.word;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -176,17 +207,17 @@ kint32 im_fpt_ctrl_brc_config_target_img(ImFptCommon*self, kuchar ch, const Tfpt
 /**
  *   Configure Interrupt.
  */
-kint32 im_fpt_ctrl_interrupt(ImFptCommon*self, kuchar ch, const TfptInterrupt* const param)
+gint32 im_fpt_common_ctrl_interrupt(ImFptCommon*self, guchar ch, const TfptInterrupt* const param)
 {
 	if(param == NULL) {
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	ioFpt[ch].fptinte0.word = param->flag;
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	S_GFPT_CALLBACK[ch] = param->callback;
 
@@ -196,11 +227,11 @@ kint32 im_fpt_ctrl_interrupt(ImFptCommon*self, kuchar ch, const TfptInterrupt* c
 /**
  *  Configure LUTRAM.
  */
-kint32 im_fpt_ctrl_lutram(ImFptCommon*self, kuchar ch, kint32 lutSel, const kuchar* lut)
+gint32 im_fpt_common_ctrl_lutram(ImFptCommon*self, guchar ch, gint32 lutSel, const guchar* lut)
 {
-	kint32 i;
-	kulong regVal;
-	kulong *pRegAddr;
+	gint32 i;
+	gulong regVal;
+	gulong *pRegAddr;
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_RUNNING) {
 		return ImFptCommon_D_IM_FPT_RETVAL_BUSY_ERR;
@@ -210,21 +241,21 @@ kint32 im_fpt_ctrl_lutram(ImFptCommon*self, kuchar ch, kint32 lutSel, const kuch
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	pRegAddr =(lutSel == 0) ?(kulong*) &ioFptAhb[ch].fptlut0.word[0] :(kulong*) &ioFptAhb[ch].fptlut1.word[0];
+	pRegAddr =(lutSel == 0) ?(gulong*) &ioFptAhb[ch].fptlut0.word[0] :(gulong*) &ioFptAhb[ch].fptlut1.word[0];
 
-	DDIM_User_AhbReg_SpinLock();
-	im_fpt_on_hclk(NULL, ch);
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustomTest);
+	im_fpt_on_hclk(self->fpt, ch);
 	 // 64*4 = 256
 	for(i = 0; i < 64; i++) {
-		regVal =(kulong)((*lut++) << 0);
-		regVal |=(kulong)((*lut++) << 8);
-		regVal |=(kulong)((*lut++) << 16);
-		regVal |=(kulong)((*lut++) << 24);
+		regVal =(gulong)((*lut++) << 0);
+		regVal |=(gulong)((*lut++) << 8);
+		regVal |=(gulong)((*lut++) << 16);
+		regVal |=(gulong)((*lut++) << 24);
 		*pRegAddr++ = regVal;
 	}
 
-	im_fpt_off_hclk(NULL, ch);
-	DDIM_User_AhbReg_SpinUnLock();
+	im_fpt_off_hclk(self->fpt, ch);
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustomTest);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -232,11 +263,11 @@ kint32 im_fpt_ctrl_lutram(ImFptCommon*self, kuchar ch, kint32 lutSel, const kuch
 /**
  *   Set REGRAM.
  */
-kint32 im_fpt_set_regram(ImFptCommon*self, kuchar ch, kint32 regSel, const kuchar* reg)
+gint32 im_fpt_common_set_regram(ImFptCommon*self, guchar ch, gint32 regSel, const guchar* reg)
 {
-	kint32 i;
-	kulong regVal;
-	kulong *pRegAddr;
+	gint32 i;
+	gulong regVal;
+	gulong *pRegAddr;
 	IoFptFptctl2 fptctl2;
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_RUNNING) {
@@ -254,21 +285,21 @@ kint32 im_fpt_set_regram(ImFptCommon*self, kuchar ch, kint32 regSel, const kucha
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	pRegAddr =(regSel == 0) ?(kulong*) &ioFptAhb[ch].fptreg0.word[0] :(kulong*) &ioFptAhb[ch].fptreg1.word[0];
+	pRegAddr =(regSel == 0) ?(gulong*) &ioFptAhb[ch].fptreg0.word[0] :(gulong*) &ioFptAhb[ch].fptreg1.word[0];
 
-	DDIM_User_AhbReg_SpinLock();
-	im_fpt_on_hclk(NULL, ch);
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustomTest);
+	im_fpt_on_hclk(self->fpt, ch);
 	// 128*4 = 512
 	for(i = 0; i < 128; i++) {
-		regVal =(kulong)((*reg++) << 0);
-		regVal |=(kulong)((*reg++) << 8);
-		regVal |=(kulong)((*reg++) << 16);
-		regVal |=(kulong)((*reg++) << 24);
+		regVal =(gulong)((*reg++) << 0);
+		regVal |=(gulong)((*reg++) << 8);
+		regVal |=(gulong)((*reg++) << 16);
+		regVal |=(gulong)((*reg++) << 24);
 		*pRegAddr++ = regVal;
 	}
 
-	im_fpt_off_hclk(NULL, ch);
-	DDIM_User_AhbReg_SpinUnLock();
+	im_fpt_off_hclk(self->fpt, ch);
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustomTest);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -276,10 +307,10 @@ kint32 im_fpt_set_regram(ImFptCommon*self, kuchar ch, kint32 regSel, const kucha
 /**
  *  Get REGRAM.
  */
-kint32 im_fpt_get_regram(ImFptCommon*self, kuchar ch, kint32 regSel, kulong* bufAddr)
+gint32 im_fpt_common_get_regram(ImFptCommon*self, guchar ch, gint32 regSel, gulong* bufAddr)
 {
-	kint32 i;
-	kulong *pRegAddr;
+	gint32 i;
+	gulong *pRegAddr;
 	IoFptFptctl2 fptctl2;
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_RUNNING) {
@@ -297,17 +328,17 @@ kint32 im_fpt_get_regram(ImFptCommon*self, kuchar ch, kint32 regSel, kulong* buf
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
 	}
 
-	pRegAddr =(regSel == 0) ?(kulong*) &ioFptAhb[ch].fptreg0.word[0] :(kulong*) &ioFptAhb[ch].fptreg1.word[0];
+	pRegAddr =(regSel == 0) ?(gulong*) &ioFptAhb[ch].fptreg0.word[0] :(gulong*) &ioFptAhb[ch].fptreg1.word[0];
 
-	DDIM_User_AhbReg_SpinLock();
-	im_fpt_on_hclk(NULL, ch);
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustomTest);
+	im_fpt_on_hclk(self->fpt, ch);
 	// 128*4 = 512
 	for(i = 0; i < 128; i++) {
 		*bufAddr++ =(*pRegAddr++);
 	}
 
-	im_fpt_off_hclk(NULL, ch);
-	DDIM_User_AhbReg_SpinUnLock();
+	im_fpt_off_hclk(self->fpt, ch);
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustomTest);
 
 	return ImFptCommon_D_IM_FPT_RETVAL_OK;
 }
@@ -315,24 +346,24 @@ kint32 im_fpt_get_regram(ImFptCommon*self, kuchar ch, kint32 regSel, kulong* buf
 /**
  * Start FPT.
  */
-kint32 im_fpt_start(ImFptCommon*self, kuchar ch)
+gint32 im_fpt_common_start(ImFptCommon*self, guchar ch)
 {
-	kint32 retval;
+	gint32 retval;
 
-	im_fpt_on_pclk(NULL, ch);
-	im_fpt_on_hclk(NULL, ch);
-	im_fpt_on_iclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
+	im_fpt_on_hclk(self->fpt, ch);
+	im_fpt_on_iclk(self->fpt, ch);
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_STOPPED) {
 
-		DDIM_USER_ER ercd;
+		DdimUserCustom_ER ercd;
 
-		ercd = DDIM_User_Clr_Flg(FID_IM_FPT(ch), ~ImFptCommon_D_IM_FPT_USED_FLG_ALL);
+		ercd = ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_FPT(ch), ~ImFptCommon_D_IM_FPT_USED_FLG_ALL);
 
-		if( D_DDIM_USER_E_OK != ercd) {
-			im_fpt_off_iclk(NULL, ch);
-			im_fpt_off_hclk(NULL, ch);
-			im_fpt_off_pclk(NULL, ch);
+		if( DdimUserCustom_E_OK != ercd) {
+			im_fpt_off_iclk(self->fpt, ch);
+			im_fpt_off_hclk(self->fpt, ch);
+			im_fpt_off_pclk(self->fpt, ch);
 			return ImFptCommon_D_IM_FPT_RETVAL_SYSTEM_CALL_ERR;
 		}
 
@@ -353,15 +384,15 @@ kint32 im_fpt_start(ImFptCommon*self, kuchar ch)
 /**
  * Force stop FPT.
  */
-kint32 im_fpt_stop(ImFptCommon*self, kuchar ch)
+gint32 im_fpt_common_stop(ImFptCommon*self, guchar ch)
 {
-	kint32 retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
+	gint32 retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
 
 	if(ioFpt[ch].fptctl1.word == ImFptCommon_D_IM_FPT_TRG_STOPPED) {
 		retval = ImFptCommon_D_IM_FPT_RETVAL_ERR;
 	}
 	else {
-		DDIM_USER_ER ercd;
+		DdimUserCustom_ER ercd;
 
 		ioFpt[ch].fptctl1.word = ImFptCommon_D_IM_FPT_TRG_ABORT;
 #ifdef CO_DEBUG_ON_PC
@@ -369,9 +400,9 @@ kint32 im_fpt_stop(ImFptCommon*self, kuchar ch)
 #endif
 		ImFptCommon_IM_FPT_DUMMY_READ( ch );
 
-		ercd = DDIM_User_Set_Flg(FID_IM_FPT(ch), ImFptCommon_D_IM_FPT_ABORT_STOP);
+		ercd = ddim_user_custom_set_flg(self->ddimUserCustomTest, FID_IM_FPT(ch), ImFptCommon_D_IM_FPT_ABORT_STOP);
 
-		if(ercd == D_DDIM_USER_E_OK) {
+		if(ercd == DdimUserCustom_E_OK) {
 			retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
 		}
 		else {
@@ -379,9 +410,9 @@ kint32 im_fpt_stop(ImFptCommon*self, kuchar ch)
 		}
 	}
 
-	im_fpt_off_iclk(NULL, ch);
-	im_fpt_off_hclk(NULL, ch);
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_iclk(self->fpt, ch);
+	im_fpt_off_hclk(self->fpt, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	return retval;
 }
@@ -389,9 +420,9 @@ kint32 im_fpt_stop(ImFptCommon*self, kuchar ch)
 /**
  *  Wait end.
  */
-kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint32 waitTime)
+gint32 im_fpt_common_waitend(ImFptCommon*self, guchar ch, guint32* status, gint32 waitTime)
 {
-	kint32 retval;
+	gint32 retval;
 
 	if((status == NULL) ||(waitTime < -1)) {
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
@@ -399,23 +430,23 @@ kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint32 waitT
 
 	*status = 0;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	if(ioFpt[ch].fptinte0.word & ImFptCommon_D_IM_FPT_INTERRUPT_COMPLETE) {
 		// interrupt wait(open spec.)
 
-		DDIM_USER_ER ercd;
-		DDIM_USER_FLGPTN flgptn;
+		DdimUserCustom_ER ercd;
+		DdimUserCustom_FLGPTN flgptn;
 
-		ercd = DDIM_User_Twai_Flg(FID_IM_FPT(ch), ImFptCommon_D_IM_FPT_USED_FLG_ALL, D_DDIM_USER_TWF_ORW, &flgptn, waitTime);
-		if( D_DDIM_USER_E_OK == ercd) {
+		ercd = ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_FPT(ch), ImFptCommon_D_IM_FPT_USED_FLG_ALL, DdimUserCustom_TWF_ORW, &flgptn, waitTime);
+		if( DdimUserCustom_E_OK == ercd) {
 			*status = flgptn;
 			retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
 		}
 		else {
 			retval = ImFptCommon_D_IM_FPT_RETVAL_SYSTEM_CALL_ERR;
 		}
-		ercd = DDIM_User_Clr_Flg(FID_IM_FPT(ch), ~flgptn);
+		ercd = ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_FPT(ch), ~flgptn);
 	}
 	else {
 		// polling wait(closed spec.)
@@ -429,7 +460,7 @@ kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint32 waitT
 		retval = ImFptCommon_D_IM_FPT_RETVAL_OK;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	return retval;
 }
@@ -437,14 +468,14 @@ kint32 im_fpt_waitend(ImFptCommon*self, kuchar ch, kuint32* status, kint32 waitT
 /**
  * Interrupt Handler.
  */
-kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch)
+gint32 im_fpt_common_int_handler(ImFptCommon*self, guchar ch)
 {
-	kuint32 inte, intf;
-	kuint32 intFactor;
-	DDIM_USER_ER ercd;
+	guint32 inte, intf;
+	guint32 intFactor;
+	DdimUserCustom_ER ercd;
 	IoFptFptaxierr0 fptaxierr0;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	inte = ioFpt[ch].fptinte0.word;
 	intf = ioFpt[ch].fptintf0.word;
@@ -462,7 +493,7 @@ kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch)
 	ioFpt[ch].fptintf0.word = intf;
 	ImFptCommon_IM_FPT_DUMMY_READ( ch );
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	intFactor = 0;
 
@@ -481,8 +512,8 @@ kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch)
 	}
 
 	if(intFactor) {
-		ercd = DDIM_User_Set_Flg(FID_IM_FPT(ch),(intFactor));
-		if( D_DDIM_USER_E_OK != ercd) {
+		ercd = ddim_user_custom_set_flg(self->ddimUserCustomTest, FID_IM_FPT(ch),(intFactor));
+		if( DdimUserCustom_E_OK != ercd) {
 			return ImFptCommon_D_IM_FPT_RETVAL_SYSTEM_CALL_ERR;
 		}
 	}
@@ -497,7 +528,7 @@ kint32 im_fpt_int_handler(ImFptCommon*self, kuchar ch)
 /**
  *  Get AXI response.
  */
-kint32 im_fpt_get_axi_response(ImFptCommon*self, kuchar ch, kuchar* readResponse, kuchar* writeResponse)
+gint32 im_fpt_common_get_axi_response(ImFptCommon*self, guchar ch, guchar* readResponse, guchar* writeResponse)
 {
 	if((readResponse == NULL) ||(writeResponse == NULL)) {
 		return ImFptCommon_D_IM_FPT_RETVAL_INVALID_ARG_ERR;
@@ -512,53 +543,53 @@ kint32 im_fpt_get_axi_response(ImFptCommon*self, kuchar ch, kuchar* readResponse
 /**
  *  Dump the value of all FPT's register.
  */
-void im_fpt_debugdump_all_registers(ImFptCommon*self, kuchar ch, kuint32 buf0_addr, kuint32 buf1_addr)
+void im_fpt_common_debugdump_all_registers(ImFptCommon*self, guchar ch, guint32 buf0Addr, guint32 buf1Addr)
 {
-	kint32 i;
-	kuint32 *regPtr;
-	kuint32 *dstPtr;
+	gint32 i;
+	guint32 *regPtr;
+	guint32 *dstPtr;
 
-	if((buf0_addr & 0x3) ||(buf1_addr & 0x3) ||(buf0_addr == 0x0) ||(buf1_addr == 0x0)) {
+	if((buf0Addr & 0x3) ||(buf1Addr & 0x3) ||(buf0Addr == 0x0) ||(buf1Addr == 0x0)) {
 		return;
 	}
 
 	// APB
-	regPtr =(kuint32*) &ioFpt[ch].fptctl0.word;
-	dstPtr =(kuint32*) buf0_addr;
+	regPtr =(guint32*) &ioFpt[ch].fptctl0.word;
+	dstPtr =(guint32*) buf0Addr;
 
-	im_fpt_on_pclk(NULL, ch);
+	im_fpt_on_pclk(self->fpt, ch);
 
 	for(i = 0; i < 64; i++) {
 		*dstPtr++ = *regPtr++;
 	}
 
-	im_fpt_off_pclk(NULL, ch);
+	im_fpt_off_pclk(self->fpt, ch);
 
 	// AHB
-	regPtr =(kuint32*) &ioFptAhb[ch].fptlut0.word[0];
-	dstPtr =(kuint32*) buf1_addr;
+	regPtr =(guint32*) &ioFptAhb[ch].fptlut0.word[0];
+	dstPtr =(guint32*) buf1Addr;
 
-	DDIM_User_AhbReg_SpinLock();
-	im_fpt_on_hclk(ch);
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustomTest);
+	im_fpt_on_hclk(self->fpt, ch);
 
 	for(i = 0; i < 128; i++) {
 		*dstPtr++ = *regPtr++;
 	}
 
-	im_fpt_off_hclk(NULL, ch);
-	DDIM_User_AhbReg_SpinUnLock();
+	im_fpt_off_hclk(self->fpt, ch);
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustomTest);
 }
 
 /**
  *  Get version info.
  */
-void im_fpt_get_version(ImFptCommon*self, kchar** str)
+void im_fpt_common_get_version(ImFptCommon*self, gchar** str)
 {
 	*str = ImFptCommon_D_IM_FPT_VERSION;
 }
 
-ImFptCommon* im_fpt_common_new(void)
+ImFptCommon* 		im_fpt_common_new(void)
 {
-	ImFptCommon *self = k_object_new_with_private(IM_TYPE_FPT_COMMON, sizeof(ImFptCommonPrivate));
+	ImFptCommon *self = g_object_new(IM_TYPE_FPT_COMMON, NULL);
 	return self;
 }

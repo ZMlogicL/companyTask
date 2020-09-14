@@ -215,21 +215,21 @@ FJ_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_STOP								FjDecoder_MOVIE_PLAY_VIDEO_CONCEAL
 FJ_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP 				 				FjDecoder_MOVIE_PLAY_VIDEO_CONCEAL_ERROR_SKIP
 
 更改枚举名;
-E_FJ_VIDEO_DEC_ENUM 							FjDecoderVidedDecEnum
-E_FJ_MOVIE_PLAY_VIDEO_SIZE 					FjDecoderMoviePlayVidedSize
-E_FJ_MOVIE_PLAY_SPEED 							FjDecoderMoviePlaySpeed
-E_FJ_MOVIE_PLAY_DIRECTION 					FjDecoderMoviePlayDirection
-E_FJ_MOVIE_PLAY_LAST_PICTURE 				FjDecoderMoviePlayLastPicture
-E_FJ_MOVIE_PLAY_BUFFER_TYPE 				FjDecoderMoviePlayBufferType
-E_FJ_MOVIE_PLAY_DECODER_STATUS 		FjDecoderMoviePlayDecoderStatus
-E_FJ_MOVIE_PLAY_YUV_FORMAT 				FjDecoderMoviePlayYuvFormat
-E_FJ_AUDIO_DEC_ENUM 							FjDecoderAudioDecEnum
-E_FJ_AUDIO_DEC_CODEC_TYPE 				FjDecoderAudioCodecType
-T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM 			FjDecoderPlayVideoConfigParam
-T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM	 		FjDecoderPlayVideoStreamParam
-T_FJ_MOVIE_PLAY_AUDIO_STREAM_PARAM 			FjDecoderPlayAudioStreamParam
-T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO 					FjDecoderAudioVideoYuvInfo
-T_FJ_AUDIO_DEC_CONFIG_PARAM 						FjDecoderAudioDecConfigParam
+E_FJ_VIDEO_DEC_ENUM 							FjDecoderVideoEnum
+E_FJ_MOVIE_PLAY_VIDEO_SIZE 					FjDecoderVideoSize
+E_FJ_MOVIE_PLAY_SPEED 							FjDecoderPlaySpeed
+E_FJ_MOVIE_PLAY_DIRECTION 					FjDecoderPlayDirection
+E_FJ_MOVIE_PLAY_LAST_PICTURE 				FjDecoderLastPicture
+E_FJ_MOVIE_PLAY_BUFFER_TYPE 				FjDecoderBufferType
+E_FJ_MOVIE_PLAY_DECODER_STATUS 		FjDecoderDecoderStatus
+E_FJ_MOVIE_PLAY_YUV_FORMAT 				FjDecoderYuvFormat
+E_FJ_AUDIO_DEC_ENUM 							FjDecoderDecEnum
+E_FJ_AUDIO_DEC_CODEC_TYPE 				FjDecoderCodecType
+T_FJ_MOVIE_PLAY_VIDEO_CONFIG_PARAM 			FjDecoderConfigParam
+T_FJ_MOVIE_PLAY_VIDEO_STREAM_PARAM	 		FjDecoderVideoParam
+T_FJ_MOVIE_PLAY_AUDIO_STREAM_PARAM 			FjDecoderAudioParam
+T_FJ_MOVIE_PLAY_VIDEO_YUV_INFO 					FjDecoderYuvInfo
+T_FJ_AUDIO_DEC_CONFIG_PARAM 						FjDecoderAudioDecParam
 枚举里的变量修改：
 FjDecoderPlayVideoConfigParam
 codec_type  				codecType
@@ -348,15 +348,14 @@ E_FJ_AUDIO_CAPTURE_ENUM 					FjAudioCaptureEnum
 E_FJ_AUDIO_OUT_ENUM  							FjAudioOutEnum
 E_FJ_AUDIO_IN_PORT_ENUM 					FjAudioInPortEnum
 E_FJ_AUDIO_OUT_PORT_ENUM					FjAudioOutPortEnum
-E_FJ_AUDIO_OUT_PORT_ENUM 				FjAudioOutPortEnum
 E_FJ_AUDIO_WAV_CTL 								FjAudioWavCtl
-E_FJ_AUDIO_I2S_DATA_FORMAT 				FjAudioL2sDataFormat
-T_FJ_AUDIO_I2S_CFG 									FjAudioL2sCfg
+E_FJ_AUDIO_I2S_DATA_FORMAT 				FjAudioI2sDataFormat
+T_FJ_AUDIO_I2S_CFG 									FjAudioI2sCfg
 T_FJ_AUDIO_CAPTURE_CFG 						FjAudioCaptureCfg
 T_FJ_AUDIO_OUT_CFG 								FjAudioOutCfg
-T_FJ_AUDIO_CAP_PLUGIN0_CB_PARAM 	FjAudioCapPlugin0CbParam
-T_FJ_AUDIO_CAP_PLUGIN1_CB_PARAM	FjAudioCapPlugin1CbParam
-T_FJ_AUDIO_OUT_PLUGIN_CB_PARAM 		FjAudioCapPluginCbParam
+T_FJ_AUDIO_CAP_PLUGIN0_CB_PARAM 	FjAudioPlugin0Param
+T_FJ_AUDIO_CAP_PLUGIN1_CB_PARAM	FjAudioPlugin1Param
+T_FJ_AUDIO_OUT_PLUGIN_CB_PARAM 		FjAudioPluginParam
 T_FJ_AUDIO_CAP_SMPL_CFG 						FjAudioCapSmplCfg
 更改枚举里的变量：
 FjAudioL2sCfg

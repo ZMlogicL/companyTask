@@ -32,12 +32,29 @@ struct _CtImR2y19series1Private
  */
 static void ct_im_r2y_19series1_constructor(CtImR2y19series1 *self)
 {
-	//CtImR2y19series1Private *priv = CT_IM_R2Y_19SERIES1_GET_PRIVATE(self);
+	CtImR2y19series1Private *priv = CT_IM_R2Y_19SERIES1_GET_PRIVATE(self);
+	self->imR2yClk = im_r2y_clk_new();
+	self->imR2yEdge = im_r2y_edge_new();
+	self->imR2ySet = im_r2y_set_new();
 }
 
 static void ct_im_r2y_19series1_destructor(CtImR2y19series1 *self)
 {
-	//CtImR2y19series1Private *priv = CT_IM_R2Y_19SERIES1_GET_PRIVATE(self);
+	CtImR2y19series1Private *priv = CT_IM_R2Y_19SERIES1_GET_PRIVATE(self);
+	if(self->imR2ySet){
+			k_object_unref(self->imR2ySet);
+			self->imR2ySet=NULL;
+		}
+
+	if(self->imR2yEdge){
+		k_object_unref(self->imR2yEdge);
+		self->imR2yEdge=NULL;
+	}
+
+	if(self->imR2yClk){
+			k_object_unref(self->imR2yClk);
+			self->imR2yClk=NULL;
+		}
 }
 
 
@@ -51,14 +68,14 @@ kint32 ct_im_r2y_19series1_5(CtImR2y19series1 *self, kuchar pipeNo)
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y195
 	{
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_HI];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_HI];
 	};
 	struct TCtImR2y195 	tblBody;
 	struct TCtImR2y195	*tbl = &tblBody;
 #else //!CO_DEBUG_ON_PC
 	struct TCtImR2y195
 	{
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_HI];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_HI];
 	}* tbl = (struct TCtImR2y195*)D_IM_R2Y_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32 loopcnt;
@@ -92,19 +109,19 @@ kint32 ct_im_r2y_19series1_5(CtImR2y19series1 *self, kuchar pipeNo)
 			// max
 			default:
 				//	case 0:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0x1FF;
 				}
 				break;
 			// min
 			case 1:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0;
 				}
 				break;
 			// indvisual
 			case 2:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_HI; loopcnt2++) {
 					if(loopcnt2 >= 128) {
 						tbl->srcTbl[loopcnt2] = 0x1FF - (loopcnt2 - 128);
 					} else {
@@ -114,12 +131,12 @@ kint32 ct_im_r2y_19series1_5(CtImR2y19series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_HighEdge_Step_Table(pipeNo, tbl->srcTbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_TC_HI);
+		ercd = im_r2y_set_high_edge_step_table(self->imR2ySet, pipeNo, tbl->srcTbl, 0, ImR2y_TABLE_MAX_EDGE_TC_HI);
 		DriverCommon_DDIM_PRINT((CtImR2y19series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
-		Im_R2Y_Set_HighEdgeStepTblAccessEnable(pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
+		im_r2y_edge_set_high_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_HI; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_HI; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP1.eghwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -137,7 +154,7 @@ kint32 ct_im_r2y_19series1_5(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_2(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_HI; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_HI; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP2.eghwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -154,8 +171,8 @@ kint32 ct_im_r2y_19series1_5(CtImR2y19series1 *self, kuchar pipeNo)
 				}
 			}
 		}
-		Im_R2Y_Set_HighEdgeStepTblAccessEnable(pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_edge_set_high_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 
@@ -169,14 +186,14 @@ kint32 ct_im_r2y_19series1_6(CtImR2y19series1 *self, kuchar pipeNo)
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y196
 	{
-		kuchar srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM];
+		kuchar srcTbl[ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM];
 	};
 	struct TCtImR2y196 	tblBody;
 	struct TCtImR2y196	*tbl = &tblBody;
 #else //!CO_DEBUG_ON_PC
 	struct TCtImR2y196
 	{
-		kuchar srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM];
+		kuchar srcTbl[ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM];
 	}* tbl = (struct TCtImR2y196*)D_IM_R2Y_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32 loopcnt;
@@ -210,19 +227,19 @@ kint32 ct_im_r2y_19series1_6(CtImR2y19series1 *self, kuchar pipeNo)
 			// max
 			default:
 				//	case 0:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0xFF;
 				}
 				break;
 			// min
 			case 1:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0;
 				}
 				break;
 			// indvisual
 			case 2:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2++) {
 					if(loopcnt2 >= 256) {
 						tbl->srcTbl[loopcnt2] = 0xFF - (loopcnt2 - 256);
 					} else {
@@ -232,12 +249,12 @@ kint32 ct_im_r2y_19series1_6(CtImR2y19series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_MediumEdge_Scale_Table(pipeNo, tbl->srcTbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM);
+		ercd = im_r2y_set_medium_edge_scale_table(self->imR2ySet, pipeNo, tbl->srcTbl, 0, ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM);
 		DriverCommon_DDIM_PRINT((CtImR2y19series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
-		im_r2y_edge_set_medium_edge_scl_tbl_access_enable(pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
+		im_r2y_edge_set_medium_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2 += 4) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2 += 4) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP1.egmwscl.byte[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 4); loopcnt3++) {
@@ -259,7 +276,7 @@ kint32 ct_im_r2y_19series1_6(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_2(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2 += 4) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_MEDIUM; loopcnt2 += 4) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP2.egmwscl.byte[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 4); loopcnt3++) {
@@ -281,7 +298,7 @@ kint32 ct_im_r2y_19series1_6(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		im_r2y_edge_set_medium_edge_scl_tbl_access_enable(pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 
@@ -294,13 +311,13 @@ kint32 ct_im_r2y_19series1_7(CtImR2y19series1 *self, kuchar pipeNo)
 {
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y197 {
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_MEDIUM];
 	};
 	struct TCtImR2y197 	tblBody;
 	struct TCtImR2y197	*tbl = &tblBody;
 #else //!CO_DEBUG_ON_PC
 	struct TCtImR2y197 {
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_MEDIUM];
 	}* tbl = (struct TCtImR2y197*)D_IM_R2Y_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32 loopcnt;
@@ -331,19 +348,19 @@ kint32 ct_im_r2y_19series1_7(CtImR2y19series1 *self, kuchar pipeNo)
 		// max
 			default:
 				//	case 0:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0x1FF;
 				}
 				break;
 			// min
 			case 1:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0;
 				}
 				break;
 			// indvisual
 			case 2:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2++) {
 					if(loopcnt2 >= 128) {
 						tbl->srcTbl[loopcnt2] = 0x1FF - (loopcnt2 - 128);
 					} else {
@@ -353,13 +370,13 @@ kint32 ct_im_r2y_19series1_7(CtImR2y19series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_MediumEdge_Step_Table(pipeNo, tbl->srcTbl,
-				0, D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM);
+		ercd = im_r2y_set_medium_edge_step_table(self->imR2ySet, pipeNo, tbl->srcTbl,
+				0, ImR2y_TABLE_MAX_EDGE_TC_MEDIUM);
 		DriverCommon_DDIM_PRINT((CtImR2y19series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
 		im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP1.egmwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -377,7 +394,7 @@ kint32 ct_im_r2y_19series1_7(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_2(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_MEDIUM; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP2.egmwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -395,7 +412,7 @@ kint32 ct_im_r2y_19series1_7(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 
@@ -408,13 +425,13 @@ kint32 ct_im_r2y_19series1_8(CtImR2y19series1 *self, kuchar pipeNo)
 {
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y198 {
-		kuchar srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO];
+		kuchar srcTbl[ImR2y_TABLE_MAX_EDGE_SCALE_LO];
 	};
 	struct TCtImR2y198 	tblBody;
 	struct TCtImR2y198	*tbl = &tblBody;
 #else //!CO_DEBUG_ON_PC
 	struct TCtImR2y198 {
-		kuchar srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO];
+		kuchar srcTbl[ImR2y_TABLE_MAX_EDGE_SCALE_LO];
 	}* tbl = (struct TCtImR2y198*)D_IM_R2Y_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32 loopcnt;
@@ -447,19 +464,19 @@ kint32 ct_im_r2y_19series1_8(CtImR2y19series1 *self, kuchar pipeNo)
 			// max
 			default:
 				//	case 0:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0xFF;
 				}
 				break;
 			// min
 			case 1:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0;
 				}
 				break;
 			// indvisual
 			case 2:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2++) {
 					if(loopcnt2 >= 256) {
 						tbl->srcTbl[loopcnt2] = 0xFF - (loopcnt2 - 256);
 					} else {
@@ -469,13 +486,13 @@ kint32 ct_im_r2y_19series1_8(CtImR2y19series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_LowEdge_Scale_Table(pipeNo, tbl->srcTbl,
-				0, D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO);
+		ercd = im_r2y_set_low_edge_scale_table(self->imR2ySet, pipeNo, tbl->srcTbl,
+				0, ImR2y_TABLE_MAX_EDGE_SCALE_LO);
 		DriverCommon_DDIM_PRINT((CtImR2y19series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
 		im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2 += 4) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2 += 4) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP1.eglwscl.byte[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 4); loopcnt3++) {
@@ -497,7 +514,7 @@ kint32 ct_im_r2y_19series1_8(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_2(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2 += 4) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_SCALE_LO; loopcnt2 += 4) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP2.eglwscl.byte[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 4); loopcnt3++) {
@@ -519,7 +536,7 @@ kint32 ct_im_r2y_19series1_8(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 
@@ -533,14 +550,14 @@ kint32 ct_im_r2y_19series1_9(CtImR2y19series1 *self, kuchar pipeNo)
 #ifdef CO_DEBUG_ON_PC
 	struct TCtImR2y199
 	{
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_LO];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_LO];
 	};
 	struct TCtImR2y199 	tblBody;
 	struct TCtImR2y199	*tbl = &tblBody;
 #else //!CO_DEBUG_ON_PC
 	struct TCtImR2y199
 	{
-		kushort srcTbl[D_IM_R2Y_TABLE_MAX_EDGE_TC_LO];
+		kushort srcTbl[ImR2y_TABLE_MAX_EDGE_TC_LO];
 	}* tbl = (struct TCtImR2y199*)D_IM_R2Y_IMG_MEM_IN_ADDR_TOP;
 #endif //!CO_DEBUG_ON_PC
 	kuint32 loopcnt;
@@ -574,19 +591,19 @@ kint32 ct_im_r2y_19series1_9(CtImR2y19series1 *self, kuchar pipeNo)
 			// max
 			default:
 				//	case 0:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0x1FF;
 				}
 				break;
 			// min
 			case 1:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
 					tbl->srcTbl[loopcnt2] = 0;
 				}
 				break;
 			// indvisual
 			case 2:
-				for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
+				for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_LO; loopcnt2++) {
 					if(loopcnt2 >= 128)
 					{
 						tbl->srcTbl[loopcnt2] = 0x1FF - (loopcnt2 - 128);
@@ -597,12 +614,12 @@ kint32 ct_im_r2y_19series1_9(CtImR2y19series1 *self, kuchar pipeNo)
 				break;
 		}
 #ifdef CO_MSG_PRINT_ON
-		ercd = Im_R2Y_Set_LowEdge_Step_Table(pipeNo, tbl->srcTbl, 0, D_IM_R2Y_TABLE_MAX_EDGE_TC_LO);
+		ercd = im_r2y_set_low_edge_step_table(self->imR2ySet, pipeNo, tbl->srcTbl, 0, ImR2y_TABLE_MAX_EDGE_TC_LO);
 		DriverCommon_DDIM_PRINT((CtImR2y19series1_FUNC_NAME "0x%x\n", ercd));
-		Im_R2Y_On_Hclk(pipeNo);
+		im_r2y_clk_on_hclk(self->imR2yClk, pipeNo);
 		im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_1(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_LO; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_LO; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP1.eglwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -620,7 +637,7 @@ kint32 ct_im_r2y_19series1_9(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		if(CtImR2yTool_CHECK_TARGET_PIPE_NO_2(pipeNo)) {
-			for(loopcnt2 = 0; loopcnt2 < D_IM_R2Y_TABLE_MAX_EDGE_TC_LO; loopcnt2 += 2) {
+			for(loopcnt2 = 0; loopcnt2 < ImR2y_TABLE_MAX_EDGE_TC_LO; loopcnt2 += 2) {
 				// Force word read access
 				wordConv.word = *(kulong*)&ioR2yTblP2.eglwton.hword[loopcnt2];
 				for(loopcnt3 = loopcnt2; loopcnt3 < (loopcnt2 + 2); loopcnt3++) {
@@ -638,7 +655,7 @@ kint32 ct_im_r2y_19series1_9(CtImR2y19series1 *self, kuchar pipeNo)
 			}
 		}
 		im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
-		Im_R2Y_Off_Hclk(pipeNo);
+		im_r2y_clk_off_hclk(self->imR2yClk, pipeNo);
 #endif
 	}
 

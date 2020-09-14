@@ -332,7 +332,6 @@ G_BEGIN_DECLS
 												IO_CHIPTOP.PERSEL3.bit.PRT0SCK3=(val); \
 												Dd_ARM_Critical_Section_End(gDD_Top_Spin_Lock);}						/**< Set PY0/PXRSTX0/FPSCK4 IO Control */
 
-
 #define	DdTopthree_GET_PERSEL4_EI22UD0A()		(IO_CHIPTOP.PERSEL4.bit.EI22UD0A)											/**< Get external interrupt request 22 */
 #define	DdTopthree_SET_PERSEL4_EI22UD0A(val)	{Dd_ARM_Critical_Section_Start(gDD_Top_Spin_Lock); \
 												IO_CHIPTOP.PERSEL4.bit.EI22UD0A=(val); \
@@ -398,12 +397,10 @@ G_BEGIN_DECLS
 												IO_CHIPTOP.PERSEL4.bit.U2IDDIGS=(val); \
 												Dd_ARM_Critical_Section_End(gDD_Top_Spin_Lock);}						/**< Set USB3.0&USB2.0 macro ID detection */
 
-
 #define	DdTopthree_GET_MSELC_MSEL()				(IO_CHIPTOP.MSELC.bit.MSEL)													/**< Get power-supply voltage Control */
 #define	DdTopthree_SET_MSELC_MSEL(val)			{Dd_ARM_Critical_Section_Start(gDD_Top_Spin_Lock); \
 												IO_CHIPTOP.MSELC.bit.MSEL=(val); \
 												Dd_ARM_Critical_Section_End(gDD_Top_Spin_Lock);}						/**< Set power-supply voltage Control */
-
 
 #define	DdTopthree_GET_DBCNT1_T07DC()			(IO_CHIPTOP.DBCNT1.bit.T07DC)												/**< Get Driving Force Control 07 */
 #define	DdTopthree_SET_DBCNT1_T07DC(val)		{Dd_ARM_Critical_Section_Start(gDD_Top_Spin_Lock); \
@@ -645,7 +642,6 @@ G_BEGIN_DECLS
 #define	DdTopthree_SET_DBCNT5_T66DC(val)		{Dd_ARM_Critical_Section_Start(gDD_Top_Spin_Lock); \
 												IO_CHIPTOP.DBCNT5.bit.T66DC=(val); \
 												Dd_ARM_Critical_Section_End(gDD_Top_Spin_Lock);}						/**< Set Driving Force Control 66 */
-
 #define	DdTopthree_GET_PUDCNT_EMMCNICS()		(IO_CHIPTOP.PUDCNT.bit.EMMCNICS)											/**< Get resource signal Select */
 #define	DdTopthree_SET_PUDCNT_EMMCNICS(val)		{Dd_ARM_Critical_Section_Start(gDD_Top_Spin_Lock); \
 												IO_CHIPTOP.PUDCNT.bit.EMMCNICS=(val); \
@@ -723,6 +719,270 @@ struct _DdTopthreeClass{
 
 GType 								dd_topthree_get_type(void) G_GNUC_CONST;
 DdTopthree* 					dd_topthree_new(void);
+/**
+Start PLL00.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll00(DdTopthree *self);
+
+/**
+Stop PLL00.
+*/
+VOID dd_topthree_stop_pll00(DdTopthree *self);
+
+INT32 dd_topthree_start_pll01(DdTopthree *self);
+
+/**
+Stop PLL01.
+*/
+VOID dd_topthree_stop_pll01(DdTopthree *self);
+
+/**
+Start PLL02.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll02(DdTopthree *self);
+
+/**
+Stop PLL02.
+*/
+VOID dd_topthree_stop_pll02(DdTopthree *self);
+
+INT32 dd_topthree_start_pll03(DdTopthree *self);
+
+/**
+Stop PLL03.
+*/
+VOID dd_topthree_stop_pll03(DdTopthree *self);
+
+/**
+Start PLL04.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll04(DdTopthree *self);
+
+/**
+Stop PLL04.
+*/
+VOID dd_topthree_stop_pll04(DdTopthree *self);
+
+INT32 dd_topthree_start_pll05(DdTopthree *self);
+
+/**
+Stop PLL05.
+*/
+VOID dd_topthree_stop_pll05(DdTopthree *self);
+
+/**
+Start PLL05A.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll05a(DdTopthree *self);
+
+/**
+Stop PLL05A.
+*/
+VOID dd_topthree_stop_pll05a(DdTopthree *self);
+
+/**
+Start PLL06.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll06(DdTopthree *self);
+
+/**
+Stop PLL06.
+*/
+VOID dd_topthree_stop_pll06(DdTopthree *self);
+
+INT32 dd_topthree_start_pll07(DdTopthree *self);
+
+/**
+Stop PLL07.
+*/
+VOID dd_topthree_stop_pll07(DdTopthree *self);
+
+/**
+Start PLL08.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll08(DdTopthree *self);
+
+/**
+Stop PLL08.
+*/
+VOID dd_topthree_stop_pll08(DdTopthree *self);
+
+INT32 dd_topthree_start_pll10(DdTopthree *self);
+
+/**
+Stop PLL10.
+*/
+VOID dd_topthree_stop_pll10(DdTopthree *self);
+
+/**
+Start PLL10A.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll10a(DdTopthree *self);
+
+VOID dd_topthree_stop_pll10a(DdTopthree *self);
+
+/**
+Start PLL11.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_pll11(DdTopthree *self);
+
+/**
+Stop PLL11.
+*/
+VOID dd_topthree_stop_pll11(DdTopthree *self);
+
+/**
+Start DDR 00 PLL.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll00(DdTopthree *self);
+
+VOID dd_topthree_stop_ddr_pll00(DdTopthree *self);
+
+/**
+Start DDR PLL01.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll01(DdTopthree *self);
+
+/**
+Stop DDR PLL01.
+*/
+VOID dd_topthree_stop_ddr_pll01(DdTopthree *self);
+
+/**
+Start DDR PLL02.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll02(DdTopthree *self);
+
+VOID dd_topthree_stop_ddr_pll02(DdTopthree *self);
+
+/**
+Start DDR PLL10.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll10(DdTopthree *self);
+
+VOID dd_topthree_stop_ddr_pll10(DdTopthree *self);
+
+/**
+Start DDR PLL11.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll11(DdTopthree *self);
+
+/**
+Stop DDR PLL11.
+*/
+VOID dd_topthree_stop_ddr_pll11(DdTopthree *self);
+
+/**
+Start DDR PLL12.
+@retval	D_DD_OK						Success
+@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
+@remarks	This API uses DDIM_User_Dly_Tsk().
+*/
+INT32 dd_topthree_start_ddr_pll12(DdTopthree *self);
+
+/**
+Stop DDR PLL12.
+*/
+VOID dd_topthree_stop_ddr_pll12(DdTopthree *self);
+
+VOID dd_topthree_start_clock(DdTopthree *self, UCHAR* counter, volatile unsigned long* reg_addr, unsigned long val );
+
+/**
+Control Clock Stop to stop clock.
+@param[in,out]	counter		address of Garding counter
+@param[in,out]	reg_addr	address of clock stop register
+@param[in]		val			setting value
+@remarks Set 1 to XXXSTOPS register internally.<br><br>
+		*(reg_addr + DdTopone_CLKSTOPS_OFFSET) |= val
+*/
+VOID dd_topthree_stop_clock(DdTopthree *self, UCHAR* counter, volatile unsigned long* reg_addr, unsigned long val );
+
+/**
+Get Frequency of RIBERY clock
+@retval	Hz
+*/
+ULONG dd_topthree_get_ribclk(DdTopthree *self);
+
+ULONG dd_topthree_get_nfbchclk(DdTopthree *self);
+
+/**
+Get Frequency of ME clock
+@retval	Hz
+*/
+ULONG dd_topthree_get_meclk(DdTopthree *self);
+
+/**
+Get Frequency of FPT1 clock
+@retval	Hz
+*/
+ULONG dd_topthree_get_fpt1clk(DdTopthree *self);
+
+/**
+Get Frequency of FPT0 clock
+@retval	Hz
+*/
+ULONG dd_topthree_get_fpt0clk(DdTopthree *self);
+
+ULONG dd_topthree_get_gyroclk(DdTopthree *self);
+
+/**
+Get Frequency of AXI bus 300 clock
+@retval	Hz
+*/
+ULONG dd_topthree_get_aclk300(DdTopthree *self);
+
+/**
+Set the direction of a selectable GPIO port.<br>
+It is set to the DDR(Data Direction Register) value.
+@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
+@param [in]  direction	Direction type.
+						  <ul>
+							  <li>0:@ref DdToptwo_GPIO_DIR_IN
+							  <li>1:@ref DdToptwo_GPIO_DIR_OUT
+						  </ul>
+@retval D_DDIM_OK					Success.
+@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
+*/
+INT32 dd_topthree_set_gpio_direction(DdTopthree *self, DdTop_GPIO_PORT port, UCHAR direction );
 
 
 /*@}*/

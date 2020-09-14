@@ -11,31 +11,31 @@
 
 #include <string.h>
 #include "pdm.h"
-#include "dd_arm.h"
-#include "dd_top.h"
-#include "ddim_user_custom.h"
+#include "ddarm.h"
+#include "ddtop.h"
+#include "ddimusercustom.h"
 #include "ddpdm.h"
 
 
 K_TYPE_DEFINE_WITH_PRIVATE(DdPdm, dd_pdm);
 #define DD_PDM_GET_PRIVATE(o) (K_TYPE_INSTANCE_GET_PRIVATE ((o), DdPdmPrivate, DD_TYPE_PDM))
 
-#define dd_pdm_wait_usec(usec)	Dd_ARM_Wait_ns((usec * 1000))
+#define DdPdm_WAIT_USEC(usec)	Dd_ARM_Wait_ns((usec * 1000))
 
 
 struct _DdPdmPrivate
 {
-	volatile DdPdmFunc gDd_Pdm_Dma0_Callback_Func[DdPdm_CH_NUM_MAX];
-	volatile DdPdmFunc gDd_Pdm_Dma1_Callback_Func[DdPdm_CH_NUM_MAX];
-	volatile DdPdmFunc gDd_Pdm_OverFlow_Callback_Func[DdPdm_CH_NUM_MAX];
+	volatile DdPdmFunc dma0CallbackFunc[DdPdm_CH_NUM_MAX];
+	volatile DdPdmFunc dma1CallbackFunc[DdPdm_CH_NUM_MAX];
+	volatile DdPdmFunc overFlowCallbackFunc[DdPdm_CH_NUM_MAX];
 };
 
 // Spin Lock
-static ULONG gDd_Pdm_Spin_Lock __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
+static kulong S_DD_PDM_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64))) = 0;
 
 
-static VOID dd_pdm_set_pdmxck(UINT8 ch, UINT8 val);
-static INT32 dd_pdm_set_pcm_clk(VOID);
+static void ddPdmSetPdmxck(kuint8 ch, kuint8 val);
+static kint32 ddPdmSetPcmClk(void);
 
 
 static void dd_pdm_constructor(DdPdm *self)
@@ -45,9 +45,9 @@ static void dd_pdm_constructor(DdPdm *self)
 
 	for(i = 0; i < DdPdm_CH_NUM_MAX; i++)
 	{
-		priv->gDd_Pdm_Dma0_Callback_Func[i] = NULL;
-		priv->gDd_Pdm_Dma1_Callback_Func[i] = NULL;
-		priv->gDd_Pdm_OverFlow_Callback_Func[i] = NULL;
+		priv->dma0CallbackFunc[i] = NULL;
+		priv->dma1CallbackFunc[i] = NULL;
+		priv->overFlowCallbackFunc[i] = NULL;
 	}
 }
 
@@ -58,13 +58,13 @@ static void dd_pdm_destructor(DdPdm *self)
 
 /**
  * @brief  Set register PDMxCK.
- * @param  UINT8 ch
- * @param  UINT8 val[1:stop/0:supply]
+ * @param  kuint8 ch
+ * @param  kuint8 val[1:stop/0:supply]
  */
-static VOID dd_pdm_set_pdmxck(UINT8 ch, UINT8 val)
+static void ddPdmSetPdmxck(kuint8 ch, kuint8 val)
 {
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
 	switch (ch){
 		case DdPdm_CH0 :
@@ -78,15 +78,15 @@ static VOID dd_pdm_set_pdmxck(UINT8 ch, UINT8 val)
 	}
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 }
 
 /**
  * @brief  Set PDM_CLK.
  * @param  AudioMasterClock mclk
- * @return INT32 D_DDIM_OK/DdPdm_SYSTEM_ERROR
+ * @return kint32 D_DDIM_OK/DdPdm_SYSTEM_ERROR
  */
-static INT32 dd_pdm_set_pcm_clk(VOID)
+static kint32 ddPdmSetPcmClk(void)
 {
 	if (Dd_Top_Get_PLLCNT1_PL10ST() == 0){
 		Ddim_Print(("[DD_PDM]dd_pdm_set_masterclock:PLL10 is not started. \n"));
@@ -95,7 +95,7 @@ static INT32 dd_pdm_set_pcm_clk(VOID)
 	
 	if (Dd_Top_Get_PLLCNT1_PL10AST() == 0){
 		Dd_Top_Stop_Pll10A();
-		dd_pdm_wait_usec(6);			// wait 6us
+		DdPdm_WAIT_USEC(6);			// wait 6us
 		Dd_Top_Set_PLLCNT9_P10APLLDIV(0);
 		Dd_Top_Start_Pll10A();
 	}
@@ -119,13 +119,13 @@ static INT32 dd_pdm_set_pcm_clk(VOID)
 
 /**
  * @brief  The input channel is exclusively controlled.
- * @param  UINT8 ch
- * @param  INT32 tmout
- * @return INT32 D_DDIM_OK/DdPdm_SEM_NG/DdPdm_INPUT_PARAM_ERROR/DdPdm_SEM_TIMEOUT
+ * @param  kuint8 ch
+ * @param  kint32 tmout
+ * @return kint32 D_DDIM_OK/DdPdm_SEM_NG/DdPdm_INPUT_PARAM_ERROR/DdPdm_SEM_TIMEOUT
  */
-INT32 dd_pdm_open(DdPdm *self, UINT8 ch, INT32 tmout)
+kint32 dd_pdm_open(DdPdm *self, kuint8 ch, kint32 tmout)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -133,24 +133,24 @@ INT32 dd_pdm_open(DdPdm *self, UINT8 ch, INT32 tmout)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (tmout < D_DDIM_USER_SEM_WAIT_FEVR){
+	if (tmout < DdimUserCustom_SEM_WAIT_FEVR){
 		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Open:input timeout error : %d\n", tmout));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	
 	// Exclusive check
-	if (tmout == D_DDIM_USER_SEM_WAIT_POL){
+	if (tmout == DdimUserCustom_SEM_WAIT_POL){
 		ercd = DDIM_User_Pol_Sem(SID_DD_PDM(ch));							// pol_sem()
 	}
 	else {
-		ercd = DDIM_User_Twai_Sem(SID_DD_PDM(ch), (DDIM_USER_TMO)tmout);	// twai_sem()
+		ercd = DDIM_User_Twai_Sem(SID_DD_PDM(ch), (DdimUserCustom_TMO)tmout);	// twai_sem()
 	}
 	
 	switch (ercd){
-		case D_DDIM_USER_E_OK:
+		case DdimUserCustom_E_OK:
 			return D_DDIM_OK;
-		case D_DDIM_USER_E_TMOUT:
+		case DdimUserCustom_E_TMOUT:
 			return DdPdm_SEM_TIMEOUT;
 		default:
 			return DdPdm_SEM_NG;
@@ -159,12 +159,12 @@ INT32 dd_pdm_open(DdPdm *self, UINT8 ch, INT32 tmout)
 
 /**
  * @brief  The exclusive control of control Input Channel it is released.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdPdm_SEM_NG/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdPdm_SEM_NG/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_close(DdPdm *self, UINT8 ch)
+kint32 dd_pdm_close(DdPdm *self, kuint8 ch)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -175,7 +175,7 @@ INT32 dd_pdm_close(DdPdm *self, UINT8 ch)
 
 	// Exclusive release
 	ercd = DDIM_User_Sig_Sem(SID_DD_PDM(ch));					// sig_sem()
-	if (ercd == D_DDIM_USER_E_OK){
+	if (ercd == DdimUserCustom_E_OK){
 		return D_DDIM_OK;
 	}
 	else {
@@ -185,9 +185,9 @@ INT32 dd_pdm_close(DdPdm *self, UINT8 ch)
 
 /**
  * @brief  PDM DMA0 interrupt handler
- * @param  UINT8 ch
+ * @param  kuint8 ch
  */
-VOID dd_pdm_dma0_int_handler(DdPdm *self, UINT8 ch)
+void dd_pdm_dma0_int_handler(DdPdm *self, kuint8 ch)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -198,27 +198,27 @@ VOID dd_pdm_dma0_int_handler(DdPdm *self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA0 = 0;
+	ioPdm[ch].dmaCfg.bit.clrIrqDma0 = 0;
 	Dd_ARM_Dsb_Pou();
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	if (priv->gDd_Pdm_Dma0_Callback_Func[ch] != NULL){
-		priv->gDd_Pdm_Dma0_Callback_Func[ch](self);
+	if (priv->dma0CallbackFunc[ch] != NULL){
+		priv->dma0CallbackFunc[ch](self);
 	}
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA0 = 1;
+	ioPdm[ch].dmaCfg.bit.clrIrqDma0 = 1;
 }
 
 /**
  * @brief  PDM DMA1 interrupt handler
- * @param  UINT8 ch
+ * @param  kuint8 ch
  */
-VOID dd_pdm_dma1_int_handler(DdPdm *self, UINT8 ch)
+void dd_pdm_dma1_int_handler(DdPdm *self, kuint8 ch)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -229,27 +229,27 @@ VOID dd_pdm_dma1_int_handler(DdPdm *self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA1 = 0;
+	ioPdm[ch].dmaCfg.bit.clrIrqDma1 = 0;
 	Dd_ARM_Dsb_Pou();
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	if (priv->gDd_Pdm_Dma1_Callback_Func[ch] != NULL){
-		priv->gDd_Pdm_Dma1_Callback_Func[ch](self);
+	if (priv->dma1CallbackFunc[ch] != NULL){
+		priv->dma1CallbackFunc[ch](self);
 	}
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA1 = 1;
+	ioPdm[ch].dmaCfg.bit.clrIrqDma1 = 1;
 }
 
 /**
  * @brief  OverFlow interrupt handler
- * @param  UINT8 ch
+ * @param  kuint8 ch
  */
-VOID dd_pdm_overflow_int_handler(DdPdm *self, UINT8 ch)
+void dd_pdm_overflow_int_handler(DdPdm *self, kuint8 ch)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -260,81 +260,81 @@ VOID dd_pdm_overflow_int_handler(DdPdm *self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_FFOVF = 0;
+	ioPdm[ch].dmaCfg.bit.clrIrqFfovf = 0;
 	Dd_ARM_Dsb_Pou();
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	if (priv->gDd_Pdm_OverFlow_Callback_Func[ch] != NULL){
-		priv->gDd_Pdm_OverFlow_Callback_Func[ch](self);
+	if (priv->overFlowCallbackFunc[ch] != NULL){
+		priv->overFlowCallbackFunc[ch](self);
 	}
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
-	IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_FFOVF = 1;
+	ioPdm[ch].dmaCfg.bit.clrIrqFfovf = 1;
 }
 
 /**
  * @brief  Initialized PDM Macro Setting
  */
-INT32 dd_pdm_init(DdPdm *self)
+kint32 dd_pdm_init(DdPdm *self)
 {
-	INT32 ret;
-	volatile union io_pdm_dmacfg pdmdmacfg;
+	kint32 ret;
+	volatile IoPdmDmacfg pdmdmacfg;
 	
-	dd_pdm_set_pdmxck(DdPdm_CH0, 1);
-	dd_pdm_set_pdmxck(DdPdm_CH1, 1);
+	ddPdmSetPdmxck(DdPdm_CH0, 1);
+	ddPdmSetPdmxck(DdPdm_CH1, 1);
 	Dd_ARM_Dsb_Pou();
 	
 	// Init Register.
-	IO_PDM[DdPdm_CH0].CORE_CFG.bit.PDMCORE_EN = DdPdm_DISABLE;
-	IO_PDM[DdPdm_CH1].CORE_CFG.bit.PDMCORE_EN = DdPdm_DISABLE;
+	ioPdm[DdPdm_CH0].coreCfg.bit.pdmcoreEn = DdPdm_DISABLE;
+	ioPdm[DdPdm_CH1].coreCfg.bit.pdmcoreEn = DdPdm_DISABLE;
 	
-	pdmdmacfg.word = IO_PDM[DdPdm_CH0].DMA_CFG.word;
-	pdmdmacfg.bit.DMA_EN = DdPdm_DISABLE;
-	pdmdmacfg.bit.CLR_IRQ_FFOVF	= 0;
-	pdmdmacfg.bit.CLR_IRQ_DMA1	= 0;
-	pdmdmacfg.bit.CLR_IRQ_DMA0	= 0;
-	pdmdmacfg.bit.PCM_CHSET		= 3;
-	IO_PDM[DdPdm_CH0].DMA_CFG.word = pdmdmacfg.word;
+	pdmdmacfg.word = ioPdm[DdPdm_CH0].dmaCfg.word;
+	pdmdmacfg.bit.dmaEn = DdPdm_DISABLE;
+	pdmdmacfg.bit.clrIrqFfovf = 0;
+	pdmdmacfg.bit.clrIrqDma1 = 0;
+	pdmdmacfg.bit.clrIrqDma0 = 0;
+	pdmdmacfg.bit.pcmChset = 3;
+	ioPdm[DdPdm_CH0].dmaCfg.word = pdmdmacfg.word;
 	
-	pdmdmacfg.word = IO_PDM[DdPdm_CH1].DMA_CFG.word;
-	pdmdmacfg.bit.DMA_EN = DdPdm_DISABLE;
-	pdmdmacfg.bit.CLR_IRQ_FFOVF	= 0;
-	pdmdmacfg.bit.CLR_IRQ_DMA1	= 0;
-	pdmdmacfg.bit.CLR_IRQ_DMA0	= 0;
-	pdmdmacfg.bit.PCM_CHSET		= 3;
-	IO_PDM[DdPdm_CH1].DMA_CFG.word = pdmdmacfg.word;
+	pdmdmacfg.word = ioPdm[DdPdm_CH1].dmaCfg.word;
+	pdmdmacfg.bit.dmaEn = DdPdm_DISABLE;
+	pdmdmacfg.bit.clrIrqFfovf = 0;
+	pdmdmacfg.bit.clrIrqDma1 = 0;
+	pdmdmacfg.bit.clrIrqDma0 = 0;
+	pdmdmacfg.bit.pcmChset = 3;
+	ioPdm[DdPdm_CH1].dmaCfg.word = pdmdmacfg.word;
 	Dd_ARM_Dsb_Pou();
 	
-	ret = dd_pdm_set_pcm_clk();
+	ret = ddPdmSetPcmClk();
 	if (ret != D_DDIM_OK){
 		return ret;
 	}
 	
-	dd_pdm_set_pdmxck(DdPdm_CH0, 0);
-	dd_pdm_set_pdmxck(DdPdm_CH1, 0);
+	ddPdmSetPdmxck(DdPdm_CH0, 0);
+	ddPdmSetPdmxck(DdPdm_CH1, 0);
 	
-	(VOID)dd_pdm_clear_status(self, DdPdm_CH0, DdPdm_INT_TYPE_DMA0);
-	(VOID)dd_pdm_clear_status(self, DdPdm_CH1, DdPdm_INT_TYPE_DMA0);
-	(VOID)dd_pdm_clear_status(self, DdPdm_CH0, DdPdm_INT_TYPE_DMA1);
-	(VOID)dd_pdm_clear_status(self, DdPdm_CH1, DdPdm_INT_TYPE_DMA1);
+	(void)dd_pdm_clear_status(self, DdPdm_CH0, DdPdm_INT_TYPE_DMA0);
+	(void)dd_pdm_clear_status(self, DdPdm_CH1, DdPdm_INT_TYPE_DMA0);
+	(void)dd_pdm_clear_status(self, DdPdm_CH0, DdPdm_INT_TYPE_DMA1);
+	(void)dd_pdm_clear_status(self, DdPdm_CH1, DdPdm_INT_TYPE_DMA1);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set Core Control Information
- * @param  UINT8 ch
- * @param  DdPdmCoreCfg *core_cfg
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  DdPdmCoreCfg *coreCfg
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
+kint32 dd_pdm_ctrl_core(DdPdm *self, kuint8 ch, DdPdmCoreCfg* coreCfg)
 {
-	volatile union io_pdm_corecfg pdmcorecfg;
-	INT32 ret = D_DDIM_OK;
+	volatile IoPdmCorecfg pdmcorecfg;
+	kint32 ret = D_DDIM_OK;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -343,97 +343,97 @@ INT32 dd_pdm_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (core_cfg == NULL){
+	if (coreCfg == NULL){
 		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Ctrl_Core:ctrl_inf = NULL\n"));
 		
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	
-	pdmcorecfg.word = IO_PDM[ch].CORE_CFG.word;
+	pdmcorecfg.word = ioPdm[ch].coreCfg.word;
 	
 	// LRSWAP
-	if (core_cfg->swap <= DdPdm_CORE_LR_SWAP_SWAP){
-		pdmcorecfg.bit.LRSWAP = (ULONG)core_cfg->swap;
+	if (coreCfg->swap <= DdPdm_CORE_LR_SWAP_SWAP){
+		pdmcorecfg.bit.lrswap = (kulong)coreCfg->swap;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:LRSWAP is out of range. swap = %d\n", (int)core_cfg->swap));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:LRSWAP is out of range. swap = %d\n", (int)coreCfg->swap));
 	}
 	
 	// PGA_R
-	if (core_cfg->pgaR <= DdPdm_CORE_PGA_M_1_5_DB){
-		pdmcorecfg.bit.PGA_R = (ULONG)core_cfg->pgaR;
+	if (coreCfg->pgaR <= DdPdm_CORE_PGA_M_1_5_DB){
+		pdmcorecfg.bit.pgaR = (kulong)coreCfg->pgaR;
 		
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:PGA_R is out of range. pgaR = %d\n", (int)core_cfg->pgaR));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:PGA_R is out of range. pgaR = %d\n", (int)coreCfg->pgaR));
 	}
 	
 	// PGA_L
-	if (core_cfg->pgaL <= DdPdm_CORE_PGA_M_1_5_DB){
-		pdmcorecfg.bit.PGA_L = (ULONG)core_cfg->pgaL;
+	if (coreCfg->pgaL <= DdPdm_CORE_PGA_M_1_5_DB){
+		pdmcorecfg.bit.pgaL = (kulong)coreCfg->pgaL;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:PGA_L out of range. pgaL = %d\n", (int)core_cfg->pgaL));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:PGA_L out of range. pgaL = %d\n", (int)coreCfg->pgaL));
 	}
 	
 	// MCLKDIV
-	if ((1 < core_cfg->mclkDiv)	&&
-		(core_cfg->mclkDiv <= 12)	){
-		pdmcorecfg.bit.MCLKDIV = (ULONG)core_cfg->mclkDiv;
+	if ((1 < coreCfg->mclkDiv)	&&
+		(coreCfg->mclkDiv <= 12)	){
+		pdmcorecfg.bit.mclkdiv = (kulong)coreCfg->mclkDiv;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:MCLKDIV is out of range. mclkDiv = %d\n", (int)core_cfg->mclkDiv));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:MCLKDIV is out of range. mclkDiv = %d\n", (int)coreCfg->mclkDiv));
 	}
 	
-	// SINC_RATE
-	if ((16 <= core_cfg->sincRate)	&&
-		(core_cfg->sincRate < 64)	){
-		pdmcorecfg.bit.SINC_RATE = (ULONG)core_cfg->sincRate;
+	// sincRate
+	if ((16 <= coreCfg->sincRate)	&&
+		(coreCfg->sincRate < 64)	){
+		pdmcorecfg.bit.sincRate = (kulong)coreCfg->sincRate;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:SINC_RATE is out of range. sincRate = %d\n", (int)core_cfg->sincRate));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:sincRate is out of range. sincRate = %d\n", (int)coreCfg->sincRate));
 	}
 	
-	// ADCHPD
-	if (core_cfg->adcHpd == DdPdm_ENABLE){
-		pdmcorecfg.bit.ADCHPD = 0;
+	// adchpd
+	if (coreCfg->adcHpd == DdPdm_ENABLE){
+		pdmcorecfg.bit.adchpd = 0;
 	}
-	else if (core_cfg->adcHpd == DdPdm_DISABLE){
-		//pdmcorecfg.bit.ADCHPD = 1;
-		pdmcorecfg.bit.ADCHPD = 0; // from other project, always enable to avoid Audio Pop Up Noise.
+	else if (coreCfg->adcHpd == DdPdm_DISABLE){
+		//pdmcorecfg.bit.adchpd = 1;
+		pdmcorecfg.bit.adchpd = 0; // from other project, always enable to avoid Audio Pop Up Noise.
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:ADCHPD is out of range. adcHpd = %d\n", (int)core_cfg->adcHpd));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:adchpd is out of range. adcHpd = %d\n", (int)coreCfg->adcHpd));
 	}
 	
-	// HPCUTOFF
-	pdmcorecfg.bit.HPCUTOFF = core_cfg->hpCutoff;
+	// hpcutoff
+	pdmcorecfg.bit.hpcutoff = coreCfg->hpCutoff;
 	
-	// S_CYCLES
+	// sCycles
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	if (core_cfg->sCycle <= DdPdm_CORE_S_CYCLE_1333US){
-		pdmcorecfg.bit.S_CYCLES = (ULONG)core_cfg->sCycle;
+	if (coreCfg->sCycle <= DdPdm_CORE_S_CYCLE_1333US){
+		pdmcorecfg.bit.sCycles = (kulong)coreCfg->sCycle;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:S_CYCLES is out of range. sCycle = %d\n", (int)core_cfg->sCycle));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:sCycles is out of range. sCycle = %d\n", (int)coreCfg->sCycle));
 	}
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
@@ -441,13 +441,13 @@ INT32 dd_pdm_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	if (core_cfg->sCycle <= DdPdm_CORE_S_CYCLE_7){
-		pdmcorecfg.bit.S_CYCLES = (ULONG)core_cfg->sCycle;
+	if (coreCfg->sCycle <= DdPdm_CORE_S_CYCLE_7){
+		pdmcorecfg.bit.sCycles = (kulong)coreCfg->sCycle;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:S_CYCLES is out of range. sCycle = %d\n", (int)core_cfg->sCycle));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:sCycles is out of range. sCycle = %d\n", (int)coreCfg->sCycle));
 	}
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
@@ -455,29 +455,29 @@ INT32 dd_pdm_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
 // --- REMOVE_ES_COMPILE_OPT END ---
 	
 	// SOFT_MUTE
-	if (core_cfg->softMute <= DdPdm_ENABLE){
-		pdmcorecfg.bit.SOFT_MUTE = (ULONG)core_cfg->softMute;
+	if (coreCfg->softMute <= DdPdm_ENABLE){
+		pdmcorecfg.bit.softMute = (kulong)coreCfg->softMute;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:SOFT_MUTE is out of range. softMute = %d\n", (int)core_cfg->softMute));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Core:SOFT_MUTE is out of range. softMute = %d\n", (int)coreCfg->softMute));
 	}
 	
-	IO_PDM[ch].CORE_CFG.word = pdmcorecfg.word;
+	ioPdm[ch].coreCfg.word = pdmcorecfg.word;
 	
 	return ret;
 }
 
 /**
  * @brief  Get Core Control Information
- * @param  UINT8 ch
- * @param  DdPdmCoreCfg *core_cfg
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  DdPdmCoreCfg *coreCfg
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_get_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
+kint32 dd_pdm_get_ctrl_core(DdPdm *self, kuint8 ch, DdPdmCoreCfg* coreCfg)
 {
-	volatile union io_pdm_corecfg pdmcorecfg;
+	volatile IoPdmCorecfg pdmcorecfg;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -485,41 +485,41 @@ INT32 dd_pdm_get_ctrl_core(DdPdm *self, UINT8 ch, DdPdmCoreCfg* core_cfg)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (core_cfg == NULL){
+	if (coreCfg == NULL){
 		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Get_Ctrl_Core:ctrl_inf = NULL\n"));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	
-	pdmcorecfg.word = IO_PDM[ch].CORE_CFG.word;
+	pdmcorecfg.word = ioPdm[ch].coreCfg.word;
 	
-	core_cfg->swap		= (PdmCoreLrSwap)pdmcorecfg.bit.LRSWAP;			/* pgr0872 */
-	core_cfg->pgaR		= (PdmCorePga)pdmcorecfg.bit.PGA_R;				/* pgr0872 */
-	core_cfg->pgaL		= (PdmCorePga)pdmcorecfg.bit.PGA_L;				/* pgr0872 */
-	core_cfg->mclkDiv	= pdmcorecfg.bit.MCLKDIV;								/* pgr0872 */
-	core_cfg->sincRate	= pdmcorecfg.bit.SINC_RATE;								/* pgr0872 */
+	coreCfg->swap = (PdmCoreLrSwap)pdmcorecfg.bit.lrswap;			/* pgr0872 */
+	coreCfg->pgaR = (PdmCorePga)pdmcorecfg.bit.pgaR;				/* pgr0872 */
+	coreCfg->pgaL = (PdmCorePga)pdmcorecfg.bit.pgaL;				/* pgr0872 */
+	coreCfg->mclkDiv = pdmcorecfg.bit.mclkdiv;								/* pgr0872 */
+	coreCfg->sincRate = pdmcorecfg.bit.sincRate;								/* pgr0872 */
 	
-	// ADCHPD
-	if (pdmcorecfg.bit.ADCHPD == 0){											/* pgr0872 */
-		core_cfg->adcHpd = DdPdm_ENABLE;
+	// adchpd
+	if (pdmcorecfg.bit.adchpd == 0){											/* pgr0872 */
+		coreCfg->adcHpd = DdPdm_ENABLE;
 	}
 	else {
-		core_cfg->adcHpd = DdPdm_DISABLE;
+		coreCfg->adcHpd = DdPdm_DISABLE;
 	}
 	
-	core_cfg->hpCutoff	= pdmcorecfg.bit.HPCUTOFF;								/* pgr0872 */
-	core_cfg->sCycle	= (PdmCoreSCycle)pdmcorecfg.bit.S_CYCLES;		/* pgr0872 */
-	core_cfg->softMute	= pdmcorecfg.bit.SOFT_MUTE;								/* pgr0872 */
+	coreCfg->hpCutoff = pdmcorecfg.bit.hpcutoff;								/* pgr0872 */
+	coreCfg->sCycle = (PdmCoreSCycle)pdmcorecfg.bit.sCycles;		/* pgr0872 */
+	coreCfg->softMute = pdmcorecfg.bit.softMute;								/* pgr0872 */
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Start Data Streaming
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_start_streaming(DdPdm *self, UINT8 ch)
+kint32 dd_pdm_start_streaming(DdPdm *self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -528,17 +528,17 @@ INT32 dd_pdm_start_streaming(DdPdm *self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	IO_PDM[ch].CORE_CFG.bit.PDMCORE_EN = DdPdm_ENABLE;
+	ioPdm[ch].coreCfg.bit.pdmcoreEn = DdPdm_ENABLE;
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Stop Data Streaming
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_stop_streaming(DdPdm *self, UINT8 ch)
+kint32 dd_pdm_stop_streaming(DdPdm *self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -547,21 +547,21 @@ INT32 dd_pdm_stop_streaming(DdPdm *self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	IO_PDM[ch].CORE_CFG.bit.PDMCORE_EN = DdPdm_DISABLE;
+	ioPdm[ch].coreCfg.bit.pdmcoreEn = DdPdm_DISABLE;
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set DMA Control Information
- * @param  UINT8 ch
- * @param  DdPdmDmaCfg *dma_cfg
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  DdPdmDmaCfg *dmaCfg
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dma_cfg)
+kint32 dd_pdm_ctrl_dma(DdPdm *self, kuint8 ch, DdPdmDmaCfg* dmaCfg)
 {
-	volatile union io_pdm_dmacfg pdmdmacfg;
-	INT32 ret = D_DDIM_OK;
+	volatile IoPdmDmacfg pdmdmacfg;
+	kint32 ret = D_DDIM_OK;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -570,82 +570,83 @@ INT32 dd_pdm_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dma_cfg)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_cfg == NULL){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Ctrl_Dma:dma_cfg = NULL\n"));
+	if (dmaCfg == NULL){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Ctrl_Dma:dmaCfg = NULL\n"));
 		
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	
-	pdmdmacfg.word = IO_PDM[ch].DMA_CFG.word;
+	pdmdmacfg.word = ioPdm[ch].dmaCfg.word;
 	
-	// DMICK_DLY
-	if (dma_cfg->dmickDly <= 3){
-		pdmdmacfg.bit.DMICK_DLY = dma_cfg->dmickDly;
+	// dmickDly
+	if (dmaCfg->dmickDly <= 3){
+		pdmdmacfg.bit.dmickDly = dmaCfg->dmickDly;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:DMICK_DLY is out of range. dmickDly = %d\n", (int)dma_cfg->dmickDly));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:dmickDly is out of range. dmickDly = %d\n", (int)dmaCfg->dmickDly));
 	}
 	
-	// DMA_BURSTLEN
-	if (dma_cfg->dmaBurstlen <= DdPdm_DMA_BURST_LEN_16){
-		pdmdmacfg.bit.DMA_BURSTLEN = (ULONG)dma_cfg->dmaBurstlen;
-		
-	}
-	else {
-		ret = DdPdm_INPUT_PARAM_ERROR;
-		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:DMA_BURSTLEN is out of range. dmaBurstlen = %d\n", (int)dma_cfg->dmaBurstlen));
-	}
-	
-	// PCM_CHSET
-	if (dma_cfg->pcmChset <= DdPdm_DMA_PCM_CH_STEREO){
-		pdmdmacfg.bit.PCM_CHSET = (ULONG)dma_cfg->pcmChset;
+	// dmaBurstlen
+	if (dmaCfg->dmaBurstlen <= DdPdm_DMA_BURST_LEN_16){
+		pdmdmacfg.bit.dmaBurstlen = (kulong)dmaCfg->dmaBurstlen;
 		
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:PCM_CHSET is out of range. pcmChset = %d\n", (int)dma_cfg->pcmChset));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:dmaBurstlen is out of range. dmaBurstlen = %d\n",
+				(int)dmaCfg->dmaBurstlen));
 	}
 	
-	// PCM_WDLEN
-	if (dma_cfg->pcmWdlen <= DdPdm_DMA_PCM_WD_24){
-		pdmdmacfg.bit.PCM_WDLEN = (ULONG)dma_cfg->pcmWdlen;
+	// pcmChset
+	if (dmaCfg->pcmChset <= DdPdm_DMA_PCM_CH_STEREO){
+		pdmdmacfg.bit.pcmChset = (kulong)dmaCfg->pcmChset;
 		
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:PCM_WDLEN is out of range. pcmWdlen = %d\n", (int)dma_cfg->pcmWdlen));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:pcmChset is out of range. pcmChset = %d\n", (int)dmaCfg->pcmChset));
+	}
+	
+	// pcmWdlen
+	if (dmaCfg->pcmWdlen <= DdPdm_DMA_PCM_WD_24){
+		pdmdmacfg.bit.pcmWdlen = (kulong)dmaCfg->pcmWdlen;
+		
+	}
+	else {
+		ret = DdPdm_INPUT_PARAM_ERROR;
+		
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:pcmWdlen is out of range. pcmWdlen = %d\n", (int)dmaCfg->pcmWdlen));
 	}
 	
 	// DMA_EN
-	if (dma_cfg->dmaEn <= DdPdm_ENABLE){
-		pdmdmacfg.bit.DMA_EN = dma_cfg->dmaEn;
+	if (dmaCfg->dmaEn <= DdPdm_ENABLE){
+		pdmdmacfg.bit.dmaEn = dmaCfg->dmaEn;
 	}
 	else {
 		ret = DdPdm_INPUT_PARAM_ERROR;
 		
-		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:DMA_EN is out of range. dmaEn = %d\n", (int)dma_cfg->dmaEn));
+		Ddim_Print(("[DD_PDM]Dd_Pdm_Ctrl_Dma:DMA_EN is out of range. dmaEn = %d\n", (int)dmaCfg->dmaEn));
 	}
 	
-	IO_PDM[ch].DMA_CFG.word = pdmdmacfg.word;
+	ioPdm[ch].dmaCfg.word = pdmdmacfg.word;
 	
 	return ret;
 }
 
 /**
  * @brief  Get DMA Control Information
- * @param  UINT8 ch
- * @param  DdPdmDmaCfg *dma_cfg
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  DdPdmDmaCfg *dmaCfg
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_get_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dma_cfg)
+kint32 dd_pdm_get_ctrl_dma(DdPdm *self, kuint8 ch, DdPdmDmaCfg* dmaCfg)
 {
-	volatile union io_pdm_dmacfg pdmdmacfg;
+	volatile IoPdmDmacfg pdmdmacfg;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -653,30 +654,30 @@ INT32 dd_pdm_get_ctrl_dma(DdPdm *self, UINT8 ch, DdPdmDmaCfg* dma_cfg)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_cfg == NULL){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Get_Ctrl_Dma:dma_cfg = NULL\n"));
+	if (dmaCfg == NULL){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Get_Ctrl_Dma:dmaCfg = NULL\n"));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	
-	pdmdmacfg.word = IO_PDM[ch].DMA_CFG.word;
+	pdmdmacfg.word = ioPdm[ch].dmaCfg.word;
 	
-	dma_cfg->dmickDly		= pdmdmacfg.bit.DMICK_DLY;									/* pgr0872 */
-	dma_cfg->dmaBurstlen	= (PdmDmaBurstLen)pdmdmacfg.bit.DMA_BURSTLEN;		/* pgr0872 */
-	dma_cfg->pcmChset		= (PdmDmaPcmCh)pdmdmacfg.bit.PCM_CHSET;				/* pgr0872 */
-	dma_cfg->pcmWdlen		= (PdmDmaPcmWd)pdmdmacfg.bit.PCM_WDLEN;				/* pgr0872 */
-	dma_cfg->dmaEn			= pdmdmacfg.bit.DMA_EN;										/* pgr0872 */
+	dmaCfg->dmickDly = pdmdmacfg.bit.dmickDly;									/* pgr0872 */
+	dmaCfg->dmaBurstlen = (PdmDmaBurstLen)pdmdmacfg.bit.dmaBurstlen;		/* pgr0872 */
+	dmaCfg->pcmChset = (PdmDmaPcmCh)pdmdmacfg.bit.pcmChset;				/* pgr0872 */
+	dmaCfg->pcmWdlen = (PdmDmaPcmWd)pdmdmacfg.bit.pcmWdlen;				/* pgr0872 */
+	dmaCfg->dmaEn = pdmdmacfg.bit.dmaEn;										/* pgr0872 */
 
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set callback function of Dma0 Interrupt
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  DdPdmFunc callback
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_callback_dma0_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback)
+kint32 dd_pdm_set_callback_dma0_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -688,23 +689,23 @@ INT32 dd_pdm_set_callback_dma0_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback)
 #endif
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	priv->gDd_Pdm_Dma0_Callback_Func[ch] = callback;
+	priv->dma0CallbackFunc[ch] = callback;
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set enable/disable Dma0 Interrupt
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_enable_dma0_intr(DdPdm *self, UINT8 ch, UINT8 enable)
+kint32 dd_pdm_set_enable_dma0_intr(DdPdm *self, kuint8 ch, kuint8 enable)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -719,10 +720,10 @@ INT32 dd_pdm_set_enable_dma0_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 #endif
 	
 	if (enable == DdPdm_ENABLE){
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA0 = 0;
+		ioPdm[ch].dmaCfg.bit.clrIrqDma0 = 0;
 	}
 	else {
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA0 = 1;
+		ioPdm[ch].dmaCfg.bit.clrIrqDma0 = 1;
 	}
 	
 	return D_DDIM_OK;
@@ -730,11 +731,11 @@ INT32 dd_pdm_set_enable_dma0_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 
 /**
  * @brief  Set callback function of Dma1 Interrupt
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  DdPdmFunc callback
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_callback_dma1_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback)
+kint32 dd_pdm_set_callback_dma1_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -746,23 +747,23 @@ INT32 dd_pdm_set_callback_dma1_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback)
 #endif
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	priv->gDd_Pdm_Dma1_Callback_Func[ch] = callback;
+	priv->dma1CallbackFunc[ch] = callback;
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set enable/disable Dma1 Interrupt
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_enable_dma1_intr(DdPdm *self, UINT8 ch, UINT8 enable)
+kint32 dd_pdm_set_enable_dma1_intr(DdPdm *self, kuint8 ch, kuint8 enable)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -779,11 +780,11 @@ INT32 dd_pdm_set_enable_dma1_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 #endif
 	
 	if (enable == DdPdm_ENABLE){
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA1 = 0;
+		ioPdm[ch].dmaCfg.bit.clrIrqDma1 = 0;
 	}
 	else {
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_DMA1 = 1;
-		priv->gDd_Pdm_Dma1_Callback_Func[ch] = NULL;
+		ioPdm[ch].dmaCfg.bit.clrIrqDma1 = 1;
+		priv->dma1CallbackFunc[ch] = NULL;
 	}
 	
 	return D_DDIM_OK;
@@ -791,11 +792,11 @@ INT32 dd_pdm_set_enable_dma1_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 
 /**
  * @brief  Set callback function of OverFlow Interrupt
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  DdPdmFunc callback
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_callback_over_flow_intr(DdPdm *self, UINT8 ch, DdPdmFunc callback)
+kint32 dd_pdm_set_callback_over_flow_intr(DdPdm *self, kuint8 ch, DdPdmFunc callback)
 {
 	DdPdmPrivate *priv = DD_PDM_GET_PRIVATE(self);
 
@@ -807,23 +808,23 @@ INT32 dd_pdm_set_callback_over_flow_intr(DdPdm *self, UINT8 ch, DdPdmFunc callba
 #endif
 	
 	// SpinLock
-	Dd_ARM_Critical_Section_Start(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_Start(S_DD_PDM_SPIN_LOCK);
 	
-	priv->gDd_Pdm_OverFlow_Callback_Func[ch] = callback;
+	priv->overFlowCallbackFunc[ch] = callback;
 	
 	// SpinUnLock
-	Dd_ARM_Critical_Section_End(gDd_Pdm_Spin_Lock);
+	Dd_ARM_Critical_Section_End(S_DD_PDM_SPIN_LOCK);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set enable/disable OverFlow Interrupt
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_enable_over_flow_intr(DdPdm *self, UINT8 ch, UINT8 enable)
+kint32 dd_pdm_set_enable_over_flow_intr(DdPdm *self, kuint8 ch, kuint8 enable)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -838,10 +839,10 @@ INT32 dd_pdm_set_enable_over_flow_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 #endif
 	
 	if (enable == DdPdm_ENABLE){
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_FFOVF = 0;
+		ioPdm[ch].dmaCfg.bit.clrIrqFfovf = 0;
 	}
 	else {
-		IO_PDM[ch].DMA_CFG.bit.CLR_IRQ_FFOVF = 1;
+		ioPdm[ch].dmaCfg.bit.clrIrqFfovf = 1;
 	}
 	
 	return D_DDIM_OK;
@@ -849,11 +850,11 @@ INT32 dd_pdm_set_enable_over_flow_intr(DdPdm *self, UINT8 ch, UINT8 enable)
 
 /**
  * @brief  Set DMA0 distination address
- * @param  UINT8 ch
- * @param  UINT32 addr
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint32 addr
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_dma0_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr)
+kint32 dd_pdm_set_dma0_dst_addr(DdPdm *self, kuint8 ch, kuint32 addr)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -862,18 +863,18 @@ INT32 dd_pdm_set_dma0_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr)
 	}
 #endif
 	
-	IO_PDM[ch].DMA0_DST_ADDR.word = (addr & 0xFFFFFFFC);
+	ioPdm[ch].dma0DstAddr.word = (addr & 0xFFFFFFFC);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set DMA1 distination address
- * @param  UINT8 ch
- * @param  UINT32 addr
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint32 addr
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_dma1_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr)
+kint32 dd_pdm_set_dma1_dst_addr(DdPdm *self, kuint8 ch, kuint32 addr)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -882,20 +883,20 @@ INT32 dd_pdm_set_dma1_dst_addr(DdPdm *self, UINT8 ch, UINT32 addr)
 	}
 #endif
 	
-	IO_PDM[ch].DMA1_DST_ADDR.word = (addr & 0xFFFFFFFC);
+	ioPdm[ch].dma1DstAddr.word = (addr & 0xFFFFFFFC);
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Set DMA Transfer Length
- * @param  UINT8 ch
- * @param  DdPdmDmaLen* dma_len
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  DdPdmDmaLen* dmaLen
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_set_dma_trans_length(DdPdm *self, UINT8 ch, DdPdmDmaLen* dma_len)
+kint32 dd_pdm_set_dma_trans_length(DdPdm *self, kuint8 ch, DdPdmDmaLen* dmaLen)
 {
-	volatile union io_pdm_dmalen pdmdmalen;
+	volatile IoPdmDmalen pdmdmalen;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -903,43 +904,43 @@ INT32 dd_pdm_set_dma_trans_length(DdPdm *self, UINT8 ch, DdPdmDmaLen* dma_len)
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_len == NULL){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:dma_len = NULL\n"));
+	if (dmaLen == NULL){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:dmaLen = NULL\n"));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_len->ttsize > 0x7FFF){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:ttsize is out of range : %d\n", dma_len->ttsize));
+	if (dmaLen->ttsize > 0x7FFF){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:ttsize is out of range : %d\n", dmaLen->ttsize));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_len->ttsize == 0x00){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:ttsize is out of range : %d\n", dma_len->ttsize));
+	if (dmaLen->ttsize == 0x00){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:ttsize is out of range : %d\n", dmaLen->ttsize));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 	
-	if (dma_len->tsize == 0x00){
-		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:tsize is out of range : %d\n", dma_len->tsize));
+	if (dmaLen->tsize == 0x00){
+		Ddim_Assertion(("[DD_PDM]Dd_Pdm_Set_Dma_TransLength:tsize is out of range : %d\n", dmaLen->tsize));
 		return DdPdm_INPUT_PARAM_ERROR;
 	}
 
 #endif	// CO_PARAM_CHECK
 	
-	pdmdmalen.bit.DMA_TTSIZE = dma_len->ttsize;
-	pdmdmalen.bit.DMA_TSIZE = dma_len->tsize;
+	pdmdmalen.bit.dmaTtsize = dmaLen->ttsize;
+	pdmdmalen.bit.dmaTsize = dmaLen->tsize;
 	
-	IO_PDM[ch].DMA_LEN.word = pdmdmalen.word;				/* pgr0872 */
+	ioPdm[ch].dmaLen.word = pdmdmalen.word;				/* pgr0872 */
 	
 	return D_DDIM_OK;
 }
 
 /**
  * @brief  Start Dma Transfer
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
 
-INT32 dd_pdm_flush_dma_fifo(DdPdm *self, UINT8 ch)
+kint32 dd_pdm_flush_dma_fifo(DdPdm *self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -949,9 +950,9 @@ INT32 dd_pdm_flush_dma_fifo(DdPdm *self, UINT8 ch)
 #endif	// CO_PARAM_CHECK
 	
 	// FIFO Flush
-	IO_PDM[ch].DMA_CFG.bit.DMA_FLUSH = 1;
+	ioPdm[ch].dmaCfg.bit.dmaFlush = 1;
 	Dd_ARM_Dsb_Pou();
-	IO_PDM[ch].DMA_CFG.bit.DMA_FLUSH = 0;
+	ioPdm[ch].dmaCfg.bit.dmaFlush = 0;
 	Dd_ARM_Dsb_Pou();
 	
 	return D_DDIM_OK;
@@ -959,14 +960,14 @@ INT32 dd_pdm_flush_dma_fifo(DdPdm *self, UINT8 ch)
 
 /**
  * @brief  Get log of interrupt
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  DdPdmIntType type
- * @param  UINT8* status
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @param  kuint8* status
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_get_status(DdPdm *self, UINT8 ch, DdPdmIntType type, UINT8* status)
+kint32 dd_pdm_get_status(DdPdm *self, kuint8 ch, DdPdmIntType type, kuint8* status)
 {
-	volatile union io_pdm_status pdmstatus;
+	volatile IoPdmStatus pdmstatus;
 	
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -980,17 +981,17 @@ INT32 dd_pdm_get_status(DdPdm *self, UINT8 ch, DdPdmIntType type, UINT8* status)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	pdmstatus.word = IO_PDM[ch].STATUS.word;
+	pdmstatus.word = ioPdm[ch].status.word;
 	
 	switch (type) {
 		case DdPdm_INT_TYPE_FFOVF:
-			*status = pdmstatus.bit.FFOVF_INT_REG;				/* pgr0872 */
+			*status = pdmstatus.bit.ffovfIntReg;				/* pgr0872 */
 			break;
 		case DdPdm_INT_TYPE_DMA0:
-			*status = pdmstatus.bit.DMA0_INT_REG;				/* pgr0872 */
+			*status = pdmstatus.bit.dma0IntReg;				/* pgr0872 */
 			break;
 		case DdPdm_INT_TYPE_DMA1:
-			*status = pdmstatus.bit.DMA1_INT_REG;				/* pgr0872 */
+			*status = pdmstatus.bit.dma1IntReg;				/* pgr0872 */
 			break;
 		default:
 #ifdef CO_PARAM_CHECK
@@ -1004,11 +1005,11 @@ INT32 dd_pdm_get_status(DdPdm *self, UINT8 ch, DdPdmIntType type, UINT8* status)
 
 /**
  * @brief  Clear log of interrupt
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @param  DdPdmIntType type
- * @return INT32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdPdm_INPUT_PARAM_ERROR
  */
-INT32 dd_pdm_clear_status(DdPdm *self, UINT8 ch, DdPdmIntType type)
+kint32 dd_pdm_clear_status(DdPdm *self, kuint8 ch, DdPdmIntType type)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdPdm_CH_NUM_MAX){
@@ -1019,13 +1020,13 @@ INT32 dd_pdm_clear_status(DdPdm *self, UINT8 ch, DdPdmIntType type)
 	
 	switch (type) {
 		case DdPdm_INT_TYPE_FFOVF:
-			IO_PDM[ch].STATUS.bit.FFOVF_INT_REG = 1;
+			ioPdm[ch].status.bit.ffovfIntReg = 1;
 			break;
 		case DdPdm_INT_TYPE_DMA0:
-			IO_PDM[ch].STATUS.bit.DMA0_INT_REG = 1;
+			ioPdm[ch].status.bit.dma0IntReg = 1;
 			break;
 		case DdPdm_INT_TYPE_DMA1:
-			IO_PDM[ch].STATUS.bit.DMA1_INT_REG = 1;
+			ioPdm[ch].status.bit.dma1IntReg = 1;
 			break;
 		default:
 #ifdef CO_PARAM_CHECK

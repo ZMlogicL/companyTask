@@ -70,13 +70,13 @@ static UCHAR imB2rIsActFb2r( UCHAR pipe_no )
 	UCHAR t_b2r_enable;
 	ImB2r2*	imB2r2=im_b2r2_get();
 
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
 		Ddim_Print(( "imB2rIsActFb2r:pipe_no err\n" ));
 		return 0;
 	}
 
 	Im_B2R_On_Pclk(pipe_no);
-	t_b2r_enable = (im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.CNTL.bit.TRG != ImB2r1_D_IM_B2R_FB2RTRG_IDLE)?(D_IM_B2R_ENABLE_ON):(D_IM_B2R_ENABLE_OFF);
+	t_b2r_enable = (im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.CNTL.bit.TRG != ImB2r1_D_IM_B2R_FB2RTRG_IDLE)?(ImB2r_D_IM_B2R_ENABLE_ON):(ImB2r_D_IM_B2R_ENABLE_OFF);
 	Im_B2R_Off_Pclk(pipe_no);
 
 	return t_b2r_enable;
@@ -98,11 +98,11 @@ INT32 Im_B2R_Ctrl_ModeSDRAMInput( UCHAR pipe_no, const T_IM_B2R_CTRL_SDRAM_INPUT
 	if( b2r_ctrl_sdram_input == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl_ModeSDRAMInput error. b2r_ctrl_sdram_input = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_ModeSDRAMInput error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_ModeSDRAMInput error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -112,11 +112,11 @@ INT32 Im_B2R_Ctrl_ModeSDRAMInput( UCHAR pipe_no, const T_IM_B2R_CTRL_SDRAM_INPUT
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBR.YBRTRG.bit.YBRTRG != ImB2r1_D_IM_B2R_YBRTRG_IDLE ){
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 			Ddim_Print(( "Im_B2R_Ctrl_ModeSDRAMInput error. PIPE%d YBR busy\n", loop_cnt ));
 #endif
 			Im_B2R_Off_Pclk( pipe_no );
-			return D_IM_B2R_MACRO_BUSY;
+			return ImB2r_D_IM_B2R_MACRO_BUSY;
 		}
 	}
 
@@ -156,11 +156,11 @@ INT32 Im_B2R_Ctrl_ModeB2BDirect( UCHAR pipe_no, const T_IM_B2R_CTRL_B2B_DIRECT* 
 	if( b2r_ctrl_b2b_direct == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl_ModePRODirect error. b2r_ctrl_b2b_direct = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl_ModeB2BDirect error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl_ModeB2BDirect error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -170,11 +170,11 @@ INT32 Im_B2R_Ctrl_ModeB2BDirect( UCHAR pipe_no, const T_IM_B2R_CTRL_B2B_DIRECT* 
 
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBR.YBRTRG.bit.YBRTRG != ImB2r1_D_IM_B2R_YBRTRG_IDLE ){
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 			Ddim_Print(( "Im_B2R_Ctrl_ModeB2BDirect error. PIPE%d YBR busy\n", loop_cnt ));
 #endif
 			Im_B2R_Off_Pclk( pipe_no );
-			return D_IM_B2R_MACRO_BUSY;
+			return ImB2r_D_IM_B2R_MACRO_BUSY;
 		}
 	}
 
@@ -201,11 +201,11 @@ INT32 Im_B2R_Get_HRingPixs( UCHAR pipe_no, USHORT* const ring_pixs )
 	if( ring_pixs == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_HRingPixs error. ring_pixs = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_HRingPixs error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_HRingPixs error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -214,7 +214,7 @@ INT32 Im_B2R_Get_HRingPixs( UCHAR pipe_no, USHORT* const ring_pixs )
 	return D_DDIM_OK;
 }
 
-/* Restart B2R process when ybw_continue_start_enable equal D_IM_B2R_ENABLE_OFF.
+/* Restart B2R process when ybw_continue_start_enable equal ImB2r_D_IM_B2R_ENABLE_OFF.
  */
 INT32 Im_B2R_ContStart( UCHAR pipe_no )
 {
@@ -222,9 +222,9 @@ INT32 Im_B2R_ContStart( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_ContStart error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_ContStart error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -237,14 +237,14 @@ INT32 Im_B2R_ContStart( UCHAR pipe_no )
 	}
 
 	// P-clock control
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_ContStart on pclk\n" ));
 #endif
 	Im_B2R_On_Pclk( pipe_no );
 
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWTRG.bit.YBWTRG = ImB2r1_D_IM_B2R_YBWTRG_ON;
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_ContStart off pclk\n" ));
 #endif
 	Im_B2R_Off_Pclk( pipe_no );
@@ -264,19 +264,19 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Start error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Start error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Start begin\n" ));
 #endif
 
 
 	// P-clock control
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Start on pclk\n" ));
 #endif
 
@@ -287,25 +287,25 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 	for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 		if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBR.YBRTRG.bit.YBRTRG != ImB2r1_D_IM_B2R_YBRTRG_IDLE ){
 			Ddim_Print(( "Im_B2R_Start error. YBR busy\n" ));
-			return D_IM_B2R_MACRO_BUSY;
+			return ImB2r_D_IM_B2R_MACRO_BUSY;
 		}
 		if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWTRG.bit.YBWTRG != ImB2r1_D_IM_B2R_YBWTRG_IDLE ){
 			Ddim_Print(( "Im_B2R_Start error. YBW busy\n" ));
-			return D_IM_B2R_MACRO_BUSY;
+			return ImB2r_D_IM_B2R_MACRO_BUSY;
 		}
-		if( imB2rIsActFb2r(loop_cnt) != D_IM_B2R_ENABLE_OFF ){
+		if( imB2rIsActFb2r(loop_cnt) != ImB2r_D_IM_B2R_ENABLE_OFF ){
 			Ddim_Print(( "Im_B2R_Start error. F_B2R busy\n" ));
-			return D_IM_B2R_MACRO_BUSY;
+			return ImB2r_D_IM_B2R_MACRO_BUSY;
 		}
 	}
 
 	while( 1 ) {	// Pclk enable section
 		// Clear of All Interrupt enable & Interrupt status
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start begin initialize\n" ));
 #endif
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start initialize interrupt\n" ));
 #endif
 		// Initialized Interrupt
@@ -319,10 +319,10 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 			im_b2r2_get_g_im_b2r_state(imB2r2,loop_cnt).intStatus = 0;
 		}
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start enable interrupt\n" ));
 #endif
-		if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+		if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
 			im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.YBINTE.word = ImB2r1_D_IM_B2R_YBINTE_ALL_ENABLE;
 		}
 		else{
@@ -332,7 +332,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 		im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.B2RINTE.word = ImB2r1_D_IM_B2R_B2RINTE_ENABLE;
 
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start on clk\n" ));
 #endif
 		Im_B2R_On_Iclk( pipe_no );
@@ -344,18 +344,18 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 		for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 			// Bayer Deknee
 			if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBR.YBRCTL.bit.DKNEN != 0 ) {
-				Im_B2R_Set_DekneeAccessEnable( loop_cnt, D_IM_B2R_ENABLE_ON, D_IM_B2R_WAIT_OFF );
+				Im_B2R_Set_DekneeAccessEnable( loop_cnt, ImB2r_D_IM_B2R_ENABLE_ON, ImB2r_D_IM_B2R_WAIT_OFF );
 			}
 
 			// RGB Knee
 			if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWMD.bit.KNEEN != 0 ) {
-				Im_B2R_Set_RGB_KneeAccessEnable( loop_cnt, D_IM_B2R_ENABLE_ON, D_IM_B2R_WAIT_OFF );
+				Im_B2R_Set_RGB_KneeAccessEnable( loop_cnt, ImB2r_D_IM_B2R_ENABLE_ON, ImB2r_D_IM_B2R_WAIT_OFF );
 			}
 		}
 
 
 		im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.RAMAEN.bit.RAMAEN_YBR = 1;
-		if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+		if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
 			im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.RAMAEN.bit.RAMAEN_YBW = 1;
 		}
 
@@ -364,29 +364,29 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 		ImB2r1_IM_B2R_WAIT_USEC( ImB2r1_D_IM_B2R_SRAM_WAIT_USEC );
 
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start clear event flag\n" ));
 #endif
 
 		// Clear of Event Flag
 		if( ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_1( pipe_no ) ){
-			flgptn |= D_IM_B2R1_INT_FLG_ALL;
+			flgptn |= ImB2r_D_IM_B2R1_INT_FLG_ALL;
 		}
 		if( ImB2r1_IM_B2R_CHECK_TARGET_PIPE_NO_2( pipe_no ) ){
-			flgptn |= D_IM_B2R2_INT_FLG_ALL;
+			flgptn |= ImB2r_D_IM_B2R2_INT_FLG_ALL;
 		}
 
 		ercd = DDIM_User_Clr_Flg( FID_IM_B2R, ~flgptn );
 		if( ercd != D_DDIM_USER_E_OK ) {
 			Ddim_Print(( "Im_B2R_Start: invalid FID\n" ));
-			retcd = D_IM_B2R_SYSTEM_ERROR;
+			retcd = ImB2r_D_IM_B2R_SYSTEM_ERROR;
 			break;
 		}
 
 		for( loop_cnt = loop_sta; loop_cnt <= loop_end; loop_cnt++ ){
 			im_b2r2_get_g_im_b2r_state(imB2r2,loop_cnt).wasStarted = ImB2r1_D_IM_B2R_TRUE;
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 			Ddim_Print(( "Im_B2R_Start check macro busy state\n" ));
 #endif
 #ifndef D_IM_B2R_DEBUG_ON_PC
@@ -400,21 +400,21 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 			}
 #endif
 
-			if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+			if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
 				im_b2r2_get_g_im_b2r_state(imB2r2,loop_cnt).busyState |= ImB2r1_D_IM_B2R_STATE_BUSY_YBW;
 			}
 			im_b2r2_get_g_im_b2r_state(imB2r2,loop_cnt).busyState |= ImB2r1_D_IM_B2R_STATE_BUSY_F_B2R;
 			im_b2r2_get_g_im_b2r_state(imB2r2,loop_cnt).busyState |= ImB2r1_D_IM_B2R_STATE_BUSY_YBR;
 		}
 
-		if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
-#ifdef CO_DEBUG_PRINT_IM_B2R
+		if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start enable YBW\n" ));
 #endif
 			im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWTRG.bit.YBWTRG = ImB2r1_D_IM_B2R_YBWTRG_ON;
 		}
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start enable F_B2R\n" ));
 #endif
 		im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.CNTL.bit.TRG = ImB2r1_D_IM_B2R_FB2RTRG_ON;
@@ -424,7 +424,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 		}
 #endif
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Start enable YBR\n" ));
 #endif
 		im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBR.YBRTRG.bit.YBRTRG = ImB2r1_D_IM_B2R_YBRTRG_ON;
@@ -433,7 +433,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 		break;
 	}
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Start off pclk\n" ));
 #endif
 	Im_B2R_Off_Pclk( pipe_no );
@@ -447,7 +447,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 			if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->B2R_CMN.ELNLV.bit.ELNLV != 0 ){
 				im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->B2R_CMN.YBINTF.bit.__ELNEF = 1;
 			}
-			if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+			if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
 				im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->B2R_CMN.YBINTF.bit.__YBWEF = 1;
 				if( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWBANK.bit.BANKST != 0 ) {
 					im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWBANK.bit.BANKST = 0;
@@ -456,7 +456,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 			}
 			Im_B2R_Int_Handler( loop_cnt );
 			im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->B2R_CMN.YBINTF.word = 0;
-			if( start_type != D_IM_B2R_START_EXTERNAL_IF_ONLY ){
+			if( start_type != ImB2r_D_IM_B2R_START_EXTERNAL_IF_ONLY ){
 				im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWBANK.bit.BANKSTS = ImB2r1_IM_B2R_INC_BANK_INDEX( im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWBANK.bit.BANKSTS, im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loop_cnt)->YBW.YBWCTL.bit.USEBANK +1 );
 			}
 		}
@@ -465,7 +465,7 @@ INT32 Im_B2R_Start( UCHAR pipe_no, UCHAR start_type )
 
 	ImB2r1_IM_B2R_DSB();
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Start end\n" ));
 #endif
 
@@ -480,9 +480,9 @@ INT32 Im_B2R_Stop( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Stop error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Stop error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -555,10 +555,10 @@ INT32 Im_B2R_Stop( UCHAR pipe_no )
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.B2RINTF.word = ImB2r1_D_IM_B2R_B2RINTF_CLR;
 
 	// Bayer Deknee
-	Im_B2R_Set_DekneeAccessEnable( pipe_no, D_IM_B2R_ENABLE_OFF, D_IM_B2R_WAIT_OFF );
+	Im_B2R_Set_DekneeAccessEnable( pipe_no, ImB2r_D_IM_B2R_ENABLE_OFF, ImB2r_D_IM_B2R_WAIT_OFF );
 
 	// RGB Knee
-	Im_B2R_Set_RGB_KneeAccessEnable( pipe_no, D_IM_B2R_ENABLE_OFF, D_IM_B2R_WAIT_OFF );
+	Im_B2R_Set_RGB_KneeAccessEnable( pipe_no, ImB2r_D_IM_B2R_ENABLE_OFF, ImB2r_D_IM_B2R_WAIT_OFF );
 
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.RAMAEN.bit.RAMAEN_YBR = 0;
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.RAMAEN.bit.RAMAEN_YBW = 0;
@@ -586,8 +586,8 @@ VOID im_b2r_calc_in_rect_sdram_input( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "im_b2r_set_ybr_address_sdram_input error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "im_b2r_set_ybr_address_sdram_input error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -622,8 +622,8 @@ VOID im_b2r_calc_in_rect_b2b_direct( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "im_b2r_calc_in_rect_b2b_direct error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "im_b2r_calc_in_rect_b2b_direct error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -668,28 +668,28 @@ VOID im_b2r_calc_top_color_sdram_input( UCHAR pipe_no )
 	static const UCHAR t_top_pix_of_trim[4][2][2] = {	// top_color, trim_v_odd, trim_h_odd
 			// H even				 H odd
 		{	// R
-			{ D_IM_B2R_TOP_PIXEL_R,  D_IM_B2R_TOP_PIXEL_GR },	// V even
-			{ D_IM_B2R_TOP_PIXEL_GB, D_IM_B2R_TOP_PIXEL_B }		// V odd
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_R,  ImB2r_D_IM_B2R_TOP_PIXEL_GR },	// V even
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_GB, ImB2r_D_IM_B2R_TOP_PIXEL_B }		// V odd
 		},
 		{	// B
-			{ D_IM_B2R_TOP_PIXEL_B,  D_IM_B2R_TOP_PIXEL_GB }, 	// V even
-			{ D_IM_B2R_TOP_PIXEL_GR, D_IM_B2R_TOP_PIXEL_R }		// V odd
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_B,  ImB2r_D_IM_B2R_TOP_PIXEL_GB }, 	// V even
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_GR, ImB2r_D_IM_B2R_TOP_PIXEL_R }		// V odd
 		},
 		{	// GR
-			{ D_IM_B2R_TOP_PIXEL_GR, D_IM_B2R_TOP_PIXEL_R },	// V even
-			{ D_IM_B2R_TOP_PIXEL_B,  D_IM_B2R_TOP_PIXEL_GB }	// V odd
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_GR, ImB2r_D_IM_B2R_TOP_PIXEL_R },	// V even
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_B,  ImB2r_D_IM_B2R_TOP_PIXEL_GB }	// V odd
 		},
 		{	// GB
-			{ D_IM_B2R_TOP_PIXEL_GB, D_IM_B2R_TOP_PIXEL_B },	// V even
-			{ D_IM_B2R_TOP_PIXEL_R,  D_IM_B2R_TOP_PIXEL_GR }	// V odd
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_GB, ImB2r_D_IM_B2R_TOP_PIXEL_B },	// V even
+			{ ImB2r_D_IM_B2R_TOP_PIXEL_R,  ImB2r_D_IM_B2R_TOP_PIXEL_GR }	// V odd
 		}
 	};
 	USHORT trim_v_odd;
 	USHORT trim_h_odd;
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "im_b2r_calc_top_color_sdram_input error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "im_b2r_calc_top_color_sdram_input error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK

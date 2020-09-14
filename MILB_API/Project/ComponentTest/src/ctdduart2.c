@@ -14,13 +14,23 @@
 
 #include "stdlib.h"
 #include "string.h"
-#include "dd_uart.h"
-#include "dd_hdmac1.h"
-#include "dd_gic.h"
-#include "dd_top.h"
+// #include "dd_uart.h"
+#include "../../Project/DeviceDriver/Peripheral/src/dduart.h"
+#include "../../DeviceDriver/Peripheral/src/dduartcolabo.h"
+#include "../../Project/DeviceDriver/Peripheral/src/dduartinterrupt.h"
+#include "../../DeviceDriver/Peripheral/src/dduartbranch.h"
+
+// #include "dd_hdmac1.h"
+// #include "dd_gic.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+#include "../../DeviceDriver/ARM/src/ddgic.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #include "uart_csio.h"
 #include "ctdduart.h"
-#include "dd_tmr32.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
+
 
 #include "ctdduart.h"
 
@@ -70,16 +80,16 @@ static kint32 ctUartDmaSendProcess( kuchar ut_ch, CtDdUart2 *self )
 	ULONG intid;
 	ULONG dma_intid;
 
-	intid = E_DD_GIC_INTID_UART_CH0_TRANSMISSION_INT + ut_ch;
-	dma_intid = E_DD_GIC_INTID_HDMAC1_CH0_INT + self->dma_ch;
+	intid = DdGic_INTID_UART_CH0_TRANSMISSION_INT + ut_ch;
+	dma_intid = DdGic_INTID_HDMAC1_CH0_INT + self->dma_ch;
 
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)intid, 0, D_DD_GIC_PRI30, 0x2);			/** UART interrupt disable */
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)dma_intid, 1, D_DD_GIC_PRI30, 0x2);		/** HDMAC1 interrupt enable */
+	dd_gic_ctrl((DdGicIntid)intid, 0, C_PRI30, 0x2);			/** UART interrupt disable */
+	dd_gic_ctrl((DdGicIntid)dma_intid, 1, C_PRI30, 0x2);		/** HDMAC1 interrupt enable */
 
-	ret = Dd_UART_Put_Str_DMA(ut_ch, self->dma_ch);
+	ret = dd_uart_put_str_dma(ut_ch, self->dma_ch);
 
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)intid, 1, D_DD_GIC_PRI30, 0x2);			/** UART interrupt enable */
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)dma_intid, 0, D_DD_GIC_PRI30, 0x2);		/** HDMAC1 interrupt disable */
+	dd_gic_ctrl((DdGicIntid)intid, 1, C_PRI30, 0x2);			/** UART interrupt enable */
+	dd_gic_ctrl((DdGicIntid)dma_intid, 0, C_PRI30, 0x2);		/** HDMAC1 interrupt disable */
 
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Put_Str_DMA error=0x%x\n", ret) );
@@ -91,90 +101,90 @@ static kint32 ctUartDmaSendProcess( kuchar ut_ch, CtDdUart2 *self )
 
 static void ctUartRestartFifo( kuchar ut_ch )
 {
-	T_DD_UART_MNG		uart_mng;
-	T_DD_UART_FIFO_CTRL	fifo_ctrl;
+	DdUartMng		uart_mng;
+	DdUartFifoCtrl	fifo_ctrl;
 
-	memset( &uart_mng, 0, sizeof(T_DD_UART_MNG));
-	memset( &fifo_ctrl, 0, sizeof(T_DD_UART_FIFO_CTRL));
+	memset( &uart_mng, 0, sizeof(DdUartMng));
+	memset( &fifo_ctrl, 0, sizeof(DdUartFifoCtrl));
 
 	// Close
-	Dd_UART_Close(ut_ch);
+	dd_uart_close(ut_ch);
 
 	// Set UART control data
-	uart_mng.baud_rate			= E_DD_UART_BAUD_RATE_115200;		// Baud rate
-	uart_mng.psend_callback		= NULL;								// Send callback function pointer
-	uart_mng.preceive_callback	= ct_dd_uart_receive_callback_dma_cb;				// Receive callback function pointer
-	uart_mng.receive_buff_addr	= &gUartRBuff[0];					// Receive buffer address
-	uart_mng.receive_buff_size	= sizeof(gUartRBuff);				// Receive buffer size
-	uart_mng.send_buff_addr		= (kuchar*)D_UART_SRC_ADDR;			// Send_buff_addr
-	uart_mng.send_buff_size		= D_UART_SRC_SIZE;					// Send buffer size
-	uart_mng.auto_echo			= E_DD_UART_AUTO_ECHO_ON;			// Auto Echo
-	uart_mng.save_buff			= E_DD_UART_SAVE2BUFFER_EN;			// Save to the buffer
-	uart_mng.mode				= E_DD_UART_MODE_NORMAL;			// UART Nomal Mode
-	uart_mng.bit_direction		= E_DD_UART_BIT_DIR_LSB_FIRST;		// Transferring Direction, LSB first or MSB first
-	uart_mng.stop_bit_length	= E_DD_UART_STOP_BIT_1;				// Stop bit length
-	uart_mng.parity_bit			= E_DD_UART_PARITY_BIT_NONE;		// Parity bit type
-	uart_mng.data_length		= E_DD_UART_DATA_LENGTH_8;			// Data Length
-	uart_mng.ext_clk			= 0;								// Internal clock
-	uart_mng.inv_nrz			= 0;								// NRZ
+	uart_mng.baudRate			= DdUart_BAUD_RATE_115200;		// Baud rate
+	uart_mng.psendCallback		= NULL;								// Send callback function pointer
+	uart_mng.preceiveCallback	= ct_dd_uart_receive_callback_dma_cb;				// Receive callback function pointer
+	uart_mng.receiveBuffAddr	= &gUartRBuff[0];					// Receive buffer address
+	uart_mng.receiveBuffSize	= sizeof(gUartRBuff);				// Receive buffer size
+	uart_mng.sendBuffAddr		= (kuchar*)CtDdUart_D_UART_SRC_ADDR;			// Send_buff_addr
+	uart_mng.sendBuffSize		= CtDdUart_D_UART_SRC_SIZE;					// Send buffer size
+	uart_mng.autoEcho			= DdUart_AUTO_ECHO_ON;			// Auto Echo
+	uart_mng.saveBuff			= DdUart_SAVE2BUFFER_EN;			// Save to the buffer
+	uart_mng.mode				= DdUart_MODE_NORMAL;			// UART Nomal Mode
+	uart_mng.bitDirection		= DdUart_BIT_DIR_LSB_FIRST;		// Transferring Direction, LSB first or MSB first
+	uart_mng.stopBitLength	= DdUart_STOP_BIT_1;				// Stop bit length
+	uart_mng.parityBit			= DdUart_PARITY_BIT_NONE;		// Parity bit type
+	uart_mng.dataLength		= DdUart_DATA_LENGTH_8;			// Data Length
+	uart_mng.extClk			= 0;								// Internal clock
+	uart_mng.invNrz			= 0;								// NRZ
 
 	fifo_ctrl.fsel				= 0;
 	fifo_ctrl.fe1				= 1;
 	fifo_ctrl.fe2				= 0;
 	fifo_ctrl.flste				= 0;
 	fifo_ctrl.fset				= 0;
-	fifo_ctrl.fbyte_recv		= 0;
-	uart_mng.fifo_ctrl			= &fifo_ctrl;						// FIFO Setting
+	fifo_ctrl.fbyteRecv		= 0;
+	uart_mngfifoCtrl			= &fifo_ctrl;						// FIFO Setting
 
 	// Start UART
-	Dd_UART_Open(ut_ch, D_DDIM_USER_SEM_WAIT_POL);
-	Dd_UART_Ctrl(ut_ch, &uart_mng);
-	Dd_UART_Start(ut_ch);
+	dd_uart_branch_open(ut_ch, D_DDIM_USER_SEM_WAIT_POL);
+	dd_uart_ctrl(ut_ch, &uart_mng);
+	dd_uart_branch_start(ut_ch);
 
 	return;
 }
 
 static void ctUartRestartFifo2( kuchar ut_ch )
 {
-	T_DD_UART_MNG		uart_mng;
-	T_DD_UART_FIFO_CTRL	fifo_ctrl;
+	DdUartMng		uart_mng;
+	DdUartFifoCtrl	fifo_ctrl;
 
-	memset( &uart_mng, 0, sizeof(T_DD_UART_MNG));
-	memset( &fifo_ctrl, 0, sizeof(T_DD_UART_FIFO_CTRL));
+	memset( &uart_mng, 0, sizeof(DdUartMng));
+	memset( &fifo_ctrl, 0, sizeof(DdUartFifoCtrl));
 
 	// Close
-	Dd_UART_Close(ut_ch);
+	dd_uart_close(ut_ch);
 
 	// Set UART control data
-	uart_mng.baud_rate			= E_DD_UART_BAUD_RATE_115200;		// Baud rate
-	uart_mng.psend_callback		= NULL;								// Send callback function pointer
-	uart_mng.preceive_callback	= ct_dd_uart_receive_callback_dma_cb;				// Receive callback function pointer
-	uart_mng.receive_buff_addr	= &gUartRBuff[0];					// Receive buffer address
-	uart_mng.receive_buff_size	= sizeof(gUartRBuff);				// Receive buffer size
-	uart_mng.send_buff_addr		= (kuchar*)D_UART_SRC_ADDR;			// Send_buff_addr
-	uart_mng.send_buff_size		= D_UART_SRC_SIZE;					// Send buffer size
-	uart_mng.auto_echo			= E_DD_UART_AUTO_ECHO_ON;			// Auto Echo
-	uart_mng.save_buff			= E_DD_UART_SAVE2BUFFER_EN;			// Save to the buffer
-	uart_mng.mode				= E_DD_UART_MODE_NORMAL;			// UART Nomal Mode
-	uart_mng.bit_direction		= E_DD_UART_BIT_DIR_LSB_FIRST;		// Transferring Direction, LSB first or MSB first
-	uart_mng.stop_bit_length	= E_DD_UART_STOP_BIT_1;				// Stop bit length
-	uart_mng.parity_bit			= E_DD_UART_PARITY_BIT_NONE;		// Parity bit type
-	uart_mng.data_length		= E_DD_UART_DATA_LENGTH_8;			// Data Length
-	uart_mng.ext_clk			= 0;								// Internal clock
-	uart_mng.inv_nrz			= 0;								// NRZ
+	uart_mng.baudRate			= DdUart_BAUD_RATE_115200;		// Baud rate
+	uart_mng.psendCallback		= NULL;								// Send callback function pointer
+	uart_mng.preceiveCallback	= ct_dd_uart_receive_callback_dma_cb;				// Receive callback function pointer
+	uart_mng.receiveBuffAddr	= &gUartRBuff[0];					// Receive buffer address
+	uart_mng.receiveBuffSize	= sizeof(gUartRBuff);				// Receive buffer size
+	uart_mng.sendBuffAddr		= (kuchar*)CtDdUart_D_UART_SRC_ADDR;			// Send_buff_addr
+	uart_mng.sendBuffSize		= CtDdUart_D_UART_SRC_SIZE;					// Send buffer size
+	uart_mng.autoEcho			= DdUart_AUTO_ECHO_ON;			// Auto Echo
+	uart_mng.saveBuff			= DdUart_SAVE2BUFFER_EN;			// Save to the buffer
+	uart_mng.mode				= DdUart_MODE_NORMAL;			// UART Nomal Mode
+	uart_mng.bitDirection		= DdUart_BIT_DIR_LSB_FIRST;		// Transferring Direction, LSB first or MSB first
+	uart_mng.stopBitLength	= DdUart_STOP_BIT_1;				// Stop bit length
+	uart_mng.parityBit			= DdUart_PARITY_BIT_NONE;		// Parity bit type
+	uart_mng.dataLength		= DdUart_DATA_LENGTH_8;			// Data Length
+	uart_mng.extClk			= 0;								// Internal clock
+	uart_mng.invNrz			= 0;								// NRZ
 
 	fifo_ctrl.fsel				= 0;
 	fifo_ctrl.fe1				= 1;
 	fifo_ctrl.fe2				= 1;
 	fifo_ctrl.flste				= 0;
 	fifo_ctrl.fset				= 0;
-	fifo_ctrl.fbyte_recv		= 3;
-	uart_mng.fifo_ctrl			= &fifo_ctrl;						// FIFO Setting
+	fifo_ctrl.fbyteRecv		= 3;
+	uart_mngfifoCtrl			= &fifo_ctrl;						// FIFO Setting
 
 	// Start UART
-	Dd_UART_Open(ut_ch, D_DDIM_USER_SEM_WAIT_POL);
-	Dd_UART_Ctrl(ut_ch, &uart_mng);
-	Dd_UART_Start(ut_ch);
+	dd_uart_branch_open(ut_ch, D_DDIM_USER_SEM_WAIT_POL);
+	dd_uart_ctrl(ut_ch, &uart_mng);
+	dd_uart_branch_start(ut_ch);
 
 	return;
 }
@@ -183,65 +193,65 @@ static void ctUartRestartFifo2( kuchar ut_ch )
 static kint32 ctUartProcess( CtDdUart2 *self )
 {
 	kint32				ret;
-	T_DD_UART_MNG		uart_mng;
-	T_DD_UART_FIFO_CTRL fifo_ctrl;
+	DdUartMng		uart_mng;
+	DdUartFifoCtrl fifo_ctrl;
 
-	memset(&uart_mng, 0, sizeof(T_DD_UART_MNG));
-	memset(&fifo_ctrl, 0, sizeof(T_DD_UART_FIFO_CTRL));
+	memset(&uart_mng, 0, sizeof(DdUartMng));
+	memset(&fifo_ctrl, 0, sizeof(DdUartFifoCtrl));
 
 	/* Open */
-	ret = Dd_UART_Open( gUARTCh, D_DDIM_USER_SEM_WAIT_POL );
+	ret = dd_uart_branch_open( gUARTCh, D_DDIM_USER_SEM_WAIT_POL );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Open error=0x%x\n", ret) );
 		return ret;
 	}
 	/* Control */
-	uart_mng.baud_rate = E_DD_UART_BAUD_RATE_115200;
+	uart_mng.baudRate = DdUart_BAUD_RATE_115200;
 	if(self->send_int == 1){
-		uart_mng.psend_callback = ct_dd_uart_send_callback_cb;
+		uart_mng.psendCallback = ct_dd_uart_send_callback_cb;
 	}
 	else {
-		uart_mng.psend_callback = NULL;
+		uart_mng.psendCallback = NULL;
 	}
 	if( self->auto_echo == 0 ){
-		uart_mng.preceive_callback = ct_dd_uart_receive_callback_cb;		// for auto echo on
+		uart_mng.preceiveCallback = ct_dd_uart_receive_callback_cb;		// for auto echo on
 	}
 	else {
-		uart_mng.preceive_callback = ct_dd_uart_receive_callback_echo_cb;// for auto echo off
+		uart_mng.preceiveCallback = ct_dd_uart_receive_callback_echo_cb;// for auto echo off
 	}
-	uart_mng.receive_buff_addr			= &gUartRBuff[0];
-	uart_mng.receive_buff_size			= sizeof(gUartRBuff);
-	uart_mng.send_buff_addr				= (kuchar*)D_UART_SRC_ADDR;
-	uart_mng.send_buff_size				= D_UART_SRC_SIZE;
-	uart_mng.auto_echo					= (E_DD_UART_AUTO_ECHO)(self->auto_echo);
-	uart_mng.save_buff					= (E_DD_UART_SAVE2BUFFER)(self->save_buff);
-	uart_mng.mode						= E_DD_UART_MODE_NORMAL;
-	uart_mng.bit_direction				= E_DD_UART_BIT_DIR_LSB_FIRST;
-	uart_mng.stop_bit_length			= E_DD_UART_STOP_BIT_1;
-	uart_mng.data_length				= E_DD_UART_DATA_LENGTH_8;
-	uart_mng.parity_bit					= E_DD_UART_PARITY_BIT_NONE;
+	uart_mng.receiveBuffAddr			= &gUartRBuff[0];
+	uart_mng.receiveBuffSize			= sizeof(gUartRBuff);
+	uart_mng.sendBuffAddr				= (kuchar*)CtDdUart_D_UART_SRC_ADDR;
+	uart_mng.sendBuffSize				= CtDdUart_D_UART_SRC_SIZE;
+	uart_mng.autoEcho					= (DdUart_AUTO_ECHO)(self->auto_echo);
+	uart_mng.saveBuff					= (DdUart_SAVE2BUFFER)(self->save_buff);
+	uart_mng.mode						= DdUart_MODE_NORMAL;
+	uart_mng.bitDirection				= DdUart_BIT_DIR_LSB_FIRST;
+	uart_mng.stopBitLength			= DdUart_STOP_BIT_1;
+	uart_mng.dataLength				= DdUart_DATA_LENGTH_8;
+	uart_mng.parityBit					= DdUart_PARITY_BIT_NONE;
 
 	if(self->fifo == 1){
-		uart_mng.fifo_ctrl				= &fifo_ctrl;
-		uart_mng.fifo_ctrl->fsel		= 0;
-		uart_mng.fifo_ctrl->fe1			= 1;
-		uart_mng.fifo_ctrl->fe2			= 0;
-		uart_mng.fifo_ctrl->flste		= 0;
-		uart_mng.fifo_ctrl->fset		= 0;
-		uart_mng.fifo_ctrl->fbyte_recv	= 0;
+		uart_mngfifoCtrl				= &fifo_ctrl;
+		uart_mngfifoCtrl->fsel		= 0;
+		uart_mngfifoCtrl->fe1			= 1;
+		uart_mngfifoCtrl->fe2			= 0;
+		uart_mngfifoCtrl->flste		= 0;
+		uart_mngfifoCtrl->fset		= 0;
+		uart_mngfifoCtrl->fbyteRecv	= 0;
 	}
 	else{
-		uart_mng.fifo_ctrl = NULL;
+		uart_mngfifoCtrl = NULL;
 	}
 
-	ret = Dd_UART_Ctrl( gUARTCh, &uart_mng );
+	ret = dd_uart_ctrl( gUARTCh, &uart_mng );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Ctrl error=0x%x\n", ret) );
 		return ret;
 	}
 
 	/* Start */
-	ret = Dd_UART_Start( gUARTCh );
+	ret = dd_uart_branch_start( gUARTCh );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Start error=0x%x\n", ret) );
 		return ret;
@@ -255,40 +265,40 @@ static kint32 ctUartProcess( CtDdUart2 *self )
 static kint32 ctUartSimpleProcess( CtDdUart2 *self )
 {
 	kint32					ret ;
-	T_DD_UART_MNG_SIMPLE	uart_mng_simple;
+	DdUartMngSimple	uart_mng_simple;
 
 	/* Open */
-	ret = Dd_UART_Open( self->ch, D_DDIM_USER_SEM_WAIT_POL );
+	ret = dd_uart_branch_open( self->ch, D_DDIM_USER_SEM_WAIT_POL );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Open error=0x%x\n", ret) );
 		return ret;
 	}
 	/* Control */
-	uart_mng_simple.baud_rate = E_DD_UART_BAUD_RATE_115200;
-	if( self->auto_echo == E_DD_UART_AUTO_ECHO_ON ){
-		uart_mng_simple.preceive_callback = ct_dd_uart_receive_callback_cb;		// for auto echo on
+	uart_mng_simple.baudRate = DdUart_BAUD_RATE_115200;
+	if( self->auto_echo == DdUart_AUTO_ECHO_ON ){
+		uart_mng_simple.preceiveCallback = ct_dd_uart_receive_callback_cb;		// for auto echo on
 	}
 	else {
-		uart_mng_simple.preceive_callback = ct_dd_uart_receive_callback_echo_cb;// for auto echo off
+		uart_mng_simple.preceiveCallback = ct_dd_uart_receive_callback_echo_cb;// for auto echo off
 	}
-	uart_mng_simple.receive_buff_addr	= &gUartRBuff[0];
-	uart_mng_simple.receive_buff_size	= sizeof(gUartRBuff);
-	uart_mng_simple.send_buff_addr		= (kuchar*)D_UART_SRC_ADDR;
-	uart_mng_simple.send_buff_size		= D_UART_SRC_SIZE;
-	uart_mng_simple.auto_echo			= (E_DD_UART_AUTO_ECHO)(self->auto_echo);
-	uart_mng_simple.save_buff			= (E_DD_UART_SAVE2BUFFER)(self->save_buff);
-	uart_mng_simple.stop_bit_length		= E_DD_UART_STOP_BIT_1;
-	uart_mng_simple.data_length			= E_DD_UART_DATA_LENGTH_8;
-	uart_mng_simple.parity_bit			= E_DD_UART_PARITY_BIT_NONE;
+	uart_mng_simple.receiveBuffAddr	= &gUartRBuff[0];
+	uart_mng_simple.receiveBuffSize	= sizeof(gUartRBuff);
+	uart_mng_simple.sendBuffAddr		= (kuchar*)CtDdUart_D_UART_SRC_ADDR;
+	uart_mng_simple.sendBuffSize		= CtDdUart_D_UART_SRC_SIZE;
+	uart_mng_simple.autoEcho			= (DdUart_AUTO_ECHO)(self->auto_echo);
+	uart_mng_simple.saveBuff			= (DdUart_SAVE2BUFFER)(self->save_buff);
+	uart_mng_simple.stopBitLength		= DdUart_STOP_BIT_1;
+	uart_mng_simple.dataLength			= DdUart_DATA_LENGTH_8;
+	uart_mng_simple.parityBit			= DdUart_PARITY_BIT_NONE;
 
-	ret = Dd_UART_Initialize_Simple( self->ch, &uart_mng_simple );
+	ret = dd_uart_branch_initialize_simple( self->ch, &uart_mng_simple );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Util_Set error=0x%x\n", ret) );
 		return ret;
 	}
 
 	/* Start */
-	ret = Dd_UART_Start( self->ch );
+	ret = dd_uart_branch_start( self->ch );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Start error=0x%x\n", ret) );
 		return ret;
@@ -297,12 +307,12 @@ static kint32 ctUartSimpleProcess( CtDdUart2 *self )
 	return ret;
 }
 
-// static kint32 ct_start_send_dma_normal(kuchar ch, kuchar dma_ch, E_DD_UART_BAUD_RATE baud_rate, kuchar* data_addr, kuint32 data_num, kuint32 cbflg)
+// static kint32 ct_start_send_dma_normal(kuchar ch, kuchar dma_ch, DdUartBaudRate baud_rate, kuchar* data_addr, kuint32 data_num, kuint32 cbflg)
 static kint32 ctStartSendDmaNormal(CtDdUart2 *self, kuint32 cbflg)
 {
 	kint32				ret = D_DDIM_OK;
-	T_DD_UART_MNG		uart_mng;
-	T_DD_UART_FIFO_CTRL	fifo_ctrl;
+	DdUartMng		uart_mng;
+	DdUartFifoCtrl	fifo_ctrl;
 	ULONG				intid;
 
 	Ddim_Print( ("ct_start_send_dma\n") );
@@ -312,55 +322,55 @@ static kint32 ctStartSendDmaNormal(CtDdUart2 *self, kuint32 cbflg)
 	Ddim_Print( ("data_addr = %p\n",		(kuchar*)&self->data_addr) );
 	Ddim_Print( ("data_num  = 0x%x\n",		(kuint32)self->data_num) );
 
-	memset(&uart_mng, 0, sizeof(T_DD_UART_MNG));
-	memset(&fifo_ctrl, 0, sizeof(T_DD_UART_FIFO_CTRL));
+	memset(&uart_mng, 0, sizeof(DdUartMng));
+	memset(&fifo_ctrl, 0, sizeof(DdUartFifoCtrl));
 
 	/* Control */
-	uart_mng.baud_rate			= self->baud_rate;
-	uart_mng.psend_callback		= NULL;
-	uart_mng.preceive_callback	= NULL;
-	uart_mng.receive_buff_addr	= NULL;
-	uart_mng.receive_buff_size	= 0;
-	uart_mng.send_buff_addr		= NULL;
-	uart_mng.send_buff_size		= 0;
-	uart_mng.auto_echo			= E_DD_UART_AUTO_ECHO_OFF;
-	uart_mng.save_buff			= E_DD_UART_SAVE2BUFFER_DIS;
-	uart_mng.mode				= E_DD_UART_MODE_NORMAL;
-	uart_mng.bit_direction		= E_DD_UART_BIT_DIR_LSB_FIRST;
-	uart_mng.stop_bit_length	= E_DD_UART_STOP_BIT_1;
-	uart_mng.data_length		= E_DD_UART_DATA_LENGTH_8;
-	uart_mng.parity_bit			= E_DD_UART_PARITY_BIT_NONE;
+	uart_mng.baudRate			= self->baud_rate;
+	uart_mng.psendCallback		= NULL;
+	uart_mng.preceiveCallback	= NULL;
+	uart_mng.receiveBuffAddr	= NULL;
+	uart_mng.receiveBuffSize	= 0;
+	uart_mng.sendBuffAddr		= NULL;
+	uart_mng.sendBuffSize		= 0;
+	uart_mng.autoEcho			= DdUart_AUTO_ECHO_OFF;
+	uart_mng.saveBuff			= DdUart_SAVE2BUFFER_DIS;
+	uart_mng.mode				= DdUart_MODE_NORMAL;
+	uart_mng.bitDirection		= DdUart_BIT_DIR_LSB_FIRST;
+	uart_mng.stopBitLength	= DdUart_STOP_BIT_1;
+	uart_mng.dataLength		= DdUart_DATA_LENGTH_8;
+	uart_mng.parityBit			= DdUart_PARITY_BIT_NONE;
 
 	fifo_ctrl.fsel				= 0;
 	fifo_ctrl.fe1				= 1;
 	fifo_ctrl.fe2				= 1;
 	fifo_ctrl.flste				= 0;
 	fifo_ctrl.fset				= 0;
-//	fifo_ctrl.fbyte_recv		= 128;
-	fifo_ctrl.fbyte_recv		= 64;
-	uart_mng.fifo_ctrl			= &fifo_ctrl;
+//	fifo_ctrl.fbyteRecv		= 128;
+	fifo_ctrl.fbyteRecv		= 64;
+	uart_mngfifoCtrl			= &fifo_ctrl;
 
 	if(cbflg != 0){
-		uart_mng.send_dma_callback	= ct_dd_uart_send_dma_callback_cb;
-		uart_mng.recv_dma_callback	= ct_dd_uart_recv_dma_callback_cb;
+		uart_mngsendDmaCallback	= ct_dd_uart_send_dma_callback_cb;
+		uart_mngrecvDmaCallback	= ct_dd_uart_recv_dma_callback_cb;
 	}
 
-	ret = Dd_UART_Ctrl( gUARTCh, &uart_mng );
+	ret = dd_uart_ctrl( gUARTCh, &uart_mng );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Ctrl error=0x%x\n", ret) );
 		return ret;
 	}
 
-	ret = Dd_UART_Set_Send_Data_DMA( self->ch, (kuchar*)self->data_addr, (kuint32)self->data_num );
+	ret = dd_uart_branch_set_send_data_dma( self->ch, (kuchar*)self->data_addr, (kuint32)self->data_num );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Set_Send_Data_DMA error=0x%x\n", ret) );
 		return ret;
 	}
 
-	intid = E_DD_GIC_INTID_UART_CH0_TRANSMISSION_INT + self->ch;
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)intid, 0, -1, 0x2);				/** UART interrupt disable */
+	intid = DdGic_INTID_UART_CH0_TRANSMISSION_INT + self->ch;
+	dd_gic_ctrl((DdGicIntid)intid, 0, -1, 0x2);				/** UART interrupt disable */
 
-	ret = Dd_UART_Start_Send_DMA( self->ch, self->dma_ch );
+	ret = dd_uart_colabo_start_send_dma( self->ch, self->dma_ch );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Start_Send_DMA error=0x%x\n", ret) );
 		return ret;
@@ -369,12 +379,12 @@ static kint32 ctStartSendDmaNormal(CtDdUart2 *self, kuint32 cbflg)
 	return ret;
 }
 
-// static kint32 ct_start_recv_dma_normal(kuchar ch, kuchar dma_ch, E_DD_UART_BAUD_RATE baud_rate, kuchar* data_addr, kuint32 data_num, kuint32 cbflg)
+// static kint32 ct_start_recv_dma_normal(kuchar ch, kuchar dma_ch, DdUartBaudRate baud_rate, kuchar* data_addr, kuint32 data_num, kuint32 cbflg)
 static kint32 ctStartRecvDmaNormal(CtDdUart2 *self, kuint32 cbflg)
 {
 	kint32				ret = D_DDIM_OK;
-	T_DD_UART_MNG		uart_mng;
-	T_DD_UART_FIFO_CTRL	fifo_ctrl;
+	DdUartMng		uart_mng;
+	DdUartFifoCtrl	fifo_ctrl;
 	ULONG				intid;
 
 	Ddim_Print( ("ct_start_recv_dma\n") );
@@ -384,55 +394,55 @@ static kint32 ctStartRecvDmaNormal(CtDdUart2 *self, kuint32 cbflg)
 	Ddim_Print( ("data_addr = %p\n",		(kuchar*)self->data_addr) );
 	Ddim_Print( ("data_num  = 0x%x\n",		(kuint32)self->data_num) );
 
-	memset(&uart_mng, 0, sizeof(T_DD_UART_MNG));
-	memset(&fifo_ctrl, 0, sizeof(T_DD_UART_FIFO_CTRL));
+	memset(&uart_mng, 0, sizeof(DdUartMng));
+	memset(&fifo_ctrl, 0, sizeof(DdUartFifoCtrl));
 
 	/* Control */
-	uart_mng.baud_rate			= self->baud_rate;
-	uart_mng.psend_callback		= NULL;
-	uart_mng.preceive_callback	= NULL;
-	uart_mng.receive_buff_addr	= NULL;
-	uart_mng.receive_buff_size	= 0;
-	uart_mng.send_buff_addr		= NULL;
-	uart_mng.send_buff_size		= 0;
-	uart_mng.auto_echo			= E_DD_UART_AUTO_ECHO_OFF;
-	uart_mng.save_buff			= E_DD_UART_SAVE2BUFFER_DIS;
-	uart_mng.mode				= E_DD_UART_MODE_NORMAL;
-	uart_mng.bit_direction		= E_DD_UART_BIT_DIR_LSB_FIRST;
-	uart_mng.stop_bit_length	= E_DD_UART_STOP_BIT_1;
-	uart_mng.data_length		= E_DD_UART_DATA_LENGTH_8;
-	uart_mng.parity_bit			= E_DD_UART_PARITY_BIT_NONE;
+	uart_mng.baudRate			= self->baud_rate;
+	uart_mng.psendCallback		= NULL;
+	uart_mng.preceiveCallback	= NULL;
+	uart_mng.receiveBuffAddr	= NULL;
+	uart_mng.receiveBuffSize	= 0;
+	uart_mng.sendBuffAddr		= NULL;
+	uart_mng.sendBuffSize		= 0;
+	uart_mng.autoEcho			= DdUart_AUTO_ECHO_OFF;
+	uart_mng.saveBuff			= DdUart_SAVE2BUFFER_DIS;
+	uart_mng.mode				= DdUart_MODE_NORMAL;
+	uart_mng.bitDirection		= DdUart_BIT_DIR_LSB_FIRST;
+	uart_mng.stopBitLength	= DdUart_STOP_BIT_1;
+	uart_mng.dataLength		= DdUart_DATA_LENGTH_8;
+	uart_mng.parityBit			= DdUart_PARITY_BIT_NONE;
 
 	fifo_ctrl.fsel				= 0;
 	fifo_ctrl.fe1				= 1;
 	fifo_ctrl.fe2				= 1;
 	fifo_ctrl.flste				= 0;
 	fifo_ctrl.fset				= 0;
-//	fifo_ctrl.fbyte_recv		= 128;
-	fifo_ctrl.fbyte_recv		= 64;
-	uart_mng.fifo_ctrl			= &fifo_ctrl;
+//	fifo_ctrl.fbyteRecv		= 128;
+	fifo_ctrl.fbyteRecv		= 64;
+	uart_mngfifoCtrl			= &fifo_ctrl;
 
 	if(cbflg != 0){
-		uart_mng.send_dma_callback	= ct_dd_uart_send_dma_callback_cb;
-		uart_mng.recv_dma_callback	= ct_dd_uart_recv_dma_callback_cb;
+		uart_mngsendDmaCallback	= ct_dd_uart_send_dma_callback_cb;
+		uart_mngrecvDmaCallback	= ct_dd_uart_recv_dma_callback_cb;
 	}
 
-	ret = Dd_UART_Ctrl( gUARTCh, &uart_mng );
+	ret = dd_uart_ctrl( gUARTCh, &uart_mng );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Ctrl error=0x%x\n", ret) );
 		return ret;
 	}
 
-	ret = Dd_UART_Set_Recv_Data_DMA( self->ch, (kuchar*)self->data_addr, (kuint32)self->data_num );
+	ret = dd_uart_colabo_set_recv_data_dma( self->ch, (kuchar*)self->data_addr, (kuint32)self->data_num );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Set_Recv_Data_DMA error=0x%x\n", ret) );
 		return ret;
 	}
 
-	intid = E_DD_GIC_INTID_UART_CH0_RECEPTION_INT + self->ch;
-	Dd_GIC_Ctrl((E_DD_GIC_INTID)intid, 0, -1, 0x2);				/** UART interrupt disable */
+	intid = DdGic_INTID_UART_CH0_RECEPTION_INT + self->ch;
+	dd_gic_ctrl((DdGicIntid)intid, 0, -1, 0x2);				/** UART interrupt disable */
 
-	ret = Dd_UART_Start_Recv_DMA( self->ch, self->dma_ch );
+	ret = dd_uart_colabo_start_recv_dma( self->ch, self->dma_ch );
 	if( ret != D_DDIM_OK ){
 		Ddim_Print( ("Dd_UART_Start_Recv_DMA error=0x%x\n", ret) );
 		return ret;
@@ -462,15 +472,15 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 	// USHORT				baudrate;
 	// kuchar				slave_addr;
 	// ULONG				s_write_pos;
-	T_DD_UART_MNG		uart_mng;
-	E_DD_UART_BAUD_RATE	baud_rate;
+	DdUartMng		uart_mng;
+	DdUartBaudRate	baud_rate;
 	ULONG				data_addr;
 	ULONG				data_num;*/
     if( strcmp(argv[1], "start") == 0 ){
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Start( gUARTCh );
+		self->ret = dd_uart_branch_start( gUARTCh );
 		if (self->ret !=D_DDIM_OK) {
 			Ddim_Print(("UART Start ERR. self->ret=0x%x\n", self->ret));
 		}
@@ -479,7 +489,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Stop( gUARTCh );
+		self->ret = dd_uart_colabo_stop( gUARTCh );
 		if (self->ret !=D_DDIM_OK) {
 			Ddim_Print(("UART Stop ERR. self->ret=0x%x\n", self->ret));
 		}
@@ -488,21 +498,21 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Close( gUARTCh );
+		self->ret = dd_uart_close( gUARTCh );
 		if (self->ret != D_DDIM_OK) {
 			Ddim_Print( ("Dd_UART_Close ERR. self->ret=0x%x\n", self->ret) );
 		}
 
-		self->auto_echo = (E_DD_UART_AUTO_ECHO)( atoi(argv[3]) );
-		self->fifo = (E_DD_UART_AUTO_ECHO)( atoi(argv[4]) );
-		self->send_int = (E_DD_UART_AUTO_ECHO)( atoi(argv[5]) );
-		self->save_buff = (E_DD_UART_SAVE2BUFFER)( atoi(argv[6]) );
+		self->auto_echo = (DdUart_AUTO_ECHO)( atoi(argv[3]) );
+		self->fifo = (DdUart_AUTO_ECHO)( atoi(argv[4]) );
+		self->send_int = (DdUart_AUTO_ECHO)( atoi(argv[5]) );
+		self->save_buff = (DdUart_SAVE2BUFFER)( atoi(argv[6]) );
 		ctUartProcess( self );
 	}
 	else if( strcmp(argv[1], "start_send_dma") == 0 ){
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
-		self->baud_rate = (E_DD_UART_BAUD_RATE)atoi( argv[4] );
+		self->baud_rate = (DdUartBaudRate)atoi( argv[4] );
 		sscanf(argv[5], "%lx", (ULONG*)&(self->data_addr));
 		sscanf(argv[6], "%lx", (ULONG*)&(self->data_num));
 		self->ch = gUARTCh;
@@ -513,7 +523,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 	else if( strcmp(argv[1], "start_recv_dma") == 0 ){
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
-		self->baud_rate = (E_DD_UART_BAUD_RATE)atoi( argv[4] );
+		self->baud_rate = (DdUartBaudRate)atoi( argv[4] );
 		sscanf(argv[5], "%lx", (ULONG*)&(self->data_addr));
 		sscanf(argv[6], "%lx", (ULONG*)&(self->data_num));
 		self->ch = gUARTCh;
@@ -540,7 +550,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Put_Char( gUARTCh, argv[3][0] );
+		self->ret = dd_uart_put_char( gUARTCh, argv[3][0] );
 		if (self->ret != D_DDIM_OK) {
 			Ddim_Print( ("Dd_UART_Put_Char ERR. self->ret=0x%x\n", self->ret) );
 		}
@@ -556,29 +566,29 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
 
-		memset( (kint32*)D_UART_SRC_ADDR, '\0', D_UART_SRC_SIZE);
+		memset( (kint32*)CtDdUart_D_UART_SRC_ADDR, '\0', CtDdUart_D_UART_SRC_SIZE);
 
 		// restart
 		ctUartRestartFifo2(gUARTCh);
 
-		Dd_UART_Set_Str( gUARTCh, 'U' );
-		Dd_UART_Set_Str( gUARTCh, 'A' );
-		Dd_UART_Set_Str( gUARTCh, 'R' );
-		Dd_UART_Set_Str( gUARTCh, 'T' );
-		Dd_UART_Set_Str( gUARTCh, ' ' );
-		Dd_UART_Set_Str( gUARTCh, 'P' );
-		Dd_UART_Set_Str( gUARTCh, 'U' );
-		Dd_UART_Set_Str( gUARTCh, 'T' );
-		Dd_UART_Set_Str( gUARTCh, ' ' );
-		Dd_UART_Set_Str( gUARTCh, 'D' );
-		Dd_UART_Set_Str( gUARTCh, 'M' );
-		Dd_UART_Set_Str( gUARTCh, 'A' );
-		Dd_UART_Set_Str( gUARTCh, ' ' );
-		Dd_UART_Set_Str( gUARTCh, 'T' );
-		Dd_UART_Set_Str( gUARTCh, 'E' );
-		Dd_UART_Set_Str( gUARTCh, 'S' );
-		Dd_UART_Set_Str( gUARTCh, 'T' );
-		Dd_UART_Set_Str( gUARTCh, '\n' );
+		dd_uart_branch_set_str( gUARTCh, 'U' );
+		dd_uart_branch_set_str( gUARTCh, 'A' );
+		dd_uart_branch_set_str( gUARTCh, 'R' );
+		dd_uart_branch_set_str( gUARTCh, 'T' );
+		dd_uart_branch_set_str( gUARTCh, ' ' );
+		dd_uart_branch_set_str( gUARTCh, 'P' );
+		dd_uart_branch_set_str( gUARTCh, 'U' );
+		dd_uart_branch_set_str( gUARTCh, 'T' );
+		dd_uart_branch_set_str( gUARTCh, ' ' );
+		dd_uart_branch_set_str( gUARTCh, 'D' );
+		dd_uart_branch_set_str( gUARTCh, 'M' );
+		dd_uart_branch_set_str( gUARTCh, 'A' );
+		dd_uart_branch_set_str( gUARTCh, ' ' );
+		dd_uart_branch_set_str( gUARTCh, 'T' );
+		dd_uart_branch_set_str( gUARTCh, 'E' );
+		dd_uart_branch_set_str( gUARTCh, 'S' );
+		dd_uart_branch_set_str( gUARTCh, 'T' );
+		dd_uart_branch_set_str( gUARTCh, '\n' );
 
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
@@ -591,35 +601,35 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
 
-		memset( (kint32*)D_UART_SRC_ADDR, '\0', D_UART_SRC_SIZE);
+		memset( (kint32*)CtDdUart_D_UART_SRC_ADDR, '\0', CtDdUart_D_UART_SRC_SIZE);
 
 		// restart
 		ctUartRestartFifo(gUARTCh);
 
 		for(self->count = 0; self->count < 4095; (self->count)++) {
 			if (self->count == 4094) {
-				Dd_UART_Set_Str( gUARTCh, 'E' );
+				dd_uart_branch_set_str( gUARTCh, 'E' );
 			}
 			else {
-				Dd_UART_Set_Str( gUARTCh, 'A' );
+				dd_uart_branch_set_str( gUARTCh, 'A' );
 			}
 		}
 
-		Dd_UART_Set_Str( gUARTCh, '\n' );
+		dd_uart_branch_set_str( gUARTCh, '\n' );
 
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
 			return ;
 		}
 
-		Dd_UART_Set_Str( gUARTCh, 'B' );
+		dd_uart_branch_set_str( gUARTCh, 'B' );
 
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
 			return ;
 		}
 
-		Dd_UART_Set_Str( gUARTCh, '\n' );
+		dd_uart_branch_set_str( gUARTCh, '\n' );
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
 			return ;
@@ -631,12 +641,12 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
 
-		memset( (kint32*)D_UART_SRC_ADDR, '\0', D_UART_SRC_SIZE);
+		memset( (kint32*)CtDdUart_D_UART_SRC_ADDR, '\0', CtDdUart_D_UART_SRC_SIZE);
 
 		// restart
 		ctUartRestartFifo(gUARTCh);
 
-		Dd_UART_Set_Str( gUARTCh, 'B' );
+		dd_uart_branch_set_str( gUARTCh, 'B' );
 
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
@@ -645,10 +655,10 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 
 		for(self->count = 0; self->count < 4095; (self->count)++) {
 			if (self->count == 4094) {
-				Dd_UART_Set_Str( gUARTCh, 'E' );
+				dd_uart_branch_set_str( gUARTCh, 'E' );
 			}
 			else {
-				Dd_UART_Set_Str( gUARTCh, 'A' );
+				dd_uart_branch_set_str( gUARTCh, 'A' );
 			}
 		}
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
@@ -656,7 +666,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 			return ;
 		}
 
-		Dd_UART_Set_Str( gUARTCh, '\n' );
+		dd_uart_branch_set_str( gUARTCh, '\n' );
 		self->ret = ctUartDmaSendProcess( gUARTCh, self );
 		if( self->ret != D_DDIM_OK ){
 			return ;
@@ -668,7 +678,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
 
-		memset( (kint32*)D_UART_SRC_ADDR, '\0', D_UART_SRC_SIZE);
+		memset( (kint32*)CtDdUart_D_UART_SRC_ADDR, '\0', CtDdUart_D_UART_SRC_SIZE);
 
 		// restart
 		ctUartRestartFifo(gUARTCh);
@@ -683,19 +693,19 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		gUARTCh = atoi( argv[2] );
 		self->dma_ch = atoi( argv[3] );
 
-		memset( (kint32*)D_UART_SRC_ADDR, '\0', D_UART_SRC_SIZE);
+		memset( (kint32*)CtDdUart_D_UART_SRC_ADDR, '\0', CtDdUart_D_UART_SRC_SIZE);
 
 		// restart
 		ctUartRestartFifo2(gUARTCh);
 
 		for(self->count = 0; self->count < 3000; (self->count)++) {
-			Dd_UART_Set_Str( gUARTCh, 'A' );
+			dd_uart_branch_set_str( gUARTCh, 'A' );
 			if (self->count == 2999) {
-				Dd_UART_Set_Str( gUARTCh, ' ' );
-				Dd_UART_Set_Str( gUARTCh, 'E' );
-				Dd_UART_Set_Str( gUARTCh, 'N' );
-				Dd_UART_Set_Str( gUARTCh, 'D' );
-				Dd_UART_Set_Str( gUARTCh, '\n' );
+				dd_uart_branch_set_str( gUARTCh, ' ' );
+				dd_uart_branch_set_str( gUARTCh, 'E' );
+				dd_uart_branch_set_str( gUARTCh, 'N' );
+				dd_uart_branch_set_str( gUARTCh, 'D' );
+				dd_uart_branch_set_str( gUARTCh, '\n' );
 			}
 		}
 
@@ -705,13 +715,13 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		}
 
 		for(self->count = 0; self->count < 3000; (self->count)++) {
-			Dd_UART_Set_Str( gUARTCh, 'B' );
+			dd_uart_branch_set_str( gUARTCh, 'B' );
 			if (self->count == 2999) {
-				Dd_UART_Set_Str( gUARTCh, ' ' );
-				Dd_UART_Set_Str( gUARTCh, 'E' );
-				Dd_UART_Set_Str( gUARTCh, 'N' );
-				Dd_UART_Set_Str( gUARTCh, 'D' );
-				Dd_UART_Set_Str( gUARTCh, '\n' );
+				dd_uart_branch_set_str( gUARTCh, ' ' );
+				dd_uart_branch_set_str( gUARTCh, 'E' );
+				dd_uart_branch_set_str( gUARTCh, 'N' );
+				dd_uart_branch_set_str( gUARTCh, 'D' );
+				dd_uart_branch_set_str( gUARTCh, '\n' );
 			}
 		}
 
@@ -726,7 +736,7 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		self->length = atoi( argv[4] );
 
 		for(self->count = 0; self->count < self->length; (self->count)++) {
-			self->ret = Dd_UART_Set_Str( gUARTCh, argv[3][0] );
+			self->ret = dd_uart_branch_set_str( gUARTCh, argv[3][0] );
 			if( self->ret != D_DDIM_OK ){
 				Ddim_Print( ("Dd_UART_Set_Str error=0x%x\n", self->ret) );
 				return ;
@@ -743,8 +753,8 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Put_Str( gUARTCh );
-		self->ret = Dd_UART_Put_Str( gUARTCh );
+		self->ret = dd_uart_branch_put_str( gUARTCh );
+		self->ret = dd_uart_branch_put_str( gUARTCh );
 		if( self->ret != D_DDIM_OK ){
 			Ddim_Print( ("Dd_UART_Put_Str error=0x%x\n", self->ret) );
 			return ;
@@ -754,64 +764,64 @@ void ct_dd_uart2_main_b( CtDdUart2 *self,int argc, char** argv )
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Get_Char( gUARTCh, &self->data );
+		self->ret = dd_uart_branch_get_char( gUARTCh, &self->data );
 		if( self->ret != D_DDIM_OK ){
 			Ddim_Print( ("Dd_UART_Get_Char error=0x%x\n", self->ret) );
 			return ;
 		}
 	}
 	else if ( strcmp(argv[1], "get_ctrl") == 0 ){
-		T_DD_UART_FIFO_CTRL fifo_ctrl;
+		DdUartFifoCtrl fifo_ctrl;
 
-		self->uart_mng.fifo_ctrl = &fifo_ctrl;
+		self->uart_mngfifoCtrl = &fifo_ctrl;
 
 		/* ch number */
 		self->ch = atoi( argv[2] );
 
-		self->ret = Dd_UART_Get_Ctrl(self->ch, &self->uart_mng);
+		self->ret = dd_uart_branch_get_ctrl(self->ch, &self->uart_mng);
 		if( self->ret != D_DDIM_OK ){
 			Ddim_Print( ("Dd_UART_Get_Ctrl error=0x%x\n", self->ret) );
 			return ;
 		}
 
 		Ddim_Print(("UART Ctrl_Get OK.\n"));
-		Ddim_Print(("UART baud_rate             =%d\n", self->uart_mng.baud_rate));
-		Ddim_Print(("UART psend_callback        =%p\n", self->uart_mng.psend_callback));
-		Ddim_Print(("UART preceive_callback     =%p\n", self->uart_mng.preceive_callback));
-		Ddim_Print(("UART receive_buff_addr     =%p\n", self->uart_mng.receive_buff_addr));
-		Ddim_Print(("UART receive_buff_size     =%d\n", self->uart_mng.receive_buff_size));
-		Ddim_Print(("UART send_buff_addr        =%p\n", self->uart_mng.send_buff_addr));
-		Ddim_Print(("UART send_buff_size        =%d\n", self->uart_mng.send_buff_size));
-		Ddim_Print(("UART auto_echo             =%d\n", self->uart_mng.auto_echo));
-		Ddim_Print(("UART save_buff             =%d\n", self->uart_mng.save_buff));
+		Ddim_Print(("UART baud_rate             =%d\n", self->uart_mng.baudRate));
+		Ddim_Print(("UART psendCallback        =%p\n", self->uart_mng.psendCallback));
+		Ddim_Print(("UART preceiveCallback     =%p\n", self->uart_mng.preceiveCallback));
+		Ddim_Print(("UART receiveBuffAddr     =%p\n", self->uart_mng.receiveBuffAddr));
+		Ddim_Print(("UART receiveBuffSize     =%d\n", self->uart_mng.receiveBuffSize));
+		Ddim_Print(("UART sendBuffAddr        =%p\n", self->uart_mng.sendBuffAddr));
+		Ddim_Print(("UART sendBuffSize        =%d\n", self->uart_mng.sendBuffSize));
+		Ddim_Print(("UART autoEcho             =%d\n", self->uart_mng.autoEcho));
+		Ddim_Print(("UART saveBuff             =%d\n", self->uart_mng.saveBuff));
 		Ddim_Print(("UART mode                  =%d\n", self->uart_mng.mode));
-		Ddim_Print(("UART bit_direction         =%d\n", self->uart_mng.bit_direction));
-		Ddim_Print(("UART stop_bit_length       =%d\n", self->uart_mng.stop_bit_length));
-		Ddim_Print(("UART data_length           =%d\n", self->uart_mng.data_length));
-		Ddim_Print(("UART parity_bit            =%d\n", self->uart_mng.parity_bit));
-		Ddim_Print(("UART ext_clk               =%d\n", self->uart_mng.ext_clk));
-		Ddim_Print(("UART inv_nrz               =%d\n", self->uart_mng.inv_nrz));
-		Ddim_Print(("UART flow_enable           =%d\n", self->uart_mng.flow_enable));
-		Ddim_Print(("UART fifo_ctrl->fsel       =%d\n", self->uart_mng.fifo_ctrl->fsel));
-		Ddim_Print(("UART fifo_ctrl->flste      =%d\n", self->uart_mng.fifo_ctrl->flste));
-		Ddim_Print(("UART fifo_ctrl->fset       =%d\n", self->uart_mng.fifo_ctrl->fset));
-		Ddim_Print(("UART fifo_ctrl->fe2        =%d\n", self->uart_mng.fifo_ctrl->fe2));
-		Ddim_Print(("UART fifo_ctrl->fe1        =%d\n", self->uart_mng.fifo_ctrl->fe1));
-		Ddim_Print(("UART fifo_ctrl->fbyte_recv =%d\n", self->uart_mng.fifo_ctrl->fbyte_recv));
-		Ddim_Print(("UART send_dma_callback     =%p\n", self->uart_mng.send_dma_callback));
-		Ddim_Print(("UART recv_dma_callback     =%p\n", self->uart_mng.recv_dma_callback));
+		Ddim_Print(("UART bitDirection         =%d\n", self->uart_mng.bitDirection));
+		Ddim_Print(("UART stopBitLength       =%d\n", self->uart_mng.stopBitLength));
+		Ddim_Print(("UART dataLength           =%d\n", self->uart_mng.dataLength));
+		Ddim_Print(("UART parityBit            =%d\n", self->uart_mng.parityBit));
+		Ddim_Print(("UART extClk               =%d\n", self->uart_mng.extClk));
+		Ddim_Print(("UART invNrz               =%d\n", self->uart_mng.invNrz));
+		Ddim_Print(("UART flowEnable           =%d\n", self->uart_mng.flowEnable));
+		Ddim_Print(("UART fifo_ctrl->fsel       =%d\n", self->uart_mngfifoCtrl->fsel));
+		Ddim_Print(("UART fifo_ctrl->flste      =%d\n", self->uart_mngfifoCtrl->flste));
+		Ddim_Print(("UART fifo_ctrl->fset       =%d\n", self->uart_mngfifoCtrl->fset));
+		Ddim_Print(("UART fifo_ctrl->fe2        =%d\n", self->uart_mngfifoCtrl->fe2));
+		Ddim_Print(("UART fifo_ctrl->fe1        =%d\n", self->uart_mngfifoCtrl->fe1));
+		Ddim_Print(("UART fifo_ctrl->fbyteRecv =%d\n", self->uart_mngfifoCtrl->fbyteRecv));
+		Ddim_Print(("UART send_dma_callback     =%p\n", self->uart_mngsendDmaCallback));
+		Ddim_Print(("UART recv_dma_callback     =%p\n", self->uart_mngrecvDmaCallback));
 	}
 	else if ( strcmp(argv[1], "simple") == 0 ){
 		/* channel */
 		gUARTCh = atoi( argv[2] );
 
-		self->ret = Dd_UART_Close( gUARTCh );
+		self->ret = dd_uart_close( gUARTCh );
 		if (self->ret != D_DDIM_OK) {
 			Ddim_Print( ("Dd_UART_Close ERR. self->ret=0x%x\n", self->ret) );
 		}
 
-		self->auto_echo = (E_DD_UART_AUTO_ECHO)( atoi(argv[3]) );
-		self->save_buff = (E_DD_UART_SAVE2BUFFER)( atoi(argv[4]) );
+		self->auto_echo = (DdUart_AUTO_ECHO)( atoi(argv[3]) );
+		self->save_buff = (DdUart_SAVE2BUFFER)( atoi(argv[4]) );
 		self->ch = gUARTCh;
 		ctUartSimpleProcess( self );
 	}

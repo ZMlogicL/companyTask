@@ -28,7 +28,7 @@ struct _CtDdSpiTest
 {
 	KObject parent;
 	kuint32 gctDdSpiTransNum;
-	E_DD_SPI_BIT_LEN gctDdSpiBitLen;
+	DdSpiBitLen gctDdSpiBitLen;
 	kint32 gctDdSpiResult;
 	kuchar gctDdSpiAsync;
 };

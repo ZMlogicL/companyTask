@@ -63,7 +63,7 @@ static void finalize_od(GObject *object)
 Get Frequency of eMMC clock
 @retval	Hz
 */
-ULONG dd_topone_get_emmcclk(VOID)
+ULONG dd_topone_get_emmcclk(DdTopone *self)
 {
 	// 0:187.5MHz(=1500MHz/8)
 	// 1:166.666MHz(=1500MHz/9)
@@ -78,7 +78,7 @@ ULONG dd_topone_get_emmcclk(VOID)
 Get Frequency of NAND Flash clock
 @retval	Hz
 */
-ULONG dd_topone_get_nfclk(VOID)
+ULONG dd_topone_get_nfclk(DdTopone *self)
 {
 	// 0:100MHz 	(=1600MHz/16)
 	// 1:80MHz 		(=1600MHz/20)
@@ -104,7 +104,7 @@ ULONG dd_topone_get_nfclk(VOID)
 Get Frequency of UHS2 clock
 @retval	Hz
 */
-ULONG dd_topone_get_uhs2clk(VOID)
+ULONG dd_topone_get_uhs2clk(DdTopone *self)
 {
 	// 0: 51.851MHz(=1400MHz/27)
 	// 1: 46.666MHz(=1400MHz/30)
@@ -132,7 +132,7 @@ ULONG dd_topone_get_uhs2clk(VOID)
 Get Frequency of UHS1 ch2 clock
 @retval	Hz
 */
-ULONG dd_topone_get_uhs1clk2(VOID)
+ULONG dd_topone_get_uhs1clk2(DdTopone *self)
 {
 	// 2: 400MHz(=1600MHz/4)
 	// 3: 200MHz(=1600MHz/8)
@@ -158,7 +158,7 @@ ULONG dd_topone_get_uhs1clk2(VOID)
 Get Frequency of UHS1 ch1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_uhs1clk1(VOID)
+ULONG dd_topone_get_uhs1clk1(DdTopone *self)
 {
 	// 3: 200MHz(=1600MHz/8)
 	// 4: 100MHz(=1600MHz/16)
@@ -183,7 +183,7 @@ ULONG dd_topone_get_uhs1clk1(VOID)
 Get Frequency of UHS1 ch0 clock
 @retval	Hz
 */
-ULONG dd_topone_get_uhs1clk0(VOID)
+ULONG dd_topone_get_uhs1clk0(DdTopone *self)
 {
 	// 0: 800MHz(=1600MHz/2)
 	// 1: 533.333MHz (=1600MHz/3)
@@ -211,7 +211,7 @@ ULONG dd_topone_get_uhs1clk0(VOID)
 Get Frequency of Cortex-A7 MPCore Peri clock
 @retval	Hz
 */
-ULONG dd_topone_get_rclk(VOID)
+ULONG dd_topone_get_rclk(DdTopone *self)
 {
 	// 0:54MHz(=864MHz/16)
 	// 1:27MHz(=864MHz/32)
@@ -226,7 +226,7 @@ ULONG dd_topone_get_rclk(VOID)
 Get Frequency of RAW clock
 @retval	Hz
 */
-ULONG dd_topone_get_rawclk(VOID)
+ULONG dd_topone_get_rawclk(DdTopone *self)
 {
 	// 0: 200MHz(=1600MHz/8)
 	// 1: 160MHz(=1600MHz/10)
@@ -241,7 +241,7 @@ ULONG dd_topone_get_rawclk(VOID)
 Get Frequency of DISP HIF clock
 @retval	Hz
 */
-ULONG dd_topone_get_hifclk(VOID)
+ULONG dd_topone_get_hifclk(DdTopone *self)
 {
 	// 0:594MHz(=1188MHz/2)
 	// 1:297MHz(=1188MHz/4)
@@ -266,7 +266,7 @@ ULONG dd_topone_get_hifclk(VOID)
 Get Frequency of DISP MIF clock
 @retval	Hz
 */
-ULONG dd_topone_get_mifclk(VOID)
+ULONG dd_topone_get_mifclk(DdTopone *self)
 {
 	// 0: 169.714MHz (=1188MHz/7)
 	// 1: 148.5MHz (=1188MHz/8)
@@ -293,7 +293,7 @@ ULONG dd_topone_get_mifclk(VOID)
 Get Frequency of IPU system clock
 @retval	Hz
 */
-ULONG dd_topone_get_ipuclk(VOID)
+ULONG dd_topone_get_ipuclk(DdTopone *self)
 {
 	// 0: 400MHz (=1600MHz/4/(8/8))
 	// 1: 50MHz  (=1600MHz/4/(1/8))
@@ -312,7 +312,7 @@ ULONG dd_topone_get_ipuclk(VOID)
 Get Frequency of IPU TME clock
 @retval	Hz
 */
-ULONG dd_topone_get_iputmeclk(VOID)
+ULONG dd_topone_get_iputmeclk(DdTopone *self)
 {
 	// 0:500MHz   (=1500MHz/3/(8/8))
 	// 1:62.5MHz  (=1500MHz/3/(1/8))
@@ -330,7 +330,7 @@ ULONG dd_topone_get_iputmeclk(VOID)
 Get Frequency of GPU clock
 @retval	Hz
 */
-ULONG dd_topone_get_gpuclk(VOID)
+ULONG dd_topone_get_gpuclk(DdTopone *self)
 {
 	// 0:466.666MHz(=1400MHz/3/(8/8))
 	// 1:58.333MHz(=1400MHz/3/(1/8))
@@ -349,7 +349,7 @@ ULONG dd_topone_get_gpuclk(VOID)
 Get Frequency of JPEG clock
 @retval	Hz
 */
-ULONG dd_topone_get_jpegclk(VOID)
+ULONG dd_topone_get_jpegclk(DdTopone *self)
 {
 	// 0:200MHz(=1600MHz/8/(8/8))
 	// 1:25MHz(=1600MHz/8/(1/8))
@@ -368,7 +368,7 @@ ULONG dd_topone_get_jpegclk(VOID)
 Get Frequency of ELA clock
 @retval	Hz
 */
-ULONG dd_topone_get_elaclk(VOID)
+ULONG dd_topone_get_elaclk(DdTopone *self)
 {
 	// 0:300MHz(=1200MHz/4)
 	// 1:200MHz(=1200MHz/6)
@@ -406,7 +406,7 @@ ULONG dd_topone_get_hevencsel(VOID)
 Get type of image pipe macro Select
 @retval	Select value
 */
-ULONG dd_topone_get_pipesel(VOID)
+ULONG dd_topone_get_pipesel(DdTopone *self)
 {
 	// 10:Use PLL02 (300MHz�`50MHz)
 	// 11:Use PLL01 (266.666MHz�`66.666MHz)
@@ -418,7 +418,7 @@ ULONG dd_topone_get_pipesel(VOID)
 Get Frequency of SENSOR clock
 @retval	Hz
 */
-ULONG dd_topone_get_senclk(VOID)
+ULONG dd_topone_get_senclk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -446,7 +446,7 @@ ULONG dd_topone_get_senclk(VOID)
 Get Frequency of SENSOR clock
 @retval	Hz
 */
-ULONG dd_topone_get_senmskclk(VOID)
+ULONG dd_topone_get_senmskclk(DdTopone *self)
 {
 	// 0:100MHz(=1600MHz/16)
 	// 1:80MHz(=1600MHz/20)
@@ -459,7 +459,7 @@ ULONG dd_topone_get_senmskclk(VOID)
 Get Frequency of IIP clock
 @retval	Hz
 */
-ULONG dd_topone_get_iipclk(VOID)
+ULONG dd_topone_get_iipclk(DdTopone *self)
 {
 	// 0:300MHz(=1200MHz/4)
 	// 1:200MHz(=1200MHz/6)
@@ -477,7 +477,7 @@ ULONG dd_topone_get_iipclk(VOID)
 Get Frequency of STAT clock
 @retval	Hz
 */
-ULONG dd_topone_get_pasclk(VOID)
+ULONG dd_topone_get_pasclk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -505,7 +505,7 @@ ULONG dd_topone_get_pasclk(VOID)
 Get Frequency of HEVC IPP clock
 @retval	Hz
 */
-ULONG dd_topone_get_ippclk(VOID)
+ULONG dd_topone_get_ippclk(DdTopone *self)
 {
 	// 0:800MHz    (=1600MHz/2)
 	// 1:533.333MHz(=1600MHz/3)
@@ -538,7 +538,7 @@ ULONG dd_topone_get_ippclk(VOID)
 Get Frequency of HEVC PXF clock
 @retval	Hz
 */
-ULONG dd_topone_get_pxfclk(VOID)
+ULONG dd_topone_get_pxfclk(DdTopone *self)
 {
 	// 0: 700MHz(=1400MHz/2)
 	// 1: 280MHz(=1400MHz/5)
@@ -572,7 +572,7 @@ ULONG dd_topone_get_pxfclk(VOID)
 Get Frequency of HEVC ENC clock
 @retval	Hz
 */
-ULONG dd_topone_get_hevencclk(VOID)
+ULONG dd_topone_get_hevencclk(DdTopone *self)
 {
 	// 0:466.666MHz(=1400MHz/3)
 	// 1:350MHz(=1400MHz/4)
@@ -604,7 +604,7 @@ ULONG dd_topone_get_hevencclk(VOID)
 Get Frequency of HEVC VDF clock
 @retval	Hz
 */
-ULONG dd_topone_get_vdfclk(VOID)
+ULONG dd_topone_get_vdfclk(DdTopone *self)
 {
 	// 0: 700MHz(=1400MHz/2)
 	// 1: 280MHz(=1400MHz/5)
@@ -634,7 +634,7 @@ ULONG dd_topone_get_vdfclk(VOID)
 Get Frequency of SRO pipe1 input2 clock
 @retval	Hz
 */
-ULONG dd_topone_get_sro1clk_2(VOID)
+ULONG dd_topone_get_sro1clk_2(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -663,7 +663,7 @@ ULONG dd_topone_get_sro1clk_2(VOID)
 Get Frequency of R2Y pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_r2y1clk(VOID)
+ULONG dd_topone_get_r2y1clk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -681,7 +681,7 @@ ULONG dd_topone_get_r2y1clk(VOID)
 Get Frequency of LTM pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_ltm1clk(VOID)
+ULONG dd_topone_get_ltm1clk(DdTopone *self)
 {
 	// 0:  300MHz(=1200MHz/4)
 	// 1:  200MHz(=1200MHz/6)
@@ -728,7 +728,7 @@ ULONG dd_topone_get_ltm1clk(VOID)
 Get Frequency of B2R pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_b2r1clk(VOID)
+ULONG dd_topone_get_b2r1clk(DdTopone *self)
 {
 	// 0:  300MHz(=1200MHz/4)
 	// 1:  200MHz(=1200MHz/6)
@@ -774,7 +774,7 @@ ULONG dd_topone_get_b2r1clk(VOID)
 Get Frequency of CNR pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_cnr1clk(VOID)
+ULONG dd_topone_get_cnr1clk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -809,7 +809,7 @@ ULONG dd_topone_get_cnr1clk(VOID)
 Get Frequency of SRO pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_sro1clk(VOID)
+ULONG dd_topone_get_sro1clk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -827,7 +827,7 @@ ULONG dd_topone_get_sro1clk(VOID)
 Get Frequency of B2B pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_b2b1clk(VOID)
+ULONG dd_topone_get_b2b1clk(DdTopone *self)
 {
 	// 0:  300MHz(=1200MHz/4)
 	// 1:  200MHz(=1200MHz/6)
@@ -866,7 +866,7 @@ ULONG dd_topone_get_b2b1clk(VOID)
 Get Frequency of LTMRBK pipe1 clock
 @retval	Hz
 */
-ULONG dd_topone_get_ltmrbk1clk(VOID)
+ULONG dd_topone_get_ltmrbk1clk(DdTopone *self)
 {
 	// 0:  300MHz(=1200MHz/4)
 	// 1:  200MHz(=1200MHz/6)
@@ -905,7 +905,7 @@ ULONG dd_topone_get_ltmrbk1clk(VOID)
 Get Frequency of SRO pipe2 input2 clock
 @retval	Hz
 */
-ULONG dd_topone_get_sro2clk_2(VOID)
+ULONG dd_topone_get_sro2clk_2(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -933,7 +933,7 @@ ULONG dd_topone_get_sro2clk_2(VOID)
 Get Frequency of R2Y pipe2 clock
 @retval	Hz
 */
-ULONG dd_topone_get_r2y2clk(VOID)
+ULONG dd_topone_get_r2y2clk(DdTopone *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)

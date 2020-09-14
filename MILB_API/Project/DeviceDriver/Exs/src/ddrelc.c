@@ -3,7 +3,7 @@
 *@date                :2020-08-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -23,13 +23,13 @@
 #include "ddrelc.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(DdRelc, dd_relc);
-#define DD_RELC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), DdRelcPrivate, DD_TYPE_RELC))
+G_DEFINE_TYPE(DdRelc, dd_relc, G_TYPE_OBJECT);
+#define DD_RELC_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), DD_TYPE_RELC, DdRelcPrivate));
 
 
 struct _DdRelcPrivate
 {
-	kint a;
+	gint a;
 };
 
 
@@ -51,21 +51,56 @@ struct _DdRelcPrivate
 /* Global Data																*/
 /*----------------------------------------------------------------------	*/
 /**< Callback function pointer */
-static VpCallback S_GRELC_CALLBACK = NULL;
+static VpCallbackFunc S_GRELC_CALLBACK = NULL;
 static volatile TDdRelcDecInfo S_GRELC_DEC_INFO;
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  *IMPL
  */
-static void dd_relc_constructor(DdRelc *self)
+static void 		dd_relc_class_init(DdRelcClass *klass)
 {
-//	DdRelcPrivate *priv = DD_RELC_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(DdRelcPrivate));
 }
 
-static void dd_relc_destructor(DdRelc *self)
+static void 		dd_relc_init(DdRelc *self)
 {
-//	DdRelcPrivate *priv = DD_RELC_GET_PRIVATE(self);
+	DdRelcPrivate *priv = DD_RELC_GET_PRIVATE(self);
+	self->ddexs = dd_exs_get();
+	self->ddgpv = dd_gpv_get();
+	self->ddimUserCustom = ddim_user_custom_new();
+}
+static void 		dispose_od(GObject *object)
+{
+	DdRelcPrivate *priv = DD_RELC_GET_PRIVATE(object);
+	DdRelc *self = dd_relc_new();
+	if(self->ddexs){
+		g_object_unref(self->ddexs);
+		self->ddexs = NULL;
+	}
+	if(self->ddgpv){
+		g_object_unref(self->ddgpv);
+		self->ddgpv = NULL;
+	}
+	if(self->ddimUserCustom){
+		g_object_unref(self->ddimUserCustom);
+		self->ddimUserCustom = NULL;
+	}
+
+	G_OBJECT_CLASS(dd_relc_parent_class) -> dispose(object);
 }
 
+static void 		finalize_od(GObject *object)
+{
+	DdRelcPrivate *priv = DD_RELC_GET_PRIVATE(object);
+	G_OBJECT_CLASS(dd_relc_parent_class) -> dispose(object);
+}
 /**
  * PUBLIC
  */
@@ -83,24 +118,24 @@ static void dd_relc_destructor(DdRelc *self)
  *@param[in] readHprot			RELC data read side HPROT (default:0x0B)
  *@remarks This function performs interrupt permission and soft reset.
  */
-extern	void dd_relc_init(DdRelc*self, kuchar writeHprot, kuchar readHprot )
+extern	void dd_relc_init(DdRelc*self, guchar writeHprot, guchar readHprot )
 {
-	dd_exs_set_ram_pd_ctrl_relc(NULL, 1);
-	dd_exs_set_relc_soft_reset(NULL, 1);
-	Dd_GPV_Set_ARC_Remap(DdGpv_REMAP_SD_RELC_HDMAC_USB2, 1);
+	dd_exs_set_ram_pd_ctrl_relc(self->ddexs, 1);
+	dd_exs_set_relc_soft_reset(self->ddexs, 1);
+	dd_gpv_set_arc_remap(self->ddgpv, DdGpv_REMAP_SD_RELC_HDMAC_USB2, 1);
 
 #ifdef CO_ACT_CLOCK
 	Dd_Exs_Set_RELC_BUS_CLOCK_Stop_Ctrl(0);
 #endif //CO_ACT_CLOCK
 
 	/* Set the RELC expanded data write side HPROT setting */
-	Dd_Exs_Set_RELC_HPROT_Write(writeHprot);
+	dd_exs_set_relc_hprot_write(self->ddexs, writeHprot);
 	/* Set the RELC expanded data read side HPROT setting */
-	Dd_Exs_Set_RELC_HPROT_Read(readHprot);
+	dd_exs_set_relc_hprot_read(self->ddexs, readHprot);
 
 	/* SRST:soft reset on */
 	ioRelc.relcReset.bit.srst = 0x00000001;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 	S_GRELC_CALLBACK = NULL;
 
 	while (1) {
@@ -111,7 +146,7 @@ extern	void dd_relc_init(DdRelc*self, kuchar writeHprot, kuchar readHprot )
 
 	/* Interrupt permission */
 	ioRelc.relcIntEn.word = 0x0000000F;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	/* Number of bytes read*/
 	S_GRELC_DEC_INFO.readByte = 0;
@@ -135,18 +170,18 @@ extern	void dd_relc_init(DdRelc*self, kuchar writeHprot, kuchar readHprot )
  * @return DdRelc_D_DD_RELC_OK					OK
  * @return DdRelc_D_DD_RELC_EXT_LOCK_NG		Lock Error (System Using RELC)
 */
-kint32 dd_relc_open(DdRelc*self)
+gint32 dd_relc_open(DdRelc*self)
 {
-	kint32 ret = DdRelc_D_DD_RELC_OK;
+	gint32 ret = DdRelc_D_DD_RELC_OK;
 
-	if (DDIM_User_Twai_Sem(SID_DD_RELC, D_DDIM_USER_SEM_WAIT_POL) != D_DDIM_USER_E_OK) {
+	if (ddim_user_custom_twai_sem(self->ddimUserCustom, SID_DD_RELC, DdimUserCustom_SEM_WAIT_POL) != DdimUserCustom_E_OK) {
 		ret = DdRelc_D_DD_RELC_EXT_LOCK_NG;
 	}
 
-	dd_exs_set_ram_pd_ctrl_relc(NULL, 0);
+	dd_exs_set_ram_pd_ctrl_relc(self->ddexs, 0);
 
 #ifdef CO_ACT_CLOCK
-	Dd_Exs_Set_RELC_BUS_CLOCK_Stop_Ctrl(0);
+	dd_exs_set_relc_bus_clock_stop_ctrl(self->ddexs, 0);
 #endif //CO_ACT_CLOCK
 
 	return ret;
@@ -158,18 +193,18 @@ kint32 dd_relc_open(DdRelc*self)
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_EXT_LOCK_NG	Lock Error (System Using RELC
 */
-kint32 dd_relc_close(DdRelc*self)
+gint32 dd_relc_close(DdRelc*self)
 {
-	kint32 ret = DdRelc_D_DD_RELC_OK;
+	gint32 ret = DdRelc_D_DD_RELC_OK;
 
-	if (DDIM_User_Sig_Sem(SID_DD_RELC) != D_DDIM_USER_E_OK) {
+	if (ddim_user_custom_sig_sem(self->ddimUserCustom, SID_DD_RELC) != DdimUserCustom_E_OK) {
 		ret = DdRelc_D_DD_RELC_EXT_LOCK_NG;
 	}
 
-	dd_exs_set_ram_pd_ctrl_relc(NULL, 1);
+	dd_exs_set_ram_pd_ctrl_relc(self->ddexs, 1);
 
 #ifdef CO_ACT_CLOCK
-	Dd_Exs_Set_RELC_BUS_CLOCK_Stop_Ctrl(1);
+	dd_exs_set_relc_bus_clock_stop_ctrl(self->ddexs, 1);
 #endif //CO_ACT_CLOCK
 
 	return ret;
@@ -181,26 +216,26 @@ kint32 dd_relc_close(DdRelc*self)
  * @return DdRelc_D_DD_RELC_FLG_CLR_NG		Clear flag is NG
  * @return DdRelc_D_DD_RELC_TIMEOUT		twai_flg is time out
 */
-kint32 dd_relc_start_sync(DdRelc*self)
+gint32 dd_relc_start_sync(DdRelc*self)
 {
 	DdimUserCustom_FLGPTN flgptn;
 	DdimUserCustom_FLGPTN waiptn;
-	kint ercd = 0;
+	gint ercd = 0;
 
 	waiptn = ( DdRelc_D_DD_RELC_INT_END_FLG | DdRelc_D_DD_RELC_INT_ERR_FLG | DdRelc_D_DD_RELC_INT_SLP_FLG );
 
-	ercd = DDIM_User_Clr_Flg( FID_DD_RELC, ~waiptn );
-	if( ercd != D_DDIM_USER_E_OK ) {
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom, FID_DD_RELC, ~waiptn );
+	if( ercd != DdimUserCustom_E_OK ) {
 		Ddim_Print(("I:RELC_Start_Sync() clr_flg error\n"));
 		return DdRelc_D_DD_RELC_FLG_CLR_NG;
 	}
 
 	/* RELC start */
 	ioRelc.relcMode1.bit.prun = 0x00000001;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
-	ercd = DDIM_User_Twai_Flg( FID_DD_RELC, waiptn, D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME );
-	if ( ercd == D_DDIM_USER_E_TMOUT ) {
+	ercd = ddim_user_custom_twai_flg(self->ddimUserCustom, FID_DD_RELC, waiptn, DdimUserCustom_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME );
+	if ( ercd == DdimUserCustom_E_TMOUT ) {
 		Ddim_Print(("I:RELC_Start_Sync() RELC twai_flg timeout\n"));
 		return DdRelc_D_DD_RELC_TIMEOUT;
 	}
@@ -213,21 +248,21 @@ kint32 dd_relc_start_sync(DdRelc*self)
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_FLG_CLR_NG		Clear flag is NG
 */
-kint32 dd_relc_start_async(DdRelc*self)
+gint32 dd_relc_start_async(DdRelc*self)
 {
 	DdimUserCustom_FLGPTN waiptn;
-	kint ercd = 0;
+	gint ercd = 0;
 	waiptn = (DdRelc_D_DD_RELC_INT_END_FLG | DdRelc_D_DD_RELC_INT_ERR_FLG | DdRelc_D_DD_RELC_INT_SLP_FLG );
 
-	ercd = DDIM_User_Clr_Flg( FID_DD_RELC, ~waiptn );
-	if(ercd != D_DDIM_USER_E_OK){
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom, FID_DD_RELC, ~waiptn );
+	if(ercd != DdimUserCustom_E_OK){
 		Ddim_Print(("I:RELC_Start_ASync() clr_flg error\n"));
 		return DdRelc_D_DD_RELC_FLG_CLR_NG;
 	}
 
 	/* RELC start */
 	ioRelc.relcMode1.bit.prun = 0x00000001;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -237,26 +272,26 @@ kint32 dd_relc_start_async(DdRelc*self)
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_TIMEOUT		twai_flg is time out
 */
-kint32 dd_relc_wait_end(DdRelc*self)
+gint32 dd_relc_wait_end(DdRelc*self)
 {
 	DdimUserCustom_FLGPTN flgptn;
 	DdimUserCustom_FLGPTN waiptn;
-	kint ercd = 0;
+	gint ercd = 0;
 
 	waiptn = ( DdRelc_D_DD_RELC_INT_END_FLG | DdRelc_D_DD_RELC_INT_ERR_FLG | DdRelc_D_DD_RELC_INT_SLP_FLG );
 
-	ercd = DDIM_User_Twai_Flg( FID_DD_RELC, waiptn, D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME );
-	if ( ercd == D_DDIM_USER_E_TMOUT ) {
+	ercd = ddim_user_custom_twai_flg(self->ddimUserCustom, FID_DD_RELC, waiptn, DdimUserCustom_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME );
+	if ( ercd == DdimUserCustom_E_TMOUT ) {
 		Ddim_Print(("I:RELC_Wait_End() twai_flg timeout\n"));
 		return DdRelc_D_DD_RELC_TIMEOUT;
 	}
 
 	 /* Number of bytes read	*/
-	S_GRELC_DEC_INFO.readByte = (kushort) ioRelc.relcReadByte.bit.drnm;
+	S_GRELC_DEC_INFO.readByte = (gushort) ioRelc.relcReadByte.bit.drnm;
 	/* Number of bytes written	*/
-	S_GRELC_DEC_INFO.writeByte = (kushort) ioRelc.relcWriteByte.bit.dwnm;
+	S_GRELC_DEC_INFO.writeByte = (gushort) ioRelc.relcWriteByte.bit.dwnm;
 	/* Number of processing blocks	*/
-	S_GRELC_DEC_INFO.procBlock = (kushort) ioRelc.relcBlock.bit.blkn;
+	S_GRELC_DEC_INFO.procBlock = (gushort) ioRelc.relcBlock.bit.blkn;
 	/* Decode the total number of bytes to read	*/
 	S_GRELC_DEC_INFO.decTotalReadBytes = ioRelc.relcInputByte;
 	/* Decode the total number of bytes to write	*/
@@ -274,7 +309,7 @@ void dd_relc_stop(DdRelc*self)
 {
 	/* RELC stop */
 	ioRelc.relcMode1.bit.prun	&= 0x00000000;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 }
 
 /**
@@ -283,7 +318,7 @@ void dd_relc_stop(DdRelc*self)
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn )
+gint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlCmn == NULL ) {
@@ -302,7 +337,7 @@ kint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn 
 	ioRelc.relcMode1.bit.crmd = relcCtrlCmn->contRunMode;
 	/* Sequential Run Number of Times	*/
 	ioRelc.relcSeqNum = relcCtrlCmn->seqNum;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 	/* Callback function pointer	*/
 	S_GRELC_CALLBACK = relcCtrlCmn->callback;
 
@@ -315,7 +350,7 @@ kint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn 
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlReg )
+gint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlReg )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlReg == NULL ) {
@@ -341,7 +376,7 @@ kint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlRe
 	ioRelc.relcOutStartAddr = relcCtrlReg->outStartAddr;
 	/* Output end address	*/
 	ioRelc.relcOutEndAddr = relcCtrlReg->outEndAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -352,7 +387,7 @@ kint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlRe
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtrlDesc )
+gint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtrlDesc )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlDesc == NULL ) {
@@ -363,7 +398,7 @@ kint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtr
 
 	/* descriptor address */
 	ioRelc.relcDescriptorAddr = relcCtrlDesc->descriptorAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -374,7 +409,7 @@ kint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtr
  * @return DdRelc_D_DD_RELC_OK				OK
  * @retval DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_in_start_addr(DdRelc*self, kulong inStartAddr )
+gint32 dd_relc_set_in_start_addr(DdRelc*self, gulong inStartAddr )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( inStartAddr == 0 ) {
@@ -385,7 +420,7 @@ kint32 dd_relc_set_in_start_addr(DdRelc*self, kulong inStartAddr )
 
 	/* Input start address */
 	ioRelc.relcInStartAddr = inStartAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -396,7 +431,7 @@ kint32 dd_relc_set_in_start_addr(DdRelc*self, kulong inStartAddr )
  * @return DdRelc_D_DD_RELC_OK				OK
  * @retval DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_in_end_addr(DdRelc*self, kulong inEndAddr )
+gint32 dd_relc_set_in_end_addr(DdRelc*self, gulong inEndAddr )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( inEndAddr == 0 ) {
@@ -407,7 +442,7 @@ kint32 dd_relc_set_in_end_addr(DdRelc*self, kulong inEndAddr )
 
 	/* Input end address */
 	ioRelc.relcInEndAddr = inEndAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -418,7 +453,7 @@ kint32 dd_relc_set_in_end_addr(DdRelc*self, kulong inEndAddr )
  * @return DdRelc_D_DD_RELC_OK				OK
  * @retval DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_out_start_addr(DdRelc*self, kulong outStartAddr )
+gint32 dd_relc_set_out_start_addr(DdRelc*self, gulong outStartAddr )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( outStartAddr == 0 ) {
@@ -429,7 +464,7 @@ kint32 dd_relc_set_out_start_addr(DdRelc*self, kulong outStartAddr )
 
 	/* Output start address */
 	ioRelc.relcOutStartAddr = outStartAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -440,7 +475,7 @@ kint32 dd_relc_set_out_start_addr(DdRelc*self, kulong outStartAddr )
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_set_out_end_addr(DdRelc*self, kulong outEndAddr)
+gint32 dd_relc_set_out_end_addr(DdRelc*self, gulong outEndAddr)
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( outEndAddr == 0 ) {
@@ -451,7 +486,7 @@ kint32 dd_relc_set_out_end_addr(DdRelc*self, kulong outEndAddr)
 
 	/* Output end address */
 	ioRelc.relcOutEndAddr = outEndAddr;
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 
 	return DdRelc_D_DD_RELC_OK;
 }
@@ -462,7 +497,7 @@ kint32 dd_relc_set_out_end_addr(DdRelc*self, kulong outEndAddr)
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 */
-kint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn )
+gint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlCmn == NULL ) {
@@ -472,9 +507,9 @@ kint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn )
 #endif
 
 	/* Descriptor Mode	*/
-	relcCtrlCmn->descMode = (kuchar) ioRelc.relcMode1.bit.dsmd;
+	relcCtrlCmn->descMode = (guchar) ioRelc.relcMode1.bit.dsmd;
 	/* Continuous Run Mode	*/
-	relcCtrlCmn->contRunMode = (kuchar) ioRelc.relcMode1.bit.crmd;
+	relcCtrlCmn->contRunMode = (guchar) ioRelc.relcMode1.bit.crmd;
 	/* Sequential Run Number of Times	*/
 	relcCtrlCmn->seqNum = ioRelc.relcSeqNum;
 	/* Callback function pointer	*/
@@ -489,7 +524,7 @@ kint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn )
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg )
+gint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlReg == NULL ) {
@@ -499,13 +534,13 @@ kint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg 
 #endif
 
 	/* Input End Address Enable	*/
-	relcCtrlReg->inEndAddrEn = (kuchar) ioRelc.relcMode2.bit.imax;
+	relcCtrlReg->inEndAddrEn = (guchar) ioRelc.relcMode2.bit.imax;
 	/* Output End Address Enable	*/
-	relcCtrlReg->outEndAddrEn = (kuchar) ioRelc.relcMode2.bit.omax;
+	relcCtrlReg->outEndAddrEn = (guchar) ioRelc.relcMode2.bit.omax;
 	/* Input Address Auto Increment	*/
-	relcCtrlReg->inAddrAutoInc = (kuchar) ioRelc.relcMode2.bit.iaai;
+	relcCtrlReg->inAddrAutoInc = (guchar) ioRelc.relcMode2.bit.iaai;
 	/* Output Address Auto Increment */
-	relcCtrlReg->outAddrAutoInc = (kuchar) ioRelc.relcMode2.bit.oaai;
+	relcCtrlReg->outAddrAutoInc = (guchar) ioRelc.relcMode2.bit.oaai;
 
 	/* Input start address	 */
 	relcCtrlReg->inStartAddr = ioRelc.relcInStartAddr;
@@ -525,7 +560,7 @@ kint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg 
  * @return DdRelc_D_DD_RELC_OK				OK
  * @return DdRelc_D_DD_RELC_PARAM_ERR		Parameter error
 */
-kint32 dd_relc_get_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc* const relcCtrlDesc )
+gint32 dd_relc_get_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc* const relcCtrlDesc )
 {
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if ( relcCtrlDesc == NULL) {
@@ -547,86 +582,86 @@ kint32 dd_relc_get_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc* const relcCtrlD
 void dd_relc_int_handler(DdRelc*self)
 {
 	DdimUserCustom_FLGPTN waiptn;
-	kuchar int_type = 0;
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	guchar intType = 0;
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
 	waiptn = 0;
 
 	/* ERROR INT */
 	if ( ( ioRelc.relcIntEn.bit.eint == 1 ) && ( ioRelc.relcIntSt.bit.__eins == 1 ) ) {
 		waiptn |= DdRelc_D_DD_RELC_INT_ERR_FLG;
-		int_type = DdRelc_D_DD_RELC_ERR;
+		intType = DdRelc_D_DD_RELC_ERR;
 	}
 
 	/* SLEEP INT */
 	if ( ( ioRelc.relcIntEn.bit.sint == 1) && ( ioRelc.relcIntSt.bit.__sins == 1 ) ) {
-		if ( int_type == 0 ) {
+		if ( intType == 0 ) {
 	 		waiptn |= DdRelc_D_DD_RELC_INT_SLP_FLG;
-			int_type = DdRelc_D_DD_RELC_ERR;
+			intType = DdRelc_D_DD_RELC_SLEEP;
 		}
 	}
 
 	/* FINISH INT */
 	if ( ( ioRelc.relcIntEn.bit.fint == 1 ) && ( ioRelc.relcIntSt.bit.__fins == 1 ) ) {
-		if ( int_type == 0 ) {
+		if ( intType == 0 ) {
 	 		waiptn |= DdRelc_D_DD_RELC_INT_END_FLG;
- 			int_type = DdRelc_D_DD_RELC_FINISH;
+ 			intType = DdRelc_D_DD_RELC_FINISH;
 		}
 	}
 
 	/* CONTINUOUS RUN FINISH */
 	if ( (ioRelc.relcIntEn.bit.cint == 1 ) && ( ioRelc.relcIntSt.bit.__cins == 1 ) ) {
-		if ( int_type == 0 ) {
+		if ( intType == 0 ) {
 			waiptn |= DdRelc_D_DD_RELC_INT_END_FLG;
-			int_type = DdRelc_D_DD_RELC_CR_FINISH;
+			intType = DdRelc_D_DD_RELC_CR_FINISH;
 		}
 	}
 
-	if ( int_type == DdRelc_D_DD_RELC_FINISH ) {
+	if ( intType == DdRelc_D_DD_RELC_FINISH ) {
 		if ( ioRelc.relcSeqNum == 1 ) {
-			ret = DDIM_User_Set_Flg( FID_DD_RELC, waiptn );
-			if ( ret != D_DDIM_USER_E_OK ) {
+			ret = ddim_user_custom_set_flg(self->ddimUserCustom FID_DD_RELC, waiptn );
+			if ( ret != DdimUserCustom_E_OK ) {
 				Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 			}
 		}
 	}
 	else {
-		ret = DDIM_User_Set_Flg( FID_DD_RELC, waiptn );
-		if ( ret != D_DDIM_USER_E_OK ) {
+		ret = ddim_user_custom_set_flg(self->ddimUserCustom, FID_DD_RELC, waiptn );
+		if ( ret != DdimUserCustom_E_OK ) {
 			Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 		}
 	}
 
 	if ( S_GRELC_CALLBACK ) {
 		/* Call Back function */
-		(*S_GRELC_CALLBACK)( int_type );
+		(*S_GRELC_CALLBACK)( intType );
 	}
 
-	if ( int_type == DdRelc_D_DD_RELC_ERR ) {
+	if ( intType == DdRelc_D_DD_RELC_ERR ) {
 		/* EINS */
 		ioRelc.relcIntSt.word = 0x0000FFFB;
 	}
 
-	if ( int_type == DdRelc_D_DD_RELC_ERR ) {
+	if ( intType == DdRelc_D_DD_RELC_SLEEP ) {
 		/* SINS */
 		ioRelc.relcIntSt.word = 0x0000FFFE;
 	}
 
-	if ( int_type == DdRelc_D_DD_RELC_FINISH ) {
+	if ( intType == DdRelc_D_DD_RELC_FINISH ) {
 		/* FINS */
 		ioRelc.relcIntSt.word = 0x0000FFFD;
 	}
 
-	if ( int_type == DdRelc_D_DD_RELC_CR_FINISH ) {
+	if ( intType == DdRelc_D_DD_RELC_CR_FINISH ) {
 		/* CINS, FINS */
 		ioRelc.relcIntSt.word = 0x0000FFF5;
 	}
 
-	Dd_ARM_Dsb_Pou();
+	DD_ARM_DSB_POU();
 }
 
-DdRelc* 		dd_relc_new(kuchar writeHprot, kuchar readHprot)
+DdRelc* 		dd_relc_new(void)
 {
-	DdRelc *self = k_object_new_with_private(DD_TYPE_RELC	, sizeof(DdRelcPrivate));
+	DdRelc *self = g_object_new(DD_TYPE_RELC, NULL);
 	return self;
 }

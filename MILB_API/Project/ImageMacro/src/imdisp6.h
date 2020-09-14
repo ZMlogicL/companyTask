@@ -11,7 +11,8 @@
 #include "driver_common.h"
 #include "dd_top.h"
 #include "imdisp3.h"
-#include "imdisp8.h"
+#include "imdisp5.h"
+
 #define IM_TYPE_DISP6				(im_disp6_get_type())
 #define IM_DISP6(obj) 				(K_TYPE_CHECK_INSTANCE_CAST(obj, ImDisp6))
 #define IM_IS_DISP6(obj)			(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_DISP6))
@@ -29,13 +30,13 @@ ImDisp6*	im_disp6_new(void);
 
 
 
-extern INT32 Im_DISP_Set_OSD_Display_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, U_IM_DISP_DSTA position);
+ INT32 im_disp6_set_osd_display_position(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, U_IM_DISP_DSTA position);
 
 /**
 Get input start position.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -44,44 +45,13 @@ Get input start position.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Display_Position(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, U_IM_DISP_DSTA* position);
-
-/**
-Set input data's order.<br>
-@param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
-@param[in]	layer			OSD layer selection.<br>
-							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
-								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
-@param[in]	ipo				Input data order.
-@retval	D_DDIM_OK						Success.
-@retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
-@remarks	It is necessary to fulfill the following conditions. <br>
-			<ul><li>GRIPO.IPO1, GRIPO.IPO2, GRIPO.IPO3 and GRIPO.IPO4 do not overlap
-			</ul>
-*/
-extern INT32 Im_DISP_Set_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIPO ipo);
-
-/**
-Get input data's order.<br>
-@param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
-@param[in]	layer			OSD layer selection.<br>
-							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
-								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
-@param[out]	ipo		Input data order.
-@retval	D_DDIM_OK						Success.
-@retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
-*/
-extern INT32 Im_DISP_Get_OSD_IPO(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRIPO* ipo);
+ INT32 im_disp6_get_osd_display_position(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, UINT32 bank_no, U_IM_DISP_DSTA* position);
 
 /**
 Set GR's horizontal rectangle to showing or hiden.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -93,13 +63,13 @@ Set GR's horizontal rectangle to showing or hiden.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_OSD_Area_Enable(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG area_enable);
+ INT32 im_disp6_set_osd_area_enable(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG area_enable);
 
 /**
 Get GR's horizontal rectangle to showing or hiden.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -110,13 +80,13 @@ Get GR's horizontal rectangle to showing or hiden.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Area_Enable(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG *area_enable);
+ INT32 im_disp6_get_osd_area_enable(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG *area_enable);
 
 /**
 Set blink method selection.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -128,13 +98,13 @@ Set blink method selection.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_OSD_Blink(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG blink);
+ INT32 im_disp6_set_osd_blink(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG blink);
 
 /**
 Get blink method selection.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -145,13 +115,13 @@ Get blink method selection.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Blink(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG *blink);
+ INT32 im_disp6_get_osd_blink(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG *blink);
 
 /**
 Set GR's blink period.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -161,13 +131,13 @@ Set GR's blink period.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks The item which was not specified by set_item would not be set to the register.
 */
-extern INT32 Im_DISP_Set_OSD_Blink_Timer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRBLINK grblink);
+ INT32 im_disp6_set_osd_blink_timer(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRBLINK grblink);
 
 /**
 Get GR's blink period.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -175,13 +145,13 @@ Get GR's blink period.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Blink_Timer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRBLINK *grblink);
+ INT32 im_disp6_get_osd_blink_timer(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRBLINK *grblink);
 
 /**
 Set GR's blink sync setting.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -197,13 +167,13 @@ Set GR's blink sync setting.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks Can not D_IM_DISP_BITRG_WRITE_SYNC_WAIT writing to Blink sync trigger in the blink sync reflect wait state.
 */
-extern INT32 Im_DISP_Set_OSD_Blink_Sync(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG grbinit, ULONG grbitrg);
+ INT32 im_disp6_set_osd_blink_sync(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG grbinit, ULONG grbitrg);
 
 /**
 Get GR's blink sync setting.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -217,13 +187,13 @@ Get GR's blink sync setting.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Blink_Sync(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG* grbinit, ULONG* grbitrg);
+ INT32 im_disp6_get_osd_blink_sync(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG* grbinit, ULONG* grbitrg);
 
 /**
 Set resize value.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -232,23 +202,23 @@ Set resize value.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks	It is necessary to fulfill the following conditions. <br>
-			<ul><li>GRRSZ1.HRSZM / GRRSZ1.HRSZN >= 0.5
-				<li>GRRSZ1.HRSZM / GRRSZ1.HRSZN <= 8
-				<li>(in the case of GRRSZ1.HRSZM / GRRSZ1.HRSZN = 1.0) GRRSZ1.HRSZOF = 0
-				<li>(in the case of GRHRSZ0 = E_IM_DISP_RSZSL_PADDING_THINNING) GRRSZ1.HRSZOF = 0
-				<li>GRRSZ1.HRSZOF < GRISIZE.IHSIZE * GRRSZ1.HRSZM - (pixel count after horizontal resize -1) * GRRSZ1.HRSZN
-				<li>GRRSZ1.HRSZOF < GRRSZ1.HRSZM
-				<li>GRRSZ2.VRSZM / GRRSZ2.VRSZN >= 0.5
-				<li>GRRSZ2.VRSZM / GRRSZ2.VRSZN <= 8
+			<ul><li>GRRSZ1.hrszm / GRRSZ1.hrszn >= 0.5
+				<li>GRRSZ1.hrszm / GRRSZ1.hrszn <= 8
+				<li>(in the case of GRRSZ1.hrszm / GRRSZ1.hrszn = 1.0) GRRSZ1.hrszof = 0
+				<li>(in the case of GRHRSZ0 = ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING) GRRSZ1.hrszof = 0
+				<li>GRRSZ1.hrszof < GRISIZE.IHSIZE * GRRSZ1.hrszm - (pixel count after horizontal resize -1) * GRRSZ1.hrszn
+				<li>GRRSZ1.hrszof < GRRSZ1.hrszm
+				<li>GRRSZ2.vrszm / GRRSZ2.vrszn >= 0.5
+				<li>GRRSZ2.vrszm / GRRSZ2.vrszn <= 8
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Resize(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, T_IM_DISP_RESIZE const *const resize);
+ INT32 im_disp6_set_osd_resize(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, T_IM_DISP_RESIZE const *const resize);
 
 /**
 Get resize value.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -256,13 +226,13 @@ Get resize value.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Resize(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, T_IM_DISP_RESIZE *const resize);
+ INT32 im_disp6_get_osd_resize(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, T_IM_DISP_RESIZE *const resize);
 
 /**
 Set YCbCr -> RGB matrix data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -279,13 +249,13 @@ Set YCbCr -> RGB matrix data.<br>
 					The matrix coefficient value is COEFFICIENT2/64.<br>
 			</ul>
 */
-extern INT32 Im_DISP_Set_OSD_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRY2R gry2r[D_IM_DISP_MATRIX_SIZE]);
+ INT32 im_disp6_set_osd_matrix(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRY2R gry2r[D_IM_DISP_MATRIX_SIZE]);
 
 /**
 Get YCbCr -> RGB matrix data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -293,13 +263,13 @@ Get YCbCr -> RGB matrix data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRY2R gry2r[D_IM_DISP_MATRIX_SIZE]);
+ INT32 im_disp6_get_osd_matrix(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, U_IM_DISP_GRY2R gry2r[D_IM_DISP_MATRIX_SIZE]);
 
 /**
 Set GR's Alpha.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1
@@ -308,13 +278,13 @@ Set GR's Alpha.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_OSD_Alpha(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG alpha);
+ INT32 im_disp6_set_osd_alpha(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG alpha);
 
 /**
 Get GR's Alpha.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
@@ -322,13 +292,13 @@ Get GR's Alpha.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_OSD_Alpha(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, ULONG* alpha);
+ INT32 im_disp6_get_osd_alpha(ImDisp6 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ULONG* alpha);
 
 /**
 Set Anti-gamma table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Anti-gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -337,13 +307,13 @@ Set Anti-gamma table.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_Anti_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_ANTI_GAMMA_TBL const *const tbl);
+ INT32 im_disp6_set_anti_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_ANTI_GAMMA_TBL const *const tbl);
 
 /**
 Get Anti-gamma table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Anti-gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -352,13 +322,13 @@ Get Anti-gamma table.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Get_Anti_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_ANTI_GAMMA_TBL *const tbl);
+ INT32 im_disp6_get_anti_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_ANTI_GAMMA_TBL *const tbl);
 
 /**
 Set Gamma table (Main data input block).
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -367,13 +337,13 @@ Set Gamma table (Main data input block).
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_Main_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_GAMMA_TBL_IN const *const tbl);
+ INT32 im_disp6_set_main_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_GAMMA_TBL_IN const *const tbl);
 
 /**
 Get Gamma table (Main data input block).
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -382,13 +352,13 @@ Get Gamma table (Main data input block).
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Get_Main_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_GAMMA_TBL_IN *const tbl);
+ INT32 im_disp6_get_main_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_GAMMA_TBL_IN *const tbl);
 
 /**
 Set Gamma table (Data output block).
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -397,13 +367,13 @@ Set Gamma table (Data output block).
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_Dcore_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_GAMMA_TBL_OUT const *const tbl);
+ INT32 im_disp6_set_dcore_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_GAMMA_TBL_OUT const *const tbl);
 
 /**
 Get Gamma table (Data output block).
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Gamma table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -412,13 +382,13 @@ Get Gamma table (Data output block).
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Get_Dcore_Gamma_Table(E_IM_DISP_SEL block, BYTE surface, T_IM_DISP_GAMMA_TBL_OUT *const tbl);
+ INT32 im_disp6_get_dcore_gamma_table(ImDisp6 * self, ImDispEImDispSel block, BYTE surface, T_IM_DISP_GAMMA_TBL_OUT *const tbl);
 
 /**
 Set Luminance correct table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Luminance correct table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>

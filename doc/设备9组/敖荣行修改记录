@@ -43,6 +43,10 @@ UINT32	Sdram_Map_Movie_Play_Get_AStream_out( VOID );  ---------->>  UINT32	sdram
 INT32		Sdram_Map_Movie_Play_Chg_AStream_out( VOID );  ---------->>  INT32		sdram_map_movie_play_chg_astream_out( VOID );
 UINT32	Sdram_Map_Movie_Play_Get_AStream_Area_Size( VOID );  ---------->>  UINT32	sdram_map_movie_play_get_astream_area_size( VOID );
 
+宏定义修改如下：
+SDRAM_BNK_LIMIT  ---------->>  SdramMapMoviePlay_SDRAM_BNK_LIMIT
+RIBERY_OFFSET  ---------->>  SdramMapMoviePlay_RIBERY_OFFSET
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 3、新建类AudioCodecWrapper
 1) 将audio_codec_wrapper.c 新建为 audiocodecwrapper.c，并删除audio_codec_wrapper.c
@@ -700,7 +704,7 @@ void LT6911UX_StartStop_Straming(FJ_PERI_CH i2cCh, BOOL startstop);  ---------->
 ---------------------------------------------------------------------------------------------------
 	b：枚举类型修改如下
 	(1)
-	枚举名：E_SDRAM_MAP_MOVIE_RECORD_PATTERN  --------->>  SdramMapMovieRecordEs3ComESdramMapMovieRecordPattern
+	枚举名：E_SDRAM_MAP_MOVIE_RECORD_PATTERN  --------->>  SdramMapMovieRecordEs3ComEPattern
 	枚举成员：E_SDRAM_MAP_MOVIE_RECORD_PATTERN_0  ---------->>  SdramMapMovieRecordEs3Com_PATTERN_0
 					   E_SDRAM_MAP_MOVIE_RECORD_PATTERN_STITCH  ---------->>  SdramMapMovieRecordEs3Com__PATTERN_STITCH
 					   E_SDRAM_MAP_MOVIE_RECORD_PATTERN_MAX  ---------->>  SdramMapMovieRecordEs3Com__PATTERN_MAX

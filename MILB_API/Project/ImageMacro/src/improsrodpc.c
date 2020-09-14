@@ -45,7 +45,7 @@ struct _ImproSrodpcPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const TimproRdmaDpcAddr S_G_IM_PRO_DPC_Addr[E_IM_PRO_UNIT_NUM_MAX] = {
+static const TimproRdmaDpcAddr S_G_IM_PRO_DPC_Addr[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	{
 		0x28409118,0x2840911C,0x28409120,0x28409124,
 		0x28409130,0x28409134,0x28409138,0x28409140,
@@ -83,7 +83,7 @@ static const TimproRdmaDpcAddr S_G_IM_PRO_DPC_Addr[E_IM_PRO_UNIT_NUM_MAX] = {
 		0x286091C4,
 	},
 };
-static const UINT32	gIM_PRO_DPC_Status_Tbl[E_IM_PRO_UNIT_NUM_MAX] = {
+static const UINT32	gIM_PRO_DPC_Status_Tbl[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	ImproSrodpc_D_IM_SRO1_STATUS_DPC,	ImproSrodpc_D_IM_SRO2_STATUS_DPC,	ImproSrodpc_D_IM_SRO_STATUS_DPC_BOTH,
 };
 
@@ -118,15 +118,15 @@ static void impro_srodpc_destructor(ImproSrodpc *self)
 Compensation mode start
 @param[in]	unitNo : Unit number.
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 INT32 impro_srodpc_start( E_IM_PRO_UNIT_NUM unitNo )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dpctrg.bit.dpctrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(gIM_PRO_DPC_Status_Tbl[unitNo], 0);
 
@@ -138,12 +138,12 @@ Compensation mode stop
 @param[in]	unitNo : Unit number.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 INT32 impro_srodpc_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
 		ioPro.imgPipe[unitNo].sro.dpc.dpctrg.bit.dpctrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -153,7 +153,7 @@ INT32 impro_srodpc_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 		ioPro.imgPipe[unitNo].sro.dpc.dpctrg.bit.dpctrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(gIM_PRO_DPC_Status_Tbl[unitNo], 0);
 
@@ -165,23 +165,23 @@ DPC control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcCtrl : DPC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcCtrl* dpcCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_ctrl error. dpcCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dpcmd.bit.dpcmd			= dpcCtrl->dpcMode;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcmd.bit.dpcrtz			= dpcCtrl->threConv0;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -191,15 +191,15 @@ A setup of enable access to the built-in RAM of AEAWB.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dpcpaen.bit.dpaen = paenTrg;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -209,51 +209,51 @@ DPC control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcArea : DPC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproDpcArea* dpcArea )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcArea == NULL){
 		Ddim_Assertion(("I:impro_srodpc_set_area error. dpcArea=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCGH_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCGH_MAX,
 			dpcArea->gPosX, "impro_srodpc_set_area : gPosX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCGV_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCGV_MAX,
 			dpcArea->gPosY, "impro_srodpc_set_area : gPosY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCGHW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCGHW_MAX,
 			dpcArea->gWidth, "impro_srodpc_set_area : gWidth" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCGVW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCGVW_MAX,
 			dpcArea->gLines, "impro_srodpc_set_area : gLines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCH_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCH_MAX,
 			dpcArea->posX, "impro_srodpc_set_area : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCV_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCV_MAX,
 			dpcArea->posY, "impro_srodpc_set_area : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCHW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCHW_MAX,
 			dpcArea->width, "impro_srodpc_set_area : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCVW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCVW_MAX,
 			dpcArea->lines, "impro_srodpc_set_area : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dpcgwp.bit.dpcgh			= dpcArea->gPosX;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcgwp.bit.dpcgv			= dpcArea->gPosY;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcgws.bit.dpcghw			= dpcArea->gWidth;
@@ -263,7 +263,7 @@ INT32 impro_srodpc_set_area( E_IM_PRO_UNIT_NUM unitNo, TimproDpcArea* dpcArea )
 	ioPro.imgPipe[unitNo].sro.dpc.dpcws.bit.dpchw			= dpcArea->width;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcws.bit.dpcvw			= dpcArea->lines;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -273,33 +273,33 @@ Alpha blend control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcAbCtrl : Alpha blend Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_alpha_blend_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcAbCtrl* dpcAbCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcAbCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_alpha_blend_ctrl error. dpcAbCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCBLW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCBLW_MAX,
 			dpcAbCtrl->alphaBlendTransitionWidthP, "impro_srodpc_alpha_blend_ctrl : alphaBlendTransitionWidthP" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrodpc_D_IM_PRO_DPC_DPCBLW_MIN, ImproSrodpc_D_IM_PRO_DPC_DPCBLW_MAX,
 			dpcAbCtrl->alphaBlendTransitionWidthM, "impro_srodpc_alpha_blend_ctrl : alphaBlendTransitionWidthM" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dpcblp.bit.dpcblwp			= dpcAbCtrl->alphaBlendTransitionWidthP;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcblp.bit.dpcblsp			= dpcAbCtrl->alphaBlendStartPosP;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcblm.bit.dpcblwm			= dpcAbCtrl->alphaBlendTransitionWidthM;
 	ioPro.imgPipe[unitNo].sro.dpc.dpcblm.bit.dpcblsm			= dpcAbCtrl->alphaBlendStartPosM;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -309,19 +309,19 @@ Defect Dynamic Detection control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcDddCtrl : Defect Dynamic Detection Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_dynamic_detect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcDddCtrl* dpcDddCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcDddCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_dynamic_detect_ctrl error. dpcDddCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dfctl.bit.dfgrgb			= dpcDddCtrl->grgbIndependentSetting;
 	ioPro.imgPipe[unitNo].sro.dpc.dfctl.bit.dfmdg			= dpcDddCtrl->gMode;
 	ioPro.imgPipe[unitNo].sro.dpc.dfctl.bit.dfmdrb			= dpcDddCtrl->rbMode;
@@ -358,7 +358,7 @@ INT32 impro_srodpc_dynamic_detect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcDddCt
 	ioPro.imgPipe[unitNo].sro.dpc.dflsth.dflsth1.bit.dflsthg	= dpcDddCtrl->threshold2consecutiveBrightPix[1];
 	ioPro.imgPipe[unitNo].sro.dpc.dflsth.dflsth2.bit.dflsthb	= dpcDddCtrl->threshold2consecutiveBrightPix[2];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -368,19 +368,19 @@ Calculation of mis-determination degree control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcMddCtrl : Calculation of mis-determination degree for correction Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_mis_determination_calc_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcMddCtrl* dpcMddCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcMddCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_mis_determination_calc_ctrl error. dpcMddCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dfagef.bit.dfagefp			= dpcMddCtrl->pMddEffect;
 	ioPro.imgPipe[unitNo].sro.dpc.dfagef.bit.dfagefm			= dpcMddCtrl->mMddEffect;
 	ioPro.imgPipe[unitNo].sro.dpc.dfagef2.bit.dfagefp2		= dpcMddCtrl->pMddEffect2;
@@ -390,7 +390,7 @@ INT32 impro_srodpc_mis_determination_calc_ctrl( E_IM_PRO_UNIT_NUM unitNo, Timpro
 	ioPro.imgPipe[unitNo].sro.dpc.dfagthk.bit.dfagthkp		= dpcMddCtrl->pThresholdGain;
 	ioPro.imgPipe[unitNo].sro.dpc.dfagthk.bit.dfagthkm		= dpcMddCtrl->mThresholdGain;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -400,19 +400,19 @@ Pixel value magnitude defect correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcMdcCtrl : Pixel value magnitude defect correction control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_magnitude_defect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcMdcCtrl* dpcMdcCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcMdcCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_magnitude_defect_ctrl error. dpcMdcCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dmctl.bit.dmgug			= dpcMdcCtrl->useOcd;
 	ioPro.imgPipe[unitNo].sro.dpc.dmwks.bit.dmwksp			= dpcMdcCtrl->pManualAdjValSingle;
 	ioPro.imgPipe[unitNo].sro.dpc.dmwks.bit.dmwksm			= dpcMdcCtrl->mManualAdjValSingle;
@@ -421,7 +421,7 @@ INT32 impro_srodpc_magnitude_defect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcMdc
 	ioPro.imgPipe[unitNo].sro.dpc.dmagk.bit.dmagkp			= dpcMdcCtrl->pCorrectionLevelOnOcd;
 	ioPro.imgPipe[unitNo].sro.dpc.dmagk.bit.dmagkm			= dpcMdcCtrl->mCorrectionLevelOnOcd;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -431,18 +431,18 @@ Edge storage defect correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcEsdcCtrl : Edge storage defect correction Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_edge_storage_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcEsdcCtrl* dpcEsdcCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcEsdcCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_edge_storage_ctrl error. dpcEsdcCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dectl.bit.degrgb			= dpcEsdcCtrl->esdMode;
 	ioPro.imgPipe[unitNo].sro.dpc.dectl.bit.derbug			= dpcEsdcCtrl->useRbJdge;
 	ioPro.imgPipe[unitNo].sro.dpc.dectl.bit.degug			= dpcEsdcCtrl->useOcd;
@@ -455,7 +455,7 @@ INT32 impro_srodpc_edge_storage_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcEsdcCtr
 	ioPro.imgPipe[unitNo].sro.dpc.deagk.bit.deagkp			= dpcEsdcCtrl->pCorrectionLevelOnOcd;
 	ioPro.imgPipe[unitNo].sro.dpc.deagk.bit.deagkm			= dpcEsdcCtrl->mCorrectionLevelOnOcd;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -465,24 +465,24 @@ Calculation of over-correction degree for correction control setup
 @param[in]	unitNo : Unit number.
 @param[in]	dpcOcdCtrl : Calculation of over-correction degree for correction control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srodpc_over_correction_detect_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproDpcOcdCtrl* dpcOcdCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (dpcOcdCtrl == NULL){
 		Ddim_Assertion(("I:impro_srodpc_over_correction_detect_ctrl error. dpcOcdCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.dpc.dcagef.bit.dcagefp			= dpcOcdCtrl->pOcdEffect;
 	ioPro.imgPipe[unitNo].sro.dpc.dcagef.bit.dcagefm			= dpcOcdCtrl->mOcdEffect;
 	ioPro.imgPipe[unitNo].sro.dpc.dcagth.bit.dcagthp			= dpcOcdCtrl->pThreshold;
 	ioPro.imgPipe[unitNo].sro.dpc.dcagth.bit.dcagthm			= dpcOcdCtrl->mThreshold;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -499,7 +499,7 @@ INT32 impro_srodpc_get_rdma_addr_dpc_cntl( E_IM_PRO_UNIT_NUM unitNo, const Timpr
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_srodpc_get_rdma_addr_dpc_cntl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 

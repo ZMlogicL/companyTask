@@ -928,22 +928,22 @@ void im_pro_1_1_print_2(ImPro11Print *self,const char* string, T_IM_PRO_SENTOP_C
 void im_pro_1_1_print_3(ImPro11Print *self,const char* string)
 {
     if(ioPro.sen.sg[0].sgtrg.bit.sgtrg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Start() %s result:sgtrg ch0 (%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sensg_start() %s result:sgtrg ch0 (%d)\n", string, 
         ioPro.sen.sg[0].sgtrg.bit.sgtrg))
     }; 
         
     if(ioPro.sen.sg[1].sgtrg.bit.sgtrg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Start() %s result:sgtrg ch1 (%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sensg_start() %s result:sgtrg ch1 (%d)\n", string, 
         ioPro.sen.sg[1].sgtrg.bit.sgtrg))
     }; 
         
     if(ioPro.sen.sg[2].sgtrg.bit.sgtrg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Start() %s result:sgtrg ch2 (%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sensg_start() %s result:sgtrg ch2 (%d)\n", string, 
         ioPro.sen.sg[2].sgtrg.bit.sgtrg))
     }; 
         
     if(ioPro.sen.sg[3].sgtrg.bit.sgtrg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Start() %s result:sgtrg ch3 (%d)\n", string, 
+        DriverCommon_DDIM_PRINT(("impro_sensg_start() %s result:sgtrg ch3 (%d)\n", string, 
         ioPro.sen.sg[3].sgtrg.bit.sgtrg))
     }; 
 }
@@ -974,62 +974,62 @@ void im_pro_1_1_print_4(ImPro11Print *self,const char* string, kuchar force)
 void im_pro_1_1_print_5(ImPro11Print *self,const char* string, E_IM_PRO_SG_CH ch, TImProSgCtrl* sgCtrl)
 {
     if(ioPro.sen.sg[ch].sgctl1.bit.vhdo != sgCtrl->vhdo) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vhdo (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vhdo (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl1.bit.vhdo, sgCtrl->vhdo))
     }; 
         
     if(ioPro.sen.sg[ch].sgctl1.bit.vdot != sgCtrl->vdot) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vdot (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vdot (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl1.bit.vdot, sgCtrl->vdot))
     }; 
         
     if(ioPro.sen.sg[ch].sgctl1.bit.vdinv != sgCtrl->vdinv) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vdinv (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vdinv (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl1.bit.vdinv, sgCtrl->vdinv))
     }; 
         
     if(ioPro.sen.sg[ch].sgctl1.bit.hdinv != sgCtrl->hdinv) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdinv (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdinv (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl1.bit.hdinv, sgCtrl->hdinv))
     }; 
         
     if(ioPro.sen.sg[ch].sgctl2.bit.hdchg != sgCtrl->hdchg) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdchg (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdchg (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl2.bit.hdchg, sgCtrl->hdchg))
     }; 
         
     if(ioPro.sen.sg[ch].sgctl2.bit.vddly != sgCtrl->vddly) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vddly (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vddly (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].sgctl2.bit.vddly, sgCtrl->vddly))
     }; 
         
     if(ioPro.sen.sg[ch].vdocyc.bit.vdocyc != sgCtrl->vdocyc) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vdocyc (%d) in(%lu)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vdocyc (%d) in(%lu)\n", 
         ch, string, ioPro.sen.sg[ch].vdocyc.bit.vdocyc, sgCtrl->vdocyc))
     }; 
         
     if(ioPro.sen.sg[ch].vdow.bit.vdow != sgCtrl->vdow) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:vdow (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:vdow (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].vdow.bit.vdow, sgCtrl->vdow))
     }; 
         
     if(ioPro.sen.sg[ch].hdocyc.bit.hdocyc != sgCtrl->hdocyc) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdocyc (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdocyc (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].hdocyc.bit.hdocyc, sgCtrl->hdocyc))
     }; 
         
     if(ioPro.sen.sg[ch].hdow.bit.hdow != sgCtrl->hdow) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdow (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdow (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].hdow.bit.hdow, sgCtrl->hdow))
     }; 
         
     if(ioPro.sen.sg[ch].hdocyc2.bit.hdocyc2 != sgCtrl->hdocyc2) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdocyc2 (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdocyc2 (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].hdocyc2.bit.hdocyc2, sgCtrl->hdocyc2))
     }; 
         
     if(ioPro.sen.sg[ch].hdow2.bit.hdow2 != sgCtrl->hdow2) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SG_Ctrl(%u) %s result:hdow2 (%d) in(%d)\n", 
+        DriverCommon_DDIM_PRINT(("impro_sensg_ctrl(%u) %s result:hdow2 (%d) in(%d)\n", 
         ch, string, ioPro.sen.sg[ch].hdow2.bit.hdow2, sgCtrl->hdow2))
     }; 
 }      

@@ -15,15 +15,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ddimusercustom.h"
-#include "dd_slimbus.h"
-#include "ddim_typedef.h"
+#include "ddslimbus.h"
+#include "ddimtypedef.h"
 #include "ctddslimbus.h"
 
 K_TYPE_DEFINE_WITH_PRIVATE(CtDdSlimbus, ct_dd_slimbus);
 #define CT_DD_SLIMBUS_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdSlimbusPrivate,CT_TYPE_DD_SLIMBUS))
 
 struct _CtDdSlimbusPrivate {
-    kint i;
+    DdimUserCustom *ddimUserCus;
+	DdSlimbus *		ddSlim;
 };
 
 /*----------------------------------------------------------------------*/
@@ -41,10 +42,10 @@ struct _CtDdSlimbusPrivate {
 /*----------------------------------------------------------------------*/
 /* Structure															*/
 /*----------------------------------------------------------------------*/
-typedef struct{
+typedef struct _TMcFifoMsg{
 	kuint32	size;
 	kuint32	msg[4];
-} TMcFifoMsg;
+};
 
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
@@ -164,15 +165,16 @@ static kuint32	S_GDD_WRITE_TMP_DATA[CtDdSlimbus_WRITE_DATA_NUM] \
 static kuint32	S_GDD_READ_DATA[CtDdSlimbus_READ_DATA_NUM]  \
 		__attribute__((section(".DCACHE_ALIGN_SECTION"), aligned(64)));
 
-/*DECLS*/
-
-static kint32 	ctDdSlimbusReadMsgRxFifo(E_DD_SLIMBUS_CH ch);
-static void 	ctDdSlimbusManagerIntCb(kuchar ch, kint32 status);
-static void 	ctDdSlimbusDataPortIntCb(kuchar ch, kint32 status);
-static void 	ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir);
-static void 	ctDdSlimbusDisconnect(E_DD_SLIMBUS_CH ch);
-static void 	ctDdSlimbusDmaIntWriteCb(kuchar dmaCh, kint32 status);
-static void 	ctDdSlimbusDmaIntReadCb(kuchar dmaCh, kint32 status);	
+/*
+ *DECLS
+ */
+static kint32 	ctDdSlimbusReadMsgRxFifo(EDdSlimbusCh ch);
+static void 	ctDdSlimbusManagerInt_cb(kuchar ch, kint32 status);
+static void 	ctDdSlimbusDataPortInt_cb(kuchar ch, kint32 status);
+static void 	ctDdSlimbusEnumeration(EDdSlimbusCh ch, kboolean dir);
+static void 	ctDdSlimbusDisconnect(EDdSlimbusCh ch);
+static void 	ctDdSlimbusDmaIntWrite_cb(kuchar dmaCh, kint32 status);
+static void 	ctDdSlimbusDmaIntRead_cb(kuchar dmaCh, kint32 status);	
 
 static void ct_dd_slimbus_constructor(CtDdSlimbus *self) 
 {
@@ -183,9 +185,9 @@ static void ct_dd_slimbus_destructor(CtDdSlimbus *self)
 {
     // CtDdSlimbusPrivate *priv = CT_DD_SLIMBUS_GET_PRIVATE(self);
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
@@ -199,18 +201,19 @@ static void ct_dd_slimbus_destructor(CtDdSlimbus *self)
 /*----------------------------------------------------------------------*/
 /* Local Function														*/
 /*----------------------------------------------------------------------*/
-static kint32 ctDdSlimbusReadMsgRxFifo(E_DD_SLIMBUS_CH ch)
+static kint32 ctDdSlimbusReadMsgRxFifo(EDdSlimbusCh ch)
 {
-	kint32	ret;
-	kuint32	size;
-	kuint32	rxMsg[16];
-	kuchar*	s;
-	kuchar	loop, i;
+	kint32		ret;
+	kuint32		size;
+	kuint32		rxMsg[16];
+	kuchar*		s;
+	kuchar		loop, i;
+	DdSlimbus *	ddSlim = dd_slimbus_get();
 
 	memset(rxMsg, 0, sizeof(rxMsg));
-	ret =Dd_Slimbus_Read_Msg(ch, rxMsg, &size);
+	ret =dd_slimbus_read_msg(ddSlim, ch, rxMsg, &size);
 	if(ret != D_DDIM_OK){
-		Ddim_Print(("Dd_Slimbus_Read_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+		Ddim_Print(("dd_slimbus_read_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 		return ret;
 	}
 
@@ -264,13 +267,15 @@ static kint32 ctDdSlimbusReadMsgRxFifo(E_DD_SLIMBUS_CH ch)
 			Ddim_Print(("ch%d Generic Device\n", ch+1));
 		}
 	}
+	k_object_unref(ddSlim);
+	ddSlim = NULL;
 
 	return D_DDIM_OK;
 }
 
-static void ctDdSlimbusManagerIntCb(kuchar ch, kint32 status)
+static void ctDdSlimbusManagerInt_cb(kuchar ch, kint32 status)
 {
-	Ddim_Print(("ctDdSlimbusManagerIntCb called. ch=%d, Status=0x%08X\n", ch, status));
+	Ddim_Print(("ctDdSlimbusManagerInt_cb called. ch=%d, Status=0x%08X\n", ch, status));
 
 	if (status & 0x80) {	// 7 PORT_INT R
 		Ddim_Print(("\t PORT_INT\n"));
@@ -301,9 +306,9 @@ static void ctDdSlimbusManagerIntCb(kuchar ch, kint32 status)
 	}
 }
 
-static void ctDdSlimbusDataPortIntCb(kuchar ch, kint32 status)
+static void ctDdSlimbusDataPortInt_cb(kuchar ch, kint32 status)
 {
-	Ddim_Print(("ctDdSlimbusDataPortIntCb called. ch=%d, Status=0x%08X\n", ch, status));
+	Ddim_Print(("ctDdSlimbusDataPortInt_cb called. ch=%d, Status=0x%08X\n", ch, status));
 	if (status & 0x20) {	// 5 UND_INT R/C
 		Ddim_Print(("\t UND_INT\n"));
 	}
@@ -340,18 +345,20 @@ static void ctDdSlimbusDataPortIntCb(kuchar ch, kint32 status)
 #endif
 }
 
-static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
+static void ctDdSlimbusEnumeration(EDdSlimbusCh ch, kboolean dir)
 {
-	kint32			ret;
-	kuchar			index;
-	DDIM_USER_ER	ercd;
-	kuint32			msg;
-	kuint32			la;
-	TMcFifoMsg		tMsg;
+	kint32				ret;
+	kuchar				index;
+	kint32				ercd;
+	kuint32				msg;
+	kuint32				la;
+	TMcFifoMsg			tMsg;
+	DdSlimbus *			ddSlim = dd_slimbus_get();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 
 	for(index=0 ; index<CtDdSlimbus_CONFIG_MSG_NUM ; index++){
 		S_G_TX_INT_FLAG[ch] = 0;
-		if (ch == E_DD_SLIMBUS_CH0 || ch == E_DD_SLIMBUS_CH1) {
+		if (ch == DdSlimbus_CH0 || ch == DdSlimbus_CH1) {
 			tMsg = S_GDD_MC_FIFO_TX_MSG_01[index];
 			if(dir == TRUE){	// sink -> source
 				if(index==10){		// CONNECT_SOURCE
@@ -393,9 +400,9 @@ static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
 					Ddim_Print(("A:tMsg.msg[3] = 0x%08X\n", tMsg.msg[3]));
 				}
 
-				ret = Dd_Slimbus_Write_Msg(ch, &tMsg.msg[0], tMsg.size);
+				ret = dd_slimbus_write_msg(ddSlim, ch, &tMsg.msg[0], tMsg.size);
 				if(ret != D_DDIM_OK){
-					Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+					Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 				}
 			} else {
 				if (index < 5) {
@@ -405,10 +412,10 @@ static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
 					Ddim_Print(("A:tMsg.msg[2] = 0x%08X\n", tMsg.msg[2]));
 					Ddim_Print(("A:tMsg.msg[3] = 0x%08X\n", tMsg.msg[3]));
 				}
-				ret = Dd_Slimbus_Write_Msg(ch, &S_GDD_MC_FIFO_TX_MSG_01[index].msg[0], 
+				ret = dd_slimbus_write_msg(ddSlim, ch, &S_GDD_MC_FIFO_TX_MSG_01[index].msg[0], 
 								S_GDD_MC_FIFO_TX_MSG_01[index].size);
 				if(ret != D_DDIM_OK){
-					Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+					Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 				}
 			}
 		} else {	// sink -> source
@@ -425,9 +432,9 @@ static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
 					tMsg.msg[1] &= 0xFFFF00FF;
 					tMsg.msg[1] |= la;
 				}
-				ret = Dd_Slimbus_Write_Msg(ch, &tMsg.msg[0], tMsg.size);
+				ret = dd_slimbus_write_msg(ddSlim, ch, &tMsg.msg[0], tMsg.size);
 				if(ret != D_DDIM_OK){
-					Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+					Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 				}
 			} else {
 				if (index < 5) {
@@ -437,16 +444,16 @@ static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
 					Ddim_Print(("A:tMsg.msg[2] = 0x%08X\n", tMsg.msg[2]));
 					Ddim_Print(("A:tMsg.msg[3] = 0x%08X\n", tMsg.msg[3]));
 				}
-				ret = Dd_Slimbus_Write_Msg(ch, &S_GDD_MC_FIFO_TX_MSG_23[index].msg[0], 
+				ret = dd_slimbus_write_msg(ddSlim, ch, &S_GDD_MC_FIFO_TX_MSG_23[index].msg[0], 
 					S_GDD_MC_FIFO_TX_MSG_23[index].size);
 				if(ret != D_DDIM_OK){
-					Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+					Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 				}
 			}
 		}
 
 		while(1){
-			ercd = ddim_user_custom_dly_tsk(1);	// 1ms wait
+			ercd = ddim_user_custom_dly_tsk(ddimUserCus, 1);	// 1ms wait
 			if (ercd != DdimUserCustom_E_OK){
 				Ddim_Print(("ddim_user_custom_dly_tsk Error. ercd = %d\n", ercd));
 			}
@@ -455,29 +462,35 @@ static void ctDdSlimbusEnumeration(E_DD_SLIMBUS_CH ch, kboolean dir)
 			}
 		}
 	}
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
+	k_object_unref(ddSlim);
+	ddSlim = NULL;
 }
 
-static void ctDdSlimbusDisconnect(E_DD_SLIMBUS_CH ch)
+static void ctDdSlimbusDisconnect(EDdSlimbusCh ch)
 {
-	kint32			ret;
-	kuchar			index;
-	DDIM_USER_ER	ercd;
+	kint32				ret;
+	kuchar				index;
+	kint32				ercd;
+	DdSlimbus *			ddSlim = dd_slimbus_get();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 
 	for(index=CtDdSlimbus_CONFIG_MSG_NUM ; index<CtDdSlimbus_CONFIG_MSG_NUM+2 ; index++){
 		S_G_TX_INT_FLAG[ch] = 0;
-		if (ch == E_DD_SLIMBUS_CH0 || ch == E_DD_SLIMBUS_CH1) {
-			ret = Dd_Slimbus_Write_Msg(ch, &S_GDD_MC_FIFO_TX_MSG_01[index].msg[0], 
+		if (ch == DdSlimbus_CH0 || ch == DdSlimbus_CH1) {
+			ret = dd_slimbus_write_msg(ddSlim, ch, &S_GDD_MC_FIFO_TX_MSG_01[index].msg[0], 
 					S_GDD_MC_FIFO_TX_MSG_01[index].size);
 		} else {	// sink -> source
-			ret = Dd_Slimbus_Write_Msg(ch, &S_GDD_MC_FIFO_TX_MSG_23[index].msg[0], 
+			ret = dd_slimbus_write_msg(ddSlim, ch, &S_GDD_MC_FIFO_TX_MSG_23[index].msg[0], 
 					S_GDD_MC_FIFO_TX_MSG_23[index].size);
 		}
 		if(ret != D_DDIM_OK){
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+			Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 		}
 
 		while(1){
-			ercd = ddim_user_custom_dly_tsk(1);	// 1ms wait
+			ercd = ddim_user_custom_dly_tsk(ddimUserCus, 1);	// 1ms wait
 			if (ercd != DdimUserCustom_E_OK){
 				Ddim_Print(("ddim_user_custom_dly_tsk Error. ercd = %d\n", ercd));
 			}
@@ -486,20 +499,24 @@ static void ctDdSlimbusDisconnect(E_DD_SLIMBUS_CH ch)
 			}
 		}
 	}
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
+	k_object_unref(ddSlim);
+	ddSlim = NULL;
 }
 
 #if 0
-static void ct_dd_slimbus_enumeration_1(E_DD_SLIMBUS_CH ch)
+static void ct_dd_slimbus_enumeration_1(EDdSlimbusCh ch)
 {
 	kint32			ret;
 	kuchar			index;
-	DDIM_USER_ER	ercd;
+	kint32	ercd;
 
 	for(index=0 ; index<15 ; index++){
 		S_G_TX_INT_FLAG[ch] = 0;
-		ret = Dd_Slimbus_Write_Msg(ch, &gDD_MC_FIFO_Tx_Msg[index].msg[0], gDD_MC_FIFO_Tx_Msg[index].size);
+		ret = dd_slimbus_write_msg(ch, &gDD_MC_FIFO_Tx_Msg[index].msg[0], gDD_MC_FIFO_Tx_Msg[index].size);
 		if(ret != D_DDIM_OK){
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+			Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 		}
 
 		while(1){
@@ -513,17 +530,17 @@ static void ct_dd_slimbus_enumeration_1(E_DD_SLIMBUS_CH ch)
 		}
 	}
 }
-static void ct_dd_slimbus_enumeration_2(E_DD_SLIMBUS_CH ch)
+static void ct_dd_slimbus_enumeration_2(EDdSlimbusCh ch)
 {
 	kint32			ret;
 	kuchar			index;
-	DDIM_USER_ER	ercd;
+	kint32	ercd;
 
 	for(index=15 ; index<18 ; index++){
 		S_G_TX_INT_FLAG[ch] = 0;
-		ret = Dd_Slimbus_Write_Msg(ch, &gDD_MC_FIFO_Tx_Msg[index].msg[0], gDD_MC_FIFO_Tx_Msg[index].size);
+		ret = dd_slimbus_write_msg(ch, &gDD_MC_FIFO_Tx_Msg[index].msg[0], gDD_MC_FIFO_Tx_Msg[index].size);
 		if(ret != D_DDIM_OK){
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) Error. Return Value=0x%08X\n", ch, ret));
+			Ddim_Print(("dd_slimbus_write_msg(%d) Error. Return Value=0x%08X\n", ch, ret));
 		}
 
 		while(1){
@@ -539,9 +556,9 @@ static void ct_dd_slimbus_enumeration_2(E_DD_SLIMBUS_CH ch)
 }
 #endif
 
-static void ctDdSlimbusDmaIntWriteCb(kuchar dmaCh, kint32 status)
+static void ctDdSlimbusDmaIntWrite_cb(kuchar dmaCh, kint32 status)
 {
-	Ddim_Print(("ctDdSlimbusDmaIntWriteCb called. dmaCh=%d, Status=0x%08X\n", dmaCh, status));
+	Ddim_Print(("ctDdSlimbusDmaIntWrite_cb called. dmaCh=%d, Status=0x%08X\n", dmaCh, status));
 #if 1
 {
 	kint i;
@@ -555,9 +572,9 @@ static void ctDdSlimbusDmaIntWriteCb(kuchar dmaCh, kint32 status)
 #endif
 }
 
-static void ctDdSlimbusDmaIntReadCb(kuchar dmaCh, kint32 status)
+static void ctDdSlimbusDmaIntRead_cb(kuchar dmaCh, kint32 status)
 {
-	Ddim_Print(("ctDdSlimbusDmaIntReadCb called. dmaCh=%d, Status=0x%08X\n", dmaCh, status));
+	Ddim_Print(("ctDdSlimbusDmaIntRead_cb called. dmaCh=%d, Status=0x%08X\n", dmaCh, status));
 #if 1
 {
 	kint i;
@@ -570,9 +587,9 @@ static void ctDdSlimbusDmaIntReadCb(kuchar dmaCh, kint32 status)
 }
 #endif
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Global Function														*/
 /*----------------------------------------------------------------------*/
@@ -622,72 +639,74 @@ static void ctDdSlimbusDmaIntReadCb(kuchar dmaCh, kint32 status)
 void ct_dd_slimbus_main(CtDdSlimbus *self, kint argc, KType* argv)
 {
 	kint32				ret=0;
+	DdSlimbus *			ddSlim = dd_slimbus_get();
+	DdimUserCustom *	ddimUserCus = ddim_user_custom_new();
 	
 	if(strcmp(argv[1], "open") == 0){
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
-		ret = Dd_Slimbus_Open(self->ch, (kint32)atoi(argv[3]));
-		Ddim_Print(("Dd_Slimbus_Open(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
+		ret = dd_slimbus_open(ddSlim, self->ch, (kint32)atoi(argv[3]));
+		Ddim_Print(("dd_slimbus_open(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "close") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
-		ret = Dd_Slimbus_Close(self->ch);
-		Ddim_Print(("Dd_Slimbus_Close(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
+		ret = dd_slimbus_close(ddSlim, self->ch);
+		Ddim_Print(("dd_slimbus_close(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "ctrl") == 0) {
 		if (strcmp(argv[2], "err") != 0) {
-			self->slimbusCtrl.ch				= (E_DD_SLIMBUS_CH)atoi(argv[2]);
-			self->slimbusCtrl.manager_mode	= (E_DD_SLIMBUS_MANAGER_MODE)atoi(argv[3]);
-			self->slimbusCtrl.fr_en			= (E_DD_SLIMBUS_FR_EN)atoi(argv[4]);
-			self->slimbusCtrl.src_thr		= (kuchar)atoi(argv[5]);	// source threshold
-			self->slimbusCtrl.sink_thr		= (kuchar)atoi(argv[6]);	// sink threshold
+			self->slimbusCtrl.ch			= (EDdSlimbusCh)atoi(argv[2]);
+			self->slimbusCtrl.managerMode	= (DdSlimbusManagerMode)atoi(argv[3]);
+			self->slimbusCtrl.frEn			= (DdSlimbusFrEn)atoi(argv[4]);
+			self->slimbusCtrl.srcThr		= (kuchar)atoi(argv[5]);	// source threshold
+			self->slimbusCtrl.sinkThr		= (kuchar)atoi(argv[6]);	// sink threshold
 			if(strcmp(argv[7], "1") == 0){
-				self->slimbusCtrl.manager_int_cb = (VP_SLIMBUS_CALLBACK)ctDdSlimbusManagerIntCb;
+				self->slimbusCtrl.managerIntCb = (VpSlimbusCallback)ctDdSlimbusManagerInt_cb;
 			} else {
-				self->slimbusCtrl.manager_int_cb = NULL;
+				self->slimbusCtrl.managerIntCb = NULL;
 			}
 			if(strcmp(argv[8], "1") == 0){
-				self->slimbusCtrl.data_port_int_cb = (VP_SLIMBUS_CALLBACK)ctDdSlimbusDataPortIntCb;
+				self->slimbusCtrl.dataPortIntCb = (VpSlimbusCallback)ctDdSlimbusDataPortInt_cb;
 			} else {
-				self->slimbusCtrl.data_port_int_cb = NULL;
+				self->slimbusCtrl.dataPortIntCb = NULL;
 			}
-			ret = Dd_Slimbus_Ctrl(&self->slimbusCtrl);
-			Ddim_Print(("Dd_Slimbus_Ctrl(%d) completed. Return Value=0x%08X\n", self->slimbusCtrl.ch, ret));
+			ret = dd_slimbus_ctrl(ddSlim, &self->slimbusCtrl);
+			Ddim_Print(("dd_slimbus_ctrl(%d) completed. Return Value=0x%08X\n", self->slimbusCtrl.ch, ret));
 		} else {
-			ret = Dd_Slimbus_Ctrl(NULL);
-			Ddim_Print(("Dd_Slimbus_Ctrl() completed. Return Value=0x%08X\n", ret));
+			ret = dd_slimbus_ctrl(ddSlim, NULL);
+			Ddim_Print(("dd_slimbus_ctrl() completed. Return Value=0x%08X\n", ret));
 		}
 	} else if(strcmp(argv[1], "start") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
-		ret = Dd_Slimbus_Start(self->ch);
-		Ddim_Print(("Dd_Slimbus_Start(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
+		ret = dd_slimbus_start(ddSlim, self->ch);
+		Ddim_Print(("dd_slimbus_start(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "stop") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
-		ret = Dd_Slimbus_Stop(self->ch);
-		Ddim_Print(("Dd_Slimbus_Stop(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
+		ret = dd_slimbus_stop(ddSlim, self->ch);
+		Ddim_Print(("dd_slimbus_stop(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "enu_sta") == 0) {	// enumeration
 		kboolean dir;
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		dir = (kboolean)atoi(argv[3]);
 		ctDdSlimbusEnumeration(self->ch, dir);
 		Ddim_Print(("enu_sta(%d) completed.\n", self->ch));
 	}
 #if 0
 	else if(strcmp(argv[1], "enu_sta1") == 0){	// enumeration
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		ct_dd_slimbus_enumeration_1(self->ch);
 		Ddim_Print(("enu_sta(%d) completed.\n", self->ch));
 	} else if(strcmp(argv[1], "enu_sta2") == 0) {	// enumeration
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		ct_dd_slimbus_enumeration_2(self->ch);
 		Ddim_Print(("enu_sta(%d) completed.\n", self->ch));
 	} else if(strcmp(argv[1], "r_msg") == 0) {
 		if (strcmp(argv[2], "err") != 0) {
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+			self->ch = (EDdSlimbusCh)atoi(argv[2]);
 			ret = ctDdSlimbusReadMsgRxFifo(self->ch);
-			Ddim_Print(("Dd_Slimbus_Read_Msg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			Ddim_Print(("dd_slimbus_read_msg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		} else {
-			ret =Dd_Slimbus_Read_Msg(0, NULL, &size);
-			Ddim_Print(("Dd_Slimbus_Read_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
-			ret =Dd_Slimbus_Read_Msg(0, rxMsg, &NULL);
-			Ddim_Print(("Dd_Slimbus_Read_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret =dd_slimbus_read_msg(0, NULL, &size);
+			Ddim_Print(("dd_slimbus_read_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret =dd_slimbus_read_msg(0, rxMsg, &NULL);
+			Ddim_Print(("dd_slimbus_read_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
 		}
 	}
 #else
@@ -696,10 +715,10 @@ void ct_dd_slimbus_main(CtDdSlimbus *self, kint argc, KType* argv)
 			kuint32	size;
 			kuint32	rxMsg[16];
 
-			ret =Dd_Slimbus_Read_Msg(0, NULL, &size);
-			Ddim_Print(("Dd_Slimbus_Read_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
-			ret =Dd_Slimbus_Read_Msg(0, rxMsg, NULL);
-			Ddim_Print(("Dd_Slimbus_Read_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret =dd_slimbus_read_msg(ddSlim, 0, NULL, &size);
+			Ddim_Print(("dd_slimbus_read_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret =dd_slimbus_read_msg(ddSlim, 0, rxMsg, NULL);
+			Ddim_Print(("dd_slimbus_read_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
 		}
 	}
 #endif
@@ -718,7 +737,7 @@ void ct_dd_slimbus_main(CtDdSlimbus *self, kint argc, KType* argv)
 		}
 	} else if(strcmp(argv[1], "disc") == 0) { 	// disconnect
 
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		ctDdSlimbusDisconnect(self->ch);
 		Ddim_Print(("disconnect(%d) completed.\n", self->ch));
 	} else if(strcmp(argv[1], "w_cnt") == 0) {	// next write position
@@ -727,190 +746,191 @@ void ct_dd_slimbus_main(CtDdSlimbus *self, kint argc, KType* argv)
 		Ddim_Print(("next write position(%d) completed.\n", S_G_WRITE_DATA_POS));
 	} else if(strcmp(argv[1], "w_msg") == 0) {
 		if (strcmp(argv[2], "err") != 0) {
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+			self->ch = (EDdSlimbusCh)atoi(argv[2]);
 			self->index = atoi(argv[3]);
-			if(self->ch == E_DD_SLIMBUS_CH0 || self->ch == E_DD_SLIMBUS_CH1){
-				ret = Dd_Slimbus_Write_Msg(self->ch, &S_GDD_MC_FIFO_TX_MSG_01[self->index].msg[0], 
+			if(self->ch == DdSlimbus_CH0 || self->ch == DdSlimbus_CH1){
+				ret = dd_slimbus_write_msg(ddSlim, self->ch, &S_GDD_MC_FIFO_TX_MSG_01[self->index].msg[0], 
 						S_GDD_MC_FIFO_TX_MSG_01[self->index].size);
 			} else {
-				ret = Dd_Slimbus_Write_Msg(self->ch, &S_GDD_MC_FIFO_TX_MSG_23[self->index].msg[0], 
+				ret = dd_slimbus_write_msg(ddSlim, self->ch, &S_GDD_MC_FIFO_TX_MSG_23[self->index].msg[0], 
 						S_GDD_MC_FIFO_TX_MSG_23[self->index].size);
 			}
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			Ddim_Print(("dd_slimbus_write_msg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		} else {
-			ret = Dd_Slimbus_Write_Msg(E_DD_SLIMBUS_CH0, NULL, S_GDD_MC_FIFO_TX_MSG_01[0].size);
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
-			ret = Dd_Slimbus_Write_Msg(E_DD_SLIMBUS_CH0, &S_GDD_MC_FIFO_TX_MSG_01[0].msg[0], 65);
-			Ddim_Print(("Dd_Slimbus_Write_Msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret = dd_slimbus_write_msg(ddSlim, DdSlimbus_CH0, NULL, S_GDD_MC_FIFO_TX_MSG_01[0].size);
+			Ddim_Print(("dd_slimbus_write_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret = dd_slimbus_write_msg(ddSlim, DdSlimbus_CH0, &S_GDD_MC_FIFO_TX_MSG_01[0].msg[0], 65);
+			Ddim_Print(("dd_slimbus_write_msg(%d) completed. Return Value=0x%08X\n", 0, ret));
 		}
 	} else if(strcmp(argv[1], "w_dat") == 0) {
 		if (strcmp(argv[2], "err") != 0) {
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+			self->ch = (EDdSlimbusCh)atoi(argv[2]);
 			self->dmaCh = (kuchar)atoi(argv[3]);
 			self->count = (kuint32)atoi(argv[4]);
-			ret = Dd_Slimbus_Write_Data(self->ch, self->dmaCh, (kuint32*)S_GDD_WRITE_DATA, self->count, 
-					(VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntWriteCb);
-			Ddim_Print(("Dd_Slimbus_Write_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			ret = dd_slimbus_write_data(ddSlim, self->ch, self->dmaCh, (kuint32*)S_GDD_WRITE_DATA, self->count, 
+					(VpSlimbusCallback)ctDdSlimbusDmaIntWrite_cb);
+			Ddim_Print(("dd_slimbus_write_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		} else {
-			ret = Dd_Slimbus_Write_Data(0, 3, NULL, 16, (VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntWriteCb);
-			Ddim_Print(("Dd_Slimbus_Write_Data(%d) completed. Return Value=0x%08X\n", 0, ret));
-			ret = Dd_Slimbus_Write_Data(0, 3, (kuint32*)S_GDD_WRITE_DATA, 16, NULL);
-			Ddim_Print(("Dd_Slimbus_Write_Data(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret = dd_slimbus_write_data(ddSlim, 0, 3, NULL, 16, (VpSlimbusCallback)ctDdSlimbusDmaIntWrite_cb);
+			Ddim_Print(("dd_slimbus_write_data(%d) completed. Return Value=0x%08X\n", 0, ret));
+			ret = dd_slimbus_write_data(ddSlim, 0, 3, (kuint32*)S_GDD_WRITE_DATA, 16, NULL);
+			Ddim_Print(("dd_slimbus_write_data(%d) completed. Return Value=0x%08X\n", 0, ret));
 		}
 	} else if(strcmp(argv[1], "w_dat2") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		self->dmaCh = (kuchar)atoi(argv[3]);
 		self->count = (kuint32)atoi(argv[4]);
-		ret = Dd_Slimbus_Write_Data(self->ch, self->dmaCh, (kuint32*)S_GDD_WRITE_DATA, self->count, NULL);
-		Ddim_Print(("Dd_Slimbus_Write_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		ret = dd_slimbus_write_data(ddSlim, self->ch, self->dmaCh, (kuint32*)S_GDD_WRITE_DATA, self->count, NULL);
+		Ddim_Print(("dd_slimbus_write_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "w_dat3") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		self->dmaCh = (kuchar)atoi(argv[3]);
 		self->count = (kuint32)atoi(argv[4]);
 		self->index = (kuint32)atoi(argv[5]);
-		ret = Dd_Slimbus_Write_Data(self->ch, self->dmaCh, (kuint32*)&S_GDD_WRITE_DATA[self->index], self->count, 
-				(VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntWriteCb);
-		Ddim_Print(("Dd_Slimbus_Write_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		ret = dd_slimbus_write_data(ddSlim, self->ch, self->dmaCh, (kuint32*)&S_GDD_WRITE_DATA[self->index], 
+			self->count, (VpSlimbusCallback)ctDdSlimbusDmaIntWrite_cb);
+		Ddim_Print(("dd_slimbus_write_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "w_datc") == 0) {
 		for (self->index = 0; self->index < CtDdSlimbus_WRITE_DATA_NUM; self->index ++) {
 			S_GDD_WRITE_TMP_DATA[self->index % CtDdSlimbus_WRITE_DATA_NUM] = 
 			S_GDD_WRITE_DATA[(self->index + S_G_WRITE_DATA_POS) % CtDdSlimbus_WRITE_DATA_NUM];
 		}
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		self->dmaCh = (kuchar)atoi(argv[3]);
 		self->count = (kuint32)atoi(argv[4]);
-		ret = Dd_Slimbus_Write_Data(self->ch, self->dmaCh, 
+		ret = dd_slimbus_write_data(ddSlim, self->ch, self->dmaCh, 
 			(kuint32*)&S_GDD_WRITE_TMP_DATA[S_G_WRITE_DATA_POS % CtDdSlimbus_WRITE_DATA_NUM], 
-			self->count, (VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntWriteCb);
-		Ddim_Print(("Dd_Slimbus_Write_Data(%d) position=%d completed. Return Value=0x%08X\n", 
+			self->count, (VpSlimbusCallback)ctDdSlimbusDmaIntWrite_cb);
+		Ddim_Print(("dd_slimbus_write_data(%d) position=%d completed. Return Value=0x%08X\n", 
 			self->ch, S_G_WRITE_DATA_POS, ret));
 	} else if(strcmp(argv[1], "r_dat") == 0) {
 		if (strcmp(argv[2], "err") != 0) {
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+			self->ch = (EDdSlimbusCh)atoi(argv[2]);
 			self->dmaCh = (kuchar)atoi(argv[3]);
 			self->count = (kuint32)atoi(argv[4]);
 			memset(S_GDD_READ_DATA, 0, sizeof(S_GDD_READ_DATA));
-			ddim_user_custom_l1l2cache_clean_flush_addr((kuint32)S_GDD_READ_DATA, sizeof(S_GDD_READ_DATA));
-			ret = Dd_Slimbus_Read_Data(self->ch, self->dmaCh, S_GDD_READ_DATA, self->count, 
-				(VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntReadCb);
-			Ddim_Print(("Dd_Slimbus_Read_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			ddim_user_custom_l1l2cache_clean_flush_addr(ddimUserCus,
+				(kuint32)S_GDD_READ_DATA, sizeof(S_GDD_READ_DATA));
+			ret = dd_slimbus_read_data(ddSlim, self->ch, self->dmaCh, S_GDD_READ_DATA, self->count, 
+				(VpSlimbusCallback)ctDdSlimbusDmaIntRead_cb);
+			Ddim_Print(("dd_slimbus_read_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		} else {
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
-			ret = Dd_Slimbus_Read_Data(0, 3, NULL, 16, (VP_SLIMBUS_CALLBACK)ctDdSlimbusDmaIntReadCb);
-			Ddim_Print(("Dd_Slimbus_Read_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
-			ret = Dd_Slimbus_Read_Data(0, 3, S_GDD_READ_DATA, 16, NULL);
-			Ddim_Print(("Dd_Slimbus_Read_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			self->ch = (EDdSlimbusCh)atoi(argv[2]);
+			ret = dd_slimbus_read_data(ddSlim, 0, 3, NULL, 16, (VpSlimbusCallback)ctDdSlimbusDmaIntRead_cb);
+			Ddim_Print(("dd_slimbus_read_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			ret = dd_slimbus_read_data(ddSlim, 0, 3, S_GDD_READ_DATA, 16, NULL);
+			Ddim_Print(("dd_slimbus_read_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		}
 	} else if(strcmp(argv[1], "r_dat2") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[2]);
+		self->ch = (EDdSlimbusCh)atoi(argv[2]);
 		self->dmaCh = (kuchar)atoi(argv[3]);
 		self->count = (kuint32)atoi(argv[4]);
 		memset(S_GDD_READ_DATA, 0, sizeof(S_GDD_READ_DATA));
-		ddim_user_custom_l1l2cache_clean_flush_addr((kuint32)S_GDD_READ_DATA, sizeof(S_GDD_READ_DATA));
-		ret = Dd_Slimbus_Read_Data(self->ch, self->dmaCh, S_GDD_READ_DATA, self->count, NULL);
-		Ddim_Print(("Dd_Slimbus_Read_Data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+		ddim_user_custom_l1l2cache_clean_flush_addr(ddimUserCus, (kuint32)S_GDD_READ_DATA, sizeof(S_GDD_READ_DATA));
+		ret = dd_slimbus_read_data(ddSlim, self->ch, self->dmaCh, S_GDD_READ_DATA, self->count, NULL);
+		Ddim_Print(("dd_slimbus_read_data(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 	} else if(strcmp(argv[1], "set") == 0) {
 		if(strcmp(argv[2], "reg") == 0){
-			self->ch = (E_DD_SLIMBUS_CH)atoi(argv[3]);
+			self->ch = (EDdSlimbusCh)atoi(argv[3]);
 			sscanf(argv[4], "%lx", (kulong*)&self->offset);
 			sscanf(argv[5], "%lx", (kulong*)&self->data);
-			ret = Dd_Slimbus_Set_Reg(self->ch, self->offset, self->data);
+			ret = dd_slimbus_set_reg(ddSlim, self->ch, self->offset, self->data);
 			Ddim_Print(("SLIMBus ch%d Register 0x%04X 0x%08X\n", self->ch, self->offset, self->data));
-			Ddim_Print(("Dd_Slimbus_Set_Reg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+			Ddim_Print(("dd_slimbus_set_reg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 		} else {
 			Ddim_Print(("please check parameter!!\n"));
 		}
 	} else if(strcmp(argv[1], "get") == 0) {
-		self->ch = (E_DD_SLIMBUS_CH)atoi(argv[3]);
+		self->ch = (EDdSlimbusCh)atoi(argv[3]);
 		if(strcmp(argv[2], "ctrl") == 0){
 			if (strcmp(argv[3], "err") != 0) {
-				ret = Dd_Slimbus_Get_Ctrl(self->ch, &self->slimbusCtrl);
+				ret = dd_slimbus_get_ctrl(ddSlim, self->ch, &self->slimbusCtrl);
 				if(ret == D_DDIM_OK){
 					Ddim_Print(("ch               : 0x%X\n", self->slimbusCtrl.ch));
-					Ddim_Print(("manager_mode     : 0x%X\n", self->slimbusCtrl.manager_mode));
-					Ddim_Print(("fr_en            : 0x%X\n", self->slimbusCtrl.fr_en));
-					Ddim_Print(("src_thr          : 0x%X\n", self->slimbusCtrl.src_thr));
-					Ddim_Print(("sink_thr         : 0x%X\n", self->slimbusCtrl.sink_thr));
+					Ddim_Print(("manager_mode     : 0x%X\n", self->slimbusCtrl.managerMode));
+					Ddim_Print(("fr_en            : 0x%X\n", self->slimbusCtrl.frEn));
+					Ddim_Print(("src_thr          : 0x%X\n", self->slimbusCtrl.srcThr));
+					Ddim_Print(("sink_thr         : 0x%X\n", self->slimbusCtrl.sinkThr));
 					Ddim_Print(("manager_int_cb   : 0x%08lX\n", 
-						(kulong)self->slimbusCtrl.manager_int_cb));
+						(kulong)self->slimbusCtrl.managerIntCb));
 					Ddim_Print(("data_port_int_cb : 0x%08lX\n", 
-						(kulong)self->slimbusCtrl.data_port_int_cb));
+						(kulong)self->slimbusCtrl.dataPortIntCb));
 				}
-				Ddim_Print(("Dd_Slimbus_Get_Ctrl(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+				Ddim_Print(("dd_slimbus_get_ctrl(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 			} else {
-				ret = Dd_Slimbus_Get_Ctrl(0, NULL);
-				Ddim_Print(("Dd_Slimbus_Get_Ctrl(0) completed. Return Value=0x%08X\n", ret));
+				ret = dd_slimbus_get_ctrl(ddSlim, 0, NULL);
+				Ddim_Print(("dd_slimbus_get_ctrl(0) completed. Return Value=0x%08X\n", ret));
 			}
 		} else if(strcmp(argv[2], "reg") == 0) {
 			if (strcmp(argv[3], "err") != 0) {
 				sscanf(argv[4], "%lx", (kulong*)&self->offset);
-				ret = Dd_Slimbus_Get_Reg(self->ch, self->offset, &self->data);
+				ret = dd_slimbus_get_reg(ddSlim, self->ch, self->offset, &self->data);
 				Ddim_Print(("SLIMBus ch%d Register 0x%04X 0x%08X\n", 
 					self->ch, self->offset, self->data));
-				Ddim_Print(("Dd_Slimbus_Get_Reg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
+				Ddim_Print(("dd_slimbus_get_reg(%d) completed. Return Value=0x%08X\n", self->ch, ret));
 			} else {
-				ret = Dd_Slimbus_Get_Reg(0, 0, NULL);
+				ret = dd_slimbus_get_reg(ddSlim, 0, 0, NULL);
 				Ddim_Print(("SLIMBus ch%d Register 0x%04X NULL\n", 0, 0));
-				Ddim_Print(("Dd_Slimbus_Get_Reg(%d) completed. Return Value=0x%08X\n", 0, ret));
+				Ddim_Print(("dd_slimbus_get_reg(%d) completed. Return Value=0x%08X\n", 0, ret));
 			}
 		} else {
 			Ddim_Print(("please check parameter!!\n"));
 		}
 	} else if(strcmp(argv[1], "err") == 0) {
-		if(Dd_Slimbus_Close(0) != D_DD_SLIMBUS_SEM_NG){
-			Ddim_Print(("Dd_Slimbus_Close D_DD_SLIMBUS_SEM_NG Check NG.\n"));
+		if(dd_slimbus_close(ddSlim, 0) != DdSlimbus_SEM_NG){
+			Ddim_Print(("dd_slimbus_close D_DD_SLIMBUS_SEM_NG Check NG.\n"));
 			return;
 		}
 
-		Dd_Slimbus_Open(0, 0);
-		if(Dd_Slimbus_Open(0, 20) != D_DD_SLIMBUS_SEM_TIMEOUT){
-			Ddim_Print(("Dd_Slimbus_Open ch0 D_DD_SLIMBUS_SEM_TIMEOUT Check NG.\n"));
+		dd_slimbus_open(ddSlim, 0, 0);
+		if(dd_slimbus_open(ddSlim, 0, 20) != DdSlimbus_SEM_TIMEOUT){
+			Ddim_Print(("dd_slimbus_open ch0 D_DD_SLIMBUS_SEM_TIMEOUT Check NG.\n"));
 			return;
 		}
 
 		kuint32 data;
-		if(Dd_Slimbus_Get_Reg(0, 0x0001, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x0001, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Get_Reg(0, 0x0014, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x0014, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Get_Reg(0, 0x0030, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x0030, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Get_Reg(0, 0x34, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x34, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Get_Reg(0, 0x0084, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x0084, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Get_Reg(0, 0x00BC, &data) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_get_reg(ddSlim, 0, 0x00BC, &data) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Set_Reg(0, 0x00C4, 0x0) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_set_reg(ddSlim, 0, 0x00C4, 0x0) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Set_Reg(0, 0x00FC, 0x0) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_set_reg(ddSlim, 0, 0x00FC, 0x0) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Set_Reg(0, 0x0108, 0x0) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_set_reg(ddSlim, 0, 0x0108, 0x0) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Set_Reg(0, 0x0FFC, 0x0) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_set_reg(ddSlim, 0, 0x0FFC, 0x0) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
-		if(Dd_Slimbus_Set_Reg(0, 0x1040, 0x0) != D_DD_SLIMBUS_INPUT_PARAM_ERROR){
-			Ddim_Print(("Dd_Slimbus_Get_Reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
+		if(dd_slimbus_set_reg(ddSlim, 0, 0x1040, 0x0) != DdSlimbus_INPUT_PARAM_ERROR){
+			Ddim_Print(("dd_slimbus_get_reg ch1 D_DD_SLIMBUS_INPUT_PARAM_ERROR Check NG.\n"));
 			return;
 		}
 
@@ -918,6 +938,10 @@ void ct_dd_slimbus_main(CtDdSlimbus *self, kint argc, KType* argv)
 	} else {
 		Ddim_Print(("please check parameter!!\n"));
 	}
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL;
+	k_object_unref(ddSlim);
+	ddSlim = NULL;
 }
 
 CtDdSlimbus *ct_dd_slimbus_new(void)

@@ -1,0 +1,497 @@
+负责代码及其路径：target/cpu_tkernel/basefw/fj/disp/src/disp.c,fb_disp.c
+原disp.c拆分为kdisp.c,disputil.c,kdisp1.c,kdisp2.c
+kdisp.h:
+枚举修改：
+typedef enum {
+//	E_BF_DISP_IMAGE_FORMAT_YCC422_RP_8BIT		= 0,	/**< YCbCr422 respect point 8bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_422					= 0,	/**< YCbCr422 respect point 8bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_YCC422_RP_12BIT_PACK = 1,	/**< YCbCr422 respect point 12bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_YCC422_RP_10BIT_PACK	= 3,	/**< YCbCr422 respect point 10bit format.			*/
+//	E_BF_DISP_IMAGE_FORMAT_YCC420_RP_8BIT		= 4,	/**< YCbCr420 respect point 8bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_420					= 4,	/**< YCbCr420 respect point 8bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_YCC420_RP_10BIT_PACK	= 7,	/**< YCbCr420 respect point 10bit format.			*/
+	E_BF_DISP_IMAGE_FORMAT_GENERAL_10BIT		= 11,	/**< General purpose 10bit input data.				*/
+	E_BF_DISP_IMAGE_FORMAT_GENERAL_10BITx2		= 27,	/**< General purpose 10bit input data (10bitx2).	*/
+	E_BF_DISP_IMAGE_FORMAT_VIDEO				= 0xFF,	/**< Video format									*/
+//	E_BF_DISP_IMAGE_FORMAT_420		= 0x04,		/**< 420 Semi -Planar 8bit format	*/
+//	E_BF_DISP_IMAGE_FORMAT_422		= 0x00,		/**< 422 Semi -Planar 8bit format	*/
+//	E_BF_DISP_IMAGE_FORMAT_RIBERY	= 0x0C,		/**< Ribery format					*/
+} E_BF_DISP_IMAGE_FORMAT;
+
+/** YCC color space */
+typedef enum {
+	E_BF_DISP_YCC_COLOR_SPACE_601 = 0,			/**< ITU-R BT.601	*/
+	E_BF_DISP_YCC_COLOR_SPACE_709				/**< ITU-R BT.709	*/
+} E_BF_DISP_YCC_COLOR_SPACE;
+
+/** HDMI Audio I2S SD justify */
+typedef enum {
+	E_BF_DISP_HDMI_AUDIO_I2S_JUST_LEFT = 0,		/**< Data is left-justified		*/
+	E_BF_DISP_HDMI_AUDIO_I2S_JUST_RIGHT,		/**< Data is right-justified	*/
+	E_BF_DISP_HDMI_AUDIO_I2S_STANDARD,			/**< Data is standard			*/
+} E_BF_DISP_HDMI_AUDIO_I2S_JUST;
+
+/** HDMI Audio I2S sample word length */
+typedef enum {
+	E_BF_DISP_HDMI_AUDIO_I2S_LEN_16 = 0,		/**< 16bit		*/
+	E_BF_DISP_HDMI_AUDIO_I2S_LEN_24 = 5,		/**< 24bit		*/
+} E_BF_DISP_HDMI_AUDIO_I2S_LEN;
+
+改为：
+
+typedef enum {
+//	E_BF_DISP_IMAGE_FORMAT_YCC422_RP_8BIT		= 0,	/**< YCbCr422 respect point 8bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_422					= 0,	/**< YCbCr422 respect point 8bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_YCC422_RP_12BIT_PACK = 1,	/**< YCbCr422 respect point 12bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_YCC422_RP_10BIT_PACK	= 3,	/**< YCbCr422 respect point 10bit format.			*/
+//	E_BF_DISP_IMAGE_FORMAT_YCC420_RP_8BIT		= 4,	/**< YCbCr420 respect point 8bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_420					= 4,	/**< YCbCr420 respect point 8bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_YCC420_RP_10BIT_PACK	= 7,	/**< YCbCr420 respect point 10bit format.			*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_GENERAL_10BIT		= 11,	/**< General purpose 10bit input data.				*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_GENERAL_10BITx2		= 27,	/**< General purpose 10bit input data (10bitx2).	*/
+	KDisp_E_BF_DISP_IMAGE_FORMAT_VIDEO				= 0xFF,	/**< Video format									*/
+//	KDisp_E_BF_DISP_IMAGE_FORMAT_420		= 0x04,		/**< 420 Semi -Planar 8bit format	*/
+//	KDisp_E_BF_DISP_IMAGE_FORMAT_422		= 0x00,		/**< 422 Semi -Planar 8bit format	*/
+//	E_BF_DISP_IMAGE_FORMAT_RIBERY	= 0x0C,		/**< Ribery format					*/
+} EBfDispImageFormat;
+
+/** YCC color space */
+typedef enum {
+	KDisp_E_BF_DISP_YCC_COLOR_SPACE_601 = 0,			/**< ITU-R BT.601	*/
+	KDisp_E_BF_DISP_YCC_COLOR_SPACE_709				/**< ITU-R BT.709	*/
+} EBfDispYccColorSpace;
+
+/** HDMI Audio I2S SD justify */
+typedef enum {
+	KDisp_E_BF_DISP_HDMI_AUDIO_I2S_JUST_LEFT = 0,		/**< Data is left-justified		*/
+	KDisp_E_BF_DISP_HDMI_AUDIO_I2S_JUST_RIGHT,		/**< Data is right-justified	*/
+	KDisp_E_BF_DISP_HDMI_AUDIO_I2S_STANDARD,			/**< Data is standard			*/
+} EBfDispHdmiAudioI2sJust;
+
+/** HDMI Audio I2S sample word length */
+typedef enum {
+	KDisp_E_BF_DISP_HDMI_AUDIO_I2S_LEN_16 = 0,		/**< 16bit		*/
+	KDisp_E_BF_DISP_HDMI_AUDIO_I2S_LEN_24 = 5,		/**< 24bit		*/
+} EBfDispHdmiAudioI2sLen;
+
+公有方法修改：
+原码为：
+extern FJ_ERR_CODE BF_Disp_Set_Main_Addr( UCHAR disp_id, FJ_DISP_YCC_ADDR* ycc_addr, E_BF_DISP_IMAGE_FORMAT image_format, E_BF_DISP_YCC_COLOR_SPACE color_space, ULONG global_width );
+extern VOID BF_Disp_Wait_Vsync( FJ_DISP_TYPE disp_type );
+extern FJ_ERR_CODE BF_Disp_Set_Audio_I2S( ULONG samp_freq, E_BF_DISP_HDMI_AUDIO_I2S_JUST i2s_just, E_BF_DISP_HDMI_AUDIO_I2S_LEN i2s_len );
+extern VOID BF_Disp_Clear_Addr( VOID );
+extern BOOL BF_Disp_HDMI_Get_SPD_InfoFrame_Enable( VOID );
+extern BOOL BF_Disp_HDMI_Get_MPEG_InfoFrame_Enable( VOID );
+extern VOID BF_Disp_Instance_Print_Info( VOID );
+extern VOID BF_Disp_OSD_Print_Info( UCHAR disp_id );
+
+extern FJ_ERR_CODE fj_disp_open( FJ_DISP_TYPE disp_type, UCHAR *disp_id );
+extern FJ_ERR_CODE fj_disp_close( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_lcd_config( UCHAR disp_id, FJ_DISP_LCD_CONFIG *lcd_config_info );
+extern FJ_ERR_CODE fj_disp_lcd_start_sync( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_lcd_stop_sync( UCHAR disp_id );
+extern FJ_DISP_LCD_CONNECT_STATE fj_disp_lcd_get_status( VOID );
+extern FJ_ERR_CODE fj_disp_hdmi_set_detect_callback( DISP_HDMI_CALLBACK interrupt_callback , FJ_DISP_HDMI_DETECT_SETTING const* const detect_setting );
+extern FJ_DISP_HDMI_DETECT fj_disp_hdmi_get_detect_status( VOID );
+extern FJ_ERR_CODE fj_disp_hdmi_get_sink( UCHAR disp_id, FJ_DISP_HDMI_SINK_INFO* sink_info );
+extern FJ_ERR_CODE fj_disp_hdmi_get_devicevendorproductid( UCHAR disp_id, FJ_DISP_HDMI_DEV_VENDOR_PRODUCT_ID* vendor_product_id );
+extern FJ_ERR_CODE fj_disp_hdmi_set_vic_info( UCHAR disp_id, FJ_DISP_HDMI_VIC_INFO* vic_info );
+extern FJ_ERR_CODE fj_disp_hdmi_set_spd( UCHAR disp_id, FJ_DISP_HDMI_SPD_INFO* spd_info );
+extern FJ_ERR_CODE fj_disp_hdmi_set_vendor_specific( UCHAR disp_id, FJ_DISP_HDMI_VENDOR_SPEC_INFO* vendor_spec_info );
+extern FJ_ERR_CODE fj_disp_hdmi_config_video( UCHAR disp_id, FJ_DISP_VIDEO_ID video_id, UCHAR freq_ctrl );
+extern FJ_ERR_CODE fj_disp_hdmi_config_audio( UCHAR disp_id, ULONG samp_freq );
+extern FJ_ERR_CODE fj_disp_hdmi_start_sync( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_hdmi_stop_sync( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_mipi_config_video( UCHAR disp_id, FJ_DISP_LCD_CONFIG *lcd_config_info );
+extern FJ_ERR_CODE fj_disp_mipi_start_sync( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_mipi_stop_sync( UCHAR disp_id );
+extern FJ_ERR_CODE fj_set_display_window( UCHAR disp_id, FJ_DISP_WINDOW_CONFIG* window_config );
+extern FJ_ERR_CODE fj_get_display_window( UCHAR disp_id, FJ_DISP_WINDOW_CONFIG* window_config );
+extern FJ_ERR_CODE fj_disp_video_render( UCHAR disp_id, FJ_DISP_YCC_ADDR* ycc_addr, UINT32 global_width );
+extern FJ_ERR_CODE fj_disp_video_set_rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE rotate_degree );
+extern FJ_ERR_CODE fj_disp_video_get_rotate( UCHAR disp_id, FJ_DISP_ROTATE_DEGREE* rotate_degree );
+extern FJ_ERR_CODE fj_disp_video_enable( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_video_disable( UCHAR disp_id );
+extern FJ_ERR_CODE fj_disp_show_boot_image( const FJ_DISP_IMAGE_CONFIG* config_info );
+extern FJ_ERR_CODE fj_disp_osd_set_config( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, FJ_DISP_OSD_CONFIG* config_info );
+extern FJ_ERR_CODE fj_disp_osd_enable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id );
+extern FJ_ERR_CODE fj_disp_osd_disable( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id );
+extern FJ_ERR_CODE fj_disp_osd_rotate_copy( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, FJ_DISP_OSD_RECT_INFO* rect_info, FJ_DISP_OSD_BUFF_ADDR* buff_addr );
+extern FJ_ERR_CODE fj_disp_osd_render( UCHAR disp_id, FJ_DISP_LAYERID_TYPE layer_id, UINT32 disp_buff_addr );
+
+kdisp.h部分改为：
+
+void                          k_disp_bf_disp_hdmi_detect_task(kint32 stacd);
+void                          k_disp_disp_osd_copy_by_src_offset(KDisp *self,ks64 src, ks64 dst, ks64 width,
+	                             ks64 srcOffset);
+void                          k_disp_disp_osd_copy_invert_by_4pixel(KDisp *self,klong src, klong dst, klong width);
+void                          k_disp_disp_osd_rotate90(KDisp *self,klong src, klong dst, klong srcWidth,
+		                         klong srcHeight,klong srcGWidth, klong dstGWidth);
+void                          k_disp_disp_osd_rotate270(KDisp *self,klong src, klong dst, klong srcWidth,
+		                         klong srcHeight,klong srcGWidth, klong dstGWidth);
+void                          k_disp_disp_osd_rotate180(KDisp *self,klong src, klong dst, klong srcWidth,
+		                         klong srcHeight,klong srcGWidth, klong dstGWidth);
+#if 0
+FJ_ERR_CODE             k_disp_bf_disp_get_output_fps( kuchar dispId, kulong* outputFps,
+		                         FJ_DISP_LCD_SCAN_MODE *scanMode );
+#endif
+ kboolean                  k_disp_bf_disp_hdmi_get_spd_infoframe_enable(void);
+ kboolean                  k_disp_bf_disp_hdmi_get_mpeg_infoframe_enable(void);
+ FJ_ERR_CODE            k_disp_fj_disp_mipi_stop_sync(KDisp *self, kuchar dispId );
+ FJ_ERR_CODE            k_disp_fj_set_display_window(KDisp *self, kuchar dispId, FJ_DISP_WINDOW_CONFIG* windowConfig);
+ FJ_ERR_CODE            k_disp_fj_get_display_window(KDisp *self, kuchar dispId, FJ_DISP_WINDOW_CONFIG* windowConfig);
+ FJ_ERR_CODE            k_disp_fj_disp_video_render(KDisp *self, kuchar dispId, FJ_DISP_YCC_ADDR* yccAddr,
+		                         kuint globalWidth );
+ FJ_ERR_CODE            k_disp_fj_disp_video_set_rotate(KDisp *self, kuchar dispId,
+		                         FJ_DISP_ROTATE_DEGREE rotateDegree);
+ FJ_ERR_CODE            k_disp_fj_disp_video_get_rotate(KDisp*self,kuchar dispId, FJ_DISP_ROTATE_DEGREE* rotateDegree);
+ FJ_ERR_CODE            k_disp_fj_disp_video_enable(KDisp*self,kuchar dispId );
+ FJ_ERR_CODE            k_disp_fj_disp_video_disable(KDisp*self,kuchar dispId );
+ FJ_ERR_CODE            k_disp_fj_disp_show_boot_image(KDisp*self,const FJ_DISP_IMAGE_CONFIG* configInfo );
+ FJ_ERR_CODE            k_disp_fj_disp_osd_set_config(KDisp*self, kuchar dispId, FJ_DISP_LAYERID_TYPE layerId,
+		                         FJ_DISP_OSD_CONFIG* configInfo);
+ FJ_ERR_CODE            k_disp_fj_disp_osd_enable(KDisp*self,  kuchar dispId, FJ_DISP_LAYERID_TYPE layerId );
+ FJ_ERR_CODE            k_disp_fj_disp_osd_disable(KDisp*self, kuchar dispId, FJ_DISP_LAYERID_TYPE layerId );
+ FJ_ERR_CODE            k_disp_fj_disp_osd_rotate_copy(KDisp*self, kuchar dispId, FJ_DISP_LAYERID_TYPE layerId,
+		                         FJ_DISP_OSD_RECT_INFO* rectInfo, FJ_DISP_OSD_BUFF_ADDR* buffAddr );
+ FJ_ERR_CODE            k_disp_fj_disp_osd_render(KDisp*self, kuchar dispId, FJ_DISP_LAYERID_TYPE layerId,
+		                         kuint dispBuffAddr );
+
+kdisp1.h部分改为：
+
+FJ_ERR_CODE                           k_disp1_bf_disp_set_main_addr(KDisp1 *self, kuchar dispId,
+		                                        FJ_DISP_YCC_ADDR* yccAddr, EBfDispImageFormat imageFormat,
+		                                        EBfDispYccColorSpace colorSpace, kulong globalWidth);
+ void                                        k_disp1_bf_disp_wait_vsync(KDisp1 *self, FJ_DISP_TYPE dispType);
+ FJ_ERR_CODE                           k_disp1_bf_disp_set_audio_i2s(KDisp1 *self,kulong sampFreq,
+		                                        EBfDispHdmiAudioI2sJust i2sJust, EBfDispHdmiAudioI2sLen i2sLen);
+ void                                        k_disp1_bf_disp_clear_addr(void);
+ void                                        k_disp1_bf_disp_instance_print_info(void);
+ void                                        k_disp1_bf_disp_osd_print_info(KDisp1 *self, kuchar dispId);
+ FJ_ERR_CODE                           k_disp1_fj_disp_open(KDisp1 *self,  FJ_DISP_TYPE dispType, kuchar *dispId);
+ FJ_ERR_CODE                           k_disp1_fj_disp_close(KDisp1 *self, kuchar dispId);
+ FJ_ERR_CODE                           k_disp1_fj_disp_lcd_config(KDisp1 *self, kuchar dispId,
+		                                        FJ_DISP_LCD_CONFIG *lcdConfigInfo);
+ FJ_ERR_CODE                           k_disp1_fj_disp_lcd_start_sync(KDisp1 *self, kuchar dispId);
+ FJ_ERR_CODE                           k_disp1_fj_disp_lcd_stop_sync(KDisp1 *self, kuchar dispId);
+ FJ_DISP_LCD_CONNECT_STATE k_disp1_fj_disp_lcd_get_status(KDisp1 *self);
+ FJ_ERR_CODE                           k_disp1_fj_disp_hdmi_set_detect_callback(DISP_HDMI_CALLBACK interruptCallback ,
+		                                        FJ_DISP_HDMI_DETECT_SETTING const* const detectSetting);
+
+kdisp2.h部分改为：
+
+ FJ_DISP_HDMI_DETECT k_disp2_fj_disp_hdmi_get_detect_status(KDisp2 *self);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_get_sink(KDisp2 *self,kuchar dispId,FJ_DISP_HDMI_SINK_INFO*sinkInfo);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_get_devicevendorproductid(KDisp2 *self, kuchar dispId,
+		                             FJ_DISP_HDMI_DEV_VENDOR_PRODUCT_ID* vendorProductId);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_set_vic_info(KDisp2 *self,kuchar dispId,
+		                             FJ_DISP_HDMI_VIC_INFO* vicInfo);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_set_spd(KDisp2 *self, kuchar dispId, FJ_DISP_HDMI_SPD_INFO* spdInfo);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_set_vendor_specific(KDisp2 *self, kuchar dispId,
+		                             FJ_DISP_HDMI_VENDOR_SPEC_INFO* vendorSpecInfo);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_config_video(KDisp2 *self,kuchar dispId, FJ_DISP_VIDEO_ID videoId,
+		                             kuchar freqCtrl);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_config_audio(KDisp2 *self, kuchar dispId, kulong sampFreq);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_start_sync(KDisp2 *self, kuchar dispId);
+ FJ_ERR_CODE                k_disp2_fj_disp_hdmi_stop_sync(KDisp2 *self, kuchar dispId);
+ FJ_ERR_CODE                k_disp2_fj_disp_mipi_config_video(KDisp2 *self, kuchar dispId,
+		                             FJ_DISP_LCD_CONFIG *lcdConfigInfo);
+ FJ_ERR_CODE                k_disp2_fj_disp_mipi_start_sync(KDisp2 *self,kuchar dispId);
+
+fb_disp.h:
+
+头文件宏部分：
+#define D_MAX_COMMAND_NUM	(20)
+#define D_MAX_COMMAND_WORD	(15)
+#define D_MAX_COMMAND_BUFFER_SIZE (120)
+
+改为
+
+#define C_D_MAX_COMMAND_NUM	(20)
+#define C_D_MAX_COMMAND_WORD	(15)
+#define C_D_MAX_COMMAND_BUFFER_SIZE (120)
+
+枚举部分：
+typedef enum{
+	eGRTISIZE=1,
+	eGRTDSTA,
+	eGRSCCTL,
+	eGRRSZ,
+	eGRISIZE,
+	eGRDSTA,
+	eGRHGA,
+	eGRSA0,
+	eGRSA,
+	eGRAREN,
+	eGRTRG,
+	eGRIDT,
+	eGRRST,
+	eGRIPO,
+}e_command_code;
+
+改为：
+
+typedef enum{
+	FbDisp_eGRTISIZE=1,
+	FbDisp_eGRTDSTA,
+	FbDisp_eGRSCCTL,
+	FbDisp_eGRRSZ,
+	FbDisp_eGRISIZE,
+	FbDisp_eGRDSTA,
+	FbDisp_eGRHGA,
+	FbDisp_eGRSA0,
+	FbDisp_eGRSA,
+	FbDisp_eGRAREN,
+	FbDisp_eGRTRG,
+	FbDisp_eGRIDT,
+	FbDisp_eGRRST,
+	FbDisp_eGRIPO,
+}ECommandCode;
+
+结构体：
+
+typedef struct {
+	unsigned int sequence_no;
+	unsigned int data;
+} t_ipcu_mail_box;
+
+typedef union {
+	unsigned int word;
+	struct {
+        unsigned int   command_num	:8;
+        unsigned int   block_no		:8;
+        unsigned int   gr_no		:8;
+        unsigned int   reserve		:8;
+	}bit;
+}u_ipcu_command_head;
+
+typedef union {
+	unsigned int word;
+	struct {
+        unsigned int   size			:8;/* word's num */
+        unsigned int   command_code	:8;
+        unsigned int   reserve		:16;
+	}bit;
+}u_command_head;
+
+typedef struct {
+	u_command_head command_head;
+	unsigned int command[D_MAX_COMMAND_WORD];  
+} t_request;
+
+typedef struct {
+	u_ipcu_command_head head;
+	unsigned int command_offset[D_MAX_COMMAND_NUM];
+	unsigned int buffer[D_MAX_COMMAND_BUFFER_SIZE];
+}t_ipcu_command;
+
+改为：
+
+typedef struct {
+	kuint sequenceNo;
+	kuint data;
+} TIpcuMailBox;
+
+typedef union {
+	kuint word;
+	struct {
+		kuint   commandNum	:8;
+		kuint   blockNo		:8;
+		kuint   grNo		:8;
+		kuint   reserve		:8;
+	}bit;
+}UIpcuCommandHead;
+
+typedef union {
+	kuint word;
+	struct {
+		kuint   size			:8;/* word's num */
+		kuint   commandCode	:8;
+		kuint   reserve		:16;
+	}bit;
+}UCommandHead;
+
+typedef struct {
+	UCommandHead commandHead;
+	kuint command[C_D_MAX_COMMAND_WORD];
+} TRequest;
+
+typedef struct {
+	UIpcuCommandHead head;
+	kuint commandOffset[C_D_MAX_COMMAND_NUM];
+	kuint buffer[C_D_MAX_COMMAND_BUFFER_SIZE];
+}TIpcuCommand;
+
+公有方法：
+
+VOID IPCU_request_OSD_cb( UCHAR id, UCHAR *data, UINT32 length, UINT32 cont, UINT32 total_length );
+VOID IPCU_Set_OSD_config(INT32 stacd);
+
+改为：
+
+void ipcuRequestOsd_cb( kuchar id, kuchar *data, kuint length, kuint cont, kuint totalLength );
+void fb_disp_ipcu_set_osd_config(kuint stacd);
+
+负责代码及其路径：
+
+target/cpu_tkernel/basefw/fj/iq
+
+iq_calib.h:
+枚举项：
+typedef enum {
+	E_IQ_BAYER_COLOR_R,
+	E_IQ_BAYER_COLOR_GR,
+	E_IQ_BAYER_COLOR_GB,
+	E_IQ_BAYER_COLOR_B,
+	E_IQ_BAYER_COLOR_MAX,
+} E_IQ_BAYER_COLOR;
+
+改为：
+
+typedef enum {
+	IqCalib_E_IQ_BAYER_COLOR_R,
+	IqCalib_E_IQ_BAYER_COLOR_GR,
+	IqCalib_E_IQ_BAYER_COLOR_GB,
+	IqCalib_E_IQ_BAYER_COLOR_B,
+	IqCalib_E_IQ_BAYER_COLOR_MAX,
+} EIqBayerColor;
+
+结构体：
+
+typedef struct {
+	USHORT* pus_bayer16_addr;				/**< bayer top address					*/
+	UINT32 ui_bayer_bytelen;				/**< bayer size(byte)					*/
+	USHORT us_global_rows;					/**< bayer global rows(height)			*/
+	USHORT us_global_columns;				/**< bayer global columns(width)		*/
+	USHORT us_field_num;					/**< num of PRO fields					*/
+	E_IQ_BAYER_COLOR t_top_color;			/**< color of Left-Top corner			*/
+	E_IQ_STILL_MODE still_mode;				/**< current still mode					*/
+	USHORT us_vd_ofs;						/**< DPC detect window virtical offset	*/
+	USHORT us_hd_ofs;						/**< DPC detect window horizontal offset*/
+	UINT32 us_upper_trim;					/**< bayer upper side of detect window	*/
+	UINT32 us_left_trim;					/**< bayer left side of detect window	*/
+	UINT32 us_rows;							/**< bayer rows(height) of detect window	*/
+	UINT32 us_columns;						/**< bayer columns(width) of detect window	*/
+	const T_FJ_IQ_DPC_LINE_ORDER* pt_line_order_table;	/**< line separate order table for all fields ... for Badpix Software detection */
+} T_BF_IQ_CALIB_PARAM;
+
+// T_BF_IQ_CALIB_INFO_OB
+typedef struct {
+	SHORT				obdata[E_IQ_BAYER_COLOR_MAX];	// OB value by color.
+} T_BF_IQ_CALIB_INFO_OB;
+
+/**	T_BF_IQ_CALIB_INFO
+ */
+typedef struct {
+	const VOID* pv_bayer16_addr;		// bayer data top addr
+	UINT32	ui_bayer_bytelen;			// bayer data size(bytes) (for 16bit pack)
+	USHORT	us_global_h_pixels;			// bayer global height(pixels)
+	USHORT	us_global_w_pixels;			// bayer global width(pixels)
+	USHORT	us_vd_ofs;					// virtical offset(pixels)
+	USHORT	us_hd_ofs;					// horizontal offset(pixels)
+	UINT32	us_upper_trim;				// bayer upper side of detect window
+	UINT32	us_left_trim;				// bayer left side of detect window
+	E_IQ_BAYER_COLOR	t_top_color;	// color of Left-Top corner
+	E_IQ_STILL_MODE still_mode;			// current still mode
+	USHORT	us_field_num;				// num of PRO fields
+	T_BF_IQ_CALIB_INFO_OB	ob;			// OB information.
+} T_BF_IQ_CALIB_INFO;
+
+改为：
+
+typedef struct {
+	kushort* pusBayer16Addr;				/**< bayer top address					*/
+	kuint32 uiBayerBytelen;				/**< bayer size(byte)					*/
+	kushort usGlobalRows;					/**< bayer global rows(height)			*/
+	kushort usGlobalColumns;				/**< bayer global columns(width)		*/
+	kushort usFieldNum;					/**< num of PRO fields					*/
+	EIqBayerColor tTopColor;			/**< color of Left-Top corner			*/
+	E_IQ_STILL_MODE stillMode;				/**< current still mode					*/
+	kushort usVdOfs;						/**< DPC detect window virtical offset	*/
+	kushort usHdOfs;						/**< DPC detect window horizontal offset*/
+	kuint32 usUpperTrim;					/**< bayer upper side of detect window	*/
+	kuint32 usLeftTrim;					/**< bayer left side of detect window	*/
+	kuint32 usRows;							/**< bayer rows(height) of detect window	*/
+	kuint32 usColumns;						/**< bayer columns(width) of detect window	*/
+	const TFjIqDpcLineOrder* ptLineOrderTable;	/**< line separate order table for all fields ... for Badpix Software detection */
+} TBfIqCalibParam;
+
+// TBfIqCalibInfoOb
+typedef struct {
+	kint16				obdata[IqCalib_E_IQ_BAYER_COLOR_MAX];	// OB value by color.
+} TBfIqCalibInfoOb;
+
+/**	TBfIqCalibInfo
+ */
+typedef struct {
+	kconstpointer pvBayer16Addr;		// bayer data top addr
+	kuint32	uiBayerBytelen;			// bayer data size(bytes) (for 16bit pack)
+	kushort	usGlobalHPixels;			// bayer global height(pixels)
+	kushort	usGlobalWPixels;			// bayer global width(pixels)
+	kushort	usVdOfs;					// virtical offset(pixels)
+	kushort	usHdOfs;					// horizontal offset(pixels)
+	kuint32	usUpperTrim;				// bayer upper side of detect window
+	kuint32	usLeftTrim;				// bayer left side of detect window
+	EIqBayerColor	tTopColor;	// color of Left-Top corner
+	E_IQ_STILL_MODE stillMode;			// current still mode
+	kushort	usFieldNum;				// num of PRO fields
+	TBfIqCalibInfoOb	ob;			// OB information.
+} TBfIqCalibInfo;
+
+公有函数部分：
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+// BaseFW internal API
+extern FJ_ERR_CODE BF_IQ_Calib_Load_BayerFile( const UCHAR sen_id, const UCHAR* const puc_filepath );
+extern FJ_ERR_CODE BF_IQ_Calibration_Set_Param( const UCHAR sen_id, const T_BF_IQ_CALIB_PARAM* const pt_calib_param );
+extern FJ_ERR_CODE BF_IQ_Calibration_Set_Ob( const UCHAR sen_id, const T_BF_IQ_CALIB_INFO_OB* const pt_ob );
+extern T_BF_IQ_CALIB_INFO_OB* BF_IQ_Calibration_Get_Ob( const UCHAR sen_id );
+extern FJ_ERR_CODE BF_IQ_Calib_Set_Bay( const UCHAR sen_id, const VOID* const bay_addr, const UINT32 bay_bytes, const UINT32 width, const UINT32 lines );
+extern FJ_ERR_CODE BF_IQ_Calib_Set_BayAddr( const UCHAR sen_id, const VOID* const bay_addr );
+extern const T_BF_IQ_CALIB_INFO* BF_IQ_Calib_Get_Param( const UCHAR sen_id );
+extern const CHAR* BF_IQ_Calib_Get_CalibTgtName( const E_IQ_CALIB_TGT e_target );
+// BaseFW external API substantial
+extern VOID fj_iq_calibrationsetformatpix( const E_IQ_CALIB_FMT_PIX e_format_pix );
+extern E_IQ_CALIB_FMT_PIX fj_iq_calibrationgetformatpix( VOID );
+extern VOID fj_iq_calibrationsetrawsavetomedia( const BOOL save );
+extern BOOL fj_iq_calibrationgetrawsavetomedia( VOID );
+extern VOID fj_iq_calibrationsetjpegsavetomedia( const BOOL save );
+extern BOOL fj_iq_calibrationgetjpegsavetomedia( VOID );
+extern VOID fj_iq_calibrationsettarget( const E_IQ_CALIB_TGT target );
+extern E_IQ_CALIB_TGT fj_iq_calibrationgettarget( VOID );
+extern VOID fj_iq_calibrationsetoperate( const E_IQ_CALIB_OP target );
+extern E_IQ_CALIB_OP fj_iq_calibrationgetoperate( VOID );
+extern BOOL fj_iq_calibrationgetbayerinfo( VOID** const pv_top_addr, USHORT* const pus_global_height_pixs, USHORT* const pus_global_width_pixs );
+extern VOID fj_iq_calib_set_bay( const VOID* const bay_addr, const UINT32 bay_bytes, const UINT32 width, const UINT32 lines );
+#ifdef __cplusplus
+}
+#endif
+
+改为：
+
+ FJ_ERR_CODE                iq_calib_bf_iq_calib_load_bayerfile(IqCalib *self, const kuchar senId, const kuchar* const pucFilepath );
+ FJ_ERR_CODE                iq_calib_bf_iq_calibration_set_param(const kuchar senId, const TBfIqCalibParam* const ptCalibParam );
+ FJ_ERR_CODE                iq_calib_bf_iq_calibration_set_ob(const kuchar senId, const TBfIqCalibInfoOb* const ptOb );
+ TBfIqCalibInfoOb*       iq_calib_bf_iq_calibration_get_ob(const kuchar senId );
+ FJ_ERR_CODE                iq_calib_bf_iq_calib_set_bay(IqCalib *self, const kuchar senId, kconstpointer const bayAddr, const kuint32 bayBytes, const kuint32 width, const kuint32 lines );
+ FJ_ERR_CODE                iq_calib_bf_iq_calib_set_bayaddr(const kuchar senId, kconstpointer const bayAddr );
+ const TBfIqCalibInfo* iq_calib_bf_iq_calib_get_param(const kuchar senId );
+  KConstType                iq_calib_bf_iq_calib_get_calibtgtname(IqCalib *self,const E_IQ_CALIB_TGT eTarget );
+// BaseFW external API substantial
+ void                             iq_calib_fj_iq_calibrationsetformatpix(const E_IQ_CALIB_FMT_PIX eFormatPix );
+ E_IQ_CALIB_FMT_PIX    iq_calib_fj_iq_calibrationgetformatpix(void);
+ void                             iq_calib_fj_iq_calibrationsetrawsavetomedia(const kboolean save );
+ kboolean                      iq_calib_fj_iq_calibrationgetrawsavetomedia(void);
+ void                             iq_calib_fj_iq_calibrationsetjpegsavetomedia(const kboolean save );
+ kboolean                      iq_calib_fj_iq_calibrationgetjpegsavetomedia(void);
+ void                             iq_calib_fj_iq_calibrationsettarget(const E_IQ_CALIB_TGT target );
+ E_IQ_CALIB_TGT           iq_calib_fj_iq_calibrationgettarget(void);
+ void                             iq_calib_fj_iq_calibrationsetoperate( const E_IQ_CALIB_OP target );
+ E_IQ_CALIB_OP            iq_calib_fj_iq_calibrationgetoperate(void);
+ kboolean                      iq_calib_fj_iq_calibrationgetbayerinfo(kpointer* const pv_top_addr, kushort* const pusGlobalHeightPixs, kushort* const pusGlobalWidthPixs );
+ void                             iq_calib_fj_iq_calib_set_bay(kconstpointer const bayAddr, const kuint32 bayBytes, const kuint32 width, const kuint32 lines );
+ 
+ 
+ 

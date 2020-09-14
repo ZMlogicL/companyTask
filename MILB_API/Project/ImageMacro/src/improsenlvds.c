@@ -42,7 +42,7 @@ struct _ImproSenlvdsPrivate
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
 static const USHORT S_GIM_PRO_MAXIMUM_SIZE_LVDS[ImproSentop_E_IM_PRO_SENTOP_SENCORE_MAX_HSIZE_CTRL_3 + 1]
-                                         [E_IM_PRO_LVDS_CH_3 + 1] = {
+                                         [ImproBase_E_IM_PRO_LVDS_CH_3 + 1] = {
 	{2960,	2960,	2960,	2960},
 	{5920,	5920,	0,		1024},
 	{11840,	0,		0,		1024},
@@ -80,17 +80,17 @@ static void impro_senlvds_destructor(ImproSenlvds *self)
 LVDS macro start.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Macro Start OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: LVDS has not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: LVDS has not stopped NG
 */
-INT32 impro_senlvds_start( E_IM_PRO_LVDS_CH ch )
+INT32 impro_senlvds_start( EimproLvdsCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lvdstrg.bit.lvdstrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_start_status(D_IM_SEN_STATUS_LVDS0, ch);
+	im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_LVDS0, ch);
 
 	return D_DDIM_OK;
 }
@@ -101,16 +101,16 @@ LVDS macro stop.
 @retval		D_DDIM_OK					: Macro Stop OK
 @retval		D_IM_PRO_NG					: Macro Stop NG
 */
-INT32 impro_senlvds_stop( E_IM_PRO_LVDS_CH ch )
+INT32 impro_senlvds_stop( EimproLvdsCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	// frame stop
 	ioPro.sen.lvds[ch].lvdstrg.bit.lvdstrg = D_IM_PRO_TRG_FRAME_STOP;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_stop_status(D_IM_SEN_STATUS_LVDS0, ch);
+	im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_LVDS0, ch);
 
 	return D_DDIM_OK;
 }
@@ -120,23 +120,23 @@ The control parameter of LVDS is set.
 @param[in]	ch : Channel No.
 @param[in]	lvdsCtrl : LVDS control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senlvds_ctrl( E_IM_PRO_LVDS_CH ch, TimproLvdsCtrl* lvdsCtrl )
+INT32 impro_senlvds_ctrl( EimproLvdsCh ch, TimproLvdsCtrl* lvdsCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (lvdsCtrl == NULL){
 		Ddim_Assertion(("I:impro_senlvds_ctrl error. lvdsCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( lvdsCtrl->outputChNo > ImproSenlvds_E_IM_PRO_LVDS_OUT_1CH ) {
 		Ddim_Print(("I:impro_senlvds_ctrl. outputChNo error.(%u) \n", lvdsCtrl->outputChNo));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lvdsctl1.bit.lmd	= lvdsCtrl->transMode;
 	ioPro.sen.lvds[ch].lvdsctl1.bit.lch	= lvdsCtrl->outputChNo;
 	ioPro.sen.lvds[ch].lvdsctl1.bit.lane	= lvdsCtrl->lane;
@@ -178,7 +178,7 @@ INT32 impro_senlvds_ctrl( E_IM_PRO_LVDS_CH ch, TimproLvdsCtrl* lvdsCtrl )
 	ioPro.sen.lvds[ch].LVDSDATS.bit.dats70	= lvdsCtrl->clockSelectSp71;
 	ioPro.sen.lvds[ch].SYNCSEL.bit.syncsel	= lvdsCtrl->laneSelect;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -194,23 +194,23 @@ LVDS Input starting position setup .
 						 maximum size that can be set by each SENCORE block set by SENTOP.SENRAMSW.<br>
 						 target registor:@@LHSIZE
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 @remarks	Only in the case of @@SZEN = 1 (see impro_senlvds_ctrl), the value set up by this API is effective.
 */
-INT32 impro_senlvds_set_area( E_IM_PRO_LVDS_CH ch, USHORT input_pos, USHORT inputSize )
+INT32 impro_senlvds_set_area( EimproLvdsCh ch, USHORT input_pos, USHORT inputSize )
 {
 #ifdef CO_PARAM_CHECK
 	if( inputSize < ImproSenlvds_D_IM_PRO_LVDS_LHSIZE_MIN ) {
 		Ddim_Assertion(("I:impro_senlvds_set_area. input param:[inputSize] value over!! >= %d (%d)\n",
 									ImproSenlvds_D_IM_PRO_LVDS_LHSIZE_MIN ,inputSize ));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( inputSize > S_GIM_PRO_MAXIMUM_SIZE_LVDS
 			[ioPro.sen.sentop.sentopctl1.sentopctl13.bit.SENRAMSW][ch] ) {
 		Ddim_Assertion(("I:impro_senlvds_set_area. input param:[inputSize] value over!! <= %d (%d)\n",
 				S_GIM_PRO_MAXIMUM_SIZE_LVDS[ioPro.sen.sentop.sentopctl1
 				  .sentopctl13.bit.SENRAMSW][ch] ,inputSize ));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else {
 		// DO NOTHING
@@ -218,11 +218,11 @@ INT32 impro_senlvds_set_area( E_IM_PRO_LVDS_CH ch, USHORT input_pos, USHORT inpu
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lhsadd.bit.lhsadd	= input_pos;
 	ioPro.sen.lvds[ch].lhsize.bit.lhsize	= inputSize;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -232,19 +232,19 @@ LVDS output data rearrangement setup.
 @param[in]	ch : Channel No.
 @param[in]	lvdsOrder : LVDS pixel order information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senlvds_set_pixel_order( E_IM_PRO_LVDS_CH ch, TimproLvdsPixelOrder* lvdsOrder )
+INT32 impro_senlvds_set_pixel_order( EimproLvdsCh ch, TimproLvdsPixelOrder* lvdsOrder )
 {
 #ifdef CO_PARAM_CHECK
 	if (lvdsOrder == NULL){
 		Ddim_Assertion(("I:impro_senlvds_set_pixel_order error. lvdsOrder=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lpdchg.bit.sela	= lvdsOrder->ptnA;
 	ioPro.sen.lvds[ch].lpdchg.bit.selb	= lvdsOrder->ptnB;
 	ioPro.sen.lvds[ch].lpdchg.bit.selc	= lvdsOrder->ptnC;
@@ -262,7 +262,7 @@ INT32 impro_senlvds_set_pixel_order( E_IM_PRO_LVDS_CH ch, TimproLvdsPixelOrder* 
 	ioPro.sen.lvds[ch].lpdchg.bit.selo	= lvdsOrder->ptnO;
 	ioPro.sen.lvds[ch].lpdchg.bit.selp	= lvdsOrder->ptnP;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -272,19 +272,19 @@ The sync code parameter of LVDS is set.
 @param[in]	ch : Channel No.
 @param[in]	syncCode : LVDS sync code information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senlvds_set_sync_code( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncCodeCtrl* syncCode )
+INT32 impro_senlvds_set_sync_code( EimproLvdsCh ch, TimproLvdsSyncCodeCtrl* syncCode )
 {
 #ifdef CO_PARAM_CHECK
 	if (syncCode == NULL){
 		Ddim_Assertion(("I:Im_PRO_Set_SyncCode. syncCode=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].sav0.sav01.bit.sav00 = syncCode->syncCode[0].sav[0];
 	ioPro.sen.lvds[ch].sav0.sav01.bit.sav01 = syncCode->syncCode[0].sav[1];
 	ioPro.sen.lvds[ch].sav0.sav02.bit.sav02 = syncCode->syncCode[0].sav[2];
@@ -346,7 +346,7 @@ INT32 impro_senlvds_set_sync_code( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncCodeCtrl* 
 	ioPro.sen.lvds[ch].eab2.eab22.bit.eab22 = syncCode->syncCode[2].eab[2];
 	ioPro.sen.lvds[ch].eab2.eab22.bit.eab23 = syncCode->syncCode[2].eab[3];
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -356,19 +356,19 @@ LVDS sync code Mask setup.
 @param[in]	ch : Channel No.
 @param[in]	syncMask : LVDS sync mask information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senlvds_set_sync_mask( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncMaskCtrl* syncMask )
+INT32 impro_senlvds_set_sync_mask( EimproLvdsCh ch, TimproLvdsSyncMaskCtrl* syncMask )
 {
 #ifdef CO_PARAM_CHECK
 	if (syncMask == NULL){
 		Ddim_Assertion(("I:Im_PRO_Set_SyncMask. syncMask=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].msav0.msav01.bit.msav00 = syncMask->syncMask[0].msav[0];
 	ioPro.sen.lvds[ch].msav0.msav01.bit.msav01 = syncMask->syncMask[0].msav[1];
 	ioPro.sen.lvds[ch].msav0.msav02.bit.msav02 = syncMask->syncMask[0].msav[2];
@@ -429,7 +429,7 @@ INT32 impro_senlvds_set_sync_mask( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncMaskCtrl* 
 	ioPro.sen.lvds[ch].meab2.meab22.bit.meab22 = syncMask->syncMask[2].meab[2];
 	ioPro.sen.lvds[ch].meab2.meab22.bit.meab23 = syncMask->syncMask[2].meab[3];
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -439,31 +439,31 @@ LVDS Input starting position setup .
 @param[in]	ch : Channel No.
 @param[in]	intAddr	: SOL/EOL interrupt address information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senlvds_set_int_adr( E_IM_PRO_LVDS_CH ch, TimproLvdsIntAddrCtrl* intAddr )
+INT32 impro_senlvds_set_int_adr( EimproLvdsCh ch, TimproLvdsIntAddrCtrl* intAddr )
 {
 #ifdef CO_PARAM_CHECK
 	if (intAddr == NULL){
 		Ddim_Assertion(("I:impro_senlvds_set_int_adr. intAddr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	for( UCHAR loopcnt = 0; loopcnt <= ioPro.sen.lvds[ch].lvdsctl2.bit.dolmd; loopcnt++ ) {
 		if( intAddr->intAddr[loopcnt].solAddr > ImproSenlvds_D_IM_PRO_LVDS_LVDSINTADR_MAX ) {
 			Ddim_Assertion(("I:impro_senlvds_set_int_adr. input param:[solAddr%d] value over!! <= %d (%d)\n",
 					loopcnt, ImproSenlvds_D_IM_PRO_LVDS_LVDSINTADR_MAX, intAddr->intAddr[loopcnt].solAddr ));
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( intAddr->intAddr[loopcnt].eolAddr > ImproSenlvds_D_IM_PRO_LVDS_LVDSINTADR_MAX ) {
 			Ddim_Assertion(("I:impro_senlvds_set_int_adr. input param:[eolAddr%d] value over!! <= %d (%d)\n",
 					loopcnt, ImproSenlvds_D_IM_PRO_LVDS_LVDSINTADR_MAX, intAddr->intAddr[loopcnt].eolAddr ));
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lvdsintadr0.bit.solvadr0	= intAddr->intAddr[0].solAddr;
 	ioPro.sen.lvds[ch].lvdsintadr0.bit.eolvadr0	= intAddr->intAddr[0].eolAddr;
 	ioPro.sen.lvds[ch].lvdsintadr1.bit.solvadr1	= intAddr->intAddr[1].solAddr;
@@ -474,7 +474,7 @@ INT32 impro_senlvds_set_int_adr( E_IM_PRO_LVDS_CH ch, TimproLvdsIntAddrCtrl* int
 	ioPro.sen.lvds[ch].LVDSINTSET1.word = 1;
 	ioPro.sen.lvds[ch].LVDSINTSET2.word = 1;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -485,21 +485,21 @@ A setup of enable access to the built-in RAM of LVDS.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senlvds_set_paen( E_IM_PRO_LVDS_CH ch, UCHAR paenTrg )
+INT32 impro_senlvds_set_paen( EimproLvdsCh ch, UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
 	if( ( paenTrg == 0 ) && ( ioPro.sen.lvds[ch].lvdstrg.bit.lvdstrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_senlvds_set_paen. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.lvds[ch].lvdspaen.bit.paen	= paenTrg;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }

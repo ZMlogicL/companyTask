@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kjdsshdr2.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KJdsshdr2, k_jdsshdr2);
+
 #define K_JDSSHDR2_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KJdsshdr2Private, K_TYPE_JDSSHDR2))
+
 
 struct _KJdsshdr2Private
 {
@@ -41,4 +45,3 @@ KJdsshdr2* k_jdsshdr2_new(void)
     KJdsshdr2* self = k_object_new_with_private(K_TYPE_JDSSHDR2, sizeof(KJdsshdr2Private));
     return self;
 }
-

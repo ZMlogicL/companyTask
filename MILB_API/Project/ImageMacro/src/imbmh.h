@@ -39,15 +39,15 @@ ImBmh*		        im_bmh_new(void);
 /* Definition															*/
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
-#define	D_IM_BMH_SEM_TIMEOUT_ERR		(D_IM_BMH | D_DDIM_SEM_TIMEOUT)			/**< Time Out                 (0xXX000011) */
-#define	D_IM_BMH_NG						(D_IM_BMH | D_DDIM_SYSTEM_ERROR)		/**< Processing NG            (0xXX000099) */
-#define D_IM_BMH_SEM_NG					(D_IM_BMH | D_DDIM_SEM_NG)				/**< Semaphore acquisition NG (0xXX000010) */
-#define D_IM_BMH_INPUT_PARAMETER_ERROR	(D_IM_BMH | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error.         (0xXX000001) */
-#define D_IM_BMH_BUSY_NG				(D_IM_BMH | D_DDIM_MACRO_BUSY_NG)		/**< Macro busy               (0xXX000005) */
-#define	D_IM_BMH_AXI_ERR				(D_IM_BMH | 0x100)						/**< AXI bus error.           (0xXX000100) */
+#define	ImBmh_D_IM_BMH_SEM_TIMEOUT_ERR		(D_IM_BMH | D_DDIM_SEM_TIMEOUT)			/**< Time Out                 (0xXX000011) */
+#define	ImBmh_D_IM_BMH_NG						(D_IM_BMH | D_DDIM_SYSTEM_ERROR)		/**< Processing NG            (0xXX000099) */
+#define ImBmh_D_IM_BMH_SEM_NG					(D_IM_BMH | D_DDIM_SEM_NG)				/**< Semaphore acquisition NG (0xXX000010) */
+#define ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR	(D_IM_BMH | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error.         (0xXX000001) */
+#define ImBmh_D_IM_BMH_BUSY_NG				(D_IM_BMH | D_DDIM_MACRO_BUSY_NG)		/**< Macro busy               (0xXX000005) */
+#define	ImBmh_D_IM_BMH_AXI_ERR				(D_IM_BMH | 0x100)						/**< AXI bus error.           (0xXX000100) */
 
-#define D_IM_BMH_FLG_BMH_END		(0x00000001)	/**< bmh end flag		*/
-#define D_IM_BMH_FLG_BMH_AXI_ERR	(0x00000010)	/**< bmh AXI error flag	*/
+#define ImBmh_D_IM_BMH_FLG_BMH_END		(0x00000001)	/**< bmh end flag		*/
+#define ImBmh_D_IM_BMH_FLG_BMH_AXI_ERR	(0x00000010)	/**< bmh AXI error flag	*/
 
 
 
@@ -65,9 +65,9 @@ ImBmh*		        im_bmh_new(void);
 /** BMH enable / disable
 */
 typedef enum {
-	E_IM_BMH_ONOFF_DISABLE = 0,		/**< BMH disable	*/
-	E_IM_BMH_ONOFF_ENABLE			/**< BMH enable	*/
-} E_IM_BMH_ONOFF;
+	ImBmh_E_IM_BMH_ONOFF_DISABLE = 0,		/**< BMH disable	*/
+	ImBmh_E_IM_BMH_ONOFF_ENABLE			/**< BMH enable	*/
+} ImBmhEImBmhOnoff;
 
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -83,7 +83,7 @@ typedef enum {
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
 
-typedef VOID (*T_IM_BMH_CALLBACK)( ULONG interrupt_flag_mask );	/**< Callback function pointer	*/
+typedef VOID (*ImBmhCallback)( ULONG interrupt_flag_mask );	/**< Callback function pointer	*/
 
 /** BMH Control info for common
 */
@@ -97,57 +97,57 @@ typedef struct {
 	UCHAR				mode;		/**< Setting process mode [0000b ~ 1000b (4bit)]		@@MODE	*/
 	ULONG				poffset;	/**< Position offset value (aligned on 1byte)			@@POFFSET	*/
 	ULONG				sadlv;		/**< SAD level comparison value (aligned on 2byte)		@@SADLV	*/
-	T_IM_BMH_CALLBACK	pCallBack;	/**< callback function	*/
-} T_IM_BMH_CTRL;
+	ImBmhCallback	pCallBack;	/**< callback function	*/
+} ImBmhCtrl;
 
 /** Im_BMH_Ctrl_Axi() parameter structure */
 typedef struct {
-	UINT32	read_cache_type;			/**< Read Cache type. */
-	UINT32	read_protection_type;		/**< Read Protection type. */
-	UINT32	write_cache_type;			/**< Write Cache type. */
-	UINT32	write_protection_type;		/**< Write Protection type. */
-} T_IM_BMH_AXI;
+	UINT32	readCacheType;			/**< Read Cache type. */
+	UINT32	readProtectionType;		/**< Read Protection type. */
+	UINT32	writeCacheType;			/**< Write Cache type. */
+	UINT32	writeProtectionType;		/**< Write Protection type. */
+} ImBmhAxi;
 
 /** Im_BMH_Get_AXI_Status() parameter structure */
 typedef struct {
-	UCHAR	read_channel_response;	/**< RRESP register */
-	UCHAR	write_channel_response;	/**< WRESP register */
-} T_IM_BMH_AXI_STATUS;
+	UCHAR	readChannelResponse;	/**< RRESP register */
+	UCHAR	writeChannelResponse;	/**< WRESP register */
+} ImBmhAxiStatus;
 
 /** Im_BMH_Set_Bmhre()/Im_BMH_Get_Bmhre() parameter structure */
 typedef struct {
 	UCHAR	bmhre;	/**< BMHRE register */
-} T_IM_BMH_BMHRE;
+} ImBmhBmhre;
 
 /** Im_BMH_Get_Rsst() parameter structure */
 typedef struct {
 	UCHAR	rsst;	/**< BMHINTFS-RSST register */
-} T_IM_BMH_RSST;
+} ImBmhRsst;
 
 /** Im_BMH_Set_Bmhcont()/Im_BMH_Get_Bmhcont() parameter structure */
 typedef struct {
 	UCHAR	cont;	/**< BMHCONT-CONT register */
-} T_IM_BMH_BMHCONT;
+} ImBmhBmhcont;
 
 /** Im_BMH_Set_Bmhhcnt()/Im_BMH_Get_Bmhhcnt() parameter structure */
 typedef struct {
 	UCHAR	hcnt;	/**< BMHHCNT-HCNT register */
 	UCHAR	rcnt;	/**< BMHHCNT-RCNT register */
-} T_IM_BMH_BMHHCNT;
+} ImBmhBmhhcnt;
 
 /** Im_BMH_Set_Bmhsad_wr()/Im_BMH_Get_Bmhsad_wr() parameter structure */
 typedef struct {
-	UCHAR	sad_wr;	/**< BMHSAD_WR-SAD_WR register */
-} T_IM_BMH_BMHSAD_WR;
+	UCHAR	sadWr;	/**< BMHSAD_WR-SAD_WR register */
+} ImBmhBmhsadWr;
 
 /** BMH Control info for DMA mode
 */
 typedef struct {
 	ULONG				dmamd;			/**< DMA mode setting (0:DMA mode Off / 1:DMA mode ON)	@@DMAMD	*/
-	ULONG				ghsize_cur;		/**< Current image GHSIZE setting register (16bit) 8byte boundary		@@GHSIZE_CUR	*/
-	ULONG				ghsize_ref;		/**< Reference image GHSIZE setting register (16bit) 8byte boundary	@@GHSIZE_REF	*/
-	ULONG				hsize_ref;		/**< Reference image HSIZE setting register (16bit)		@@HSIZE_REF	*/
-	ULONG				vsize_ref;		/**< Reference image VSIZE setting register (16bit)		@@VSIZE_REF	*/
+	ULONG				ghsizeCur;		/**< Current image GHSIZE setting register (16bit) 8byte boundary		@@GHSIZE_CUR	*/
+	ULONG				ghsizeRef;		/**< Reference image GHSIZE setting register (16bit) 8byte boundary	@@GHSIZE_REF	*/
+	ULONG				hsizeRef;		/**< Reference image HSIZE setting register (16bit)		@@HSIZE_REF	*/
+	ULONG				vsizeRef;		/**< Reference image VSIZE setting register (16bit)		@@VSIZE_REF	*/
 	ULONG				curstad;		/**< Current image storage location start address setting register (32bit) <br>
 											The start address, 8byte boundary		@@CURSTAD	*/
 	ULONG				refstad;		/**< Reference image storage destination top address setting register (32bit) <br>
@@ -155,74 +155,74 @@ typedef struct {
 	ULONG				sadstad;		/**< Calculation result storage destination top address setting register (32bit) <br>
 											The start address, 8byte boundary		@@SADSTAD	*/
 	ULONG				sadghsize;		/**< Calculation result storage destination GHSIZE setting register (16bit) 8byte boundary	@@BMHSADGH	*/
-} T_IM_BMH_CTRL_DMA;
+} ImBmhCtrlDma;
 
 /** Im_BMH_Set_Cur() parameter structure */
 typedef struct {
-	UCHAR			cur_write_flg[9][256];	/**< CUR write flag (1:write other:do nothing)*/
-	UCHAR			cur_data[9][256];		/**< CUR Write data */
-} T_IM_BMH_CUR_BLOCK;
+	UCHAR			curWriteFlg[9][256];	/**< CUR write flag (1:write other:do nothing)*/
+	UCHAR			curData[9][256];		/**< CUR Write data */
+} ImBmhCurBlock;
 
 /** Im_BMH_Set_Ref() parameter structure */
 typedef struct {
-	UCHAR			ref_write_flg[9][256];	/**< REF write flag (1:write other:do nothing)*/
-	UCHAR			ref_data[9][256];		/**< REF Write data */
-} T_IM_BMH_REF_BLOCK;
+	UCHAR			refWriteFlg[9][256];	/**< REF write flag (1:write other:do nothing)*/
+	UCHAR			refData[9][256];		/**< REF Write data */
+} ImBmhRefBlock;
 
 /** Im_BMH_Set_Lut() parameter structure */
 typedef struct {
 	USHORT	lut[2048];				/**< LUT data */
-} T_IM_BMH_LUT;
+} ImBmhLut;
 
 /** Im_BMH_Get_Sadr_000() parameter structure */
 /** Array[225]-[227] is dummy.(Do not use) **/
 typedef struct {
 	UCHAR	sadcmp[2][228];			/**< SAD comparative result */
 	UCHAR	pos[2][228];			/**< Position of minimum SAD  */
-} T_IM_BMH_SADR_000;
+} ImBmhSadr000;
 
 /** Im_BMH_Get_Sadr_001() parameter structure */
 typedef struct {
 	UCHAR	sadcmp[225];			/**< SAD comparative result */
 	UCHAR	pos[225];				/**< Position of minimum SAD */
 	USHORT	sadmin[225];			/**< Value minimum SAD */
-} T_IM_BMH_SADR_001;
+} ImBmhSadr001;
 
 /** Im_BMH_Get_Sadr_010() parameter structure */
 /** Array[225] is dummy.(Do not use) **/
 typedef struct {
 	UCHAR	sadcmp[2][226];			/**< SAD comparative result */
-	UCHAR	pos_integer[2][226];	/**< Position of minimum SAD(integer part) */
-	UCHAR	pos_fraction[2][226];	/**< Position of minimum SAD(fractional part) */
-} T_IM_BMH_SADR_010;
+	UCHAR	posInteger[2][226];	/**< Position of minimum SAD(integer part) */
+	UCHAR	posFraction[2][226];	/**< Position of minimum SAD(fractional part) */
+} ImBmhSadr010;
 
 /** Im_BMH_Get_Sadr_011() parameter structure */
 typedef struct {
 	UCHAR	sadcmp[225];			/**< SAD comparative result */
-	UCHAR	pos_integer[225];		/**< Position of minimum SAD(integer part) */
-	UCHAR	pos_fraction[225];		/**< Position of minimum SAD(fractional part) */
+	UCHAR	posInteger[225];		/**< Position of minimum SAD(integer part) */
+	UCHAR	posFraction[225];		/**< Position of minimum SAD(fractional part) */
 	USHORT	sadmin[225];			/**< Value minimum SAD */
-} T_IM_BMH_SADR_011;
+} ImBmhSadr011;
 
 /** Im_BMH_Get_Sadr_100() parameter structure */
 typedef struct {
 	UCHAR	sadcmp[2][112];			/**< SAD comparative result */
-	UCHAR	pos_integer[2][112];	/**< Position of minimum SAD(integer part) */
-	UCHAR	pos_fraction[2][112];	/**< Position of minimum SAD(fractional part) */
+	UCHAR	posInteger[2][112];	/**< Position of minimum SAD(integer part) */
+	UCHAR	posFraction[2][112];	/**< Position of minimum SAD(fractional part) */
 	USHORT	sadmin[2][112];			/**< Value minimum SAD */
-} T_IM_BMH_SADR_100;
+} ImBmhSadr100;
 
 /** Im_BMH_Get_Sadr_101() parameter structure */
 typedef struct {
 	UCHAR	sadcmp[2][56];			/**< SAD comparative result */
-	UCHAR	pos_integer[2][56];		/**< Position of minimum SAD(integer part) */
-	UCHAR	pos_fraction[2][56];	/**< Position of minimum SAD(fractional part) */
+	UCHAR	posInteger[2][56];		/**< Position of minimum SAD(integer part) */
+	UCHAR	posFraction[2][56];	/**< Position of minimum SAD(fractional part) */
 	USHORT	sadmin[2][56];			/**< Value minimum SAD */
 	UCHAR	weight[2][56];			/**< Weight of minimum SAD */
 	UCHAR	deviation[2][56];		/**< standard deviation */
-	UCHAR	cur_max[2][56];			/**< Max value of Current */
-	UCHAR	cur_min[2][56];			/**< Minimum value of Current */
-} T_IM_BMH_SADR_101;
+	UCHAR	curMax[2][56];			/**< Max value of Current */
+	UCHAR	curMin[2][56];			/**< Minimum value of Current */
+} ImBmhSadr101;
 
 /** Im_BMH_Get_Sadr_110() parameter structure */
 typedef struct {
@@ -235,9 +235,9 @@ typedef struct {
 	USHORT	sadmin2after[2][28];	/**< Value minimum SAD(sadmin[x][y]+2) */
 	UCHAR	weight[2][28];			/**< Weight of minimum SAD */
 	UCHAR	deviation[2][28];		/**< standard deviation */
-	UCHAR	cur_max[2][28];			/**< Max value of Current */
-	UCHAR	cur_min[2][28];			/**< Minimum value of Current */
-} T_IM_BMH_SADR_110;
+	UCHAR	curMax[2][28];			/**< Max value of Current */
+	UCHAR	curMin[2][28];			/**< Minimum value of Current */
+} ImBmhSadr110;
 
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -260,19 +260,19 @@ extern	INT32 Im_BMH_Start_Async( BYTE channel_no );
 extern	INT32 Im_BMH_Wait_End( BYTE channel_no, UINT32* const p_wait_factor, const INT32 wait_time );
 extern	INT32 Im_BMH_Stop( BYTE channel_no );
 extern	INT32 Im_BMH_Close( BYTE channel_no );
-extern	INT32 Im_BMH_Get_Ctrl( BYTE channel_no, T_IM_BMH_CTRL* const bmh_ctrl );
-extern	INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const T_IM_BMH_BMHRE* const sram );
-extern	INT32 Im_BMH_Get_Bmhre( BYTE channel_no, T_IM_BMH_BMHRE* const sram );
-extern	INT32 Im_BMH_Get_Rsst( BYTE channel_no, T_IM_BMH_RSST* const rsst );
-extern	INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const T_IM_BMH_BMHCONT* const cont );
-extern	INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, T_IM_BMH_BMHCONT* const cont );
-extern	INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const T_IM_BMH_AXI* const axi_ctrl );
-extern	INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const T_IM_BMH_BMHHCNT* const cnt );
-extern	INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const T_IM_BMH_BMHSAD_WR* const sad_wr );
-extern	INT32 Im_BMH_Set_Lut( BYTE channel_no, const T_IM_BMH_LUT* const lut_data );
-extern	INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const T_IM_BMH_CTRL_DMA* const bmh_ctrl_dma );
+extern	INT32 Im_BMH_Get_Ctrl( BYTE channel_no, ImBmhCtrl* const bmh_ctrl );
+extern	INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const ImBmhBmhre* const sram );
+extern	INT32 Im_BMH_Get_Bmhre( BYTE channel_no, ImBmhBmhre* const sram );
+extern	INT32 Im_BMH_Get_Rsst( BYTE channel_no, ImBmhRsst* const rsst );
+extern	INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const ImBmhBmhcont* const cont );
+extern	INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, ImBmhBmhcont* const cont );
+extern	INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const ImBmhAxi* const axi_ctrl );
+extern	INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const ImBmhBmhhcnt* const cnt );
+extern	INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const ImBmhBmhsadWr* const sadWr );
+extern	INT32 Im_BMH_Set_Lut( BYTE channel_no, const ImBmhLut* const lut_data );
+extern	INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const ImBmhCtrlDma* const bmh_ctrl_dma );
 extern	VOID Im_BMH_Int_Handler( BYTE channel_no );
-extern	INT32 Im_BMH_Ctrl( BYTE channel_no, const T_IM_BMH_CTRL* const bmh_ctrl );
+extern	INT32 Im_BMH_Ctrl( BYTE channel_no, const ImBmhCtrl* const bmh_ctrl );
 
 #ifdef CO_BMH_DEBUG
 VOID Im_BMH_Print_ClockStatus( VOID )

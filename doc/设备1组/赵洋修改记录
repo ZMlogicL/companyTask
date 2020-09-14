@@ -27,7 +27,7 @@ kvpuapienum.h 文件:
 typedef enum CodStd;
 
 
-公有方法（原共有方法先转换尾蛇形命名形式（ctr + alt + y），在加前缀k_vpuapi_ ，所有方法都加了参数KVpuapi* self）：
+公有方法(	所有方法都加了参数KVpuapi* self）：
 Kvpuapi.h 文件:
 Int32 			k_vpuapi_isbusy(KVpuapi* self, Uint32 coreIdx);
 

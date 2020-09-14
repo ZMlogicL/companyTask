@@ -22,7 +22,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro72, ct_impro_7_2)
 
 struct _CtImpro72Private
 {
-
+    TImProCallbackCfg intCtrlMax1;
+    TImProCallbackCfg intCtrlMax2;
 };
 
 
@@ -32,6 +33,12 @@ struct _CtImpro72Private
 static void ct_impro_7_2_constructor(CtImpro72 *self)
 {
 	CtImpro72Private *priv = CT_IMPRO_7_2_GET_PRIVATE(self);
+
+    priv->intCtrlMax1.inthandler = im_pro_callback_sen_vd_int_cb;
+    priv->intCtrlMax1.userParam = 0;
+
+    priv->intCtrlMax2.inthandler = im_pro_callback_sen_hd_int_cb;
+    priv->intCtrlMax2.userParam = 0;
 }
 
 static void ct_impro_7_2_destructor(CtImpro72 *self)
@@ -44,47 +51,41 @@ static void ct_impro_7_2_destructor(CtImpro72 *self)
  * PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_20(const kuint32 idx)
+void ct_im_pro_7_2_0(CtImpro72 *self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_21(const kuint32 idx)
+void ct_im_pro_7_2_1(CtImpro72 *self,const kuint32 idx)
 {
+	CtImpro72Private *priv = CT_IMPRO_7_2_GET_PRIVATE(self);
     kint32 ercd;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_sen_vd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
         for(userParam = 0; userParam < 4; userParam++) {
-            intCtrlMax.userParam = userParam;
-            ercd = interrupt_sen_set_vd_int_handler(&intCtrlMax);
-            im_pro_7_21_Print(NULL,"", ercd, &intCtrlMax);
+            priv->intCtrlMax1.userParam = userParam;
+            ercd = interrupt_sen_set_vd_int_handler(&priv->intCtrlMax1);
+            im_pro_7_print_21(im_pro_7_print_get(),"", ercd, &priv->intCtrlMax1);
         }
     }
 }
 
-void ct_im_pro_7_22(const kuint32 idx)
+void ct_im_pro_7_2_2(CtImpro72 *self,const kuint32 idx)
 {
+	CtImpro72Private *priv = CT_IMPRO_7_2_GET_PRIVATE(self);
     kint32 ercd;
     kulong userParam;
-    TImProCallbackCfg intCtrlMax = {
-        .inthandler = im_pro_callback_sen_hd_int_cb,
-        .userParam = 0,
-    };
 
     if(idx == 1) {
         for(userParam = 0; userParam < 4; userParam++) {
-            intCtrlMax.userParam = userParam;
-            ercd = Im_PRO_SEN_Set_HD_Int_Handler(&intCtrlMax);
-            im_pro_7_22_Print(NULL,"", ercd, &intCtrlMax);
+            priv->intCtrlMax2.userParam = userParam;
+            ercd = Im_PRO_SEN_Set_HD_Int_Handler(&priv->intCtrlMax2);
+            im_pro_7_print_22(im_pro_7_print_get(),"", ercd, &priv->intCtrlMax2);
         }
     }
 }
 
-void ct_im_pro_7_23(const kuint32 idx)
+void ct_im_pro_7_2_3(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32  loopcnt;
@@ -93,7 +94,7 @@ void ct_im_pro_7_23(const kuint32 idx)
     kuint32  intf = 0;
     inte = (D_IM_PRO_PWCHINTENB_PWE | D_IM_PRO_PWCHINTENB_PWEE | D_IM_PRO_PWCHINTENB_PWXE);
     intf = (D_IM_PRO_PWCHINTFLG_PWF | D_IM_PRO_PWCHINTFLG_PWEF | D_IM_PRO_PWCHINTFLG_PWXF);
-    for(chLoopcnt = 0; chLoopcnt < E_IM_PRO_PWCH_MAX; chLoopcnt++) {
+    for(chLoopcnt = 0; chLoopcnt < ImProPwch_MAX; chLoopcnt++) {
         im_pro_debug_pwch_intflg_fill(im_pro_debug_get(),0, 0, chLoopcnt, inte, intf);
     }
 
@@ -133,97 +134,65 @@ void ct_im_pro_7_23(const kuint32 idx)
     Im_PRO_SEN_Int_Handler();
 }
 
-void ct_im_pro_7_24(const kuint32 idx)
+void ct_im_pro_7_2_4(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
-    kuint32  inte = (D_IM_PRO_INT_VDE00 | 
-                    D_IM_PRO_INT_VDE01 |
-                    D_IM_PRO_INT_VDE10 |
-                    D_IM_PRO_INT_VDE11 |
-                    D_IM_PRO_INT_VDE20 |
-                    D_IM_PRO_INT_VDE21 |
-                    D_IM_PRO_INT_VDE30 |
-                    D_IM_PRO_INT_VDE31);
+    kuint32  inte = (D_IM_PRO_INT_VDE00 | D_IM_PRO_INT_VDE01 |
+                    D_IM_PRO_INT_VDE10 | D_IM_PRO_INT_VDE11 |
+                    D_IM_PRO_INT_VDE20 | D_IM_PRO_INT_VDE21 |
+                    D_IM_PRO_INT_VDE30 | D_IM_PRO_INT_VDE31);
 
-    kuint32  intf = (D_IM_PRO_INT_VDF00 |
-                    D_IM_PRO_INT_VDF01 |
-                    D_IM_PRO_INT_VDF10 |
-                    D_IM_PRO_INT_VDF11 |
-                    D_IM_PRO_INT_VDF20 |
-                    D_IM_PRO_INT_VDF21 |
-                    D_IM_PRO_INT_VDF30 |
-                    D_IM_PRO_INT_VDF31);
+    kuint32  intf = (ImPro_INT_VDF00 | D_IM_PRO_INT_VDF01 |
+                    D_IM_PRO_INT_VDF10 | D_IM_PRO_INT_VDF11 |
+                    D_IM_PRO_INT_VDF20 | D_IM_PRO_INT_VDF21 |
+                    D_IM_PRO_INT_VDF30 | D_IM_PRO_INT_VDF31);
 
-    kuint32  sgInte = (D_IM_PRO_INT_SGVDE0 |
-                      D_IM_PRO_INT_SGVDE1 |
-                      D_IM_PRO_INT_SGVDE2 |
-                      D_IM_PRO_INT_SGVDE3);
+    kuint32  sgInte = (D_IM_PRO_INT_SGVDE0 | D_IM_PRO_INT_SGVDE1 |
+                      D_IM_PRO_INT_SGVDE2 | D_IM_PRO_INT_SGVDE3);
 
-    kuint32  sgIntf = (D_IM_PRO_INT_SGVDF0 |
-                      D_IM_PRO_INT_SGVDF1 |
-                      D_IM_PRO_INT_SGVDF2 |
-                      D_IM_PRO_INT_SGVDF3);
+    kuint32  sgIntf = (D_IM_PRO_INT_SGVDF0 | D_IM_PRO_INT_SGVDF1 |
+                      D_IM_PRO_INT_SGVDF2 | D_IM_PRO_INT_SGVDF3);
 
-    kuint32  gyroInte = (D_IM_PRO_INT_GYRO_SOFE0 |
-                        D_IM_PRO_INT_GYRO_SOFE1 |
-                        D_IM_PRO_INT_GYRO_SOFE2 |
-                        D_IM_PRO_INT_GYRO_SOFE3 |
-                        D_IM_PRO_INT_GYRO_EOFE0 |
-                        D_IM_PRO_INT_GYRO_EOFE1 |
-                        D_IM_PRO_INT_GYRO_EOFE2 |
-                        D_IM_PRO_INT_GYRO_EOFE3);
+    kuint32  gyroInte = (D_IM_PRO_INT_GYRO_SOFE0 | D_IM_PRO_INT_GYRO_SOFE1 |
+                        D_IM_PRO_INT_GYRO_SOFE2 | D_IM_PRO_INT_GYRO_SOFE3 |
+                        D_IM_PRO_INT_GYRO_EOFE0 | D_IM_PRO_INT_GYRO_EOFE1 |
+                        D_IM_PRO_INT_GYRO_EOFE2 | D_IM_PRO_INT_GYRO_EOFE3);
 
-    kuint32  gyroIntf = (D_IM_PRO_INT_GYRO_SOFF0 |
-                        D_IM_PRO_INT_GYRO_SOFF1 |
-                        D_IM_PRO_INT_GYRO_SOFF2 |
-                        D_IM_PRO_INT_GYRO_SOFF3 |
-                        D_IM_PRO_INT_GYRO_EOFF0 |
-                        D_IM_PRO_INT_GYRO_EOFF1 |
-                        D_IM_PRO_INT_GYRO_EOFF2 |
-                        D_IM_PRO_INT_GYRO_EOFF3);
+    kuint32  gyroIntf = (D_IM_PRO_INT_GYRO_SOFF0 | D_IM_PRO_INT_GYRO_SOFF1 |
+                        D_IM_PRO_INT_GYRO_SOFF2 | D_IM_PRO_INT_GYRO_SOFF3 |
+                        D_IM_PRO_INT_GYRO_EOFF0 | D_IM_PRO_INT_GYRO_EOFF1 |
+                        D_IM_PRO_INT_GYRO_EOFF2 | D_IM_PRO_INT_GYRO_EOFF3);
 
     im_pro_debug_sentop_vd_intflg_fill(im_pro_debug_get(),inte, intf, sgInte, sgIntf, gyroInte, gyroIntf);
 #endif  // CO_DEBUG_ON_PC
     Im_PRO_SEN_VD_Int_Handler();
 }
 
-void ct_im_pro_7_25(const kuint32 idx)
+void ct_im_pro_7_2_5(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
-    kuint32  inte = (D_IM_PRO_INT_HDE00 |
-                    D_IM_PRO_INT_HDE01 |
-                    D_IM_PRO_INT_HDE10 |
-                    D_IM_PRO_INT_HDE11 |
-                    D_IM_PRO_INT_HDE20 |
-                    D_IM_PRO_INT_HDE21 |
-                    D_IM_PRO_INT_HDE30 |
-                    D_IM_PRO_INT_HDE31);
+    kuint32  inte = (D_IM_PRO_INT_HDE00 | D_IM_PRO_INT_HDE01 |
+                    D_IM_PRO_INT_HDE10 | D_IM_PRO_INT_HDE11 |
+                    D_IM_PRO_INT_HDE20 | D_IM_PRO_INT_HDE21 |
+                    D_IM_PRO_INT_HDE30 | D_IM_PRO_INT_HDE31);
 
-    kuint32  intf = (D_IM_PRO_INT_HDF00 |
-                    D_IM_PRO_INT_HDF01 |
-                    D_IM_PRO_INT_HDF10 |
-                    D_IM_PRO_INT_HDF11 |
-                    D_IM_PRO_INT_HDF20 |
-                    D_IM_PRO_INT_HDF21 |
-                    D_IM_PRO_INT_HDF30 |
-                    D_IM_PRO_INT_HDF31);
+    kuint32  intf = (D_IM_PRO_INT_HDF00 | D_IM_PRO_INT_HDF01 |
+                    D_IM_PRO_INT_HDF10 | D_IM_PRO_INT_HDF11 |
+                    D_IM_PRO_INT_HDF20 | D_IM_PRO_INT_HDF21 |
+                    D_IM_PRO_INT_HDF30 | D_IM_PRO_INT_HDF31);
 
-    kuint32  sgInte = (D_IM_PRO_INT_SGHDE0 |
-                     D_IM_PRO_INT_SGHDE1 |
-                     D_IM_PRO_INT_SGHDE2 |
-                     D_IM_PRO_INT_SGHDE3);
+    kuint32  sgInte = (D_IM_PRO_INT_SGHDE0 |  D_IM_PRO_INT_SGHDE1 |
+                     D_IM_PRO_INT_SGHDE2 | D_IM_PRO_INT_SGHDE3);
 
-    kuint32  sgIntf = (D_IM_PRO_INT_SGHDF0 |
-                     D_IM_PRO_INT_SGHDF1 |
-                     D_IM_PRO_INT_SGHDF2 |
-                     D_IM_PRO_INT_SGHDF3);
+    kuint32  sgIntf = (D_IM_PRO_INT_SGHDF0 | D_IM_PRO_INT_SGHDF1 |
+                     D_IM_PRO_INT_SGHDF2 | D_IM_PRO_INT_SGHDF3);
                                 
     im_pro_debug_sentop_hd_intflg_fill(im_pro_debug_get(),inte, intf, sgInte, sgIntf);
 #endif  // CO_DEBUG_ON_PC
     Im_PRO_SEN_HD_Int_Handler();
 }
 
-void ct_im_pro_7_26(const kuint32 idx)
+void ct_im_pro_7_2_6(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 slvsCommInte = (D_IM_PRO_SLVS_COMMON_PEINTEN_IC_LANE7_BIT |
@@ -276,68 +245,40 @@ void ct_im_pro_7_26(const kuint32 idx)
                             D_IM_PRO_SLVS_COMMON_PEINTST_IPC_LANE1_BIT |
                             D_IM_PRO_SLVS_COMMON_PEINTST_IPC_LANE0_BIT);
 
-    kuint32 slvsInte = (D_IM_PRO_SLVS_INTEN_FSI_BIT |
-                        D_IM_PRO_SLVS_INTEN_FSO_BIT |
-                        D_IM_PRO_SLVS_INTEN_FEI_BIT |
-                        D_IM_PRO_SLVS_INTEN_FEO_BIT |
-                        D_IM_PRO_SLVS_INTEN_RDY_BIT |
-                        D_IM_PRO_SLVS_INTEN_STBY_BIT);
+    kuint32 slvsInte = (D_IM_PRO_SLVS_INTEN_FSI_BIT | D_IM_PRO_SLVS_INTEN_FSO_BIT |
+                        D_IM_PRO_SLVS_INTEN_FEI_BIT | D_IM_PRO_SLVS_INTEN_FEO_BIT |
+                        D_IM_PRO_SLVS_INTEN_RDY_BIT | D_IM_PRO_SLVS_INTEN_STBY_BIT);
 
-    kuint32 slvsIntf = (D_IM_PRO_SLVS_INTST_FSI_BIT |
-                        D_IM_PRO_SLVS_INTST_FSO_BIT |
-                        D_IM_PRO_SLVS_INTST_FEI_BIT |
-                        D_IM_PRO_SLVS_INTST_FEO_BIT |
-                        D_IM_PRO_SLVS_INTST_RDY_BIT |
-                        D_IM_PRO_SLVS_INTST_STBY_BIT);
+    kuint32 slvsIntf = (D_IM_PRO_SLVS_INTST_FSI_BIT | D_IM_PRO_SLVS_INTST_FSO_BIT |
+                        D_IM_PRO_SLVS_INTST_FEI_BIT | D_IM_PRO_SLVS_INTST_FEO_BIT |
+                        D_IM_PRO_SLVS_INTST_RDY_BIT | D_IM_PRO_SLVS_INTST_STBY_BIT);
 
-    kuint32 slvsLeinte = (D_IM_PRO_SLVS_LEINTEN_LBOVF_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_LNE_BIT  |
-                        D_IM_PRO_SLVS_LEINTEN_ECCE_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_ECC2C_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_ECC1C_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_HCRCE_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_HCRC2C_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_HCRC1C_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_PCRCE_BIT |
-                        D_IM_PRO_SLVS_LEINTEN_LLE_BIT);
+    kuint32 slvsLeinte = (D_IM_PRO_SLVS_LEINTEN_LBOVF_BIT | D_IM_PRO_SLVS_LEINTEN_LNE_BIT  |
+                        D_IM_PRO_SLVS_LEINTEN_ECCE_BIT | D_IM_PRO_SLVS_LEINTEN_ECC2C_BIT |
+                        D_IM_PRO_SLVS_LEINTEN_ECC1C_BIT | D_IM_PRO_SLVS_LEINTEN_HCRCE_BIT |
+                        D_IM_PRO_SLVS_LEINTEN_HCRC2C_BIT | D_IM_PRO_SLVS_LEINTEN_HCRC1C_BIT |
+                        D_IM_PRO_SLVS_LEINTEN_PCRCE_BIT | D_IM_PRO_SLVS_LEINTEN_LLE_BIT);
                                     
-    kuint32 slvsLeintf = (D_IM_PRO_SLVS_LEINTST_LBOVF_BIT |
-                        D_IM_PRO_SLVS_LEINTST_LNE_BIT  |
-                        D_IM_PRO_SLVS_LEINTST_ECCE_BIT |
-                        D_IM_PRO_SLVS_LEINTST_ECC2C_BIT |
-                        D_IM_PRO_SLVS_LEINTST_ECC1C_BIT |
-                        D_IM_PRO_SLVS_LEINTST_HCRCE_BIT |
-                        D_IM_PRO_SLVS_LEINTST_HCRC2C_BIT |
-                        D_IM_PRO_SLVS_LEINTST_HCRC1C_BIT |
-                        D_IM_PRO_SLVS_LEINTST_PCRCE_BIT |
-                        D_IM_PRO_SLVS_LEINTST_LLE_BIT);
+    kuint32 slvsLeintf = (D_IM_PRO_SLVS_LEINTST_LBOVF_BIT | D_IM_PRO_SLVS_LEINTST_LNE_BIT  |
+                        D_IM_PRO_SLVS_LEINTST_ECCE_BIT | D_IM_PRO_SLVS_LEINTST_ECC2C_BIT |
+                        D_IM_PRO_SLVS_LEINTST_ECC1C_BIT | D_IM_PRO_SLVS_LEINTST_HCRCE_BIT |
+                        D_IM_PRO_SLVS_LEINTST_HCRC2C_BIT | D_IM_PRO_SLVS_LEINTST_HCRC1C_BIT |
+                        D_IM_PRO_SLVS_LEINTST_PCRCE_BIT | D_IM_PRO_SLVS_LEINTST_LLE_BIT);
 
-    kuint32 slvsMeinte0 = (D_IM_PRO_SLVS_MEINTEN0_DSD_BIT |
-                            D_IM_PRO_SLVS_MEINTEN0_DCL_BIT |
-                            D_IM_PRO_SLVS_MEINTEN0_SCL_BIT |
-                            D_IM_PRO_SLVS_MEINTEN0_ECL_BIT);
+    kuint32 slvsMeinte0 = (D_IM_PRO_SLVS_MEINTEN0_DSD_BIT | D_IM_PRO_SLVS_MEINTEN0_DCL_BIT |
+                            D_IM_PRO_SLVS_MEINTEN0_SCL_BIT | D_IM_PRO_SLVS_MEINTEN0_ECL_BIT);
 
-    kuint32 slvsMeintf0 = (D_IM_PRO_SLVS_MEINTST0_DSD_BIT |
-                            D_IM_PRO_SLVS_MEINTST0_DCL_BIT |
-                            D_IM_PRO_SLVS_MEINTST0_SCL_BIT |
-                            D_IM_PRO_SLVS_MEINTST0_ECL_BIT);
+    kuint32 slvsMeintf0 = (D_IM_PRO_SLVS_MEINTST0_DSD_BIT | D_IM_PRO_SLVS_MEINTST0_DCL_BIT |
+                            D_IM_PRO_SLVS_MEINTST0_SCL_BIT | D_IM_PRO_SLVS_MEINTST0_ECL_BIT);
 
-    kuint32 slvsMeinte1 = (D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE7_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE6_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE5_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE4_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE3_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE2_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE1_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE0_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE7_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE6_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE5_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE4_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE3_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE2_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE1_BIT |
-                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE0_BIT);
+    kuint32 slvsMeinte1 = (D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE7_BIT | D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE6_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE5_BIT | D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE4_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE3_BIT | D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE2_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE1_BIT | D_IM_PRO_SLVS_MEINTEN1_FUNF_LANE0_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE7_BIT | D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE6_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE5_BIT | D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE4_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE3_BIT | D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE2_BIT |
+                            D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE1_BIT | D_IM_PRO_SLVS_MEINTEN1_FOVF_LANE0_BIT);
 
     kuint32 slvsMeintf1 = (D_IM_PRO_SLVS_MEINTST1_FUNF_LANE7_BIT |
                             D_IM_PRO_SLVS_MEINTST1_FUNF_LANE6_BIT |
@@ -558,7 +499,7 @@ void ct_im_pro_7_26(const kuint32 idx)
     Im_PRO_SEN_Sensor_If_Int_Handler_0();
 }
 
-void ct_im_pro_7_27(const kuint32 idx)
+void ct_im_pro_7_2_7(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 lvdsInte1 = (D_IM_PRO_LVDSINTENB_SOFE0 |
@@ -758,7 +699,7 @@ void ct_im_pro_7_27(const kuint32 idx)
     Im_PRO_SEN_Sensor_If_Int_Handler_1();
 }
 
-void ct_im_pro_7_28(const kuint32 idx)
+void ct_im_pro_7_2_8(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 lvdsInte1 = (D_IM_PRO_LVDSINTENB_SOFE0 |
@@ -957,7 +898,7 @@ void ct_im_pro_7_28(const kuint32 idx)
     Im_PRO_SEN_Sensor_If_Int_Handler_2();
 }
 
-void ct_im_pro_7_29(const kuint32 idx)
+void ct_im_pro_7_2_9(CtImpro72 *self,const kuint32 idx)
 {
 #ifdef CO_DEBUG_ON_PC
     kuint32 lvdsInte1 = (D_IM_PRO_LVDSINTENB_SOFE0 |
@@ -1084,8 +1025,7 @@ void ct_im_pro_7_29(const kuint32 idx)
                         D_IM_PRO_MPICINTE1_PHCRC2E |
                         D_IM_PRO_MPICINTE1_PHCRC1E);
 
-    kuint32 cmipiIntf1 = (D_IM_PRO_MPICINTF1_CECF2 |
-                        D_IM_PRO_MPICINTF1_CECF1 |
+    kuint32 cmipiIntf1 = (D_IM_PRO_MPICINTF1_CECF2 | D_IM_PRO_MPICINTF1_CECF1 |
                         D_IM_PRO_MPICINTF1_CECF0 |
                         D_IM_PRO_MPICINTF1_CEEF2 |
                         D_IM_PRO_MPICINTF1_CEEF1 |
@@ -1112,26 +1052,18 @@ void ct_im_pro_7_29(const kuint32 idx)
                         D_IM_PRO_MPICINTF1_PHCRC2EF |
                         D_IM_PRO_MPICINTF1_PHCRC1EF);
 
-    kuint32 cmipiInte2 = (D_IM_PRO_MPICINTE2_CICHSE2 |
-                        D_IM_PRO_MPICINTE2_CICHSE1 |
-                        D_IM_PRO_MPICINTE2_CICHSE0 |
-                        D_IM_PRO_MPICINTE2_PHCRCAEE);
+    kuint32 cmipiInte2 = (D_IM_PRO_MPICINTE2_CICHSE2 | D_IM_PRO_MPICINTE2_CICHSE1 |
+                        D_IM_PRO_MPICINTE2_CICHSE0 | D_IM_PRO_MPICINTE2_PHCRCAEE);
 
-    kuint32 cmipiIntf2 = (D_IM_PRO_MPICINTF2_CICHSF2 |
-                        D_IM_PRO_MPICINTF2_CICHSF1 |
-                        D_IM_PRO_MPICINTF2_CICHSF0 |
-                        D_IM_PRO_MPICINTF2_PHCRCAEF);
+    kuint32 cmipiIntf2 = (D_IM_PRO_MPICINTF2_CICHSF2 | D_IM_PRO_MPICINTF2_CICHSF1 |
+                        D_IM_PRO_MPICINTF2_CICHSF0 | D_IM_PRO_MPICINTF2_PHCRCAEF);
 
-    kuint32 moniInte = (D_IM_PRO_MONIINTENB_MONIHDE |
-                        D_IM_PRO_MONIINTENB_MONIEPFE |
-                        D_IM_PRO_MONIINTENB_MONIEPLE |
-                        D_IM_PRO_MONIINTENB_MONIBLLMINE |
+    kuint32 moniInte = (D_IM_PRO_MONIINTENB_MONIHDE | D_IM_PRO_MONIINTENB_MONIEPFE |
+                        D_IM_PRO_MONIINTENB_MONIEPLE | D_IM_PRO_MONIINTENB_MONIBLLMINE |
                         D_IM_PRO_MONIINTENB_MONIBLLMAXE);
 
-    kuint32 moniIntf = (D_IM_PRO_MONIINTFLG_MONIHDF |
-                        D_IM_PRO_MONIINTFLG_MONIEPFF |
-                        D_IM_PRO_MONIINTFLG_MONIEPLF |
-                        D_IM_PRO_MONIINTFLG_MONIBLLMINF |
+    kuint32 moniIntf = (D_IM_PRO_MONIINTFLG_MONIHDF | D_IM_PRO_MONIINTFLG_MONIEPFF |
+                        D_IM_PRO_MONIINTFLG_MONIEPLF | D_IM_PRO_MONIINTFLG_MONIBLLMINF |
                         D_IM_PRO_MONIINTFLG_MONIBLLMAXF);
 
     const T_IM_PRO_COMMON_MONI_INFO* moniInfo;

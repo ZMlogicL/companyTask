@@ -17,8 +17,8 @@
 #include "imhdmi.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImHdmi, im_hdmi);
-#define IM_HDMI_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImHdmiPrivate, IM_TYPE_HDMI))
+G_DEFINE_TYPE(ImHdmi, im_hdmi, G_TYPE_OBJECT);
+#define IM_HDMI_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_HDMI, ImHdmiPrivate));
 
 // wait.
 #define ImHdmi_IM_HDMI_WAIT_US( usec )								Dd_ARM_Wait_ns( usec * 1000 )
@@ -26,7 +26,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImHdmi, im_hdmi);
 
 struct _ImHdmiPrivate
 {
-	kint a;
+	gint a;
 };
 
 
@@ -34,25 +34,52 @@ struct _ImHdmiPrivate
 /* Global Data																*/
 /*----------------------------------------------------------------------	*/
 static volatile VP_HDMI_CALLBACK S_GIM_HDMI_INT_CALLBACK = NULL;
-
 /**
  *DECLS
  */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 static void 		imHdmiCallbackInterruptI2cm(void);
 static void 		imHdmiCallbackInterruptI2cmphy(void);
 static void 		imHdmiCallbackInterruptPhyLock(void);
-static kint32 		imHdmiPhyWrite(kuchar address, kushort data);
+static gint32 		imHdmiPhyWrite(guchar address, gushort data);
 /**
  *IMPL
  */
-static void im_hdmi_constructor(ImHdmi *self)
+static void 		im_hdmi_class_init(ImHdmiClass *klass)
 {
-//	ImHdmiPrivate *priv = IM_HDMI_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImHdmiPrivate));
 }
 
-static void im_hdmi_destructor(ImHdmi *self)
+static void 		im_hdmi_init(ImHdmi *self)
 {
-//	ImHdmiPrivate *priv = IM_HDMI_GET_PRIVATE(self);
+	ImHdmiPrivate *priv = IM_HDMI_GET_PRIVATE(self);
+	self->ddimUserCustomTest = ddim_user_custom_test_new();
+	self->imHdmiEnum = im_hdmi_enum_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImHdmiPrivate *priv = IM_HDMI_GET_PRIVATE(object);
+	ImHdmi *self = im_hdmi_new();
+	if(self->ddimUserCustomTest){
+		g_object_unref(self->ddimUserCustomTest);
+		self->ddimUserCustomTest = NULL;
+	}
+	if(self->imHdmiEnum){
+		g_object_unref(self->imHdmiEnum);
+		self->imHdmiEnum = NULL;
+	}
+	G_OBJECT_CLASS(im_hdmi_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImHdmiPrivate *priv = IM_HDMI_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_hdmi_parent_class) -> dispose(object);
 }
 
 /**
@@ -62,10 +89,11 @@ static void im_hdmi_destructor(ImHdmi *self)
  */
 static void imHdmiCallbackInterruptI2cm(void)
 {
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	ImHdmi *self = im_hdmi_new();
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	ret = DDIM_User_Set_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
-	if(ret != D_DDIM_USER_E_OK){
+	ret = ddim_user_custom_set_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
+	if(ret != DdimUserCustom_E_OK){
 		Ddim_Print(("Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 	}
 }
@@ -77,10 +105,11 @@ static void imHdmiCallbackInterruptI2cm(void)
  */
 static void imHdmiCallbackInterruptI2cmphy(void)
 {
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	ImHdmi *self = im_hdmi_new();
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	ret = DDIM_User_Set_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
-	if(ret != D_DDIM_USER_E_OK){
+	ret = ddim_user_custom_set_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
+	if(ret != DdimUserCustom_E_OK){
 		Ddim_Print(("imHdmiCallbackInterruptI2cmphy Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 	}
 }
@@ -92,10 +121,11 @@ static void imHdmiCallbackInterruptI2cmphy(void)
  */
 static void imHdmiCallbackInterruptPhyLock(void)
 {
-	DDIM_USER_ER ret = D_DDIM_USER_E_OK;
+	ImHdmi *self = im_hdmi_new();
+	DdimUserCustom_ER ret = DdimUserCustom_E_OK;
 
-	ret = DDIM_User_Set_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
-	if(ret != D_DDIM_USER_E_OK){
+	ret = ddim_user_custom_set_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM);
+	if(ret != DdimUserCustom_E_OK){
 		Ddim_Print(("imHdmiCallbackInterruptPhyLock Error DDIM_User_Set_Flg!! ret = 0x%x\n", ret));
 	}
 }
@@ -107,12 +137,13 @@ static void imHdmiCallbackInterruptPhyLock(void)
  * @retval	D_DDIM_OK						Success.
  * @retval	ImHdmi_D_IM_HDMI_TIMEOUT				timeout.
  */
-static kint32 imHdmiPhyWrite(kuchar address, kushort data)
+static gint32 imHdmiPhyWrite(guchar address, gushort data)
 {
-	DDIM_USER_FLGPTN flgptn = 0;
+	ImHdmi *self = im_hdmi_new();
+	DdimUserCustom_FLGPTN flgptn = 0;
 
 	// clear Interrupt flag.
-	DDIM_User_Clr_Flg(FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
+	ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
 
 	// 0:Standard Mode
 	ioDisp.hdmiTx.phyI2cmDiv.bit.fastStdMode = 0;
@@ -122,13 +153,14 @@ static kint32 imHdmiPhyWrite(kuchar address, kushort data)
 	// Write register address.
 	ioDisp.hdmiTx.phyI2cmAddress = address;
 	// Write data.
-	ioDisp.hdmiTx.phyI2cmDatao1 = (kuchar) (data >> 8);
-	ioDisp.hdmiTx.phyI2cmDatao0 = (kuchar) (data & 0x00FF);
+	ioDisp.hdmiTx.phyI2cmDatao1 = (guchar) (data >> 8);
+	ioDisp.hdmiTx.phyI2cmDatao0 = (guchar) (data & 0x00FF);
 	// Write operation.
 	ioDisp.hdmiTx.phyI2cmOperation.byte[0] = 0x10;
 
 	// Wait for a done interruption from the I2C master.
-	if (DDIM_User_Twai_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM, D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != D_DDIM_USER_E_OK) {
+	if (ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM,
+		DdimUserCustom_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != DdimUserCustom_E_OK) {
 		return ImHdmi_D_IM_HDMI_TIMEOUT;
 	}
 
@@ -145,7 +177,7 @@ static kint32 imHdmiPhyWrite(kuchar address, kushort data)
  * @param	void.
  * @retval	void.
  */
-void im_hdmi_pclk_on (void) {
+void im_hdmi_pclk_on (ImHdmi *self) {
 #ifdef CO_ACT_PCLOCK
 	Im_DISP_APB_Clock_On();
 #endif	// CO_ACT_PCLOCK
@@ -156,7 +188,7 @@ void im_hdmi_pclk_on (void) {
  * @param	void.
  * @retval	void.
  */
-void im_hdmi_pclk_off(void)
+void im_hdmi_pclk_off(ImHdmi *self)
 {
 #ifdef CO_ACT_PCLOCK
 	Im_DISP_APB_Clock_Off();
@@ -170,12 +202,12 @@ void im_hdmi_pclk_off(void)
  * @retval	D_DDIM_OK						Success.
  * @retval	ImHdmi_D_IM_HDMI_TIMEOUT				timeout.
  */
-kint32 im_hdmi_phy_read(kuchar address, kushort *data)
+gint32 im_hdmi_phy_read(ImHdmi *self, guchar address, gushort *data)
 {
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 
 	// clear Interrupt flag.
-	DDIM_User_Clr_Flg(FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
+	ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
 
 	 // 0:Standard Mode
 	ioDisp.hdmiTx.phyI2cmDiv.bit.fastStdMode = 0;
@@ -188,7 +220,8 @@ kint32 im_hdmi_phy_read(kuchar address, kushort *data)
 	ioDisp.hdmiTx.phyI2cmOperation.byte[0] = 0x01;
 
 	// Wait for a done interruption from the I2C master.
-	if (DDIM_User_Twai_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM, D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != D_DDIM_USER_E_OK) {
+	if (ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM,
+		DdimUserCustom_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != DdimUserCustom_E_OK) {
 		return ImHdmi_D_IM_HDMI_TIMEOUT;
 	}
 
@@ -206,11 +239,11 @@ kint32 im_hdmi_phy_read(kuchar address, kushort *data)
  * @retval	ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR		Input parameter error.
  * @retval	ImHdmi_D_IM_HDMI_TIMEOUT				timeout.
  */
-kint32 im_hdmi_configure_pll(ThdmiPllConfig const *const pllConfig)
+gint32 im_hdmi_configure_pll(ImHdmi *self, ThdmiPllConfig const *const pllConfig)
 {
-	kint32 ret = D_DDIM_OK;
-	DDIM_USER_FLGPTN flgptn = 0;
-	kint loop;
+	gint32 ret = D_DDIM_OK;
+	DdimUserCustom_FLGPTN flgptn = 0;
+	gint loop;
 
 #ifdef CO_PARAM_CHECK
 	if (pllConfig == NULL) {
@@ -253,11 +286,12 @@ kint32 im_hdmi_configure_pll(ThdmiPllConfig const *const pllConfig)
 	ioDisp.hdmiTx.phyConf0.byte[0] = 0x2E;
 
 	// clear Interrupt flag.
-	DDIM_User_Clr_Flg(FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
+	ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
 
 	// check PHY lock
 	// Wait for a done interruption from the PHY.
-	if (DDIM_User_Twai_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM, D_DDIM_USER_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != D_DDIM_USER_E_OK) {
+	if (ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM,
+		DdimUserCustom_TWF_ORW, &flgptn, D_DDIM_WAIT_END_TIME) != DdimUserCustom_E_OK) {
 		return ImHdmi_D_IM_HDMI_TIMEOUT;
 	}
 
@@ -271,10 +305,10 @@ kint32 im_hdmi_configure_pll(ThdmiPllConfig const *const pllConfig)
  * @retval		ImHdmi_D_IM_HDMI_NG					NG.
  * @retval		ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR		Input parameter error.
  */
-kint32 im_hdmi_configure_infoframes(ThdmiInfoFrames const *const infoFrames)
+gint32 im_hdmi_configure_infoframes(ImHdmi *self, ThdmiInfoFrames const *const infoFrames)
 {
-	kint32 ret = D_DDIM_OK;
-	kint index;
+	gint32 ret = D_DDIM_OK;
+	gint index;
 #ifdef CO_PARAM_CHECK
 	if (infoFrames == NULL) {
 		Ddim_Assertion(("im_hdmi_configure_infoframes Input_Param_Err status NULL\n"));
@@ -338,13 +372,13 @@ kint32 im_hdmi_configure_infoframes(ThdmiInfoFrames const *const infoFrames)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_fc(void)
+void im_hdmi_check_interrupt_fc(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihFcStat0 register bit.
-	EhdmiIhFcStat0 fc_stat0_bit[] = {
+	EhdmiIhFcStat0 fcStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_NULL,
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_ACR,
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_AUDS,
@@ -355,7 +389,7 @@ void im_hdmi_check_interrupt_fc(void)
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_AUDI
 	};
 	// ihFcStat1 register bit.
-	EhdmiIhFcStat1 fc_stat1_bit[] = {
+	EhdmiIhFcStat1 fcStat1Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_GCP,
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_AVI,
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_AMP,
@@ -366,73 +400,73 @@ void im_hdmi_check_interrupt_fc(void)
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_GMD
 	};
 	// ihFcStat2 register bit.
-	EhdmiIhFcStat2 fc_stat2_bit[] = {
+	EhdmiIhFcStat2 fcStat2Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT2_HP_OF,
 		ImHdmiEnum_E_IM_HDMI_IH_FC_STAT2_LP_OF
 	};
 
 	// Frame Composer Interrupt Status Register 0.
-	for (loop = 0; loop < sizeof(fc_stat0_bit) / sizeof(fc_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(fcStat0Bit) / sizeof(fcStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihFcStat0.byte[0] & fc_stat0_bit[loop]) == fc_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihFcStat0.byte[0] & fcStat0Bit[loop]) == fcStat0Bit[loop]) {
 
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT0, (kuchar) fc_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT0, (guchar) fcStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihFcStat0.byte[0] = fc_stat0_bit[loop];
+			ioDisp.hdmiTx.ihFcStat0.byte[0] = fcStat0Bit[loop];
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
 
 	// Frame Composer Interrupt Status Register 1.
-	for (loop = 0; loop < sizeof(fc_stat1_bit) / sizeof(fc_stat1_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(fcStat1Bit) / sizeof(fcStat1Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihFcStat1.byte[0] & fc_stat1_bit[loop]) == fc_stat1_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihFcStat1.byte[0] & fcStat1Bit[loop]) == fcStat1Bit[loop]) {
 
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT1, (kuchar) fc_stat1_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT1, (guchar) fcStat1Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihFcStat1.byte[0] = fc_stat1_bit[loop];
+			ioDisp.hdmiTx.ihFcStat1.byte[0] = fcStat1Bit[loop];
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
 
 	// Frame Composer Interrupt Status Register 2.
-	for (loop = 0; loop < sizeof(fc_stat2_bit) / sizeof(fc_stat2_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(fcStat2Bit) / sizeof(fcStat2Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihFcStat2.byte[0] & fc_stat2_bit[loop]) == fc_stat2_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihFcStat2.byte[0] & fcStat2Bit[loop]) == fcStat2Bit[loop]) {
 
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT2, (kuchar) fc_stat2_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT2, (guchar) fcStat2Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihFcStat2.byte[0] = fc_stat2_bit[loop];
+			ioDisp.hdmiTx.ihFcStat2.byte[0] = fcStat2Bit[loop];
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
@@ -442,9 +476,9 @@ void im_hdmi_check_interrupt_fc(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_as(void)
+void im_hdmi_check_interrupt_as(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihAsStat0 register bit.
@@ -460,7 +494,7 @@ void im_hdmi_check_interrupt_as(void)
 		if ((ioDisp.hdmiTx.ihAsStat0.byte[0] & as_stat0_bit[loop]) == as_stat0_bit[loop]) {
 
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_AS_STAT0, (kuchar) as_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_AS_STAT0, (guchar) as_stat0_bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
@@ -471,7 +505,7 @@ void im_hdmi_check_interrupt_as(void)
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
@@ -482,13 +516,13 @@ void im_hdmi_check_interrupt_as(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_phy(void)
+void im_hdmi_check_interrupt_phy(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihPhyStat0 register bit.
-	EhdmiIhPhyStat0 phy_stat0_bit[] = {
+	EhdmiIhPhyStat0 phyStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_HDP,
 		ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_TX_PHY_LOCK,
 		ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_0,
@@ -498,38 +532,38 @@ void im_hdmi_check_interrupt_phy(void)
 	};
 
 	// PHY Interface Interrupt Status Register.
-	for (loop = 0; loop < sizeof(phy_stat0_bit) / sizeof(phy_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(phyStat0Bit) / sizeof(phyStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihPhyStat0.byte[0] & phy_stat0_bit[loop]) == phy_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihPhyStat0.byte[0] & phyStat0Bit[loop]) == phyStat0Bit[loop]) {
 
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_PHY_STAT0, (kuchar) phy_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_PHY_STAT0, (guchar) phyStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			//  bit clear.
-			if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_HDP) {
+			if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_HDP) {
 				ioDisp.hdmiTx.phyPol0.bit.hpd = ~ioDisp.hdmiTx.phyPol0.bit.hpd;
 			}
-			else if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_TX_PHY_LOCK) {
+			else if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_TX_PHY_LOCK) {
 				ioDisp.hdmiTx.phyPol0.bit.txPhyLock = ~ioDisp.hdmiTx.phyPol0.bit.txPhyLock;
 			}
-			else if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_0) {
+			else if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_0) {
 				ioDisp.hdmiTx.phyPol0.bit.rxSense0 = ~ioDisp.hdmiTx.phyPol0.bit.rxSense0;
 			}
-			else if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_1) {
+			else if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_1) {
 				ioDisp.hdmiTx.phyPol0.bit.rxSense1 = ~ioDisp.hdmiTx.phyPol0.bit.rxSense1;
 			}
-			else if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_2) {
+			else if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_2) {
 				ioDisp.hdmiTx.phyPol0.bit.rxSense2 = ~ioDisp.hdmiTx.phyPol0.bit.rxSense2;
 			}
-			else if (phy_stat0_bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_3) {
+			else if (phyStat0Bit[loop] == ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_3) {
 				ioDisp.hdmiTx.phyPol0.bit.rxSense3 = ~ioDisp.hdmiTx.phyPol0.bit.rxSense3;
 			}
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihPhyStat0.byte[0] = phy_stat0_bit[loop];
+			ioDisp.hdmiTx.ihPhyStat0.byte[0] = phyStat0Bit[loop];
 
 			// Interrupt type : ihPhyStat0.txPhyLock
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_TX_PHY_LOCK) {
@@ -538,7 +572,7 @@ void im_hdmi_check_interrupt_phy(void)
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
@@ -549,31 +583,31 @@ void im_hdmi_check_interrupt_phy(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_i2cm(void)
+void im_hdmi_check_interrupt_i2cm(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihI2cmStat0 register bit.
-	EhdmiIhI2cmStat0 i2cm_stat0_bit[] = {
+	EhdmiIhI2cmStat0 i2cmStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_MASTER_ERR,
 		ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_MASTER_DONE,
 		ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_SDSC
 	};
 
 	// E-DDC I2C Master Interrupt Status Register.
-	for (loop = 0; loop < sizeof(i2cm_stat0_bit) / sizeof(i2cm_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(i2cmStat0Bit) / sizeof(i2cmStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihI2cmStat0.byte[0] & i2cm_stat0_bit[loop]) == i2cm_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihI2cmStat0.byte[0] & i2cmStat0Bit[loop]) == i2cmStat0Bit[loop]) {
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_I2CM_STAT0, (kuchar) i2cm_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_I2CM_STAT0, (guchar) i2cmStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihI2cmStat0.byte[0] = i2cm_stat0_bit[loop];
+			ioDisp.hdmiTx.ihI2cmStat0.byte[0] = i2cmStat0Bit[loop];
 
 			// Interrupt type : ihI2cmStat0 Register.I2Cmasterdone
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_M_DONE) {
@@ -582,7 +616,7 @@ void im_hdmi_check_interrupt_i2cm(void)
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
@@ -593,13 +627,13 @@ void im_hdmi_check_interrupt_i2cm(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_cec(void)
+void im_hdmi_check_interrupt_cec(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihCecStat0 register bit.
-	EhdmiIhCecStat0 cec_stat0_bit[] = {
+	EhdmiIhCecStat0 cecStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_DONE,
 		ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_EOM,
 		ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_NACK,
@@ -610,22 +644,22 @@ void im_hdmi_check_interrupt_cec(void)
 	};
 
 	// CEC Interrupt Status Register.
-	for (loop = 0; loop < sizeof(cec_stat0_bit)/sizeof(cec_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(cecStat0Bit)/sizeof(cecStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihCecStat0.byte[0] & cec_stat0_bit[loop]) == cec_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihCecStat0.byte[0] & cecStat0Bit[loop]) == cecStat0Bit[loop]) {
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_CEC_STAT0, (kuchar)cec_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_CEC_STAT0, (guchar)cecStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihCecStat0.byte[0] = cec_stat0_bit[loop];
+			ioDisp.hdmiTx.ihCecStat0.byte[0] = cecStat0Bit[loop];
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar)interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar)interruptType);
 			}
 		}
 	}
@@ -636,13 +670,13 @@ void im_hdmi_check_interrupt_cec(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_vp(void)
+void im_hdmi_check_interrupt_vp(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihVpStat0 register bit.
-	EhdmiIhVpStat0 vp_stat0_bit[] = {
+	EhdmiIhVpStat0 vpStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_BYP,
 		ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_FULL_BYP,
 		ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_REMAP,
@@ -654,22 +688,22 @@ void im_hdmi_check_interrupt_vp(void)
 	};
 
 	// Video Packetizer Interrupt Status Register.
-	for (loop = 0; loop < sizeof(vp_stat0_bit) / sizeof(vp_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(vpStat0Bit) / sizeof(vpStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihVpStat0.byte[0] & vp_stat0_bit[loop]) == vp_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihVpStat0.byte[0] & vpStat0Bit[loop]) == vpStat0Bit[loop]) {
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_VP_STAT0, (kuchar) vp_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_VP_STAT0, (guchar) vpStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihVpStat0.byte[0] = vp_stat0_bit[loop];
+			ioDisp.hdmiTx.ihVpStat0.byte[0] = vpStat0Bit[loop];
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
@@ -680,30 +714,30 @@ void im_hdmi_check_interrupt_vp(void)
  * @param	void.
  * @return	void.
  */
-void im_hdmi_check_interrupt_i2cmphy(void)
+void im_hdmi_check_interrupt_i2cmphy(ImHdmi *self)
 {
-	kint32 loop;
+	gint32 loop;
 	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// ihI2cmphyStat0 register bit.
-	EhdmiIhFcStat0 i2cmphy_stat0_bit[] = {
+	EhdmiIhFcStat0 i2cmphyStat0Bit[] = {
 		ImHdmiEnum_E_IM_HDMI_IH_I2CMPHY_STAT0_MASTER_ERR,
 		ImHdmiEnum_E_IM_HDMI_IH_I2CMPHY_STAT0_MASTER_DONE
 	};
 
 	// PHY GEN2 I2C Master Interrupt Status Register.
-	for (loop = 0; loop < sizeof(i2cmphy_stat0_bit) / sizeof(i2cmphy_stat0_bit[0]); loop++) {
+	for (loop = 0; loop < sizeof(i2cmphyStat0Bit) / sizeof(i2cmphyStat0Bit[0]); loop++) {
 		// check register bit.
-		if ((ioDisp.hdmiTx.ihI2cmphyStat0.byte[0] & i2cmphy_stat0_bit[loop]) == i2cmphy_stat0_bit[loop]) {
+		if ((ioDisp.hdmiTx.ihI2cmphyStat0.byte[0] & i2cmphyStat0Bit[loop]) == i2cmphyStat0Bit[loop]) {
 			// Get Interrupt type.
-			interruptType = im_hdmi_get_interrupt_type(ImHdmiEnum_E_IM_HDMI_INT_REG_I2CMPHY_STAT0, (kuchar) i2cmphy_stat0_bit[loop]);
+			interruptType = im_hdmi_enum_get_interrupt_type(self->imHdmiEnum, ImHdmiEnum_E_IM_HDMI_INT_REG_I2CMPHY_STAT0, (guchar) i2cmphyStat0Bit[loop]);
 			// Illegal type(fail safe).
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX) {
 				continue;
 			}
 
 			// Interrupt bit clear.
-			ioDisp.hdmiTx.ihI2cmphyStat0.byte[0] = i2cmphy_stat0_bit[loop];
+			ioDisp.hdmiTx.ihI2cmphyStat0.byte[0] = i2cmphyStat0Bit[loop];
 
 			// Interrupt type : ihI2cmphyStat0.I2Cmphydone
 			if (interruptType == ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CMPHY_DONE) {
@@ -712,14 +746,14 @@ void im_hdmi_check_interrupt_i2cmphy(void)
 
 			// callback.
 			if (S_GIM_HDMI_INT_CALLBACK != NULL) {
-				S_GIM_HDMI_INT_CALLBACK((kuchar) interruptType);
+				S_GIM_HDMI_INT_CALLBACK((guchar) interruptType);
 			}
 		}
 	}
 }
 
-ImHdmi* im_hdmi_new(void)
+ImHdmi* 		im_hdmi_new(void)
 {
-	ImHdmi *self = k_object_new_with_private(IM_TYPE_HDMI, sizeof(ImHdmiPrivate));
+	ImHdmi *self = g_object_new(IM_TYPE_HDMI, NULL);
 	return self;
 }

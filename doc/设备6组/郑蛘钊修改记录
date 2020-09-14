@@ -35,15 +35,21 @@ struct io_cnr_reg改为struct IoCnrReg；
 
 peri_test、chiptop_test移至perichiptoptest.c
 
-函数名前加类名peri_chiptop_test_，加参数PeriChiptopTest* self
+函数名前加类名peri_chiptop_test_，加参数  PeriChiptopTest* self
 struct io_peri-->struct IoPeri
 struct io_pwmdma-->struct IoPwmdma
 union io_usio-->union IoUsio
 struct io_hdmac-->struct IoHdmac
 struct io_slimbus-->struct IoSlimbus
 
-
 去掉引用结构体前struct
+
+mcc_test移到新建类mcctest，函数加参数  MmcTest* self
+mrbc_test移到新建类mrbctest，函数加参数  MrbcTest* self
+mxic_test移到新建类mxictest，函数加参数  Mxic* self
+netsec_test移到新建类netsectest，函数加参数  NetsecTest* self
+函数加参数
+
 
 
 新建类/snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/MILB_Header/Project/Arm/src/kexiu.c
@@ -226,6 +232,48 @@ struct,union内大写变量改为驼峰式命名
 
 struct:
 volatile struct io_wdog IO_WDOG-->volatile IoWdog ioWdog
+
+struct io_wdog {
+    unsigned long               WDOGLOAD;                                   /* 1C26_(C000 - C003h)  */
+    unsigned long               WDOGVALUE;                                  /* 1C26_(C004 - C007h)  */
+    union io_wdog_control       WDOGCONTROL;                                /* 1C26_(C008 - C00Bh)  */
+    unsigned long               WDOGINTCLR;                                 /* 1C26_(C00C - C00Fh)  */
+    union io_wdog_ris           WDOGRIS;                                    /* 1C26_(C010 - C013h)  */
+    union io_wdog_mis           WDOGMIS;                                    /* 1C26_(C014 - C017h)  */
+    unsigned char               dmy_018_BFF[0xC00 - 0x018];                 /* 1C26_(C018 - CBFFh)  */
+    union io_wdog_lock          WDOGLOCK;                                   /* 1C26_(CC00 - CC03h)  */
+    unsigned char               dmy_C04_EFF[0xF00 - 0xC04];                 /* 1C26_(CC04 - CEFFh)  */
+    union io_wdog_itcr          WDOGITCR;                                   /* 1C26_(CF00 - CF03h)  */
+    union io_wdog_itop          WDOGITOP;                                   /* 1C26_(CF04 - CF07h)  */
+    unsigned char               dmy_F08_FDF[0xFE0 - 0xF08];                 /* 1C26_(CF08 - CFDFh)  */
+    union io_wdog_periphid0     WDOGPERIPHID0;                              /* 1C26_(CFE0 - CFE3h)  */
+    union io_wdog_periphid1     WDOGPERIPHID1;                              /* 1C26_(CFE4 - CFE7h)  */
+    union io_wdog_periphid2     WDOGPERIPHID2;                              /* 1C26_(CFE8 - CFEBh)  */
+    union io_wdog_periphid3     WDOGPERIPHID3;                              /* 1C26_(CFEC - CFEFh)  */
+    union io_wdog_pcellid       WDOGPCELLID[4];                             /* 1C26_(CFF0 - CFFFh)  */
+};
+修改为
+struct _IoWdog
+{
+    kulong wdogLoad; /* 1C26_(C000 - C003h)  */
+    kulong wdogValue; /* 1C26_(C004 - C007h)  */
+    IoWdogControl wdogControl; /* 1C26_(C008 - C00Bh)  */
+    kulong wdogIntclr; /* 1C26_(C00C - C00Fh)  */
+    IoWdogRis wdogRis; /* 1C26_(C010 - C013h)  */
+    IoWdogMis wdogMis; /* 1C26_(C014 - C017h)  */
+    kuchar dmy018Bff[0xC00 - 0x018]; /* 1C26_(C018 - CBFFh)  */
+    IoWdogLock wdogLock; /* 1C26_(CC00 - CC03h)  */
+    kuchar dmyC04Eff[0xF00 - 0xC04]; /* 1C26_(CC04 - CEFFh)  */
+    IoWdogItcr wdogItcr; /* 1C26_(CF00 - CF03h)  */
+    IoWdogItop wdogItop; /* 1C26_(CF04 - CF07h)  */
+    kuchar dmyF08Fdf[0xFE0 - 0xF08]; /* 1C26_(CF08 - CFDFh)  */
+    IoWdogPeriphid0 wdogPeriPhId0; /* 1C26_(CFE0 - CFE3h)  */
+    IoWdogPeriphid1 wdogPeriPhId1; /* 1C26_(CFE4 - CFE7h)  */
+    IoWdogPeriphid2 wdogPeriPhId2; /* 1C26_(CFE8 - CFEBh)  */
+    IoWdogPeriphid3 wdogPeriPhId3; /* 1C26_(CFEC - CFEFh)  */
+    IoWdogPcellid wdogPCellId[4]; /* 1C26_(CFF0 - CFFFh)  */
+};
+
 
 union:
 io_wdog_control-->IoWdogControl;

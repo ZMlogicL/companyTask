@@ -66,9 +66,9 @@ SPR Start Sync for On The Fly
 							If this parameter is set to -1, driver waits permanently unless system-call sets event-flag.
 @retval		D_DDIM_OK : success.
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_AXI_ERR				Fail - AXI bus error.
+@retval		ImCnr_AXI_ERR				Fail - AXI bus error.
 @retval		D_IM_CNR_TIMEOUT				Fail - Processing NG. (Time outed)
-@retval		D_IM_CNR_NG						Fail - Process NG. (system error)
+@retval		ImCnr_NG						Fail - Process NG. (system error)
 @remarks	SPR function is started(enable) Sync.
 @remarks	This API uses DDIM_User_Clr_Flg().
 */
@@ -91,9 +91,9 @@ SPR Start Sync for Off Line
 							If this parameter is set to -1, driver waits permanently unless system-call sets event-flag.
 @retval		D_DDIM_OK : success.
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_AXI_ERR				Fail - AXI bus error.
+@retval		ImCnr_AXI_ERR				Fail - AXI bus error.
 @retval		D_IM_CNR_TIMEOUT				Fail - Processing NG. (Time outed)
-@retval		D_IM_CNR_NG						Fail - Process NG. (system error)
+@retval		ImCnr_NG						Fail - Process NG. (system error)
 @remarks	SPR function is started(enable) Sync.
 @remarks	This API uses DDIM_User_Clr_Flg().
 */

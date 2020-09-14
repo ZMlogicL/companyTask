@@ -74,31 +74,31 @@ kint32 ct_im_r2y_17series_4(CtImR2y17series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y17series_FUNC_NAME));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_ON, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_OFF, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -112,31 +112,31 @@ kint32 ct_im_r2y_17series_5(CtImR2y17series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y17series_FUNC_NAME));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_ON, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_OFF, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_medium_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo,
 			ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -580,27 +580,27 @@ kint32 ct_im_r2y_17series_7(CtImR2y17series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y17series_FUNC_NAME));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_scl_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;
@@ -614,27 +614,27 @@ kint32 ct_im_r2y_17series_8(CtImR2y17series *self, kuchar pipeNo)
 
 	DriverCommon_DDIM_PRINT(("%s\n", CtImR2y17series_FUNC_NAME));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_ON, ImR2y_WAIT_ON);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 	ercd = im_r2y_edge_set_low_edge_step_tbl_access_enable(self->imR2yEdge, pipeNo, ImR2y_ENABLE_OFF, ImR2y_WAIT_OFF);
 	DriverCommon_DDIM_PRINT((CtImR2y17series_FUNC_NAME "0x%x\n", ercd));
 #ifdef IM_R2Y_STATUS_PRINT
-	im_r2y_stat_print_acc_en_status(self->imR2yStatself->imR2yStat);
+	im_r2y_stat_print_acc_en_status(self->imR2yStat);
 #endif
 
 	return D_DDIM_OK;

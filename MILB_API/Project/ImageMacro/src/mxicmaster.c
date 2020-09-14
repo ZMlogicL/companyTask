@@ -45,10 +45,10 @@ typedef enum {
 typedef struct {
 	MxicMasterOperationType		kindSetGet;			// Operation type (Set/Get)
 	MxicMasterMaskOperation		kindFactorTarget;	// Master mask operation type (Factor/Target)
-	UCHAR						master;				// Master number.
+	kuchar						master;				// Master number.
 	ImMxicMaskGroup			group;				// Mask group.
-	UCHAR						enable;				// Setting of whether to make a master into a mask factor(target).
-} MxicMasterMaskFactorTarget;
+	kuchar						enable;				// Setting of whether to make a master into a mask factor(target).
+} MasterMaskFactorTarget;
 
 struct _MxicMasterPrivate
 {
@@ -59,11 +59,11 @@ struct _MxicMasterPrivate
 /*----------------------------------------------------------------------*/
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
-static INT32 imMxicRwMasterMaskFactorOrTarget( MxicMaster *self, ImMxicUnit unit, 
-												MxicMasterMaskFactorTarget* const config );
+static kint32 imMxicRwMasterMaskFactorOrTarget( MxicMaster *self, ImMxicUnit unit, 
+												MasterMaskFactorTarget* const config );
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckMasterMaskFactorTargetParam( MxicMasterOperationType operation, 
-													UCHAR master, ImMxicMaskGroup group, UCHAR* const enable );
+static kint32 imMxicCheckMasterMaskFactorTargetParam( MxicMasterOperationType operation, 
+													kuchar master, ImMxicMaskGroup group, kuchar* const enable );
 #endif // CO_PARAM_CHECK
 
 
@@ -96,13 +96,13 @@ This function operates the factor of a master mask, and the target.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicRwMasterMaskFactorOrTarget( MxicMaster *self, ImMxicUnit unit, 
-												MxicMasterMaskFactorTarget* const config )
+static kint32 imMxicRwMasterMaskFactorOrTarget( MxicMaster *self, ImMxicUnit unit, 
+												MasterMaskFactorTarget* const config )
 {
-	INT32						result;
-	INT32						operate_bit;
-	INT32						compare_bit;
-	UCHAR						readMaster;
+	kint32						result;
+	kint32						operate_bit;
+	kint32						compare_bit;
+	kuchar						readMaster;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -328,8 +328,8 @@ Check parameter of function that operates master mask factor and target.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckMasterMaskFactorTargetParam( MxicMasterOperationType operation, 
-													UCHAR master, ImMxicMaskGroup group, UCHAR* const enable )
+static kint32 imMxicCheckMasterMaskFactorTargetParam( MxicMasterOperationType operation, 
+													kuchar master, ImMxicMaskGroup group, kuchar* const enable )
 {
 	if ( group >= MxicUtlis_MASK_GROUP_MAX ) {
 		// Group is illegal.
@@ -366,9 +366,9 @@ This function set the movement position after the master process.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_set_master_priority( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR priority )
+kint32 mxic_master_set_master_priority( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar priority )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -479,9 +479,9 @@ This function get the movement position after the master process.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_priority( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR* const priority )
+kint32 mxic_master_get_master_priority( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar* const priority )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -599,11 +599,11 @@ This function set the master transfer mask and mask period.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting mask ranges are from 4 to 4096.
 */
-INT32 mxic_master_set_master_mask( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
+kint32 mxic_master_set_master_mask( MxicMaster *self, ImMxicUnit unit, kuchar master, 
 									const ImMxicMasterMask* const mask )
 {
-	UCHAR						masterTypeRead;
-	INT32						result;
+	kuchar						masterTypeRead;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -796,10 +796,10 @@ This function get the master transfer mask and mask period.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_mask( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
+kint32 mxic_master_get_master_mask( MxicMaster *self, ImMxicUnit unit, kuchar master, 
 									ImMxicMasterMask* const mask )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -928,11 +928,11 @@ This function set factor of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32 mxic_master_set_master_mask_factor( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR enable )
+kint32 mxic_master_set_master_mask_factor( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar enable )
 {
-	INT32						result;
-	MxicMasterMaskFactorTarget	config;
+	kint32						result;
+	MasterMaskFactorTarget	config;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckMasterMaskFactorTargetParam( MxicMaster_OPERATION_TYPE_SET, master, group, &enable ) 
@@ -975,11 +975,11 @@ This function get factor of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_mask_factor( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR* const enable )
+kint32 mxic_master_get_master_mask_factor( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar* const enable )
 {
-	INT32						result;
-	MxicMasterMaskFactorTarget	config;
+	kint32						result;
+	MasterMaskFactorTarget	config;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckMasterMaskFactorTargetParam( MxicMaster_OPERATION_TYPE_GET, master, group, enable ) 
@@ -1024,11 +1024,11 @@ This function set target of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_set_master_mask_target( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR enable )
+kint32 mxic_master_set_master_mask_target( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar enable )
 {
-	INT32						result;
-	MxicMasterMaskFactorTarget	config;
+	kint32						result;
+	MasterMaskFactorTarget	config;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckMasterMaskFactorTargetParam( MxicMaster_OPERATION_TYPE_SET, master, group, &enable ) 
@@ -1071,11 +1071,11 @@ This function get target of transfer demand mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_mask_target( MxicMaster *self, ImMxicUnit unit, UCHAR master, 
-											ImMxicMaskGroup group, UCHAR* const enable )
+kint32 mxic_master_get_master_mask_target( MxicMaster *self, ImMxicUnit unit, kuchar master, 
+											ImMxicMaskGroup group, kuchar* const enable )
 {
-	INT32						result;
-	MxicMasterMaskFactorTarget	config;
+	kint32						result;
+	MasterMaskFactorTarget	config;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckMasterMaskFactorTargetParam( MxicMaster_OPERATION_TYPE_GET, master, group, enable ) 
@@ -1117,9 +1117,9 @@ This function set the mask factor master state.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_set_master_mask_select( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR select )
+kint32 mxic_master_set_master_mask_select( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar select )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -1246,9 +1246,9 @@ This function get the mask factor master state.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_mask_select( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR* const select )
+kint32 mxic_master_get_master_mask_select( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar* const select )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -1385,9 +1385,9 @@ This function set the max number of master transaction.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_set_master_transaction( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR transaction )
+kint32 mxic_master_set_master_transaction( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar transaction )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 
@@ -1499,9 +1499,9 @@ This function get the max number of master transaction.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_master_get_master_transaction( MxicMaster *self, ImMxicUnit unit, UCHAR master, UCHAR* const transaction )
+kint32 mxic_master_get_master_transaction( MxicMaster *self, ImMxicUnit unit, kuchar master, kuchar* const transaction )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
     MxicMasterPrivate *priv = MXIC_MASTER_GET_PRIVATE(self);
 

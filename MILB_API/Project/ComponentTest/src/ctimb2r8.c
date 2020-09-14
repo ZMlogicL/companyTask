@@ -12,16 +12,20 @@
 *
 */
 
-#include "ct_im_b2r.h"
+#include "ctimb2r.h"
 
-#include "im_b2r.h"
+// #include "im_b2r.h"
+#include "../../ImageMacro/src/imb2r.h"
 #include "im_pro.h"
-#include "im_pro_common.h"
+// #include "im_pro_common.h"
+#include "../../ImageMacro/src/improcommon.h"
 
 #include "driver_common.h"
-#include "ddim_user_custom.h"
+// #include "ddim_user_custom.h"
+#include "../../../../milb_api_usercustom/src/ddimusercustom.h"
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #endif
 
 #include "jdsb2r.h"
@@ -42,8 +46,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImB2r8, ct_im_b2r8);
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
-#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (D_IM_B2R_PIPE1+1))
-#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (D_IM_B2R_PIPE2+1))
+#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE1+1))
+#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE2+1))
 
 
 struct _CtImB2r8Private
@@ -99,17 +103,17 @@ kint32 ct_im_b2r8_3_18( CtImB2r8 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_rect_param.input_size.img_top = D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
-	b2r_rect_param.input_size.img_left = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
+	b2r_rect_param.input_size.img_top = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
+	b2r_rect_param.input_size.img_left = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -160,7 +164,7 @@ kint32 ct_im_b2r8_3_18( CtImB2r8 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -176,10 +180,10 @@ kint32 ct_im_b2r8_3_18( CtImB2r8 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -192,10 +196,10 @@ kint32 ct_im_b2r8_3_18( CtImB2r8 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -213,7 +217,7 @@ kint32 ct_im_b2r8_3_18( CtImB2r8 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_other_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -250,17 +254,17 @@ kint32 ct_im_b2r8_3_21( CtImB2r8 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_rect_param.input_size.img_top = D_IM_B2R_SRC_IMG_PIXS_LINES / 4;
-	b2r_rect_param.input_size.img_left = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
+	b2r_rect_param.input_size.img_top = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 4;
+	b2r_rect_param.input_size.img_left = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -311,7 +315,7 @@ kint32 ct_im_b2r8_3_21( CtImB2r8 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -327,10 +331,10 @@ kint32 ct_im_b2r8_3_21( CtImB2r8 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -343,10 +347,10 @@ kint32 ct_im_b2r8_3_21( CtImB2r8 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -364,7 +368,7 @@ kint32 ct_im_b2r8_3_21( CtImB2r8 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_other_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -391,17 +395,17 @@ kint32 ct_im_b2r8_3_23( CtImB2r8 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_rect_param.input_size.img_top = D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
-	b2r_rect_param.input_size.img_left = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
+	b2r_rect_param.input_size.img_top = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
+	b2r_rect_param.input_size.img_left = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -452,7 +456,7 @@ kint32 ct_im_b2r8_3_23( CtImB2r8 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -468,10 +472,10 @@ kint32 ct_im_b2r8_3_23( CtImB2r8 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -484,10 +488,10 @@ kint32 ct_im_b2r8_3_23( CtImB2r8 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -505,7 +509,7 @@ kint32 ct_im_b2r8_3_23( CtImB2r8 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_other_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -532,17 +536,17 @@ kint32 ct_im_b2r8_3_25( CtImB2r8 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_rect_param.input_size.img_top = D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
-	b2r_rect_param.input_size.img_left = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
+	b2r_rect_param.input_size.img_top = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 4 - 1;
+	b2r_rect_param.input_size.img_left = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -593,7 +597,7 @@ kint32 ct_im_b2r8_3_25( CtImB2r8 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -609,10 +613,10 @@ kint32 ct_im_b2r8_3_25( CtImB2r8 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -625,10 +629,10 @@ kint32 ct_im_b2r8_3_25( CtImB2r8 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -646,7 +650,7 @@ kint32 ct_im_b2r8_3_25( CtImB2r8 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_other_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -672,7 +676,7 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 	T_IM_B2R_CTRL_B2B_DIRECT b2r_ctrl_b2b_direct = gctImB2rCtrlB2bDirect;
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 	USHORT ring_pixs;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
@@ -680,15 +684,15 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_ctrl.bayer_top_pixel = D_IM_B2R_TOP_PIXEL_GR;
+	b2r_ctrl.bayer_top_pixel = ImB2r_D_IM_B2R_TOP_PIXEL_GR;
 
 	Im_B2R_Get_HRingPixs( 0, &ring_pixs );
 	b2r_ctrl_b2b_direct.even_line_start_timming -= ring_pixs / 2;
 
-	b2r_rect_param.input_size.img_top = D_IM_B2R_SRC_IMG_PIXS_LINES / 4;
-	b2r_rect_param.input_size.img_left = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
-	b2r_rect_param.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
-	b2r_rect_param.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
+	b2r_rect_param.input_size.img_top = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 4;
+	b2r_rect_param.input_size.img_left = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 4 - 1;
+	b2r_rect_param.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH / 2;
+	b2r_rect_param.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -747,7 +751,7 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -765,10 +769,10 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -784,10 +788,10 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 	ct_im_b2r1_waitend_stop_b2b( (E_IM_PRO_UNIT_NUM)self->pipeNo );
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 30 );
@@ -813,7 +817,7 @@ kint32 ct_im_b2r8_3_27( CtImB2r8 *self )
 	ct_im_b2r1_print_axi_reg();
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R End Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();

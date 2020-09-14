@@ -11,7 +11,7 @@
 
 
 #include "audio_if.h"
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "ddaudio.h"
 #include "ddaudioreg.h"
 
@@ -22,7 +22,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdAudioReg, dd_audio_reg);
 
 struct _DdAudioRegPrivate
 {
-	volatile DdAudioRegFunc gDd_Audio_UnderFlow_Callback_Func[DdAudio_IF_CH_NUM_MAX];
+	volatile DdAudioRegFunc underFlowCallbackFunc[DdAudio_IF_CH_NUM_MAX];
 };
 
 
@@ -33,7 +33,7 @@ static void dd_audio_reg_constructor(DdAudioReg *self)
 
 	for(i = 0; i < DdAudio_IF_CH_NUM_MAX; i++)
 	{
-		priv->gDd_Audio_UnderFlow_Callback_Func[i] = NULL;
+		priv->underFlowCallbackFunc[i] = NULL;
 	}
 }
 
@@ -44,15 +44,15 @@ static void dd_audio_reg_destructor(DdAudioReg *self)
 
 /**
  * @brief  Set register INTIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aucr aucr;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAucr aucr;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -68,7 +68,7 @@ INT32 dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, UINT8 ch, UINT8 ena
 
 	if (enable == DdAudio_ENABLE){
 		if (dd_audio_get_enable_in_usage_intr(ddAudio, ch) != FALSE){
-			Ddim_Print(("[DD_AUDIO]Set INTIE Error:EINTIE = 1\n"));
+			Ddim_Print(("[DD_AUDIO]Set INTIE Error:eintie = 1\n"));
 			return DdAudio_SYSTEM_ERROR;
 		}
 	}
@@ -76,9 +76,9 @@ INT32 dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, UINT8 ch, UINT8 ena
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aucr.word = IO_AUDIO.AUDIOIF[ch].AUCR.word;
-	aucr.bit.INTIE = enable;
-	IO_AUDIO.AUDIOIF[ch].AUCR.word = aucr.word;
+	aucr.word = ioAudio.audioif[ch].aucr.word;
+	aucr.bit.intie = enable;
+	ioAudio.audioif[ch].aucr.word = aucr.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -90,15 +90,15 @@ INT32 dd_audio_reg_set_enable_in_full_intr(DdAudioReg* self, UINT8 ch, UINT8 ena
 
 /**
  * @brief  Set register INTOE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aucr aucr;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAucr aucr;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -114,7 +114,7 @@ INT32 dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, UINT8 ch, UINT8 e
 
 	if (enable == DdAudio_ENABLE){
 		if (dd_audio_get_enable_out_usage_intr(ddAudio, ch) != FALSE){
-			Ddim_Print(("[DD_AUDIO]Set INTOE Error:EINTOE = 1\n"));
+			Ddim_Print(("[DD_AUDIO]Set INTOE Error:eintoe = 1\n"));
 			return DdAudio_SYSTEM_ERROR;
 		}
 	}
@@ -122,9 +122,9 @@ INT32 dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, UINT8 ch, UINT8 e
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aucr.word = IO_AUDIO.AUDIOIF[ch].AUCR.word;
-	aucr.bit.INTOE = enable;
-	IO_AUDIO.AUDIOIF[ch].AUCR.word = aucr.word;
+	aucr.word = ioAudio.audioif[ch].aucr.word;
+	aucr.bit.intoe = enable;
+	ioAudio.audioif[ch].aucr.word = aucr.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -136,10 +136,10 @@ INT32 dd_audio_reg_set_enable_out_empty_intr(DdAudioReg* self, UINT8 ch, UINT8 e
 
 /**
  * @brief  Get register AUIEF.
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @return TRUE/FALSE
  */
-BOOL dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, UINT8 ch)
+kboolean dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -148,7 +148,7 @@ BOOL dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	if (IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF == 1){
+	if (ioAudio.audioif[ch].aucr.bit.auief == 1){
 		return TRUE;
 	}
 	else {
@@ -158,10 +158,10 @@ BOOL dd_audio_reg_get_audio_in_enable_flag(DdAudioReg* self, UINT8 ch)
 
 /**
  * @brief  Get register AUOE.
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @return TRUE/FALSE
  */
-BOOL dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, UINT8 ch)
+kboolean dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -170,7 +170,7 @@ BOOL dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	if (IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUOEF == 1){
+	if (ioAudio.audioif[ch].aucr.bit.auoef == 1){
 		return TRUE;
 	}
 	else {
@@ -180,14 +180,14 @@ BOOL dd_audio_reg_get_audio_out_enable_flag(DdAudioReg* self, UINT8 ch)
 
 /**
  * @brief  Clear register ORUF.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, UINT8 ch)
+kint32 dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, kuint8 ch)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -199,9 +199,9 @@ INT32 dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, UINT8 ch)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
-	aust.bit.ORUF = 0;
-	IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
+	aust.bit.oruf = 0;
+	ioAudio.audioif[ch].aust.word = aust.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -213,15 +213,15 @@ INT32 dd_audio_reg_clear_out_underflow_flag(DdAudioReg* self, UINT8 ch)
 
 /**
  * @brief  Set register OFIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -238,9 +238,9 @@ INT32 dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, UINT8 ch, UINT8
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
-	aust.bit.OFIE = enable;
-	IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
+	aust.bit.ofie = enable;
+	ioAudio.audioif[ch].aust.word = aust.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -250,15 +250,15 @@ INT32 dd_audio_reg_set_enable_in_overflow_intr(DdAudioReg* self, UINT8 ch, UINT8
 
 /**
  * @brief  Set register UFIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -275,9 +275,9 @@ INT32 dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, UINT8 ch, UIN
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
-	aust.bit.UFIE = enable;
-	IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
+	aust.bit.ufie = enable;
+	ioAudio.audioif[ch].aust.word = aust.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -286,26 +286,26 @@ INT32 dd_audio_reg_set_enable_out_underflow_intr(DdAudioReg* self, UINT8 ch, UIN
 }
 
 /**
- * @brief  Set register EINTIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @brief  Set register eintie.
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
-		Ddim_Assertion(("[DD_AUDIO]Set EINTIE:input channel error : %d\n", ch));
+		Ddim_Assertion(("[DD_AUDIO]Set eintie:input channel error : %d\n", ch));
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 
 	if (enable > 1){
-		Ddim_Assertion(("[DD_AUDIO]Set EINTIE:input enable error : %d\n", enable));
+		Ddim_Assertion(("[DD_AUDIO]Set eintie:input enable error : %d\n", enable));
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -313,22 +313,22 @@ INT32 dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 en
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
 
-	if (aust.bit.EINTIE != enable){								/* pgr0872 */
+	if (aust.bit.eintie != enable){								/* pgr0872 */
 		if (enable == DdAudio_ENABLE){
 			if (dd_audio_get_enable_in_full_intr(ddAudio, ch) != FALSE){
-				Ddim_Print(("[DD_AUDIO]Set EINTIE Error:INTIE = 1\n"));
-				ret_val = DdAudio_SYSTEM_ERROR;
+				Ddim_Print(("[DD_AUDIO]Set eintie Error:INTIE = 1\n"));
+				retVal = DdAudio_SYSTEM_ERROR;
 			}
 			else {
-				aust.bit.EINTIE = enable;
-				IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+				aust.bit.eintie = enable;
+				ioAudio.audioif[ch].aust.word = aust.word;
 			}
 		}
 		else {
-			aust.bit.EINTIE = enable;
-			IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+			aust.bit.eintie = enable;
+			ioAudio.audioif[ch].aust.word = aust.word;
 		}
 	}
 
@@ -337,19 +337,19 @@ INT32 dd_audio_reg_set_enable_in_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 en
 
 	Dd_ARM_Dsb_Pou();
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Clear register IROF.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, UINT8 ch)
+kint32 dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, kuint8 ch)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -361,9 +361,9 @@ INT32 dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, UINT8 ch)
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
-	aust.bit.IROF = 0;
-	IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
+	aust.bit.irof = 0;
+	ioAudio.audioif[ch].aust.word = aust.word;
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
@@ -374,26 +374,26 @@ INT32 dd_audio_reg_clear_in_overflow_flag(DdAudioReg* self, UINT8 ch)
 }
 
 /**
- * @brief  Set register EINTOE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @brief  Set register eintoe.
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 enable)
+kint32 dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aust aust;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAust aust;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
-		Ddim_Assertion(("[DD_AUDIO]Set EINTOE:input channel error : %d\n", ch));
+		Ddim_Assertion(("[DD_AUDIO]Set eintoe:input channel error : %d\n", ch));
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 
 	if (enable > 1){
-		Ddim_Assertion(("[DD_AUDIO]Set EINTOE:input enable error : %d\n", enable));
+		Ddim_Assertion(("[DD_AUDIO]Set eintoe:input enable error : %d\n", enable));
 		return DdAudio_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -401,22 +401,22 @@ INT32 dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 e
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aust.word = IO_AUDIO.AUDIOIF[ch].AUST.word;
+	aust.word = ioAudio.audioif[ch].aust.word;
 
-	if (aust.bit.EINTOE != enable){								/* pgr0872 */
+	if (aust.bit.eintoe != enable){								/* pgr0872 */
 		if (enable == DdAudio_ENABLE){
 			if (dd_audio_get_enable_out_empty_intr(ddAudio, ch) != FALSE){
-				Ddim_Print(("[DD_AUDIO]Set EINTOE Error:INTOE = 1\n"));
-				ret_val = DdAudio_SYSTEM_ERROR;
+				Ddim_Print(("[DD_AUDIO]Set eintoe Error:INTOE = 1\n"));
+				retVal = DdAudio_SYSTEM_ERROR;
 			}
 			else {
-				aust.bit.EINTOE = enable;
-				IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+				aust.bit.eintoe = enable;
+				ioAudio.audioif[ch].aust.word = aust.word;
 			}
 		}
 		else {
-			aust.bit.EINTOE = enable;
-			IO_AUDIO.AUDIOIF[ch].AUST.word = aust.word;
+			aust.bit.eintoe = enable;
+			ioAudio.audioif[ch].aust.word = aust.word;
 		}
 	}
 
@@ -425,15 +425,15 @@ INT32 dd_audio_reg_set_enable_out_usage_intr(DdAudioReg* self, UINT8 ch, UINT8 e
 
 	Dd_ARM_Dsb_Pou();
 
-	return ret_val;
+	return retVal;
 }
 
 /**
  * @brief  Get address of register AUIDLR.
- * @param  UINT8 ch
- * @return UINT32 address of register AUIDLR
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUIDLR
  */
-UINT32 dd_audio_reg_get_addr_reg_auidlr(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auidlr(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -442,15 +442,15 @@ UINT32 dd_audio_reg_get_addr_reg_auidlr(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUIDLR;
+	return (kuint32)&ioAudio.audioif[ch].auidlr;
 }
 
 /**
  * @brief  Get address of register AUODLR.
- * @param  UINT8 ch
- * @return UINT32 address of register AUODLR
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUODLR
  */
-UINT32 dd_audio_reg_get_addr_reg_auodlr(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auodlr(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -459,15 +459,15 @@ UINT32 dd_audio_reg_get_addr_reg_auodlr(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUODLR;
+	return (kuint32)&ioAudio.audioif[ch].auodlr;
 }
 
 /**
  * @brief  Get address of register AUIDL.
- * @param  UINT8 ch
- * @return UINT32 address of register AUIDL
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUIDL
  */
-UINT32 dd_audio_reg_get_addr_reg_auidl(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auidl(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -475,15 +475,15 @@ UINT32 dd_audio_reg_get_addr_reg_auidl(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUIDL;
+	return (kuint32)&ioAudio.audioif[ch].auidl;
 }
 
 /**
  * @brief  Get address of register AUIDR.
- * @param  UINT8 ch
- * @return UINT32 address of register AUIDR
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUIDR
  */
-UINT32 dd_audio_reg_get_addr_reg_auidr(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auidr(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -491,15 +491,15 @@ UINT32 dd_audio_reg_get_addr_reg_auidr(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUIDR;
+	return (kuint32)&ioAudio.audioif[ch].auidr;
 }
 
 /**
  * @brief  Get address of register AUODL.
- * @param  UINT8 ch
- * @return UINT32 address of register AUODL
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUODL
  */
-UINT32 dd_audio_reg_get_addr_reg_auodl(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auodl(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -507,15 +507,15 @@ UINT32 dd_audio_reg_get_addr_reg_auodl(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUODL;
+	return (kuint32)&ioAudio.audioif[ch].auodl;
 }
 
 /**
  * @brief  Get address of register AUODR.
- * @param  UINT8 ch
- * @return UINT32 address of register AUODR
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUODR
  */
-UINT32 dd_audio_reg_get_addr_reg_auodr(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auodr(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -523,15 +523,15 @@ UINT32 dd_audio_reg_get_addr_reg_auodr(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUODR;
+	return (kuint32)&ioAudio.audioif[ch].auodr;
 }
 
 /**
  * @brief  Get address of register AUIDDMAPT.
- * @param  UINT8 ch
- * @return UINT32 address of register AUIDDMAPT
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUIDDMAPT
  */
-UINT32 dd_audio_reg_get_addr_reg_auiddmapt(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auiddmapt(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -539,15 +539,15 @@ UINT32 dd_audio_reg_get_addr_reg_auiddmapt(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUIDDMAPT;
+	return (kuint32)&ioAudio.audioif[ch].auiddmapt;
 }
 
 /**
  * @brief  Get address of register AUODDMAPT.
- * @param  UINT8 ch
- * @return UINT32 address of register AUODDMAPT
+ * @param  kuint8 ch
+ * @return kuint32 address of register AUODDMAPT
  */
-UINT32 dd_audio_reg_get_addr_reg_auoddmapt(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_addr_reg_auoddmapt(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -555,20 +555,20 @@ UINT32 dd_audio_reg_get_addr_reg_auoddmapt(DdAudioReg* self, UINT8 ch)
 		return 0;
 	}
 #endif	// CO_PARAM_CHECK
-	return (UINT32)&IO_AUDIO.AUDIOIF[ch].AUODDMAPT;
+	return (kuint32)&ioAudio.audioif[ch].auoddmapt;
 }
 
 /**
- * @brief  Set register INTIE/EINTIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
+ * @brief  Set register INTIE/eintie.
+ * @param  kuint8 ch
+ * @param  kuint8 enable
  * @param  DdAudioRegFunc callback
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_input_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback)
+kint32 dd_audio_reg_set_enable_input_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	INT32 ret;
+	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -583,7 +583,7 @@ INT32 dd_audio_reg_set_enable_input_intr(DdAudioReg* self, UINT8 ch, UINT8 enabl
 #endif	// CO_PARAM_CHECK
 
 	if ((dd_audio_get_cmmn_fifo_usage(ddAudio, ch) == DdAudioCtrl_FIFO_USAGE_STAGES_16)	||
-		(dd_audio_get_in_fifo_stages(ddAudio, ch) == DdAudioCtrl_FIFO_STAGES_1)			){
+		(dd_audio_get_in_fifo_stages(ddAudio, ch) == DdAudioCtrl_FIFO_STAGES_1)){
 
 		ret = dd_audio_reg_set_enable_in_full_intr(self, ch, enable);
 	}
@@ -602,15 +602,15 @@ INT32 dd_audio_reg_set_enable_input_intr(DdAudioReg* self, UINT8 ch, UINT8 enabl
 }
 
 /**
- * @brief  Set register INTOE/EINTOE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @brief  Set register INTOE/eintoe.
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_output_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback)
+kint32 dd_audio_reg_set_enable_output_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	INT32 ret;
+	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -625,7 +625,7 @@ INT32 dd_audio_reg_set_enable_output_intr(DdAudioReg* self, UINT8 ch, UINT8 enab
 #endif	// CO_PARAM_CHECK
 
 	if ((dd_audio_get_cmmn_fifo_usage(ddAudio, ch) == DdAudioCtrl_FIFO_USAGE_STAGES_16)	||
-		(dd_audio_get_out_fifo_stages(ddAudio, ch) == DdAudioCtrl_FIFO_STAGES_1)			){
+		(dd_audio_get_out_fifo_stages(ddAudio, ch) == DdAudioCtrl_FIFO_STAGES_1)){
 
 		ret = dd_audio_reg_set_enable_out_empty_intr(self, ch, enable);
 	}
@@ -645,14 +645,14 @@ INT32 dd_audio_reg_set_enable_output_intr(DdAudioReg* self, UINT8 ch, UINT8 enab
 
 /**
  * @brief  Set register OFIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback)
+kint32 dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	INT32 ret;
+	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -668,7 +668,8 @@ INT32 dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, UINT8 ch, UINT
 
 	ret = dd_audio_reg_clear_in_overflow_flag(self, ch);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("[DD_AUDIO]dd_audio_reg_set_enable_in_over_flow_intr:dd_audio_clear_in_overflow_flag() = %x\n", ret));
+		Ddim_Print(("[DD_AUDIO]dd_audio_reg_set_enable_in_over_flow_intr:dd_audio_clear_in_overflow_flag() = %x\n",
+						ret));
 	}
 
 	ret = dd_audio_reg_set_enable_in_overflow_intr(self, ch, enable);
@@ -685,14 +686,14 @@ INT32 dd_audio_reg_set_enable_in_over_flow_intr(DdAudioReg* self, UINT8 ch, UINT
 
 /**
  * @brief  Set register UFIE.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, UINT8 ch, UINT8 enable, DdAudioRegFunc callback)
+kint32 dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, kuint8 ch, kuint8 enable, DdAudioRegFunc callback)
 {
 	DdAudioRegPrivate *priv = DD_AUDIO_REG_GET_PRIVATE(self);
-	INT32 ret;
+	kint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -708,16 +709,17 @@ INT32 dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, UINT8 ch, UI
 
 	ret = dd_audio_reg_clear_out_underflow_flag(self, ch);
 	if (ret != D_DDIM_OK){
-		Ddim_Print(("[DD_AUDIO]dd_audio_reg_set_enable_out_under_flow_intr:dd_audio_clear_out_underflow_flag() = %x\n", ret));
+		Ddim_Print(("[DD_AUDIO]dd_audio_reg_set_enable_out_under_flow_intr:"
+				"dd_audio_clear_out_underflow_flag() = %x\n", ret));
 	}
 
 	ret = dd_audio_reg_set_enable_out_underflow_intr(self, ch, enable);
 
 	if ((ret == D_DDIM_OK) && (enable == DdAudio_ENABLE)){
-		priv->gDd_Audio_UnderFlow_Callback_Func[ch] = callback;
+		priv->underFlowCallbackFunc[ch] = callback;
 	}
 	else {
-		priv->gDd_Audio_UnderFlow_Callback_Func[ch] = NULL;
+		priv->underFlowCallbackFunc[ch] = NULL;
 	}
 
 	return ret;
@@ -725,10 +727,10 @@ INT32 dd_audio_reg_set_enable_out_under_flow_intr(DdAudioReg* self, UINT8 ch, UI
 
 /**
  * @brief  Get register AUIFST.
- * @param  UINT8 ch
- * @return UINT32 value of register AUIFST
+ * @param  kuint8 ch
+ * @return kuint32 value of register AUIFST
  */
-UINT32 dd_audio_reg_get_input_fifo_status(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_input_fifo_status(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_IN_CH_NUM_MAX) || (ch == DdAudio_IF_CH3)){
@@ -737,15 +739,15 @@ UINT32 dd_audio_reg_get_input_fifo_status(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	return IO_AUDIO.AUDIOIF[ch].AUIFST.word;
+	return ioAudio.audioif[ch].auifst.word;
 }
 
 /**
  * @brief  Get register AUOFST.
- * @param  UINT8 ch
- * @return UINT32 value of register AUOFST
+ * @param  kuint8 ch
+ * @return kuint32 value of register AUOFST
  */
-UINT32 dd_audio_reg_get_output_fifo_status(DdAudioReg* self, UINT8 ch)
+kuint32 dd_audio_reg_get_output_fifo_status(DdAudioReg* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_OUT_CH_NUM_MAX){
@@ -754,21 +756,21 @@ UINT32 dd_audio_reg_get_output_fifo_status(DdAudioReg* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	return IO_AUDIO.AUDIOIF[ch].AUOFST.word;
+	return ioAudio.audioif[ch].auofst.word;
 }
 
 void dd_audio_reg_set_under_flow_func(DdAudioReg* self, DdAudioRegFunc underFlowFunc, int index)
 {
 	DdAudioRegPrivate *priv = DD_AUDIO_REG_GET_PRIVATE(self);
 
-	priv->gDd_Audio_UnderFlow_Callback_Func[index] = underFlowFunc;
+	priv->underFlowCallbackFunc[index] = underFlowFunc;
 }
 
 DdAudioRegFunc dd_audio_reg_get_under_flow_func(DdAudioReg* self, int index)
 {
 	DdAudioRegPrivate *priv = DD_AUDIO_REG_GET_PRIVATE(self);
 
-	return priv->gDd_Audio_UnderFlow_Callback_Func[index];
+	return priv->underFlowCallbackFunc[index];
 }
 
 DdAudioReg* dd_audio_reg_new(void)

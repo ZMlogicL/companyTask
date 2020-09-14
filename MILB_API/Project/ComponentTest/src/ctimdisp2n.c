@@ -1,7 +1,7 @@
 /*
  *ctimdisp2n.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -27,27 +30,50 @@
 #include "imdisp2group.h"
 #include "ctimdisp2n.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2n, ct_im_disp2n, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2N_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2nPrivate, CT_TYPE_IM_DISP2N))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2n, ct_im_disp2n, IM_TYPE_DISP2_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2N_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2N, CtImDisp2nPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp2nPrivate
 {
-	kpointer qwertyu;
 	T_IM_DISP_CTRL_P2M gLcdDispTblCtrlP2m;//const
 	T_IM_DISP_CTRL_PWCH gLcdDispTblCtrlPwch;//const
 };
 
 /*
+ * 文件级全局变量定义
+ * */
+
+/*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2nDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp2n_constructor(CtImDisp2n *self)
+static void ct_im_disp2n_class_init(CtImDisp2nClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2nPrivate));
+}
+
+static void ct_im_disp2n_init(CtImDisp2n *self)
 {
 	CtImDisp2nPrivate *priv = CT_IM_DISP2N_GET_PRIVATE(self);
 	T_IM_DISP_CTRL_P2M *pgLcdDispTblCtrlP2m = &(priv->gLcdDispTblCtrlP2m);
@@ -60,12 +86,12 @@ static void ct_im_disp2n_constructor(CtImDisp2n *self)
 	pgLcdDispTblCtrlP2m->p2mpaen =(ULONG)D_IM_DISP_ENABLE_ON;					// P2MPAEN(ena)
 	pgLcdDispTblCtrlP2m->p2mctl_plpf =(E_IM_DISP_PLPF)E_IM_DISP_PLPF_LONG;		// p2mctl_plpf
 	pgLcdDispTblCtrlP2m->p2mctl_p2mtyp =(E_IM_DISP_P2MTYP)E_IM_DISP_P2MTYP_16;		// p2mctl_p2mtyp
-	pgLcdDispTblCtrlP2m->p2mofs =(kushort)32767;								// p2mofs
+	pgLcdDispTblCtrlP2m->p2mofs =(gushort)32767;								// p2mofs
 	pgLcdDispTblCtrlP2m->pbsft =(BYTE)8;									// pbsft
-	pgLcdDispTblCtrlP2m->pclph =(kushort)65535;								// pclph
-	pgLcdDispTblCtrlP2m->ptrmv =(kushort)8191;								// ptrmv
-	pgLcdDispTblCtrlP2m->ptrmh =(kushort)12287;								// ptrmh
-	pgLcdDispTblCtrlP2m->ptrmvw =(kushort)65535;								// ptrmvw
+	pgLcdDispTblCtrlP2m->pclph =(gushort)65535;								// pclph
+	pgLcdDispTblCtrlP2m->ptrmv =(gushort)8191;								// ptrmv
+	pgLcdDispTblCtrlP2m->ptrmh =(gushort)12287;								// ptrmh
+	pgLcdDispTblCtrlP2m->ptrmvw =(gushort)65535;								// ptrmvw
 	pgLcdDispTblCtrlP2m->ptrmhw =(ULONG)16777215;							// ptrmhw
 	pgLcdDispTblCtrlP2m->ptrmxvcyc =(BYTE)63;									// ptrmxvcyc
 	pgLcdDispTblCtrlP2m->ptrmxhcyc =(BYTE)63;									// ptrmxhcyc
@@ -83,24 +109,45 @@ static void ct_im_disp2n_constructor(CtImDisp2n *self)
 	pgLcdDispTblCtrlPwch->pwvfm = (BYTE)D_IM_DISP_FORMAT_VIDEO	;			// pwvfm
 }
 
-static void ct_im_disp2n_destructor(CtImDisp2n *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2n *self = CT_IM_DISP2N(object);
+//	CtImDisp2nPrivate *priv = CT_IM_DISP2N_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2n_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImDisp2n *self = CT_IM_DISP2N(object);
+//	CtImDisp2nPrivate *priv = CT_IM_DISP2N_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2n_parent_class)->finalize(object);
 }
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void disp2nDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
 {
 	CtImDisp2n *self = (CtImDisp2n *)parent;
-	kint32 error = D_DDIM_OK;
-	kuint32 layer = 0;
+	gint32 error = D_DDIM_OK;
+	guint32 layer = 0;
 	ImDisp2Group *disp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
 	CtImDisp4 *ctImDisp4 = (CtImDisp4 *)im_disp2_group_get_disp4(disp2Group);
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
-	kuchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
+	guchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
 	CtImDisp3 *disp3 = (CtImDisp3 *)im_disp2_group_get_disp3(imDisp2Group);
 	CtImDisp3a *disp3a = (CtImDisp3a *)im_disp2_group_get_disp3a(imDisp2Group);
 
-	if (strcmp((kchar*) argv[1], "SetGainTbl") == 0)
+	if (strcmp((gchar *) argv[1], "SetGainTbl") == 0)
 	{
 		//Im_DISP_Set_Chroma_Gain_Table
 
@@ -115,7 +162,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
-			kushort setTable[33];
+			gushort setTable[33];
 			if (surface == 0)
 			{
 				memcpy(setTable, ct_im_disp4_get_gain_tbla(ctImDisp4), sizeof(setTable));
@@ -125,7 +172,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				memcpy(setTable, ct_im_disp4_get_gain_tblb(ctImDisp4), sizeof(setTable));
 			}
 			T_IM_DISP_CTRL_OUTPUT_TBL outputTbl;
-			outputTbl.chroma_a = (kushort*) setTable;
+			outputTbl.chroma_a = (gushort*) setTable;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
@@ -143,7 +190,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			else
 			{
 //					error = Im_DISP_Set_Chroma_Gain_Table(block, surface, setTable);
-				error = Im_DISP_Set_Chroma_Gain_Table(block, surface, (kushort*) &outputTbl.chroma_a);
+				error = Im_DISP_Set_Chroma_Gain_Table(block, surface, (gushort*) &outputTbl.chroma_a);
 			}
 			if (error != D_DDIM_OK)
 			{
@@ -160,7 +207,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetGainTbl") == 0)
+	else if (strcmp((gchar *) argv[1], "GetGainTbl") == 0)
 	{
 		//Im_DISP_Get_Chroma_Gain_Table
 
@@ -175,10 +222,10 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			BYTE surface = (BYTE) strtoul(argv[4], NULL, 0);
-			kushort getTable[33];
+			gushort getTable[33];
 			memset(getTable, 0, sizeof(getTable));
 			T_IM_DISP_CTRL_OUTPUT_TBL outputTbl;
-			outputTbl.chroma_a = (kushort*) getTable;
+			outputTbl.chroma_a = (gushort*) getTable;
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Setting -------\n"));
@@ -196,7 +243,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 //					error = Im_DISP_Get_Chroma_Gain_Table(block, surface, getTable);	/* pgr0539 */
 				error = Im_DISP_Get_Chroma_Gain_Table(block,
-						surface, (kushort*) &outputTbl.chroma_a); /* pgr0539 */
+						surface, (gushort*) &outputTbl.chroma_a); /* pgr0539 */
 			}
 			if (error != D_DDIM_OK)
 			{
@@ -215,7 +262,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetMipiCtrl0") == 0)
+	else if (strcmp((gchar *) argv[1], "SetMipiCtrl0") == 0)
 	{
 		//Im_DISP_Set_Mipi_Dsi_Ctrl0
 
@@ -232,7 +279,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
-			Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC0.word));
+			Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC0.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_Mipi_Dsi_Ctrl0(shudown, color_mode); /* pgr0539 */
@@ -244,7 +291,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("------- After Setting -------\n"));
-				Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC0.word));
+				Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC0.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -253,7 +300,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetMipiCtrl0") == 0)
+	else if (strcmp((gchar *) argv[1], "GetMipiCtrl0") == 0)
 	{
 		//Im_DISP_Get_Mipi_Dsi_Ctrl0
 
@@ -289,7 +336,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			else
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
-				Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC0.word));
+				Ddim_Print(("IO_DISP.MDSCTL.MDSIC0 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC0.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("shudown    = 0x%02X\n", shudown));
@@ -301,7 +348,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetMipiCtrl1") == 0)
+	else if (strcmp((gchar *) argv[1], "SetMipiCtrl1") == 0)
 	{
 		//Im_DISP_Set_Mipi_Dsi_Ctrl1
 
@@ -314,7 +361,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
-			Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC1.word));
+			Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC1.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_Mipi_Dsi_Ctrl1();
@@ -326,7 +373,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("------- After Setting -------\n"));
-				Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC1.word));
+				Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC1.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -335,7 +382,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetMipiCtrl1") == 0)
+	else if (strcmp((gchar *) argv[1], "GetMipiCtrl1") == 0)
 	{
 		//Im_DISP_Get_Mipi_Dsi_Ctrl1
 
@@ -362,7 +409,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			else
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
-				Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (kuint32)IO_DISP.MDSCTL.MDSIC1.word));
+				Ddim_Print(("IO_DISP.MDSCTL.MDSIC1 = 0x%08X\n", (guint32)IO_DISP.MDSCTL.MDSIC1.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("MDSIC1 = 0x%08X\n", update_config));
@@ -373,7 +420,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "ChgCsC") == 0)
+	else if (strcmp((gchar *) argv[1], "ChgCsC") == 0)
 	{
 		//Im_DISP_Change_CSC_Matrix
 
@@ -410,7 +457,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "ChgBBCol") == 0)
+	else if (strcmp((gchar *) argv[1], "ChgBBCol") == 0)
 	{
 		//Im_DISP_Change_BB_Color
 
@@ -440,7 +487,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "ChkBBCol") == 0)
+	else if (strcmp((gchar *) argv[1], "ChkBBCol") == 0)
 	{
 		//Im_DISP_Check_BB_Color
 
@@ -481,7 +528,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "ChgGrid") == 0)
+	else if (strcmp((gchar *) argv[1], "ChgGrid") == 0)
 	{
 		//Im_DISP_Change_Grid
 
@@ -495,8 +542,8 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		if (argc == 5)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[2], NULL, 0);
-			kuint32 ghnum = strtoul(argv[3], NULL, 0);
-			kuint32 gvnum = strtoul(argv[4], NULL, 0);
+			guint32 ghnum = strtoul(argv[3], NULL, 0);
+			guint32 gvnum = strtoul(argv[4], NULL, 0);
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
@@ -520,7 +567,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "DrawFF") == 0)
+	else if (strcmp((gchar *) argv[1], "DrawFF") == 0)
 	{
 		//Im_DISP_Draw_Face_Frame_Single
 
@@ -539,8 +586,8 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		if (argc == 10)
 		{
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
-			kint32 index = strtoul(argv[4], NULL, 0);
-			kint32 enable = strtoul(argv[5], NULL, 0);
+			gint32 index = strtoul(argv[4], NULL, 0);
+			gint32 enable = strtoul(argv[5], NULL, 0);
 			T_IM_DISP_FACE_FRAME_PARAM face;
 			face.ffdsta.word = strtoul(argv[6], NULL, 0);
 			face.ffsize.word = strtoul(argv[7], NULL, 0);
@@ -577,7 +624,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 10\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetSRIP") == 0)
+	else if (strcmp((gchar *) argv[1], "SetSRIP") == 0)
 	{
 		//Im_DISP_Set_SR_IP
 
@@ -601,9 +648,9 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("IO_DISP.MAIN[1].DCORE.TRG.bit.TRG = %d\n",
 					IO_DISP.MAIN[E_IM_DISP_LCD_MIPI].DCORE.TRG.bit.TRG));
 			Ddim_Print(("IO_DISP.JDDISP_HDMI_HDMIC.HDMISR  = 0x%08X\n",
-					(kuint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
+					(guint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
 			Ddim_Print(("IO_DISP.MDSCTL.MDSSR              = 0x%08X\n",
-					(kuint32)IO_DISP.MDSCTL.MDSSR.word));
+					(guint32)IO_DISP.MDSCTL.MDSSR.word));
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_SR_IP(ip, sr);
 			if (error != D_DDIM_OK)
@@ -614,9 +661,9 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				Ddim_Print(("------- After Setting -------\n"));
 				Ddim_Print(("IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word = 0x%08X\n",
-						(kuint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
+						(guint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
 				Ddim_Print(("IO_DISP.MDSCTL.MDSSR.word             = 0x%08X\n",
-						(kuint32)IO_DISP.MDSCTL.MDSSR.word));
+						(guint32)IO_DISP.MDSCTL.MDSSR.word));
 			}
 		}
 		else
@@ -624,7 +671,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetSRIP") == 0)
+	else if (strcmp((gchar *) argv[1], "GetSRIP") == 0)
 	{
 		//Im_DISP_Get_SR_IP
 
@@ -640,9 +687,9 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			Ddim_Print(("IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word = 0x%08X\n",
-					(kuint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
+					(guint32)IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.word));
 			Ddim_Print(("IO_DISP.MDSCTL.MDSSR.word             = 0x%08X\n",
-					(kuint32)IO_DISP.MDSCTL.MDSSR.word));
+					(guint32)IO_DISP.MDSCTL.MDSSR.word));
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			if (argv[2][0] == '0')
 			{
@@ -668,7 +715,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetWrtCH") == 0)
+	else if (strcmp((gchar *) argv[1], "SetWrtCH") == 0)
 	{
 		//Im_DISP_Set_Write_Channel_Ctrl
 
@@ -732,7 +779,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 6\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetWrtCH") == 0)
+	else if (strcmp((gchar *) argv[1], "GetWrtCH") == 0)
 	{
 		//Im_DISP_Get_Write_Channel_Ctrl
 
@@ -784,7 +831,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetWrtCHRes") == 0)
+	else if (strcmp((gchar *) argv[1], "GetWrtCHRes") == 0)
 	{
 		//Im_DISP_Get_Write_Channel_Response
 
@@ -816,8 +863,8 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				Ddim_Print(("------- Setting Data -------\n"));
 				Ddim_Print(("IO_DISP.PWCH[%d].PWCHBRESP = 0x%08X\n",
-						number, (kuint32)IO_DISP.PWCH[number].PWCHBRESP.word));
-				Ddim_Print(("response = 0x%08X\n", (kuint32)response));
+						number, (guint32)IO_DISP.PWCH[number].PWCHBRESP.word));
+				Ddim_Print(("response = 0x%08X\n", (guint32)response));
 			}
 		}
 		else
@@ -825,7 +872,7 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "delay") == 0)
+	else if (strcmp((gchar *) argv[1], "delay") == 0)
 	{
 		if (argc == 3)
 		{
@@ -848,6 +895,6 @@ static void disp2nDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 CtImDisp2n *ct_im_disp2n_new(void)
 {
-	CtImDisp2n *self = (CtImDisp2n *) k_object_new_with_private(CT_TYPE_IM_DISP2N,sizeof(CtImDisp2nPrivate));
+	CtImDisp2n *self = (CtImDisp2n *) g_object_new(CT_TYPE_IM_DISP2N, NULL);
 	return self;
 }

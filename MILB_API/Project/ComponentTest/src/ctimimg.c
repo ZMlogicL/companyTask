@@ -31,8 +31,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImImg, ct_im_img);
 #define CT_IM_IMG_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImImgPrivate,CT_TYPE_IM_IMG))
 
 struct _CtImImgPrivate {
-	CtImImg *ciImg;
-	ImImg 	*imImg;
+	CtImImg *	ciImg;
+	ImImg *		imImg;
 };
 
 static void ct_im_img_constructor(CtImImg *self) 
@@ -55,9 +55,9 @@ static void ct_im_img_destructor(CtImImg *self)
 	}
 	priv->imImg = NULL;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 void ct_im_img_reg_print(CtImImg *self)
 {
 	Ddim_Print(("---------------------------------\n"));

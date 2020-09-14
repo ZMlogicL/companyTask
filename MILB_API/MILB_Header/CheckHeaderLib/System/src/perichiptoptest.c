@@ -51,6 +51,7 @@
 
 
 K_TYPE_DEFINE_WITH_PRIVATE(PeriChiptopTest, peri_chiptop_test);
+
 #define PERI_CHIPTOP_TEST_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), PeriChiptopTestPrivate, PERI_TYPE_CHIPTOP_TEST))
 
 #define PERI_CHIPTOP_TEST_RS_PRINTF printf
@@ -61,7 +62,7 @@ struct  _PeriChiptopTestPrivate
 
 };
 /**
- IMPL
+*IMPL
 */
 static void peri_chiptop_test_constructor(PeriChiptopTest *self)
 {
@@ -73,297 +74,297 @@ static void peri_chiptop_test_destructor(PeriChiptopTest *self)
 	PeriChiptopTestPrivate *priv = PERI_CHIPTOP_TEST_GET_PRIVATE(self);
 }
 /**
- PUBLIC
+*PUBLIC
 */
 /*************************************************************************/
 void peri_chiptop_test_peri_test(PeriChiptopTest *self)
 {
 // for PC debug
 #if 0
-#define IO_PERI     (*IO_PERI2)
-    volatile IoPeri* IO_PERI2 = (kpointer)0x1E000000;
-#define IO_PWMDMA   (IO_PWMDMA2)
-    volatile IoPwmdma* IO_PWMDMA2 = (kpointer)0x1E120000;
-#define IO_USIO     (*IO_USIO2)
-    volatile union IoUsio* IO_USIO2 = (kpointer)0x1E700000;
-#define IO_HDMAC    (*IO_HDMAC2)
-    volatile IoHdmac* IO_HDMAC2 = (kpointer)0x1B040000;
-#define IO_HDMAC0   (*IO_HDMAC02)
-    volatile IoHdmac* IO_HDMAC02 = (kpointer)0x1E100000;
-#define IO_HDMAC1   (*IO_HDMAC12)
-    volatile IoHdmac* IO_HDMAC12 = (kpointer)0x1E110000;
-#define IO_SLIMBUS0 (*IO_SLIMBUS02)
-    volatile IoSlimbus* IO_SLIMBUS02 = (kpointer)0x1E300000;
-#define IO_SLIMBUS1 (*IO_SLIMBUS12)
-    volatile IoSlimbus* IO_SLIMBUS12 = (kpointer)0x1E400000;
-#define IO_SLIMBUS2 (*IO_SLIMBUS22)
-    volatile IoSlimbus* IO_SLIMBUS22 = (kpointer)0x1E900000;
-#define IO_SLIMBUS3 (*IO_SLIMBUS32)
-    volatile IoSlimbus* IO_SLIMBUS32 = (kpointer)0x1EA00000;
+#define ioPeri     (*ioPeri2)
+    volatile IoPeri* ioPeri2 = (kpointer)0x1E000000;
+#define ioPwmdma   (ioPwmdma2)
+    volatile IoPwmdma* ioPwmdma2 = (kpointer)0x1E120000;
+#define ioUsio     (*ioUsio2)
+    volatile union IoUsio* ioUsio2 = (kpointer)0x1E700000;
+#define ioHdmac    (*ioHdmac2)
+    volatile IoHdmac* ioHdmac2 = (kpointer)0x1B040000;
+#define ioHdmac0   (*ioHdmac02)
+    volatile IoHdmac* ioHdmac02 = (kpointer)0x1E100000;
+#define ioHdmac1   (*ioHdmac12)
+    volatile IoHdmac* ioHdmac12 = (kpointer)0x1E110000;
+#define ioSlimbus0 (*ioSlimbus02)
+    volatile IoSlimbus* ioSlimbus02 = (kpointer)0x1E300000;
+#define ioSlimbus1 (*ioSlimbus12)
+    volatile IoSlimbus* ioSlimbus12 = (kpointer)0x1E400000;
+#define ioSlimbus2 (*ioSlimbus22)
+    volatile IoSlimbus* ioSlimbus22 = (kpointer)0x1E900000;
+#define ioSlimbus3 (*ioSlimbus32)
+    volatile IoSlimbus* ioSlimbus32 = (kpointer)0x1EA00000;
 #endif
     PERI_CHIPTOP_TEST_RS_PRINTF("Peri\n");
 #if 0
-    int i;
+    kint i;
 
     /* 32bit Reload Timer */
     for ( i = 0; i < 14; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR[%d].TMCSR     = %lX\n", i, (kulong)&IO_PERI.TMR[i].TMCSR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR[%d].TMR       = %lX\n", i, (kulong)&IO_PERI.TMR[i].TMR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR[%d].TMRLR0    = %lX\n", i, (kulong)&IO_PERI.TMR[i].TMRLR0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR[%d].TMRLR1    = %lX\n", i, (kulong)&IO_PERI.TMR[i].TMRLR1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr[%d].tmcsr     = %lX\n", i, (kulong)&ioPeri.tmr[i].tmcsr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr[%d].tmr       = %lX\n", i, (kulong)&ioPeri.tmr[i].tmr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr[%d].tmrlr0    = %lX\n", i, (kulong)&ioPeri.tmr[i].tmrlr0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr[%d].tmrlr1    = %lX\n", i, (kulong)&ioPeri.tmr[i].tmrlr1);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
     /* 64bit Free Run Timer */
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.TMCSR64_1    = %lX\n", (kulong)&IO_PERI.TMR64.TMCSR64_1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.TMCSR64_2    = %lX\n", (kulong)&IO_PERI.TMR64.TMCSR64_2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.GTIMSTMP     = %lX\n", (kulong)&IO_PERI.TMR64.GTIMSTMP);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FSTMSTMP[0]  = %lX\n", (kulong)&IO_PERI.TMR64.FSTMSTMP[0]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FSTMSTMP[1]  = %lX\n", (kulong)&IO_PERI.TMR64.FSTMSTMP[1]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FSTMSTMP[2]  = %lX\n", (kulong)&IO_PERI.TMR64.FSTMSTMP[2]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FSTMSTMP[3]  = %lX\n", (kulong)&IO_PERI.TMR64.FSTMSTMP[3]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FETMSTMP[0]  = %lX\n", (kulong)&IO_PERI.TMR64.FETMSTMP[0]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FETMSTMP[1]  = %lX\n", (kulong)&IO_PERI.TMR64.FETMSTMP[1]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FETMSTMP[2]  = %lX\n", (kulong)&IO_PERI.TMR64.FETMSTMP[2]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.FETMSTMP[3]  = %lX\n", (kulong)&IO_PERI.TMR64.FETMSTMP[3]);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.TMR64_L      = %lX\n", (kulong)&IO_PERI.TMR64.TMR64_L);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.TMR64.TMR64_H      = %lX\n", (kulong)&IO_PERI.TMR64.TMR64_H);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.tmcsr641    = %lX\n", (kulong)&ioPeri.tmr64.tmcsr641);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.tmcsr642    = %lX\n", (kulong)&ioPeri.tmr64.tmcsr642);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.gtimstmp     = %lX\n", (kulong)&ioPeri.tmr64.gtimstmp);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fstmstmp[0]  = %lX\n", (kulong)&ioPeri.tmr64.fstmstmp[0]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fstmstmp[1]  = %lX\n", (kulong)&ioPeri.tmr64.fstmstmp[1]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fstmstmp[2]  = %lX\n", (kulong)&ioPeri.tmr64.fstmstmp[2]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fstmstmp[3]  = %lX\n", (kulong)&ioPeri.tmr64.fstmstmp[3]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fetmstmp[0]  = %lX\n", (kulong)&ioPeri.tmr64.fetmstmp[0]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fetmstmp[1]  = %lX\n", (kulong)&ioPeri.tmr64.fetmstmp[1]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fetmstmp[2]  = %lX\n", (kulong)&ioPeri.tmr64.fetmstmp[2]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.fetmstmp[3]  = %lX\n", (kulong)&ioPeri.tmr64.fetmstmp[3]);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.tmr64L      = %lX\n", (kulong)&ioPeri.tmr64.tmr64L);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.tmr64.tmr64H      = %lX\n", (kulong)&ioPeri.tmr64.tmr64H);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
-    /* PWM Timer */
+    /* pwm Timer */
     for ( i = 0; i < 4; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].GCN1       = %lX\n", i, (kulong)&IO_PERI.PWM[i].GCN1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].GCN2       = %lX\n", i, (kulong)&IO_PERI.PWM[i].GCN2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PTMRA      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PTMRA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRA      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTA      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCNA       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCNA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PTMRB      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PTMRB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRB      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTB      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCNB       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCNB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PTMRC      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PTMRC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRC      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTC      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCNC       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCNC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PTMRD      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PTMRD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRD      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTD      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCND       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCND);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PTMRE      = %lX\n", i, (kulong)&IO_PERI.PWM[i].PTMRE);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCNE       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCNE);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].TSEL       = %lX\n", i, (kulong)&IO_PERI.PWM[i].TSEL);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PREV       = %lX\n", i, (kulong)&IO_PERI.PWM[i].PREV);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRQA     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRQA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTQA     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTQA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRQB     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRQB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTQB     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTQB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRQC     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRQC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTQC     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTQC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRQD     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRQD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTQD     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTQD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRRA     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRRA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTRA     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTRA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRRB     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRRB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTRB     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTRB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRRC     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRRC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTRC     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTRC);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRRD     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRRD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTRD     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTRD);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCHSET0    = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCHSET0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCHSET1    = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCHSET1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PINTCT0    = %lX\n", i, (kulong)&IO_PERI.PWM[i].PINTCT0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PINTCT1    = %lX\n", i, (kulong)&IO_PERI.PWM[i].PINTCT1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].STMRH      = %lX\n", i, (kulong)&IO_PERI.PWM[i].STMRH);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].STMRL      = %lX\n", i, (kulong)&IO_PERI.PWM[i].STMRL);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE4     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE4);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE4     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE4);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE4     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE4);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE5     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE5);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE5     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE5);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE5     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE5);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE6     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE6);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE6     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE6);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE6     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE6);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRE7     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRE7);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTE7     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTE7);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALE7     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALE7);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRU0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRU0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTU0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTU0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALU0     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALU0);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRU1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRU1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTU1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTU1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALU1     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALU1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRU2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRU2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTU2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTU2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALU2     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALU2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PCSRU3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PCSRU3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PDUTU3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PDUTU3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.PWM[%d].PPALU3     = %lX\n", i, (kulong)&IO_PERI.PWM[i].PPALU3);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PWMDMA[%d].BFDTPT       = %lX\n", i, (kulong)&IO_PWMDMA[i].BFDTPT);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].gcn1       = %lX\n", i, (kulong)&ioPeri.pwm[i].gcn1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].gcn2       = %lX\n", i, (kulong)&ioPeri.pwm[i].gcn2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ptmra      = %lX\n", i, (kulong)&ioPeri.pwm[i].ptmra);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsra      = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsra);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pduta      = %lX\n", i, (kulong)&ioPeri.pwm[i].pduta);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcna       = %lX\n", i, (kulong)&ioPeri.pwm[i].pcna);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ptmrb      = %lX\n", i, (kulong)&ioPeri.pwm[i].ptmrb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrb      = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutb      = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcnb       = %lX\n", i, (kulong)&ioPeri.pwm[i].pcnb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ptmrc      = %lX\n", i, (kulong)&ioPeri.pwm[i].ptmrc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrc      = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutc      = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcnc       = %lX\n", i, (kulong)&ioPeri.pwm[i].pcnc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ptmrd      = %lX\n", i, (kulong)&ioPeri.pwm[i].ptmrd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrd      = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutd      = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcnd       = %lX\n", i, (kulong)&ioPeri.pwm[i].pcnd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ptmre      = %lX\n", i, (kulong)&ioPeri.pwm[i].ptmre);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcne       = %lX\n", i, (kulong)&ioPeri.pwm[i].pcne);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].tsel       = %lX\n", i, (kulong)&ioPeri.pwm[i].tsel);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].prev       = %lX\n", i, (kulong)&ioPeri.pwm[i].prev);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrqa     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrqa);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutqa     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutqa);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrqb     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrqb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutqb     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutqb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrqc     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrqc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutqc     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutqc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrqd     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrqd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutqd     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutqd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrra     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrra);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutra     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutra);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrrb     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrrb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutrb     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutrb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrrc     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrrc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutrc     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutrc);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsrrd     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsrrd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutrd     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutrd);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pchset0    = %lX\n", i, (kulong)&ioPeri.pwm[i].pchset0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pchset1    = %lX\n", i, (kulong)&ioPeri.pwm[i].pchset1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pintct0    = %lX\n", i, (kulong)&ioPeri.pwm[i].pintct0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pintct1    = %lX\n", i, (kulong)&ioPeri.pwm[i].pintct1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].stmrh      = %lX\n", i, (kulong)&ioPeri.pwm[i].stmrh);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].stmrl      = %lX\n", i, (kulong)&ioPeri.pwm[i].stmrl);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre0     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute0     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale0     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre1     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute1     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale1     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre2     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute2     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale2     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre3     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute3     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale3     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre4     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre4);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute4     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute4);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale4     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale4);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre5     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre5);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute5     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute5);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale5     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale5);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre6     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre6);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute6     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute6);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale6     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale6);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsre7     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsre7);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdute7     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdute7);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppale7     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppale7);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsru0     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsru0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutu0     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutu0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppalu0     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppalu0);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsru1     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsru1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutu1     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutu1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppalu1     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppalu1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsru2     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsru2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutu2     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutu2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppalu2     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppalu2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pcsru3     = %lX\n", i, (kulong)&ioPeri.pwm[i].pcsru3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].pdutu3     = %lX\n", i, (kulong)&ioPeri.pwm[i].pdutu3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.pwm[%d].ppalu3     = %lX\n", i, (kulong)&ioPeri.pwm[i].ppalu3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPwmdma[%d].bfdtpt       = %lX\n", i, (kulong)&ioPwmdma[i].bfdtpt);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
     /* UpDownCounter */
     for ( i = 0; i < 6; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.UDC[%d].UDCR      = %lX\n", i, (kulong)&IO_PERI.UDC[i].UDCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.UDC[%d].RCR       = %lX\n", i, (kulong)&IO_PERI.UDC[i].RCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.UDC[%d].CSR       = %lX\n", i, (kulong)&IO_PERI.UDC[i].CSR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.UDC[%d].CCR       = %lX\n", i, (kulong)&IO_PERI.UDC[i].CCR);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.udc[%d].udcr      = %lX\n", i, (kulong)&ioPeri.udc[i].udcr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.udc[%d].rcr       = %lX\n", i, (kulong)&ioPeri.udc[i].rcr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.udc[%d].csr       = %lX\n", i, (kulong)&ioPeri.udc[i].csr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.udc[%d].ccr       = %lX\n", i, (kulong)&ioPeri.udc[i].ccr);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
-    /* I2C */
+    /* i2c */
     for ( i = 0; i < 3; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].SDAT      = %lX\n", i, (kulong)&IO_PERI.I2C[i].SDAT);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].ST        = %lX\n", i, (kulong)&IO_PERI.I2C[i].ST  );
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].CST       = %lX\n", i, (kulong)&IO_PERI.I2C[i].CST );
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].CTL1      = %lX\n", i, (kulong)&IO_PERI.I2C[i].CTL1);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].ADDR      = %lX\n", i, (kulong)&IO_PERI.I2C[i].ADDR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].CTL2      = %lX\n", i, (kulong)&IO_PERI.I2C[i].CTL2);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].TOPR      = %lX\n", i, (kulong)&IO_PERI.I2C[i].TOPR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_PERI.I2C[%d].CTL3      = %lX\n", i, (kulong)&IO_PERI.I2C[i].CTL3);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].sdat      = %lX\n", i, (kulong)&ioPeri.i2c[i].sdat);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].st        = %lX\n", i, (kulong)&ioPeri.i2c[i].st  );
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].cst       = %lX\n", i, (kulong)&ioPeri.i2c[i].cst );
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].ctl1      = %lX\n", i, (kulong)&ioPeri.i2c[i].ctl1);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].addr      = %lX\n", i, (kulong)&ioPeri.i2c[i].addr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].ctl2      = %lX\n", i, (kulong)&ioPeri.i2c[i].ctl2);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].topr      = %lX\n", i, (kulong)&ioPeri.i2c[i].topr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioPeri.i2c[%d].ctl3      = %lX\n", i, (kulong)&ioPeri.i2c[i].ctl3);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
-    /* UART/CSIO */
+    /* uart/csio */
     for ( i = 0; i < 6; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].SMR      = %lX\n", i, (kulong)&IO_USIO.UART[i].SMR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].SCR      = %lX\n", i, (kulong)&IO_USIO.UART[i].SCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].ESCR     = %lX\n", i, (kulong)&IO_USIO.UART[i].ESCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].SSR      = %lX\n", i, (kulong)&IO_USIO.UART[i].SSR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].DR       = %lX\n", i, (kulong)&IO_USIO.UART[i].DR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].BGR      = %lX\n", i, (kulong)&IO_USIO.UART[i].BGR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].FCR      = %lX\n", i, (kulong)&IO_USIO.UART[i].FCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.UART[%d].FBYTE    = %lX\n", i, (kulong)&IO_USIO.UART[i].FBYTE);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].smr      = %lX\n", i, (kulong)&ioUsio.uart[i].smr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].scr      = %lX\n", i, (kulong)&ioUsio.uart[i].scr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].escr     = %lX\n", i, (kulong)&ioUsio.uart[i].escr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].ssr      = %lX\n", i, (kulong)&ioUsio.uart[i].ssr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].dr       = %lX\n", i, (kulong)&ioUsio.uart[i].dr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].bgr      = %lX\n", i, (kulong)&ioUsio.uart[i].bgr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].fcr      = %lX\n", i, (kulong)&ioUsio.uart[i].fcr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.uart[%d].fbyte    = %lX\n", i, (kulong)&ioUsio.uart[i].fbyte);
 
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].SMR      = %lX\n", i, (kulong)&IO_USIO.CSIO[i].SMR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].SCR      = %lX\n", i, (kulong)&IO_USIO.CSIO[i].SCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].ESCR     = %lX\n", i, (kulong)&IO_USIO.CSIO[i].ESCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].SSR      = %lX\n", i, (kulong)&IO_USIO.CSIO[i].SSR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].DR       = %lX\n", i, (kulong)&IO_USIO.CSIO[i].DR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].BGR      = %lX\n", i, (kulong)&IO_USIO.CSIO[i].BGR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].FCR      = %lX\n", i, (kulong)&IO_USIO.CSIO[i].FCR);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_USIO.CSIO[%d].FBYTE    = %lX\n", i, (kulong)&IO_USIO.CSIO[i].FBYTE);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].smr      = %lX\n", i, (kulong)&ioUsio.csio[i].smr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].scr      = %lX\n", i, (kulong)&ioUsio.csio[i].scr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].escr     = %lX\n", i, (kulong)&ioUsio.csio[i].escr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].ssr      = %lX\n", i, (kulong)&ioUsio.csio[i].ssr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].dr       = %lX\n", i, (kulong)&ioUsio.csio[i].dr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].bgr      = %lX\n", i, (kulong)&ioUsio.csio[i].bgr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].fcr      = %lX\n", i, (kulong)&ioUsio.csio[i].fcr);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioUsio.csio[%d].fbyte    = %lX\n", i, (kulong)&ioUsio.csio[i].fbyte);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
     /* HDMAC */
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC.DMACR      = %lX\n", (kulong)&IO_HDMAC.DMACR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC0.DMACR     = %lX\n", (kulong)&IO_HDMAC0.DMACR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC1.DMACR     = %lX\n", (kulong)&IO_HDMAC1.DMACR);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac.dmacr      = %lX\n", (kulong)&ioHdmac.dmacr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac0.dmacr     = %lX\n", (kulong)&ioHdmac0.dmacr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac1.dmacr     = %lX\n", (kulong)&ioHdmac1.dmacr);
     for ( i = 0; i < 8; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC[%d].DMACA     = %lX\n", i, (kulong)&IO_HDMAC.DMAC[i].DMACA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC[%d].DMACB     = %lX\n", i, (kulong)&IO_HDMAC.DMAC[i].DMACB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC[%d].DMACSA    = %lX\n", i, (kulong)&IO_HDMAC.DMAC[i].DMACSA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC[%d].DMACDA    = %lX\n", i, (kulong)&IO_HDMAC.DMAC[i].DMACDA);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac[%d].dmaca     = %lX\n", i, (kulong)&ioHdmac.dmac[i].dmaca);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac[%d].dmacb     = %lX\n", i, (kulong)&ioHdmac.dmac[i].dmacb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac[%d].dmacsa    = %lX\n", i, (kulong)&ioHdmac.dmac[i].dmacsa);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac[%d].dmacda    = %lX\n", i, (kulong)&ioHdmac.dmac[i].dmacda);
     }
     for ( i = 0; i < 8; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC0[%d].DMACA     = %lX\n", i, (kulong)&IO_HDMAC0.DMAC[i].DMACA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC0[%d].DMACB     = %lX\n", i, (kulong)&IO_HDMAC0.DMAC[i].DMACB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC0[%d].DMACSA    = %lX\n", i, (kulong)&IO_HDMAC0.DMAC[i].DMACSA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC0[%d].DMACDA    = %lX\n", i, (kulong)&IO_HDMAC0.DMAC[i].DMACDA);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac0[%d].dmaca     = %lX\n", i, (kulong)&ioHdmac0.dmac[i].dmaca);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac0[%d].dmacb     = %lX\n", i, (kulong)&ioHdmac0.dmac[i].dmacb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac0[%d].dmacsa    = %lX\n", i, (kulong)&ioHdmac0.dmac[i].dmacsa);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac0[%d].dmacda    = %lX\n", i, (kulong)&ioHdmac0.dmac[i].dmacda);
     }
     for ( i = 0; i < 8; i++ ) {
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC1[%d].DMACA     = %lX\n", i, (kulong)&IO_HDMAC1.DMAC[i].DMACA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC1[%d].DMACB     = %lX\n", i, (kulong)&IO_HDMAC1.DMAC[i].DMACB);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC1[%d].DMACSA    = %lX\n", i, (kulong)&IO_HDMAC1.DMAC[i].DMACSA);
-        PERI_CHIPTOP_TEST_RS_PRINTF("IO_HDMAC1[%d].DMACDA    = %lX\n", i, (kulong)&IO_HDMAC1.DMAC[i].DMACDA);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac1[%d].dmaca     = %lX\n", i, (kulong)&ioHdmac1.dmac[i].dmaca);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac1[%d].dmacb     = %lX\n", i, (kulong)&ioHdmac1.dmac[i].dmacb);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac1[%d].dmacsa    = %lX\n", i, (kulong)&ioHdmac1.dmac[i].dmacsa);
+        PERI_CHIPTOP_TEST_RS_PRINTF("ioHdmac1[%d].dmacda    = %lX\n", i, (kulong)&ioHdmac1.dmac[i].dmacda);
     }
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
     /* SLIMbus */
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_MODE  = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_MODE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_EA    = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_EA);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_PR_TP = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_PR_TP);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_FR    = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_FR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_DPORT = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_DPORT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_EA2   = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_EA2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.CONFIG_THR   = %lX\n", (kulong)&IO_SLIMBUS0.CONFIG_THR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.COMMAND      = %lX\n", (kulong)&IO_SLIMBUS0.COMMAND);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.STATE        = %lX\n", (kulong)&IO_SLIMBUS0.STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.IE_STATE     = %lX\n", (kulong)&IO_SLIMBUS0.IE_STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.MCH_USAGE    = %lX\n", (kulong)&IO_SLIMBUS0.MCH_USAGE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.INT_EN       = %lX\n", (kulong)&IO_SLIMBUS0.INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.INT          = %lX\n", (kulong)&IO_SLIMBUS0.INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.MC_FIFO      = %lX\n", (kulong)&IO_SLIMBUS0.MC_FIFO);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.P0_INT_EN    = %lX\n", (kulong)&IO_SLIMBUS0.P0_INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.P0_INT       = %lX\n", (kulong)&IO_SLIMBUS0.P0_INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.P0_STATE_0   = %lX\n", (kulong)&IO_SLIMBUS0.P0_STATE_0);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.P0_STATE_1   = %lX\n", (kulong)&IO_SLIMBUS0.P0_STATE_1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS0.P0_FIFO      = %lX\n", (kulong)&IO_SLIMBUS0.P0_FIFO);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configMode  = %lX\n", (kulong)&ioSlimbus0.configMode);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configEa    = %lX\n", (kulong)&ioSlimbus0.configEa);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configPrTp = %lX\n", (kulong)&ioSlimbus0.configPrTp);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configFr    = %lX\n", (kulong)&ioSlimbus0.configFr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configDport = %lX\n", (kulong)&ioSlimbus0.configDport);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configEa2   = %lX\n", (kulong)&ioSlimbus0.configEa2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.configThr   = %lX\n", (kulong)&ioSlimbus0.configThr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.command      = %lX\n", (kulong)&ioSlimbus0.command);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.state        = %lX\n", (kulong)&ioSlimbus0.state);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.ieState     = %lX\n", (kulong)&ioSlimbus0.ieState);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.mchUsage    = %lX\n", (kulong)&ioSlimbus0.mchUsage);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.intEn       = %lX\n", (kulong)&ioSlimbus0.intEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.ksint       = %lX\n", (kulong)&ioSlimbus0.ksint);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.mcFifo      = %lX\n", (kulong)&ioSlimbus0.mcFifo);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.p0IntEn    = %lX\n", (kulong)&ioSlimbus0.p0IntEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.p0Int       = %lX\n", (kulong)&ioSlimbus0.p0Int);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.p0State0   = %lX\n", (kulong)&ioSlimbus0.p0State0);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.p0State1   = %lX\n", (kulong)&ioSlimbus0.p0State1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus0.p0Fifo      = %lX\n", (kulong)&ioSlimbus0.p0Fifo);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_MODE  = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_MODE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_EA    = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_EA);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_PR_TP = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_PR_TP);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_FR    = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_FR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_DPORT = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_DPORT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_EA2   = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_EA2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.CONFIG_THR   = %lX\n", (kulong)&IO_SLIMBUS1.CONFIG_THR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.COMMAND      = %lX\n", (kulong)&IO_SLIMBUS1.COMMAND);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.STATE        = %lX\n", (kulong)&IO_SLIMBUS1.STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.IE_STATE     = %lX\n", (kulong)&IO_SLIMBUS1.IE_STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.MCH_USAGE    = %lX\n", (kulong)&IO_SLIMBUS1.MCH_USAGE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.INT_EN       = %lX\n", (kulong)&IO_SLIMBUS1.INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.INT          = %lX\n", (kulong)&IO_SLIMBUS1.INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.MC_FIFO      = %lX\n", (kulong)&IO_SLIMBUS1.MC_FIFO);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.P0_INT_EN    = %lX\n", (kulong)&IO_SLIMBUS1.P0_INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.P0_INT       = %lX\n", (kulong)&IO_SLIMBUS1.P0_INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.P0_STATE_0   = %lX\n", (kulong)&IO_SLIMBUS1.P0_STATE_0);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.P0_STATE_1   = %lX\n", (kulong)&IO_SLIMBUS1.P0_STATE_1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS1.P0_FIFO      = %lX\n", (kulong)&IO_SLIMBUS1.P0_FIFO);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configMode  = %lX\n", (kulong)&ioSlimbus1.configMode);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configEa    = %lX\n", (kulong)&ioSlimbus1.configEa);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configPrTp = %lX\n", (kulong)&ioSlimbus1.configPrTp);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configFr    = %lX\n", (kulong)&ioSlimbus1.configFr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configDport = %lX\n", (kulong)&ioSlimbus1.configDport);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configEa2   = %lX\n", (kulong)&ioSlimbus1.configEa2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.configThr   = %lX\n", (kulong)&ioSlimbus1.configThr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.command      = %lX\n", (kulong)&ioSlimbus1.command);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.state        = %lX\n", (kulong)&ioSlimbus1.state);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.ieState     = %lX\n", (kulong)&ioSlimbus1.ieState);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.mchUsage    = %lX\n", (kulong)&ioSlimbus1.mchUsage);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.intEn       = %lX\n", (kulong)&ioSlimbus1.intEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.ksint          = %lX\n", (kulong)&ioSlimbus1.ksint);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.mcFifo      = %lX\n", (kulong)&ioSlimbus1.mcFifo);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.p0IntEn    = %lX\n", (kulong)&ioSlimbus1.p0IntEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.p0Int       = %lX\n", (kulong)&ioSlimbus1.p0Int);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.p0State0   = %lX\n", (kulong)&ioSlimbus1.p0State0);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.p0State1   = %lX\n", (kulong)&ioSlimbus1.p0State1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus1.p0Fifo      = %lX\n", (kulong)&ioSlimbus1.p0Fifo);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_MODE  = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_MODE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_EA    = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_EA);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_PR_TP = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_PR_TP);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_FR    = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_FR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_DPORT = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_DPORT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_EA2   = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_EA2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.CONFIG_THR   = %lX\n", (kulong)&IO_SLIMBUS2.CONFIG_THR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.COMMAND      = %lX\n", (kulong)&IO_SLIMBUS2.COMMAND);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.STATE        = %lX\n", (kulong)&IO_SLIMBUS2.STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.IE_STATE     = %lX\n", (kulong)&IO_SLIMBUS2.IE_STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.MCH_USAGE    = %lX\n", (kulong)&IO_SLIMBUS2.MCH_USAGE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.INT_EN       = %lX\n", (kulong)&IO_SLIMBUS2.INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.INT          = %lX\n", (kulong)&IO_SLIMBUS2.INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.MC_FIFO      = %lX\n", (kulong)&IO_SLIMBUS2.MC_FIFO);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.P0_INT_EN    = %lX\n", (kulong)&IO_SLIMBUS2.P0_INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.P0_INT       = %lX\n", (kulong)&IO_SLIMBUS2.P0_INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.P0_STATE_0   = %lX\n", (kulong)&IO_SLIMBUS2.P0_STATE_0);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.P0_STATE_1   = %lX\n", (kulong)&IO_SLIMBUS2.P0_STATE_1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS2.P0_FIFO      = %lX\n", (kulong)&IO_SLIMBUS2.P0_FIFO);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configMode  = %lX\n", (kulong)&ioSlimbus2.configMode);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configEa    = %lX\n", (kulong)&ioSlimbus2.configEa);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configPrTp = %lX\n", (kulong)&ioSlimbus2.configPrTp);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configFr    = %lX\n", (kulong)&ioSlimbus2.configFr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configDport = %lX\n", (kulong)&ioSlimbus2.configDport);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configEa2   = %lX\n", (kulong)&ioSlimbus2.configEa2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.configThr   = %lX\n", (kulong)&ioSlimbus2.configThr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.command      = %lX\n", (kulong)&ioSlimbus2.command);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.state        = %lX\n", (kulong)&ioSlimbus2.state);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.ieState     = %lX\n", (kulong)&ioSlimbus2.ieState);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.mchUsage    = %lX\n", (kulong)&ioSlimbus2.mchUsage);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.intEn       = %lX\n", (kulong)&ioSlimbus2.intEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.ksint        = %lX\n", (kulong)&ioSlimbus2.ksint);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.mcFifo      = %lX\n", (kulong)&ioSlimbus2.mcFifo);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.p0IntEn    = %lX\n", (kulong)&ioSlimbus2.p0IntEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.p0Int       = %lX\n", (kulong)&ioSlimbus2.p0Int);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.p0State0   = %lX\n", (kulong)&ioSlimbus2.p0State0);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.p0State1   = %lX\n", (kulong)&ioSlimbus2.p0State1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus2.p0Fifo      = %lX\n", (kulong)&ioSlimbus2.p0Fifo);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_MODE  = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_MODE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_EA    = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_EA);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_PR_TP = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_PR_TP);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_FR    = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_FR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_DPORT = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_DPORT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_EA2   = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_EA2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.CONFIG_THR   = %lX\n", (kulong)&IO_SLIMBUS3.CONFIG_THR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.COMMAND      = %lX\n", (kulong)&IO_SLIMBUS3.COMMAND);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.STATE        = %lX\n", (kulong)&IO_SLIMBUS3.STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.IE_STATE     = %lX\n", (kulong)&IO_SLIMBUS3.IE_STATE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.MCH_USAGE    = %lX\n", (kulong)&IO_SLIMBUS3.MCH_USAGE);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.INT_EN       = %lX\n", (kulong)&IO_SLIMBUS3.INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.INT          = %lX\n", (kulong)&IO_SLIMBUS3.INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.MC_FIFO      = %lX\n", (kulong)&IO_SLIMBUS3.MC_FIFO);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.P0_INT_EN    = %lX\n", (kulong)&IO_SLIMBUS3.P0_INT_EN);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.P0_INT       = %lX\n", (kulong)&IO_SLIMBUS3.P0_INT);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.P0_STATE_0   = %lX\n", (kulong)&IO_SLIMBUS3.P0_STATE_0);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.P0_STATE_1   = %lX\n", (kulong)&IO_SLIMBUS3.P0_STATE_1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_SLIMBUS3.P0_FIFO      = %lX\n", (kulong)&IO_SLIMBUS3.P0_FIFO);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configMode  = %lX\n", (kulong)&ioSlimbus3.configMode);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configEa    = %lX\n", (kulong)&ioSlimbus3.configEa);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configPrTp = %lX\n", (kulong)&ioSlimbus3.configPrTp);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configFr    = %lX\n", (kulong)&ioSlimbus3.configFr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configDport = %lX\n", (kulong)&ioSlimbus3.configDport);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configEa2   = %lX\n", (kulong)&ioSlimbus3.configEa2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.configThr   = %lX\n", (kulong)&ioSlimbus3.configThr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.command      = %lX\n", (kulong)&ioSlimbus3.command);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.state        = %lX\n", (kulong)&ioSlimbus3.state);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.ieState     = %lX\n", (kulong)&ioSlimbus3.ieState);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.mchUsage    = %lX\n", (kulong)&ioSlimbus3.mchUsage);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.intEn       = %lX\n", (kulong)&ioSlimbus3.intEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.ksint          = %lX\n", (kulong)&ioSlimbus3.ksint);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.mcFifo      = %lX\n", (kulong)&ioSlimbus3.mcFifo);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.p0IntEn    = %lX\n", (kulong)&ioSlimbus3.p0IntEn);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.p0Int       = %lX\n", (kulong)&ioSlimbus3.p0Int);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.p0State0   = %lX\n", (kulong)&ioSlimbus3.p0State0);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.p0State1   = %lX\n", (kulong)&ioSlimbus3.p0State1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioSlimbus3.p0Fifo      = %lX\n", (kulong)&ioSlimbus3.p0Fifo);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 #endif
 }
@@ -373,69 +374,69 @@ void peri_chiptop_test_chiptop_test(PeriChiptopTest *self)
     PERI_CHIPTOP_TEST_RS_PRINTF("CHIPTOP\n");
 #if 1
     /* Clock */
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PERSEL1     = %lX\n", (kulong)&IO_CHIPTOP.PERSEL1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PERSEL2     = %lX\n", (kulong)&IO_CHIPTOP.PERSEL2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PERSEL3     = %lX\n", (kulong)&IO_CHIPTOP.PERSEL3);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PERSEL4     = %lX\n", (kulong)&IO_CHIPTOP.PERSEL4);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.MSELC       = %lX\n", (kulong)&IO_CHIPTOP.MSELC);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DBCNT1      = %lX\n", (kulong)&IO_CHIPTOP.DBCNT1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DBCNT2      = %lX\n", (kulong)&IO_CHIPTOP.DBCNT2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DBCNT3      = %lX\n", (kulong)&IO_CHIPTOP.DBCNT3);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DBCNT4      = %lX\n", (kulong)&IO_CHIPTOP.DBCNT4);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DBCNT5      = %lX\n", (kulong)&IO_CHIPTOP.DBCNT5);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PUDCNT      = %lX\n", (kulong)&IO_CHIPTOP.PUDCNT);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.persel1     = %lX\n", (kulong)&ioChiptop.persel1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.persel2     = %lX\n", (kulong)&ioChiptop.persel2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.persel3     = %lX\n", (kulong)&ioChiptop.persel3);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.persel4     = %lX\n", (kulong)&ioChiptop.persel4);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.mselc       = %lX\n", (kulong)&ioChiptop.mselc);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.dbcnt1      = %lX\n", (kulong)&ioChiptop.dbcnt1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.dbcnt2      = %lX\n", (kulong)&ioChiptop.dbcnt2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.dbcnt3      = %lX\n", (kulong)&ioChiptop.dbcnt3);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.dbcnt4      = %lX\n", (kulong)&ioChiptop.dbcnt4);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.dbcnt5      = %lX\n", (kulong)&ioChiptop.dbcnt5);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pudcnt      = %lX\n", (kulong)&ioChiptop.pudcnt);
     PERI_CHIPTOP_TEST_RS_PRINTF("\n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL1     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL2     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL3     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL3);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL4     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL4);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL5     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL5);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL6     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL6);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL7     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL7);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL8     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL8);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL9     = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL9);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL10    = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL10);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL11    = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL11);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSEL12    = %lX\n", (kulong)&IO_CHIPTOP.CLKSEL12);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel1     = %lX\n", (kulong)&ioChiptop.clksel1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel2     = %lX\n", (kulong)&ioChiptop.clksel2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel3     = %lX\n", (kulong)&ioChiptop.clksel3);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel4     = %lX\n", (kulong)&ioChiptop.clksel4);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel5     = %lX\n", (kulong)&ioChiptop.clksel5);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel6     = %lX\n", (kulong)&ioChiptop.clksel6);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel7     = %lX\n", (kulong)&ioChiptop.clksel7);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel8     = %lX\n", (kulong)&ioChiptop.clksel8);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel9     = %lX\n", (kulong)&ioChiptop.clksel9);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel10    = %lX\n", (kulong)&ioChiptop.clksel10);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel11    = %lX\n", (kulong)&ioChiptop.clksel11);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clksel12    = %lX\n", (kulong)&ioChiptop.clksel12);
     PERI_CHIPTOP_TEST_RS_PRINTF("\n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT1     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT2     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT3     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT3);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT4     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT4);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT5     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT5);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT7     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT7);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT8     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT8);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLCNT9     = %lX\n", (kulong)&IO_CHIPTOP.PLLCNT9);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt1     = %lX\n", (kulong)&ioChiptop.pllcnt1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt2     = %lX\n", (kulong)&ioChiptop.pllcnt2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt3     = %lX\n", (kulong)&ioChiptop.pllcnt3);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt4     = %lX\n", (kulong)&ioChiptop.pllcnt4);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt5     = %lX\n", (kulong)&ioChiptop.pllcnt5);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt7     = %lX\n", (kulong)&ioChiptop.pllcnt7);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt8     = %lX\n", (kulong)&ioChiptop.pllcnt8);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllcnt9     = %lX\n", (kulong)&ioChiptop.pllcnt9);
     PERI_CHIPTOP_TEST_RS_PRINTF("\n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP1    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP2    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP2);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP3    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP3);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP4    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP4);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP5    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP5);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP6    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP6);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP7    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP7);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP8    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP8);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP9    = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP9);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP10   = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP10);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP11   = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP11);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP12   = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP12);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP13   = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP13);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CLKSTOP14   = %lX\n", (kulong)&IO_CHIPTOP.CLKSTOP14);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop1    = %lX\n", (kulong)&ioChiptop.clkstop1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop2    = %lX\n", (kulong)&ioChiptop.clkstop2);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop3    = %lX\n", (kulong)&ioChiptop.clkstop3);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop4    = %lX\n", (kulong)&ioChiptop.clkstop4);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop5    = %lX\n", (kulong)&ioChiptop.clkstop5);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop6    = %lX\n", (kulong)&ioChiptop.clkstop6);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop7    = %lX\n", (kulong)&ioChiptop.clkstop7);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop8    = %lX\n", (kulong)&ioChiptop.clkstop8);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop9    = %lX\n", (kulong)&ioChiptop.clkstop9);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop10   = %lX\n", (kulong)&ioChiptop.clkstop10);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop11   = %lX\n", (kulong)&ioChiptop.clkstop11);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop12   = %lX\n", (kulong)&ioChiptop.clkstop12);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop13   = %lX\n", (kulong)&ioChiptop.clkstop13);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.clkstop14   = %lX\n", (kulong)&ioChiptop.clkstop14);
     PERI_CHIPTOP_TEST_RS_PRINTF("\n");
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CRSWR       = %lX\n", (kulong)&IO_CHIPTOP.CRSWR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CRRRS       = %lX\n", (kulong)&IO_CHIPTOP.CRRRS);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CRRSM       = %lX\n", (kulong)&IO_CHIPTOP.CRRSM);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.crswr       = %lX\n", (kulong)&ioChiptop.crswr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.crrrs       = %lX\n", (kulong)&ioChiptop.crrrs);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.crrsm       = %lX\n", (kulong)&ioChiptop.crrsm);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 
     /* PORT */
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PDR         = %lX\n", (kulong)&IO_CHIPTOP.PDR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.DDR         = %lX\n", (kulong)&IO_CHIPTOP.DDR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.EPCR        = %lX\n", (kulong)&IO_CHIPTOP.EPCR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PUDER       = %lX\n", (kulong)&IO_CHIPTOP.PUDER);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PUDCR       = %lX\n", (kulong)&IO_CHIPTOP.PUDCR);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.PLLFREQ1    = %lX\n", (kulong)&IO_CHIPTOP.PLLFREQ1);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.ODIVCH0     = %lX\n", (kulong)&IO_CHIPTOP.ODIVCH0);
-    PERI_CHIPTOP_TEST_RS_PRINTF("IO_CHIPTOP.CMDEN       = %lX\n", (kulong)&IO_CHIPTOP.CMDEN);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pdr         = %lX\n", (kulong)&ioChiptop.pdr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.ddr         = %lX\n", (kulong)&ioChiptop.ddr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.epcr        = %lX\n", (kulong)&ioChiptop.epcr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.puder       = %lX\n", (kulong)&ioChiptop.puder);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pudcr       = %lX\n", (kulong)&ioChiptop.pudcr);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.pllfreq1    = %lX\n", (kulong)&ioChiptop.pllfreq1);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.odivch0     = %lX\n", (kulong)&ioChiptop.odivch0);
+    PERI_CHIPTOP_TEST_RS_PRINTF("ioChiptop.cmden       = %lX\n", (kulong)&ioChiptop.cmden);
     PERI_CHIPTOP_TEST_RS_PRINTF(" \n");
 #endif
 }

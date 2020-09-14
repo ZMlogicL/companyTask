@@ -15,8 +15,12 @@
 #define __IM_IIP_FRECT_REGISTER_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imiipafnregister.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -24,9 +28,12 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_FRECT_REGISTER						(im_iip_frect_register_get_type())
-#define IM_IIP_FRECT_REGISTER(obj)							(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipFrectRegister))
-#define IM_IS_IIP_FRECT_REGISTER(obj)						(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_FRECT_REGISTER))
+#define IM_TYPE_IIP_FRECT_REGISTER			(im_iip_frect_register_struct_get_type ())
+#define IM_IIP_FRECT_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_FRECT_REGISTER, ImIipFrectRegister))
+#define IM_IIP_FRECT_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_FRECT_REGISTER, ImIipFrectRegisterClass))
+#define IM_IS_IIP_FRECT_REGISTER(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_FRECT_REGISTER))
+#define IM_IS_IIP_FRECT_REGISTER_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_FRECT_REGISTER))
+#define IM_IIP_FRECT_REGISTER_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_FRECT_REGISTER, ImIipFrectRegisterClass))
 
 
 typedef union _UimFrectFrtopcnf				UimFrectFrtopcnf;
@@ -56,8 +63,9 @@ typedef union _UimFrectLknum					UimFrectLknum;
 typedef union _UimFrectRing						UimFrectRing;
 
 typedef struct _TimFrectDump					TimFrectDump;
-typedef struct _ImIipFrectRegister 								ImIipFrectRegister;
-typedef struct _ImIipFrectRegisterPrivate 				ImIipFrectRegisterPrivate;
+typedef struct _ImIipFrectRegister				ImIipFrectRegister;
+typedef struct _ImIipFrectRegisterClass		ImIipFrectRegisterClass;
+typedef struct _ImIipFrectRegisterPrivate 		ImIipFrectRegisterPrivate;
 
 
 ///////////////////////////////////////////////////////////////
@@ -67,16 +75,16 @@ typedef struct _ImIipFrectRegisterPrivate 				ImIipFrectRegisterPrivate;
 union _UimFrectFrtopcnf
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< waitconf<br>Refer to @ref EimPortid. */
-		kulong waitconf :6;
-		kulong :2;
-		kulong :8;
+		gulong waitconf :6;
+		gulong :2;
+		gulong :8;
 		/**< dataconf<br>Refer to @ref EimPortid. */
-		kulong dataconf :6;
-		kulong :10;
+		gulong dataconf :6;
+		gulong :10;
 	} bit;
 } ;
 
@@ -84,16 +92,16 @@ union _UimFrectFrtopcnf
 union _UimFrectFrldcnf
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
-		kulong :3;
-		kulong :1;
-		kulong :3;
-		kulong :1;
+		gulong :3;
+		gulong :1;
+		gulong :3;
+		gulong :1;
 		/**< dthd<br>Refer to @ref EimDthd. */
-		kulong dthd :1;
-		kulong :23;
+		gulong dthd :1;
+		gulong :23;
 	} bit;
 } ;
 
@@ -101,25 +109,25 @@ union _UimFrectFrldcnf
 union _UimFrectFrctl
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< ghsz<br>Refer to @ref EimGhsz. */
-		kulong ghsz :1;
-		kulong :3;
+		gulong ghsz :1;
+		gulong :3;
 		/**< gvsz<br>Refer to @ref EimGvsz. */
-		kulong gvsz :4;
+		gulong gvsz :4;
 		/**< lplvl<br>Refer to @ref EimLplvl. */
-		kulong lplvl :1;
-		kulong :3;
-		kulong :4;
+		gulong lplvl :1;
+		gulong :3;
+		gulong :4;
 		/**< hdbl<br>Refer to @ref EimHdbl */
-		kulong hdbl :1;
+		gulong hdbl :1;
 		/**< vdbl<br>Refer to @ref EimVdbl */
-		kulong vdbl :1;
+		gulong vdbl :1;
 		/**< hsmd<br>Refer to @ref EimHsmd */
-		kulong hsmd :1;
-		kulong :13;
+		gulong hsmd :1;
+		gulong :13;
 	} bit;
 } ;
 
@@ -127,26 +135,26 @@ union _UimFrectFrctl
 union _UimFrectPfctl
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< pfextmc */
-		kulong pfextmc :3;
-		kulong :5;
+		gulong pfextmc :3;
+		gulong :5;
 		/**< pfextadc */
-		kulong pfextadc :8;
+		gulong pfextadc :8;
 		/**< pfsp1<br>Refer to @ref EimPfsp */
-		kulong pfsp1 :3;
-		kulong :1;
+		gulong pfsp1 :3;
+		gulong :1;
 		/**< pfsp2<br>Refer to @ref EimPfsp */
-		kulong pfsp2 :3;
-		kulong :1;
+		gulong pfsp2 :3;
+		gulong :1;
 		/**< pfvsp<br>Refer to @ref EimPfvsp. */
-		kulong pfvsp :2;
-		kulong :2;
+		gulong pfvsp :2;
+		gulong :2;
 		/**< pfoff<br>Refer to @ref EimPfoff. */
-		kulong pfoff :1;
-		kulong :3;
+		gulong pfoff :1;
+		gulong :3;
 	} bit;
 } ;
 
@@ -154,19 +162,19 @@ union _UimFrectPfctl
 union _UimFrectPixidef
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
-		kulong :2;
-		kulong :2;
+		gulong :2;
+		gulong :2;
 		/**< ipixid */
-		kulong ipixid :4;
+		gulong ipixid :4;
 		/**< exa<br>Refer to @ref EimExa. */
-		kulong exa :1;
-		kulong :3;
+		gulong exa :1;
+		gulong :3;
 		/**< csel<br>Refer to @ref EimCsel */
-		kulong csel :2;
-		kulong :18;
+		gulong csel :2;
+		gulong :18;
 	} bit;
 } ;
 
@@ -174,28 +182,28 @@ union _UimFrectPixidef
 union _UimFrectCalmethod
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opcol */
-		kulong opcol :1;
-		kulong :3;
+		gulong opcol :1;
+		gulong :3;
 		/**< itmd<br>Refer to @ref EimItmd. */
-		kulong itmd :2;
+		gulong itmd :2;
 		/**< ara<br>Refer to @ref EimAra. */
-		kulong ara :2;
+		gulong ara :2;
 		/**< filmd */
-		kulong filmd :1;
+		gulong filmd :1;
 		/**< danti */
-		kulong danti :1;
+		gulong danti :1;
 		/**< aanti */
-		kulong aanti :1;
-		kulong :1;
+		gulong aanti :1;
+		gulong :1;
 		/**< cubsel<br>Refer to @ref EimCubsel. */
-		kulong cubsel :3;
+		gulong cubsel :3;
 		/**< scub<br>Refer to @ref EimScub. */
-		kulong scub :1;
-		kulong :16;
+		gulong scub :1;
+		gulong :16;
 	} bit;
 } ;
 
@@ -203,13 +211,13 @@ union _UimFrectCalmethod
 union _UimFrectFilval0
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< filvalyg */
-		kulong filvalyg :16;
+		gulong filvalyg :16;
 		/**< filvalb */
-		kulong filvalb :16;
+		gulong filvalb :16;
 	} bit;
 } ;
 
@@ -217,13 +225,13 @@ union _UimFrectFilval0
 union _UimFrectFilval1
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< filvalr */
-		kulong filvalr :16;
+		gulong filvalr :16;
 		/**< filvala */
-		kulong filvala :16;
+		gulong filvala :16;
 	} bit;
 } ;
 
@@ -231,14 +239,14 @@ union _UimFrectFilval1
 union _UimFrectOpmd
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opmd0<br>Refer to @ref EimOpmd. */
-		kulong opmd0 :3;
-		kulong :1;
-		kulong :1;
-		kulong :27;
+		gulong opmd0 :3;
+		gulong :1;
+		gulong :1;
+		gulong :27;
 	} bit;
 } ;
 
@@ -246,14 +254,14 @@ union _UimFrectOpmd
 union _UimFrectOpy
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opby */
-		kulong opby :16;
+		gulong opby :16;
 		/**< opay */
-		kulong opay :8;
-		kulong :8;
+		gulong opay :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -261,14 +269,14 @@ union _UimFrectOpy
 union _UimFrectOpb
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opbb */
-		kulong opbb :16;
+		gulong opbb :16;
 		/**< opab */
-		kulong opab :8;
-		kulong :8;
+		gulong opab :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -276,14 +284,14 @@ union _UimFrectOpb
 union _UimFrectOpr
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opbr */
-		kulong opbr :16;
+		gulong opbr :16;
 		/**< opar */
-		kulong opar :8;
-		kulong :8;
+		gulong opar :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -291,14 +299,14 @@ union _UimFrectOpr
 union _UimFrectOpa
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< opba */
-		kulong opba :16;
+		gulong opba :16;
 		/**< opaa */
-		kulong opaa :8;
-		kulong :8;
+		gulong opaa :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -306,13 +314,13 @@ union _UimFrectOpa
 union _UimFrectCliplvly
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< cliplvlyh */
-		kulong cliplvlyh :16;
+		gulong cliplvlyh :16;
 		/**< cliplvlyl */
-		kulong cliplvlyl :16;
+		gulong cliplvlyl :16;
 	} bit;
 } ;
 
@@ -320,13 +328,13 @@ union _UimFrectCliplvly
 union _UimFrectCliplvlb
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< cliplvlbh */
-		kulong cliplvlbh :16;
+		gulong cliplvlbh :16;
 		/**< cliplvlbl */
-		kulong cliplvlbl :16;
+		gulong cliplvlbl :16;
 	} bit;
 } ;
 
@@ -334,13 +342,13 @@ union _UimFrectCliplvlb
 union _UimFrectCliplvlr
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< cliplvlrh */
-		kulong cliplvlrh :16;
+		gulong cliplvlrh :16;
 		/**< cliplvlrl */
-		kulong cliplvlrl :16;
+		gulong cliplvlrl :16;
 	} bit;
 } ;
 
@@ -348,13 +356,13 @@ union _UimFrectCliplvlr
 union _UimFrectCliplvla
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< cliplvlah */
-		kulong cliplvlah :16;
+		gulong cliplvlah :16;
 		/**< cliplvlal */
-		kulong cliplvlal :16;
+		gulong cliplvlal :16;
 	} bit;
 } ;
 
@@ -362,15 +370,15 @@ union _UimFrectCliplvla
 union _UimFrectFrpcnt
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< frphcnt */
-		kulong frphcnt :9;
-		kulong :7;
+		gulong frphcnt :9;
+		gulong :7;
 		/**< frpvcnt */
-		kulong frpvcnt :8;
-		kulong :8;
+		gulong frpvcnt :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -378,11 +386,11 @@ union _UimFrectFrpcnt
 union _UimFrectPadrs
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< padrs */
-		kulong padrs :32;
+		gulong padrs :32;
 	} bit;
 } ;
 
@@ -390,15 +398,15 @@ union _UimFrectPadrs
 union _UimFrectOutsize
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< outhsz */
-		kulong outhsz :14;
-		kulong :2;
+		gulong outhsz :14;
+		gulong :2;
 		/**< outvsz */
-		kulong outvsz :14;
-		kulong :2;
+		gulong outvsz :14;
+		gulong :2;
 	} bit;
 } ;
 
@@ -406,15 +414,15 @@ union _UimFrectOutsize
 union _UimFrectOutstartpos
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< startx */
-		kulong startx :14;
-		kulong :2;
+		gulong startx :14;
+		gulong :2;
 		/**< starty */
-		kulong starty :14;
-		kulong :2;
+		gulong starty :14;
+		gulong :2;
 	} bit;
 } ;
 
@@ -422,19 +430,19 @@ union _UimFrectOutstartpos
 union _UimFrectUplkTarget
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< upsu0<br>Refer to @ref EimUpsu. */
-		kulong upsu0 :4;
-		kulong :4;
+		gulong upsu0 :4;
+		gulong :4;
 		/**< upsu1<br>Refer to @ref EimUpsu. */
-		kulong upsu1 :4;
-		kulong :4;
+		gulong upsu1 :4;
+		gulong :4;
 		/**< upsu2 */
-		kulong upsu2 :4;
-		kulong :4;
-		kulong :8;
+		gulong upsu2 :4;
+		gulong :4;
+		gulong :8;
 	} bit;
 } ;
 
@@ -442,19 +450,19 @@ union _UimFrectUplkTarget
 union _UimFrectDwlkTarget
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< dwsu0<br>Refer to @ref EimDwsu. */
-		kulong dwsu0 :4;
-		kulong :4;
+		gulong dwsu0 :4;
+		gulong :4;
 		/**< dwsu1<br>Refer to @ref EimDwsu. */
-		kulong dwsu1 :4;
-		kulong :4;
+		gulong dwsu1 :4;
+		gulong :4;
 		/**< dwsu2 */
-		kulong dwsu2 :4;
-		kulong :4;
-		kulong :8;
+		gulong dwsu2 :4;
+		gulong :4;
+		gulong :8;
 	} bit;
 } ;
 
@@ -462,15 +470,15 @@ union _UimFrectDwlkTarget
 union _UimFrectLknum
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< upnum<br>Refer to @ref EimUpnum. */
-		kulong upnum :2;
-		kulong :2;
+		gulong upnum :2;
+		gulong :2;
 		/**< dwnum<br>Refer to @ref EimDwnum. */
-		kulong dwnum :2;
-		kulong :26;
+		gulong dwnum :2;
+		gulong :26;
 	} bit;
 } ;
 
@@ -478,17 +486,17 @@ union _UimFrectLknum
 union _UimFrectRing
 {
 	/**< All bits */
-	kulong word;
+	gulong word;
 	/**< bit field */
 	struct {
 		/**< uringsize */
-		kulong uringsize :8;
+		gulong uringsize :8;
 		/**< umarginiysz */
-		kulong umarginiysz :4;
-		kulong :4;
+		gulong umarginiysz :4;
+		gulong :4;
 		/**< dringsize */
-		kulong dringsize :8;
-		kulong :8;
+		gulong dringsize :8;
+		gulong :8;
 	} bit;
 } ;
 
@@ -514,7 +522,7 @@ struct _TimFrectDump
 	/**< (0020 - 0023h) */
 	UimFrectOpmd opmd;
 	/**< (0024 - 002Fh) */
-	kuchar dmy0024002f[0x0030 - 0x0024];
+	guchar dmy0024002f[0x0030 - 0x0024];
 	/**< (0030 - 0033h) */
 	UimFrectOpy opy;
 	/**< (0034 - 0037h) */
@@ -548,22 +556,30 @@ struct _TimFrectDump
 	/**< (006C - 006Fh) */
 	UimFrectRing ring;
 	/**< 0070 - FFFFh */
-	kuchar dmy600706ffff[0x70000 - 0x60070];
+	guchar dmy600706ffff[0x70000 - 0x60070];
 } ;
 
 struct _ImIipFrectRegister
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipFrectRegisterClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    				im_iip_frect_register_get_type(void);
-ImIipFrectRegister*		        im_iip_frect_register_new(void);
+GType						im_iip_frect_register_struct_get_type(void)	G_GNUC_CONST;
+ImIipFrectRegister*					im_iip_frect_register_struct_new(void);
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_FRECT_REGISTER_H__ */

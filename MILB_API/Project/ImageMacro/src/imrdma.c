@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -120,7 +120,7 @@ static volatile UCHAR S_G_IM_RDMA_CLK_CTRL_CNT = 0;
 #endif // ImRdma_CO_ACT_RDMA_CLOCK
 
 // interrupt mode
-static volatile E_IM_RDMA_INT_MODE	S_G_IM_RDMA_INT_MODE = E_IM_RDMA_INT_MODE_AND_ERR;
+static volatile ImRdmaIntMode	S_G_IM_RDMA_INT_MODE = ImRdma_INT_MODE_AND_ERR ;
 
 static volatile T_IM_RDMA_CALLBACK	S_G_IM_RDMA_CALL_BACK_FUNC = NULL;
 
@@ -232,13 +232,13 @@ PUBLIC
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR, D_IM_RDMA_SEM_TIMEOUT, D_IM_RDMA_SEM_NG
  * @note		None
  */
-INT32 Im_RDMA_Open( INT32 tmout )
+INT32 im_rdma_open( ImRdma*self,INT32 tmout )
 {
 	DDIM_USER_ER	ercd;
 
 #ifdef CO_PARAM_CHECK
 	if( tmout < D_DDIM_USER_SEM_WAIT_FEVR ){
-		Ddim_Assertion(("I:Im_RDMA_Open: input param error. tmout = 0x%x\n", tmout));
+		Ddim_Assertion(("I:im_rdma_open: input param error. tmout = 0x%x\n", tmout));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 #endif
@@ -254,11 +254,11 @@ INT32 Im_RDMA_Open( INT32 tmout )
 		// twai_sem error
 		if( D_DDIM_USER_E_TMOUT == ercd ){
 			// Semaphore Get Time Out
-			Ddim_Print(("I:Im_RDMA_Open() Error : Semaphore Get Time Out. ercd = 0x%x\n", ercd));
+			Ddim_Print(("I:im_rdma_open() Error : Semaphore Get Time Out. ercd = 0x%x\n", ercd));
 			return D_IM_RDMA_SEM_TIMEOUT;
 		}
 		// Semaphore Get Error
-		Ddim_Print(("I:Im_RDMA_Open() Error : Semaphore Get Error. ercd = 0x%x\n", ercd));
+		Ddim_Print(("I:im_rdma_open() Error : Semaphore Get Error. ercd = 0x%x\n", ercd));
 		return D_IM_RDMA_SEM_NG;
 	}
 
@@ -270,14 +270,14 @@ INT32 Im_RDMA_Open( INT32 tmout )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_SEM_NG
  * @note		None
  */
-INT32 Im_RDMA_Close( VOID )
+INT32 im_rdma_close( ImRdma*self )
 {
 	DDIM_USER_ER ercd;
 
 	ercd = DDIM_User_Sig_Sem( SID_IM_RDMA );				// sig_sem()
 	if( D_DDIM_USER_E_OK != ercd ){
 		// sig_sem error
-		Ddim_Print(("I:Im_RDMA_Close: Semaphore error : ercd = 0x%x\n", ercd));
+		Ddim_Print(("I:im_rdma_close: Semaphore error : ercd = 0x%x\n", ercd));
 		return D_IM_RDMA_SEM_NG;
 	}
 
@@ -291,11 +291,11 @@ INT32 Im_RDMA_Close( VOID )
  * @return		None
  * @note		None
  */
-INT32 Im_RDMA_Init( VOID )
+INT32 im_rdma_init( ImRdma*self )
 {
 	// check macro busy
 	if( IO_RDMA.RDMA_CORE.RDMATRG.bit.RDMATRG != ImRdma_D_IM_RDMA_TRG_STOPPED ){
-		Ddim_Print(("I:Im_RDMA_Init. macro not stopped error. \n"));
+		Ddim_Print(("I:im_rdma_init. macro not stopped error. \n"));
 		return D_IM_RDMA_MACRO_BUSY_NG;
 	}
 
@@ -348,12 +348,12 @@ INT32 Im_RDMA_Init( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR
  * @note		None
  */
-INT32 Im_RDMA_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
+INT32 im_rdma_ctrl( ImRdma*self,ImRdmaCtrl* rdma_ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if( rdma_ctrl == NULL ){
 		// rdma_ctrl is Error because of NULL
-		Ddim_Assertion(("I:Im_RDMA_Ctrl: Null check error. rdma_ctrl = NULL\n"));
+		Ddim_Assertion(("I:im_rdma_ctrl: Null check error. rdma_ctrl = NULL\n"));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHfECK
@@ -364,22 +364,22 @@ INT32 Im_RDMA_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
 
 	// set register
 	// PRch0
-	IO_RDMA.PRCH0.PRCHCTL.bit.PRLV		= rdma_ctrl->req_threshold;		// PRch request threshold
-	IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transfer_byte;		// RDMA : 4Byte Alignment
-	IO_RDMA.PRCH0.PRSA.bit.PRSA			= rdma_ctrl->reg_addr_tbl_addr;	// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH0.PRCHCTL.bit.PRLV		= rdma_ctrl->reqThreshold;		// PRch request threshold
+	IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transferByte;		// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH0.PRSA.bit.PRSA			= rdma_ctrl->regAddrTblAddr;	// RDMA : 4Byte Alignment
 	// PRch1
-	IO_RDMA.PRCH1.PRCHCTL.bit.PRLV		= rdma_ctrl->req_threshold;		// PRch request threshold
-	IO_RDMA.PRCH1.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transfer_byte;		// RDMA : 4Byte Alignment
-	IO_RDMA.PRCH1.PRSA.bit.PRSA			= rdma_ctrl->reg_data_top_addr;	// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH1.PRCHCTL.bit.PRLV		= rdma_ctrl->reqThreshold;		// PRch request threshold
+	IO_RDMA.PRCH1.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transferByte;		// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH1.PRSA.bit.PRSA			= rdma_ctrl->regDataTopAddr;	// RDMA : 4Byte Alignment
 
 	// set interrupt mode
-	IO_RDMA.RDMA_TOP.INTCTL.bit.INTMD	= rdma_ctrl->int_mode;
-	S_G_IM_RDMA_INT_MODE					= rdma_ctrl->int_mode;
+	IO_RDMA.RDMA_TOP.INTCTL.bit.INTMD	= rdma_ctrl->intMode;
+	S_G_IM_RDMA_INT_MODE					= rdma_ctrl->intMode;
 	// set interrupt
 	IO_RDMA.RDMA_CORE.RDMAINTENB.bit.RDMAE	= 1;
 	IO_RDMA.PRCH0.PRCHINTENB.bit.PRE		= 1;
 	IO_RDMA.PRCH1.PRCHINTENB.bit.PRE		= 1;
-	if( rdma_ctrl->int_mode == E_IM_RDMA_INT_MODE_AND_ERR ){
+	if( rdma_ctrl->intMode == ImRdma_INT_MODE_AND_ERR  ){
 		IO_RDMA.RDMA_CORE.RDMAINTENB.bit.RDMAXE	= 1;
 		IO_RDMA.PRCH0.PRCHINTENB.bit.PRXE		= 1;
 		IO_RDMA.PRCH1.PRCHINTENB.bit.PRXE		= 1;
@@ -405,7 +405,7 @@ INT32 Im_RDMA_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_NG, D_IM_RDMA_MACRO_BUSY_NG
  * @note		None
  */
-INT32 Im_RDMA_Start_Sync( VOID )
+INT32 im_rdma_start_sync( ImRdma*self )
 {
 	INT32 ercd = D_IM_RDMA_OK;
 
@@ -418,7 +418,7 @@ INT32 Im_RDMA_Start_Sync( VOID )
 		imRdmaOffPclk();
 		ImRdma_IM_RDMA_DSB();
 
-		Ddim_Print(("I:Im_RDMA_Start_Sync: Macro busy error.\n"));
+		Ddim_Print(("I:im_rdma_start_sync: Macro busy error.\n"));
 		return D_IM_RDMA_MACRO_BUSY_NG;
 	}
 
@@ -440,9 +440,9 @@ INT32 Im_RDMA_Start_Sync( VOID )
 	IO_RDMA.RDMA_TOP.VDGEN1.bit.VDGEN1	= 1;
 
 	// wait RDMA process
-	ercd = Im_RDMA_Wait_End();
+	ercd = im_rdma_wait_end(NULL);
 	if( ercd != D_IM_RDMA_OK ){
-		Ddim_Print(("I:Im_RDMA_Start_Sync: Wait_End error.\n"));
+		Ddim_Print(("I:im_rdma_start_sync: Wait_End error.\n"));
 	}
 
 	// stop PRch(0/1)
@@ -464,7 +464,7 @@ INT32 Im_RDMA_Start_Sync( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_MACRO_BUSY_NG
  * @note		None
  */
-INT32 Im_RDMA_Start_Async( VOID )
+INT32 im_rdma_start_async( ImRdma*self )
 {
 	// clock ON (pclk)
 	imRdmaOnPclk();
@@ -475,7 +475,7 @@ INT32 Im_RDMA_Start_Async( VOID )
 		imRdmaOffPclk();
 		ImRdma_IM_RDMA_DSB();
 
-		Ddim_Print(("I:Im_RDMA_Start_Sync: Macro busy error.\n"));
+		Ddim_Print(("I:im_rdma_start_sync: Macro busy error.\n"));
 		return D_IM_RDMA_MACRO_BUSY_NG;
 	}
 
@@ -506,17 +506,17 @@ INT32 Im_RDMA_Start_Async( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_NG, D_IM_RDMA_SEM_TIMEOUT
  * @note        When the executed asynchronization processing ends, it is a return.
  */
-INT32 Im_RDMA_Wait_End( VOID )
+INT32 im_rdma_wait_end( ImRdma*self )
 {
 	DDIM_USER_FLGPTN	flg_ptn;
 	DDIM_USER_FLGPTN	waiptn;
 	DDIM_USER_ER		ercd;
 	INT32				ret = D_IM_RDMA_OK;
 
-	if( S_G_IM_RDMA_INT_MODE == E_IM_RDMA_INT_MODE_OR ){
+	if( S_G_IM_RDMA_INT_MODE == ImRdma_INT_MODE_OR  ){
 		waiptn = ImRdma_D_IM_RDMA_WAIT_FLGPTN_OR;
 	}
-	else if( S_G_IM_RDMA_INT_MODE == E_IM_RDMA_INT_MODE_AND ){
+	else if( S_G_IM_RDMA_INT_MODE == ImRdma_INT_MODE_AND ){
 		waiptn = ImRdma_D_IM_RDMA_WAIT_FLGPTN_AND;
 	}
 	else{
@@ -525,18 +525,18 @@ INT32 Im_RDMA_Wait_End( VOID )
 
 #ifdef CO_DEBUG_ON_PC
 	// normal end
-	Im_RDMA_Int_Handler();
+	im_rdma_int_handler();
 #endif	// CO_DEBUG_ON_PC
 
 	// Wait
 	ercd = DDIM_User_Twai_Flg( FID_IM_RDMA, waiptn, D_DDIM_USER_TWF_ORW, &flg_ptn, D_DDIM_WAIT_END_TIME );
 	if( ercd == D_DDIM_USER_E_TMOUT ) {
 		// A semaphore acquisition processing time out
-		Ddim_Print(("I:Im_RDMA_Wait_End: time out. ercd = 0x%x\n", ercd));
+		Ddim_Print(("I:im_rdma_wait_end: time out. ercd = 0x%x\n", ercd));
 		return D_IM_RDMA_SEM_TIMEOUT;
 	}
 	if( ercd != D_DDIM_USER_E_OK ){
-		Ddim_Print(("I:Im_RDMA_Wait_End: DDIM_User_Twai_Flg error. ercd = 0x%x\n", ercd));
+		Ddim_Print(("I:im_rdma_wait_end: DDIM_User_Twai_Flg error. ercd = 0x%x\n", ercd));
 		ret = D_IM_RDMA_SEM_NG;
 	}
 
@@ -558,12 +558,12 @@ INT32 Im_RDMA_Wait_End( VOID )
  * @brief		It is an interrupt handler that starts when the processing of RDMA ends
  * @note		None
  */
-VOID Im_RDMA_Int_Handler( VOID )
+VOID im_rdma_int_handler( VOID )
 {
 	imRdmaOnPclk();		// PCLK on
 	ImRdma_IM_RDMA_DSB();
 
-	if( S_G_IM_RDMA_INT_MODE == E_IM_RDMA_INT_MODE_OR ){
+	if( S_G_IM_RDMA_INT_MODE == ImRdma_INT_MODE_OR  ){
 		union io_rmda_top_intmon1 intmon_1;
 
 		// get status
@@ -583,11 +583,11 @@ VOID Im_RDMA_Int_Handler( VOID )
 		}
 
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_RDMA_Int_Handler. E_IM_RDMA_INT_MODE_OR: end:0x%08lx\n",
+		Ddim_Print(("I:im_rdma_int_handler. ImRdma_INT_MODE_OR : end:0x%08lx\n",
 						(ULONG)intmon_1.word));
 #endif	// CO_DEBUG_ON_PC
 	}
-	else if( S_G_IM_RDMA_INT_MODE == E_IM_RDMA_INT_MODE_AND ){
+	else if( S_G_IM_RDMA_INT_MODE == ImRdma_INT_MODE_AND ){
 #ifdef CO_DEBUG_ON_PC
 		union io_rmda_top_intmon1 intmon_1;
 
@@ -609,11 +609,11 @@ VOID Im_RDMA_Int_Handler( VOID )
 		}
 
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_RDMA_Int_Handler. E_IM_RDMA_INT_MODE_AND: end:0x%08lx\n",
+		Ddim_Print(("I:im_rdma_int_handler. ImRdma_INT_MODE_AND: end:0x%08lx\n",
 						(ULONG)intmon_1.word));
 #endif	// CO_DEBUG_ON_PC
 	}
-	else{	// S_G_IM_RDMA_INT_MODE == E_IM_RDMA_INT_MODE_AND_ERR
+	else{	// S_G_IM_RDMA_INT_MODE == ImRdma_INT_MODE_AND_ERR
 		union io_rmda_top_intmon1 intmon_1;
 		union io_rmda_top_intmon2 intmon_2;
 
@@ -638,7 +638,7 @@ VOID Im_RDMA_Int_Handler( VOID )
 		}
 
 #ifdef CO_DEBUG_ON_PC
-		Ddim_Print(("I:Im_RDMA_Int_Handler. E_IM_RDMA_INT_MODE_AND_ERR: end:0x%08lx, error:0x%08lx\n",
+		Ddim_Print(("I:im_rdma_int_handler. ImRdma_INT_MODE_AND_ERR : end:0x%08lx, error:0x%08lx\n",
 						(ULONG)intmon_1.word, (ULONG)intmon_2.word));
 #endif	// CO_DEBUG_ON_PC
 	}
@@ -654,12 +654,12 @@ VOID Im_RDMA_Int_Handler( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR
  * @note		None
  */
-INT32 Im_RDMA_Get_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
+INT32 im_rdma_get_ctrl( ImRdma*self,ImRdmaCtrl* rdma_ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if( rdma_ctrl == NULL ){
 		// rdma_ctrl is Error because of NULL
-		Ddim_Assertion(("I:Im_RDMA_Get_Ctrl: Null check error. rdma_ctrl = NULL\n"));
+		Ddim_Assertion(("I:im_rdma_get_ctrl: Null check error. rdma_ctrl = NULL\n"));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -669,12 +669,12 @@ INT32 Im_RDMA_Get_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
 
 	// get register
 	// common
-	rdma_ctrl->req_threshold		= IO_RDMA.PRCH0.PRCHCTL.bit.PRLV;
-	rdma_ctrl->transfer_byte		= IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE;
+	rdma_ctrl->reqThreshold		= IO_RDMA.PRCH0.PRCHCTL.bit.PRLV;
+	rdma_ctrl->transferByte		= IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE;
 	// PRch0
-	rdma_ctrl->reg_addr_tbl_addr	= IO_RDMA.PRCH0.PRSA.bit.PRSA;
+	rdma_ctrl->regAddrTblAddr	= IO_RDMA.PRCH0.PRSA.bit.PRSA;
 	// PRch1
-	rdma_ctrl->reg_data_top_addr	= IO_RDMA.PRCH0.PRSA.bit.PRSA;
+	rdma_ctrl->regDataTopAddr	= IO_RDMA.PRCH0.PRSA.bit.PRSA;
 	// Callback
 	rdma_ctrl->pCallBack			= S_G_IM_RDMA_CALL_BACK_FUNC;
 
@@ -689,7 +689,7 @@ INT32 Im_RDMA_Get_Ctrl( T_IM_RDMA_CTRL* rdma_ctrl )
  * @return		E_IM_RDMA_INT_MODE
  * @note		None
  */
-E_IM_RDMA_INT_MODE Im_RDMA_Get_Int_Mode( VOID )
+ImRdmaIntMode im_rdma_get_intMode( ImRdma*self )
 {
 	return S_G_IM_RDMA_INT_MODE;
 }
@@ -699,7 +699,7 @@ E_IM_RDMA_INT_MODE Im_RDMA_Get_Int_Mode( VOID )
  * @return		TRUE:PRch setting error, FALSE:not PRch error
  * @note		None
  */
-BOOL Im_RDMA_Get_PRch_Error_Status( VOID )
+BOOL im_rdma_get_prch_error_status( ImRdma*self )
 {
 	BOOL error_flag;
 
@@ -720,7 +720,7 @@ BOOL Im_RDMA_Get_PRch_Error_Status( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR
  * @note		None
  */
-INT32 Im_RDMA_Set_Axi( const T_IM_RDMA_AXI* const axi_ctrl )
+INT32 im_rdma_set_axi( ImRdma*self,const ImRdmaAxi* const axi_ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if( axi_ctrl == NULL ) {
@@ -733,8 +733,8 @@ INT32 Im_RDMA_Set_Axi( const T_IM_RDMA_AXI* const axi_ctrl )
 	imRdmaOnPclk();
 	ImRdma_IM_RDMA_DSB();
 
-	IO_RDMA.RDMA_CORE.RDMAAXCTL.bit.AWPROT	= axi_ctrl->write_protection_type;
-	IO_RDMA.RDMA_CORE.RDMAAXCTL.bit.AWCACHE	= axi_ctrl->write_cache_type;
+	IO_RDMA.RDMA_CORE.RDMAAXCTL.bit.AWPROT	= axi_ctrl->writeProtectionType;
+	IO_RDMA.RDMA_CORE.RDMAAXCTL.bit.AWCACHE	= axi_ctrl->writeCacheType;
 
 	imRdmaOffPclk();
 	ImRdma_IM_RDMA_DSB();
@@ -748,12 +748,12 @@ INT32 Im_RDMA_Set_Axi( const T_IM_RDMA_AXI* const axi_ctrl )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR
  * @note		None
  */
-INT32 Im_RDMA_Get_Axi_Status( T_IM_RDMA_AXI_STATUS* const sts )
+INT32 im_rdma_get_axi_status( ImRdma*self,ImRdmaAxiStatus* const sts )
 {
 #ifdef CO_PARAM_CHECK
 	if( sts == NULL ) {
 		// sts setting error
-		Ddim_Assertion(("I:Im_RDMA_Get_Axi_Status. Parameter is NULL.\n"));
+		Ddim_Assertion(("I:im_rdma_get_axi_status. Parameter is NULL.\n"));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 #endif
@@ -761,7 +761,7 @@ INT32 Im_RDMA_Get_Axi_Status( T_IM_RDMA_AXI_STATUS* const sts )
 	imRdmaOnPclk();
 	ImRdma_IM_RDMA_DSB();
 
-	sts->write_channel_response = IO_RDMA.RDMA_CORE.RDMABRESP.bit.RDMABRESP;
+	sts->writeChannelResponse = IO_RDMA.RDMA_CORE.RDMABRESP.bit.RDMABRESP;
 
 	imRdmaOffPclk();
 	ImRdma_IM_RDMA_DSB();
@@ -770,7 +770,7 @@ INT32 Im_RDMA_Get_Axi_Status( T_IM_RDMA_AXI_STATUS* const sts )
 }
 
 #ifdef D_IM_RDMA_PRINT_ST
-VOID Im_RDMA_Print_ClockStatus( VOID )
+VOID im_rdma_print_clock_status( ImRdma*self )
 {
 #ifdef ImRdma_CO_ACT_RDMA_PCLOCK
 	Ddim_Print(( "CLKSTOP: AP=%u\n", Dd_Top_Get_CLKSTOP14_RDMAAP() ));
@@ -805,26 +805,26 @@ VOID Im_RDMA_Print_ClockStatus( VOID )
  * @return		D_IM_RDMA_OK, D_IM_RDMA_INPUT_PARAM_ERR
  * @note		None
  */
-INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl )
+INT32 im_rdma_ctrl_quick_start_sync( ImRdma*self,INT32 tmout, ImRdmaCtrl* rdma_ctrl )
 {
 	INT32 ercd = D_IM_RDMA_OK;
 
 #ifdef CO_PARAM_CHECK
 	if( tmout < D_DDIM_USER_SEM_WAIT_FEVR ){
-		Ddim_Assertion(("I:Im_RDMA_Ctrl_Quick_Start_Sync: input param error. tmout = 0x%x\n", tmout));
+		Ddim_Assertion(("I:im_rdma_ctrl_quick_start_sync: input param error. tmout = 0x%x\n", tmout));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 	if( rdma_ctrl == NULL ){
 		// rdma_ctrl is Error because of NULL
-		Ddim_Assertion(("I:Im_RDMA_Ctrl_Quick_Start_Sync: Null check error. rdma_ctrl = NULL\n"));
+		Ddim_Assertion(("I:im_rdma_ctrl_quick_start_sync: Null check error. rdma_ctrl = NULL\n"));
 		return D_IM_RDMA_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
 
 	// Open
-	ercd = Im_RDMA_Open( tmout );
+	ercd = im_rdma_open(NULL, tmout );
 	if( ercd != D_IM_RDMA_OK ){
-		Ddim_Print(("I:Im_RDMA_Ctrl_Quick_Start_Sync: Im_RDMA_Open error.\n"));
+		Ddim_Print(("I:im_rdma_ctrl_quick_start_sync: im_rdma_open error.\n"));
 		return ercd;
 	}
 
@@ -846,13 +846,13 @@ INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl )
 	IO_RDMA.PRCH1.PRVSIZE.bit.PRVSIZE	= 1;	// 1 fixed
 
 	// set interrupt mode
-	IO_RDMA.RDMA_TOP.INTCTL.bit.INTMD	= rdma_ctrl->int_mode;
-	S_G_IM_RDMA_INT_MODE					= rdma_ctrl->int_mode;
+	IO_RDMA.RDMA_TOP.INTCTL.bit.INTMD	= rdma_ctrl->intMode;
+	S_G_IM_RDMA_INT_MODE					= rdma_ctrl->intMode;
 	// set interrupt
 	IO_RDMA.RDMA_CORE.RDMAINTENB.bit.RDMAE	= 1;
 	IO_RDMA.PRCH0.PRCHINTENB.bit.PRE		= 1;
 	IO_RDMA.PRCH1.PRCHINTENB.bit.PRE		= 1;
-	if( rdma_ctrl->int_mode == E_IM_RDMA_INT_MODE_AND_ERR ){
+	if( rdma_ctrl->intMode == ImRdma_INT_MODE_AND_ERR  ){
 		IO_RDMA.RDMA_CORE.RDMAINTENB.bit.RDMAXE	= 1;
 		IO_RDMA.PRCH0.PRCHINTENB.bit.PRXE		= 1;
 		IO_RDMA.PRCH1.PRCHINTENB.bit.PRXE		= 1;
@@ -865,13 +865,13 @@ INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl )
 
 	// Set parameter
 	// PRch0
-	IO_RDMA.PRCH0.PRCHCTL.bit.PRLV		= rdma_ctrl->req_threshold;		// PRch request threshold
-	IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transfer_byte;		// RDMA : 4Byte Alignment
-	IO_RDMA.PRCH0.PRSA.bit.PRSA			= rdma_ctrl->reg_addr_tbl_addr;	// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH0.PRCHCTL.bit.PRLV		= rdma_ctrl->reqThreshold;		// PRch request threshold
+	IO_RDMA.PRCH0.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transferByte;		// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH0.PRSA.bit.PRSA			= rdma_ctrl->regAddrTblAddr;	// RDMA : 4Byte Alignment
 	// PRch1
-	IO_RDMA.PRCH1.PRCHCTL.bit.PRLV		= rdma_ctrl->req_threshold;		// PRch request threshold
-	IO_RDMA.PRCH1.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transfer_byte;		// RDMA : 4Byte Alignment
-	IO_RDMA.PRCH1.PRSA.bit.PRSA			= rdma_ctrl->reg_data_top_addr;	// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH1.PRCHCTL.bit.PRLV		= rdma_ctrl->reqThreshold;		// PRch request threshold
+	IO_RDMA.PRCH1.PRHSIZE.bit.PRHSIZE	= rdma_ctrl->transferByte;		// RDMA : 4Byte Alignment
+	IO_RDMA.PRCH1.PRSA.bit.PRSA			= rdma_ctrl->regDataTopAddr;	// RDMA : 4Byte Alignment
 
 	// set callback
 	S_G_IM_RDMA_CALL_BACK_FUNC				= rdma_ctrl->pCallBack;
@@ -894,9 +894,9 @@ INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl )
 	IO_RDMA.RDMA_CORE.RDMATRG.bit.RDMATRG = ImRdma_D_IM_RDMA_TRG_START;
 
 	// wait RDMA process
-	ercd = Im_RDMA_Wait_End();
+	ercd = im_rdma_wait_end(NULL);
 	if( ercd != D_IM_RDMA_OK ){
-		Ddim_Print(("I:Im_RDMA_Ctrl_Quick_Start_Sync: Wait_End error.\n"));
+		Ddim_Print(("I:im_rdma_ctrl_quick_start_sync: Wait_End error.\n"));
 	}
 
 	// clock OFF
@@ -905,9 +905,9 @@ INT32 Im_RDMA_Ctrl_Quick_Start_Sync( INT32 tmout, T_IM_RDMA_CTRL* rdma_ctrl )
 	ImRdma_IM_RDMA_DSB();
 
 	// Close
-	ercd = Im_RDMA_Close();
+	ercd = im_rdma_close(NULL);
 	if( ercd != D_IM_RDMA_OK ){
-		Ddim_Print(("I:Im_RDMA_Ctrl_Quick_Start_Sync: Im_RDMA_Close error.\n"));
+		Ddim_Print(("I:im_rdma_ctrl_quick_start_sync: im_rdma_close error.\n"));
 	}
 
 	return ercd;

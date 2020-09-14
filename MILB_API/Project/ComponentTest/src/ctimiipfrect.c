@@ -55,7 +55,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImIipFrect, ct_im_iip_frect)
 #if 1
 #include <stdio.h>
 #undef CtImIipFrect_DDIM_PRINT
-#define CtImIipFrect_DDIM_PRINT(arg)		{DDIM_User_Printf arg;}		/**< printf function inside DDIM */
+#define CtImIipFrect_DDIM_PRINT(arg)		{ddim_user_custom_printf arg;}		/**< printf function inside DDIM */
 #endif
 
 // FRECT table size (for VGA 640x480)
@@ -109,11 +109,13 @@ static __align(8) IipParamFrectOpcol0	S_G_CT_IM_IIP_FRECTTBL[CtImIipFrect_D_CT_I
 /*----------------------------------------------------------------------*/
 static void ct_im_iip_frect_constructor(CtImIipFrect *self)
 {
- //CtImIipFrectPrivate *priv = CT_IM_IIP_FRECT_GET_PRIVATE(self);
+// CtImIipFrectPrivate *priv = CT_IM_IIP_FRECT_GET_PRIVATE(self);
 }
 
 static void ct_im_iip_frect_destructor(CtImIipFrect *self)
 {
+	//CtImIipFrectPrivate *priv = CT_IM_IIP_FRECT_GET_PRIVATE(self);
+
 }
 
 
@@ -132,16 +134,16 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 	ImIipParamSts* slUnitInf = &gCtImIipUnitParamSl0;
 	ImIipUnitCfg slCfg;
 	kuint32 waitFactorResult = 0;
-	const kuint32	 waitFactor = ImIip_D_IM_IIP_INT_FACTOR_AXIERR | ImIip_D_IM_IIP_INT_FACTOR_SL2END;
-	const kuint32 unitidBitmask = ImIip_D_IM_IIP_PARAM_PLDUNIT_FRECT0 | ImIip_D_IM_IIP_PARAM_PLDUNIT_SL2;
-	const kuint32	 pixidBitmask = ImIip_E_IM_IIP_PIXID_4 | ImIip_E_IM_IIP_PIXID_5;
-	const ImIipEImIipUnitId srcUnitid = ImIip_E_IM_IIP_UNIT_ID_FRECT0;
-	const ImIipEImIipUnitId dstUnitid = ImIip_E_IM_IIP_UNIT_ID_SL2;
+	const kuint32	 waitFactor = ImIipDefine_D_IM_IIP_INT_FACTOR_AXIERR | ImIipDefine_D_IM_IIP_INT_FACTOR_SL2END;
+	const kuint32 unitidBitmask = ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_FRECT0 | ImIipDefine_D_IM_IIP_PARAM_PLDUNIT_SL2;
+	const kuint32	 pixidBitmask = ImIipStruct_E_IM_IIP_PIXID_4 | ImIipStruct_E_IM_IIP_PIXID_5;
+	const ImIipStructEImIipUnitId srcUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_FRECT0;
+	const ImIipStructEImIipUnitId dstUnitid = ImIipStruct_E_IM_IIP_UNIT_ID_SL2;
 	const ImIipParamEImIipParamPortid srcPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_FRECT0;
 	const ImIipParamEImIipParamPortid dstPortid = ImIipParamEnum_E_IM_IIP_PARAM_PORTID_SL2;
 	const kuint32	 srcPixid = 4;
 	const kuint32	 dstPixid = 5;
-	const kuint32	 openResBitmask = ImIip_E_IM_IIP_OPEN_RES_CACHE0;
+	const kuint32	 openResBitmask = ImIipStruct_E_IM_IIP_OPEN_RES_CACHE0;
 	kuint32 loopcnt;
 	kuint32 loopcnt2;
 	kuint32 loopcnt3;
@@ -150,28 +152,28 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 
 	ercd = Im_IIP_Open_SWTRG( unitidBitmask, pixidBitmask, openResBitmask, CtImIip_D_CT_IM_IIP_OPEN_TIMEOUT_MSEC );
 	CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "ercd = 0x%x\n", ercd ));
-	if( ercd != ImIip_D_IM_IIP_OK ) {
+	if( ercd != ImIipDefine_D_IM_IIP_OK ) {
 		return ercd;
 	}
 
 	pixfmtTbl0 = gCtImIipPixfmttblBase;
-	pixfmtTbl0.lineBytes.Y_G = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	pixfmtTbl0.lineBytes.Cb_B = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	pixfmtTbl0.lineBytes.Cr_R = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	pixfmtTbl0.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	pixfmtTbl0.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	pixfmtTbl0.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
 	pixfmtTbl0.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	pixfmtTbl0.addr.Y_G = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
-	pixfmtTbl0.addr.Cb_B = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
-	pixfmtTbl0.addr.Cr_R = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	pixfmtTbl0.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_Y;
+	pixfmtTbl0.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
+	pixfmtTbl0.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_C;
 	pixfmtTbl0.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_0_YCC422_U8_A;
 
 	pixfmtTbl1 = gCtImIipPixfmttblBase;
-	pixfmtTbl1.lineBytes.Y_G = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
-	pixfmtTbl1.lineBytes.Cb_B = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
-	pixfmtTbl1.lineBytes.Cr_R = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	pixfmtTbl1.lineBytes.yG = CtImIip_D_IM_IIP_VGA_YCC422_U8_Y_GLOBAL_WIDTH;
+	pixfmtTbl1.lineBytes.cbB = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
+	pixfmtTbl1.lineBytes.crR = CtImIip_D_IM_IIP_VGA_YCC422_U8_C_GLOBAL_WIDTH;
 	pixfmtTbl1.lineBytes.Alpha = CtImIip_D_IM_IIP_VGA_YCC422_U8_A_GLOBAL_WIDTH;
-	pixfmtTbl1.addr.Y_G = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
-	pixfmtTbl1.addr.Cb_B = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
-	pixfmtTbl1.addr.Cr_R = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	pixfmtTbl1.addr.yG = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_Y;
+	pixfmtTbl1.addr.cbB = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
+	pixfmtTbl1.addr.crR = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_C;
 	pixfmtTbl1.addr.Alpha = CtImIip_D_IM_IIP_IMG_MEM_ADDR_1_YCC422_U8_A;
 
 	CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "frectTbl = 0x%x 0x%x\n", (kuint32)frectTbl,
@@ -214,8 +216,8 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 	frectUnitInf->FRPCNT.bit.FRPHCNT = CtImIipFrect_D_CT_IM_IIP_FRECT_TBL_X_NUM;
 	frectUnitInf->FRPCNT.bit.FRPVCNT = CtImIipFrect_D_CT_IM_IIP_FRECT_TBL_Y_NUM;
 
-	frectCfg.unitCtrl = ImIip_D_IM_IIP_HW_CTRL_SWTRG;
-	frectCfg.chainEnable = ImIip_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	frectCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	frectCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
 	frectCfg.unitParamAddr = (ULONG)frectUnitInf;
 	frectCfg.loadUnitParamFlag = 0;
 
@@ -231,8 +233,8 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 	slUnitInf->BASE.slPhsz.bit.PHSZ0 = CtImIipFrect_D_CT_IM_IIP_FRECT_TBL_X_SZ;
 	slUnitInf->BASE.slPvsz.bit.PVSZ0 = CtImIipFrect_D_CT_IM_IIP_FRECT_TBL_Y_SZ;
 
-	slCfg.unitCtrl = ImIip_D_IM_IIP_HW_CTRL_SWTRG;
-	slCfg.chainEnable = ImIip_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
+	slCfg.unitCtrl = ImIipDefine_D_IM_IIP_HW_CTRL_SWTRG;
+	slCfg.chainEnable = ImIipDefine_D_IM_IIP_PLDUNIT_CHAIN_DISABLE;
 	slCfg.unitParamAddr = (ULONG)slUnitInf;
 	slCfg.loadUnitParamFlag = unitidBitmask;
 
@@ -280,7 +282,7 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 			   ));
 	im_iip_struct_off_pclk();
 
-	DdArm_Dd_ARM_Dmb_Pou();
+	DdArm_DD_ARM_DMB_POU();
 
 	CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "Start1\n" ));
 	ercd = Im_IIP_Start_SWTRG( dstUnitid, ImIipDefine_D_IM_IIP_SWTRG_ON );
@@ -306,7 +308,7 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 	CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", ercd, waitFactorResult ));
 	if( ercd != DriverCommon_D_DDIM_OK ) {
 		CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "Stop\n" ));
-		ercd = im_iip_main_stop( ImIip_D_IM_IIP_ABORT );
+		ercd = im_iip_main_stop( ImIipDefine_D_IM_IIP_ABORT );
 		CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "ercd = 0x%x factor=0x%x\n", ercd,
 				waitFactorResult ));
 	}
@@ -327,7 +329,7 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 		kuint32 paramBytes;
 		ercd = im_iip_static_get_unit_param( srcUnitid, gGetUnitParam, &paramBytes );
 		CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, paramBytes ));
-		if( ercd == ImIip_D_IM_IIP_OK ) {
+		if( ercd == ImIipDefine_D_IM_IIP_OK ) {
 			CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "dump UNITINF FRECT[0] %u\n", paramBytes ));
 			CtImIip_CT_IM_IIP_CLEAN_L1L2_DCACHE_ADDR( (ULONG)gGetUnitParam, paramBytes );
 			palladium_test_set_out_localstack( (ULONG)gGetUnitParam, paramBytes );
@@ -341,7 +343,7 @@ kint32 ct_im_iip_frect_4_1_1( CtImIipFrect *self )
 		kuint32 paramBytes;
 		ercd = im_iip_static_get_unit_param( dstUnitid, gGetUnitParam, &paramBytes );
 		CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "ercd = %d bytes = %u\n", ercd, paramBytes ));
-		if( ercd == ImIip_D_IM_IIP_OK ) {
+		if( ercd == ImIipDefine_D_IM_IIP_OK ) {
 			CtImIipFrect_DDIM_PRINT(( CtImIipFrect_D_IM_IIP_FUNC_NAME "dump UNITINF SL[2] %u\n", paramBytes ));
 			CtImIip_CT_IM_IIP_CLEAN_L1L2_DCACHE_ADDR( (ULONG)gGetUnitParam, paramBytes );
 			palladium_test_set_out_localstack( (ULONG)gGetUnitParam, paramBytes );

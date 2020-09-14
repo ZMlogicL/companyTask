@@ -1,3 +1,6 @@
+
+前面几个.c文件之前没有写详细修改记录，有疑问的可以问我。
+
 将dd_ipcu.c拆分成dd_nic.c 和dd_ipcu_mb.c
 将dd_csio.c拆分成dd_csio.c，dd_csio_dma.c和dd_csio_common.c
 将dd_pcie_rc.c拆分成dd_pcie_rc.c，dd_pcie_rc_int.c和dd_pcie_rc_common.c
@@ -13,7 +16,7 @@ ddimtypedef.h
 修改：
 BYTE改为kbyte，
 PBYTE改为kpbyte，
-VP_CALLBACK改为VpCallback，（VpCallbackFunc有重复的，故改为VpCallback）
+VP_CALLBACK改为VpCallbackFunc，
 所谓的代替就是将大写的类型改为ktypes.h中的小写。
 typedef signed short SHORT 用ktypes.h中的typedef signed short kint16代替；
 typedef unsigned short USHORT 用ktypes.h中的typedef unsigned short kuint16代替；
@@ -75,7 +78,7 @@ ddim_typedef.h(将其移植到ARM/src/)
 dd_pcie_comm.h
 改文件名：ddpciecomm.h
 类型修改：
-VP_CALLBACK_PCIE改为vpCallbackPcieFunc
+VP_CALLBACK_PCIE改为VpCallbackPcieFunc
 
 宏修改：（将D_DD改为C或者类名）
 D_DD_PCIE_INPUT_PARAM_ERROR改为C_PCIE_INPUT_PARAM_ERROR，
@@ -233,6 +236,7 @@ Dd_IPCU_Clr_MB_Dst改为dd_ipcu_clr_mb_dst，
 结构体名字T_DD_IPCU_SEND_INFO改为DdIpcuSendInfo，T_DD_IPCU_MB_DATA改为DdIpcuMbData，
 结构体名字T_DD_IPCU_MNG改为DdIpcuMng，其成员名字规范，将其全部成员放入类结构体中。
 枚举类型名字E_DD_IPCU_MB_MODE改为DdIpcuMbMode，枚举变量前缀E_DD改为类名。
+类型T_DD_IPCU_ACK_FUNC改为DdIpcuAckFunc，
 函数中的局部变量规范
 
 dd_nic.c dd_nic.h

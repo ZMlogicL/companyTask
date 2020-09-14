@@ -10,6 +10,42 @@
 *@version
 *1.0.0 2020年09月开始开发
 */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "milb.h"
+#include "chiptop.h"
+#if 0
+#include "arm.h"
+#include "chiptop.h"
+#include "exstop.h"
+#include "jdsb2r.h"
+#include "jdscnr.h"
+#include "jdsdisp.h"
+#include "jdsela.h"
+#include "jdsfpt.h"
+#include "jdsiip.h"
+#include "jdsimg.h"
+#include "jdsjpgdec.h"
+#include "jdsjpgenc.h"
+#include "jdsltm.h"
+#include "jdsmxic.h"
+#include "jdspro.h"
+#include "jdsr2y.h"
+#include "jdsraw.h"
+#include "jdsshdr.h"
+#include "jdsxch.h"
+#include "jmilaum.h"
+#include "jmilhdmi.h"
+#include "jmlbmh.h"
+#include "jsrlot.h"
+#include "peripheral.h"
+#include "slimbus.h"
+#include "sdramc.h"
+#include "uart_csio.h"
+#include "jdsme.h"
+#endif
 #include "defs.h"
 #include "mrbctest.h"
 
@@ -23,7 +59,6 @@ struct _MrbcTestPrivate
 {
 	 gint preserved;
 };
-
 /**
  * DECLS
  */
@@ -70,25 +105,24 @@ static void run_od(AbsHeaderTest *self)
 /**
  * PUBLIC
  */
-/*************************************************************************/
-void mrbc_test()
+void mrbc_test(MrbcTest* self)
 {
 #if 0	// for PC debug
-#define IO_MRBC	(*IO_MRBC2)
-	volatile struct io_mrbc*		IO_MRBC2		= (void*)0xFFF68000;
+#define ioMrbc	(*ioMrbc2)
+	volatile IoMrbc* ioMrbc2 = (kpointer)0xFFF68000;
 #endif
 	RS_printf("MRBC\n");
 #if 0
-	RS_printf("Reserved       = %p\n", &IO_MRBC.dmy_8000_800F );
-	RS_printf("IO_MRBC.VIHSTA = %p\n", &IO_MRBC.VIHSTA );
-	RS_printf("IO_MRBC.VIHSET = %p\n", &IO_MRBC.VIHSET );
-	RS_printf("IO_MRBC.VIHCLR = %p\n", &IO_MRBC.VIHCLR );
-	RS_printf("Reserved       = %p\n", &IO_MRBC.dmy_801C_8FFF );
+	RS_printf("Reserved       = %p\n", &ioMrbc.dmy8000800f );
+	RS_printf("ioMrbc.vihsta = %p\n", &ioMrbc.vihsta );
+	RS_printf("ioMrbc.vihset = %p\n", &ioMrbc.vihset );
+	RS_printf("ioMrbc.vihclr = %p\n", &ioMrbc.vihclr );
+	RS_printf("Reserved       = %p\n", &ioMrbc.dmy801c8fff );
 	RS_printf(" \n");
 #endif
 }
 
-MrbcTest *mrbc_test_new()
+MrbcTest *mrbc_test_new(void)
 {
 	MrbcTest *self = g_object_new(MRBC_TYPE_TEST, NULL);
 	return self;

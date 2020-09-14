@@ -16,11 +16,18 @@
 #include "string.h"
 #include "ct_dd_spi.h"
 #include "spi.h"
-#include "dd_spi.h"
+// #include "dd_spi.h"
 #include "dd_top.h"
 #include "peripheral.h"
-#include "dd_hdmac1.h"
-#include "dd_tmr32.h"
+// #include "dd_hdmac1.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddspidrivebranch.h"
+#include "../../DeviceDriver/Peripheral/src/ddspi.h"
+#include "../../DeviceDriver/Peripheral/src/ddspicolabo.h"
+#include "../../DeviceDriver/Peripheral/src/ddspidrive.h"
+#include "../../DeviceDriver/Peripheral/src/ddspicalculate.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
 #include "ctddspimain.h"
 #include "ctddspitest.h"
 #include "ctddspitestone.h"
@@ -83,15 +90,15 @@ static void ctDdSpiTimer_cb(void)
 {
 	if( S_GDD_CT_SPI_TIMER_MODE == CtDdSpiJudge_SPI_TIMER_MODE_DMA )
 		IO_HDMAC1.DMAC[CtDdSpiJudge_SPI_DMA_CH_1].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-		Dd_HDMAC1_Int_Handler( CtDdSpiJudge_SPI_DMA_CH_1 );
+		dd_hdmac1_int_handler(dd_hdmac1_get(), CtDdSpiJudge_SPI_DMA_CH_1 );
 
 		if( S_GCT_DD_SPI_TRANS_TYPE == CtDdSpiJudge_SPI_TRNAS_TYPE_FULL ){
 			IO_HDMAC1.DMAC[CtDdSpiJudge_SPI_DMA_CH_2 ].DMACB.bit.SS = D_DD_HDMAC1_SS_NORMAL_END;
-			Dd_HDMAC1_Int_Handler( CtDdSpiJudge_SPI_DMA_CH_2 );
+			dd_hdmac1_int_handler(dd_hdmac1_get(), CtDdSpiJudge_SPI_DMA_CH_2 );
 		}
 	else if( S_GDD_CT_SPI_TIMER_MODE == CtDdSpiJudge_SPI_TIMER_MODE_STOP ){
 		Ddim_Print(("---Stop SPI(%d)---\n", S_GDD_CT_SPI_CH));
-		Dd_SPI_Stop( S_GDD_CT_SPI_CH );
+		dd_spi_drive_stop(dd_spi_drive_get(), S_GDD_CT_SPI_CH);
 	}
 
 	S_GDD_CT_SPI_TIMER_NUM--;
@@ -108,21 +115,21 @@ static void ctDdSpiSetTimer(kuchar spi_ch, kulong msec, kuchar num, kint32 mode)
 	S_GDD_CT_SPI_TIMER_MODE	= mode;
 	S_GDD_CT_SPI_TIMER_NUM = num;
 
-	ret = Dd_TMR32_Open( CtDdSpiJudge_SPI_TIMER_CH, D_DDIM_USER_SEM_WAIT_POL );
+	ret = dd_tmr32_open(dd_tmr32_get(),CtDdSpiJudge_SPI_TIMER_CH, D_DDIM_USER_SEM_WAIT_POL);
 	if (ret != D_DDIM_OK) {
 		Ddim_Print(("timer open error : ret=%d \n", ret));
 		return;
 	}
 
-	ret = Dd_TMR32_SetTimer( CtDdSpiJudge_SPI_TIMER_CH, msec * 1000, ctDdSpiTimer_cb );
+	ret = dd_tmr32_set_timer(dd_tmr32_get(),CtDdSpiJudge_SPI_TIMER_CH, msec * 1000, ctDdSpiTimer_cb);
 	if(ret != D_DDIM_OK) {
-		Dd_TMR32_Stop(CtDdSpiJudge_SPI_TIMER_CH);
-		Dd_TMR32_Close(CtDdSpiJudge_SPI_TIMER_CH);
+		dd_tmr32_stop(dd_tmr32_get(),CtDdSpiJudge_SPI_TIMER_CH);
+		dd_tmr32_close(dd_tmr32_get(),CtDdSpiJudge_SPI_TIMER_CH);
 		Ddim_Print(("timer set error : ret=%d \n", ret));
 		return;
 	}
 
-	ret = Dd_TMR32_Start(CtDdSpiJudge_SPI_TIMER_CH);
+	ret = dd_tmr32_start(dd_tmr32_get(),CtDdSpiJudge_SPI_TIMER_CH);
 	if(ret != D_DDIM_OK) {
 		Ddim_Print(("timer start error : ret=%d \n", ret));
 		return;
@@ -238,7 +245,7 @@ static void ctDdSpiPcTestCtrl1(CtDdSpiJudge *self)
 	//                                                                    +---dma_to:0-16777215
 	//                                                                    | +---ssout:0-3
 	//                                                      +-dly:0-255   | | +---sspol:0-1
-	//                                  +-mode:0-3          | +-Inhi:0-1  | | | +---cont_trans:0-2
+	//                                  +-mode:0-3          | +-Inhi:0-1  | | | +---contTrans:0-2
 	//                                  | +-sig:0-3         | | +-txwmk   | | | | +---cb
 	//                                  | |     +-bit:4-16  | | |  +-rxwmk| | | | | +---cb_ss
 	//                                  | |     |           | | |  |      | | | | | |
@@ -263,7 +270,7 @@ static void ctDdSpiPcTestCtrl2(CtDdSpiJudge *self)
 	//                                                                    +---dma_to:0-16777215
 	//                                                                    |        +---ssout:0-3
 	//                                                      +-dly:0-255   |        | +---sspol:0-1
-	//                                  +-mode:0-3          | +-Inhi:0-1  |        | | +---cont_trans:0-2
+	//                                  +-mode:0-3          | +-Inhi:0-1  |        | | +---contTrans:0-2
 	//                                  | +-sig:0-3         | | +-txwmk   |        | | | +---cb
 	//                                  | |     +-bit:4-16  | | |  +-rxwmk|        | | | | +---cb_ss
 	//                                  | |     |           | | |  |      |        | | | | |
@@ -346,9 +353,9 @@ void ct_dd_spi_judge_main(CtDdSpiJudge *self, CtDdSpiTest * test,kint argc, kcha
 		self->enableSig = atoi( argv[3] );
 		self->enable = atoi( argv[4] );
 
-		self->ret = Dd_SPI_Set_SPI_Enable( self->ch, self->enableSig, self->enable );
+		self->ret = dd_spi_drive_set_spi_enable(dd_spi_drive_get(), self->ch, self->enableSig, self->enable );
 
-		Ddim_Print(("Dd_SPI_Set_SPI_Enable End. ret=0x%08X, EN.word=0x%02lX\n", self->ret, IO_SPI[self->ch].EN.word));
+		Ddim_Print(("dd_spi_drive_set_spi_enable End. ret=0x%08X, EN.word=0x%02lX\n", self->ret, IO_SPI[self->ch].EN.word));
 	}
 	else if (strcmp(argv[1], "test") == 0){
 		switch (atoi(argv[2])) {
@@ -747,125 +754,125 @@ void ct_dd_spi_judge_main(CtDdSpiJudge *self, CtDdSpiTest * test,kint argc, kcha
 		kuchar *recvbuf8 = ct_dd_spi_return_recvbuf8();
 		kuchar  *sendbuf8 = ct_dd_spi_return_sendbuf8();
 
-		self->ret = Dd_SPI_Open( CtDdSpiJudge_SPI_CH_MAX, self->tmout );
+		self->ret = dd_spi_drive_open(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, self->tmout);
 
-		Ddim_Print(("Dd_SPI_Open(): CH number max error. ret=%X\n", self->ret ));
+		Ddim_Print(("dd_spi_drive_open(): CH number max error. ret=%X\n", self->ret));
 
-		self->ret = Dd_SPI_Open( 0, -2 );
-		Ddim_Print(("Dd_SPI_Open(): tmout value error. ret=%X\n", self->ret ));
-
-
-		self->ret = Dd_SPI_Close( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Close(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_open(dd_spi_drive_get(), 0, -2);
+		Ddim_Print(("dd_spi_drive_open(): tmout value error. ret=%X\n", self->ret));
 
 
-		self->ret = Dd_SPI_Ctrl( CtDdSpiJudge_SPI_CH_MAX, &(self->spiCtrl) );
-		Ddim_Print(("Dd_SPI_Ctrl(): CH number max error. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Ctrl( 0, NULL );
-		Ddim_Print(("Dd_SPI_Ctrl(): spiCtrl is NULL. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_close(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX);
+		Ddim_Print(("dd_spi_drive_close(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Get_Ctrl( CtDdSpiJudge_SPI_CH_MAX, &(self->spiCtrl) );
-		Ddim_Print(("Dd_SPI_Get_Ctrl(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_ctrl(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, &(self->spiCtrl));
+		Ddim_Print(("dd_spi_drive_ctrl(): CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Get_Ctrl( 0, NULL );
-		Ddim_Print(("Dd_SPI_Get_Ctrl(): spiCtrl is NULL. ret=%X\n", self->ret ));
-
-
-		self->ret = Dd_SPI_Set_Send_Data( CtDdSpiJudge_SPI_CH_MAX, sendbuf8, 1 );
-		Ddim_Print(("Dd_SPI_Set_Send_Data(): CH number max error. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Set_Send_Data( 0, NULL, 1 );
-		Ddim_Print(("Dd_SPI_Set_Send_Data(): send_addr is NULL. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Set_Send_Data( 0, sendbuf8, 0 );
-		Ddim_Print(("Dd_SPI_Set_Send_Data(): num is 0. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_ctrl(dd_spi_drive_get(), 0, NULL);
+		Ddim_Print(("dd_spi_drive_ctrl(): spiCtrl is NULL. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Start_Send( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Start_Send(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_get_ctrl(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, &(self->spiCtrl));
+		Ddim_Print(("dd_spi_drive_get_ctrl(): CH number max error. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_drive_get_ctrl(dd_spi_drive_get(), 0, NULL);
+		Ddim_Print(("dd_spi_drive_get_ctrl(): spiCtrl is NULL. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Set_Recv_Data( CtDdSpiJudge_SPI_CH_MAX, recvbuf8, 1 );
-		Ddim_Print(("Dd_SPI_Set_Recv_Data(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_set_send_data(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, sendbuf8, 1);
+		Ddim_Print(("dd_spi_drive_set_send_data(): CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Set_Recv_Data( 0, NULL, 1 );
-		Ddim_Print(("Dd_SPI_Set_Recv_Data(): recv_addr is NULL. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_set_send_data(dd_spi_drive_get(), 0, NULL, 1);
+		Ddim_Print(("dd_spi_drive_set_send_data(): send_addr is NULL. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Set_Recv_Data( 0, recvbuf8, 0 );
-		Ddim_Print(("Dd_SPI_Set_Recv_Data(): num is 0. ret=%X\n", self->ret ));
-
-
-		self->ret = Dd_SPI_Start_Recv( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Start_Recv(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_set_send_data(dd_spi_drive_get(), 0, sendbuf8, 0);
+		Ddim_Print(("dd_spi_drive_set_send_data(): num is 0. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Start_Full_Duplex( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Start_Full_Duplex(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_start_send(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX);
+		Ddim_Print(("dd_spi_drive_start_send(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Stop( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Stop(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_set_recv_data(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, recvbuf8, 1);
+		Ddim_Print(("dd_spi_drive_set_recv_data(): CH number max error. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_drive_set_recv_data( 0, NULL, 1 );
+		Ddim_Print(("dd_spi_drive_set_recv_data(): recv_addr is NULL. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_drive_set_recv_data(dd_spi_drive_get(), 0, recvbuf8, 0);
+		Ddim_Print(("dd_spi_drive_set_recv_data(): num is 0. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Set_Slave_Select( CtDdSpiJudge_SPI_CH_MAX, &(self->ssInfo) );
-		Ddim_Print(("Dd_SPI_Set_Slave_Select(): CH number max error. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Set_Slave_Select( 0, NULL );
-		Ddim_Print(("Dd_SPI_Set_Slave_Select(): ssInfo is NULL. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_start_recv(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX);
+		Ddim_Print(("dd_spi_drive_start_recv(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Get_Slave_Select( CtDdSpiJudge_SPI_CH_MAX, &(self->ssInfo) );
-		Ddim_Print(("Dd_SPI_Get_Slave_Select(): CH number max error. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Get_Slave_Select( 0, NULL );
-		Ddim_Print(("Dd_SPI_Get_Slave_Select(): ssInfo is NULL. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_start_full_duplex(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX );
+		Ddim_Print(("dd_spi_drive_start_full_duplex(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Set_Clock_Divisor( CtDdSpiJudge_SPI_CH_MAX, self->clkDiv );
-		Ddim_Print(("Dd_SPI_Set_Clock_Divisor(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_stop(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX);
+		Ddim_Print(("dd_spi_drive_stop(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Get_Clock_Divisor( CtDdSpiJudge_SPI_CH_MAX, &(self->clkDiv) );
-		Ddim_Print(("Dd_SPI_Get_Clock_Divisor(): CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_set_slave_select(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, &(self->ssInfo) );
+		Ddim_Print(("dd_spi_drive_set_slave_select(): CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Get_Clock_Divisor( 0, NULL );
-		Ddim_Print(("Dd_SPI_Get_Clock_Divisor(): clkDiv is NULL. ret=%X\n", self->ret ));
-
-
-		self->ret = Dd_SPI_Set_SPI_Enable( CtDdSpiJudge_SPI_CH_MAX, E_DD_SPI_ENABLE_SIG_CPU, TRUE );
-		Ddim_Print(("Dd_SPI_Set_SPI_Enable(): CH number max error. ret=%X\n", self->ret ));
-
-		Dd_SPI_Int_Handler( CtDdSpiJudge_SPI_CH_MAX );
-		Ddim_Print(("Dd_SPI_Int_Handler(): CH number error.\n"));
+		self->ret = dd_spi_drive_set_slave_select(dd_spi_drive_get(), 0, NULL );
+		Ddim_Print(("dd_spi_drive_set_slave_select(): ssInfo is NULL. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Calculate( 1, NULL );
-		Ddim_Print(("Dd_SPI_Calculate(): clkDiv is NULL. ret=%X\n", self->ret ));
+		self->ret = dd_spi_drive_get_slave_select(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, &(self->ssInfo) );
+		Ddim_Print(("dd_spi_drive_get_slave_select(): CH number max error. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_drive_get_slave_select(dd_spi_drive_get(), 0, NULL );
+		Ddim_Print(("dd_spi_drive_get_slave_select(): ssInfo is NULL. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Start_Send_DMA( CtDdSpiJudge_SPI_CH_MAX, 5 );
-		Ddim_Print(("Dd_SPI_Start_Send_DMA(): SPI CH number max error. ret=%X\n", self->ret ));
-
-		self->ret = Dd_SPI_Start_Send_DMA( 0, D_DD_HDMAC1_CH_NUM_MAX );
-		Ddim_Print(("Dd_SPI_Start_Send_DMA(): DMA CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_calculate_set_clock_divisor(dd_spi_calculate_get(), CtDdSpiJudge_SPI_CH_MAX, self->clkDiv );
+		Ddim_Print(("dd_spi_calculate_set_clock_divisor(): CH number max error. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Start_Recv_DMA( CtDdSpiJudge_SPI_CH_MAX, 5 );
-		Ddim_Print(("Dd_SPI_Start_Recv_DMA(): SPI CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_calculate_get_clock_divisor(dd_spi_calculate_get(), CtDdSpiJudge_SPI_CH_MAX, &(self->clkDiv) );
+		Ddim_Print(("dd_spi_calculate_get_clock_divisor(): CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Start_Recv_DMA( 0, D_DD_HDMAC1_CH_NUM_MAX  );
-		Ddim_Print(("Dd_SPI_Start_Recv_DMA(): DMA CH number max error. ret=%X\n", self->ret ));
+		self->ret = dd_spi_calculate_get_clock_divisor(dd_spi_calculate_get(), 0, NULL );
+		Ddim_Print(("dd_spi_calculate_get_clock_divisor(): clkDiv is NULL. ret=%X\n", self->ret ));
 
 
-		self->ret = Dd_SPI_Start_Full_Duplex_DMA( CtDdSpiJudge_SPI_CH_MAX, 0, 1 );
+		self->ret = dd_spi_drive_set_spi_enable(dd_spi_drive_get(), CtDdSpiJudge_SPI_CH_MAX, DdSpiDriveBranch_E_DD_SPI_ENABLE_SIG_CPU, TRUE );
+		Ddim_Print(("dd_spi_drive_set_spi_enable(dd_spi_drive_get(),): CH number max error. ret=%X\n", self->ret ));
+
+		dd_spi_int_handler(CtDdSpiJudge_SPI_CH_MAX);
+		Ddim_Print(("dd_spi_int_handler(): CH number error.\n"));
+
+
+		self->ret = dd_spi_calculate_clock_divisor(dd_spi_calculate_get(), 1, NULL);
+		Ddim_Print(("dd_spi_calculate_clock_divisor(): clkDiv is NULL. ret=%X\n", self->ret ));
+
+
+		self->ret = dd_spi_colabo_start_send_dma(dd_spi_colabo_get(), CtDdSpiJudge_SPI_CH_MAX, 5 );
+		Ddim_Print(("dd_spi_colabo_start_send_dma(): SPI CH number max error. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_colabo_start_send_dma(dd_spi_colabo_get(), 0, D_DD_HDMAC1_CH_NUM_MAX );
+		Ddim_Print(("dd_spi_colabo_start_send_dma(): DMA CH number max error. ret=%X\n", self->ret ));
+
+
+		self->ret = dd_spi_colabo_start_recv_dma(dd_spi_colabo_get(), CtDdSpiJudge_SPI_CH_MAX, 5 );
+		Ddim_Print(("dd_spi_colabo_start_recv_dma(): SPI CH number max error. ret=%X\n", self->ret ));
+
+		self->ret = dd_spi_colabo_start_recv_dma(dd_spi_colabo_get(), 0, D_DD_HDMAC1_CH_NUM_MAX  );
+		Ddim_Print(("dd_spi_colabo_start_recv_dma(): DMA CH number max error. ret=%X\n", self->ret ));
+
+
+		self->ret = dd_spi_colabo_start_full_duplex_dma(dd_spi_colabo_get(), CtDdSpiJudge_SPI_CH_MAX, 0, 1 );
 		Ddim_Print(("Dd_SPI_Start_Full_DMA(): SPI CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Start_Full_Duplex_DMA( 0, D_DD_HDMAC1_CH_NUM_MAX, 7 );
+		self->ret = dd_spi_colabo_start_full_duplex_dma(dd_spi_colabo_get(), 0, D_DD_HDMAC1_CH_NUM_MAX, 7 );
 		Ddim_Print(("Dd_SPI_Start_Full_DMA(): DMA CH number max error. ret=%X\n", self->ret ));
 
-		self->ret = Dd_SPI_Start_Full_Duplex_DMA( 0, 7, D_DD_HDMAC1_CH_NUM_MAX );
+		self->ret = dd_spi_colabo_start_full_duplex_dma(dd_spi_colabo_get(), 0, 7, D_DD_HDMAC1_CH_NUM_MAX );
 		Ddim_Print(("Dd_SPI_Start_Full_DMA(): DMA CH number max error. ret=%X\n", self->ret ));
 	}else{
 		Ddim_Print(("please check 1st parameter!!\n"));

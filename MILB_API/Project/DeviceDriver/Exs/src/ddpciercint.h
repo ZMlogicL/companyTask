@@ -36,38 +36,38 @@ typedef struct _DdPcieRcIntTrsIcsMsiCb DdPcieRcIntTrsIcsMsiCb;
 /** PCIe interrupt EP callback */
 struct _DdPcieRcIntEpCb
 {
-	vpCallbackPcieFunc radmIntxCb; /**< Callback of radm_inta/b/c/d port interrupt			*/
-	vpCallbackPcieFunc radmPmPmeCb; /**< Callback of radm_pm_pme port interrupt				*/
-	vpCallbackPcieFunc radmCorrectableErrCb; /**< Callback of radm_correctable_err port interrupt	*/
-	vpCallbackPcieFunc radmNonfatalErrCb; /**< Callback of radm_nonfatal_err port interrupt		*/
-	vpCallbackPcieFunc radmFatalErrCb; /**< Callback of radm_fatal_err port interrupt			*/
-	vpCallbackPcieFunc radmMsgLtrCb; /**< Callback of radm_msg_ltr port interrupt			*/
-	vpCallbackPcieFunc radmPmToAckCb; /**< Callback of radm_pm_to_ack port interrupt			*/
-	vpCallbackPcieFunc radmVendorMsgCb; /**< Callback of radm_vendor_msg port interrupt			*/
+	VpCallbackPcieFunc radmIntxCb; /**< Callback of radm_inta/b/c/d port interrupt			*/
+	VpCallbackPcieFunc radmPmPmeCb; /**< Callback of radm_pm_pme port interrupt				*/
+	VpCallbackPcieFunc radmCorrectableErrCb; /**< Callback of radm_correctable_err port interrupt	*/
+	VpCallbackPcieFunc radmNonfatalErrCb; /**< Callback of radm_nonfatal_err port interrupt		*/
+	VpCallbackPcieFunc radmFatalErrCb; /**< Callback of radm_fatal_err port interrupt			*/
+	VpCallbackPcieFunc radmMsgLtrCb; /**< Callback of radm_msg_ltr port interrupt			*/
+	VpCallbackPcieFunc radmPmToAckCb; /**< Callback of radm_pm_to_ack port interrupt			*/
+	VpCallbackPcieFunc radmVendorMsgCb; /**< Callback of radm_vendor_msg port interrupt			*/
 };
 
 /** PCIe interrupt system error callback. */
 struct _DdPcieRcIntSysErrCb
 {
-	vpCallbackPcieFunc cfgAerRcErrCb; /**< Callback of cfg_aer_rc_err_int/msi port interrupt	*/
-	vpCallbackPcieFunc cfgSysErrRcCb; /**< Callback of cfg_sys_err_rc port interrupt			*/
+	VpCallbackPcieFunc cfgAerRcErrCb; /**< Callback of cfg_aer_rc_err_int/msi port interrupt	*/
+	VpCallbackPcieFunc cfgSysErrRcCb; /**< Callback of cfg_sys_err_rc port interrupt			*/
 };
 
 /** PCIe interrupt own callback. */
 struct _DdPciRcIntOwnCb
 {
-	vpCallbackPcieFunc cfgPmeCb; /**< Callback of cfg_pme_int/msi port interrupt		*/
-	vpCallbackPcieFunc hpCb; /**< Callback of hp_pme/int/msi port interrupt		*/
-	vpCallbackPcieFunc rdlhLinkUpCb; /**< Callback of rdlh_link_up port interrupt		*/
-	vpCallbackPcieFunc wakeCb; /**< Callback of wake port interrupt				*/
+	VpCallbackPcieFunc cfgPmeCb; /**< Callback of cfg_pme_int/msi port interrupt		*/
+	VpCallbackPcieFunc hpCb; /**< Callback of hp_pme/int/msi port interrupt		*/
+	VpCallbackPcieFunc rdlhLinkUpCb; /**< Callback of rdlh_link_up port interrupt		*/
+	VpCallbackPcieFunc wakeCb; /**< Callback of wake port interrupt				*/
 };
 
 /** PCIe interrupt trs_ics_msi callback */
 struct _DdPcieRcIntTrsIcsMsiCb
 {
-	vpCallbackPcieFunc cfgLinkAutoBwIntCb; /**< Callback of cfg_link_auto_bw_int port interrupt	*/
-	vpCallbackPcieFunc cfgBwMgtIntCb; /**< Callback of cfg_bw_mgt_int port interrupt			*/
-	vpCallbackPcieFunc smlhReqRstNotCb; /**< Callback of smlh_req_rst_not port interrupt		*/
+	VpCallbackPcieFunc cfgLinkAutoBwIntCb; /**< Callback of cfg_link_auto_bw_int port interrupt	*/
+	VpCallbackPcieFunc cfgBwMgtIntCb; /**< Callback of cfg_bw_mgt_int port interrupt			*/
+	VpCallbackPcieFunc smlhReqRstNotCb; /**< Callback of smlh_req_rst_not port interrupt		*/
 };
 
 
@@ -81,7 +81,7 @@ struct _DdPcieRcInt
 	DdPcieCh ch; /**< PCIe channel			*/
 	kuint32 intEn; /**< Interrupt enable		*/
 	kuint32 cmpAdr; /**< compare address	*/
-	vpCallbackPcieFunc intMsiCb; /**< MSI callback	*/
+	VpCallbackPcieFunc intMsiCb; /**< MSI callback	*/
 };
 
 

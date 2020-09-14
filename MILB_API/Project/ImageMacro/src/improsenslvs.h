@@ -39,18 +39,18 @@
 
 
 /**< All wait flags of INTST	*/
-#define	ImproSenslvs_D_IM_PRO_SLVS_INTST_ALL_WAITEND_FLG				(D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG  | \
-														 D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG	)
+#define	ImproSenslvs_D_IM_PRO_SLVS_INTST_ALL_WAITEND_FLG				(ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG  | \
+														 ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG	)
 
 /*其他结构体或类型定义区域*/
 
@@ -423,29 +423,29 @@ ImproSenslvs*		impro_senslvs_new();
 Software reset of SLVS-EC RX macro(excluding PMA, termination resistor adjustment circuit and CNT block).
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senslvs_sr( E_IM_PRO_SLVS_STREAM_TYPE streamType );
+extern	INT32			impro_senslvs_sr( EimproSlvsStreamType streamType );
 /**
 Update of the SLVS-EC configuration parameters.
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senslvs_update_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType );
+extern	INT32			impro_senslvs_update_cfg( EimproSlvsStreamType streamType );
 /**
 Software reset release of SLVS-EC.
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senslvs_sr_rlease( E_IM_PRO_SLVS_STREAM_TYPE streamType );
+extern	INT32			impro_senslvs_sr_rlease( EimproSlvsStreamType streamType );
 /**
 Physical Media Attachment initialization.
 @param[in]	pmaInit : PMA initialization parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 extern	INT32			impro_senslvs_pma_init( TimproSlvsPmaInit* pmaInit );
 /**
@@ -453,7 +453,7 @@ Physical Media Attachment Power Down control.
 @param[in]	pmaPd : PMA Power Down control parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 extern	INT32			impro_senslvs_pma_power_down( TimproSlvsPmaPd* pmaPd );
 /**
@@ -461,7 +461,7 @@ Physical Media Attachment PLL Power Down control.
 @param[in]	pdState : PMA PLL Power Down control parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 extern	INT32			impro_senslvs_pma_pll_power_down( EimproSlvsPdState pdState );
 /**
@@ -469,7 +469,7 @@ SLVS-EC Common Configuration.
 @param[in]	commonCfg : Common configuration parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 extern	INT32			impro_senslvs_common_cfg( TimproSlvsCommonCfg* commonCfg );
 /**
@@ -478,81 +478,81 @@ SLVS-EC Configuration.
 @param[in]	slvsCtrl : configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_ctrl( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsCtrl* slvsCtrl );
+extern	INT32			impro_senslvs_ctrl( EimproSlvsStreamType streamType, TimproSlvsCtrl* slvsCtrl );
 /**
 SLVS-EC Mode Configuration.
 @param[in]	streamType : stream type of SLVS
 @param[in]	modeCtrl : mode configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_mode_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsModeCfg* modeCtrl );
+extern	INT32			impro_senslvs_mode_cfg( EimproSlvsStreamType streamType, TimproSlvsModeCfg* modeCtrl );
 /**
 SLVS-EC Trimming Configuration.
 @param[in]	streamType : stream type of SLVS
 @param[in]	trimCtrl : trimming configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_trim_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsTrimCfg* trimCtrl );
+extern	INT32			impro_senslvs_trim_cfg( EimproSlvsStreamType streamType, TimproSlvsTrimCfg* trimCtrl );
 /**
 Get SLVS-EC status.
 @param[in]	streamType : stream type of SLVS
 @param[out]	status : status parameter pointer.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_get_status( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsStatus* status );
+extern	INT32			impro_senslvs_get_status( EimproSlvsStreamType streamType, TimproSlvsStatus* status );
 /**
 SLVS-EC macro start.
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_status( E_IM_PRO_SLVS_STREAM_TYPE streamType );
+extern	INT32			impro_senslvs_status( EimproSlvsStreamType streamType );
 /**
 Stop SLVS-EC information
 @param[in]	streamType : stream type of SLVS
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-extern	INT32			impro_senslvs_stop( E_IM_PRO_SLVS_STREAM_TYPE streamType, UCHAR force );
+extern	INT32			impro_senslvs_stop( EimproSlvsStreamType streamType, UCHAR force );
 /**
 wait end of SLVS-EC macro.
 @param[in]		waiptn   : waiting end cause. (bit field)
-						<ul><li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG</ul>
+						<ul><li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG</ul>
 @param[in]		tmout    : timeout.
 @param[out]		p_flgptn : end cause. (bit field)
-						<ul><li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG
-							<li>@ref D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG</ul>
+						<ul><li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FSO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_FEO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_RDY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_A_INTST_STBY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FSO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEI_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_FEO_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_RDY_WAITEND_FLG
+							<li>@ref ImproBase_D_IM_PRO_SLVS_STREAM_B_INTST_STBY_WAITEND_FLG</ul>
 @retval			D_DDIM_OK                  : SLVS-EC normal end. and set end cause to p_flgptn.
-@retval			D_IM_PRO_INPUT_PARAM_ERROR : parameter error.
+@retval			ImproBase_D_IM_PRO_INPUT_PARAM_ERROR : parameter error.
 @retval			ImproSenslvs_D_IM_PRO_TIMEOUT     : wait timeout.
 @remarks		This API uses DDIM_User_Clr_Flg().
 @remarks		This API uses DDIM_User_Twai_Flg().

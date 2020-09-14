@@ -55,7 +55,7 @@ This function set the slot priority level control.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting ranges are from 1 to 64.
 */
-INT32	mxic_slot_set_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
+kint32	mxic_slot_set_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
 			MxicSlotLevelCtrl levelNumber, const MxicSlotPriorityLevel* const priority );
 /**
 This function get the slot priority level control.<br>
@@ -74,7 +74,7 @@ This function get the slot priority level control.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 	mxic_slot_get_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
+kint32 	mxic_slot_get_slot_priority( MxicSlot *self, SlotArgs priArgs, ImMxicPort port, 
 			MxicSlotLevelCtrl levelNumber, MxicSlotPriorityLevel* const priority );
 /**
 This function set the slot priority level control to all arbiter.<br>
@@ -85,7 +85,7 @@ This function set the slot priority level control to all arbiter.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting  ranges are from 1 to 64.
 */
-INT32	mxic_slot_set_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
+kint32	mxic_slot_set_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
 			const MxicAllSlotPriority* const allPriority );
 
 /**
@@ -96,7 +96,7 @@ This function get the slot priority level control from all arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_slot_get_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
+kint32	mxic_slot_get_slot_priority_all_arbiter( MxicSlot *self, ImMxicUnit unit, 
 			MxicAllSlotPriority* const allPriority );
 
 /**
@@ -117,8 +117,8 @@ This function set the slot mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_slot_set_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
-								ImMxicSlot slot, UCHAR maskEnable );
+kint32	mxic_slot_set_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
+								ImMxicSlot slot, kuchar maskEnable );
 
 /**
 This function get the slot mask.<br>
@@ -138,7 +138,7 @@ This function get the slot mask.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_slot_get_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
-								ImMxicSlot slot, UCHAR* const maskEnable );
+kint32	mxic_slot_get_slot_mask( MxicSlot *self, SlotArgs maskArgs, ImMxicPort port, 
+								ImMxicSlot slot, kuchar* const maskEnable );
 
 #endif	// __MXIC_SLOT_H__

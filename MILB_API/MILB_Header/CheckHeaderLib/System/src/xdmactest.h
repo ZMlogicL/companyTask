@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 #include <glib-object.h>
-#include "internals.h"
+#include "checkheadermaindefs.h"
 #include "absheadertest.h"
 
 

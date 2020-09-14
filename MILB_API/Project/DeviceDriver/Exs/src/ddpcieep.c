@@ -13,7 +13,6 @@
 *1.0.0 2020年06月开始开发
 */
 
-
 #include "ddimusercustom.h"
 #include "chiptop.h"
 #include "ddtoptwo.h"
@@ -189,7 +188,7 @@ kint32 dd_pcie_ep_init(DdPcieEp *self)
 	kuchar					direction;
 	kuchar					perst=0;
 	kuint32					waitCounter;
-	DDIM_USER_ER		ercd;
+	DdimUserCustom_ER		ercd;
 
 	DdTopthree_SET_PERSEL3_PRT0SCK3(1);	    	 // bit23 FPSCK4		System reset input when used as Endpoint.
 	DdTopthree_SET_PERSEL3_PXW0WP12(1);		// bit12 WPPG12_1	Wakeup request signal from EP to RC.
@@ -300,7 +299,7 @@ void dd_pcie_ep_deinit(DdPcieEp *self)
 kint32 dd_pcie_ep_open(DdPcieEp *self, kint32 tmout)
 {
 	DdPcieEpPrivate *priv = DD_PCIE_EP_GET_PRIVATE(self);
-	DDIM_USER_ER	ercd;
+	DdimUserCustom_ER	ercd;
 
 #ifdef DriverCommon_CO_PARAM_CHECK
 	if (tmout < D_DDIM_USER_SEM_WAIT_FEVR) {
@@ -313,7 +312,7 @@ kint32 dd_pcie_ep_open(DdPcieEp *self, kint32 tmout)
 		ercd = ddim_user_custom_pol_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_PDM);
 	}
 	else{
-		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_PDM, (DDIM_USER_TMO)tmout);
+		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_PDM, (DdimUserCustom_TMO)tmout);
 	}
 
 	switch (ercd){
@@ -332,8 +331,8 @@ kint32 dd_pcie_ep_open(DdPcieEp *self, kint32 tmout)
  */
 kint32 dd_pcie_ep_close(DdPcieEp *self)
 {
-	DDIM_USER_ER	ercd;
-
+	DdPcieEpPrivate *priv = DD_PCIE_EP_GET_PRIVATE(self);
+	DdimUserCustom_ER	ercd;
 	ercd = ddim_user_custom_sig_sem(priv->ddimUserCustom, DdimUserCustom_SID_DD_PDM);	// Exclusive release
 	if(DdimUserCustom_E_OK != ercd){
 		return C_PCIE_SEM_NG;
@@ -585,7 +584,7 @@ kuint32 dd_pcie_ep_transfer_msi(DdPcieEp *self, EDdPcieEpMsiNum msiNum)
 void dd_pcie_ep_ch0_int_ep_handler(DdPcieEp *self)
 {
 	DdPcieEpPrivate *priv = DD_PCIE_EP_GET_PRIVATE(self);
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DD_PCIE_DEBUG_PRINT(("[DD_PCIE_EP] CH0 INT_EP Occurred.\n"));
 	DD_PCIE_DEBUG_PRINT(("[DD_PCIE_EP] INT_CONTROL_3_Status \t0x%08X\t0x%08X\n", \
@@ -618,7 +617,7 @@ void dd_pcie_ep_ch0_int_ep_handler(DdPcieEp *self)
 void dd_pcie_ep_ch0_int_own_handler(DdPcieEp *self)
 {
 	DdPcieEpPrivate *priv = DD_PCIE_EP_GET_PRIVATE(self);
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DD_PCIE_DEBUG_PRINT(("[DD_PCIE_EP] CH0 INT_OWN Occurred.\n"));
 	DD_PCIE_DEBUG_PRINT(("[DD_PCIE_EP] INT_CONTROL_2_Status \t0x%08X\t0x%08X\n",\
@@ -672,7 +671,7 @@ void dd_pcie_ep_ch0_int_dma_handler(DdPcieEp *self)
 {
 	DdPcieEpPrivate *priv = DD_PCIE_EP_GET_PRIVATE(self);
 	kuint32 					status;
-	vpCallbackPcieFunc 			callback;
+	VpCallbackPcieFunc 			callback;
 
 	DD_PCIE_DEBUG_PRINT(("[DD_PCIE_EP] CH0 INT_DMA Occurred.\n"));
 

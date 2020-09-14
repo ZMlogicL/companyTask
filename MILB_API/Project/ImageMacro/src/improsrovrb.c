@@ -27,12 +27,12 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImproSrovrb, impro_srovrb);
 
 /*宏定义区域*/
 /* VRB				*/
-#define	ImproSrovrb_D_IM_SRO1_STATUS_VRB		((0x00000000UL)&(1<<14))
+#define	ImproSrovrb_D_IM_SRO1_STATUS_VRB				((0x00000000UL)&(1<<14))
 /* VRB				*/
-#define	ImproSrovrb_D_IM_SRO2_STATUS_VRB		((0x10000000UL)&(1<<14))
+#define	ImproSrovrb_D_IM_SRO2_STATUS_VRB				((0x10000000UL)&(1<<14))
 /* Image Pipe1&2 VRB	*/
-#define	ImproSrovrb_D_IM_SRO_STATUS_VRB_BOTH	( ImproSrovrb_D_IM_SRO1_STATUS_VRB\
-																								| ImproSrovrb_D_IM_SRO2_STATUS_VRB	)
+#define	ImproSrovrb_D_IM_SRO_STATUS_VRB_BOTH		( ImproSrovrb_D_IM_SRO1_STATUS_VRB\
+																									| ImproSrovrb_D_IM_SRO2_STATUS_VRB	)
 
 
 /*内部结构体或类型定义，枚举定义区域(按顺序摆放)*/
@@ -46,7 +46,7 @@ struct _ImproSrovrbPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const UINT32	S_G_IM_PRO_VRB_STATUS_TBL[E_IM_PRO_UNIT_NUM_MAX] = {
+static const UINT32	S_G_IM_PRO_VRB_STATUS_TBL[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	ImproSrovrb_D_IM_SRO1_STATUS_VRB,	ImproSrovrb_D_IM_SRO2_STATUS_VRB,	ImproSrovrb_D_IM_SRO_STATUS_VRB_BOTH,
 };
 
@@ -84,10 +84,10 @@ Start VRB
 VOID impro_srovrb_start( E_IM_PRO_UNIT_NUM unitNo )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.vrb.vrbtrg.bit.vrbtrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(S_G_IM_PRO_VRB_STATUS_TBL[unitNo], 0);
 }
@@ -100,7 +100,7 @@ Stop VRB
 VOID impro_srovrb_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
 		ioPro.imgPipe[unitNo].sro.vrb.vrbtrg.bit.vrbtrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -110,7 +110,7 @@ VOID impro_srovrb_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 		ioPro.imgPipe[unitNo].sro.vrb.vrbtrg.bit.vrbtrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(S_G_IM_PRO_VRB_STATUS_TBL[unitNo], 0);
 }
@@ -120,39 +120,39 @@ VRB control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	vrb_ctrl : VRB control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srovrb_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproVrbCtrl* vrb_ctrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (vrb_ctrl == NULL){
 		Ddim_Assertion(("I:impro_srovrb_ctrl error. vrb_ctrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrovrb_D_IM_PRO_VRB_VRBH_MIN, ImproSrovrb_D_IM_PRO_VRB_VRBH_MAX,
 			vrb_ctrl->inPosX, "impro_srovrb_ctrl : inPosX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrovrb_D_IM_PRO_VRB_VRBV_MIN, ImproSrovrb_D_IM_PRO_VRB_VRBV_MAX,
 			vrb_ctrl->inPosY, "impro_srovrb_ctrl : inPosY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrovrb_D_IM_PRO_VRB_VRBHW_MIN, ImproSrovrb_D_IM_PRO_VRB_VRBHW_MAX,
 			vrb_ctrl->inWidth, "impro_srovrb_ctrl : inWidth" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrovrb_D_IM_PRO_VRB_VRBVW_MIN, ImproSrovrb_D_IM_PRO_VRB_VRBVW_MAX,
 			vrb_ctrl->inLines, "impro_srovrb_ctrl : inLines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrovrb_D_IM_PRO_VRB_VRBSCYC_MIN, ImproSrovrb_D_IM_PRO_VRB_VRBSCYC_MAX,
 			vrb_ctrl->cycle, "impro_srovrb_ctrl : cycle" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.vrb.vrbh.bit.vrbh				= vrb_ctrl->inPosX;
 	ioPro.imgPipe[unitNo].sro.vrb.vrbv.bit.vrbv				= vrb_ctrl->inPosY;
 	ioPro.imgPipe[unitNo].sro.vrb.vrbhw.bit.vrbhw			= vrb_ctrl->inWidth;
@@ -221,7 +221,7 @@ INT32 impro_srovrb_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproVrbCtrl* vrb_ctrl )
 	ioPro.imgPipe[unitNo].sro.vrb.vrb1k.vrb1k15.bit.vrb1k91	= vrb_ctrl->coefficient1[9][1];
 	ioPro.imgPipe[unitNo].sro.vrb.vrb1k.vrb1k15.bit.vrb1k92	= vrb_ctrl->coefficient1[9][2];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -232,21 +232,21 @@ A setup of enable access to the built-in RAM of vrb.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srovrb_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
 	if( ( paenTrg == 0 ) && ( ioPro.imgPipe[unitNo].sro.vrb.vrbtrg.bit.vrbtrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_srovrb_set_paen. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.vrb.vrbpaen.bit.paen = paenTrg;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }

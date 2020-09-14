@@ -3,7 +3,7 @@
 *@date                :2020-09-09
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,24 +18,18 @@
 #define __JDSDISP_HDMI_H__
 
 
-#include <klib.h>
-
-
-#define JDSDISP_TYPE_HDMI				(jdsdisp_hdmi_get_type())
-#define JDSDISP_HDMI(obj)				(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsdispHdmi))
-#define JDSDISP_IS_HDMI(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSDISP_TYPE_HDMI))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoJddispHdmiHdmisr IoJddispHdmiHdmisr;
 typedef struct 				_IoJddispHdmi IoJddispHdmi;
-typedef struct 				_JdsdispHdmi JdsdispHdmi;
-typedef struct 				_JdsdispHdmiPrivate	JdsdispHdmiPrivate;
 
 union _IoJddispHdmiHdmisr{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   sr  :1;
-        kulong       :31;
+        gulong   sr  :1;
+        gulong       :31;
     }bit;
 };
 
@@ -45,17 +39,8 @@ struct _IoJddispHdmi{
 	/* 2890_(E000 - E003h) */
 	IoJddispHdmiHdmisr    hdmisr;
 	/* 2890_(E004 - EFFFh) */
-    kuchar dmyE004Efff[0xF000-0xE004];
+    guchar dmyE004Efff[0xF000-0xE004];
 };
-
-struct  _JdsdispHdmi
-{
-	KObject parent;
-};
-
-
-KConstType				jdsdisp_hdmi_get_type(void);
-JdsdispHdmi*			jdsdisp_hdmi_new(void);
 
 
 #endif/*__JDSDISP_HDMI_H__*/

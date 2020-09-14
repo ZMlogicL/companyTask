@@ -12,18 +12,22 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "ktimestamp.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KTimestamp, k_timestamp);
+
 #define K_TIMESTAMP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KTimestampPrivate, K_TYPE_TIMESTAMP))
+
 
 struct _KTimestampPrivate
 {
 
 };
 
-volatile IoTimestamp ioTimestamp __attribute__((section(".TIMESTAMP")));
 
+volatile IoTimestamp ioTimestamp __attribute__((section(".TIMESTAMP")));
 /**
  *IMPL
  */
@@ -44,4 +48,3 @@ KTimestamp* k_timestamp_new(void)
     KTimestamp* self = k_object_new_with_private(K_TYPE_TIMESTAMP, sizeof(KTimestampPrivate));
     return self;
 }
-

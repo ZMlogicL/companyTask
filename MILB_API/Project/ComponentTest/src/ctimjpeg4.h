@@ -43,13 +43,13 @@ struct _CtImJpeg4Class
 };
 
 
-GType     		  ct_im_jpeg4_get_type(void);
-CtImJpeg4*     ct_im_jpeg4_new();
+GType     		  	ct_im_jpeg4_get_type(void);
+CtImJpeg4*		ct_im_jpeg4_new();
 
 void ct_im_jpeg4_run2(CtImJpeg4 *self,gint32 ctParam1, gint32 ctParam2);
-void ct_im_jpeg4_decode_cb(TImJpegDecMng* pJpgDecMng);
+void ct_im_jpeg4_decode_cb(TimgDecMng* pJpgDecMng);
 void ct_im_jpeg4_decode(CtImJpeg4 *self,CtImJpeg5* decParam);
-TImJpegDecMng *ct_im_jpeg4_get1(CtImJpeg4 *self);
+TimgDecMng *ct_im_jpeg4_get1(CtImJpeg4 *self);
 
 
 G_END_DECLS

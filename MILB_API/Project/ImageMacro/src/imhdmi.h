@@ -15,9 +15,13 @@
 #define __IM_HDMI_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
 #include "imhdmistruct.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -25,9 +29,12 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_HDMI				(im_hdmi_get_type())
-#define IM_HDMI	(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, ImHdmi))
-#define IM_IS_HDMI	(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_HDMI))
+#define IM_TYPE_HDMI			(im_hdmi_get_type ())
+#define IM_HDMI(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_HDMI, ImHdmi))
+#define IM_HDMI_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_HDMI, ImHdmiClass))
+#define IM_IS_HDMI(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_HDMI))
+#define IM_IS_HDMI_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_HDMI))
+#define IM_HDMI_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_HDMI, ImHdmiClass))
 
 /*----------------------------------------------------------------------	*/
 /* Definition																	*/
@@ -136,16 +143,24 @@ extern "C" {
 
 
 /**< Type is defined to Callback function pointer */
-typedef void	(*VP_HDMI_CALLBACK)(kuchar);
+typedef void	(*VP_HDMI_CALLBACK)(guchar);
 
 
-typedef struct _ImHdmi 				ImHdmi;
-typedef struct _ImHdmiPrivate 	ImHdmiPrivate;
+typedef struct _ImHdmi					ImHdmi;
+typedef struct _ImHdmiClass			ImHdmiClass;
+typedef struct _ImHdmiPrivate 		ImHdmiPrivate;
 
 
 struct _ImHdmi
 {
-	KObject parent;
+	GObject parent;
+	DdimUserCustomTest *ddimUserCustomTest;
+	ImHdmiEnum *imHdmiEnum;
+};
+
+struct _ImHdmiClass
+{
+	GObjectClass parentClass;
 };
 
 
@@ -162,26 +177,28 @@ struct _ImHdmi
 /*----------------------------------------------------------------------	*/
 /* Function																		*/
 /*----------------------------------------------------------------------	*/
-KConstType 		    im_hdmi_get_type(void);
-ImHdmi*		        im_hdmi_new(void);
-void 						im_hdmi_pclk_on(void);
-void 						im_hdmi_pclk_off(void);
-kint32 					im_hdmi_configure_pll(ThdmiPllConfig const *const config);
-kint32 					im_hdmi_configure_infoframes(ThdmiInfoFrames const *const config);
-void 						im_hdmi_check_interrupt_fc(void);
-void 						im_hdmi_check_interrupt_as(void);
-void 						im_hdmi_check_interrupt_phy(void);
-void 						im_hdmi_check_interrupt_i2cm(void);
-void 						im_hdmi_check_interrupt_cec(void);
-void 						im_hdmi_check_interrupt_vp(void);
-void 						im_hdmi_check_interrupt_i2cmphy(void);
-kint32 					im_hdmi_phy_read(kuchar address, kushort *data);
-EhdmiIntType 		im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit);
+GType						im_hdmi_get_type(void)	G_GNUC_CONST;
+ImHdmi*				im_hdmi_new(void);
+void 						im_hdmi_pclk_on(ImHdmi *self);
+void 						im_hdmi_pclk_off(ImHdmi *self);
+gint32 					im_hdmi_configure_pll(ImHdmi *self, ThdmiPllConfig const *const config);
+gint32 					im_hdmi_configure_infoframes(ImHdmi *self, ThdmiInfoFrames const *const config);
+void 						im_hdmi_check_interrupt_fc(ImHdmi *self);
+void 						im_hdmi_check_interrupt_as(ImHdmi *self);
+void 						im_hdmi_check_interrupt_phy(ImHdmi *self);
+void 						im_hdmi_check_interrupt_i2cm(ImHdmi *self);
+void 						im_hdmi_check_interrupt_cec(ImHdmi *self);
+void 						im_hdmi_check_interrupt_vp(ImHdmi *self);
+void 						im_hdmi_check_interrupt_i2cmphy(ImHdmi *self);
+gint32 					im_hdmi_phy_read(ImHdmi *self, guchar address, gushort *data);
 
 
 #ifdef __cplusplus
 }
 #endif
+
+G_END_DECLS
+
 
 #endif /* __IM_HDMI_H__ */
 /*@}*/
@@ -198,11 +215,11 @@ EhdmiIntType 		im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit);
 // SAMPLE CODE //
 void im_hdmi_sample_initialize(void)
 {
-	kint32 ret = D_DDIM_OK;
+	gint32 ret = D_DDIM_OK;
 	ThdmiPllConfig	pllConfig;
 	ThdmiI2cmConfig	i2cmConfig;
-	kuchar					read_sinks_e_edid[8];
-	ThdmiCtrl			ctrl;
+	guchar					read_sinks_e_edid[8];
+	ImHdmiStruct			ctrl;
 
 	// PLL Configuration.
 	pllConfig.vpPrCd.desiredPrFactor	= 0;
@@ -212,7 +229,7 @@ void im_hdmi_sample_initialize(void)
 	pllConfig.phyI2cmDatao[0]			= 0x00;
 
 	// Init.
-	ret = im_hdmi_init();
+	ret = im_hdmi_enum_init();
 	if (ret != D_DDIM_OK){
 		// NG.
 		return;
@@ -225,7 +242,7 @@ void im_hdmi_sample_initialize(void)
 	i2cmConfig.i2cmOperation	= ImHdmiEnum_E_IM_HDMI_I2CM_OPERATION_RD;
 
 	// Read Sink’s E-EDID.
-	ret = im_hdmi_read_sinks_e_edid(&i2cmConfig, read_sinks_e_edid);
+	ret = im_hdmi_enum_read_sinks_e_edid(&i2cmConfig, read_sinks_e_edid);
 	if (ret != D_DDIM_OK){
 		// NG.
 		return;
@@ -262,7 +279,7 @@ void im_hdmi_sample_initialize(void)
 	// When DVI mode (ctrl.dviModez=ImHdmi_D_IM_HDMI_DVI_MODEZ_DVI),
 	// Audio config and Infoframes setting is omitted.
 
-	ret = im_hdmi_ctrl(&ctrl);
+	ret = im_hdmi_enum_ctrl(&ctrl);
 	if (ret != D_DDIM_OK){
 		// NG.
 		return;

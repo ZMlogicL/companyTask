@@ -12,19 +12,23 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "knic.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KNic, k_nic);
+
 #define K_NIC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KNicPrivate, K_TYPE_NIC))
+
 
 struct _KNicPrivate
 {
 
 };
 
+
 volatile IoAddrctrl ioNicAddrctrl __attribute__((section(".NIC_ADDRCTRL")));
 volatile IoAsib ioNicAsib[7] __attribute__((section(".NIC_ASIB")));
-
 /**
  *IMPL
  */

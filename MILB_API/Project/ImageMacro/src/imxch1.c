@@ -9,7 +9,7 @@
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
-*1、interrupt setting process api
+*1、
 *2、
 *@version:        1.0.0
 */
@@ -48,7 +48,7 @@ static void im_xch1_destructor(ImXch1 *self)
 PUBLIC
  */
 
-INT32 Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
+INT32 im_xch1_ctrl_common( ImXch1*self,ImXchChSel xch, ImXchCtrlCmn* xch_ctrl_cmn )
 {
 	ImXch* imXch = im_xch_get();
 
@@ -56,12 +56,12 @@ INT32 Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_cmn == NULL ){
 		// xch_ctrl_cmn is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Common: Null check error. xch_ctrl_cmn = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_ctrl_common: Null check error. xch_ctrl_cmn = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
-	if( (xch != E_IM_XCH_CH_SEL_0) && ( (xch_ctrl_cmn->mode == D_IM_XCH_MD_HISTGRAM_DOWN) || (xch_ctrl_cmn->mode == D_IM_XCH_MD_HISTGRAM) ) ){
+	if( (xch != ImXch_XCH_CH_SEL_0) && ( (xch_ctrl_cmn->mode == D_IM_XCH_MD_HISTGRAM_DOWN) || (xch_ctrl_cmn->mode == D_IM_XCH_MD_HISTGRAM) ) ){
 		// A channel does not match Mode error
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Common: channel does not match histogram mode error. Xch = %d\n", xch));
+		Ddim_Assertion(("I:im_xch1_ctrl_common: channel does not match histogram mode error. Xch = %d\n", xch));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -87,7 +87,7 @@ INT32 Im_Xch_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
+INT32 im_xch1_ctrl_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlThin* xch_ctrl_thin )
 {
 	ImXch* imXch = im_xch_get();
 
@@ -95,7 +95,7 @@ INT32 Im_Xch_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_thin == NULL ){
 		// xch_ctrl_thin is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Thin: Null check error. xch_ctrl_thin = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_ctrl_thin: Null check error. xch_ctrl_thin = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -121,20 +121,20 @@ INT32 Im_Xch_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist )
+INT32 im_xch1_ctrl_hist( ImXch1*self,ImXchChSel xch, ImXchCtrlHist* xch_ctrl_hist )
 {
 	ImXch* imXch = im_xch_get();
 
 
 #ifdef CO_PARAM_CHECK
-	if( xch != E_IM_XCH_CH_SEL_0 ){
+	if( xch != ImXch_XCH_CH_SEL_0 ){
 		// Channel number error. ( Only Histogram Mode : X0ch )
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Hist: Channel number error. Xch = %d\n", xch));
+		Ddim_Assertion(("I:im_xch1_ctrl_hist: Channel number error. Xch = %d\n", xch));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 	if( xch_ctrl_hist == NULL ){
 		// xch_ctrl_hist is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Hist: Null check error. xch_ctrl_hist = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_ctrl_hist: Null check error. xch_ctrl_hist = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -162,7 +162,7 @@ INT32 Im_Xch_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_half_thin )
+INT32 im_xch1_ctrl_half_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlHalfThin* xch_ctrl_half_thin )
 {
 	ImXch* imXch = im_xch_get();
 
@@ -170,7 +170,7 @@ INT32 Im_Xch_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_ha
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_half_thin == NULL ){
 		// xch_ctrl_half_thin is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Half_Thin: Null check error. xch_ctrl_half_thin = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_ctrl_half_thin: Null check error. xch_ctrl_half_thin = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -190,7 +190,7 @@ INT32 Im_Xch_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_ha
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
+INT32 im_xch1_ctrl_copy( ImXch1*self,ImXchChSel xch, ImXchCtrlCopy* xch_ctrl_copy )
 {
 	ImXch* imXch = im_xch_get();
 
@@ -198,7 +198,7 @@ INT32 Im_Xch_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_copy == NULL ){
 		// xch_ctrl_copy is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Ctrl_Copy: Null check error. xch_ctrl_copy = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_ctrl_copy: Null check error. xch_ctrl_copy = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -218,7 +218,7 @@ INT32 Im_Xch_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR fill_data )
+INT32 im_xch1_ctrl_fill( ImXch1*self,ImXchChSel xch, UCHAR fill_data )
 {
 	ImXch* imXch = im_xch_get();
 
@@ -233,7 +233,7 @@ INT32 Im_Xch_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR fill_data )
 }
 
 
-UCHAR Im_Xch_Get_Histogram_Max( VOID )
+UCHAR im_xch1_get_histogram_max( ImXch1*self )
 {
 	UCHAR ret;
 
@@ -248,12 +248,12 @@ UCHAR Im_Xch_Get_Histogram_Max( VOID )
 	return ret;
 }
 
-INT32 Im_Xch_Get_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
+INT32 im_xch1_get_ctrl_common( ImXch1*self,ImXchChSel xch, ImXchCtrlCmn* xch_ctrl_cmn )
 {
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_cmn == NULL ){
 		// xch_ctrl_cmn is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Common: Null check error. xch_ctrl_cmn = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_common: Null check error. xch_ctrl_cmn = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -261,7 +261,7 @@ INT32 Im_Xch_Get_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		xch_ctrl_cmn->mode		= IO_XCH.XCHCTL0.XMD.bit.XMD;
 		xch_ctrl_cmn->gHsize	= IO_XCH.XCHCTL0.XGHW.bit.XGHW;
@@ -284,12 +284,12 @@ INT32 Im_Xch_Get_Ctrl_Common( E_IM_XCH_CH_SEL xch, ImXchCtrlCmn* xch_ctrl_cmn )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
+INT32 im_xch1_get_ctrl_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlThin* xch_ctrl_thin )
 {
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_thin == NULL ){
 		// xch_ctrl_thin is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Thin: Null check error. xch_ctrl_thin = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_thin: Null check error. xch_ctrl_thin = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -297,7 +297,7 @@ INT32 Im_Xch_Get_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		xch_ctrl_thin->xdtype	= IO_XCH.XCHCTL0.XDTYPE.bit.XSDTYPE;
 		xch_ctrl_thin->hcyc		= IO_XCH.XCHCTL0.XCYC.bit.XHCYC;
@@ -324,16 +324,16 @@ INT32 Im_Xch_Get_Ctrl_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlThin* xch_ctrl_thin )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist )
+INT32 im_xch1_get_ctrl_hist( ImXch1*self,ImXchChSel xch, ImXchCtrlHist* xch_ctrl_hist )
 {
 #ifdef CO_PARAM_CHECK
-	if( xch != E_IM_XCH_CH_SEL_0 ){
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Hist: Channel number error. Xch = %d\n", xch));
+	if( xch != ImXch_XCH_CH_SEL_0 ){
+		Ddim_Assertion(("I:im_xch1_get_ctrl_hist: Channel number error. Xch = %d\n", xch));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 	if( xch_ctrl_hist == NULL ){
 		// xch_ctrl_hist is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Hist: NULL check error. xch_ctrl_hist=NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_hist: NULL check error. xch_ctrl_hist=NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -356,12 +356,12 @@ INT32 Im_Xch_Get_Ctrl_Hist( E_IM_XCH_CH_SEL xch, ImXchCtrlHist* xch_ctrl_hist )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctrl_half_thin )
+INT32 im_xch1_get_ctrl_half_thin( ImXch1*self,ImXchChSel xch, ImXchCtrlHalfThin* xch_ctrl_half_thin )
 {
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_half_thin == NULL ){
 		// xch_ctrl_half_thin is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Half_Thin: NULL check error. xch_ctrl_half_thin = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_half_thin: NULL check error. xch_ctrl_half_thin = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -369,7 +369,7 @@ INT32 Im_Xch_Get_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctr
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		xch_ctrl_half_thin->vcyc		= IO_XCH.XCHCTL0.XCYC.bit.XVCYC;
 		xch_ctrl_half_thin->ven			= IO_XCH.XCHCTL0.XVEN.bit.XVEN;
@@ -390,12 +390,12 @@ INT32 Im_Xch_Get_Ctrl_Half_Thin( E_IM_XCH_CH_SEL xch, ImXchCtrlHalfThin* xch_ctr
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
+INT32 im_xch1_get_ctrl_copy( ImXch1*self,ImXchChSel xch, ImXchCtrlCopy* xch_ctrl_copy )
 {
 #ifdef CO_PARAM_CHECK
 	if( xch_ctrl_copy == NULL ){
 		// xch_ctrl_copy is Error because of NULL
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Copy. NULL check error. xch_ctrl_copy = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_copy. NULL check error. xch_ctrl_copy = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -403,7 +403,7 @@ INT32 Im_Xch_Get_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		xch_ctrl_copy->vcyc		= IO_XCH.XCHCTL0.XCYC.bit.XVCYC;
 		xch_ctrl_copy->ven		= IO_XCH.XCHCTL0.XVEN.bit.XVEN;
@@ -424,12 +424,12 @@ INT32 Im_Xch_Get_Ctrl_Copy( E_IM_XCH_CH_SEL xch, ImXchCtrlCopy* xch_ctrl_copy )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR* fill_data )
+INT32 im_xch1_get_ctrl_fill( ImXch1*self,ImXchChSel xch, UCHAR* fill_data )
 {
 #ifdef CO_PARAM_CHECK
 	if( fill_data == NULL ) {
 		// Channel number error
-		Ddim_Assertion(("I:Im_Xch_Get_Ctrl_Fill: NULL check error. fill_data = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_ctrl_fill: NULL check error. fill_data = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -437,7 +437,7 @@ INT32 Im_Xch_Get_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR* fill_data )
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		*fill_data = IO_XCH.XCHCTL0.XFDT.bit.XFDT;
 	}
@@ -452,12 +452,12 @@ INT32 Im_Xch_Get_Ctrl_Fill( E_IM_XCH_CH_SEL xch, UCHAR* fill_data )
 	return D_IM_XCH_OK;
 }
 
-INT32 Im_Xch_Get_Xtrg( E_IM_XCH_CH_SEL xch, E_IM_XCH_ST* status )
+INT32 im_xch1_get_xtrg( ImXch1*self,ImXchChSel xch, ImXchSt* status )
 {
 #ifdef CO_PARAM_CHECK
 	if( status == NULL ){
 		// Channel number error
-		Ddim_Assertion(("I:Im_Xch_Get_Xtrg: NULL check error. status = NULL\n"));
+		Ddim_Assertion(("I:im_xch1_get_xtrg: NULL check error. status = NULL\n"));
 		return D_IM_XCH_INPUT_PARAM_ERR;
 	}
 #endif // CO_PARAM_CHECK
@@ -465,22 +465,22 @@ INT32 Im_Xch_Get_Xtrg( E_IM_XCH_CH_SEL xch, E_IM_XCH_ST* status )
 	im_xch_on_pclk(NULL);	// PCLK on
 	Im_XCH_Dsb();
 
-	if( xch == E_IM_XCH_CH_SEL_0 ){
+	if( xch == ImXch_XCH_CH_SEL_0 ){
 		// X0ch
 		if( IO_XCH.XCHCTL0.XTRG.bit.XTRG == D_IM_XCH_RUNNING ){
-			*status = E_IM_XCH_ST_RUNNING;
+			*status = ImXch_XCH_ST_RUNNING;
 		}
 		else{
-			*status = E_IM_XCH_ST_STOPPED;
+			*status = ImXch_XCH_ST_STOPPED;
 		}
 	}
 	else{
 		// X1ch
 		if( IO_XCH.XCHCTL1.XTRG.bit.XTRG == D_IM_XCH_RUNNING ){
-			*status = E_IM_XCH_ST_RUNNING;
+			*status = ImXch_XCH_ST_RUNNING;
 		}
 		else{
-			*status = E_IM_XCH_ST_STOPPED;
+			*status = ImXch_XCH_ST_STOPPED;
 		}
 	}
 

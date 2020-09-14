@@ -97,17 +97,17 @@ static VOID imCnrConvertRdmaCsprLowCcYTable( const ImCnrTable* csprLowCcY,
 	rdmaLowCcYTable->LCCSCLOF.LCCSCLOF2.bit.LCCSCLOF_4	= csprLowCcY->of4;
 	rdmaLowCcYTable->LCCSCLOF.LCCSCLOF2.bit.LCCSCLOF_5	= csprLowCcY->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
 			union io_cnr_cspr_reg_lccsclga_1, LCCSCLGA_0, csprLowCcY->gain0 );
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
 			union io_cnr_cspr_reg_lccsclga_1, LCCSCLGA_1, csprLowCcY->gain1 );
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
 			union io_cnr_cspr_reg_lccsclga_1, LCCSCLGA_2, csprLowCcY->gain2 );
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA1,
 			union io_cnr_cspr_reg_lccsclga_1, LCCSCLGA_3, csprLowCcY->gain3 );
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA2,
 			union io_cnr_cspr_reg_lccsclga_2, LCCSCLGA_4, csprLowCcY->gain4 );
-	im_cnr_set_reg_signed( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcYTable->LCCSCLGA.LCCSCLGA2,
 			union io_cnr_cspr_reg_lccsclga_2, LCCSCLGA_5, csprLowCcY->gain5 );
 }
 /*
@@ -128,17 +128,17 @@ static VOID imCnrConvertRdmaCsprLowCcCTable( const ImCnrTable* csprLowCcC,
 	rdmaLowCcCTable->LCSSCLOF.LCSSCLOF2.bit.LCSSCLOF_4	= csprLowCcC->of4;
 	rdmaLowCcCTable->LCSSCLOF.LCSSCLOF2.bit.LCSSCLOF_5	= csprLowCcC->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
 			union io_cnr_cspr_reg_lcssclga_1, LCSSCLGA_0, csprLowCcC->gain0 );
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
 			union io_cnr_cspr_reg_lcssclga_1, LCSSCLGA_1, csprLowCcC->gain1 );
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
 			union io_cnr_cspr_reg_lcssclga_1, LCSSCLGA_2, csprLowCcC->gain2 );
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA1,
 			union io_cnr_cspr_reg_lcssclga_1, LCSSCLGA_3, csprLowCcC->gain3 );
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA2,
 			union io_cnr_cspr_reg_lcssclga_2, LCSSCLGA_4, csprLowCcC->gain4 );
-	im_cnr_set_reg_signed( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaLowCcCTable->LCSSCLGA.LCSSCLGA2,
 			union io_cnr_cspr_reg_lcssclga_2, LCSSCLGA_5, csprLowCcC->gain5 );
 }
 
@@ -160,17 +160,17 @@ static VOID imCnrConvertRdmaCsprEdgeTable( const ImCnrTable* csprEdge,
 	rdmaEdgeTable->CESCLOF.CESCLOF2.bit.CESCLOF_4	= csprEdge->of4;
 	rdmaEdgeTable->CESCLOF.CESCLOF2.bit.CESCLOF_5	= csprEdge->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA1,
 			union io_cnr_cspr_reg_cesclga_1, CESCLGA_0, csprEdge->gain0 );
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA1,
 			union io_cnr_cspr_reg_cesclga_1, CESCLGA_1, csprEdge->gain1 );
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA1,
 			union io_cnr_cspr_reg_cesclga_1, CESCLGA_2, csprEdge->gain2 );
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA1,
 			union io_cnr_cspr_reg_cesclga_1, CESCLGA_3, csprEdge->gain3 );
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA2,
 			union io_cnr_cspr_reg_cesclga_2, CESCLGA_4, csprEdge->gain4 );
-	im_cnr_set_reg_signed( rdmaEdgeTable->CESCLGA.CESCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaEdgeTable->CESCLGA.CESCLGA2,
 			union io_cnr_cspr_reg_cesclga_2, CESCLGA_5, csprEdge->gain5 );
 }
 
@@ -181,11 +181,11 @@ static VOID imCnrConvertRdmaCsprHueTable( const ImCnrHueSpecTable* csprHue,
 		ImCnroneRdmaDataCsprHueTbl* rdmaHueTable )
 {
 	// write signed data
-	im_cnr_set_reg_signed( rdmaHueTable->CPHPT, union io_cnr_cspr_reg_cphpt, CDCB, csprHue->cd_cb );
-	im_cnr_set_reg_signed( rdmaHueTable->CPHPT, union io_cnr_cspr_reg_cphpt, CDCR, csprHue->cd_cr );
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CPHPT, union io_cnr_cspr_reg_cphpt, CDCB, csprHue->cdCb );
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CPHPT, union io_cnr_cspr_reg_cphpt, CDCR, csprHue->cdCr );
 
-	rdmaHueTable->CPHPTK.bit.KCB	= csprHue->k_cb;
-	rdmaHueTable->CPHPTK.bit.KCR	= csprHue->k_cr;
+	rdmaHueTable->CPHPTK.bit.KCB	= csprHue->kCb;
+	rdmaHueTable->CPHPTK.bit.KCR	= csprHue->kCr;
 
 	rdmaHueTable->CDSCLBD.CDSCLBD1.bit.CDSCLBD_1	= csprHue->bd1;
 	rdmaHueTable->CDSCLBD.CDSCLBD1.bit.CDSCLBD_2	= csprHue->bd2;
@@ -199,17 +199,17 @@ static VOID imCnrConvertRdmaCsprHueTable( const ImCnrHueSpecTable* csprHue,
 	rdmaHueTable->CDSCLOF.CDSCLOF3.bit.CDSCLOF_4	= csprHue->of4;
 	rdmaHueTable->CDSCLOF.CDSCLOF3.bit.CDSCLOF_5	= csprHue->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA1,
 			union io_cnr_cspr_reg_cdsclga_1, CDSCLGA_0, csprHue->gain0 );
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA1,
 			union io_cnr_cspr_reg_cdsclga_1, CDSCLGA_1, csprHue->gain1 );
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA2,
 			union io_cnr_cspr_reg_cdsclga_2, CDSCLGA_2, csprHue->gain2 );
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA2,
 			union io_cnr_cspr_reg_cdsclga_2, CDSCLGA_3, csprHue->gain3 );
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA3,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA3,
 			union io_cnr_cspr_reg_cdsclga_3, CDSCLGA_4, csprHue->gain4 );
-	im_cnr_set_reg_signed( rdmaHueTable->CDSCLGA.CDSCLGA3,
+	ImCnr_SET_REG_SIGNED( rdmaHueTable->CDSCLGA.CDSCLGA3,
 			union io_cnr_cspr_reg_cdsclga_3, CDSCLGA_5, csprHue->gain5 );
 }
 
@@ -221,75 +221,75 @@ static VOID imCnrConvertRdmaCsprSprsCc( const ImCnrCtrlCcSrcDst* sprsCtrl,
 {
 	rdmaSprsCtrl->SPRS.bit.SPRS = sprsCtrl->enable;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
-			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_1, sprsCtrl->cb_table.bd1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
-			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_2, sprsCtrl->cb_table.bd2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
-			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_3, sprsCtrl->cb_table.bd3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
-			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_4, sprsCtrl->cb_table.bd4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD2,
-			union io_cnr_cspr_reg_sprscbbd_2, SPRSCBBD_5, sprsCtrl->cb_table.bd5 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
-			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_0, sprsCtrl->cb_table.of0 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
-			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_1, sprsCtrl->cb_table.of1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
-			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_2, sprsCtrl->cb_table.of2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
-			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_3, sprsCtrl->cb_table.of3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF2,
-			union io_cnr_cspr_reg_sprscbof_2, SPRSCBOF_4, sprsCtrl->cb_table.of4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF2,
-			union io_cnr_cspr_reg_sprscbof_2, SPRSCBOF_5, sprsCtrl->cb_table.of5 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA1,
-			union io_cnr_cspr_reg_sprscbga_1, SPRSCBGA_0, sprsCtrl->cb_table.gain0 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA1,
-			union io_cnr_cspr_reg_sprscbga_1, SPRSCBGA_1, sprsCtrl->cb_table.gain1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA2,
-			union io_cnr_cspr_reg_sprscbga_2, SPRSCBGA_2, sprsCtrl->cb_table.gain2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA2,
-			union io_cnr_cspr_reg_sprscbga_2, SPRSCBGA_3, sprsCtrl->cb_table.gain3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA3,
-			union io_cnr_cspr_reg_sprscbga_3, SPRSCBGA_4, sprsCtrl->cb_table.gain4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA3,
-			union io_cnr_cspr_reg_sprscbga_3, SPRSCBGA_5, sprsCtrl->cb_table.gain5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
+			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_1, sprsCtrl->cbTable.bd1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
+			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_2, sprsCtrl->cbTable.bd2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
+			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_3, sprsCtrl->cbTable.bd3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD1,
+			union io_cnr_cspr_reg_sprscbbd_1, SPRSCBBD_4, sprsCtrl->cbTable.bd4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBBD.SPRSCBBD2,
+			union io_cnr_cspr_reg_sprscbbd_2, SPRSCBBD_5, sprsCtrl->cbTable.bd5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
+			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_0, sprsCtrl->cbTable.of0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
+			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_1, sprsCtrl->cbTable.of1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
+			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_2, sprsCtrl->cbTable.of2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF1,
+			union io_cnr_cspr_reg_sprscbof_1, SPRSCBOF_3, sprsCtrl->cbTable.of3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF2,
+			union io_cnr_cspr_reg_sprscbof_2, SPRSCBOF_4, sprsCtrl->cbTable.of4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBOF.SPRSCBOF2,
+			union io_cnr_cspr_reg_sprscbof_2, SPRSCBOF_5, sprsCtrl->cbTable.of5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA1,
+			union io_cnr_cspr_reg_sprscbga_1, SPRSCBGA_0, sprsCtrl->cbTable.gain0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA1,
+			union io_cnr_cspr_reg_sprscbga_1, SPRSCBGA_1, sprsCtrl->cbTable.gain1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA2,
+			union io_cnr_cspr_reg_sprscbga_2, SPRSCBGA_2, sprsCtrl->cbTable.gain2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA2,
+			union io_cnr_cspr_reg_sprscbga_2, SPRSCBGA_3, sprsCtrl->cbTable.gain3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA3,
+			union io_cnr_cspr_reg_sprscbga_3, SPRSCBGA_4, sprsCtrl->cbTable.gain4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCBGA.SPRSCBGA3,
+			union io_cnr_cspr_reg_sprscbga_3, SPRSCBGA_5, sprsCtrl->cbTable.gain5 );
 
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
-			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_1, sprsCtrl->cr_table.bd1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
-			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_2, sprsCtrl->cr_table.bd2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
-			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_3, sprsCtrl->cr_table.bd3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
-			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_4, sprsCtrl->cr_table.bd4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD2,
-			union io_cnr_cspr_reg_sprscrbd_2, SPRSCRBD_5, sprsCtrl->cr_table.bd5 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
-			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_0, sprsCtrl->cr_table.of0 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
-			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_1, sprsCtrl->cr_table.of1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
-			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_2, sprsCtrl->cr_table.of2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
-			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_3, sprsCtrl->cr_table.of3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF2,
-			union io_cnr_cspr_reg_sprscrof_2, SPRSCROF_4, sprsCtrl->cr_table.of4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCROF.SPRSCROF2,
-			union io_cnr_cspr_reg_sprscrof_2, SPRSCROF_5, sprsCtrl->cr_table.of5 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA1,
-			union io_cnr_cspr_reg_sprscrga_1, SPRSCRGA_0, sprsCtrl->cr_table.gain0 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA1,
-			union io_cnr_cspr_reg_sprscrga_1, SPRSCRGA_1, sprsCtrl->cr_table.gain1 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA2,
-			union io_cnr_cspr_reg_sprscrga_2, SPRSCRGA_2, sprsCtrl->cr_table.gain2 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA2,
-			union io_cnr_cspr_reg_sprscrga_2, SPRSCRGA_3, sprsCtrl->cr_table.gain3 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA3,
-			union io_cnr_cspr_reg_sprscrga_3, SPRSCRGA_4, sprsCtrl->cr_table.gain4 );
-	im_cnr_set_reg_signed( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA3,
-			union io_cnr_cspr_reg_sprscrga_3, SPRSCRGA_5, sprsCtrl->cr_table.gain5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
+			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_1, sprsCtrl->crTable.bd1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
+			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_2, sprsCtrl->crTable.bd2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
+			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_3, sprsCtrl->crTable.bd3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD1,
+			union io_cnr_cspr_reg_sprscrbd_1, SPRSCRBD_4, sprsCtrl->crTable.bd4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRBD.SPRSCRBD2,
+			union io_cnr_cspr_reg_sprscrbd_2, SPRSCRBD_5, sprsCtrl->crTable.bd5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
+			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_0, sprsCtrl->crTable.of0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
+			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_1, sprsCtrl->crTable.of1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
+			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_2, sprsCtrl->crTable.of2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF1,
+			union io_cnr_cspr_reg_sprscrof_1, SPRSCROF_3, sprsCtrl->crTable.of3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF2,
+			union io_cnr_cspr_reg_sprscrof_2, SPRSCROF_4, sprsCtrl->crTable.of4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCROF.SPRSCROF2,
+			union io_cnr_cspr_reg_sprscrof_2, SPRSCROF_5, sprsCtrl->crTable.of5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA1,
+			union io_cnr_cspr_reg_sprscrga_1, SPRSCRGA_0, sprsCtrl->crTable.gain0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA1,
+			union io_cnr_cspr_reg_sprscrga_1, SPRSCRGA_1, sprsCtrl->crTable.gain1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA2,
+			union io_cnr_cspr_reg_sprscrga_2, SPRSCRGA_2, sprsCtrl->crTable.gain2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA2,
+			union io_cnr_cspr_reg_sprscrga_2, SPRSCRGA_3, sprsCtrl->crTable.gain3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA3,
+			union io_cnr_cspr_reg_sprscrga_3, SPRSCRGA_4, sprsCtrl->crTable.gain4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprsCtrl->SPRSCRGA.SPRSCRGA3,
+			union io_cnr_cspr_reg_sprscrga_3, SPRSCRGA_5, sprsCtrl->crTable.gain5 );
 }
 
 /*
@@ -300,75 +300,75 @@ static VOID imCnrConvertRdmaCsprSprdCc( const ImCnrCtrlCcSrcDst* sprdCtrl,
 {
 	rdmaSprdCtrl->SPRD.bit.SPRD = sprdCtrl->enable;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cb_table.bd1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cb_table.bd2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cb_table.bd3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cb_table.bd4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD2,
-			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cb_table.bd5 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cb_table.of0 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cb_table.of1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cb_table.of2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cb_table.of3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cb_table.of4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cb_table.of5 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cb_table.gain0 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cb_table.gain1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cb_table.gain2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cb_table.gain3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cb_table.gain4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cb_table.gain5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cbTable.bd1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cbTable.bd2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cbTable.bd3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cbTable.bd4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBBD.SPRDCBBD2,
+			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cbTable.bd5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cbTable.of0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cbTable.of1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cbTable.of2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cbTable.of3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cbTable.of4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cbTable.of5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cbTable.gain0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cbTable.gain1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cbTable.gain2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cbTable.gain3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cbTable.gain4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cbTable.gain5 );
 
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->cr_table.bd1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->cr_table.bd2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->cr_table.bd3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->cr_table.bd4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD2,
-			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->cr_table.bd5 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->cr_table.of0 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->cr_table.of1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->cr_table.of2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->cr_table.of3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->cr_table.of4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->cr_table.of5 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->cr_table.gain0 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->cr_table.gain1 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->cr_table.gain2 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->cr_table.gain3 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->cr_table.gain4 );
-	im_cnr_set_reg_signed( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->cr_table.gain5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->crTable.bd1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->crTable.bd2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->crTable.bd3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->crTable.bd4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRBD.SPRDCRBD2,
+			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->crTable.bd5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->crTable.of0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->crTable.of1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->crTable.of2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->crTable.of3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->crTable.of4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->crTable.of5 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->crTable.gain0 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->crTable.gain1 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->crTable.gain2 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->crTable.gain3 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->crTable.gain4 );
+	ImCnr_SET_REG_SIGNED( rdmaSprdCtrl->SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->crTable.gain5 );
 }
 
 /*
@@ -389,17 +389,17 @@ static VOID imCnrConvertRdmaCsprLowYTable( const ImCnrTable* sprCsprLowY,
 	rdmaCsprLowYTable->LCYSCLOF.LCYSCLOF2.bit.LCYSCLOF_4	= sprCsprLowY->of4;
 	rdmaCsprLowYTable->LCYSCLOF.LCYSCLOF2.bit.LCYSCLOF_5	= sprCsprLowY->of5;
 	// write signed data
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
 			union io_cnr_cspr_reg_lcysclga_1, LCYSCLGA_0, sprCsprLowY->gain0 );
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
 			union io_cnr_cspr_reg_lcysclga_1, LCYSCLGA_1, sprCsprLowY->gain1 );
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
 			union io_cnr_cspr_reg_lcysclga_1, LCYSCLGA_2, sprCsprLowY->gain2 );
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA1,
 			union io_cnr_cspr_reg_lcysclga_1, LCYSCLGA_3, sprCsprLowY->gain3 );
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA2,
 			union io_cnr_cspr_reg_lcysclga_2, LCYSCLGA_4, sprCsprLowY->gain4 );
-	im_cnr_set_reg_signed( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA2,
+	ImCnr_SET_REG_SIGNED( rdmaCsprLowYTable->LCYSCLGA.LCYSCLGA2,
 			union io_cnr_cspr_reg_lcysclga_2, LCYSCLGA_5, sprCsprLowY->gain5 );
 }
 
@@ -411,95 +411,95 @@ Set CbCr setting of destination
 INT32 im_cnrfive_ofl_ctrl_sprd_cc(ImCnrfive *self, UCHAR ch, const ImCnrCtrlCcSrcDst* const sprdCtrl )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfive_ofl_ctrl_sprd_cc() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( sprdCtrl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfive_ofl_ctrl_sprd_cc() Parameter is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	IO_CNR(ch)->OFL_CSPR_REG.SPRD.bit.SPRD = sprdCtrl->enable;
 
 	// write signed data
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cb_table.bd1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cb_table.bd2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cb_table.bd3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cb_table.bd4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD2,
-			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cb_table.bd5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cb_table.of0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cb_table.of1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cb_table.of2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cb_table.of3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cb_table.of4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cb_table.of5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cb_table.gain0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cb_table.gain1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cb_table.gain2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cb_table.gain3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cb_table.gain4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cb_table.gain5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cbTable.bd1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cbTable.bd2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cbTable.bd3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cbTable.bd4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBBD.SPRDCBBD2,
+			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cbTable.bd5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cbTable.of0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cbTable.of1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cbTable.of2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cbTable.of3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cbTable.of4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cbTable.of5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cbTable.gain0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cbTable.gain1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cbTable.gain2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cbTable.gain3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cbTable.gain4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cbTable.gain5 );
 
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->cr_table.bd1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->cr_table.bd2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->cr_table.bd3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->cr_table.bd4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD2,
-			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->cr_table.bd5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->cr_table.of0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->cr_table.of1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->cr_table.of2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->cr_table.of3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->cr_table.of4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->cr_table.of5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->cr_table.gain0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->cr_table.gain1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->cr_table.gain2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->cr_table.gain3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->cr_table.gain4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->cr_table.gain5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->crTable.bd1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->crTable.bd2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->crTable.bd3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->crTable.bd4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRBD.SPRDCRBD2,
+			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->crTable.bd5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->crTable.of0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->crTable.of1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->crTable.of2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->crTable.of3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->crTable.of4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->crTable.of5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->crTable.gain0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->crTable.gain1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->crTable.gain2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->crTable.gain3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->crTable.gain4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OFL_CSPR_REG.SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->crTable.gain5 );
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	return D_DDIM_OK;
 }
@@ -510,95 +510,95 @@ Set CbCr setting of destination
 INT32 im_cnrfive_otf_ctrl_sprd_cc(ImCnrfive *self, UCHAR ch, const ImCnrCtrlCcSrcDst* const sprdCtrl )
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnrfive_otf_ctrl_sprd_cc() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( sprdCtrl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:im_cnrfive_otf_ctrl_sprd_cc() Parameter is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	IO_CNR(ch)->OTF_CSPR_REG.SPRD.bit.SPRD = sprdCtrl->enable;
 
 	// write signed data
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cb_table.bd1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cb_table.bd2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cb_table.bd3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
-			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cb_table.bd4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD2,
-			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cb_table.bd5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cb_table.of0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cb_table.of1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cb_table.of2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
-			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cb_table.of3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cb_table.of4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF2,
-			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cb_table.of5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cb_table.gain0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA1,
-			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cb_table.gain1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cb_table.gain2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA2,
-			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cb_table.gain3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cb_table.gain4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA3,
-			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cb_table.gain5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_1, sprdCtrl->cbTable.bd1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_2, sprdCtrl->cbTable.bd2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_3, sprdCtrl->cbTable.bd3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD1,
+			union io_cnr_cspr_reg_sprdcbbd_1, SPRDCBBD_4, sprdCtrl->cbTable.bd4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBBD.SPRDCBBD2,
+			union io_cnr_cspr_reg_sprdcbbd_2, SPRDCBBD_5, sprdCtrl->cbTable.bd5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_0, sprdCtrl->cbTable.of0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_1, sprdCtrl->cbTable.of1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_2, sprdCtrl->cbTable.of2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF1,
+			union io_cnr_cspr_reg_sprdcbof_1, SPRDCBOF_3, sprdCtrl->cbTable.of3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_4, sprdCtrl->cbTable.of4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBOF.SPRDCBOF2,
+			union io_cnr_cspr_reg_sprdcbof_2, SPRDCBOF_5, sprdCtrl->cbTable.of5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_0, sprdCtrl->cbTable.gain0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA1,
+			union io_cnr_cspr_reg_sprdcbga_1, SPRDCBGA_1, sprdCtrl->cbTable.gain1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_2, sprdCtrl->cbTable.gain2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA2,
+			union io_cnr_cspr_reg_sprdcbga_2, SPRDCBGA_3, sprdCtrl->cbTable.gain3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_4, sprdCtrl->cbTable.gain4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCBGA.SPRDCBGA3,
+			union io_cnr_cspr_reg_sprdcbga_3, SPRDCBGA_5, sprdCtrl->cbTable.gain5 );
 
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->cr_table.bd1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->cr_table.bd2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->cr_table.bd3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
-			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->cr_table.bd4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD2,
-			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->cr_table.bd5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->cr_table.of0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->cr_table.of1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->cr_table.of2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
-			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->cr_table.of3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->cr_table.of4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF2,
-			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->cr_table.of5 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->cr_table.gain0 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA1,
-			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->cr_table.gain1 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->cr_table.gain2 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA2,
-			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->cr_table.gain3 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->cr_table.gain4 );
-	im_cnr_set_reg_signed( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA3,
-			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->cr_table.gain5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_1, sprdCtrl->crTable.bd1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_2, sprdCtrl->crTable.bd2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_3, sprdCtrl->crTable.bd3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD1,
+			union io_cnr_cspr_reg_sprdcrbd_1, SPRDCRBD_4, sprdCtrl->crTable.bd4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRBD.SPRDCRBD2,
+			union io_cnr_cspr_reg_sprdcrbd_2, SPRDCRBD_5, sprdCtrl->crTable.bd5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_0, sprdCtrl->crTable.of0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_1, sprdCtrl->crTable.of1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_2, sprdCtrl->crTable.of2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF1,
+			union io_cnr_cspr_reg_sprdcrof_1, SPRDCROF_3, sprdCtrl->crTable.of3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_4, sprdCtrl->crTable.of4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCROF.SPRDCROF2,
+			union io_cnr_cspr_reg_sprdcrof_2, SPRDCROF_5, sprdCtrl->crTable.of5 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_0, sprdCtrl->crTable.gain0 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA1,
+			union io_cnr_cspr_reg_sprdcrga_1, SPRDCRGA_1, sprdCtrl->crTable.gain1 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_2, sprdCtrl->crTable.gain2 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA2,
+			union io_cnr_cspr_reg_sprdcrga_2, SPRDCRGA_3, sprdCtrl->crTable.gain3 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_4, sprdCtrl->crTable.gain4 );
+	ImCnr_SET_REG_SIGNED( IO_CNR(ch)->OTF_CSPR_REG.SPRDCRGA.SPRDCRGA3,
+			union io_cnr_cspr_reg_sprdcrga_3, SPRDCRGA_5, sprdCtrl->crTable.gain5 );
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	return D_DDIM_OK;
 }
@@ -615,13 +615,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_y_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_y_table() Parameter(sprCsprLowCcY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowCcYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_y_table() Parameter(rdmaCsprLowCcYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -642,13 +642,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_low_cc_y_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_cc_y_table() Parameter(sprCsprLowCcY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowCcYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_cc_y_table() Parameter(rdmaCsprLowCcYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -669,13 +669,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_c_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_c_table() Parameter(sprCsprLowCcC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowCcCTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_cc_c_table() Parameter(rdmaCsprLowCcCTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -696,13 +696,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_low_cc_c_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_cc_c_table() Parameter(sprCsprLowCcC) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowCcCTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_cc_c_table() Parameter(rdmaCsprLowCcCTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -723,13 +723,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_edge_table(ImCnrfive *self, const ImCnrT
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_edge_table() Parameter(sprCsprEdge) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprEdgeTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_edge_table() Parameter(rdmaCsprEdgeTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -750,13 +750,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_edge_table(ImCnrfive *self, const ImCnrT
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_edge_table() Parameter(sprCsprEdge) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprEdgeTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_edge_table() Parameter(rdmaCsprEdgeTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -777,13 +777,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_hue_spec_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_hue_spec_table() Parameter(sprCsprHue) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprHueTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_hue_spec_table() Parameter(rdmaCsprHueTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -804,13 +804,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_hue_spec_table(ImCnrfive *self, const Im
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_hue_spec_table() Parameter(sprCsprHue) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprHueTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_hue_spec_table() Parameter(rdmaCsprHueTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -831,13 +831,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_sprs_cc_table(ImCnrfive *self, const ImC
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_sprs_cc_table() Parameter(csprSprsCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprSprsCc == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_sprs_cc_table() Parameter(rdmaCsprSprsCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -858,13 +858,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_sprs_cc_table(ImCnrfive *self, const ImC
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_sprs_cc_table() Parameter(csprSprsCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprSprsCc == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_sprs_cc_table() Parameter(rdmaCsprSprsCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -885,13 +885,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_sprd_cc_table(ImCnrfive *self, const ImC
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_sprd_cc_table() Parameter(csprSprdCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprSprdCc == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_sprd_cc_table() Parameter(rdmaCsprSprdCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -912,13 +912,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_sprd_cc_table(ImCnrfive *self, const ImC
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_sprd_cc_table() Parameter(csprSprdCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprSprdCc == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_sprd_cc_table() Parameter(rdmaCsprSprdCc) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -939,13 +939,13 @@ INT32 im_cnrfive_set_rdmavalue_ofl_cspr_low_y_table(ImCnrfive *self, const ImCnr
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_y_table() Parameter(sprCsprLowY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_ofl_cspr_low_y_table() Parameter(rdmaCsprLowYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -966,13 +966,13 @@ INT32 im_cnrfive_set_rdmavalue_otf_cspr_low_y_table(ImCnrfive *self, const ImCnr
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_y_table() Parameter(sprCsprLowY) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 	if( rdmaCsprLowYTable == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion
 		(("I:im_cnrfive_set_rdmavalue_otf_cspr_low_y_table() Parameter(rdmaCsprLowYTable) is NULL.\n"));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 

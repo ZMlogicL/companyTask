@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-05
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtDdCache类
 *@rely                :klib
@@ -15,12 +15,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "driver_common.h"
-#include "dd_cache.h"
+#include "ddcache.h"
 
 #include "ctddcache.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdCache, ct_dd_cache);
-#define CT_DD_CACHE_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdCachePrivate,CT_TYPE_DD_CACHE))
+G_DEFINE_TYPE(CtDdCache, ct_dd_cache, G_TYPE_OBJECT);
+#define CT_DD_CACHE_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_CACHE, CtDdCachePrivate))
 
 /*----------------------------------------------------------------------*/
 /* Definition															*/
@@ -47,34 +47,55 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtDdCache, ct_dd_cache);
 
 struct _CtDdCachePrivate
 {
+
 };
+
 
 /*
 *DECLS
 */
-static void cacheAreaWriteData(kuint32 startAddr, kuint32 writeData);
-static void cacheAreaWrite(kuint32 writeData);
-static void cacheAreaMemcmp(void);
-static void cacheAreaInit(void);
-
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+static void 	cacheAreaWriteData(guint32 startAddr, guint32 writeData);
+static void 	cacheAreaWrite(guint32 writeData);
+static void 	cacheAreaMemcmp(void);
+static void 	cacheAreaInit(void);
 
 /*
 *IMPL
 */
-static void ct_dd_cache_constructor(CtDdCache *self) 
+
+static void ct_dd_cache_class_init(CtDdCacheClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdCachePrivate));
 }
 
-static void ct_dd_cache_destructor(CtDdCache *self) 
+static void ct_dd_cache_init(CtDdCache *self)
 {
+//	CtDdCachePrivate *priv = CT_DD_CACHE_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+//	CtDdCache *self = (CtDdCache*)object;
+//	CtDdCachePrivate *priv = CT_DD_CACHE_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtDdCache *self = (CtDdCache*)object;
+//	CtDdCachePrivate *priv = CT_DD_CACHE_GET_PRIVATE(self);
 }
 
 /*----------------------------------------------------------------------*/
 /* Local Method Definition												*/
 /*----------------------------------------------------------------------*/
-static void cacheAreaWriteData(kuint32 startAddr, kuint32 writeData)
+static void cacheAreaWriteData(guint32 startAddr, guint32 writeData)
 {
-	kuint32 writeAddress;
+	guint32 writeAddress;
 
 	writeAddress = startAddr;
 	while(writeAddress < (startAddr + CtDdCache_D_CT_DD_CACHE_SIZE)) {
@@ -83,7 +104,7 @@ static void cacheAreaWriteData(kuint32 startAddr, kuint32 writeData)
 	}
 }
 
-static void cacheAreaWrite(kuint32 writeData)
+static void cacheAreaWrite(guint32 writeData)
 {
 	cacheAreaWriteData(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR, writeData);
 	cacheAreaWriteData(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR, writeData);
@@ -176,7 +197,7 @@ static void cacheAreaInit(void)
  *		| l1l2addr_cf     |      |      |L1L2 Cache Clean & Flush Address/Size Test.                |
  *		+-----------------+------+------+-----------------------------------------------------------+
  */
-void ct_dd_cache_main_main(CtDdCache* self, kint argc, kchar** argv)
+void ct_dd_cache_main_main(CtDdCache* self, gint argc, gchar** argv)
 {
 	if( argc < 2 ) {
 		Ddim_Print(("please check 1st parameter!!\n"));
@@ -257,163 +278,163 @@ void ct_dd_cache_main_main(CtDdCache* self, kint argc, kchar** argv)
 		Ddim_Print(("Dd_CACHE_L1_Clean_Flush_Dcache_All / Dd_CACHE_L2_Clean_Flush_Dcache_All end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1addr_f" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xAAAAAAAA);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1addr_c" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Clean_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xBBBBBBBB);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Clean_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1addr_cf" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Clean_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xCCCCCCCC);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Clean_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l2addr_f" ) ) {
-		Ddim_Print(("Dd_CACHE_L2_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L2_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xDDDDDDDD);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L2_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L2_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l2addr_c" ) ) {
-		Ddim_Print(("Dd_CACHE_L2_Clean_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L2_CLEAN_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xEEEEEEEE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L2_Clean_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L2_CLEAN_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l2addr_cf" ) ) {
-		Ddim_Print(("Dd_CACHE_L2_Clean_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0xFFFFFFFF);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L2_Clean_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1l2addr_f" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Flush_Dcache_Addr / Dd_CACHE_L2_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_FLUSH_DCACHE_ADDR / DdCache_L2_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0x1F1F1F1F);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Flush_Dcache_Addr / Dd_CACHE_L2_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_FLUSH_DCACHE_ADDR / DdCache_L2_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1l2addr_c" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Clean_Dcache_Addr / Dd_CACHE_L2_Clean_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_DCACHE_ADDR / DdCache_L2_CLEAN_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0x2F2F2F2F);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Clean_Dcache_Addr / Dd_CACHE_L2_Clean_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_DCACHE_ADDR / DdCache_L2_CLEAN_DCACHE_ADDR end\n"));
 	}
 	else if( 0 == strcmp( argv[1], "l1l2addr_cf" ) ) {
-		Ddim_Print(("Dd_CACHE_L1_Clean_Flush_Dcache_Addr / Dd_CACHE_L2_Clean_Flush_Dcache_Addr start\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR / DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR start\n"));
 		cacheAreaInit();
 		cacheAreaWrite(0x3F3F3F3F);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_NONCACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L1_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
-		Dd_CACHE_L2_Clean_Flush_Dcache_Addr(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
+		DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR(CtDdCache_D_CT_DD_CACHE_L1L2CACHE_START_ADDR,
 				CtDdCache_D_CT_DD_CACHE_SIZE);
 		cacheAreaMemcmp();
-		Ddim_Print(("Dd_CACHE_L1_Clean_Flush_Dcache_Addr / Dd_CACHE_L2_Clean_Flush_Dcache_Addr end\n"));
+		Ddim_Print(("DdCache_L1_CLEAN_FLUSH_DCACHE_ADDR / DdCache_L2_CLEAN_FLUSH_DCACHE_ADDR end\n"));
 	}
 	else
 	{
@@ -421,8 +442,8 @@ void ct_dd_cache_main_main(CtDdCache* self, kint argc, kchar** argv)
 	}
 }
 
-CtDdCache* ct_dd_cache_new(void) 
+CtDdCache *ct_dd_cache_new(void) 
 {
-    CtDdCache *self = k_object_new_with_private(CT_TYPE_DD_CACHE, sizeof(CtDdCachePrivate));
+    CtDdCache *self = g_object_new(CT_TYPE_DD_CACHE, NULL);
     return self;
 }

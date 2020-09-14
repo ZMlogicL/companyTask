@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "ctimdisp.h"//already define CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
@@ -22,34 +25,81 @@
 
 #include "imdisp1group.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(ImDisp1Group, im_disp1_group, K_TYPE_OBJECT)
-#define IM_DISP1_GROUP_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), ImDisp1GroupPrivate, IM_TYPE_DISP1_GROUP))
 
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (ImDisp1Group, im_disp1_group, G_TYPE_OBJECT);
+
+/*
+ * 以下开始宏定义
+ * */
+#define IM_DISP1_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
+		IM_TYPE_DISP1_GROUP, ImDisp1GroupPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _ImDisp1GroupPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 	ImDisp1Parent *pcTestInstance;
-	KObject *wrapObject;
-	kuchar *pImDispPclkCounter;
+	GObject *wrapObject;
+	guchar *pImDispPclkCounter;
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 static void initAllCtImDisp1(ImDisp1Group *self);
 
 /*
  * IMPL
  * */
-static void im_disp1_group_constructor(ImDisp1Group *self)
+static void im_disp1_group_class_init(ImDisp1GroupClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(ImDisp1GroupPrivate));
+}
+
+static void im_disp1_group_init(ImDisp1Group *self)
 {
 	ImDisp1GroupPrivate *priv = IM_DISP1_GROUP_GET_PRIVATE(self);
 	self->privImDisp1Group = priv;
 	priv->pcTestInstance = NULL;
 }
 
-static void im_disp1_group_destructor(ImDisp1Group *self)
+static void dispose_od(GObject *object)
 {
+//	ImDisp1Group *self = IM_DISP1_GROUP(object);
+//	ImDisp1GroupPrivate *priv = IM_DISP1_GROUP_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (im_disp1_group_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	ImDisp1Group *self = IM_DISP1_GROUP(object);
+//	ImDisp1GroupPrivate *priv = IM_DISP1_GROUP_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (im_disp1_group_parent_class)->finalize(object);
 }
 
 static void initAllCtImDisp1(ImDisp1Group *self)
@@ -68,17 +118,17 @@ static void initAllCtImDisp1(ImDisp1Group *self)
 	im_disp1_parent_add_next(ctImDisp1c, ctImDisp1d);
 	im_disp1_parent_add_next(ctImDisp1d, ctImDisp1e);
 
-	im_disp1_parent_set_group(ctImDisp1, (KObject *)self);
-	im_disp1_parent_set_group(ctImDisp1a, (KObject *)self);
-	im_disp1_parent_set_group(ctImDisp1b, (KObject *)self);
-	im_disp1_parent_set_group(ctImDisp1c, (KObject *)self);
-	im_disp1_parent_set_group(ctImDisp1d, (KObject *)self);
+	im_disp1_parent_set_group(ctImDisp1, (GObject *)self);
+	im_disp1_parent_set_group(ctImDisp1a, (GObject *)self);
+	im_disp1_parent_set_group(ctImDisp1b, (GObject *)self);
+	im_disp1_parent_set_group(ctImDisp1c, (GObject *)self);
+	im_disp1_parent_set_group(ctImDisp1d, (GObject *)self);
 
-	k_object_unref(ctImDisp1a);
-	k_object_unref(ctImDisp1b);
-	k_object_unref(ctImDisp1c);
-	k_object_unref(ctImDisp1d);
-	k_object_unref(ctImDisp1e);
+	g_object_unref(ctImDisp1a);
+	g_object_unref(ctImDisp1b);
+	g_object_unref(ctImDisp1c);
+	g_object_unref(ctImDisp1d);
+	g_object_unref(ctImDisp1e);
 
 	priv->pcTestInstance = ctImDisp1;
 }
@@ -97,7 +147,7 @@ ImDisp1Parent *	im_disp1_group_get_pctest_instance(ImDisp1Group *self)
 	return NULL;
 }
 
-kuchar *im_disp1_group_get_pclk_counter(ImDisp1Group *self)
+guchar *im_disp1_group_get_pclk_counter(ImDisp1Group *self)
 {
 	if (IM_IS_DISP1_GROUP(self))
 	{
@@ -125,10 +175,10 @@ void im_disp1_group_ct_im_disp3_pclk_counter_off(ImDisp1Group *self)
 #endif	// CO_ACT_PCLOCK
 }
 
-ImDisp1Group *im_disp1_group_new(kuchar *pclkCounter, kuchar *hclkCounter)
+ImDisp1Group *im_disp1_group_new(guchar *pclkCounter, guchar *hclkCounter)
 {
 	ImDisp1Group *self = (ImDisp1Group *)
-			k_object_new_with_private(IM_TYPE_DISP1_GROUP,sizeof(ImDisp1GroupPrivate));
+		g_object_new(IM_TYPE_DISP1_GROUP, NULL);
 	ImDisp1GroupPrivate *priv = self->privImDisp1Group;
 	priv->pImDispPclkCounter = pclkCounter;
 

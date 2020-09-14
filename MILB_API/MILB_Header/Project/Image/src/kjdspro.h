@@ -15,8 +15,10 @@
  *
  */
 
+
 #ifndef __K_JDSPRO_H__
 #define __K_JDSPRO_H__
+
 
 #include <klib.h>
 //#include "__jdspro_sen_top_apb.h"
@@ -74,6 +76,7 @@
 #include "__jdspro_stat_top_ahb.h"
 #include "__jdspro_pas_top_ahb.h"
 
+
 #define K_TYPE_JDSPRO				(k_jdspro_get_type())
 #define K_JDSPRO(obj)					(K_TYPE_CHECK_INSTANCE_CAST((obj), KJdspro))
 #define K_IS_JDSPRO(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSPRO))
@@ -81,10 +84,12 @@
 typedef struct _KJdspro 				KJdspro;
 typedef struct _KJdsproPrivate 	KJdsproPrivate;
 
+
 struct _KJdspro
 {
 	KObject parent;
 };
+
 
 /* Define i/o mapping */
 typedef struct _IoSroTopApb
@@ -97,7 +102,7 @@ typedef struct _IoSroTopApb
 	IoFf ff[2]; /* 2840_(8400 - 84FFh) */
 	/* 2840_(8500 - 85FFh) */
 	IoPgain pgain0; /* 2840_(8600 - 86FFh) */
-	unsigned char dmy870087ff[0x8800 - 0x8700]; /* 2840_(8700 - 87FFh) */
+	kuchar dmy870087ff[0x8800 - 0x8700]; /* 2840_(8700 - 87FFh) */
 	IoSdc sdc[2]; /* 2840_(8800 - 8BFFh) */
 	/* 2840_(8C00 - 8FFFh) */
 	IoPzsft pzsftb1; /* 2840_(9000 - 90FFh) */
@@ -146,16 +151,16 @@ typedef struct _IoSroTopApb
 	IoMoni moni0; /* 2840_(BC00 - BCFFh) */
 // --- REMOVE_BUZ BEGIN
 #ifdef CO_USE_BUZ
-	unsigned char dmy2840bd002840c3ff[0x2840C400 - 0x2840BD00]; /* 2840_BD00 - 2840_C3FFh */
+	kuchar dmy2840bd002840c3ff[0x2840C400 - 0x2840BD00]; /* 2840_BD00 - 2840_C3FFh */
 	IoBuz buz; /* 2840_(C400 - C4FFh) */
 	IoMoni moni1; /* 2840_(C500 - C5FFh) */
-	unsigned char dmy2840c6002840ffff[0x28410000 - 0x2840C600]; /* 2840_C600 - 2840_FFFFh */
+	kuchar dmy2840c6002840ffff[0x28410000 - 0x2840C600]; /* 2840_C600 - 2840_FFFFh */
 #endif
 // --- REMOVE_BUZ END
 // --- REMOVE_BUZ BEGIN
 #ifndef CO_USE_BUZ
 // --- REMOVE_BUZ END
-	unsigned char dmy2840bd002840ffff[0x28410000-0x2840BD00]; /* 2840_BD00 - 2840_FFFFh */
+	kuchar dmy2840bd002840ffff[0x28410000-0x2840BD00]; /* 2840_BD00 - 2840_FFFFh */
 // --- REMOVE_BUZ BEGIN
 #endif	// CO_USE_BUZ
 // --- REMOVE_BUZ END
@@ -187,19 +192,19 @@ typedef struct _IoB2bTopApb
 	/* 2841_(1600 - 16FFh) */
 	/* 2841_(1700 - 17FFh) */
 	/* 2841_(1800 - 18FFh) */
-	unsigned char dmy19001fff[0x2000 - 0x1900]; /* 2841_(1900 - 1FFFh) */
+	kuchar dmy19001fff[0x2000 - 0x1900]; /* 2841_(1900 - 1FFFh) */
 } IoB2bTopApb;
 
 typedef struct _IoProPipe
 {
 	/* 28x0_0000 - 28x0_7FFF */
-	unsigned char dmy0x08000[0x8000];
+	kuchar dmy0x08000[0x8000];
 	/* 28x0_(8000 - FFFFh) */
 	IoSroTopApb sro;
 	/* 28x1_(0000 - 1FFFh) */
 	IoB2bTopApb b2b;
 	/* 28x1_2000 - 28xF_FFFF */
-	unsigned char dmy0xee000[0xEE000];
+	kuchar dmy0xee000[0xEE000];
 } IoProPipe;
 
 /* Define i/o mapping */
@@ -216,7 +221,7 @@ typedef struct _IoSenTopApb
 	/* 2800_(8C00 - 8DFFh) */
 	/* 2800_(8E00 - 8FFFh) */
 	IoSlvs slvsec; /* 2800_(9000 - 93FFh) */
-	unsigned char dmy940097ff[0x9800 - 0x9400]; /* 2800_(9400 - 97FFh) */
+	kuchar dmy940097ff[0x9800 - 0x9400]; /* 2800_(9400 - 97FFh) */
 	IoMpid mipid[4]; /* 2800_(9800 - 98FFh) */
 	/* 2800_(9900 - 99FFh) */
 	/* 2800_(9A00 - 9AFFh) */
@@ -266,7 +271,7 @@ typedef struct _IoSenTopApb
 	/* 2800_(CD00 - CDFFh) */
 	/* 2800_(CE00 - CEFFh) */
 	/* 2800_(CF00 - CFFFh) */
-	unsigned char dmy2800d0002800ffff[0x28010000 - 0x2800D000]; /* 2800_D000 - 2800_FFFFh */
+	kuchar dmy2800d0002800ffff[0x28010000 - 0x2800D000]; /* 2800_D000 - 2800_FFFFh */
 } IoSenTopApb;
 
 /* Define i/o mapping */
@@ -274,7 +279,7 @@ typedef struct _IoStatTopApb
 {
 	/* JDSIMG */
 	IoStattop stattop; /* 2886_(0000 - 00FFh) */
-	unsigned char dmy01001fff[0x2000 - 0x0100]; /* 2886_(0100 - 1FFFh) */
+	kuchar dmy01001fff[0x2000 - 0x0100]; /* 2886_(0100 - 1FFFh) */
 	IoAftop af[2]; /* 2886_(2000 - 3FFFh) */
 	/* 2886_(4000 - 5FFFh) */
 	IoAeawb aeawb[4]; /* 2886_(6000 - 60FFh) */
@@ -293,7 +298,7 @@ typedef struct _IoStatTopApb
 	/* 2886_(6D00 - 6DFFh) */
 	/* 2886_(6E00 - 6EFFh) */
 	/* 2886_(6F00 - 6FFFh) */
-	unsigned char dmy70007fff[0x8000 - 0x7000]; /* 2886_(7000 - 7FFFh) */
+	kuchar dmy70007fff[0x8000 - 0x7000]; /* 2886_(7000 - 7FFFh) */
 } IoStatTopApb;
 
 /* Define i/o mapping */
@@ -309,7 +314,7 @@ typedef struct _IoPasTopApb
 	IoPwch pwch0; /* 2886_(8600 - 86FFh) */
 	IoM2p m2p0; /* 2886_(8700 - 87FFh) */
 	IoPrch prch0; /* 2886_(8800 - 88FFh) */
-	unsigned char dmy89008fff[0x9000 - 0x8900]; /* 2886_(8900 - 8FFFh) */
+	kuchar dmy89008fff[0x9000 - 0x8900]; /* 2886_(8900 - 8FFFh) */
 } IoPasTopApb;
 
 /* Define i/o mapping */
@@ -320,17 +325,17 @@ typedef struct _IoPro
 	/* 2800_(8000 - FFFFh) */
 	IoSenTopApb sen;
 	/* 2801_0000 - 280F_FFFF */
-	unsigned char dmy28010000280fffff[0x28100000 - 0x28010000];
+	kuchar dmy28010000280fffff[0x28100000 - 0x28010000];
 	/* 2810_0000 - 283F_FFFF */
-	unsigned char dmy28100000283fffff[0x28400000 - 0x28100000];
+	kuchar dmy28100000283fffff[0x28400000 - 0x28100000];
 	// IMG_APB1(PIPE[1] / PIPE[2] / PIPE[3])
 	/* 2840_0000 - 286F_FFFF */
 	IoProPipe imgPipe[3];
 	/* 2870_0000 - 287F_FFFF */
-	unsigned char dmy28700000287fffff[0x28800000 - 0x28700000];
+	kuchar dmy28700000287fffff[0x28800000 - 0x28700000];
 	// IMG_APB3
 	/* 2880_0000 - 2885_FFFF */
-	unsigned char dmy288000002885ffff[0x28860000 - 0x28800000];
+	kuchar dmy288000002885ffff[0x28860000 - 0x28800000];
 	/* 2886_(0000 - 7FFFh) */
 	IoStatTopApb stat;
 	/* 2886_(8000 - 8FFFh) */
@@ -343,25 +348,25 @@ typedef struct _IoProTbl
 	/* JDSIMG */
 	// IMG_APB0
 	IoSenAhb senTbl; /* 2900_(0000 - 3FFFh) */
-	unsigned char dmy29004000290fffff[0x29100000 - 0x29004000]; /* 2900_4000 - 290F_FFFF */
-	unsigned char dmy29100000293fffff[0x29400000 - 0x29100000]; /* 2910_0000 - 293F_FFFF */
+	kuchar dmy29004000290fffff[0x29100000 - 0x29004000]; /* 2900_4000 - 290F_FFFF */
+	kuchar dmy29100000293fffff[0x29400000 - 0x29100000]; /* 2910_0000 - 293F_FFFF */
 	// IMG_APB1(PIPE[1])
-	unsigned char dmy294000002943ffff[0x29440000 - 0x29400000]; /* 2940_0000 - 2943_FFFF */
+	kuchar dmy294000002943ffff[0x29440000 - 0x29400000]; /* 2940_0000 - 2943_FFFF */
 	IoSroAhb sro1Tbl; /* 2944_0000 - 2947_FFFFh */
 	IoB2bAhb b2b1Tbl; /* 2948_0000 - 2948_1FFFh */
-	unsigned char dmy29482000294fffff[0x29500000 - 0x29482000]; /* 2948_2000 - 294F_FFFF */
+	kuchar dmy29482000294fffff[0x29500000 - 0x29482000]; /* 2948_2000 - 294F_FFFF */
 	// IMG_APB1(PIPE[2])
-	unsigned char dmy295000002953ffff[0x29540000 - 0x29500000]; /* 2950_0000 - 2953_FFFF */
+	kuchar dmy295000002953ffff[0x29540000 - 0x29500000]; /* 2950_0000 - 2953_FFFF */
 	IoSroAhb sro2Tbl; /* 2954_0000 - 2957_FFFFh */
 	IoB2bAhb b2b2Tbl; /* 2958_0000 - 2958_1FFFh */
-	unsigned char dmy29482000295fffff[0x29600000 - 0x29582000]; /* 2958_2000 - 295F_FFFF */
+	kuchar dmy29482000295fffff[0x29600000 - 0x29582000]; /* 2958_2000 - 295F_FFFF */
 	// IMG_APB1(PIPE[3])
-	unsigned char dmy296000002963ffff[0x29640000 - 0x29600000]; /* 2960_0000 - 2963_FFFF */
+	kuchar dmy296000002963ffff[0x29640000 - 0x29600000]; /* 2960_0000 - 2963_FFFF */
 	IoSroAhb sro3Tbl; /* 2964_0000 - 2967_FFFFh */
 	IoB2bAhb b2b3Tbl; /* 2968_0000 - 2968_1FFFh */
-	unsigned char dmy29682000297fffff[0x29800000 - 0x29682000]; /* 2968_2000 - 297F_FFFF */
+	kuchar dmy29682000297fffff[0x29800000 - 0x29682000]; /* 2968_2000 - 297F_FFFF */
 	// IMG_APB3
-	unsigned char dmy298000002980ffff[0x29810000 - 0x29800000]; /* 2980_0000 - 2980_FFFF */
+	kuchar dmy298000002980ffff[0x29810000 - 0x29800000]; /* 2980_0000 - 2980_FFFF */
 	IoStatAhb statTbl; /* 2981_0000 - 2981_3FFFh */
 	IoPasAhb pasTbl; /* 2981_4000 - 2981_4FFFh */
 

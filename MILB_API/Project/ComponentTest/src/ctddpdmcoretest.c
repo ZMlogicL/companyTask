@@ -15,13 +15,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pdm.h"
-#include "dd_pdm.h"
+// #include "dd_pdm.h"
 #include "ct_dd_pdm.h"
-#include "dd_top.h"
-#include "dd_cache.h"
-#include "dd_gic.h"
-#include "dd_audio.h"
-#include "dd_hdmac0.h"
+// #include "dd_top.h"
+// #include "dd_cache.h"
+// #include "dd_gic.h"
+// #include "dd_audio.h"
+// #include "dd_hdmac0.h"
+#include "../../DeviceDriver/Peripheral/src/ddpdm.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudio.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac0.h"
 #include "peripheral.h"
 #include "ctddpdmmain.h"
 #include "ctddpdmcoretest.h"
@@ -55,25 +58,25 @@ void ct_dd_pdm_coretest_set_test(CtDdPdmCoretest *self,CtDdPdmOthertest *test)
 void ct_dd_pdm_coretest_ctrl(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -83,14 +86,14 @@ void ct_dd_pdm_coretest_ctrl(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -110,25 +113,25 @@ void ct_dd_pdm_coretest_ctrl(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e1(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = (E_DD_PDM_CORE_LR_SWAP)2;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = (PdmCoreLrSwap)2;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -138,14 +141,14 @@ void ct_dd_pdm_coretest_ctrl_e1(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -165,25 +168,25 @@ void ct_dd_pdm_coretest_ctrl_e1(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e2(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = (E_DD_PDM_CORE_PGA)16;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = (PdmCorePga)16;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -193,14 +196,14 @@ void ct_dd_pdm_coretest_ctrl_e2(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -220,25 +223,25 @@ void ct_dd_pdm_coretest_ctrl_e2(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e3(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = (E_DD_PDM_CORE_PGA)16;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = (PdmCorePga)16;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -248,14 +251,14 @@ void ct_dd_pdm_coretest_ctrl_e3(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -275,25 +278,25 @@ void ct_dd_pdm_coretest_ctrl_e3(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e4(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 32;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 32;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -303,14 +306,14 @@ void ct_dd_pdm_coretest_ctrl_e4(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -330,25 +333,25 @@ void ct_dd_pdm_coretest_ctrl_e4(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e5(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 64;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 64;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -358,14 +361,14 @@ void ct_dd_pdm_coretest_ctrl_e5(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -385,25 +388,25 @@ void ct_dd_pdm_coretest_ctrl_e5(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e6(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = 2;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = 2;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -413,14 +416,14 @@ void ct_dd_pdm_coretest_ctrl_e6(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -440,23 +443,23 @@ void ct_dd_pdm_coretest_ctrl_e6(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e7(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
-	coreCfg.s_cycle = (E_DD_PDM_CORE_S_CYCLE)8;
-	coreCfg.soft_mute = D_DD_PDM_ENABLE;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
+	coreCfg.sCycle = (PdmCoreSCycle)8;
+	coreCfg.softMute = DdAudio_ENABLE;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -476,25 +479,25 @@ void ct_dd_pdm_coretest_ctrl_e7(CtDdPdmCoretest *self)
 void ct_dd_pdm_coretest_ctrl_e8(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 
-	coreCfg.swap = E_DD_PDM_CORE_LR_SWAP_SWAP;
-	coreCfg.pga_r = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.pga_l = E_DD_PDM_CORE_PGA_P_10_5_DB;
-	coreCfg.mclk_div = 12;
-	coreCfg.sinc_rate = 48;
-	coreCfg.adc_hpd = D_DD_PDM_ENABLE;
-	coreCfg.hp_cutoff = 2;
+	coreCfg.swap = DdPdm_CORE_LR_SWAP_SWAP;
+	coreCfg.pgaR = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.pgaL = DdPdm_CORE_PGA_P_10_5_DB;
+	coreCfg.mclkDiv = 12;
+	coreCfg.sincRate = 48;
+	coreCfg.adcHpd = DdAudio_ENABLE;
+	coreCfg.hpCutoff = 2;
 	
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_1000US;
+	coreCfg.sCycle = E_DD_PDM_CORE_S_CYCLE_1000US;
 // --- REMOVE_ES1_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES1_HARDWARE
@@ -504,14 +507,14 @@ void ct_dd_pdm_coretest_ctrl_e8(CtDdPdmCoretest *self)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-	coreCfg.s_cycle = E_DD_PDM_CORE_S_CYCLE_5;
+	coreCfg.sCycle = DdPdm_CORE_S_CYCLE_5;
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
-	coreCfg.soft_mute = 2;
+	coreCfg.softMute = 2;
 	
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	if (self->test->ch <= 1){
 		Ddim_Print(("LRSWAP=%d\n", IO_PDM[self->test->ch].CORE_CFG.bit.LRSWAP));
@@ -533,30 +536,30 @@ void ct_dd_pdm_coretest_ctrl_e9(CtDdPdmCoretest *self)
 	kint32 result;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
-	result = Dd_Pdm_Ctrl_Core(self->test->ch, NULL);
+	result = dd_pdm_ctrl_core(dd_pdm_get(),self->test->ch, NULL);
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
 
 void ct_dd_pdm_coretest_get_ctrl(CtDdPdmCoretest *self)
 {
 	kint32 result;
-	T_DD_PDM_CORE_CFG coreCfg;
+	DdPdmCoreCfg coreCfg;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	ct_dd_pdm_main_reg_init();
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 
-	result = Dd_Pdm_Get_Ctrl_Core(self->test->ch, &coreCfg);
+	result = dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, &coreCfg);
 	
 	Ddim_Print(("swap=0x%x\n", coreCfg.swap));
-	Ddim_Print(("pga_r=0x%x\n", coreCfg.pga_r));
-	Ddim_Print(("pga_l=0x%x\n", coreCfg.pga_l));
-	Ddim_Print(("mclk_div=0x%x\n", coreCfg.mclk_div));
-	Ddim_Print(("sinc_rate=0x%x\n", coreCfg.sinc_rate));
-	Ddim_Print(("adc_hpd=0x%x\n", coreCfg.adc_hpd));
-	Ddim_Print(("hp_cutoff=0x%x\n", coreCfg.hp_cutoff));
-	Ddim_Print(("s_cycle=0x%x\n", coreCfg.s_cycle));
-	Ddim_Print(("soft_mute=0x%x\n", coreCfg.soft_mute));
+	Ddim_Print(("pgaR=0x%x\n", coreCfg.pgaR));
+	Ddim_Print(("pgaL=0x%x\n", coreCfg.pgaL));
+	Ddim_Print(("mclkDiv=0x%x\n", coreCfg.mclkDiv));
+	Ddim_Print(("sincRate=0x%x\n", coreCfg.sincRate));
+	Ddim_Print(("adcHpd=0x%x\n", coreCfg.adcHpd));
+	Ddim_Print(("hpCutoff=0x%x\n", coreCfg.hpCutoff));
+	Ddim_Print(("sCycle=0x%x\n", coreCfg.sCycle));
+	Ddim_Print(("softMute=0x%x\n", coreCfg.softMute));
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
 
@@ -565,7 +568,7 @@ void ct_dd_pdm_coretest_get_ctrl_e1(CtDdPdmCoretest *self)
 	kint32 result;
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
-	result = Dd_Pdm_Get_Ctrl_Core(self->test->ch, NULL);
+	result = dd_pdm_get_ctrl_core(dd_pdm_get(),self->test->ch, NULL);
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
 

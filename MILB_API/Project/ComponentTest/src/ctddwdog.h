@@ -23,7 +23,7 @@
 #define __CT_DD_WDOG_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 #include "ddwdog.h"
 #include "ddimusercustom.h"
 

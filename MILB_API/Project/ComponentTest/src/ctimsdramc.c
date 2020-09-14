@@ -48,7 +48,7 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImSdramc, ct_im_sdramc)
 /*----------------------------------------------------------------------*/
 struct  _CtImSdramcPrivate
 {
-
+	UCHAR ch;
 };
 
 
@@ -63,11 +63,13 @@ static void ctSdramcCallback_cb( ULONG intCause );
  */
 static void ct_im_sdramc_constructor(CtImSdramc *self)
 {
- //CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+	priv-> ch = 0;
 }
 
 static void ct_im_sdramc_destructor(CtImSdramc *self)
 {
+
 }
 
 /*----------------------------------------------------------------------*/
@@ -89,8 +91,10 @@ void ct_im_sdramc_1_01( CtImSdramc *self, UCHAR ch )
 {
 	ImSdramcPortEImSdramcPort port;
 	SdramcCmdArbRate arbRate;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+	priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_01(test ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_01(test priv->ch=%d)\n", priv->ch));
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		arbRate.throughput[ port ] = 0xFFF;
@@ -98,11 +102,11 @@ void ct_im_sdramc_1_01( CtImSdramc *self, UCHAR ch )
 		arbRate.enable[ port ] = ImSdramc_E_IM_SDRAMC_EN_ENABLE;
 	}
 
-	(void)im_sdramc1_set_acceptancecapability( (ImSdramcEImSdramcCh)ch, &arbRate );
+	(void)im_sdramc1_set_acceptancecapability( (ImSdramcEImSdramcCh)priv->ch, &arbRate );
 
 	memset( &arbRate, 0, sizeof(arbRate) );
 
-	(void)im_sdramc1_get_acceptancecapability( (ImSdramcEImSdramcCh)ch, &arbRate );
+	(void)im_sdramc1_get_acceptancecapability( (ImSdramcEImSdramcCh)priv->ch, &arbRate );
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		Ddim_Print( ("arbRate.throughput[%d] = %d\n", port, arbRate.throughput[ port ] ) );
@@ -111,7 +115,7 @@ void ct_im_sdramc_1_01( CtImSdramc *self, UCHAR ch )
 	}
 
 	Ddim_Print(("\n"));
-	Ddim_Print(("ct_im_sdramc_1_01(reset ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_01(reset priv->ch=%d)\n", priv->ch));
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		arbRate.throughput[ port ] = 0;
@@ -119,16 +123,16 @@ void ct_im_sdramc_1_01( CtImSdramc *self, UCHAR ch )
 		arbRate.enable[ port ] = ImSdramc_E_IM_SDRAMC_EN_DISABLE;
 	}
 
-	(void)im_sdramc1_set_acceptancecapability( (ImSdramcEImSdramcCh)ch, &arbRate );
+	(void)im_sdramc1_set_acceptancecapability( (ImSdramcEImSdramcCh)priv->ch, &arbRate );
 
 	memset( &arbRate, 0, sizeof(arbRate) );
 
-	(void)im_sdramc1_get_acceptancecapability( (ImSdramcEImSdramcCh)ch, &arbRate );
+	(void)im_sdramc1_get_acceptancecapability( (ImSdramcEImSdramcCh)priv->ch, &arbRate );
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		Ddim_Print( ("arbRate.throughput[%d] = %d\n", port, arbRate.throughput[ port ] ) );
-		Ddim_Print( ("arbRate.latency[%d] = %d\n", port, arbRate.latency[ port ]    ) );
-		Ddim_Print( ("arbRate.enable[%d] = %d\n", port, arbRate.enable[ port ]     ) );
+		Ddim_Print( ("arbRate.latency[%d] = %d\n", port, arbRate.latency[ port ] ) );
+		Ddim_Print( ("arbRate.enable[%d] = %d\n", port, arbRate.enable[ port ] ) );
 	}
 
 	Ddim_Print(("ct_im_sdramc_1_01 end\n"));
@@ -139,19 +143,21 @@ void ct_im_sdramc_1_02( CtImSdramc *self, UCHAR ch )
 {
 	ImSdramcPortEImSdramcPort port;
 	SdramcCmdArbPri arbPri;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_02(test ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_02(test priv->ch=%d)\n", priv->ch));
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		arbPri.priority[ port ] = 0x1F;
 		arbPri.enable[ port ] = ImSdramc_E_IM_SDRAMC_EN_ENABLE;
 	}
 
-	(void)im_sdramc1_set_cmd_arbitration_priority( (ImSdramcEImSdramcCh)ch, &arbPri );
+	(void)im_sdramc1_set_cmd_arbitration_priority( (ImSdramcEImSdramcCh)priv->ch, &arbPri );
 
 	memset( &arbPri, 0, sizeof(arbPri) );
 
-	(void)im_sdramc1_get_cmd_arbitration_priority( (ImSdramcEImSdramcCh)ch, &arbPri );
+	(void)im_sdramc1_get_cmd_arbitration_priority( (ImSdramcEImSdramcCh)priv->ch, &arbPri );
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		Ddim_Print( ("arbPri.priority[%d] = %d\n", port, arbPri.priority[ port ] ) );
@@ -159,18 +165,18 @@ void ct_im_sdramc_1_02( CtImSdramc *self, UCHAR ch )
 	}
 
 	Ddim_Print(("\n"));
-	Ddim_Print(("ct_im_sdramc_1_02(reset ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_02(reset priv->ch=%d)\n", priv->ch));
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		arbPri.priority[ port ] = 0;
 		arbPri.enable[ port ] = ImSdramc_E_IM_SDRAMC_EN_DISABLE;
 	}
 
-	(void)im_sdramc1_set_cmd_arbitration_priority( (ImSdramcEImSdramcCh)ch, &arbPri );
+	(void)im_sdramc1_set_cmd_arbitration_priority( (ImSdramcEImSdramcCh)priv->ch, &arbPri );
 
 	memset( &arbPri, 0, sizeof(arbPri) );
 
-	(void)im_sdramc1_get_cmd_arbitration_priority( (ImSdramcEImSdramcCh)ch, &arbPri );
+	(void)im_sdramc1_get_cmd_arbitration_priority( (ImSdramcEImSdramcCh)priv->ch, &arbPri );
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		Ddim_Print( ("arbPri.priority[%d] = %d\n", port, arbPri.priority[ port ] ) );
@@ -185,14 +191,16 @@ void ct_im_sdramc_1_03( CtImSdramc *self, UCHAR ch )
 {
 	UCHAR data;
 	ImSdramcEImSdramcRank	rank	= ImSdram_E_IM_SDRAMC_RANK_0;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_03(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_03(priv->ch=%d)\n", priv->ch));
 
-	IO_SDRAMC[ ch ].UMCMRACSST.bit.MRST = 1;
+	IO_SDRAMC[ priv->ch ].UMCMRACSST.bit.MRST = 1;
 
-	(void)im_sdramc1_set_mode_register( (ImSdramcEImSdramcCh)ch, rank, 0, 0xFF );
+	(void)im_sdramc1_set_mode_register( (ImSdramcEImSdramcCh)priv->ch, rank, 0, 0xFF );
 
-	(void)im_sdeamc1_get_mode_register( (ImSdramcEImSdramcCh)ch, rank, 0, &data );
+	(void)im_sdeamc1_get_mode_register( (ImSdramcEImSdramcCh)priv->ch, rank, 0, &data );
 
 	Ddim_Print( ("data = %d\n", data  ) );
 
@@ -203,25 +211,27 @@ void ct_im_sdramc_1_03( CtImSdramc *self, UCHAR ch )
 void ct_im_sdramc_1_04( CtImSdramc *self, UCHAR ch )
 {
 	ImSdramcPortEImSdramcPort port;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_04(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_04(priv->ch=%d)\n", priv->ch));
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 
 		Ddim_Print( ("Bus IF(read %d) on\n", port) );
-		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)ch, port, ImSdramc_E_IM_SDRAMC_ACCESS_READ,
+		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)priv->ch, port, ImSdramc_E_IM_SDRAMC_ACCESS_READ,
 				ImSdramc_E_IM_SDRAMC_EN_ENABLE );
 
 		Ddim_Print( ("Bus IF(read %d) off\n", port) );
-		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)ch, port, ImSdramc_E_IM_SDRAMC_ACCESS_READ,
+		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)priv->ch, port, ImSdramc_E_IM_SDRAMC_ACCESS_READ,
 				ImSdramc_E_IM_SDRAMC_EN_DISABLE );
 
 		Ddim_Print( ("Bus IF(write %d) on\n", port) );
-		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)ch, port, ImSdram_E_IM_SDRAMC_ACCESS_WRITE,
+		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)priv->ch, port, ImSdram_E_IM_SDRAMC_ACCESS_WRITE,
 				ImSdramc_E_IM_SDRAMC_EN_ENABLE );
 
 		Ddim_Print( ("Bus IF(write %d) off\n", port) );
-		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)ch, port, ImSdram_E_IM_SDRAMC_ACCESS_WRITE,
+		(void)im_sdramc1_set_clock_enable_busIf( (ImSdramcEImSdramcCh)priv->ch, port, ImSdram_E_IM_SDRAMC_ACCESS_WRITE,
 				ImSdramc_E_IM_SDRAMC_EN_DISABLE );
 
 	}
@@ -233,16 +243,18 @@ void ct_im_sdramc_1_04( CtImSdramc *self, UCHAR ch )
 void ct_im_sdramc_1_05( CtImSdramc *self, UCHAR ch )
 {
 	ImSdramcEImSdramcDatabuf dbno;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_05(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_05(priv->ch=%d)\n", priv->ch));
 
 	for ( dbno = ImSdram_E_IM_SDRAMC_DATABUF_0; dbno < ImSdram_E_IM_SDRAMC_DATABUF_MAX; dbno++ ) {
 
 		Ddim_Print( ("Data buf(%d) on\n", dbno) );
-		(void)im_sdramc_set_clock_enable_databuf( (ImSdramcEImSdramcCh)ch, dbno, ImSdramc_E_IM_SDRAMC_EN_ENABLE );
+		(void)im_sdramc_set_clock_enable_databuf( (ImSdramcEImSdramcCh)priv->ch, dbno, ImSdramc_E_IM_SDRAMC_EN_ENABLE );
 
 		Ddim_Print( ("Data buf(%d) off\n", dbno) );
-		(void)im_sdramc_set_clock_enable_databuf( (ImSdramcEImSdramcCh)ch, dbno, ImSdramc_E_IM_SDRAMC_EN_DISABLE );
+		(void)im_sdramc_set_clock_enable_databuf( (ImSdramcEImSdramcCh)priv->ch, dbno, ImSdramc_E_IM_SDRAMC_EN_DISABLE );
 	}
 
 	Ddim_Print(("ct_im_sdramc_1_05 end\n"));
@@ -251,19 +263,22 @@ void ct_im_sdramc_1_05( CtImSdramc *self, UCHAR ch )
 
 void ct_im_sdramc_1_06( CtImSdramc *self, UCHAR ch )
 {
-	Ddim_Print(("ct_im_sdramc_1_06(ch=%d)\n", ch));
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-//	IO_SDRAMC[ ch ].UMCSPCSTAT.bit.SLFRST = 1;
+	Ddim_Print(("ct_im_sdramc_1_06(priv->ch=%d)\n", priv->ch));
 
-	Ddim_Print( ("refresh start ch = %d\n", ch) );
+//	IO_SDRAMC[ priv->ch ].UMCSPCSTAT.bit.SLFRST = 1;
+
+	Ddim_Print( ("refresh start priv->ch = %d\n", priv->ch) );
 	Ddim_Print(("\n"));
-	(void)im_sdramc_strat_selfrefresh( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_strat_selfrefresh( (ImSdramcEImSdramcCh)priv->ch );
 
-//	IO_SDRAMC[ ch ].UMCSPCSTAT.bit.SLFRST = 0;
+//	IO_SDRAMC[ priv->ch ].UMCSPCSTAT.bit.SLFRST = 0;
 
-	Ddim_Print( ("refresh stop ch = %d\n", ch) );
+	Ddim_Print( ("refresh stop priv->ch = %d\n", priv->ch) );
 	Ddim_Print(("\n"));
-	(void)im_sdramc_stop_selfrefresh( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_stop_selfrefresh( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print(("ct_im_sdramc_1_06 end\n"));
 	Ddim_Print(("\n"));
@@ -275,10 +290,12 @@ void ct_im_sdramc_1_07( CtImSdramc *self, UCHAR ch )
 	ImSdramcEImSdramcArea area = ImSdram_E_IM_SDRAMC_AREA_A;
 	ImSdramcPortEImSdramcPort port;
 	ULONG addr;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_07(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_07(priv->ch=%d)\n", priv->ch));
 
-	Ddim_Print( ("ch   = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch   = %d\n", priv->ch  ) );
 	Ddim_Print( ("area = %d\n", area) );
 	Ddim_Print( ("Access detection start\n") );
 	Ddim_Print(("\n"));
@@ -307,14 +324,14 @@ void ct_im_sdramc_1_07( CtImSdramc *self, UCHAR ch )
 // --- REMOVE_ES_COMPILE_OPT END ---
 	acsDet.pCallBack	= (TImSdramcCallback)ctSdramcCallback_cb;
 
-	(void)im_sdramc_start_access_detection( (ImSdramcEImSdramcCh)ch, area, &acsDet );
+	(void)im_sdramc_start_access_detection( (ImSdramcEImSdramcCh)priv->ch, area, &acsDet );
 
 	Ddim_Print( ("Access detection stop\n") );
 	Ddim_Print(("\n"));
 
-	(void)im_sdramc_stop_access_detection( (ImSdramcEImSdramcCh)ch, area );
+	(void)im_sdramc_stop_access_detection( (ImSdramcEImSdramcCh)priv->ch, area );
 
-	(void)im_sdramc_get_access_detection( (ImSdramcEImSdramcCh)ch, &area, &port, &addr );
+	(void)im_sdramc_get_access_detection( (ImSdramcEImSdramcCh)priv->ch, &area, &port, &addr );
 
 	Ddim_Print( ("Access detection get\n") );
 	Ddim_Print( ("area = %d\n", area) );
@@ -331,28 +348,30 @@ void ct_im_sdramc_1_08( CtImSdramc *self, UCHAR ch )
 	ImSdramcEImSdramcMonmode mode = ImSdram_E_IM_SDRAMC_MONMODE_SIZE;
 	ImSdramcPortEImSdramcPort port;
 	TImSdramcMonitor mon;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_08(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_08(priv->ch=%d)\n", priv->ch));
 
-	Ddim_Print( ("ch = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch  ) );
 	Ddim_Print( ("mode = %d\n", mode) );
 	Ddim_Print( ("Monitor start\n") );
 	Ddim_Print(("\n"));
 
-	(void)im_sdramc_start_monitor( (ImSdramcEImSdramcCh)ch, mode, TRUE, TRUE, TRUE );
+	(void)im_sdramc_start_monitor( (ImSdramcEImSdramcCh)priv->ch, mode, TRUE, TRUE, TRUE );
 
-	Ddim_Print( ("ch = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch  ) );
 	Ddim_Print( ("Monitor stop\n") );
 	Ddim_Print(("\n"));
 
-	(void)im_sdramc_stop_monitor( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_stop_monitor( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print( ("Monitor get\n") );
-	Ddim_Print( ("ch = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch  ) );
 
 	memset( &mon, 0, sizeof(mon) );
 
-	(void)im_sdramc_get_monitor( (ImSdramcEImSdramcCh)ch, &mon );
+	(void)im_sdramc_get_monitor( (ImSdramcEImSdramcCh)priv->ch, &mon );
 
 	for ( port = ImSdramc_E_IM_SDRAMC_PORT_MX10; port < ImSdramc_E_IM_SDRAMC_PORT_MAX; port++ ) {
 		Ddim_Print( ("mon.data[%d] = %lu\n", port, mon.data[ port ] ) );
@@ -367,28 +386,30 @@ void ct_im_sdramc_1_09( CtImSdramc *self, UCHAR ch )
 	ImSdramcEImSdramcMonmode mode = ImSdram_E_IM_SDRAMC_MONMODE_SIZE;
 	UCHAR subId;
 	ImSdramcMonitorMxic monmxic;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_09(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_09(priv->ch=%d)\n", priv->ch));
 
-	Ddim_Print( ("ch = %d\n", ch ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch ) );
 	Ddim_Print( ("mode = %d\n", mode) );
 	Ddim_Print( ("Monitor for MXIC start\n") );
 	Ddim_Print(("\n"));
 
-	(void)im_sdramc_start_monitor_mxic( (ImSdramcEImSdramcCh)ch, mode, TRUE, TRUE, TRUE );
+	(void)im_sdramc_start_monitor_mxic( (ImSdramcEImSdramcCh)priv->ch, mode, TRUE, TRUE, TRUE );
 
-	Ddim_Print( ("ch = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch  ) );
 	Ddim_Print( ("Monitor for MXIC stop\n") );
 	Ddim_Print(("\n"));
 
-	(void)im_sdramc_stop_monitor_mxic( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_stop_monitor_mxic( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print( ("Monitor for MXIC get\n") );
-	Ddim_Print( ("ch = %d\n", ch  ) );
+	Ddim_Print( ("priv->ch = %d\n", priv->ch  ) );
 
 	memset( &monmxic, 0, sizeof(monmxic) );
 
-	(void)im_sdramc_get_monitor_mxic( (ImSdramcEImSdramcCh)ch, &monmxic );
+	(void)im_sdramc_get_monitor_mxic( (ImSdramcEImSdramcCh)priv->ch, &monmxic );
 
 	for ( subId = 0; subId < ImSdram_E_IM_SDRAMC_SUBID_MAX; subId++ ) {
 		Ddim_Print( ("monmxic.data[%d] = %lu\n", subId, monmxic.data[ subId ] ) );
@@ -400,15 +421,17 @@ void ct_im_sdramc_1_09( CtImSdramc *self, UCHAR ch )
 
 void ct_im_sdramc_1_10( CtImSdramc *self, UCHAR ch )
 {
-	Ddim_Print(("ct_im_sdramc_1_10(ch=%d)\n", ch));
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
+	Ddim_Print(("ct_im_sdramc_1_10(priv->ch=%d)\n", priv->ch));
 	Ddim_Print( (" manual mode start\n") );
 	Ddim_Print(("\n"));
-	(void)im_sdramc_start_manualmode( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_start_manualmode( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print( ("manual mode stop\n") );
 	Ddim_Print(("\n"));
-	(void)im_sdramc_stop_manualmode( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_stop_manualmode( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print(("ct_im_sdramc_1_10 end\n"));
 	Ddim_Print(("\n"));
@@ -416,11 +439,13 @@ void ct_im_sdramc_1_10( CtImSdramc *self, UCHAR ch )
 
 void ct_im_sdramc_1_11( CtImSdramc *self, UCHAR ch )
 {
-	Ddim_Print(("ct_im_sdramc_1_11(ch=%d)\n", ch));
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
+	Ddim_Print(("ct_im_sdramc_1_11(priv->ch=%d)\n", priv->ch));
 	Ddim_Print( (" ReLock_DLL start\n") );
 	Ddim_Print(("\n"));
-	(void)im_sdramc_relock_dll( (ImSdramcEImSdramcCh)ch );
+	(void)im_sdramc_relock_dll( (ImSdramcEImSdramcCh)priv->ch );
 
 	Ddim_Print(("ct_im_sdramc_1_11 end\n"));
 	Ddim_Print(("\n"));
@@ -429,13 +454,15 @@ void ct_im_sdramc_1_11( CtImSdramc *self, UCHAR ch )
 void ct_im_sdramc_1_12( CtImSdramc *self, UCHAR ch )
 {
 	kint32 ret;
+	CtImSdramcPrivate *priv = CT_IM_SDRAMC_GET_PRIVATE(self);
+		priv-> ch = ch;
 
-	Ddim_Print(("ct_im_sdramc_1_12(ch=%d)\n", ch));
+	Ddim_Print(("ct_im_sdramc_1_12(priv->ch=%d)\n", priv->ch));
 
 	Ddim_Print( ("Training1 start\n") );
 	Ddim_Print(("\n"));
 
-	ret = im_sdramc_start_training( (ImSdramcEImSdramcCh)ch, ImSdram_E_IM_SDRAMC_TRAINING_MODE_WRITE );
+	ret = im_sdramc_start_training( (ImSdramcEImSdramcCh)priv->ch, ImSdram_E_IM_SDRAMC_TRAINING_MODE_WRITE );
 
 	Ddim_Print( ("Training1 end(ret=%d)\n", ret) );
 	Ddim_Print(("\n"));
@@ -443,7 +470,7 @@ void ct_im_sdramc_1_12( CtImSdramc *self, UCHAR ch )
 	Ddim_Print( ("Training2 start\n") );
 	Ddim_Print(("\n"));
 
-	ret = im_sdramc_start_training( (ImSdramcEImSdramcCh)ch, ImSdram_E_IM_SDRAMC_TRAINING_MODE_CA );
+	ret = im_sdramc_start_training( (ImSdramcEImSdramcCh)priv->ch, ImSdram_E_IM_SDRAMC_TRAINING_MODE_CA );
 
 	Ddim_Print( ("Training2 end(ret=%d)\n", ret) );
 	Ddim_Print(("\n"));
@@ -723,85 +750,85 @@ void ct_im_sdramc_2_19( CtImSdramc *self )
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
  *	| P1       | P2      | P4     | P5    | P6    | P7    | Meaning                                             |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| set      | arbrate | ch     | test  |       |       | Set command arbitration (rate control) for test     |
+ *	| set      | arbrate | priv->ch     | test  |       |       | Set command arbitration (rate control) for test     |
  *	|          |         |        |       |       |       | im_sdramc1_set_acceptancecapability()                |
  *	|          +         +        +-------+-------+-------+-----------------------------------------------------+
  *	|          |         |        | reset |       |       | Reset command arbitration (rate control)            |
  *	|          |         |        |       |       |       | im_sdramc1_set_acceptancecapability()                |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | arbpri  | ch     | test  |       |       | Set command arbitration (priority control) for test |
+ *	|          | arbpri  | priv->ch     | test  |       |       | Set command arbitration (priority control) for test |
  *	|          |         |        |       |       |       | im_sdramc1_set_cmd_arbitration_priority()            |
  *	|          +         +        +-------+-------+-------+-----------------------------------------------------+
  *	|          |         |        | reset |       |       | Reset command arbitration (priority control)        |
  *	|          |         |        |       |       |       | im_sdramc1_set_cmd_arbitration_priority()            |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | mode    | ch     | rank  | ma    |       | Set mode register                                   |
+ *	|          | mode    | priv->ch     | rank  | ma    |       | Set mode register                                   |
  *	|          |         |        |       |       |       | im_sdramc1_set_mode_register()                       |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | clkbus  | ch     | port  | access| on    | BusIF clock enable                                  |
+ *	|          | clkbus  | priv->ch     | port  | access| on    | BusIF clock enable                                  |
  *	|          |         |        |       |       |       | im_sdramc1_set_clock_enable_busIf()                  |
  *	|          |         +        +       +       +-------+-----------------------------------------------------+
  *	|          |         |        |       |       | off   | BusIF clock disable                                 |
  *	|          |         |        |       |       |       | im_sdramc1_set_clock_enable_busIf()                  |
  *	|          |---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | clkdat  | ch     | dbno  | on    |       | Data buffer clock enable                            |
+ *	|          | clkdat  | priv->ch     | dbno  | on    |       | Data buffer clock enable                            |
  *	|          |         |        |       |       |       | im_sdramc_set_clock_enable_databuf()                |
  *	|          |         +        +       +-------+-------+-----------------------------------------------------+
  *	|          |         |        |       | off   |       | Data buffer clock disable                           |
  *	|          |         |        |       |       |       | im_sdramc_set_clock_enable_databuf()                |
  *	|----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| get      | arbrate | ch     |       |       |       | Get command arbitration (rate control)              |
+ *	| get      | arbrate | priv->ch     |       |       |       | Get command arbitration (rate control)              |
  *	|          |         |        |       |       |       | im_sdramc1_get_acceptancecapability()                |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | arbpri  | ch     |       |       |       | Get command arbitration (priority control)          |
+ *	|          | arbpri  | priv->ch     |       |       |       | Get command arbitration (priority control)          |
  *	|          |         |        |       |       |       | im_sdramc1_get_cmd_arbitration_priority()            |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | mode    | ch     | rank  | ma    |       | Get mode register                                   |
+ *	|          | mode    | priv->ch     | rank  | ma    |       | Get mode register                                   |
  *	|          |         |        |       |       |       | im_sdeamc1_get_mode_register()                       |
  *	|----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| refresh  | start   | ch     |       |       |       | Self refresh mode start                             |
+ *	| refresh  | start   | priv->ch     |       |       |       | Self refresh mode start                             |
  *	|          |         |        |       |       |       | im_sdramc_strat_selfrefresh()                       |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | stop    | ch     |       |       |       | Self refresh mode stop                              |
+ *	|          | stop    | priv->ch     |       |       |       | Self refresh mode stop                              |
  *	|          |         |        |       |       |       | im_sdramc_stop_selfrefresh()                        |
  *	|----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| detect   | start   | ch     | area  |       |       | Access detection start                              |
+ *	| detect   | start   | priv->ch     | area  |       |       | Access detection start                              |
  *	|          |         |        |       |       |       | im_sdramc_start_access_detection()                  |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | stop    | ch     | area  |       |       | Access detection stop                               |
+ *	|          | stop    | priv->ch     | area  |       |       | Access detection stop                               |
  *	|          |         |        |       |       |       | im_sdramc_stop_access_detection()                   |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | get     | ch     |       |       |       | Get access detection                                |
+ *	|          | get     | priv->ch     |       |       |       | Get access detection                                |
  *	|          |         |        |       |       |       | im_sdramc_get_access_detection()                    |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| mon      | start   | ch     | mode  | write | read  | Monitor start                                       |
+ *	| mon      | start   | priv->ch     | mode  | write | read  | Monitor start                                       |
  *	|          |         |        |       |       |       | im_sdramc_start_monitor()                           |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | stop    | ch     |       |       |       | Monitor stop                                        |
+ *	|          | stop    | priv->ch     |       |       |       | Monitor stop                                        |
  *	|          |         |        |       |       |       | im_sdramc_stop_monitor()                            |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | get     | ch     |       |       |       | Get access monitor                                  |
+ *	|          | get     | priv->ch     |       |       |       | Get access monitor                                  |
  *	|          |         |        |       |       |       | im_sdramc_get_monitor()                             |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| monmxic  | start   | ch     | mode  | write | read  | Monitor for MXIC start                              |
+ *	| monmxic  | start   | priv->ch     | mode  | write | read  | Monitor for MXIC start                              |
  *	|          |         |        |       |       |       | im_sdramc_start_monitor_mxic()                      |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | stop    | ch     |       |       |       | Monitor for MXIC stop                               |
+ *	|          | stop    | priv->ch     |       |       |       | Monitor for MXIC stop                               |
  *	|          |         |        |       |       |       | im_sdramc_stop_monitor_mxic()                       |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | get     | ch     |       |       |       | Get access monitor for MXIC                         |
+ *	|          | get     | priv->ch     |       |       |       | Get access monitor for MXIC                         |
  *	|          |         |        |       |       |       | im_sdramc_get_monitor_mxic()                        |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| manual   | start   | ch     |       |       |       | manual mode start                                   |
+ *	| manual   | start   | priv->ch     |       |       |       | manual mode start                                   |
  *	|          |         |        |       |       |       | im_sdramc_start_manualmode()                        |
  *	|          +---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	|          | stop    | ch     |       |       |       | manual mode stop                                    |
+ *	|          | stop    | priv->ch     |       |       |       | manual mode stop                                    |
  *	|          |         |        |       |       |       | im_sdramc_stop_manualmode()                         |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| relock   | ch      |        |       |       |       | Relock dll                                          |
+ *	| relock   | priv->ch      |        |       |       |       | Relock dll                                          |
  *	|          |         |        |       |       |       | im_sdramc_relock_dll()                              |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
- *	| training | ch      | mode   |       |       |       | Training startt                                     |
+ *	| training | priv->ch      | mode   |       |       |       | Training startt                                     |
  *	|          |         |        |       |       |       | im_sdramc_start_training()                          |
  *	+----------+---------+--------+-------+-------+-------+-----------------------------------------------------+
  *	| err      | arbrate | set    |       |       |       | im_sdramc1_set_acceptancecapability()                |

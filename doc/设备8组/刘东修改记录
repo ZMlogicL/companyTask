@@ -30,7 +30,10 @@ void ct_dd_xdmasnap_main(int argc, char** argv);
 4、源文件：snsrtos-zzz/target/cpu_tkernel/basefw/MILB_API/Project/ComponentTest/src/ct_im_b2r.c
 1）抄写为：ctimb2r.c　ctimb2r1.c　ctimb2r2.c　ctimb2r3.c　ctimb2r4.c　ctimb2r5.c　ctimb2r6.c　ctimb2r7.c　ctimb2r8.c　ctimb2r9.c　ctimb2r10.c ，新建类:CtImB2r CtImB2r1 CtImB2r2 CtImB2r3 CtImB2r4 CtImB2r5 CtImB2r6 CtImB2r7 CtImB2r8 CtImB2r9 CtImB2r10
 
-2）公有方法
+2)ct_im_b2r.h文件更改为ctimb2r.h文件
+宏定义修改：D_IM_B2R_*修改为CtImB2r_D_IM_B2R
+
+3）公有方法
 原：
 VOID CT_Im_B2r_PrintReg( VOID );
 VOID CT_Im_B2R_Run( const UINT32 ct_idx_1st, const UINT32 ct_idx_2nd, const UINT32 ct_idx_3rd );

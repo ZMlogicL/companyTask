@@ -41,7 +41,6 @@ static volatile TImElaExtractNoiseData		S_G_IM_ELA_EXTRACT_NOISE[ImElaReg_D_IM_E
 /* Local Method Definition												*/
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
-static VOID imElaCtrlNextEirchRegister( VOID );
 static VOID imElaCtrlEnrechRegister( VOID );
 
 static void im_ela_reg_constructor(ImElaReg *self)
@@ -56,30 +55,6 @@ static void im_ela_reg_destructor(ImElaReg *self)
 /* Local Function														*/
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
-/**
- * @brief		EIRch register next setting
- * @param[in]	None
- * @return		None
- * @note		None
- * @attention	None
- */
-static VOID imElaCtrlNextEirchRegister( VOID )
-{
-	TImElaCtrlEirch ctrlEirch;
-	ImEla *imEla  =  im_ela_get();
-//	UCHAR *gImElaStageCnt = im_ela_get_g_im_ela_stage_cnt(imEla);
-//	UCHAR *gImElaStepCnt = im_ela_get_g_im_ela_step_cnt(imEla);
-
-	// The EIRA is populated with EIWA data from the previous stage.
-	ctrlEirch.inBayerTopOffset = 0;
-	ctrlEirch.inBayerTotalHsize = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].glHbyte;
-	ctrlEirch.inBayerHsize = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].hSize;
-	ctrlEirch.inBayerVline = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].vLine;
-	ctrlEirch.inBayerTopAddr = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].bayerAddr[imEla->gImElaStepCnt];
-
-	im_ela_ctrl_eirch_register( ctrlEirch );
-}
-
 /**
  * @brief		ENREch register setting
  * @param[in]	None
@@ -112,6 +87,30 @@ static VOID imElaCtrlEnrechRegister( VOID )
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
 /**
+ * @brief		EIRch register next setting
+ * @param[in]	None
+ * @return		None
+ * @note		None
+ * @attention	None
+ */
+VOID im_ela_reg_ctrl_next_eirch_register( ImElaReg*self)
+{
+	TImElaCtrlEirch ctrlEirch;
+	ImEla *imEla  =  im_ela_get();
+//	UCHAR *gImElaStageCnt = im_ela_get_g_im_ela_stage_cnt(imEla);
+//	UCHAR *gImElaStepCnt = im_ela_get_g_im_ela_step_cnt(imEla);
+
+	// The EIRA is populated with EIWA data from the previous stage.
+	ctrlEirch.inBayerTopOffset = 0;
+	ctrlEirch.inBayerTotalHsize = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].glHbyte;
+	ctrlEirch.inBayerHsize = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].hSize;
+	ctrlEirch.inBayerVline = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].vLine;
+	ctrlEirch.inBayerTopAddr = S_G_IM_ELA_CURTAIL_BAYER[imEla->gImElaStageCnt - 1].bayerAddr[imEla->gImElaStepCnt];
+
+	im_ela_ctrl_eirch_register(im_ela_get(), ctrlEirch );
+}
+
+/**
  * @brief		Common register & EIRch register & ENWch/ENWch register setting
  * @param[in]	None
  * @return		None
@@ -136,7 +135,7 @@ VOID im_ela_reg_ctrl_next_register(ImElaReg*self)
 	if( imEla->gImElaStepCnt == ImElaReg_D_IM_ELA_STEP_S ){
 		IO_ELA.ELACTL.bit.ELAACT = ImElaReg_D_IM_ELA_ELAACT_COMBINE;								// Synthesis mode
 		imElaCtrlEnrechRegister();													// ENRAch/ENWMch register setting
-		im_ela_reg_enrach_enwmch_register(NULL);
+		im_ela_reg_enrach_enwmch_register(im_ela_reg_new());
 	}
 	else{
 		IO_ELA.ELACTL.bit.ELAACT = ImElaReg_D_IM_ELA_ELAACT_EXTRACT;								// Synthesis mode
@@ -182,18 +181,18 @@ VOID im_ela_reg_ctrl_next_register(ImElaReg*self)
 		IO_ELA.ELABYR.bit.EOBAEN = 0;	// "OB correction"/"Optical zero shift" disable
 
 		/* for multiple times execution parameter */
-		if( gImElaStepCnt == 0 ){
+		if( imEla->gImElaStepCnt == 0 ){
 			if( gImElaMultipleExecInfo->core[imEla->gImElaStageCnt] != NULL ){
-				im_ela_ctrl_core_register( gImElaMultipleExecInfo->core[imEla->gImElaStageCnt] );
+				im_ela_ctrl_core_register(im_ela_get(), gImElaMultipleExecInfo->core[imEla->gImElaStageCnt] );
 			}
 		}
 
 		// EIRch register setting
-		imElaCtrlNextEirchRegister();
+		im_ela_reg_ctrl_next_eirch_register(im_ela_reg_new());
 		// EIWch register setting
-		im_ela_reg_ctrl_eiwch_register(NULL);
+		im_ela_reg_ctrl_eiwch_register(im_ela_reg_new());
 		// ENWch register setting
-		im_ela_reg_ctrl_enwch_register(NULL);
+		im_ela_reg_ctrl_enwch_register(im_ela_reg_new());
 	}
 }
 
@@ -659,7 +658,7 @@ INT32 im_ela_reg_close(ImElaReg*self)
 	ercd = DDIM_User_Sig_Sem( SID_IM_ELA );				// sig_sem()
 	if( D_DDIM_USER_E_OK != ercd ){
 		// SPR processing error
-		Ddim_Print(("im_ela_reg_close(NULL) Error.\n"));
+		Ddim_Print(("im_ela_reg_close(im_ela_reg_new()) Error.\n"));
 		return ImEla_D_IM_ELA_SEM_NG;
 	}
 	return D_DDIM_OK;
@@ -676,11 +675,11 @@ UCHAR im_ela_reg_get_exe_cnt(ImElaReg*self)
 {
 	UCHAR ela_count;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	ela_count = ( IO_ELA.ELACTL.bit.ELACNT );
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 
 	return ela_count;
 }
@@ -696,11 +695,11 @@ USHORT im_ela_reg_get_optical_zero_level_shift(ImElaReg*self)
 {
 	USHORT Optical_Zero_Level_Shift;
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	ImElaReg_IM_ELA_GET_REG_SIGNED(Optical_Zero_Level_Shift, IO_ELA.EZSFTA1, union io_ela_ezsfta1, EZSFTA1);
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 
 	return Optical_Zero_Level_Shift;
 }
@@ -717,7 +716,7 @@ INT32 im_ela_reg_start_sync(ImElaReg*self)
 {
 	INT32 ret;
 
-	ret = im_ela_core_start_core(NULL, ImElaReg_D_IM_ELA_SYNC );
+	ret = im_ela_core_start_core(im_ela_core_new(), ImElaReg_D_IM_ELA_SYNC );
 
 	return ret;
 }
@@ -733,7 +732,7 @@ INT32 im_ela_reg_start_async(ImElaReg*self)
 {
 	INT32 ret;
 
-	ret = im_ela_core_start_core(NULL, ImElaReg_D_IM_ELA_ASYNC );
+	ret = im_ela_core_start_core(im_ela_core_new(), ImElaReg_D_IM_ELA_ASYNC );
 
 	return ret;
 }
@@ -783,7 +782,7 @@ VOID im_ela_reg_set_deknee_lut_sleep(ImElaReg*self, UCHAR dekneeEnable )
 	}
 #endif // CO_PARAM_CHECK
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 
 	if( dekneeEnable == ImEla_D_IM_ELA_ENABLE ){
 		IO_ELA.ELABYR.bit.DKNACT = 1;
@@ -792,7 +791,7 @@ VOID im_ela_reg_set_deknee_lut_sleep(ImElaReg*self, UCHAR dekneeEnable )
 		IO_ELA.ELABYR.bit.DKNACT = 0;
 	}
 
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 }
 
 /**
@@ -823,7 +822,7 @@ UINT32 im_ela_reg_set_deknee_tbl(ImElaReg*self, const USHORT* const src_tbl, USH
 	}
 #endif // CO_PARAM_CHECK
 
-	im_ela_core_on_pclk(NULL);
+	im_ela_core_on_pclk(im_ela_core_new());
 	IO_ELA.ELABYR.bit.DKNACT = 1;
 
 	if( IO_ELA.ELATRG.bit.ELATRG == 0x3 ){
@@ -850,7 +849,7 @@ UINT32 im_ela_reg_set_deknee_tbl(ImElaReg*self, const USHORT* const src_tbl, USH
 	}
 
 	IO_ELA.ELABYR.bit.DKNACT = 0;
-	im_ela_core_off_pclk(NULL);
+	im_ela_core_off_pclk(im_ela_core_new());
 
 	return D_DDIM_OK;
 }

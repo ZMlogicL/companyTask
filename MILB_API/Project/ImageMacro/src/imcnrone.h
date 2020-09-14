@@ -32,11 +32,11 @@ G_BEGIN_DECLS
 
 
 #define IM_TYPE_CNRONE							(im_cnrone_get_type ())
-#define IM_CNRONE(obj)								(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_CNRONE, ImCnrone))
+#define IM_CNRONE(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_CNRONE, ImCnrone))
 #define IM_CNRONE_CLASS(klass)				(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_CNRONE, ImCnroneClass))
 #define IM_IS_CNRONE(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_CNRONE))
 #define IM_IS_CNRONE_CLASS(klass)		    (G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_CNRONE))
-#define IM_CNRONE_GET_CLASS(obj)			(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_CNRONE, ImCnroneClass))
+#define IM_CNRONE_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_CNRONE, ImCnroneClass))
 
 
 struct 				   _ImCnrone;
@@ -231,14 +231,14 @@ PCLK ON
 @param [in]	ch				channel[0 - 1]
 @remarks		For debugging use only (for register dump on debugger)
 */
-extern	VOID im_cnrone_on_pclk( UCHAR ch );
+extern	VOID im_cnrone_on_pclk(ImCnrone *self, UCHAR ch );
 
 /**
 PCLK OFF
 @param [in]	ch				channel[0 - 1]
 @remarks		For debugging use only (for register dump on debugger)
 */
-extern	VOID im_cnrone_off_pclk( UCHAR ch );
+extern	VOID im_cnrone_off_pclk(ImCnrone *self, UCHAR ch );
 
 /**
 The semaphore of SPR is acquired for Off Line
@@ -249,12 +249,12 @@ The semaphore of SPR is acquired for Off Line
 							<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_SEM_NG					Lock Error (System Using designated channel number)
+@retval		ImCnr_SEM_NG					Lock Error (System Using designated channel number)
 @retval		D_IM_CNR_TIMEOUT				Input Parameter Error
 @remarks	This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
 			This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
 */
-extern	INT32 im_cnrone_ofl_open( UCHAR ch, const INT32 tmOut );
+extern	INT32 im_cnrone_ofl_open(ImCnrone *self, UCHAR ch, const INT32 tmOut );
 
 
 /**
@@ -266,12 +266,12 @@ The semaphore of SPR is acquired for On The Fly
 							<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
-@retval		D_IM_CNR_SEM_NG					Lock Error (System Using designated channel number)
+@retval		ImCnr_SEM_NG					Lock Error (System Using designated channel number)
 @retval		D_IM_CNR_TIMEOUT				Input Parameter Error
 @remarks	This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
 			This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
 */
-extern	INT32 im_cnrone_otf_open( UCHAR ch, const INT32 tmOut );
+extern	INT32 im_cnrone_otf_open(ImCnrone *self, UCHAR ch, const INT32 tmOut );
 
 /**
 Suppre Control for Off Line
@@ -282,7 +282,7 @@ Suppre Control for Off Line
 @remarks	The calcurate mode of the Suppre is set.
 			Please call Y, C or both setting after this function if necessary.
 */
-extern	INT32 im_cnrone_ofl_ctrl( UCHAR ch, const ImCnrOflCtrl* const cnrCtrl );
+extern	INT32 im_cnrone_ofl_ctrl(ImCnrone *self, UCHAR ch, const ImCnrOflCtrl* const cnrCtrl );
 
 /**
 Suppre Control for On The Fly
@@ -293,7 +293,7 @@ Suppre Control for On The Fly
 @remarks	The calcurate mode of the Suppre is set.
 			Please call Y, C or both setting after this function if necessary.
 */
-extern	INT32 im_cnrone_otf_ctrl( UCHAR ch, const ImCnrOtfCtrl* const cnrCtrl );
+extern	INT32 im_cnrone_otf_ctrl(ImCnrone *self, UCHAR ch, const ImCnrOtfCtrl* const cnrCtrl );
 
 /**
 Set Suppre output address information for On The Fly
@@ -302,7 +302,7 @@ Set Suppre output address information for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_otf_set_outaddr_info( UCHAR ch, const ImCnrOtfOutaddrInfo* const addrInfo );
+extern	INT32 im_cnrone_otf_set_outaddr_info(ImCnrone *self, UCHAR ch, const ImCnrOtfOutaddrInfo* const addrInfo );
 
 /**
 Increment Suppre output address index for On The Fly
@@ -310,7 +310,7 @@ Increment Suppre output address index for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_otf_increment_outaddr_index( UCHAR ch );
+extern	INT32 im_cnrone_otf_increment_outaddr_index(ImCnrone *self, UCHAR ch );
 
 /**
 Suppre Control set AXI bus I/F Control for Off Line
@@ -319,7 +319,7 @@ Suppre Control set AXI bus I/F Control for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_ofl_ctrl_Axi( UCHAR ch, const ImCnrOflAxi* const axiCtrl );
+extern	INT32 im_cnrone_ofl_ctrl_Axi(ImCnrone *self, UCHAR ch, const ImCnrOflAxi* const axiCtrl );
 
 /**
 Suppre Control set AXI bus I/F Control for On The Fly
@@ -328,7 +328,7 @@ Suppre Control set AXI bus I/F Control for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_otf_ctrl_axi( UCHAR ch, const ImCnrOtfAxi* const axiCtrl );
+extern	INT32 im_cnrone_otf_ctrl_axi(ImCnrone *self, UCHAR ch, const ImCnrOtfAxi* const axiCtrl );
 
 /**
 Get AXI bus I/F Status for Off Line
@@ -337,7 +337,7 @@ Get AXI bus I/F Status for Off Line
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_ofl_get_axi_status( UCHAR ch, ImCnrOflAxiStatus* const sts );
+extern	INT32 im_cnrone_ofl_get_axi_status(ImCnrone *self, UCHAR ch, ImCnrOflAxiStatus* const sts );
 
 /**
 Get AXI bus I/F Status for On The Fly
@@ -346,7 +346,7 @@ Get AXI bus I/F Status for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-extern	INT32 im_cnrone_otf_get_axi_status( UCHAR ch, ImCnrOtfAxiStatus* const sts );
+extern	INT32 im_cnrone_otf_get_axi_status(ImCnrone *self, UCHAR ch, ImCnrOtfAxiStatus* const sts );
 
 /**
 Set SPR setting for CbCr for Off Line
@@ -356,7 +356,7 @@ Set SPR setting for CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for CbCr is set.
 */
-extern	INT32 im_cnrone_ofl_ctrl_c( UCHAR ch, const ImCnrCtrlC* const cnrCtrlY );
+extern	INT32 im_cnrone_ofl_ctrl_c(ImCnrone *self, UCHAR ch, const ImCnrCtrlC* const cnrCtrlY );
 
 /**
 Set SPR setting for CbCr for On The Fly
@@ -366,7 +366,7 @@ Set SPR setting for CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for CbCr is set.
 */
-extern	INT32 im_cnrone_otf_ctrl_c( UCHAR ch, const ImCnrCtrlC* const cnrCtrlY );
+extern	INT32 im_cnrone_otf_ctrl_c(ImCnrone *self, UCHAR ch, const ImCnrCtrlC* const cnrCtrlY );
 
 /**
 Set SPR setting for Y for Off Line
@@ -376,7 +376,7 @@ Set SPR setting for Y for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	The calcurate mode of the Suppre for Y is set.
 */
-extern	INT32 im_cnrone_ofl_ctrl_y( UCHAR ch, const ImCnrOflCtrlY* const cnrCtrlY );
+extern	INT32 im_cnrone_ofl_ctrl_y(ImCnrone *self, UCHAR ch, const ImCnrOflCtrlY* const cnrCtrlY );
 
 /**
 Set SPR table for Y for Off Line
@@ -386,7 +386,7 @@ Set SPR table for Y for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre YSPR table for Y is set.
 */
-extern	INT32 im_cnrone_ofl_set_yspr_table( UCHAR ch, const ImCnrTable* const cnrYspr );
+extern	INT32 im_cnrone_ofl_set_yspr_table(ImCnrone *self, UCHAR ch, const ImCnrTable* const cnrYspr );
 
 /**
 Set SPR Y table for Middle frequency CbCr for Off Line
@@ -396,7 +396,7 @@ Set SPR Y table for Middle frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-extern	INT32 im_cnrone_ofl_set_cspr_mid_y_table( UCHAR ch, const ImCnrTable* const cnrCsprMidY );
+extern	INT32 im_cnrone_ofl_set_cspr_mid_y_table(ImCnrone *self, UCHAR ch, const ImCnrTable* const cnrCsprMidY );
 
 
 #ifdef __cplusplus

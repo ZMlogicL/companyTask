@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "jdsshdrtbl.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(JdsshdrTbl, jdsshdr_tbl);
+
 #define JDSSHDR_TBL_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), JdsshdrTblPrivate, JDSSHDR_TYPE_TBL))
+
 
 struct _JdsshdrTblPrivate
 {
@@ -41,4 +45,3 @@ JdsshdrTbl* jdsshdr_tbl_new(void)
     JdsshdrTbl* self = k_object_new_with_private(JDSSHDR_TYPE_TBL, sizeof(JdsshdrTblPrivate));
     return self;
 }
-

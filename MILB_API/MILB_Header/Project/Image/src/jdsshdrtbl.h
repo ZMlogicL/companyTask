@@ -12,59 +12,65 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #ifndef __JDSSHDR_TBL_H__
 #define __JDSSHDR_TBL_H__
 
+
 #include <klib.h>
 
-#define JDSSHDR_TYPE_TBL	(jdsshdr_tbl_get_type())
-#define JDSSHDR_TBL(obj)	(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsshdrTbl))
-#define JDSSHDR_IS_TBL(obj)	(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSSHDR_TYPE_TBL))
 
-typedef struct _JdsshdrTbl JdsshdrTbl;
-typedef struct _JdsshdrTblPrivate JdsshdrTblPrivate;
+#define JDSSHDR_TYPE_TBL	        (jdsshdr_tbl_get_type())
+#define JDSSHDR_TBL(obj)	        (K_TYPE_CHECK_INSTANCE_CAST((obj), JdsshdrTbl))
+#define JDSSHDR_IS_TBL(obj)	        (K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSSHDR_TYPE_TBL))
 
-typedef struct _IoJdsshdrTbl IoJdsshdrTbl;
 
-typedef union _IoShdrDgtr IoShdrDgtr;
-typedef union _IoShdrDgtg IoShdrDgtg;
-typedef union _IoShdrDgtb IoShdrDgtb;
+typedef struct _JdsshdrTbl          JdsshdrTbl;
+typedef struct _JdsshdrTblPrivate   JdsshdrTblPrivate;
+
+typedef struct _IoJdsshdrTbl        IoJdsshdrTbl;
+
+typedef union _IoShdrDgtr           IoShdrDgtr;
+typedef union _IoShdrDgtg           IoShdrDgtg;
+typedef union _IoShdrDgtb           IoShdrDgtb;
+
 
 struct _JdsshdrTbl
 {
     KObject parent;
 };
 
+
 /*  structure of dgtr       */
 union _IoShdrDgtr
 {
-    unsigned short hword[256];
+    kushort hword[256];
     struct
     {
-        unsigned short dgtr :12;
-        unsigned short :4;
+        kushort dgtr :12;
+        kushort :4;
     } bit[256];
 };
 
 /*  structure of dgtg       */
 union _IoShdrDgtg
 {
-    unsigned short hword[256];
+    kushort hword[256];
     struct
     {
-        unsigned short dgtg :12;
-        unsigned short :4;
+        kushort dgtg :12;
+        kushort :4;
     } bit[256];
 };
 
 /*  structure of dgtb       */
 union _IoShdrDgtb
 {
-    unsigned short hword[256];
+    kushort hword[256];
     struct
     {
-        unsigned short dgtb :12;
-        unsigned short :4;
+        kushort dgtb :12;
+        kushort :4;
     } bit[256];
 };
 
@@ -76,13 +82,15 @@ struct _IoJdsshdrTbl
     IoShdrDgtg dgtg; /* (0200 - 03FFh) */
     IoShdrDgtb dgtb; /* (0400 - 05FFh) */
 
-    unsigned char dmy060007ff[0x00800 - 0x0600]; /* (0600 - 07FFh) */
+    kuchar dmy060007ff[0x00800 - 0x0600]; /* (0600 - 07FFh) */
 };
+
 
 extern volatile IoJdsshdrTbl ioShdrTbl;
 
-KConstType jdsshdr_tbl_get_type(void);
+
+KConstType  jdsshdr_tbl_get_type(void);
 JdsshdrTbl* jdsshdr_tbl_new(void);
 
-#endif/*__JDSSHDR_TBL_H__*/
 
+#endif/*__JDSSHDR_TBL_H__*/

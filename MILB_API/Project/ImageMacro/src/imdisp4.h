@@ -46,7 +46,7 @@ typedef enum {
 /** Interruption demand permission state. */
 typedef enum {
 	E_IM_DISP_INTERRUPTION_STATE_NONE = 0x00000000,						/**< Set no  permission*/
-	E_IM_DISP_INTERRUPTION_STATE_SET  = E_IM_DISP_CORRECT_SELECT_ALL,	/**< Set permission*/
+	E_IM_DISP_INTERRUPTION_STATE_SET  = ImDisp_E_IM_DISP_CORRECT_SELECT_ALL,	/**< Set permission*/
 } E_IM_DISP_INTERRUPTION_STATE;
 
 /** FDOEN Register - (Enable force data output or not)*/
@@ -82,14 +82,13 @@ typedef union {
 	}AXI_Rep;	/**< Bit field */
 }U_IM_DISP_AXISTS;
 
-
-extern INT32 Im_DISP_Set_Display_Interface(E_IM_DISP_SEL block, BYTE ifs);
+ INT32 im_disp4_set_display_interface(ImDisp4 * self, ImDispEImDispSel block, BYTE ifs);
 
 /**
 Get display interface selection.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	ifs				Display I/F Selection .<br>
 							<ul><li>@ref D_IM_DISP_IFS_NONE
 								<li>@ref D_IM_DISP_IFS_LCD
@@ -98,78 +97,78 @@ Get display interface selection.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Display_Interface(E_IM_DISP_SEL block, BYTE *ifs);
+ INT32 im_disp4_get_display_interface(ImDisp4 * self, ImDispEImDispSel block, BYTE *ifs);
 
 
 /**
 Set external start-up mode.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	tgkmd			External start-up mode.<br>
-							<ul><li>@ref E_IM_DISP_TGKMD_NORMAL
-								<li>@ref E_IM_DISP_TGKMD_EXTERNAL</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_TGKMD_NORMAL
+								<li>@ref ImDisp_E_IM_DISP_TGKMD_EXTERNAL</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_STATUS_ABNORMAL		Can not set because TRG.TRG is not stoped.
 @remarks	The data output unit needs to be in a reset state.
 */
-extern INT32 Im_DISP_Set_External_Startup_Mode(E_IM_DISP_SEL block, E_IM_DISP_TGKMD tgkmd);
+ INT32 im_disp4_set_external_startup_mode(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispTgkmd tgkmd);
 
 /**
 Get external start-up mode.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	tgkmd			External start-up mode.<br>
-							<ul><li>@ref E_IM_DISP_TGKMD_NORMAL
-								<li>@ref E_IM_DISP_TGKMD_EXTERNAL</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_TGKMD_NORMAL
+								<li>@ref ImDisp_E_IM_DISP_TGKMD_EXTERNAL</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_External_Startup_Mode(E_IM_DISP_SEL block, E_IM_DISP_TGKMD* tgkmd);
+ INT32 im_disp4_get_external_startup_mode(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispTgkmd* tgkmd);
 
 /**
 Set external start-up operation start timing.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	tgkst			Operation start setting.<br>
 							Value range:0~4095.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_STATUS_ABNORMAL		Can not set because TRG.TRG is not stoped.
 */
-extern INT32 Im_DISP_Set_External_Startup_Timing(E_IM_DISP_SEL block, ULONG tgkst);
+ INT32 im_disp4_set_external_startup_timing(ImDisp4 * self, ImDispEImDispSel block, ULONG tgkst);
 
 /**
 Get external start-up operation start timing.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	tgkst			Operation start setting.<br>
 							Value range:0~4095.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_External_Startup_Timing(E_IM_DISP_SEL block, ULONG* tgkst);
+ INT32 im_disp4_get_external_startup_timing(ImDisp4 * self, ImDispEImDispSel block, ULONG* tgkst);
 
 /**
 Set a flag generation timing of vertical synchronization signal.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	timing			Generation timing.<br>
 							<ul><li>@ref E_IM_DISP_VSYNC_FLAG_NONE
 								<li>@ref E_IM_DISP_VSYNC_FLAG_FIRST
 								<li>@ref E_IM_DISP_VSYNC_FLAG_SECOND
 								<li>@ref E_IM_DISP_VSYNC_FLAG_BOTH</ul>
 */
-extern VOID Im_DISP_Set_Vsync_Int_Timing(E_IM_DISP_SEL block, E_IM_DISP_VSYNC_FLAG timing);
+ VOID im_disp4_set_vsync_int_timing(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_VSYNC_FLAG timing);
 
 /**
 Get a flag generation timing of vertical synchronization signal.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	timing			Generation timing.<br>
 							<ul><li>@ref E_IM_DISP_VSYNC_FLAG_NONE
 								<li>@ref E_IM_DISP_VSYNC_FLAG_FIRST
@@ -178,107 +177,107 @@ Get a flag generation timing of vertical synchronization signal.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Vsync_Int_Timing(E_IM_DISP_SEL block, E_IM_DISP_VSYNC_FLAG *timing);
+ INT32 im_disp4_get_vsync_int_timing(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_VSYNC_FLAG *timing);
 
 /**
 Set interruption demand permission setting.<br>
 @param[in]	block					Common block selection.<br>
-									<ul><li>@ref E_IM_DISP_HDMI
-										<li>@ref E_IM_DISP_LCD_MIPI</ul>
+									<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+										<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	interruption_select		Bit map to select set item. <br>
-									It must be set to a member of @ref E_IM_DISP_INTERRUPTION_SELECT or their OR value.<br>
+									It must be set to a member of @ref ImDispEImDispInterruptionSelect or their OR value.<br>
 @param[in]	interruption_state		The interruption demand permission setting.<br>
 									<ul><li>@ref E_IM_DISP_INTERRUPTION_STATE_NONE
 										<li>@ref E_IM_DISP_INTERRUPTION_STATE_SET</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Int(E_IM_DISP_SEL block, UINT32 interruption_select, E_IM_DISP_INTERRUPTION_STATE interruption_state);
+ INT32 im_disp4_set_int(ImDisp4 * self, ImDispEImDispSel block, UINT32 interruption_select, E_IM_DISP_INTERRUPTION_STATE interruption_state);
 
 /**
 Get interruption demand permission setting.<br>
 @param[in]	block					Common block selection.<br>
-									<ul><li>@ref E_IM_DISP_HDMI
-										<li>@ref E_IM_DISP_LCD_MIPI</ul>
+									<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+										<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	interruption_state		The interruption demand permission setting.<br>
-									It should be AND with E_IM_DISP_INTERRUPTION_SELECT's member to get<br>
+									It should be AND with ImDispEImDispInterruptionSelect's member to get<br>
 									the result.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Int(E_IM_DISP_SEL block, UINT32* interruption_state);
+ INT32 im_disp4_get_int(ImDisp4 * self, ImDispEImDispSel block, UINT32* interruption_state);
 
 /**
 Set interruption's call-back function pointer.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	interruption_select	Bit map to select set item. <br>
-								It must be set to a member of @ref E_IM_DISP_INTERRUPTION_SELECT or their OR value.<br>
+								It must be set to a member of @ref ImDispEImDispInterruptionSelect or their OR value.<br>
 @param[in]	vp_callback			The call-back pointer to set. <br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
 
-extern INT32 Im_DISP_Get_AXI_Status(E_IM_DISP_SEL block, U_IM_DISP_AXISTS *axi_state);
+ INT32 im_disp4_get_axi_status(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_AXISTS *axi_state);
 
 /**
 Set parameter reflect timing.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	timing			Register parameter reflect timing.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy.
 */
-extern INT32 Im_DISP_Set_Output_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG timing);
+ INT32 im_disp4_set_output_parameter_reflect_timing(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispRpgtmg timing);
 
 /**
 Get parameter reflect timing.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	timing			Register parameter reflect timing.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Output_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG *timing);
+ INT32 im_disp4_get_output_parameter_reflect_timing(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispRpgtmg *timing);
 
 /**
 Set parameter reflect enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	enable			Register parameter reflect enable.<br>
 							<ul><li>@ref D_IM_DISP_ENABLE_OFF
 								<li>@ref D_IM_DISP_ENABLE_ON</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Output_Parameter_Reflect_Enable(E_IM_DISP_SEL block, UINT32 enable);
+ INT32 im_disp4_set_output_parameter_reflect_enable(ImDisp4 * self, ImDispEImDispSel block, UINT32 enable);
 
 /**
 Get parameter reflect enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	enable			Register parameter reflect enable.<br>
 							<ul><li>@ref D_IM_DISP_ENABLE_OFF
 								<li>@ref D_IM_DISP_ENABLE_ON</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Output_Parameter_Reflect_Enable(E_IM_DISP_SEL block, UINT32 *enable);
+ INT32 im_disp4_get_output_parameter_reflect_enable(ImDisp4 * self, ImDispEImDispSel block, UINT32 *enable);
 
 /**
 Set transmission mode.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	tsl				Register parameter transmission mode.<br>
 							<ul><li>@ref D_IM_DISP_TSL_PROGRESSIVE
 								<li>@ref D_IM_DISP_TSL_INTERLACE</ul>
@@ -286,82 +285,82 @@ Set transmission mode.<br>
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy.
 */
-extern INT32 Im_DISP_Set_TSL(E_IM_DISP_SEL block, BYTE tsl);
+ INT32 im_disp4_set_tsl(ImDisp4 * self, ImDispEImDispSel block, BYTE tsl);
 
 /**
 Get transmission mode.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	tsl				Register parameter transmission mode.<br>
 							<ul><li>@ref D_IM_DISP_TSL_PROGRESSIVE
 								<li>@ref D_IM_DISP_TSL_INTERLACE</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_TSL(E_IM_DISP_SEL block, BYTE *tsl);
+ INT32 im_disp4_get_tsl(ImDisp4 * self, ImDispEImDispSel block, BYTE *tsl);
 
 /**
 Get output size.<br>
 @param[in]	block		Common block selection.<br>
-						<ul><li>@ref E_IM_DISP_HDMI
-							<li>@ref E_IM_DISP_LCD_MIPI</ul>
+						<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+							<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	ovsize		Vertical output size
 @param[out]	ohsize		Horizonal output size
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Output_Size(E_IM_DISP_SEL block, ULONG *ovsize, ULONG *ohsize);
+ INT32 im_disp4_get_output_size(ImDisp4 * self, ImDispEImDispSel block, ULONG *ovsize, ULONG *ohsize);
 
 /**
 Switch force data out.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	is_enable		0 mean disable and 1 mean enable.<br>
 							<ul><li>@ref E_IM_DISP_FDOEN_ORDINARY_OUT
 								<li>@ref E_IM_DISP_FDOEN_FORCE_DATA_OUT</ul>
 */
-extern VOID Im_DISP_Set_Force_Out_Data_Enable(E_IM_DISP_SEL block, E_IM_DISP_FDOEN is_enable);
+ VOID im_disp4_set_force_out_data_enable(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_FDOEN is_enable);
 
 /**
 Get force data out state.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	is_enable		0 mean disable and 1 mean enable.<br>
 							<ul><li>@ref E_IM_DISP_FDOEN_ORDINARY_OUT
 								<li>@ref E_IM_DISP_FDOEN_FORCE_DATA_OUT</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32  Im_DISP_Get_Force_Out_Data_Enable(E_IM_DISP_SEL block, E_IM_DISP_FDOEN *is_enable);
+ INT32  im_disp4_get_force_out_data_enable(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_FDOEN *is_enable);
 
 /**
 Set force output data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	color_data		Force output color data.
 */
-extern VOID Im_DISP_Set_Force_Out_Data(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR color_data);
+ VOID im_disp4_set_force_out_data(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR color_data);
 
 /**
 Get force output data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	color_data		Force output color data.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Force_Out_Data(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR *color_data);
+ INT32 im_disp4_get_force_out_data(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR *color_data);
 
 /**
 Set color bar's width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	clbhsize		Color bar's width.<br>
 							Value range:0~65535<br>
 @retval	D_DDIM_OK						Success.
@@ -370,69 +369,69 @@ Set color bar's width.<br>
 			<ul><li>CLBHSIZE * 16 >= OHSIZE
 			</ul>
 */
-extern INT32 Im_DISP_Set_Color_Bar_Size(E_IM_DISP_SEL block, ULONG clbhsize);
+ INT32 im_disp4_set_color_bar_size(ImDisp4 * self, ImDispEImDispSel block, ULONG clbhsize);
 
 /**
 Get color bar's width.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	clbhsize		Color bar's width.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Color_Bar_Size(E_IM_DISP_SEL block, ULONG *clbhsize);
+ INT32 im_disp4_get_color_bar_size(ImDisp4 * self, ImDispEImDispSel block, ULONG *clbhsize);
 
 /**
 Set color bar's color.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	clbdt			Color bar display color.<br>
 @param[in]	clbdt_size		clbdt's size that must not be over 16.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Color_Bar(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR const *const clbdt, UINT32 clbdt_size);
+ INT32 im_disp4_set_color_bar(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR const *const clbdt, UINT32 clbdt_size);
 
 /**
 Get color bar's color.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	clbdt			The array of color bar
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Color_Bar(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR clbdt[D_IM_DISP_COLOR_BAR_COUNT]);
+ INT32 im_disp4_get_color_bar(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR clbdt[D_IM_DISP_COLOR_BAR_COUNT]);
 
 /**
 Set blend order.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	blend			Blend order data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Blend(E_IM_DISP_SEL block, U_IM_DISP_BLDCTL blend);
+ INT32 im_disp4_set_blend(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_BLDCTL blend);
 
 /**
 Get blend order.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	blend			Blend order data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Blend(E_IM_DISP_SEL block, U_IM_DISP_BLDCTL *blend);
+ INT32 im_disp4_get_blend(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_BLDCTL *blend);
 
 /**
 Set YCbCr <-> RGB matrix data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	kind			Matrix kind.<br>
 							<ul><li>@ref E_IM_DISP_MATRIX_KIND_Y2R
 								<li>@ref E_IM_DISP_MATRIX_KIND_R2Y</ul>
@@ -448,13 +447,13 @@ Set YCbCr <-> RGB matrix data.<br>
 					The matrix coefficient value is COEFFICIENT2/64.<br>
 			</ul>
 */
-extern INT32 Im_DISP_Set_Output_Matrix(E_IM_DISP_SEL block, E_IM_DISP_MATRIX_KIND kind, const U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE]);
+ INT32 im_disp4_set_output_matrix(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_MATRIX_KIND kind, const U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE]);
 
 /**
 Get YCbCr <-> RGB matrix data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	kind			Matrix kind.<br>
 							<ul><li>@ref E_IM_DISP_MATRIX_KIND_Y2R
 								<li>@ref E_IM_DISP_MATRIX_KIND_R2Y</ul>
@@ -462,13 +461,13 @@ Get YCbCr <-> RGB matrix data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Output_Matrix(E_IM_DISP_SEL block, E_IM_DISP_MATRIX_KIND kind, U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE]);
+ INT32 im_disp4_get_output_matrix(ImDisp4 * self, ImDispEImDispSel block, E_IM_DISP_MATRIX_KIND kind, U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE]);
 
 /**
 Set clip/gain/offset.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	clip_cal		clip/gain/offset data.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
@@ -487,45 +486,45 @@ Set clip/gain/offset.
 				<li>Value range of cr_cal.ofs is -4096~4095.<br>
 			</ul>
 */
-extern INT32 Im_DISP_Set_Clip(E_IM_DISP_SEL block, T_IM_DISP_CLIP_CAL const *const clip_cal);
+ INT32 im_disp4_set_clip(ImDisp4 * self, ImDispEImDispSel block, T_IM_DISP_CLIP_CAL const *const clip_cal);
 
 /**
 Get clip/gain/offset.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	clip_cal		clip/gain/offset data.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Clip(E_IM_DISP_SEL block, T_IM_DISP_CLIP_CAL *const clip_cal);
+ INT32 im_disp4_get_clip(ImDisp4 * self, ImDispEImDispSel block, T_IM_DISP_CLIP_CAL *const clip_cal);
 
 /**
 Set RGB/YCbCr's output order.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	doctl0			RGB/YCbCr's output order.
 */
 
-extern VOID Im_DISP_Set_Output_Order(E_IM_DISP_SEL block, U_IM_DISP_DOCTL0 doctl0);
+ VOID im_disp4_set_output_order(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_DOCTL0 doctl0);
 
 /**
 Get RGB/YCbCr's output order.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	doctl0			RGB/YCbCr's output order.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Output_Order(E_IM_DISP_SEL block, U_IM_DISP_DOCTL0 *doctl0);
+ INT32 im_disp4_get_output_order(ImDisp4 * self, ImDispEImDispSel block, U_IM_DISP_DOCTL0 *doctl0);
 
 /**
 Set grid data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	grid			Grid data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
@@ -548,48 +547,48 @@ Set grid data.<br>
 				<li>GITVL.GVITV >= GWIDTH.GVWID + 2
 			</ul>
 */
-extern INT32 Im_DISP_Set_Grid(E_IM_DISP_SEL block, T_IM_DISP_GRID const *const grid);
+ INT32 im_disp4_set_grid(ImDisp4 * self, ImDispEImDispSel block, T_IM_DISP_GRID const *const grid);
 
 /**
 Get grid data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	grid			Grid data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Grid(E_IM_DISP_SEL block, T_IM_DISP_GRID *const grid);
+ INT32 im_disp4_get_grid(ImDisp4 * self, ImDispEImDispSel block, T_IM_DISP_GRID *const grid);
 
 /**
 Set grid line display enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	gdispen			Grid display enable.<br>
-							<ul><li>@ref E_IM_DISP_GDISPEN_NOT_DISPLAY
-								<li>@ref E_IM_DISP_GDISPEN_DISPLAY</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_GDISPEN_NOT_DISPLAY
+								<li>@ref ImDisp_E_IM_DISP_GDISPEN_DISPLAY</ul>
 */
-extern VOID Im_DISP_Set_Grid_Enable(E_IM_DISP_SEL block, E_IM_DISP_GDISPEN gdispen);
+ VOID im_disp4_set_grid_enable(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispGdispen gdispen);
 
 /**
 Get grid line display enable.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	gdispen			Grid display enable.<br>
-							<ul><li>@ref E_IM_DISP_GDISPEN_NOT_DISPLAY
-								<li>@ref E_IM_DISP_GDISPEN_DISPLAY</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_GDISPEN_NOT_DISPLAY
+								<li>@ref ImDisp_E_IM_DISP_GDISPEN_DISPLAY</ul>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Grid_Enable(E_IM_DISP_SEL block, E_IM_DISP_GDISPEN *gdispen);
+ INT32 im_disp4_get_grid_enable(ImDisp4 * self, ImDispEImDispSel block, ImDispEImDispGdispen *gdispen);
 
 /**
 Set face frame data.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	frame_count		Face frame data count.<br>
 							Value range:1-42<br>
 @param[in]	face			Face frame data.<br>

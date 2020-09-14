@@ -41,7 +41,7 @@ ImMxic*     im_mxic_new(void);
 This function set initial value to register.But this function is not set software reset.<br>
 @retval			D_DDIM_OK					Success.
 */
-INT32	im_mxic_init( ImMxic *self, ImMxicUnit unit );
+kint32	im_mxic_init( ImMxic *self, ImMxicUnit unit );
 
 /**
 This function does software reset.<br>
@@ -50,7 +50,7 @@ This function does software reset.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_reset( ImMxic *self, ImMxicUnit unit );
+kint32	im_mxic_reset( ImMxic *self, ImMxicUnit unit );
 
 /**
 This function select arbiters of executed "configration start" and start configuration.<br>
@@ -63,7 +63,7 @@ This function select arbiters of executed "configration start" and start configu
 				In this case, this function returns the @ref MxicUtlis_INPUT_PARAM_ERROR error.<br>
 				And, the allocation setting of the master is returned to the setting operating now.
 */
-INT32	im_mxic_start_config( ImMxic *self, ImMxicUnit unit, const ImMxicConfigArbiter* const targetArbiter );
+kint32	im_mxic_start_config( ImMxic *self, ImMxicUnit unit, const ImMxicConfigArbiter* const targetArbiter );
 
 /**
 Detection of Memory Access Area" are started with this function.<br>
@@ -73,7 +73,7 @@ Detection of Memory Access Area" are started with this function.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_start_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
+kint32	im_mxic_start_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
 											const MxicMemoryAccessSlave* const param );
 
 /**
@@ -83,7 +83,7 @@ Detection of Memory Access Area" are stoped with this function.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_stop_memory_access_detect( ImMxic *self, ImMxicUnit unit );
+kint32	im_mxic_stop_memory_access_detect( ImMxic *self, ImMxicUnit unit );
 
 /**
 This function set the parameter of Detection parameters of slave each memory access.<br>
@@ -93,7 +93,7 @@ This function set the parameter of Detection parameters of slave each memory acc
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 @remarks		Change of a parameter is reflected at the time of the detection start by @ref im_mxic_start_memory_access_detect function. 
 */
-INT32	im_mxic_set_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
+kint32	im_mxic_set_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
 											const MxicMemoryAccessSlave* const param );
 
 /**
@@ -105,7 +105,7 @@ This function get the parameter of Detection parameters of slave each memory acc
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		Change of a parameter is reflected at the time of the detection start by @ref im_mxic_start_memory_access_detect function. 
 */
-INT32	im_mxic_get_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
+kint32	im_mxic_get_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
 											MxicMemoryAccessSlave* const param );
 
 /**
@@ -126,7 +126,7 @@ Set switch of register read value.<br>
 						<li>TSLSW, TSLSR
 						<li>TGSLSW, TGSLSR</ul>
 */
-INT32	im_mxic_set_reg_read_switch( ImMxic *self, ImMxicUnit unit, UCHAR sw );
+kint32	im_mxic_set_reg_read_switch( ImMxic *self, ImMxicUnit unit, kuchar sw );
 
 /**
 Get switch of register read value.<br>
@@ -138,7 +138,7 @@ Get switch of register read value.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_reg_read_switch( ImMxic *self, ImMxicUnit unit, UCHAR *const sw );
+kint32	im_mxic_get_reg_read_switch( ImMxic *self, ImMxicUnit unit, kuchar *const sw );
 
 /**
 This function set output port.<br>
@@ -155,7 +155,7 @@ This function set output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			D_IM_TMI_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_set_output_port( ImMxic *self, UCHAR target, ImMxicPortGr outputPort );
+kint32	im_mxic_set_output_port( ImMxic *self, kuchar target, ImMxicPortGr outputPort );
 
 /**
 This function get output port.<br>
@@ -172,7 +172,7 @@ This function get output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			D_IM_TMI_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_output_port( ImMxic *self, UCHAR target, ImMxicPortGr* const outputPort );
+kint32	im_mxic_get_output_port( ImMxic *self, kuchar target, ImMxicPortGr* const outputPort );
 
 /**
 This function set output port.<br>
@@ -180,7 +180,7 @@ This function set output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			D_IM_TMI_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_set_output_port_all( ImMxic *self, const ImMxicOutputPort* const outPort );
+kint32	im_mxic_set_output_port_all( ImMxic *self, const ImMxicOutputPort* const outPort );
 
 /**
 This function get output port.<br>
@@ -188,14 +188,14 @@ This function get output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			D_IM_TMI_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_output_port_all( ImMxic *self, ImMxicOutputPort *const outPort );
+kint32	im_mxic_get_output_port_all( ImMxic *self, ImMxicOutputPort *const outPort );
 
 /**
 Interruption handler of MXIC.<br>
 @param[in]		unit					Target unit number.<br>
 										Please refer to @ref ImMxicUnit for a set value. <br>
 */
-VOID	im_mxic_int_handler( ImMxicUnit unit );
+void	im_mxic_int_handler( ImMxicUnit unit );
 
 #endif	// __IM_MXIC_H__
 
@@ -208,9 +208,9 @@ VOID	im_mxic_int_handler( ImMxicUnit unit );
 @section im_mxic_sample_section1	Sample of "Start MXIC macro".
 @code
 // SAMPLE CODE //
-INT32 mxic_start_sample( ImMxicUnit unit )
+kint32 mxic_start_sample( ImMxicUnit unit )
 {
-	INT32						result;
+	kint32						result;
 	ImMxicConfigArbiter	config_arbiter;			// Setting of configration start enable
 	ImMxicClock				clock_enable;			// Setting of clock enable
 
@@ -255,9 +255,9 @@ INT32 mxic_start_sample( ImMxicUnit unit )
 @section im_mxic_sample_section2	Sample of "Service history monitor".
 @code
 // SAMPLE CODE //
-INT32 mxic_service_history_monitor_sample( ImMxicUnit unit )
+kint32 mxic_service_history_monitor_sample( ImMxicUnit unit )
 {
-	INT32 result;
+	kint32 result;
 	ImMxicConfigArbiter		config_arbiter;		// Setting of configration start enable
 	ImMxicClock					clock_enable;		// Setting of clock enable
 	MxicAllHistoryMonitor	all_history;		// Monitor result of service history.
@@ -331,9 +331,9 @@ INT32 mxic_service_history_monitor_sample( ImMxicUnit unit )
 @section im_mxic_sample_section3	Sample of "Master status monitor".
 @code
 // SAMPLE CODE //
-INT32 mxic_master_status_monitor_sample( ImMxicUnit unit )
+kint32 mxic_master_status_monitor_sample( ImMxicUnit unit )
 {
-	INT32							result;
+	kint32							result;
 	ImMxicConfigArbiter		config_arbiter;		// Setting of configration start enable
 	ImMxicClock					clock_enable;		// Setting of clock enable
 	MxicMasterStatusMonitor	status;				// Monitor result of master status.
@@ -388,9 +388,9 @@ INT32 mxic_master_status_monitor_sample( ImMxicUnit unit )
 	</ul>
 @code
 // SAMPLE CODE //
-INT32 mxic_access_monitor_sample( VOID )
+kint32 mxic_access_monitor_sample( void )
 {
-	INT32						result;
+	kint32						result;
 	ImMxicMonitorParameter	monitor_param;
 
 	// Set monitor parameter
@@ -430,9 +430,9 @@ INT32 mxic_access_monitor_sample( VOID )
 	return result;
 }
 
-VOID mxic_access_monitor_sample_callback( VOID )
+void mxic_access_monitor_sample_callback( void )
 {
-	INT32									result;
+	kint32									result;
 	AllAccessTransMonitor	monitor_result;
 
 	// Get monitor result.

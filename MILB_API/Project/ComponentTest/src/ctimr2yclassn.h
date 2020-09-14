@@ -36,6 +36,6 @@ KConstType ct_im_r2y_classn_get_type(void);
 CtImR2yClassn* ct_im_r2y_classn_new(void);
 CtImR2yClassn* ct_im_r2y_classn_get(void);
 
-void ct_im_r2y_classn_1_54_temp2();
+void ct_im_r2y_classn_1_54_temp2(CtImR2yClassn *self);
 
 #endif /* __CT_IM_R2Y_CLASSN_H__ */

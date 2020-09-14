@@ -654,3 +654,6 @@ TIpWarpGridInfo* 	ip_warp_tbl_mng_get_current(IpWarpTblMng* self, const UCHAR de
 	MovieVideo_E_VIDEO_ENOCDE_ID_H265_CH0,			/**< H265 CH0 */
 	MovieVideo_E_VIDEO_ENOCDE_ID_H265_CH1,			/**< H265 CH1 */
 	MovieVideo_E_VIDEO_ENOCDE_ID_MAX,
+	结构体名VdIi_VPU_BUFFER_T改为VdIiVpuBufferT
+	结构体名vdi_vpu_pending_intr_t改为
+结构体名vpu_instance_pool_t改为vpuInstancePoolT

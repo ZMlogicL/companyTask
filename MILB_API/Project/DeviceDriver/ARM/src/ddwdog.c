@@ -13,11 +13,10 @@
 *1.0.0 2020年06月开始开发
 */
 
-#include "dd_arm.h"
-#include "dd_top.h"
+#include "ddarm.h"
+#include "ddtop.h"
 #include "arm.h"
 #include "ddwdog.h"
-#include "lytest.h"
 
 K_TYPE_DEFINE_WITH_PRIVATE(DdWdog, dd_wdog);
 #define DD_WDOG_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), DdWdogPrivate, DD_TYPE_WDOG))
@@ -31,47 +30,58 @@ K_TYPE_DEFINE_WITH_PRIVATE(DdWdog, dd_wdog);
 
 struct _DdWdogPrivate
 {
-	int a;
+	DdimUserCustom *ddimUserCustom;
+	DdToptwo *ddTopTwo;
 };
 
 //How many Watchdog Counter is reloaded
-static volatile kulong 		S_SOFT_COUNTER = 0;
+static volatile kulong 			S_SOFT_COUNTER = 0;
 //Rest of Watchdog Counter divided by 0xFFFFFFFF multiple
-static volatile kulong 		S_REMAIN_NUMBER = 0;
+static volatile kulong 			S_REMAIN_NUMBER = 0;
 //Pointer of Interrupt Callback Function
-static volatile VP_CALLBACK	S_CALLBACK = NULL;
+static volatile VpCallbackFunc	S_CALLBACK = NULL;
 
 static void dd_wdog_constructor(DdWdog *self)
 {
-//	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
+	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
+	priv->ddimUserCustom = ddim_user_custom_new();
+	priv->ddTopTwo = dd_toptwo_new();
 }
 
 static void dd_wdog_destructor(DdWdog *self)
 {
-//	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
+	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
+	if(priv->ddimUserCustom){
+		k_object_unref(priv->ddimUserCustom);
+		priv->ddimUserCustom = NULL;
+	}
+	if(priv->ddTopTwo){
+		k_object_unref(priv->ddTopTwo);
+		priv->ddTopTwo = NULL;
+	}
 }
 
 /**
  * @brief  	Initialize Watchdog Register.
  */
-VOID dd_wdog_init(DdWdog *self)
+void dd_wdog_init(DdWdog *self)
 {
 	S_SOFT_COUNTER	= 0;
 	S_REMAIN_NUMBER	= 0;
 	
 	// register write access enable.
-	dd_wdog_set_lock(DdWdog_D_DD_WDOG_ENABLE_ON);
+	dd_wdog_set_lock(self, DdWdog_D_DD_WDOG_ENABLE_ON);
 	// register write test disable.
-	dd_wdog_set_test_mode(DdWdog_D_DD_WDOG_ENABLE_OFF, DdWdog_D_DD_WDOG_ENABLE_OFF, DdWdog_D_DD_WDOG_ENABLE_OFF);
+	dd_wdog_set_test_mode(self, DdWdog_D_DD_WDOG_ENABLE_OFF, DdWdog_D_DD_WDOG_ENABLE_OFF, DdWdog_D_DD_WDOG_ENABLE_OFF);
 
-	// WDOGCONTROL
+	// wdogControl
 	// disable the reset.
-	IO_WDOG.WDOGCONTROL.bit.RESEN = DdWdog_D_DD_WDOG_ENABLE_OFF;
+	ioWdog.wdogControl.bit.resen = DdWdog_D_DD_WDOG_ENABLE_OFF;
 	// disable the interrupt.
-	IO_WDOG.WDOGCONTROL.bit.INTEN = DdWdog_D_DD_WDOG_ENABLE_OFF;
+	ioWdog.wdogControl.bit.resen = DdWdog_D_DD_WDOG_ENABLE_OFF;
 	// WDOGLOAD
 	// Initialize Watchdog Load
-//	IO_WDOG.WDOGLOAD = D_DD_WDOG_LOAD_INIT;
+//	ioWdog.wdogLoad = D_DD_WDOG_LOAD_INIT;
 }
 
 /**
@@ -79,29 +89,30 @@ VOID dd_wdog_init(DdWdog *self)
  */
 kint32 dd_wdog_open(DdWdog *self, kint32 tmout)
 {
-	DDIM_USER_ER ercd;
-	DDIM_USER_ID sid;
+	DdimUserEr ercd;
+	DdimUserId sid;
 	
+	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
 // CO_PARAM_CHECK
 #ifdef CO_PARAM_CHECK
-	if( tmout < D_DDIM_USER_SEM_WAIT_FEVR ){
+	if( tmout < DdimUserCustom_SEM_WAIT_FEVR ){
 		Ddim_Assertion(("Dd_WDOG_Open: input param error. tmout = %d\n",tmout));
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	sid = SID_DD_WDOG;
+	sid = DdimUserCustom_SID_DD_WDOG;
 	
-	if( D_DDIM_USER_SEM_WAIT_POL == tmout ){
+	if( DdimUserCustom_SEM_WAIT_POL == tmout ){
 		// pol_sem()
-		ercd = DDIM_User_Pol_Sem(sid);
+		ercd = ddim_user_custom_pol_sem(priv->ddimUserCustom, sid);
 	}
 	else{
 		// twai_sem()
-		ercd = DDIM_User_Twai_Sem(sid, (DDIM_USER_TMO)tmout);
+		ercd = ddim_user_custom_twai_sem(priv->ddimUserCustom, sid, (DdimUserTmo)tmout);
 	}
 	
-	if( D_DDIM_USER_E_OK != ercd ){
-		if( D_DDIM_USER_E_TMOUT == ercd ){
+	if( DdimUserCustom_E_OK != ercd ){
+		if( DdimUserCustom_E_TMOUT == ercd ){
 			return DdWdog_D_DD_WDOG_SEM_TIMEOUT;
 		}
 		return DdWdog_D_DD_WDOG_SEM_NG;
@@ -123,9 +134,9 @@ kint32 dd_wdog_ctrl(DdWdog *self, DdWdogCtrl *const wdogCtrl)
 	// Set Callback function.
 	S_CALLBACK = wdogCtrl->pCallback;
 	// Set value of WDOGLOAD register
-	dd_wdog_set_load(wdogCtrl->wdogLoad);
-	// Set value of WDOGCONTROL register
-	dd_wdog_set_control(wdogCtrl);
+	dd_wdog_set_load(self, wdogCtrl->wdogLoad);
+	// Set value of wdogControl register
+	dd_wdog_set_control(self, wdogCtrl);
 	
 	return D_DDIM_OK;
 }
@@ -133,11 +144,11 @@ kint32 dd_wdog_ctrl(DdWdog *self, DdWdogCtrl *const wdogCtrl)
 /**
  * @brief	Reload Watchdog Counter.
  */
-VOID dd_wdog_reload(DdWdog *self)
+void dd_wdog_reload(DdWdog *self)
 {
 	// Set value of WDOGLOAD register
-	dd_wdog_set_load(IO_WDOG.WDOGLOAD);
-	Dd_ARM_Dsb_Pou();
+	dd_wdog_set_load(self, ioWdog.wdogLoad);
+	DD_ARM_DSB_POU();
 }
 
 /**
@@ -145,14 +156,16 @@ VOID dd_wdog_reload(DdWdog *self)
  */
 kint32 dd_wdog_close(DdWdog *self)
 {
-	DDIM_USER_ER	ercd;
-	DDIM_USER_ID	sid;
+	DdimUserEr	ercd;
+	DdimUserId	sid;
 	
-	sid = SID_DD_WDOG;
+	sid = DdimUserCustom_SID_DD_WDOG;
+
+	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
 	// sig_sem()
-	ercd = DDIM_User_Sig_Sem(sid);
+	ercd = ddim_user_custom_sig_sem(priv->ddimUserCustom, sid);
 	
-	if( D_DDIM_USER_E_OK != ercd ){
+	if( DdimUserCustom_E_OK != ercd ){
 		return DdWdog_D_DD_WDOG_SEM_NG;
 	}
 	return D_DDIM_OK;
@@ -170,13 +183,13 @@ kint32 dd_wdog_get_load(DdWdog *self, kulong *wdogLoad)
 	}
 #endif
 	// Get value of WDOGLOAD register
-	*wdogLoad = IO_WDOG.WDOGLOAD;
+	*wdogLoad = ioWdog.wdogLoad;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGVALUE register.
+ * @brief	Get value of wdogValue register.
  */
 kint32 dd_wdog_get_counter(DdWdog *self, kulong *wdogCounter)
 {
@@ -186,14 +199,14 @@ kint32 dd_wdog_get_counter(DdWdog *self, kulong *wdogCounter)
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Get value of WDOGVALUE register
-	*wdogCounter	= IO_WDOG.WDOGVALUE;
+	// Get value of wdogValue register
+	*wdogCounter	= ioWdog.wdogValue;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGCONTROL register.
+ * @brief	Get value of wdogControl register.
  */
 kint32 dd_wdog_get_control(DdWdog *self, DdWdogCtrl *wdogCtrl)
 {
@@ -204,15 +217,15 @@ kint32 dd_wdog_get_control(DdWdog *self, DdWdogCtrl *wdogCtrl)
 	}
 #endif
 	// Get value of reset enable.
-	wdogCtrl->resetEnable	= IO_WDOG.WDOGCONTROL.bit.RESEN;
+	wdogCtrl->resetEnable	= ioWdog.wdogControl.bit.resen;
 	// Get value of interrupt enable.
-	wdogCtrl->intEnable	= IO_WDOG.WDOGCONTROL.bit.INTEN;
+	wdogCtrl->intEnable	= ioWdog.wdogControl.bit.inten;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGRIS/WDOGMIS register.
+ * @brief	Get value of wdogRis/wdogMis register.
  */
 kint32 dd_wdog_get_status(DdWdog *self, kuchar *rawWdogInt, kuchar *maskWdogInt)
 {
@@ -222,16 +235,16 @@ kint32 dd_wdog_get_status(DdWdog *self, kuchar *rawWdogInt, kuchar *maskWdogInt)
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Get value of WDOGRIS register
-	*rawWdogInt	= IO_WDOG.WDOGRIS.bit.STATUS;
-	// Get value of WDOGMIS register
-	*maskWdogInt = IO_WDOG.WDOGMIS.bit.STATUS;
+	// Get value of wdogRis register
+	*rawWdogInt	= ioWdog.wdogRis.bit.status;
+	// Get value of wdogMis register
+	*maskWdogInt = ioWdog.wdogMis.bit.status;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGLOCK register.
+ * @brief	Get value of wdogLock register.
  */
 kint32 dd_wdog_get_lock(DdWdog *self, kuchar *wdogLock)
 {
@@ -241,14 +254,14 @@ kint32 dd_wdog_get_lock(DdWdog *self, kuchar *wdogLock)
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Get WDOGLOCK
-	*wdogLock = IO_WDOG.WDOGLOCK.bit.EN_STATUS;
+	// Get wdogLock
+	*wdogLock = ioWdog.wdogLock.bit.enStatus;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGITCR register.
+ * @brief	Get value of wdogItcr register.
  */
 kint32 dd_wdog_get_test_mode(DdWdog *self, kuchar *testMode)
 {
@@ -258,28 +271,28 @@ kint32 dd_wdog_get_test_mode(DdWdog *self, kuchar *testMode)
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Get WDOGITCR.
-	*testMode = IO_WDOG.WDOGITCR.bit.ITEN;
+	// Get wdogItcr.
+	*testMode = ioWdog.wdogItcr.bit.iten;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Get value of WDOGPERIPHID0~3 register.
+ * @brief	Get value of wdogPeriPhId0~3 register.
  */
-kint32 Dd_WDOG_Get_Peri_Identification(DdWdog *self, DdWdogPeriIdentification *identification)
+kint32 dd_wdog_get_peri_identification(DdWdog *self, DdWdogPeriIdentification *identification)
 {
 #ifdef CO_PARAM_CHECK
 	if( identification == NULL ){
-		Ddim_Assertion(("Dd_WDOG_Get_Peri_Identification: input param error. [identification] NULL\n"));
+		Ddim_Assertion(("dd_wdog_get_peri_identification: input param error. [identification] NULL\n"));
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Get WDOGPERIPHID0~3
-	identification->partNumber		= IO_WDOG.WDOGPERIPHID0.bit.PARTNUMBER0 | (IO_WDOG.WDOGPERIPHID1.bit.PARTNUMBER1 << 8);
-	identification->designer		= IO_WDOG.WDOGPERIPHID1.bit.DESIGNER0 | (IO_WDOG.WDOGPERIPHID2.bit.DESIGNER1 << 4);
-	identification->revisionNumber	= IO_WDOG.WDOGPERIPHID2.bit.REVISION;
-	identification->configuration	= IO_WDOG.WDOGPERIPHID3.bit.CONFIGURATION;
+	// Get wdogPeriPhId0~3
+	identification->partNumber		= ioWdog.wdogPeriPhId0.bit.partNumber0 | (ioWdog.wdogPeriPhId1.bit.partNumber1 << 8);
+	identification->designer		= ioWdog.wdogPeriPhId1.bit.designer0 | (ioWdog.wdogPeriPhId2.bit.designer1 << 4);
+	identification->revisionNumber	= ioWdog.wdogPeriPhId2.bit.revision;
+	identification->configuration	= ioWdog.wdogPeriPhId3.bit.configuration;
 	
 	return D_DDIM_OK;
 }
@@ -296,8 +309,8 @@ kint32 dd_wdog_get_pcell_identification(DdWdog *self, kulong *pcell)
 	}
 #endif
 	// Get WDOGPCELLID0~3
-	*pcell	= IO_WDOG.WDOGPCELLID[0].bit.WDOGPCELLID | (IO_WDOG.WDOGPCELLID[1].bit.WDOGPCELLID << 8) |
-				(IO_WDOG.WDOGPCELLID[2].bit.WDOGPCELLID << 16) | (IO_WDOG.WDOGPCELLID[3].bit.WDOGPCELLID << 24);
+	*pcell	= ioWdog.wdogPCellId[0].bit.wdogPCellId | (ioWdog.wdogPCellId[1].bit.wdogPCellId << 8) |
+				(ioWdog.wdogPCellId[2].bit.wdogPCellId << 16) | (ioWdog.wdogPCellId[3].bit.wdogPCellId << 24);
 
 	return D_DDIM_OK;
 }
@@ -314,13 +327,13 @@ kint32 dd_wdog_set_load(DdWdog *self, kulong wdogLoad)
 	}
 #endif
 	// Set value of WDOGLOAD register
-	IO_WDOG.WDOGLOAD = wdogLoad;
+	ioWdog.wdogLoad = wdogLoad;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Set value of WDOGCONTROL register.
+ * @brief	Set value of wdogControl register.
  */
 kint32 dd_wdog_set_control(DdWdog *self, DdWdogCtrl *wdogCtrl)
 {
@@ -340,11 +353,11 @@ kint32 dd_wdog_set_control(DdWdog *self, DdWdogCtrl *wdogCtrl)
 #endif
 	// Set WdogControl
 	if( wdogCtrl->resetEnable == DdWdog_D_DD_WDOG_ENABLE_ON ) {
-		IO_WDOG.WDOGCONTROL.bit.RESEN	= DdWdog_D_DD_WDOG_ENABLE_ON;
-		IO_WDOG.WDOGCONTROL.bit.INTEN	= 1;
+		ioWdog.wdogControl.bit.resen	= DdWdog_D_DD_WDOG_ENABLE_ON;
+		ioWdog.wdogControl.bit.inten	= 1;
 	}
 	if( wdogCtrl->intEnable == DdWdog_D_DD_WDOG_ENABLE_ON ) {
-		IO_WDOG.WDOGCONTROL.bit.INTEN	= DdWdog_D_DD_WDOG_ENABLE_ON;
+		ioWdog.wdogControl.bit.inten	= DdWdog_D_DD_WDOG_ENABLE_ON;
 	}
 	
 	return D_DDIM_OK;
@@ -356,13 +369,13 @@ kint32 dd_wdog_set_control(DdWdog *self, DdWdogCtrl *wdogCtrl)
 kint32 dd_wdog_clear_interrupt(DdWdog *self)
 {
 	// Set value of WdogIntClr register
-	IO_WDOG.WDOGINTCLR = 1;
+	ioWdog.wdogIntclr = 1;
 	
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Set value of WDOGLOCK register.
+ * @brief	Set value of wdogLock register.
  */
 kint32 dd_wdog_set_lock(DdWdog *self, kuchar wdogLock)
 {
@@ -374,17 +387,17 @@ kint32 dd_wdog_set_lock(DdWdog *self, kuchar wdogLock)
 #endif
 	if( wdogLock == DdWdog_D_DD_WDOG_ENABLE_ON ){
 		// Unlock(write access to all other registers is enabled).
-		IO_WDOG.WDOGLOCK.word = D_DD_WDOG_REGISTER_ACCESS_ENABLE;
+		ioWdog.wdogLock.word = D_DD_WDOG_REGISTER_ACCESS_ENABLE;
 	}
 	else{
 		// Lock(write access to all other registers is disable).
-		IO_WDOG.WDOGLOCK.word = 0;
+		ioWdog.wdogLock.word = 0;
 	}
 	return D_DDIM_OK;
 }
 
 /**
- * @brief	Set value of WDOGITCR/WDOGITOP register.
+ * @brief	Set value of wdogItcr/wdogItop register.
  */
 kint32 dd_wdog_set_test_mode(DdWdog *self, kuchar testMode, kuchar testRes, kuchar testInt)
 {
@@ -402,11 +415,11 @@ kint32 dd_wdog_set_test_mode(DdWdog *self, kuchar testMode, kuchar testRes, kuch
 		return DdWdog_D_DD_WDOG_INPUT_PARAM_ERR;
 	}
 #endif
-	// Set WDOGITCR.
-	IO_WDOG.WDOGITCR.bit.ITEN = testMode;
-	// Set WDOGITOP.
-	IO_WDOG.WDOGITOP.bit.WDOGRES = testRes;
-	IO_WDOG.WDOGITOP.bit.WDOGINT = testInt;
+	// Set wdogItcr.
+	ioWdog.wdogItcr.bit.iten = testMode;
+	// Set wdogItop.
+	ioWdog.wdogItop.bit.wdogRes = testRes;
+	ioWdog.wdogItop.bit.wdogInt = testInt;
 	
 	return D_DDIM_OK;
 }
@@ -415,26 +428,26 @@ kint32 dd_wdog_set_test_mode(DdWdog *self, kuchar testMode, kuchar testRes, kuch
  * @brief	It is Interrupt Handler of Watchdog.<br>
  *			The CallBack function is called.
 */
-VOID dd_wdog_int_handler(DdWdog *self)
+void dd_wdog_int_handler(DdWdog *self)
 {
 	// Soft Counter check
 	if( S_SOFT_COUNTER > 1 ){
 		S_SOFT_COUNTER--;
 		
 		// Reload
-		dd_wdog_set_load(D_DD_WDOG_COUNTER_MAX_VALUE);
+		dd_wdog_set_load(self, D_DD_WDOG_COUNTER_MAX_VALUE);
 		// Clear Interrupt
-		dd_wdog_clear_interrupt();
-		Dd_ARM_Dsb_Pou();
+		dd_wdog_clear_interrupt(self);
+		DD_ARM_DSB_POU();
 	}
 	else if( S_SOFT_COUNTER == 1 ){
 		S_SOFT_COUNTER--;
 		
 		// Reload
-		dd_wdog_set_load(S_REMAIN_NUMBER);
+		dd_wdog_set_load(self, S_REMAIN_NUMBER);
 		// Clear Interrupt
-		dd_wdog_clear_interrupt();
-		Dd_ARM_Dsb_Pou();
+		dd_wdog_clear_interrupt(self);
+		DD_ARM_DSB_POU();
 	}
 	else{
 		if( S_CALLBACK != NULL ){
@@ -443,8 +456,8 @@ VOID dd_wdog_int_handler(DdWdog *self)
 		}
 		
 		// Clear Interrupt
-		dd_wdog_clear_interrupt();
-		Dd_ARM_Dsb_Pou();
+		dd_wdog_clear_interrupt(self);
+		DD_ARM_DSB_POU();
 	}
 }
 
@@ -455,9 +468,9 @@ VOID dd_wdog_int_handler(DdWdog *self)
  */
 kint32 dd_wdog_calculate(DdWdog *self, kulong wdogWdmode, kulong msec, kulong *convertCounter)
 {
-	ULLONG periClk;
-	ULLONG msecCount;
-	
+	kulonglong periClk;
+	kulonglong msecCount;
+	DdWdogPrivate *priv = DD_WDOG_GET_PRIVATE(self);
 #ifdef CO_PARAM_CHECK
 	if( wdogWdmode > 1 ){
 		Ddim_Assertion(("dd_wdog_calculate: input param error. wdogWdmode > 1\n"));
@@ -473,7 +486,7 @@ kint32 dd_wdog_calculate(DdWdog *self, kulong wdogWdmode, kulong msec, kulong *c
 	}
 #endif
 	// Call ChipTop API
-	periClk = Dd_Top_Get_PCLK();
+	periClk = dd_toptwo_get_hclk(priv->ddTopTwo);
 	// Convert to counter value
 	msecCount = periClk * msec / 1000;
 	if( wdogWdmode == 1 ){
@@ -483,7 +496,7 @@ kint32 dd_wdog_calculate(DdWdog *self, kulong wdogWdmode, kulong msec, kulong *c
 		}
 	}
 	// Calculate to input value divided by the maximum value of 32bit
-	S_SOFT_COUNTER = msecCount / ((ULLONG)D_DD_WDOG_COUNTER_MAX_VALUE + 1);
+	S_SOFT_COUNTER = msecCount / ((kulonglong)D_DD_WDOG_COUNTER_MAX_VALUE + 1);
 	// Calculate to the remainder into which the input value is divided by the maximum value of 32bit is acquired
 	S_REMAIN_NUMBER = msecCount & D_DD_WDOG_COUNTER_MAX_VALUE;
 	if( S_SOFT_COUNTER > 0 ){
@@ -504,12 +517,12 @@ kint32 dd_wdog_set_timer(DdWdog *self, kulong wdogWdmode, kulong msec)
 	kulong convertCounter;
 	kint32 ercd;
 	
-	ercd = dd_wdog_calculate(wdogWdmode, msec, &convertCounter);
+	ercd = dd_wdog_calculate(self, wdogWdmode, msec, &convertCounter);
 	if( ercd != D_DDIM_OK ){
 		return ercd;
 	}
 	// Set value of WdogLoad register
-	dd_wdog_set_load(convertCounter);
+	dd_wdog_set_load(self, convertCounter);
 	
 	return D_DDIM_OK;
 }

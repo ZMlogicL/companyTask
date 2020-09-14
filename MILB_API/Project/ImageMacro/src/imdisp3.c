@@ -6,9 +6,7 @@
  */
 #include "imdisp.h"
 #include "imdisp3.h"
-
 #include "jdsdisp3a.h"
-
 #include "dd_arm.h"
 #include "ddim_user_custom.h"
 #include <stddef.h>
@@ -16,7 +14,6 @@
 
 K_TYPE_DEFINE_WITH_PRIVATE(ImDisp3, im_disp3)
 #define IM_DISP3_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), ImDisp3Private,IM_TYPE_DISP3))
-
 
 struct _ImDisp3Private
 {
@@ -43,11 +40,11 @@ static INT32 imDispParamCheckZebra(T_IM_DISP_ZEBRA const *const zebra)
 {
 	INT32 ret = D_DDIM_OK;
 
-	if (zebra->lzbwid.bit.ZBHH < 2) {
+	if (zebra->lzbwid.bit.zbhh < 2) {
 		Im_DISP_Check_Point(("CP:imDispParamCheckZebra() 1\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
-	if (zebra->lzbwid.bit.ZBHL < 2) {
+	if (zebra->lzbwid.bit.zbhl < 2) {
 		Im_DISP_Check_Point(("CP:imDispParamCheckZebra() 2\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
@@ -67,17 +64,17 @@ static VOID imDispWaitUsec(UINT32 usec)
 
 /* Set parameter reflect timing.
 */
-INT32 Im_DISP_Set_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG timing)
+INT32 im_disp3_set_parameter_reflect_timing(ImDisp3 * self, ImDispEImDispSel block, ImDispEImDispRpgtmg timing)
 {
 	INT32 ret = D_DDIM_OK;
 
 	im_disp_pclk_on(im_disp_new());
-	if (IO_DISP.MAIN[block].LCH.LTRG.word == E_IM_DISP_TRG_READ_NO_ACT) {
+	if (IO_DISP.MAIN[block].LCH.LTRG.word == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) {
 		// Set LRPGCTL
 		IO_DISP.MAIN[block].LCH.LRPGCTL.bit.RPGTMG = timing;
 	}
 	else {
-		Ddim_Print(("E:Im_DISP_Set_Parameter_Reflect_Timing: Main layer busy\n"));
+		Ddim_Print(("E:im_disp3_set_parameter_reflect_timing: Main layer busy\n"));
 		ret = D_IM_DISP_MACRO_BUSY_NG;
 	}
 	im_disp_pclk_off(im_disp_new());
@@ -87,20 +84,20 @@ INT32 Im_DISP_Set_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG
 
 /* Get parameter reflect timing.
 */
-INT32 Im_DISP_Get_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG *timing)
+INT32 im_disp3_get_parameter_reflect_timing(ImDisp3 * self, ImDispEImDispSel block, ImDispEImDispRpgtmg *timing)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (timing == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Parameter_Reflect_Timing: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_parameter_reflect_timing: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
 
 	im_disp_pclk_on(im_disp_new());
 	// Get LRPGCTL
-	*timing = (E_IM_DISP_RPGTMG)IO_DISP.MAIN[block].LCH.LRPGCTL.bit.RPGTMG;
+	*timing = (ImDispEImDispRpgtmg)IO_DISP.MAIN[block].LCH.LRPGCTL.bit.RPGTMG;
 	im_disp_pclk_off(im_disp_new());
 
 	return ret;
@@ -108,13 +105,13 @@ INT32 Im_DISP_Get_Parameter_Reflect_Timing(E_IM_DISP_SEL block, E_IM_DISP_RPGTMG
 
 /* Set input data transfer.
 */
-INT32 Im_DISP_Set_Input_Data_Transfer(E_IM_DISP_SEL block, U_IM_DISP_LIDT lidt)
+INT32 im_disp3_set_input_data_transfer(ImDisp3 * self, ImDispEImDispSel block, ImDispUImDispLidt lidt)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (im_disp_param_check_lidt(block, lidt) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Input_Data_Transfer: LIDT parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_input_data_transfer: LIDT parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -130,13 +127,13 @@ INT32 Im_DISP_Set_Input_Data_Transfer(E_IM_DISP_SEL block, U_IM_DISP_LIDT lidt)
 
 /* Get input data transfer.
 */
-INT32 Im_DISP_Get_Input_Data_Transfer(E_IM_DISP_SEL block, U_IM_DISP_LIDT *lidt)
+INT32 im_disp3_get_input_data_transfer(ImDisp3 * self, ImDispEImDispSel block, ImDispUImDispLidt *lidt)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (lidt == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Input_Data_Transfer: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_input_data_transfer: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -152,13 +149,13 @@ INT32 Im_DISP_Get_Input_Data_Transfer(E_IM_DISP_SEL block, U_IM_DISP_LIDT *lidt)
 
 /* Set input data size of MAIN.
 */
-INT32 Im_DISP_Set_Input_Size(E_IM_DISP_SEL block, U_IM_DISP_SIZE input_size)
+INT32 im_disp3_set_input_size(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_SIZE input_size)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (im_disp_param_check_lisize(input_size) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Input_Size: LISIZE parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_input_size: LISIZE parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -173,13 +170,13 @@ INT32 Im_DISP_Set_Input_Size(E_IM_DISP_SEL block, U_IM_DISP_SIZE input_size)
 
 /* Get input data size of MAIN.
 */
-INT32 Im_DISP_Get_Input_Size(E_IM_DISP_SEL block, U_IM_DISP_SIZE *input_size)
+INT32 im_disp3_get_input_size(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_SIZE *input_size)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (input_size == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Input_Size: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_input_size: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -194,13 +191,13 @@ INT32 Im_DISP_Get_Input_Size(E_IM_DISP_SEL block, U_IM_DISP_SIZE *input_size)
 
 /* Connect MAIN input data address with the bank index.
 */
-INT32 Im_DISP_Set_Addr(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no, T_IM_DISP_IMAGE_ADDR const *const address)
+INT32 im_disp3_set_addr(ImDisp3 * self, ImDispEImDispSel block, E_IM_DISP_BANK bank_no, T_IM_DISP_IMAGE_ADDR const *const address)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (address == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Addr: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_addr: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -216,13 +213,13 @@ INT32 Im_DISP_Set_Addr(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no, T_IM_DISP_IM
 
 /* Get MAIN input data address of the bank index specified.
 */
-INT32 Im_DISP_Get_Addr(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no, T_IM_DISP_IMAGE_ADDR *const address)
+INT32 im_disp3_get_addr(ImDisp3 * self, ImDispEImDispSel block, E_IM_DISP_BANK bank_no, T_IM_DISP_IMAGE_ADDR *const address)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (address == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Addr: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_addr: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -238,13 +235,13 @@ INT32 Im_DISP_Get_Addr(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no, T_IM_DISP_IM
 
 /* Set the global size.
 */
-INT32 Im_DISP_Set_Lfd(E_IM_DISP_SEL block, ULONG y_hga, ULONG c_hga)
+INT32 im_disp3_set_lfd(ImDisp3 * self, ImDispEImDispSel block, ULONG y_hga, ULONG c_hga)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (im_disp_param_check_lfd(y_hga, c_hga) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_Lfd: LYHGA/LCHGA parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_lfd: LYHGA/LCHGA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -260,13 +257,13 @@ INT32 Im_DISP_Set_Lfd(E_IM_DISP_SEL block, ULONG y_hga, ULONG c_hga)
 
 /* Get the global size.
 */
-INT32 Im_DISP_Get_Lfd(E_IM_DISP_SEL block, ULONG* y_hga, ULONG* c_hga)
+INT32 im_disp3_get_lfd(ImDisp3 * self, ImDispEImDispSel block, ULONG* y_hga, ULONG* c_hga)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((y_hga == NULL) || (c_hga == NULL)) {
-		Ddim_Print(("E:Im_DISP_Get_Lfd: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_lfd : NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -282,7 +279,7 @@ INT32 Im_DISP_Get_Lfd(E_IM_DISP_SEL block, ULONG* y_hga, ULONG* c_hga)
 
 /* Set main bank No. to show.
 */
-VOID Im_DISP_Set_Main_Bank(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no)
+VOID im_disp3_set_main_bank(ImDisp3 * self, ImDispEImDispSel block, E_IM_DISP_BANK bank_no)
 {
 	im_disp_pclk_on(im_disp_new());
 	// Set LIBCTL.IBSET
@@ -292,13 +289,13 @@ VOID Im_DISP_Set_Main_Bank(E_IM_DISP_SEL block, E_IM_DISP_BANK bank_no)
 
 /* Get main bank No. to show or showing.
 */
-INT32 Im_DISP_Get_Main_Bank(E_IM_DISP_SEL block, E_IM_DISP_BANK *bank_no)
+INT32 im_disp3_get_main_bank(ImDisp3 * self, ImDispEImDispSel block, E_IM_DISP_BANK *bank_no)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (bank_no == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Main_Bank: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_main_bank: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -313,13 +310,13 @@ INT32 Im_DISP_Get_Main_Bank(E_IM_DISP_SEL block, E_IM_DISP_BANK *bank_no)
 
 /* Get main bank No. to showing.
 */
-INT32 Im_DISP_Get_Main_Bank_Monitor(E_IM_DISP_SEL block, E_IM_DISP_BANK *bank_no)
+INT32 im_disp3_get_main_bank_monitor(ImDisp3 * self, ImDispEImDispSel block, E_IM_DISP_BANK *bank_no)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (bank_no == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Main_Bank_Monitor: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_main_bank_monitor: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -334,17 +331,17 @@ INT32 Im_DISP_Get_Main_Bank_Monitor(E_IM_DISP_SEL block, E_IM_DISP_BANK *bank_no
 
 /* Set resize value.
 */
-INT32 Im_DISP_Set_Resize(E_IM_DISP_SEL block, T_IM_DISP_RESIZE const *const resize)
+INT32 im_disp3_set_resize(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_RESIZE const *const resize)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (resize == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Resize: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_resize: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_resize(resize->rsz0, resize->rsz1, resize->rsz2, resize->rsz3) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_Resize: LHRSZ0/LHRSZ1/LVRSZ parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_resize: LHRSZ0/LHRSZ1/LVRSZ parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -362,13 +359,13 @@ INT32 Im_DISP_Set_Resize(E_IM_DISP_SEL block, T_IM_DISP_RESIZE const *const resi
 
 /* Get resize value.
 */
-INT32 Im_DISP_Get_Resize(E_IM_DISP_SEL block, T_IM_DISP_RESIZE *const resize)
+INT32 im_disp3_get_resize(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_RESIZE *const resize)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (resize == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Resize: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_resize: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -387,13 +384,13 @@ INT32 Im_DISP_Get_Resize(E_IM_DISP_SEL block, T_IM_DISP_RESIZE *const resize)
 
 /* Set YHLP data.
 */
-INT32 Im_DISP_Set_Yhlp(E_IM_DISP_SEL block, T_IM_DISP_YHLP const *const yhlp)
+INT32 im_disp3_set_yhlp(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_YHLP const *const yhlp)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (yhlp == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Yhlp: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_yhlp: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -412,13 +409,13 @@ INT32 Im_DISP_Set_Yhlp(E_IM_DISP_SEL block, T_IM_DISP_YHLP const *const yhlp)
 
 /* Get YHLP data.
 */
-INT32 Im_DISP_Get_Yhlp(E_IM_DISP_SEL block, T_IM_DISP_YHLP *const yhlp)
+INT32 im_disp3_get_yhlp(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_YHLP *const yhlp)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (yhlp == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Yhlp: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_yhlp: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -437,17 +434,17 @@ INT32 Im_DISP_Get_Yhlp(E_IM_DISP_SEL block, T_IM_DISP_YHLP *const yhlp)
 
 /* Set warning processing data.
 */
-INT32 Im_DISP_Set_Warning(E_IM_DISP_SEL block, T_IM_DISP_WARNING const *const warning)
+INT32 im_disp3_set_warning(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_WARNING const *const warning)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (warning == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Warning: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_warning: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_warning(warning) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Warning: LYWTH parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_warning: LYWTH parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -471,13 +468,13 @@ INT32 Im_DISP_Set_Warning(E_IM_DISP_SEL block, T_IM_DISP_WARNING const *const wa
 
 /* Get warning.
 */
-INT32 Im_DISP_Get_Warning(E_IM_DISP_SEL block, T_IM_DISP_WARNING *const warning)
+INT32 im_disp3_get_warning(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_WARNING *const warning)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (warning == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Warning: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_warning: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -487,10 +484,10 @@ INT32 Im_DISP_Get_Warning(E_IM_DISP_SEL block, T_IM_DISP_WARNING *const warning)
 	warning->lywctl.word = IO_DISP.MAIN[block].LCH.LYWCTL.word;
 	warning->lyw0th.word = IO_DISP.MAIN[block].LCH.LYW0TH.word;
 	warning->lyw1th.word = IO_DISP.MAIN[block].LCH.LYW1TH.word;
-	warning->lyw0st = (E_IM_DISP_YWMD)IO_DISP.MAIN[block].LCH.LYW0ST.word;
+	warning->lyw0st = (ImDispEImDispYwmd)IO_DISP.MAIN[block].LCH.LYW0ST.word;
 	warning->lyw0ca.dword = IO_DISP.MAIN[block].LCH.LYW0CA.dword;
 	warning->lyw0cb.dword = IO_DISP.MAIN[block].LCH.LYW0CB.dword;
-	warning->lyw1st = (E_IM_DISP_YWMD)IO_DISP.MAIN[block].LCH.LYW1ST.word;
+	warning->lyw1st = (ImDispEImDispYwmd)IO_DISP.MAIN[block].LCH.LYW1ST.word;
 	warning->lyw1ca.dword = IO_DISP.MAIN[block].LCH.LYW1CA.dword;
 	warning->lyw1cb.dword = IO_DISP.MAIN[block].LCH.LYW1CB.dword;
 	warning->lbost = IO_DISP.MAIN[block].LCH.LBOST.word;
@@ -501,7 +498,7 @@ INT32 Im_DISP_Get_Warning(E_IM_DISP_SEL block, T_IM_DISP_WARNING *const warning)
 
 /* Set blink timer control data.
 */
-VOID Im_DISP_Set_Blink_Timer(E_IM_DISP_SEL block, U_IM_DISP_LBLTMR lbltmr)
+VOID im_disp3_set_blink_timer(ImDisp3 * self, ImDispEImDispSel block, ImDispUImDispLbltmr lbltmr)
 {
 	im_disp_pclk_on(im_disp_new());
 	// Set LBLTMR
@@ -511,13 +508,13 @@ VOID Im_DISP_Set_Blink_Timer(E_IM_DISP_SEL block, U_IM_DISP_LBLTMR lbltmr)
 
 /* Get blink timer control data.
 */
-INT32 Im_DISP_Get_Blink_Timer(E_IM_DISP_SEL block, U_IM_DISP_LBLTMR *lbltmr)
+INT32 im_disp3_get_blink_timer(ImDisp3 * self, ImDispEImDispSel block, ImDispUImDispLbltmr *lbltmr)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if(lbltmr == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Blink_Timer: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_blink_timer: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -532,17 +529,17 @@ INT32 Im_DISP_Get_Blink_Timer(E_IM_DISP_SEL block, U_IM_DISP_LBLTMR *lbltmr)
 
 /* Set zebra warning data.
 */
-INT32 Im_DISP_Set_Zebra(E_IM_DISP_SEL block, T_IM_DISP_ZEBRA const *const zebra)
+INT32 im_disp3_set_zebra(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_ZEBRA const *const zebra)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (zebra == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Zebra: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_zebra: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (imDispParamCheckZebra(zebra) != D_DDIM_OK) {
-		Ddim_Print(("E:Im_DISP_Set_Zebra: LYWTH parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_zebra: LYWTH parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -559,13 +556,13 @@ INT32 Im_DISP_Set_Zebra(E_IM_DISP_SEL block, T_IM_DISP_ZEBRA const *const zebra)
 
 /* Get zebra warning data.
 */
-INT32 Im_DISP_Get_Zebra(E_IM_DISP_SEL block, T_IM_DISP_ZEBRA *const zebra)
+INT32 im_disp3_get_zebra(ImDisp3 * self, ImDispEImDispSel block, T_IM_DISP_ZEBRA *const zebra)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (zebra == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Zebra: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_zebra: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -582,14 +579,14 @@ INT32 Im_DISP_Get_Zebra(E_IM_DISP_SEL block, T_IM_DISP_ZEBRA *const zebra)
 
 /* Set YCbCr->RGB matrix.
 */
-INT32 Im_DISP_Set_Matrix(E_IM_DISP_SEL block, const U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE])
+INT32 im_disp3_set_matrix(ImDisp3 * self, ImDispEImDispSel block, const U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE])
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (matrix == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Matrix: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_matrix: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -607,14 +604,14 @@ INT32 Im_DISP_Set_Matrix(E_IM_DISP_SEL block, const U_IM_DISP_YR_MATRIX_COEFFICI
 
 /* Get YCbCr->RGB matrix.
 */
-INT32 Im_DISP_Get_Matrix(E_IM_DISP_SEL block, U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE])
+INT32 im_disp3_get_matrix(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE])
 {
 	INT32 loop;
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (matrix == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Matrix: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_matrix: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -632,14 +629,14 @@ INT32 Im_DISP_Get_Matrix(E_IM_DISP_SEL block, U_IM_DISP_YR_MATRIX_COEFFICIENT ma
 
 /* Set gamma correct enable.
 */
-INT32 Im_DISP_Set_Gamma_Enable(E_IM_DISP_SEL block, E_IM_DISP_CORRECT_SELECT set_item, T_IM_DISP_TBL_ACCESS_SET const *const correct)
+INT32 im_disp3_set_gamma_enable(ImDisp3 * self, ImDispEImDispSel block, ImDispEImDispCorrectSelect set_item, T_IM_DISP_TBL_ACCESS_SET const *const correct)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (correct == NULL) {
 		// Error when argument is NULL.
-		Ddim_Print(("E:Im_DISP_Set_Gamma_Enable: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_set_gamma_enable: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -648,130 +645,130 @@ INT32 Im_DISP_Set_Gamma_Enable(E_IM_DISP_SEL block, E_IM_DISP_CORRECT_SELECT set
 
 	switch (set_item) {
 		// Main data input block RAM table access (LTBLASET).
-		case E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA:			// Anti-gamma.
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA:			// Anti-gamma.
 			// check status.
-			if ((IO_DISP.MAIN[block].LCH.LTRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
-				(correct->access == E_IM_DISP_TABLE_ACCESS_ENABLE)) {
-				// Set LTBLASET.IGTAEN.
-				IO_DISP.MAIN[block].LCH.LTBLASET.bit.IGTAEN = correct->access;
+			if ((IO_DISP.MAIN[block].LCH.LTRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+				(correct->access == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE)) {
+				// Set LTBLASET.igtaen.
+				IO_DISP.MAIN[block].LCH.LTBLASET.bit.igtaen = correct->access;
 				imDispWaitUsec(1);		// Wait 1 usec
 			}
 			else {
 				// not setting table access disable.
-				Ddim_Print(("E:Im_DISP_Set_Gamma_Enable: not setting anti-gamma access disable\n"));
+				Ddim_Print(("E:im_disp3_set_gamma_enable: not setting anti-gamma access disable\n"));
 			}
 
-			// Set LTBLASET.IGEN
+			// Set LTBLASET.igen
 			if (correct->proc) {
 				// check anti-gamma table access enable.
-				if (IO_DISP.MAIN[block].LCH.LTBLASET.bit.IGTAEN == E_IM_DISP_TABLE_ACCESS_ENABLE) {
+				if (IO_DISP.MAIN[block].LCH.LTBLASET.bit.igtaen == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE) {
 					// setting enable.
-					IO_DISP.MAIN[block].LCH.LTBLASET.bit.IGEN = E_IM_DISP_CORRECT_PROC_ENABLE;
+					IO_DISP.MAIN[block].LCH.LTBLASET.bit.igen = E_IM_DISP_CORRECT_PROC_ENABLE;
 				}
 				else {
 					// not setting enable.
-					Ddim_Print(("W:Im_DISP_Set_Gamma_Enable: not setting anti-gamma correction enable\n"));
+					Ddim_Print(("W:im_disp3_set_gamma_enable: not setting anti-gamma correction enable\n"));
 				}
 			}
 			else {
 				// settign disable.
-				IO_DISP.MAIN[block].LCH.LTBLASET.bit.IGEN = E_IM_DISP_CORRECT_PROC_DISABLE;
+				IO_DISP.MAIN[block].LCH.LTBLASET.bit.igen = E_IM_DISP_CORRECT_PROC_DISABLE;
 			}
 
-			// Set LTBLASET.IGTSL
-			IO_DISP.MAIN[block].LCH.LTBLASET.bit.IGTSL = correct->surface;
+			// Set LTBLASET.igtsl
+			IO_DISP.MAIN[block].LCH.LTBLASET.bit.igtsl = correct->surface;
 			break;
-		case E_IM_DISP_CORRECT_SELECT_GAMMA_IN:				// Gamma(Main data input block).
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_IN:				// Gamma(Main data input block).
 			// check status.
-			if ((IO_DISP.MAIN[block].LCH.LTRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
-				(correct->access == E_IM_DISP_TABLE_ACCESS_ENABLE)) {
-				// Set LTBLASET.GTAEN.
-				IO_DISP.MAIN[block].LCH.LTBLASET.bit.GTAEN = correct->access;
+			if ((IO_DISP.MAIN[block].LCH.LTRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+				(correct->access == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE)) {
+				// Set LTBLASET.gtaen.
+				IO_DISP.MAIN[block].LCH.LTBLASET.bit.gtaen = correct->access;
 				imDispWaitUsec(1);		// Wait 1 usec
 			}
 			else {
 				// not setting table access disable.
-				Ddim_Print(("E:Im_DISP_Set_Gamma_Enable: not setting gamma(main data input block) access disable\n"));
+				Ddim_Print(("E:im_disp3_set_gamma_enable: not setting gamma(main data input block) access disable\n"));
 			}
 
-			// Set LTBLASET.GMEN
+			// Set LTBLASET.gmen
 			if (correct->proc) {
 				// check gamma table access enable.
-				if (IO_DISP.MAIN[block].LCH.LTBLASET.bit.GTAEN == E_IM_DISP_TABLE_ACCESS_ENABLE) {
+				if (IO_DISP.MAIN[block].LCH.LTBLASET.bit.gtaen == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE) {
 					// setting enable.
-					IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMEN = E_IM_DISP_CORRECT_PROC_ENABLE;
+					IO_DISP.MAIN[block].LCH.LTBLASET.bit.gmen = E_IM_DISP_CORRECT_PROC_ENABLE;
 				}
 				else {
 					// not setting enable.
-					Ddim_Print(("W:Im_DISP_Set_Gamma_Enable: not setting Gamma(Main data input block) correction enable\n"));
+					Ddim_Print(("W:im_disp3_set_gamma_enable: not setting Gamma(Main data input block) correction enable\n"));
 				}
 			}
 			else {
 				// settign disable.
-				IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMEN = E_IM_DISP_CORRECT_PROC_DISABLE;
+				IO_DISP.MAIN[block].LCH.LTBLASET.bit.gmen = E_IM_DISP_CORRECT_PROC_DISABLE;
 			}
 
-			// Set LTBLASET.GMTSL
-			IO_DISP.MAIN[block].LCH.LTBLASET.bit.GMTSL = correct->surface;
+			// Set LTBLASET.gmtsl
+			IO_DISP.MAIN[block].LCH.LTBLASET.bit.gmtsl = correct->surface;
 			break;
 
 		// Data output block RAM table access (TBLASET).
-		case E_IM_DISP_CORRECT_SELECT_GAMMA_OUT:			// Gamma(Data output block).
+		case ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_OUT:			// Gamma(Data output block).
 			// check status.
-			if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
-				(correct->access == E_IM_DISP_TABLE_ACCESS_ENABLE)) {
+			if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+				(correct->access == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE)) {
 				// Set TBLASET.GMTAEN.
 				IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMTAEN = correct->access;
 				imDispWaitUsec(1);		// Wait 1 usec
 			}
 			else {
 				// not setting table access disable.
-				Ddim_Print(("E:Im_DISP_Set_Gamma_Enable: not setting gamma(data output block) access disable\n"));
+				Ddim_Print(("E:im_disp3_set_gamma_enable: not setting gamma(data output block) access disable\n"));
 			}
 
-			// Set TBLASET.GMEN
+			// Set TBLASET.gmen
 			if (correct->proc) {
 				// check gamma table access enable.
-				if (IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMTAEN == E_IM_DISP_TABLE_ACCESS_ENABLE) {
+				if (IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMTAEN == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE) {
 					// setting enable.
-					IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMEN = E_IM_DISP_CORRECT_PROC_ENABLE;
+					IO_DISP.MAIN[block].DCORE.TBLASET.bit.gmen = E_IM_DISP_CORRECT_PROC_ENABLE;
 				}
 				else {
 					// not setting enable.
-					Ddim_Print(("W:Im_DISP_Set_Gamma_Enable: not setting Gamma(data output block) correction enable\n"));
+					Ddim_Print(("W:im_disp3_set_gamma_enable: not setting Gamma(data output block) correction enable\n"));
 				}
 			}
 			else {
 				// settign disable.
-				IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMEN = E_IM_DISP_CORRECT_PROC_DISABLE;
+				IO_DISP.MAIN[block].DCORE.TBLASET.bit.gmen = E_IM_DISP_CORRECT_PROC_DISABLE;
 			}
 
-			// Set TBLASET.GMTSL
-			IO_DISP.MAIN[block].DCORE.TBLASET.bit.GMTSL = correct->surface;
+			// Set TBLASET.gmtsl
+			IO_DISP.MAIN[block].DCORE.TBLASET.bit.gmtsl = correct->surface;
 			break;
 		default:											// Luminance and chroma.
 			// check status.
-			if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
-				(correct->access == E_IM_DISP_TABLE_ACCESS_ENABLE)) {
+			if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
+				(correct->access == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE)) {
 				// Set TBLASET.YSATTA.
 				IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATTA = correct->access;
 				imDispWaitUsec(1);		// Wait 1 usec
 			}
 			else {
 				// not setting table access disable.
-				Ddim_Print(("E:Im_DISP_Set_Gamma_Enable: not setting luminance and chroma access disable\n"));
+				Ddim_Print(("E:im_disp3_set_gamma_enable: not setting luminance and chroma access disable\n"));
 			}
 
 			// Set TBLASET.YSATEN
 			if (correct->proc) {
 				// check Luminance and chroma table access enable.
-				if (IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATTA == E_IM_DISP_TABLE_ACCESS_ENABLE) {
+				if (IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATTA == ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE) {
 					// setting enable.
 					IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATEN = E_IM_DISP_CORRECT_PROC_ENABLE;
 				}
 				else {
 					// not setting enable.
-					Ddim_Print(("W:Im_DISP_Set_Gamma_Enable: not setting Luminance and chroma correction enable\n"));
+					Ddim_Print(("W:im_disp3_set_gamma_enable: not setting Luminance and chroma correction enable\n"));
 				}
 			}
 			else {
@@ -791,13 +788,13 @@ INT32 Im_DISP_Set_Gamma_Enable(E_IM_DISP_SEL block, E_IM_DISP_CORRECT_SELECT set
 
 /* Get gamma correct enable.
 */
-INT32 Im_DISP_Get_Gamma_Enable(E_IM_DISP_SEL block, U_IM_DISP_LTBLASET *lch_ltblaset, U_IM_DISP_TBLASET *dcore_tblaset)
+INT32 im_disp3_get_gamma_enable(ImDisp3 * self, ImDispEImDispSel block, ImDispUImDispLtblaset *lch_ltblaset, U_IM_DISP_TBLASET *dcore_tblaset)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((lch_ltblaset == NULL) || (dcore_tblaset == NULL)) {
-		Ddim_Print(("E:Im_DISP_Get_Gamma_Enable: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_gamma_enable: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -814,7 +811,7 @@ INT32 Im_DISP_Get_Gamma_Enable(E_IM_DISP_SEL block, U_IM_DISP_LTBLASET *lch_ltbl
 
 /* Set gamma correct mode.
 */
-VOID Im_DISP_Set_Gamma_Mode(E_IM_DISP_SEL block, U_IM_DISP_LGMMD lgmmd)
+VOID im_disp3_set_gamma_mode(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LGMMD lgmmd)
 {
 	im_disp_pclk_on(im_disp_new());
 
@@ -826,13 +823,13 @@ VOID Im_DISP_Set_Gamma_Mode(E_IM_DISP_SEL block, U_IM_DISP_LGMMD lgmmd)
 
 /* Get gamma correct mode.
 */
-INT32 Im_DISP_Get_Gamma_Mode(E_IM_DISP_SEL block, U_IM_DISP_LGMMD* lgmmd)
+INT32 im_disp3_get_gamma_mode(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LGMMD* lgmmd)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (lgmmd == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Gamma_Mode: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_gamma_mode: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -847,7 +844,7 @@ INT32 Im_DISP_Get_Gamma_Mode(E_IM_DISP_SEL block, U_IM_DISP_LGMMD* lgmmd)
 
 /* Set Alpha value.
 */
-VOID Im_DISP_Set_Alpha_Value(E_IM_DISP_SEL block, U_IM_DISP_LALP lalp)
+VOID im_disp3_set_alpha_value(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LALP lalp)
 {
 	im_disp_pclk_on(im_disp_new());
 
@@ -859,13 +856,13 @@ VOID Im_DISP_Set_Alpha_Value(E_IM_DISP_SEL block, U_IM_DISP_LALP lalp)
 
 /* Get Alpha value.
 */
-INT32 Im_DISP_Get_Alpha_Value(E_IM_DISP_SEL block, U_IM_DISP_LALP *lalp)
+INT32 im_disp3_get_alpha_value(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LALP *lalp)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (lalp == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Alpha_Value: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_alpha_value: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -880,13 +877,13 @@ INT32 Im_DISP_Get_Alpha_Value(E_IM_DISP_SEL block, U_IM_DISP_LALP *lalp)
 
 /* Set display position.
 */
-INT32 Im_DISP_Set_Display_Position(E_IM_DISP_SEL block, U_IM_DISP_DSTA position)
+INT32 im_disp3_set_display_position(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_DSTA position)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (im_disp_param_check_ldsta(position) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Set_Display_Position: LDSTA parameter error\n"));
+		Ddim_Print(("E:im_disp3_set_display_position: LDSTA parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -901,13 +898,13 @@ INT32 Im_DISP_Set_Display_Position(E_IM_DISP_SEL block, U_IM_DISP_DSTA position)
 
 /* Get display position.
 */
-INT32 Im_DISP_Get_Display_Position(E_IM_DISP_SEL block, U_IM_DISP_DSTA *position)
+INT32 im_disp3_get_display_position(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_DSTA *position)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if(position == NULL){
-		Ddim_Print(("E:Im_DISP_Get_Display_Position: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_display_position: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -922,7 +919,7 @@ INT32 Im_DISP_Get_Display_Position(E_IM_DISP_SEL block, U_IM_DISP_DSTA *position
 
 /* Set reverse display setting.
 */
-VOID Im_DISP_Set_Reverse_Display(E_IM_DISP_SEL block, U_IM_DISP_LREVDISP reverse)
+VOID im_disp3_set_reverse_display(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LREVDISP reverse)
 {
 	im_disp_pclk_on(im_disp_new());
 	// Set LREVDISP.
@@ -932,13 +929,13 @@ VOID Im_DISP_Set_Reverse_Display(E_IM_DISP_SEL block, U_IM_DISP_LREVDISP reverse
 
 /* Get reverse display setting.
 */
-INT32 Im_DISP_Get_Reverse_Display(E_IM_DISP_SEL block, U_IM_DISP_LREVDISP *reverse)
+INT32 im_disp3_get_reverse_display(ImDisp3 * self, ImDispEImDispSel block, U_IM_DISP_LREVDISP *reverse)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (reverse == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Reverse_Display: NULL check error\n"));
+		Ddim_Print(("E:im_disp3_get_reverse_display: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK

@@ -10,6 +10,8 @@
 *@version
 *1.0.0 2020年09月开始开发
 */
+
+
 #ifndef __MRBC_TEST_H__
 #define __MRBC_TEST_H__
 
@@ -22,17 +24,17 @@
 G_BEGIN_DECLS
 
 
-#define MRBC_TYPE_TEST								(mrbc_test_get_type())
-#define MRBC_TEST(obj)									(G_TYPE_CHECK_INSTANCE_CAST(obj, MRBC_TYPE_TEST, MrbcTest))
-#define MRBC_TEST_CALSS(klass)              		(G_TYPE_CHECK_CLASS_CAST((klass), MRBC_TYPE_TEST, MrbcTestClass))
-#define MRBC_IS_TEST(obj)                        		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MRBC_TYPE_TEST))
-#define MRBC_IS_TEST_CLASS(klass)         		(G_TYPE_CHECK_CLASS_TYPE ((klass), MRBC_TYPE_TEST))
-#define MRBC_TEST_GET_CLASS(obj)         		(G_TYPE_INSTANCE_GET_CLASS ((obj), MRBC_TYPE_TEST, MrbcTestClass))
+#define MRBC_TYPE_TEST					 (mrbc_test_get_type())
+#define MRBC_TEST(obj)				 	 (G_TYPE_CHECK_INSTANCE_CAST(obj, MRBC_TYPE_TEST, MrbcTest))
+#define MRBC_TEST_CALSS(klass)           (G_TYPE_CHECK_CLASS_CAST((klass), MRBC_TYPE_TEST, MrbcTestClass))
+#define MRBC_IS_TEST(obj)                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MRBC_TYPE_TEST))
+#define MRBC_IS_TEST_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), MRBC_TYPE_TEST))
+#define MRBC_TEST_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), MRBC_TYPE_TEST, MrbcTestClass))
 
 
-typedef struct _MrbcTest                       	MrbcTest;
-typedef struct _MrbcTestClass            		MrbcTestClass;
-typedef struct _MrbcTestPrivate           	MrbcTestPrivate;
+typedef struct _MrbcTest                 MrbcTest;
+typedef struct _MrbcTestClass            MrbcTestClass;
+typedef struct _MrbcTestPrivate          MrbcTestPrivate;
 
 
 struct _MrbcTest
@@ -46,8 +48,9 @@ struct _MrbcTestClass
 };
 
 
-GType 						mrbc_test_get_type(void) G_GNUC_CONST;
-MrbcTest *         		mrbc_test_new(void);
+GType 			mrbc_test_get_type(void) G_GNUC_CONST;
+MrbcTest*       mrbc_test_new(void);
+void            mrbc_test(MrbcTest* self);
 
 
 G_END_DECLS

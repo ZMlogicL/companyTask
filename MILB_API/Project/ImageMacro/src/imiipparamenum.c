@@ -14,31 +14,51 @@
 #include "imiipparamenum.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipParamEnum, im_iip_param_enum);
-#define IM_IIP_PARAM_ENUM_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipParamEnumPrivate, IM_TYPE_IIP_PARAM_ENUM	))
+G_DEFINE_TYPE(ImIipParamEnum, im_iip_param_enum, G_TYPE_OBJECT);
+#define IM_IIP_PARAM_ENUM_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_PARAM_ENUM, ImIipParamEnumPrivate));
 
 
 struct _ImIipParamEnumPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_param_enum_constructor(ImIipParamEnum *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_param_enum_class_init(ImIipParamEnumClass *klass)
 {
-//	ImIipParamEnumPrivate *priv = IM_IIP_PARAM_ENUM_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipParamEnumPrivate));
 }
 
-static void im_iip_param_enum_destructor(ImIipParamEnum *self)
+static void 		im_iip_param_enum_init(ImIipParamEnum *self)
 {
-//	ImIipParamEnumPrivate *priv = IM_IIP_PARAM_ENUM_GET_PRIVATE(self);
+	ImIipParamEnumPrivate *priv = IM_IIP_PARAM_ENUM_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipParamEnumPrivate *priv = IM_IIP_PARAM_ENUM_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_param_enum_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipParamEnumPrivate *priv = IM_IIP_PARAM_ENUM_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_param_enum_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipParamEnum* im_iip_param_enum_new(void)
+ImIipParamEnum* 		im_iip_param_enum_new(void)
 {
-	ImIipParamEnum *self = k_object_new_with_private(IM_TYPE_IIP_PARAM_ENUM, sizeof(ImIipParamEnumPrivate));
+	ImIipParamEnum *self = g_object_new(IM_TYPE_IIP_PARAM_ENUM, NULL);
 	return self;
 }

@@ -65,8 +65,8 @@ typedef struct {
 /*----------------------------------------------------------------------*/
 //---------------------- driver  section -------------------------------
 static const TImB2rIntflgTbl S_G_IM_B2R_INTTBL_FB2R[ImB2r1_D_IM_B2R_PIPE_COUNT] = {
-	{ 0x00000001, 0x00000001, D_IM_B2R1_INT_FLG_CPERR_ERR, D_IM_B2R1_INT_STATE_CPERR_ERR, 0 },	// CPERE
-	{ 0x00000001, 0x00000001, D_IM_B2R2_INT_FLG_CPERR_ERR, D_IM_B2R2_INT_STATE_CPERR_ERR, 0 },	// CPERE
+	{ 0x00000001, 0x00000001, ImB2r_D_IM_B2R1_INT_FLG_CPERR_ERR, ImB2r_D_IM_B2R1_INT_STATE_CPERR_ERR, 0 },	// CPERE
+	{ 0x00000001, 0x00000001, ImB2r_D_IM_B2R2_INT_FLG_CPERR_ERR, ImB2r_D_IM_B2R2_INT_STATE_CPERR_ERR, 0 },	// CPERE
 };
 // YBRA offset information
 static volatile TImB2rYbraOfsInfo S_G_IM_B2R_YBRA_OFS_INFO[ImB2r1_D_IM_B2R_PIPE_COUNT];
@@ -79,24 +79,24 @@ static volatile T_IM_B2R_RECT S_G_IM_B2R_RECT_PARAM[ImB2r1_D_IM_B2R_PIPE_COUNT];
 //
 static const TImB2rIntflgTbl S_G_IM_B2R_INTTBL_JDSB2R[ImB2r1_D_IM_B2R_PIPE_COUNT][8] = {
 	{
-		{ 0x00000001, 0x00000001, D_IM_B2R1_INT_FLG_YBR_END,  D_IM_B2R1_INT_STATE_YBR_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBREE
-		{ 0x00000002, 0x00000002, D_IM_B2R1_INT_FLG_YBW_END,  D_IM_B2R1_INT_STATE_YBW_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWEE
-		{ 0x00000010, 0x00000010, D_IM_B2R1_INT_FLG_FB2R_END, D_IM_B2R1_INT_STATE_FB2R_END, 0 },						// FB2REE
-		{ 0x00000020, 0x00000020, D_IM_B2R1_INT_FLG_LINE_END, D_IM_B2R1_INT_STATE_LINE_END, 0 },						// ELNEE
-		{ 0x00000100, 0x00000100, D_IM_B2R1_INT_FLG_YBR_ERR,  D_IM_B2R1_INT_STATE_YBR_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBRERE
-		{ 0x00000200, 0x00000200, D_IM_B2R1_INT_FLG_YBW_ERR,  D_IM_B2R1_INT_STATE_YBW_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWERE
-		{ 0x00001000, 0x00001000, D_IM_B2R1_INT_FLG_AXR_ERR,  D_IM_B2R1_INT_STATE_AXR_ERR,  0 },						// AXRERE
-		{ 0x00002000, 0x00002000, D_IM_B2R1_INT_FLG_AXW_ERR,  D_IM_B2R1_INT_STATE_AXW_ERR,  0 },						// AXWERE
+		{ 0x00000001, 0x00000001, ImB2r_D_IM_B2R1_INT_FLG_YBR_END,  ImB2r_D_IM_B2R1_INT_STATE_YBR_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBREE
+		{ 0x00000002, 0x00000002, ImB2r_D_IM_B2R1_INT_FLG_YBW_END,  ImB2r_D_IM_B2R1_INT_STATE_YBW_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWEE
+		{ 0x00000010, 0x00000010, ImB2r_D_IM_B2R1_INT_FLG_FB2R_END, ImB2r_D_IM_B2R1_INT_STATE_FB2R_END, 0 },						// FB2REE
+		{ 0x00000020, 0x00000020, ImB2r_D_IM_B2R1_INT_FLG_LINE_END, ImB2r_D_IM_B2R1_INT_STATE_LINE_END, 0 },						// ELNEE
+		{ 0x00000100, 0x00000100, ImB2r_D_IM_B2R1_INT_FLG_YBR_ERR,  ImB2r_D_IM_B2R1_INT_STATE_YBR_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBRERE
+		{ 0x00000200, 0x00000200, ImB2r_D_IM_B2R1_INT_FLG_YBW_ERR,  ImB2r_D_IM_B2R1_INT_STATE_YBW_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWERE
+		{ 0x00001000, 0x00001000, ImB2r_D_IM_B2R1_INT_FLG_AXR_ERR,  ImB2r_D_IM_B2R1_INT_STATE_AXR_ERR,  0 },						// AXRERE
+		{ 0x00002000, 0x00002000, ImB2r_D_IM_B2R1_INT_FLG_AXW_ERR,  ImB2r_D_IM_B2R1_INT_STATE_AXW_ERR,  0 },						// AXWERE
 	},
 	{
-		{ 0x00000001, 0x00000001, D_IM_B2R2_INT_FLG_YBR_END,  D_IM_B2R2_INT_STATE_YBR_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBREE
-		{ 0x00000002, 0x00000002, D_IM_B2R2_INT_FLG_YBW_END,  D_IM_B2R2_INT_STATE_YBW_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWEE
-		{ 0x00000010, 0x00000010, D_IM_B2R2_INT_FLG_FB2R_END, D_IM_B2R2_INT_STATE_FB2R_END, 0 },						// FB2REE
-		{ 0x00000020, 0x00000020, D_IM_B2R2_INT_FLG_LINE_END, D_IM_B2R2_INT_STATE_LINE_END, 0 },						// ELNEE
-		{ 0x00000100, 0x00000100, D_IM_B2R2_INT_FLG_YBR_ERR,  D_IM_B2R2_INT_STATE_YBR_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBRERE
-		{ 0x00000200, 0x00000200, D_IM_B2R2_INT_FLG_YBW_ERR,  D_IM_B2R2_INT_STATE_YBW_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWERE
-		{ 0x00001000, 0x00001000, D_IM_B2R2_INT_FLG_AXR_ERR,  D_IM_B2R2_INT_STATE_AXR_ERR,  0 },						// AXRERE
-		{ 0x00002000, 0x00002000, D_IM_B2R2_INT_FLG_AXW_ERR,  D_IM_B2R2_INT_STATE_AXW_ERR,  0 },						// AXWERE
+		{ 0x00000001, 0x00000001, ImB2r_D_IM_B2R2_INT_FLG_YBR_END,  ImB2r_D_IM_B2R2_INT_STATE_YBR_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBREE
+		{ 0x00000002, 0x00000002, ImB2r_D_IM_B2R2_INT_FLG_YBW_END,  ImB2r_D_IM_B2R2_INT_STATE_YBW_END,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWEE
+		{ 0x00000010, 0x00000010, ImB2r_D_IM_B2R2_INT_FLG_FB2R_END, ImB2r_D_IM_B2R2_INT_STATE_FB2R_END, 0 },						// FB2REE
+		{ 0x00000020, 0x00000020, ImB2r_D_IM_B2R2_INT_FLG_LINE_END, ImB2r_D_IM_B2R2_INT_STATE_LINE_END, 0 },						// ELNEE
+		{ 0x00000100, 0x00000100, ImB2r_D_IM_B2R2_INT_FLG_YBR_ERR,  ImB2r_D_IM_B2R2_INT_STATE_YBR_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBR },	// YBRERE
+		{ 0x00000200, 0x00000200, ImB2r_D_IM_B2R2_INT_FLG_YBW_ERR,  ImB2r_D_IM_B2R2_INT_STATE_YBW_ERR,  ImB2r1_D_IM_B2R_STATE_BUSY_YBW },	// YBWERE
+		{ 0x00001000, 0x00001000, ImB2r_D_IM_B2R2_INT_FLG_AXR_ERR,  ImB2r_D_IM_B2R2_INT_STATE_AXR_ERR,  0 },						// AXRERE
+		{ 0x00002000, 0x00002000, ImB2r_D_IM_B2R2_INT_FLG_AXW_ERR,  ImB2r_D_IM_B2R2_INT_STATE_AXW_ERR,  0 },						// AXWERE
 	},
 };
 
@@ -137,8 +137,8 @@ static VOID imB2rReset( UCHAR pipe_no )
 	ImB2r2*	imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rReset error. pipe_no>D_IM_B2R_PIPE12\n" ));
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rReset error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -162,13 +162,13 @@ static VOID imB2rManagerInit( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rManagerInit error. pipe_no>D_IM_B2R_PIPE12\n" ));
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rManagerInit error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
 
-	if( pipe_no == D_IM_B2R_PIPE12 ){
+	if( pipe_no == ImB2r_D_IM_B2R_PIPE12 ){
 		size_coef = 2;
 		pipe_no = 0;
 	}
@@ -197,8 +197,8 @@ static VOID imB2rLatestAddrUpdate( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rLatestAddrUpdate error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rLatestAddrUpdate error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -218,8 +218,8 @@ static VOID imB2rSetYbrAddressSdramInput( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rSetYbrAddressSdramInput error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rSetYbrAddressSdramInput error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -231,7 +231,7 @@ static VOID imB2rSetYbrAddressSdramInput( UCHAR pipe_no )
 	Im_B2R_Off_Pclk(pipe_no);
 }
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 // Calculate YBW output image width
 static UINT32 im_b2r_calc_ybw_out_width( UCHAR pipe_no )
 {
@@ -241,7 +241,7 @@ static UINT32 im_b2r_calc_ybw_out_width( UCHAR pipe_no )
 
 	ImB2r2 *imB2r2=im_b2r2_get();
 
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
 		Ddim_Print(( "im_b2r_calc_ybw_out_width:pipe_no err\n" ));
 		return 0;
 	}
@@ -273,7 +273,7 @@ static UINT32 im_b2r_calc_ybw_out_lines( UCHAR pipe_no )
 
 	ImB2r2 *imB2r2=im_b2r2_get();
 
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
 		Ddim_Print(( "im_b2r_calc_ybw_out_lines:pipe_no err\n" ));
 		return 0;
 	}
@@ -305,19 +305,19 @@ static VOID imB2rCalcRingPixs( UCHAR pipe_no )
 
 	static const TImB2rRingPixs ring_pixs_info_tbl[2][2] = {	// CIABYP, CIAPDD
 		{	// CIABYP=0
-			{ D_IM_B2R_ENABLE_OFF, 3, 0, 6 },	// CIABYP=0, CIAPDD=0
-			{ D_IM_B2R_ENABLE_ON,  3, 6, 0 },	// CIABYP=0, CIAPDD=1
+			{ ImB2r_D_IM_B2R_ENABLE_OFF, 3, 0, 6 },	// CIABYP=0, CIAPDD=0
+			{ ImB2r_D_IM_B2R_ENABLE_ON,  3, 6, 0 },	// CIABYP=0, CIAPDD=1
 		},
 		{	// CIABYP=1
-			{ D_IM_B2R_ENABLE_OFF, 0, 0, 0 },	// CIABYP=1, CIAPDD=0
-			{ D_IM_B2R_ENABLE_ON,  0, 0, 0 },	// CIABYP=1, CIAPDD=1	NG Setting
+			{ ImB2r_D_IM_B2R_ENABLE_OFF, 0, 0, 0 },	// CIABYP=1, CIAPDD=0
+			{ ImB2r_D_IM_B2R_ENABLE_ON,  0, 0, 0 },	// CIABYP=1, CIAPDD=1	NG Setting
 		}
 	};
 	UCHAR loop_cnt, loop_sta, loop_end;
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rCalcRingPixs error. pipe_no>D_IM_B2R_PIPE12\n" ));
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rCalcRingPixs error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -348,8 +348,8 @@ static VOID im_b2r_calc_ybr_address_sdram_input( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "im_b2r_calc_ybr_address_sdram_input error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "im_b2r_calc_ybr_address_sdram_input error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -358,15 +358,15 @@ static VOID im_b2r_calc_ybr_address_sdram_input( UCHAR pipe_no )
 	S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsYPixs = im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputSize.img_top;
 
 	switch( im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputDtype ) {
-		case D_IM_B2R_STL_DTYP_PACK12:
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK12:
 			tmp_top  = (im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputGlobal * S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsYPixs);
 			tmp_left = (S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsXPixs * 3 / 2);	// x1.5
 			break;
-		case D_IM_B2R_STL_DTYP_PACK10:
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK10:
 			tmp_top  = (im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputGlobal * S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsYPixs);
 			tmp_left = (S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsXPixs * 5 / 4);	// x1.25
 			break;
-		case D_IM_B2R_STL_DTYP_PACK16:
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK16:
 			tmp_top  = (im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputGlobal * S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsYPixs);
 			tmp_left = (S_G_IM_B2R_YBRA_OFS_INFO[pipe_no].ofsXPixs * 2);		// x2.0
 			break;
@@ -403,8 +403,8 @@ static VOID imB2rCalcTopMsbOffsetSdramInput( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rCalcTopMsbOffsetSdramInput error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rCalcTopMsbOffsetSdramInput error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -412,18 +412,18 @@ static VOID imB2rCalcTopMsbOffsetSdramInput( UCHAR pipe_no )
 	Im_B2R_On_Pclk( pipe_no );
 
 	switch( im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).inputDtype ) {
-		case D_IM_B2R_STL_DTYP_PACK8:	// FALL THROUGH
-		case D_IM_B2R_STL_DTYP_PACK16:
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK8:	// FALL THROUGH
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK16:
 			p_msb_offset = &msb_offset_pack8_16[0];
 			cycle_pixs = 1;
 			msb_array_idx = 0;
 			break;
-		case D_IM_B2R_STL_DTYP_PACK10:
+		case ImB2r_D_IM_B2R_STL_DTYP_PACK10:
 			p_msb_offset = &msb_offset_pack10[0];
 			cycle_pixs = ImB2r1_D_IM_B2R_PACK10_MSB_CYCLE_PIXS;
 			msb_array_idx = msb_offset_to_pixs_pack10[im_b2r2_get_g_im_b2r_state(imB2r2,pipe_no).topOffset];
 			break;
-//		case D_IM_B2R_STL_DTYP_PACK12:
+//		case ImB2r_D_IM_B2R_STL_DTYP_PACK12:
 		default:
 			p_msb_offset = &msb_offset_pack12[0];
 			cycle_pixs = ImB2r1_D_IM_B2R_PACK12_MSB_CYCLE_PIXS;
@@ -453,8 +453,8 @@ static VOID imB2rSetTopColorB2bDirect( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "imB2rSetTopColorB2bDirect error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "imB2rSetTopColorB2bDirect error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
@@ -477,9 +477,9 @@ INT32 Im_B2R_Init(UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Init error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Init error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -520,11 +520,11 @@ INT32 Im_B2R_Set_InAddr_Info(UCHAR pipe_no, const T_IM_B2R_INADDR_INFO* const in
 	if( in_addr == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Set_Still_InAddr_Info error. in_addr = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_InAddr_Info error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_InAddr_Info error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -554,17 +554,17 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 	ImB2r2 *imB2r2=im_b2r2_get();
 
 #ifdef CO_PARAM_CHECK
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Int_Handler error. pipe_no>=D_IM_B2R_PIPE12\n" ));
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Int_Handler error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
 		return;
 	}
 #endif	// CO_PARAM_CHECK
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler begin\n" ));
 #endif
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler on pclk\n" ));
 #endif
 	Im_B2R_On_Pclk( pipe_no );
@@ -573,7 +573,7 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 		if( !((im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBR.YBRTRG.bit.YBRTRG != ImB2r1_D_IM_B2R_YBRTRG_IDLE )
 		   || (im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWTRG.bit.YBWTRG != ImB2r1_D_IM_B2R_YBWTRG_IDLE )
 		   || (im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWCTL.bit.YBWCSE != 0 ))) {
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 			Ddim_Print(( "Im_B2R_Int_Handler off clk\n" ));
 #endif
 			Im_B2R_Off_Clk( pipe_no );
@@ -589,7 +589,7 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 	f_b2r_intf = im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.B2RINTF.word;
 	f_b2r_intf_clr = 0;
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler inte=0x%lx, intf=0x%lx f_inte=0x%lx f_intf=0x%lx\n", b2r_inte, b2r_intf, f_b2r_inte, f_b2r_intf ));
 #endif
 
@@ -599,12 +599,12 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 		if( ((b2r_intf & S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].flgBitmask) != 0)
 		 && ((b2r_inte & S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].enaBitmask) != 0) ) {
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 			Ddim_Print(( "Im_B2R_Int_Handler begin JDSB2R 0x%x\n", S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].flgBitmask ));
 #endif
 
-			if(( S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].intStatus == D_IM_B2R1_INT_STATE_YBW_END )
-			|| ( S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].intStatus == D_IM_B2R2_INT_STATE_YBW_END )) {
+			if(( S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].intStatus == ImB2r_D_IM_B2R1_INT_STATE_YBW_END )
+			|| ( S_G_IM_B2R_INTTBL_JDSB2R[pipe_no][loopcnt].intStatus == ImB2r_D_IM_B2R2_INT_STATE_YBW_END )) {
 				imB2rLatestAddrUpdate( pipe_no );
 			}
 
@@ -627,7 +627,7 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 	if( ((f_b2r_intf & S_G_IM_B2R_INTTBL_FB2R[pipe_no].flgBitmask) != 0)
 	 && ((f_b2r_inte & S_G_IM_B2R_INTTBL_FB2R[pipe_no].enaBitmask) != 0) ) {
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 		Ddim_Print(( "Im_B2R_Int_Handler begin FB2R 0x%x\n", S_G_IM_B2R_INTTBL_FB2R[pipe_no].flgBitmask ));
 #endif
 
@@ -651,22 +651,22 @@ VOID Im_B2R_Int_Handler( UCHAR pipe_no )
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.B2RINTF.word = f_b2r_intf_clr;
 
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler intf=0x%lx, %0xlx\n", im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.YBINTF.word, im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->F_B2R.CNTL.B2RINTF.word ));
 #endif
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler off pclk\n" ));
 #endif
 	Im_B2R_Off_Pclk( pipe_no );
 	ImB2r1_IM_B2R_DSB();
 
-#ifdef CO_DEBUG_PRINT_IM_B2R
+#ifdef ImB2r_CO_DEBUG_PRINT_IM_B2R
 	Ddim_Print(( "Im_B2R_Int_Handler end\n" ));
 #endif
 }
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 VOID Im_B2R_Print_Status( VOID )
 {
 	UINT32 loopcnt;
@@ -708,7 +708,7 @@ VOID Im_B2R_Print_Status( VOID )
 		Ddim_Print(( "\t\tlatest_idx = %u\n", S_G_IM_B2R_OUT_MNG[loopcnt2].latestIdx ));
 		Ddim_Print(( "\t\tbank_initial_position = %u\n", S_G_IM_B2R_OUT_MNG[loopcnt2].bankInfo.bank_initial_position ));
 		Ddim_Print(( "\t\tuse_bank_num = %u\n", S_G_IM_B2R_OUT_MNG[loopcnt2].bankInfo.use_bank_num ));
-		for( loopcnt = 0; loopcnt < D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
+		for( loopcnt = 0; loopcnt < ImB2r_D_IM_B2R_YBW_BANK_MAX; loopcnt++ ) {
 			Ddim_Print(( "\t\tBankNum = %u\n", loopcnt ));
 			Ddim_Print(( "\t\t\tout_addr[R] = 0x%x\n", (UINT32)S_G_IM_B2R_OUT_MNG[loopcnt2].bankInfo.output_addr[loopcnt].rgb.addr_R ));
 			Ddim_Print(( "\t\t\tout_addr[G] = 0x%x\n", (UINT32)S_G_IM_B2R_OUT_MNG[loopcnt2].bankInfo.output_addr[loopcnt].rgb.addr_G ));
@@ -727,14 +727,14 @@ VOID Im_B2R_Print_AccEnStatus( VOID )
 	UINT32 loopcnt;
 	ImB2r2 *imB2r2=im_b2r2_get();
 
-	Im_B2R_On_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_On_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 	for( loopcnt = 0; loopcnt < 2; loopcnt++ ) {
 		Ddim_Print(( "RAMAEN_BAY_DEKNEE = 0x%x\n", im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loopcnt)->B2R_CMN.RAMAEN.bit.RAMAEN_BAY_DEKNEE ));
 		Ddim_Print(( "RAMAEN_RGB_KNEE = 0x%x\n", im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loopcnt)->B2R_CMN.RAMAEN.bit.RAMAEN_RGB_KNEE ));
 		Ddim_Print(( "RAMAEN_YBR = 0x%x\n", im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loopcnt)->B2R_CMN.RAMAEN.bit.RAMAEN_YBR ));
 		Ddim_Print(( "RAMAEN_YBW = 0x%x\n", im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,loopcnt)->B2R_CMN.RAMAEN.bit.RAMAEN_YBW ));
 	}
-	Im_B2R_Off_Pclk( D_IM_B2R_PIPE12 );
+	Im_B2R_Off_Pclk( ImB2r_D_IM_B2R_PIPE12 );
 }
 #endif
 
@@ -751,11 +751,11 @@ INT32 Im_B2R_Set_OutBankInfo( UCHAR pipe_no, const T_IM_B2R_OUTBANK_INFO* const 
 	if( b2r_bank == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Set_OutBank_Info error. b2r_bank = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_OutBankInfo error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_OutBankInfo error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -764,18 +764,18 @@ INT32 Im_B2R_Set_OutBankInfo( UCHAR pipe_no, const T_IM_B2R_OUTBANK_INFO* const 
 	// YBWA
 	Im_B2R_On_Pclk( pipe_no );
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWCTL.bit.USEBANK = S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.use_bank_num;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_R;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_G;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_1].rgb.addr_B;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_R;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_G;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_2].rgb.addr_B;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_R;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_G;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[D_IM_B2R_YBW_BANK_3].rgb.addr_B;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_0 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_R;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_G;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_1 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_1].rgb.addr_B;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_R;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_G;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_2 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_2].rgb.addr_B;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_0_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_R;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_1_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_G;
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBW.YBWA.bit.YBWA_2_3 = (ULONG)S_G_IM_B2R_OUT_MNG[pipe_no].bankInfo.output_addr[ImB2r_D_IM_B2R_YBW_BANK_3].rgb.addr_B;
 	Im_B2R_Off_Pclk( pipe_no );
 
 	// Set bank index & top address information
@@ -795,11 +795,11 @@ INT32 Im_B2R_Get_Latest_OutAddr( UCHAR pipe_no, UCHAR* const latest_bank_idx, T_
 	if( latestAddr == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_Latest_OutAddr error. latestAddr = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_Latest_OutAddr error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_Latest_OutAddr error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -818,11 +818,11 @@ INT32 Im_B2R_Get_OutBankIndex( UCHAR pipe_no, UCHAR* const bank_index )
 	if( bank_index == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_BankIndex error. bank_index = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_OutBankIndex error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_OutBankIndex error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -840,11 +840,11 @@ INT32 Im_B2R_Get_Rect_Param( UCHAR pipe_no, T_IM_B2R_RECT* const b2r_rect_param 
 	if( b2r_rect_param == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Get_Rect_Param error. b2r_rect_param = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no >= D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Get_Rect_Param error. pipe_no>=D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no >= ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Get_Rect_Param error. pipe_no>=ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 
@@ -864,11 +864,11 @@ INT32 Im_B2R_Set_Rect( UCHAR pipe_no, const T_IM_B2R_RECT* const b2r_rect_param 
 	if(b2r_rect_param == NULL) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Set_Rect error. b2r_rect_param = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Set_Rect error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Set_Rect error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif
 
@@ -911,11 +911,11 @@ INT32 Im_B2R_Ctrl( UCHAR pipe_no, const T_IM_B2R_CTRL* const b2r_ctrl )
 	if( b2r_ctrl == NULL ) {
 		// Parameter setting error
 		Ddim_Assertion(("Im_B2R_Ctrl error. b2r_ctrl = NULL\n"));
-		return D_IM_B2R_PARAM_ERROR;
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_B2R_PIPE12 ){
-		Ddim_Assertion(( "Im_B2R_Ctrl error. pipe_no>D_IM_B2R_PIPE12\n" ));
-		return D_IM_B2R_PARAM_ERROR;
+	if( pipe_no > ImB2r_D_IM_B2R_PIPE12 ){
+		Ddim_Assertion(( "Im_B2R_Ctrl error. pipe_no>ImB2r_D_IM_B2R_PIPE12\n" ));
+		return ImB2r_D_IM_B2R_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -937,9 +937,9 @@ INT32 Im_B2R_Ctrl( UCHAR pipe_no, const T_IM_B2R_CTRL* const b2r_ctrl )
 	// YBCH
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXMD.bit.YBWDOS        = b2r_ctrl->ybw.axi_write_mode.out_sel;
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWAXMD.bit.YBWBL         = b2r_ctrl->ybw.axi_write_mode.burst_length;
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_0 = b2r_ctrl->ybw.write_request_mask[D_IM_B2R_PORT_0];
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_1 = b2r_ctrl->ybw.write_request_mask[D_IM_B2R_PORT_1];
-	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_2 = b2r_ctrl->ybw.write_request_mask[D_IM_B2R_PORT_2];
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_0 = b2r_ctrl->ybw.write_request_mask[ImB2r_D_IM_B2R_PORT_0];
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_1 = b2r_ctrl->ybw.write_request_mask[ImB2r_D_IM_B2R_PORT_1];
+	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->YBCH.YBWREQMSK.bit.YBWREQMSK_2 = b2r_ctrl->ybw.write_request_mask[ImB2r_D_IM_B2R_PORT_2];
 
 	// B2R_CMN
 	im_b2r2_get_g_im_io_b2r_reg_ptr(imB2r2,pipe_no)->B2R_CMN.ELNLV.word  = b2r_ctrl->line_intr.count;

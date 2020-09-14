@@ -28,6 +28,7 @@
 typedef struct _PeriChiptopTest	        PeriChiptopTest;
 typedef struct _PeriChiptopTestPrivate	PeriChiptopTestPrivate;
 
+
 struct  _PeriChiptopTest
 {
 	KObject parent;

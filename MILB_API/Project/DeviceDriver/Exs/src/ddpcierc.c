@@ -134,7 +134,7 @@ void dd_pcie_rc_deinit(DdPcieRc *self)
  */
 kint32 dd_pcie_rc_open(DdPcieRc *self, kint32 tmout)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
 	if (tmout < D_DDIM_USER_SEM_WAIT_FEVR) {
@@ -143,16 +143,16 @@ kint32 dd_pcie_rc_open(DdPcieRc *self, kint32 tmout)
 	}
 #endif
 
-	if (tmout == D_DDIM_USER_SEM_WAIT_POL) {
-		ercd = DDIM_User_Pol_Sem(DdimUserCustom_SID_DD_PDM);
+	if (tmout == DdimUserCustom_SEM_WAIT_POL) {
+		ercd = ddim_user_custom_pol_sem(NULL, DdimUserCustom_SID_DD_PDM);
 	} else {
-		ercd = DDIM_User_Twai_Sem(DdimUserCustom_SID_DD_PDM, (DDIM_USER_TMO) tmout);
+		ercd = ddim_user_custom_twai_sem(NULL, DdimUserCustom_SID_DD_PDM, (DdimUserCustom_TMO) tmout);
 	}
 
 	switch (ercd) {
-	case D_DDIM_USER_E_OK:
+	case DdimUserCustom_E_OK:
 		return D_DDIM_OK;
-	case D_DDIM_USER_E_TMOUT:
+	case DdimUserCustom_E_TMOUT:
 		return D_DD_PCIE_SEM_TIMEOUT;
 	default:
 		return D_DD_PCIE_SEM_NG;
@@ -165,10 +165,10 @@ kint32 dd_pcie_rc_open(DdPcieRc *self, kint32 tmout)
  */
 kint32 dd_pcie_rc_close(DdPcieRc *self)
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
-	ercd = DDIM_User_Sig_Sem(DdimUserCustom_SID_DD_PDM);	// Exclusive release
-	if (D_DDIM_USER_E_OK != ercd) {
+	ercd = ddim_user_custom_sig_sem(NULL, DdimUserCustom_SID_DD_PDM);	// Exclusive release
+	if (DdimUserCustom_E_OK != ercd) {
 		return D_DD_PCIE_SEM_NG;
 	} else {
 		return D_DDIM_OK;
@@ -484,7 +484,7 @@ kint32 dd_pcie_rc_ctrl_memory(DdPcieRc *self, DdPcieCtrlMem const* const pcieCtr
  */
 void dd_pcie_rc_ch0_int_own_handler(DdPcieRc *self)
 {
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH0 INT_OWN Occurred.\n"));
 
@@ -577,7 +577,7 @@ void dd_pcie_rc_ch0_int_own_handler(DdPcieRc *self)
 void dd_pcie_rc_ch0_int_ep_handler(DdPcieRc *self)
 {
 	kuint32 intStat;
-	vpCallbackPcieFunc callback;
+	VpCallbackPcieFunc callback;
 
 	DdPcieRcCommon_DEBUG_PRINT(("[DD_PCIE_RC] CH0 INT_EP Occurred.\n"));
 
@@ -924,10 +924,10 @@ kint32	dd_pcie_rc_config_write(DdPcieRc *self, DdPcieCh ch, kuint16 offset, kuin
 /**
  * @brief	It will be setting up Detect Card.
  * @param	DdPcieCh		ch
- * @param	vpCallbackPcieFunc	callback
+ * @param	VpCallbackPcieFunc	callback
  * @return	kint32				D_DDIM_OK
  */
-kint32 dd_pcie_rc_ctrl_detect_card(DdPcieRc *self, DdPcieCh ch, vpCallbackPcieFunc callback)
+kint32 dd_pcie_rc_ctrl_detect_card(DdPcieRc *self, DdPcieCh ch, VpCallbackPcieFunc callback)
 {
 	if (ch == E_DD_PCIE_CH0) {
 		DdTopthree_SET_PERSEL3_PRT0SCK3(0);	// CHIPTOP PERSEL3. Set PXRSTX0.

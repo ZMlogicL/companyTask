@@ -14,41 +14,57 @@
 
 #include "ctaudiocaseten.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtAudioCaseTen, ct_audio_case_ten)
-#define CT_AUDIO_CASE_TEN_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), \
-		CtAudioCaseTenPrivate, CT_TYPE_AUDIO_CASE_TEN))
+G_DEFINE_TYPE(CtAudioCaseTen, ct_audio_case_ten, G_TYPE_OBJECT);
+#define CT_AUDIO_CASE_TEN_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_AUDIO_CASE_TEN, CtAudioCaseTenPrivate))
 
 struct _CtAudioCaseTenPrivate
 {
-	
 };
 
 /*
 *DECLS
 */
-static void ct_audio_case_ten_constructor(CtAudioCaseTen *self);
-static void ct_audio_case_ten_destructor(CtAudioCaseTen *self);
-static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue);
+static void ct_audio_case_ten_class_init(CtAudioCaseTenClass *klass);
+static void ct_audio_case_ten_init(CtAudioCaseTen *self);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
+static void doWithArgs_od(AbsCtAudioCase *self, gint caseValue);
 
 /*
  * IMPL
  */
-static void ct_audio_case_ten_constructor(CtAudioCaseTen *self)
+static void ct_audio_case_ten_class_init(CtAudioCaseTenClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtAudioCaseTenPrivate));
+}
+
+static void ct_audio_case_ten_init(CtAudioCaseTen *self)
+{
+	CtAudioCaseTenPrivate *priv = CT_AUDIO_CASE_TEN_GET_PRIVATE(self);
 	((AbsCtAudioCase*)self)->doWithArgs = doWithArgs_od;
 	((AbsCtAudioCase*)self)->doNoArgs = NULL;
 }
 
-static void ct_audio_case_ten_destructor(CtAudioCaseTen *self)
+static void dispose_od(GObject *object)
 {
-	self = NULL;
+	CtAudioCaseTen *self = (CtAudioCaseTen*)object;
+	CtAudioCaseTenPrivate *priv = CT_AUDIO_CASE_TEN_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtAudioCaseTen *self = (CtAudioCaseTen*)object;
+	CtAudioCaseTenPrivate *priv = CT_AUDIO_CASE_TEN_GET_PRIVATE(self);
 }
 
 //123-244
-static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue)
+static void doWithArgs_od(AbsCtAudioCase *self, gint caseValue)
 {
-	kpointer temp = NULL;
-	kpointer secondTemp = NULL;
+	gpointer temp = NULL;
+	gpointer secondTemp = NULL;
 	switch(caseValue)
 	{
 		case 123:
@@ -466,8 +482,8 @@ static void doWithArgs_od(AbsCtAudioCase *self, kint caseValue)
 
 CtAudioCaseTen *ct_audio_case_ten_new(void)
 {
-	CtAudioCaseTen *self = k_object_new(CT_TYPE_AUDIO_CASE_TEN);
-	if (K_UNLIKELY(!self))
+	CtAudioCaseTen *self = g_object_new(CT_TYPE_AUDIO_CASE_TEN, NULL);
+	if (!self)
 	{
 		return NULL;
 	}

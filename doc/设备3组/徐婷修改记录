@@ -31,20 +31,31 @@ BF_Startup_Boot_Sample()   -->  bf_startup_boot_sample()
 bf_startup.h根据函数所在位置分为bfstartup.h  	bfversion.h   ehost.h
 
 文件名修改
-boot.c -->eboot.c
-fj_getbootcond()  -->e_boot_task()
-fj_reboot_pre() -->e_boot_get_boot_cond()
-fj_reboot()-->e_boot_reboot_pre()
-fj_get_ok_version()-->e_boot_reboot()
-BF_Boot_Enable_MxicDecErr() -->e_boot_enable_mxic_decode_error()
+boot.c -->snsboot.c
+fj_getbootcond()  -->sns_boot_task()
+fj_reboot_pre() -->sns_boot_get_boot_cond()
+fj_reboot()-->sns_boot_reboot_pre()
+fj_get_ok_version()-->sns_boot_reboot()
+BF_Boot_Enable_MxicDecErr() -->sns_boot_enable_mxic_decode_error()
 
 文件名修改
-host.c --> ehost.c
-BF_Host_Init_Message()   -->  e_host_init_message() 
-fj_hostgetmessage()   -->  e_host_block_message_check() 
-fj_hostpostmessage()   -->  e_host_get_message() 
-fj_confighostmessage()   -->  e_host_post_message() 
-BF_Block_Message_Check()   -->  e_host_config_host_message() 
+host.c --> snshost.c
+BF_Host_Init_Message()   -->  sns_host_init_message() 
+fj_hostgetmessage()   -->  sns_host_block_message_check() 
+fj_hostpostmessage()   -->  sns_host_get_message() 
+fj_confighostmessage()   -->  sns_host_post_message() 
+BF_Block_Message_Check()   -->  sns_host_config_host_message() 
+
+文件名修改
+boot_loader.c --> bootloader.c
+
+fj_bootload()   -->  boot_loader_start_boot_load()
+
+fj_bootloadstate()   -->  boot_loader_boot_load_state()
+
+BF_Boot_Loader_Check()   -->  boot_loader_check()
+
+
 
 
 

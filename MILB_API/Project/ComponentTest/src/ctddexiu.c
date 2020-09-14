@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-05
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtDdExiu类
 *@rely                :klib
@@ -15,26 +15,58 @@
 #include <stdlib.h>
 #include <string.h>
 #include "driver_common.h"
-#include "dd_exiu.h"
+#include "ddexiu.h"
 
 #include "ctddexiu.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdExiu, ct_dd_exiu);
-#define CT_DD_EXIU_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdExiuPrivate,CT_TYPE_DD_EXIU))
+
+G_DEFINE_TYPE(CtDdExiu, ct_dd_exiu, G_TYPE_OBJECT);
+#define CT_DD_EXIU_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_EXIU, CtDdExiuPrivate))
 
 struct _CtDdExiuPrivate
 {
+	DdExiu *ddExiu;
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_dd_exiu_constructor(CtDdExiu *self) 
+
+static void ct_dd_exiu_class_init(CtDdExiuClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdExiuPrivate));
 }
 
-static void ct_dd_exiu_destructor(CtDdExiu *self) 
+static void ct_dd_exiu_init(CtDdExiu *self)
 {
+	CtDdExiuPrivate *priv = CT_DD_EXIU_GET_PRIVATE(self);
+	priv->ddExiu=dd_exiu_new();
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdExiu *self = (CtDdExiu*)object;
+	CtDdExiuPrivate *priv = CT_DD_EXIU_GET_PRIVATE(self);
+	if(priv->ddExiu){
+		g_object_unref(priv->ddExiu);
+		priv->ddExiu=NULL;
+	}
+	G_OBJECT_CLASS(ct_dd_exiu_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtDdExiu *self = (CtDdExiu*)object;
+//	CtDdExiuPrivate *priv = CT_DD_EXIU_GET_PRIVATE(self);
 }
 
 
@@ -83,39 +115,39 @@ static void ct_dd_exiu_destructor(CtDdExiu *self)
  *		| err         | -             | -   | -   |Parameter Error Test.                                |
  *		+-------------+---------------+-----+-----+-----------------------------------------------------+
  */
-void Ct_Dd_EXIU_Main(kint argc, kchar** argv)
+void ct_dd_exiu_main_main(CtDdExiu *self, gint argc, gchar** argv)
 {
-	kint32  ercd;
-	kuint32 ch;
-	kuint32 dat;
+	gint32  ercd;
+	guint32 ch;
+	guint32 dat;
 
 	if( 0 == strcmp( argv[1], "display" ) ) {
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EIMASK(ch, &dat);
+			dd_exiu_get_eimask(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Interrupt Mask(EIMASK) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EISRCSEL(ch, &dat);
+			dd_exiu_get_eisrcsel(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Interrupt Source(EISRCSEL) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EIREQSTA(ch, &dat);
+			dd_exiu_get_eireqsta(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Internal Interrupt Request(EIREQSTA) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EIRAWREQSTA(ch, &dat);
+			dd_exiu_get_eirawreqsta(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Raw Interrupt Request(EIRAWREQSTA) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EILVL(ch, &dat);
+			dd_exiu_get_eilvl(priv->ddExiu, ch, &dat);
 			Ddim_Print(("External Interrupt Level(EILVL) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EIEDG(ch, &dat);
+			dd_exiu_get_eiedg(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Interrupt Detection Method(EIEDG) of Channel[%d] = %d\n", ch, dat));
 		}
 		for( ch=D_DD_EXIU_CH_MIN; ch < D_DD_EXIU_CH_MAX+1; ch++ ) {
-			Dd_EXIU_Get_EISIR(ch, &dat);
+			dd_exiu_get_eisir(priv->ddExiu, ch, &dat);
 			Ddim_Print(("Software Interrupt(EISIR) of Channel[%d] = %d\n", ch, dat));
 		}
 	}
@@ -123,73 +155,73 @@ void Ct_Dd_EXIU_Main(kint argc, kchar** argv)
 		if( 0 == strcmp( argv[2], "eimask_rele" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EIMASK_Release(num);
+			dd_exiu_set_eimask_release(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Mask Release.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eimask_mask" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EIMASK_Mask(num);
+			dd_exiu_set_eimask_mask(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Mask.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eimask_val" ) ) {
-			kulong val;
-			val = (kulong)atof(argv[3]);
-			Dd_EXIU_Set_EIMASK_Val(val);
+			gulong val;
+			val = (gulong)atof(argv[3]);
+			dd_exiu_set_eimask_val(priv->ddExiu, val);
 			Ddim_Print(("It set Interrupt is Mask or Release. \n"));
 		}
 		else if( 0 == strcmp( argv[2], "eisrcsel_ext" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EISRCSEL_Ext(num);
+			dd_exiu_set_eisrcsel_ext(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt External Source.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eisrcsel_soft" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EISRCSEL_Soft(num);
+			dd_exiu_set_eisrcsel_soft(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Software Source.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eireqclr_ch" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EIREQCLR_Ch(num);
+			dd_exiu_set_eireqclr_ch(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Cleared Channel.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eireqclr_val" ) ) {
-			kulong val;
-			val = (kulong)atof(argv[3]);
-			Dd_EXIU_Set_EIREQCLR_Val(val);
+			gulong val;
+			val = (gulong)atof(argv[3]);
+			dd_exiu_set_eireqclr_val(priv->ddExiu, val);
 			Ddim_Print(("It set Interrupt Cleared Value.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eilvl_lo" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EILVL_Lo(num);
+			dd_exiu_set_eilvl_lo(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Low level or Falling edge.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eilvl_hi" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EILVL_Hi(num);
+			dd_exiu_set_eilvl_hi(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt High level or Rising edge.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eiedg_lvl" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EIEDG_Level(num);
+			dd_exiu_set_eiedg_level(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Level Detection.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eiedg_edg" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EIEDG_Edge(num);
+			dd_exiu_set_eiedg_edge(priv->ddExiu, num);
 			Ddim_Print(("It set Interrupt Edge Detection.\n"));
 		}
 		else if( 0 == strcmp( argv[2], "eisir_gen" ) ) {
 			int num;
 			num = atoi(argv[3]);
-			Dd_EXIU_Set_EISIR_Generate(num);
+			dd_exiu_set_eisir_generate(priv->ddExiu, num);
 			Ddim_Print(("It set Software Interrupt Generate.\n"));
 		}
 		else{
@@ -197,113 +229,113 @@ void Ct_Dd_EXIU_Main(kint argc, kchar** argv)
 		}
 	}
 	else if( 0 == strcmp( argv[1], "err" ) ) {
-		ercd = Dd_EXIU_Get_EIMASK(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eimask(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Interrupt Mask(EIMASK) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIMASK(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eimask(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Interrupt Mask(EIMASK) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIMASK(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eimask(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Interrupt Mask(EIMASK) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EISRCSEL(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eisrcsel(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Interrupt Source(EISRCSEL) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EISRCSEL(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eisrcsel(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Interrupt Source(EISRCSEL) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EISRCSEL(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eisrcsel(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Interrupt Source(EISRCSEL) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EIREQSTA(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eireqsta(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Internal Interrupt Request(EIREQSTA) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIREQSTA(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eireqsta(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Internal Interrupt Request(EIREQSTA) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIREQSTA(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eireqsta(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Internal Interrupt Request(EIREQSTA) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EIRAWREQSTA(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eirawreqsta(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Raw Interrupt Request(EIRAWREQSTA) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIRAWREQSTA(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eirawreqsta(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Raw Interrupt Request(EIRAWREQSTA) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIRAWREQSTA(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eirawreqsta(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Raw Interrupt Request(EIRAWREQSTA) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EILVL(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eilvl(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("External Interrupt Level(EILVL) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EILVL(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eilvl(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("External Interrupt Level(EILVL) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EILVL(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eilvl(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("External Interrupt Level(EILVL) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EIEDG(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eiedg(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Interrupt Detection Method(EIEDG) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIEDG(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eiedg(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Interrupt Detection Method(EIEDG) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EIEDG(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eiedg(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Interrupt Detection Method(EIEDG) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Get_EISIR(D_DD_EXIU_CH_MIN - 1, &dat);
+		ercd = dd_exiu_get_eisir(priv->ddExiu, D_DD_EXIU_CH_MIN - 1, &dat);
 		Ddim_Print(("Software Interrupt(EISIR) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EISIR(D_DD_EXIU_CH_MAX + 1, &dat);
+		ercd = dd_exiu_get_eisir(priv->ddExiu, D_DD_EXIU_CH_MAX + 1, &dat);
 		Ddim_Print(("Software Interrupt(EISIR) ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Get_EISIR(D_DD_EXIU_CH_MAX, NULL);
+		ercd = dd_exiu_get_eisir(priv->ddExiu, D_DD_EXIU_CH_MAX, NULL);
 		Ddim_Print(("Software Interrupt(EISIR) ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIMASK_Release(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eimask_release(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Mask Release ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIMASK_Release(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eimask_release(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Mask Release ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIMASK_Mask(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eimask_mask(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Mask ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIMASK_Mask(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eimask_mask(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Mask ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIMASK_Val(D_DD_EXIU_VAL_MIN - 1);
+		ercd = dd_exiu_set_eimask_val(priv->ddExiu, D_DD_EXIU_VAL_MIN - 1);
 		Ddim_Print(("Set Interrupt is Mask or Release ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIMASK_Val(D_DD_EXIU_VAL_MAX + 1);
+		ercd = dd_exiu_set_eimask_val(priv->ddExiu, D_DD_EXIU_VAL_MAX + 1);
 		Ddim_Print(("Set Interrupt is Mask or Release ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EISRCSEL_Ext(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eisrcsel_ext(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt External Source ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EISRCSEL_Ext(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eisrcsel_ext(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt External Source ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EISRCSEL_Soft(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eisrcsel_soft(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Software Source ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EISRCSEL_Soft(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eisrcsel_soft(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Software Source ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIREQCLR_Ch(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eireqclr_ch(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Cleared Channel ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIREQCLR_Ch(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eireqclr_ch(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Cleared Channel ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIREQCLR_Val(D_DD_EXIU_VAL_MIN - 1);
+		ercd = dd_exiu_set_eireqclr_val(priv->ddExiu, D_DD_EXIU_VAL_MIN - 1);
 		Ddim_Print(("Set Interrupt is Cleared Value ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIREQCLR_Val(D_DD_EXIU_VAL_MAX + 1);
+		ercd = dd_exiu_set_eireqclr_val(priv->ddExiu, D_DD_EXIU_VAL_MAX + 1);
 		Ddim_Print(("Set Interrupt is Cleared Value ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EILVL_Lo(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eilvl_lo(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Low level or Falling edge ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EILVL_Lo(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eilvl_lo(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Low level or Falling edge ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EILVL_Hi(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eilvl_hi(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt High level or Rising edge ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EILVL_Hi(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eilvl_hi(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt High level or Rising edge ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIEDG_Level(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eiedg_level(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Level Detection ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIEDG_Level(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eiedg_level(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Level Detection edge ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EIEDG_Edge(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eiedg_edge(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Level Edge Detection ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EIEDG_Edge(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eiedg_edge(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Level Edge Detection ercd = 0x%08x\n", ercd));
 
-		ercd = Dd_EXIU_Set_EISIR_Generate(D_DD_EXIU_CH_MIN - 1);
+		ercd = dd_exiu_set_eisir_generate(priv->ddExiu, D_DD_EXIU_CH_MIN - 1);
 		Ddim_Print(("Set Interrupt Software Interrupt Generate ercd = 0x%08x\n", ercd));
-		ercd = Dd_EXIU_Set_EISIR_Generate(D_DD_EXIU_CH_MAX + 1);
+		ercd = dd_exiu_set_eisir_generate(priv->ddExiu, D_DD_EXIU_CH_MAX + 1);
 		Ddim_Print(("Set Interrupt Software Interrupt Generate ercd = 0x%08x\n", ercd));
 	}
 	else{
@@ -311,8 +343,8 @@ void Ct_Dd_EXIU_Main(kint argc, kchar** argv)
 	}
 }
 
-CtDdExiu* ct_dd_exiu_new(void) 
+CtDdExiu *ct_dd_exiu_new(void) 
 {
-    CtDdExiu *self = k_object_new_with_private(CT_TYPE_DD_EXIU, sizeof(CtDdExiuPrivate));
+    CtDdExiu *self = g_object_new(CT_TYPE_DD_EXIU, NULL);
     return self;
 }

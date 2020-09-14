@@ -15,7 +15,8 @@
 #define __IM_IIP_PARAM_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "imiipparamenum.h"
 #include "imiipafnregister.h"
 #include "imiipfrectregister.h"
@@ -28,14 +29,20 @@
 #include "ddimtypedef.h"
 
 
+G_BEGIN_DECLS
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-#define IM_TYPE_IIP_PARAM			(im_iip_param_get_type())
-#define IM_IIP_PARAM	(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, ImIipParam))
-#define IM_IS_IIP_PARAM	(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_IIP_PARAM	))
+#define IM_TYPE_IIP_PARAM						(im_iip_param_struct_get_type ())
+#define IM_IIP_PARAM(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_IIP_PARAM, ImIipParam))
+#define IM_IIP_PARAM_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_IIP_PARAM, ImIipParamClass))
+#define IM_IS_IIP_PARAM(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_IIP_PARAM))
+#define IM_IS_IIP_PARAM_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_IIP_PARAM))
+#define IM_IIP_PARAM_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_IIP_PARAM, ImIipParamClass))
 
 /*----------------------------------------------------------------------*/
 /* Definition																		*/
@@ -45,9 +52,9 @@ extern "C" {
 /**< "1.0" value of UimFrectXy */
 #define ImIipParam_D_IM_IIP_PARAM_FRECT_VAL_1_0				(0x100L)
 /**< Convert float type pixel position to UimAfnStaxy and UimAfnDOutIn register value. */
-#define ImIipParam_M_IM_IIP_AFNTBL_CALC_POS(pos)			((kulong)((pos) * ImIipParam_D_IM_IIP_PARAM_AFN_VAL_1_0))
+#define ImIipParam_M_IM_IIP_AFNTBL_CALC_POS(pos)			((gulong)((pos) * ImIipParam_D_IM_IIP_PARAM_AFN_VAL_1_0))
 /**< Convert float type pixel position to UimFrectXy register value. */
-#define ImIipParam_M_IM_IIP_FRECTTBL_CALC_POS(pos)			((kulong)((pos) * ImIipParam_D_IM_IIP_PARAM_FRECT_VAL_1_0))
+#define ImIipParam_M_IM_IIP_FRECTTBL_CALC_POS(pos)			((gulong)((pos) * ImIipParam_D_IM_IIP_PARAM_FRECT_VAL_1_0))
 
 
 /*----------------------------------------------------------------------	*/
@@ -65,8 +72,9 @@ typedef union _UimFrectSz			UimFrectSz;
 
 typedef struct _TimFrectOpcol0	TimFrectOpcol0;
 typedef struct _TimFrectOpcol1	TimFrectOpcol1;
-typedef struct _ImIipParam 						ImIipParam;
-typedef struct _ImIipParamPrivate 			ImIipParamPrivate;
+typedef struct _ImIipParam			ImIipParam;
+typedef struct _ImIipParamClass		ImIipParamClass;
+typedef struct _ImIipParamPrivate 		ImIipParamPrivate;
 
 
 
@@ -89,15 +97,15 @@ typedef struct _ImIipParamPrivate 			ImIipParamPrivate;
 union _UimAfnStaxy
 {
 		/**< All bits */
-		kuint32 word[2];
+		guint32 word[2];
 		/**< Bit field */
 		struct {
 			/**< STAX0 [calmethod.opcol=0]<br>STAX0/STAX1/STAX2/STAX3 [calmethod.opcol=1] */
-			kint32 stax :31;
-			kuint32 :1;
+			gint32 stax :31;
+			guint32 :1;
 			/**< STAY0 [calmethod.opcol=0]<br>STAY0/STAY1/STAY2/STAY3 [calmethod.opcol=1] */
-			kint32 stay :31;
-			kuint32 :1;
+			gint32 stay :31;
+			guint32 :1;
 		} bit;
 };
 
@@ -116,21 +124,21 @@ union _UimAfnStaxy
 union _UimAfnDOutIn
 {
 		/**< All bits */
-		kuint32 word[4];
+		guint32 word[4];
 		/**< Bit field */
 		struct {
 			/**< DXX0 [calmethod.opcol=0]<br>DXX0/DXX1/DXX2/DXX3 [calmethod.opcol=1] */
-			kint32 dxx :24;
-			kuint32 :8;
+			gint32 dxx :24;
+			guint32 :8;
 			/**< DXY0 [calmethod.opcol=0]<br>DXY0/DXY1/DXY2/DXY3 [calmethod.opcol=1] */
-			kint32 dxy :24;
-			kuint32 :8;
+			gint32 dxy :24;
+			guint32 :8;
 			/**< DYX0 [calmethod.opcol=0]<br>DYX0/DYX1/DYX2/DYX3 [calmethod.opcol=1] */
-			kint32 dyx :24;
-			kuint32 :8;
+			gint32 dyx :24;
+			guint32 :8;
 			/**< DYY0 [calmethod.opcol=0]<br>DYY0/DYY1/DYY2/DYY3 [calmethod.opcol=1] */
-			kint32 dyy :24;
-			kuint32 :8;
+			gint32 dyy :24;
+			guint32 :8;
 		} bit;
 };
 
@@ -142,15 +150,15 @@ union _UimAfnDOutIn
 union _UimAfnSz
 {
 		/**< All bits */
-		kuint32 word;
+		guint32 word;
 		/**< Bit field */
 		struct {
 			/**< afndhsz */
-			kuint32 afndhsz :14;
-			kuint32 :2;
+			guint32 afndhsz :14;
+			guint32 :2;
 			/**< afndvsz */
-			kuint32 afndvsz :14;
-			kuint32 :2;
+			guint32 afndvsz :14;
+			guint32 :2;
 		} bit;
 };
 
@@ -164,7 +172,7 @@ struct _TimAfnOpcol0
 		/**< [+0018~001B] */
 		UimAfnSz sz;
 		/**< Unused variable */
-		kuchar dmy001c001f[0x0020 - 0x001C];
+		guchar dmy001c001f[0x0020 - 0x001C];
 } ;
 
 /** AFN Struct Paramter [calmethod.opcol=1] */
@@ -177,19 +185,19 @@ struct _TimAfnOpcol1
 		/**< [+0018~001B] */
 		UimAfnSz sz;
 		/**< Unused variable */
-		kuchar dmy001c001f[0x0020 - 0x001C];
+		guchar dmy001c001f[0x0020 - 0x001C];
 		/**< [+0020~0027] */
 		UimAfnStaxy staxy1;
 		/**< [+0028~0037] */
 		UimAfnDOutIn dOutIn1;
 		/**< Unused variable */
-		kuchar dmy0038003f[0x0040 - 0x0038];
+		guchar dmy0038003f[0x0040 - 0x0038];
 		/**< [+0040~0047] */
 		UimAfnStaxy staxy2;
 		/**< [+0048~0057] */
 		UimAfnDOutIn dOutIn2;
 		/**< Unused variable */
-		kuchar dmy0058005f[0x0060 - 0x0058];
+		guchar dmy0058005f[0x0060 - 0x0058];
 		/**< [+0060~0067] */
 		UimAfnStaxy staxy3;
 		/**< [+0068~0077] */
@@ -217,32 +225,32 @@ union _UimFrectXy
 		/**< Bit field */
 		struct {
 			/**< AX0 [calmethod.opcol=0]<br>AX0/AX1/AX2/AX3 [calmethod.opcol=1] */
-			kint32 ax :23;
-			kuint32 :9;
+			gint32 ax :23;
+			guint32 :9;
 			/**< AY0 [calmethod.opcol=0]<br>AY0/AY1/AY2/AY3 [calmethod.opcol=1] */
-			kint32 ay :23;
-			kuint32 :9;
+			gint32 ay :23;
+			guint32 :9;
 			/**< BX0 [calmethod.opcol=0]<br>BX0/BX1/BX2/BX3 [calmethod.opcol=1] */
-			kint32 bx :23;
-			kuint32 :9;
+			gint32 bx :23;
+			guint32 :9;
 			/**< BY0 [calmethod.opcol=0]<br>BY0/BY1/BY2/BY3 [calmethod.opcol=1] */
-			kint32 by :23;
-			kuint32 :9;
+			gint32 by :23;
+			guint32 :9;
 			/**< CX0 [calmethod.opcol=0]<br>CX0/CX1/CX2/CX3 [calmethod.opcol=1] */
-			kint32 cx :23;
-			kuint32 :9;
+			gint32 cx :23;
+			guint32 :9;
 			/**< CY0 [calmethod.opcol=0]<br>CY0/CY1/CY2/CY3 [calmethod.opcol=1] */
-			kint32 cy :23;
-			kuint32 :9;
+			gint32 cy :23;
+			guint32 :9;
 			/**< DX0 [calmethod.opcol=0]<br>DX0/DX1/DX2/DX3 [calmethod.opcol=1] */
-			kint32 dx :23;
-			kuint32 :9;
+			gint32 dx :23;
+			guint32 :9;
 			/**< DY0 [calmethod.opcol=0]<br>DY0/DY1/DY2/DY3 [calmethod.opcol=1] */
-			kint32 dy :23;
-			kuint32 :9;
+			gint32 dy :23;
+			guint32 :9;
 		} bit;
 		/**< All bits */
-		kuint32 word[8];
+		guint32 word[8];
 } ;
 
 /**
@@ -255,15 +263,15 @@ union _UimFrectSz
 		/**< Bit field */
 		struct {
 			/**< szpowh<br>Refer to @ref EimSzpowh */
-			kuint32 szpowh :3;
-			kuint32 :5;
+			guint32 szpowh :3;
+			guint32 :5;
 			/**< szpowv<br>Refer to @ref EimSzpowv */
-			kuint32 szpowv :3;
-			kuint32 :5;
-			kuint32 :16;
+			guint32 szpowv :3;
+			guint32 :5;
+			guint32 :16;
 		} bit;
 		/**< All bits */
-		kuint32 word;
+		guint32 word;
 };
 
 /** FRECT Struct Paramter [calmethod.opcol=0] */
@@ -274,7 +282,7 @@ struct _TimFrectOpcol0
 		/**< [+0020~0023] */
 		UimFrectSz sz;
 		/**< Unused variable */
-		kuchar dmy00240027[0x0028 - 0x0024];
+		guchar dmy00240027[0x0028 - 0x0024];
 } ;
 
 /** FRECT Struct Paramter [calmethod.opcol=1] */
@@ -285,7 +293,7 @@ struct _TimFrectOpcol1
 		/**< [+0020~0023] */
 		UimFrectSz sz;
 		/**< Unused variable */
-		kuchar dmy0024002f[0x0030 - 0x0024];
+		guchar dmy0024002f[0x0030 - 0x0024];
 		/**< [+0030~004F] */
 		UimFrectXy xy1;
 		/**< [+0050~006F] */
@@ -296,17 +304,25 @@ struct _TimFrectOpcol1
 
 struct _ImIipParam
 {
-	KObject parent;
+	GObject parent;
+};
+
+struct _ImIipParamClass
+{
+	GObjectClass parentClass;
 };
 
 
-KConstType 		    		im_iip_param_get_type(void);
-ImIipParam*		       		im_iip_param_new(void);
+GType								im_iip_param_struct_get_type(void)	G_GNUC_CONST;
+ImIipParam*					im_iip_param_struct_new(void);
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_IIP_PARAM_H__ */

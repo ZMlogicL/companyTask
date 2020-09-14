@@ -112,52 +112,52 @@
 
 // --- REMOVE_ES_COMPILE_OPT END ---
 /**< Minimum setting of FFSHSUBPRV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRV_MIN	(4)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRV_MIN			(4)
 /**< Maximum setting of FFSHSUBPRV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRV_MAX	(1122)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRV_MAX		(1122)
 /**< Minimum setting of FFSHSUBSPH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPH_MIN	(16)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPH_MIN		(16)
 /**< Maximum setting of FFSHSUBSPH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPH_MAX	(724)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPH_MAX		(724)
 /**< Minimum setting of FFSHSUBSPV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPV_MIN	(16)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPV_MIN			(16)
 /**< Maximum setting of FFSHSUBSPV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPV_MAX	(724)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSPV_MAX			(724)
 /**< Minimum setting of FFSHSUBSTH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTH_MIN	(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTH_MIN			(0)
 /**< Maximum setting of FFSHSUBSTH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTH_MAX	(722)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTH_MAX		(722)
 /**< Minimum setting of FFSHSUBSTV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTV_MIN	(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTV_MIN			(0)
 /**< Maximum setting of FFSHSUBSTV	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTV_MAX	(722)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBSTV_MAX			(722)
 /**< Minimum setting of FFSHWRIC	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHWRIC_MIN		(4)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHWRIC_MIN				(4)
 /**< Maximum setting of FFSHWRIC	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHWRIC_MAX		(1023)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHWRIC_MAX				(1023)
 /*	@}*/	// im_pro_sro_fshdl
 
 // --- REMOVE_ES_COMPILE_OPT END ---
 /**< Minimum setting of FFSHULRR	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULRR_MIN		(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULRR_MIN				(0)
 /**< Maximum setting of FFSHULRR	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULRR_MAX		(16383)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULRR_MAX				(16383)
 	/**< Minimum setting of FFSHULGR	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGR_MIN		(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGR_MIN				(0)
 /**< Maximum setting of FFSHULGR	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGR_MAX		(16383)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGR_MAX				(16383)
 /**< Minimum setting of FFSHULGB	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGB_MIN		(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGB_MIN				(0)
 /**< Maximum setting of FFSHULGB	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGB_MAX		(16383)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULGB_MAX				(16383)
 /**< Minimum setting of FFSHULBB	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULBB_MIN		(0)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULBB_MIN				(0)
 	/**< Maximum setting of FFSHULBB	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULBB_MAX		(16383)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHULBB_MAX				(16383)
 /**< Minimum setting of FFSHSUBPRH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRH_MIN	(4)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHSUBPRH_MIN		(4)
 /**< Minimum setting of FFSHHWPH	*/
-#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHHWPH_MIN		(4)
+#define	ImproSrofshdl_D_IM_PRO_FSHDL_FFSHHWPH_MIN			(4)
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 /*其他结构体或类型定义区域*/
 /** FSHDL channel number
@@ -365,7 +365,7 @@ Flat Shading Start
 @param[in]	unitNo : Unit number.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK				: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG	: PRCH/M2P not running NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG	: PRCH/M2P not running NG
 @remarks	Flat Shading Compensation function is started(enable).
 */
 extern	INT32			impro_srofshdl_start( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch );
@@ -375,7 +375,7 @@ Flat Shading Stop
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK				: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG	: PRCH/M2P not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG	: PRCH/M2P not stopped NG
 @remarks	Flat Shading Compensation function is stopped(disable).
 */
 extern	INT32			impro_srofshdl_stop( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch, UCHAR force );
@@ -385,7 +385,7 @@ Flat Shading Control
 @param[in]	ch : Channel No.
 @param[in]	fshdlCtrl : Shading Control information
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
 extern	INT32			impro_srofshdl_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch, TimproFshdlCommonCtrl* fshdlCtrl );
 /**
@@ -394,7 +394,7 @@ Flat Shading Blend ratio Control
 @param[in]	ch : Channel No.
 @param[in]	blendCtrl : Shading Blend Control information
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
 extern	INT32			impro_srofshdl_set_blend( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch, TimproFshdlBlendCtrl* blendCtrl );
 /**
@@ -404,15 +404,15 @@ A setup of enable access to the built-in RAM of FSHDL.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srofshdl_set_paen( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch, UCHAR paenTrg );
 /**
 A Setup is Flat Shading Area
 @param[in]	unitNo : Unit number.
 @param[in]	ch : Channel No.
-@param[in]	fshdlArea : Area for Shading compensation See @ref T_IM_PRO_AREA_INFO<br>
+@param[in]	fshdlArea : Area for Shading compensation See @ref TimproAreaInfo<br>
  												value range  :posX[0 - 4095]<br>
  												target registor  :@@FFSHH<br>
  												value range  :posY[2 - 8960] 2line boundary<br>
@@ -437,17 +437,17 @@ A Setup is Flat Shading Area
  												value range  :lines[4 - 8960] 4pixel boundary<br>
  												target registor  :@@FFSHVW
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
 extern	INT32			impro_srofshdl_set_area( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch,
-									T_IM_PRO_AREA_INFO* fshdlArea );
+									TimproAreaInfo* fshdlArea );
 /**
 Flat Shading (Frame Correction) Control
 @param[in]	unitNo : Unit number.
 @param[in]	ch : Channel No.
 @param[in]	fshdlCtrl : Frame Correction Control information
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
 extern	INT32			impro_srofshdl_set_frame( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch,
 									TimproFshdlFrameCtrl* fshdlCtrl );
@@ -461,7 +461,7 @@ set the request issue interval when reading the coefficients from PRCH/M2P macro
 			(FFSHWRIC < ((Input horizontal size - (4* FFSHSUBPRH)) - 10)/3)<br>
 			target registor	:@@FFSHWRIC
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srofshdl_set_coeff_read_line_wait( E_IM_PRO_UNIT_NUM unitNo, EimproFshdlCh ch,
 									USHORT reqIntervalClk );

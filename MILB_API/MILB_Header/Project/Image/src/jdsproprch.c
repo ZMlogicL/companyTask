@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "jdsproprch.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(JdsproPrch, jdspro_prch);
+
 #define JDSPRO_PRCH_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), JdsproPrchPrivate, JDSPRO_TYPE_PRCH))
+
 
 struct _JdsproPrchPrivate
 {
@@ -41,4 +45,3 @@ JdsproPrch* jdspro_prch_new(void)
     JdsproPrch* self = k_object_new_with_private(JDSPRO_TYPE_PRCH, sizeof(JdsproPrchPrivate));
     return self;
 }
-

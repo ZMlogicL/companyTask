@@ -28,8 +28,8 @@
 
 
 /*宏定义区域*/
-	/**< Number of SRO SDC		*/
-#define ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM			(E_IM_PRO_SDC_CH1 + 1)
+/**< Number of SRO SDC		*/
+#define ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM			(ImproBase_E_IM_PRO_SDC_CH1 + 1)
 
 /** @addtogroup im_pro_sro_sdc SDC
 @{
@@ -80,8 +80,7 @@
 
 
 /*其他结构体或类型定义区域*/
-/** SDC Gain Table Select.
-*/
+/** SDC Gain Table Select.*/
 typedef enum {
 	/**< Gain coefficient table RAM0 (SDCGDTBL0) is selected.	*/
 	ImproSrosdc_E_IM_PRO_SDC_GAIN_TABLE_SEL_0 = 0,
@@ -89,8 +88,7 @@ typedef enum {
 	ImproSrosdc_E_IM_PRO_SDC_GAIN_TABLE_SEL_1,
 } EimproSdcGainTableSel;
 
-/** Defect correction mode select
-*/
+/** Defect correction mode select*/
 typedef enum {
 	/**< Static defect correction */
 	ImproSrosdc_E_IM_PRO_SDC_MODE_SDC = 0,
@@ -104,8 +102,7 @@ typedef enum {
 	ImproSrosdc_E_IM_PRO_SDC_MODE_COOP_DPC_AFPB_GAIN2,
 } EimproSdcMode;
 
-/** Phase difference AF pixel pattern output setting.
-*/
+/** Phase difference AF pixel pattern output setting.*/
 typedef enum {
 	/**< (Phase difference AF pixel pattern output + Static defect correction) processing
 	 *  or static defect correction only.	*/
@@ -114,8 +111,7 @@ typedef enum {
 	ImproSrosdc_E_IM_PRO_SDC_AFPB_OUTPUT_PTN_AFOB_ONLY,
 } EimproSdcAfpbOutputPtn;
 
-/** Defect correction monochrome mode select.
-*/
+/** Defect correction monochrome mode select.*/
 typedef enum {
 	/**< Static defect correction Bayer correction mode.	*/
 	ImproSrosdc_E_IM_PRO_SDC_MONOCHROME_MODE_BAYER_CORRECTION = 0,
@@ -123,8 +119,7 @@ typedef enum {
 	ImproSrosdc_E_IM_PRO_SDC_MONOCHROME_MODE_MONOCHROME_CORRECTION,
 } EimproSdcMonochromeMode;
 
-/** Phase difference AF pixel pattern output enable.
-*/
+/** Phase difference AF pixel pattern output enable.*/
 typedef enum {
 	/**< Phase difference AF pixel pattern output is OFF.	*/
 	ImproSrosdc_E_IM_PRO_SDC_AFPB_DIS = 0,
@@ -133,8 +128,7 @@ typedef enum {
 } EimproSdcAfpbEnable;
 
 
-/** RDMA I/F SDC register address information
-*/
+/** RDMA I/F SDC register address information*/
 typedef struct {
 	/**< 2840_(8808 - 880Bh) */
 	ULONG	sdcctl;
@@ -394,8 +388,7 @@ typedef struct {
 	ULONG	sdcnmax;
 } TimproRdmaSdcAddr;
 
-/** SDC Control information
-*/
+/** SDC Control information*/
 typedef struct {
 	/**< Defect correction mode select. target registor	:@@SDCMD	*/
 	EimproSdcMode					sdcMode;
@@ -407,8 +400,7 @@ typedef struct {
 	EimproSdcAfpbEnable			afpbEnabled;
 } TimproSdcCtrl;
 
-/** SDC AFPB Control information
-*/
+/** SDC AFPB Control information*/
 typedef struct {
 	/**< horizontal pattern0  of AF generation pattern in units of 1 pixel. value range
 	 * 	:[0 - 0xFFFF_FFFF_FFFF_FFFF] target registor	:@@SDCPH0[0]~0[8] */
@@ -519,16 +511,14 @@ typedef struct {
 	UCHAR						afpbNeighborPixelCorrectionLevel;
 } TimproSdcCtrlAfpb;
 
-/** SDC gain table information
-*/
+/** SDC gain table information*/
 typedef struct {
 	/**< Coefficients for gain correction. value range
 	 * 	:[0 - 255(7.96875)] target registor	:@@SDC0GD1/2	*/
 	USHORT	gainTable[ImproSrosdc_D_IM_PRO_SDC_GAIN_TBL_NUM];
 } TimproSdcGainTable;
 
-/** RDMA I/F SDC gain coefficient table register address information
-*/
+/** RDMA I/F SDC gain coefficient table register address information*/
 typedef struct {
 	/**< gain coefficient table register address */
 	ULONG	sdcgd;
@@ -549,54 +539,54 @@ struct _ImproSrosdc
 /*方法定义区域（公有放在new后面）*/
 KConstType				impro_srosdc_get_type(void);
 ImproSrosdc*			impro_srosdc_new();
-extern	VOID			impro_srosdc_comm_get_sdc_reg_info( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch,
+extern	VOID			impro_srosdc_comm_get_sdc_reg_info( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch,
 									const T_IM_PRO_SRO_SDC_INFO** sdcInfo );
 /**
 Compensation mode start
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
 */
-extern	INT32			impro_srosdc_start( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch );
+extern	INT32			impro_srosdc_start( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch );
 /**
 Compensation mode stop
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
 */
-extern	INT32			impro_srosdc_stop( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR force );
+extern	INT32			impro_srosdc_stop( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, UCHAR force );
 /**
 SDC control setup
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @param[in]	sdcCtrl : SDC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_srosdc_ctrl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, TimproSdcCtrl* sdcCtrl );
+extern	INT32			impro_srosdc_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, TimproSdcCtrl* sdcCtrl );
 /**
 Select SDC gain table.
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @param[in]	tblSel : SDC gain table select.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_srosdc_select_gain_table( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, EimproSdcGainTableSel tblSel );
+extern	INT32			impro_srosdc_select_gain_table( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, EimproSdcGainTableSel tblSel );
 /**
 set SDC gain table.
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @param[in]	sdcAfpbCtrl : SDC AFPB control information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_srosdc_ctrl_afpb( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, TimproSdcCtrlAfpb* sdcAfpbCtrl );
+extern	INT32			impro_srosdc_ctrl_afpb( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, TimproSdcCtrlAfpb* sdcAfpbCtrl );
 /**
 set SDC gain table.
 @param[in]	unitNo : Unit number.
@@ -604,9 +594,9 @@ set SDC gain table.
 @param[in]	tblSel : SDC gain table select.
 @param[in]	gainTable : SDC gain table information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_srosdc_set_gain_table( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, EimproSdcGainTableSel tblSel, TimproSdcGainTable* gainTable );
+extern	INT32			impro_srosdc_set_gain_table( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, EimproSdcGainTableSel tblSel, TimproSdcGainTable* gainTable );
 /**
 A setup of enable access to the built-in RAM of SDC.
 @param[in]	unitNo : Unit number.
@@ -614,10 +604,10 @@ A setup of enable access to the built-in RAM of SDC.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
-extern	INT32			impro_srosdc_set_paen( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR paenTrg );
+extern	INT32			impro_srosdc_set_paen( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, UCHAR paenTrg );
 /**
 Get the top address of the address array of SDC control.
 @param[in]		unitNo : Unit number.
@@ -626,7 +616,7 @@ Get the top address of the address array of SDC control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-extern	INT32			impro_srosdc_get_rdma_addr_sdc_cntl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, const TimproRdmaSdcAddr** addr );
+extern	INT32			impro_srosdc_get_rdma_addr_sdc_cntl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, const TimproRdmaSdcAddr** addr );
 /**
 Get the top address of the address array of SDC gain table.
 @param[in]		unitNo : Unit number.
@@ -636,7 +626,7 @@ Get the top address of the address array of SDC gain table.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-extern	INT32			impro_srosdc_get_rdma_addr_sdc_gain_tbl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, EimproSdcGainTableSel tblSel, const TimproRdmaSdcGainTblAddr** addr );
+extern	INT32			impro_srosdc_get_rdma_addr_sdc_gain_tbl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, EimproSdcGainTableSel tblSel, const TimproRdmaSdcGainTblAddr** addr );
 
 
 

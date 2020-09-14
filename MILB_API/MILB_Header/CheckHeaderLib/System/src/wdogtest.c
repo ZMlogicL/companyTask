@@ -107,32 +107,32 @@ static void run_od(AbsHeaderTest *self)
  */
 void wdog_test()
 {
-	IntErnals_RS_printf("Watchdog Timer\n");
+	CheckHeaderMain_RS_PRINTF("Watchdog Timer\n");
 #if 0
-	IntErnals_RS_printf("ioWdog                   = %p\n", &ioWdog );
-	IntErnals_RS_printf("ioWdog.wdogload          = %p\n", &ioWdog.wdogload );
-	IntErnals_RS_printf("ioWdog.wdogvalue         = %p\n", &ioWdog.wdogvalue );
-	IntErnals_RS_printf("ioWdog.wdogcontrol       = %p\n", &ioWdog.wdogcontrol );
-	IntErnals_RS_printf("ioWdog.wdogintclr        = %p\n", &ioWdog.wdogintclr );
-	IntErnals_RS_printf("ioWdog.wdogris           = %p\n", &ioWdog.wdogris );
-	IntErnals_RS_printf("ioWdog.wdogmis           = %p\n", &ioWdog.wdogmis );
-	IntErnals_RS_printf("Reserved                  = %p\n", &ioWdog.dmy018Bff );
-	IntErnals_RS_printf("ioWdog.wdoglock          = %p\n", &ioWdog.wdoglock );
-	IntErnals_RS_printf("Reserved                  = %p\n", &ioWdog.dmyC04Eff );
-	IntErnals_RS_printf("ioWdog.wdogitcr          = %p\n", &ioWdog.wdogitcr );
-	IntErnals_RS_printf("ioWdog.wdogitop          = %p\n", &ioWdog.wdogitop );
-	IntErnals_RS_printf("Reserved                  = %p\n", &ioWdog.dmyF08Fdf );
-	IntErnals_RS_printf("ioWdog.wdogperiphid0     = %p\n", &ioWdog.wdogperiphid0 );
-	IntErnals_RS_printf("ioWdog.wdogperiphid1     = %p\n", &ioWdog.wdogperiphid1 );
-	IntErnals_RS_printf("ioWdog.wdogperiphid2     = %p\n", &ioWdog.wdogperiphid2 );
-	IntErnals_RS_printf("ioWdog.wdogperiphid3     = %p\n", &ioWdog.wdogperiphid3 );
-	IntErnals_RS_printf("ioWdog.wdogpcellid[0]    = %p\n", &ioWdog.wdogpcellid[0] );
-	IntErnals_RS_printf("ioWdog.wdogpcellid[1]    = %p\n", &ioWdog.wdogpcellid[1] );
-	IntErnals_RS_printf("ioWdog.wdogpcellid[2]    = %p\n", &ioWdog.wdogpcellid[2] );
-	IntErnals_RS_printf("ioWdog.wdogpcellid[3]    = %p\n", &ioWdog.wdogpcellid[3] );
+	CheckHeaderMain_RS_PRINTF("ioWdog                   = %p\n", &ioWdog );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogload          = %p\n", &ioWdog.wdogload );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogvalue         = %p\n", &ioWdog.wdogvalue );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogcontrol       = %p\n", &ioWdog.wdogcontrol );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogintclr        = %p\n", &ioWdog.wdogintclr );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogris           = %p\n", &ioWdog.wdogris );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogmis           = %p\n", &ioWdog.wdogmis );
+	CheckHeaderMain_RS_PRINTF("Reserved                  = %p\n", &ioWdog.dmy018Bff );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdoglock          = %p\n", &ioWdog.wdoglock );
+	CheckHeaderMain_RS_PRINTF("Reserved                  = %p\n", &ioWdog.dmyC04Eff );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogitcr          = %p\n", &ioWdog.wdogitcr );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogitop          = %p\n", &ioWdog.wdogitop );
+	CheckHeaderMain_RS_PRINTF("Reserved                  = %p\n", &ioWdog.dmyF08Fdf );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogperiphid0     = %p\n", &ioWdog.wdogperiphid0 );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogperiphid1     = %p\n", &ioWdog.wdogperiphid1 );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogperiphid2     = %p\n", &ioWdog.wdogperiphid2 );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogperiphid3     = %p\n", &ioWdog.wdogperiphid3 );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogpcellid[0]    = %p\n", &ioWdog.wdogpcellid[0] );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogpcellid[1]    = %p\n", &ioWdog.wdogpcellid[1] );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogpcellid[2]    = %p\n", &ioWdog.wdogpcellid[2] );
+	CheckHeaderMain_RS_PRINTF("ioWdog.wdogpcellid[3]    = %p\n", &ioWdog.wdogpcellid[3] );
 #endif
 
-	IntErnals_RS_printf(" \n");
+	CheckHeaderMain_RS_PRINTF(" \n");
 }
 
 WdogTest *wdog_test_new()

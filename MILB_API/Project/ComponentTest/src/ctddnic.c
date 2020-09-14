@@ -33,8 +33,9 @@ struct _CtDdNicPrivate {
     kint a;
 };
 
-/*DECLS*/
-
+/*
+ *DECLS
+ */
 static void ctDdNicRun(kint32 ctParam1st, kulong ctParam2st, kulong ctParam3st);
 
 static void ct_dd_nic_constructor(CtDdNic *self) 
@@ -46,9 +47,9 @@ static void ct_dd_nic_destructor(CtDdNic *self)
 {
 // CtDdNicPrivate *priv = CT_DD_NIC_GET_PRIVATE(self);
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
@@ -127,9 +128,9 @@ static void ctDdNicRun(kint32 ctParam1st, kulong ctParam2st, kulong ctParam3st)
 	k_object_unref(ddNic);
 	ddNic = NULL; 
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /**
  * @brief  Command main function for NIC test.
  * @param  int argc	:The number of parameters

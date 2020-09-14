@@ -34,11 +34,11 @@ struct _ImR2yCtrlSup {
 KConstType 		    		im_r2y_ctrl_sup_get_type(void);
 ImR2yCtrlSup*		        im_r2y_ctrl_sup_new(void);
 
-void im_r2y_ctrl_sup_multi_axis(ImR2yCtrlSup *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_MULTI_AXIS* const r2y_ctrl_multi_axis );
+void im_r2y_ctrl_sup_multi_axis(ImR2yCtrlSup *self, kuint16 pipeNo, const CtrlMultiAxis* const r2y_ctrl_multi_axis );
 
 #ifdef CO_DDIM_UTILITY_USE
 #ifdef CO_R2Y_RDMA_ON
-VOID im_r2y_ctrl_sup_set_rdma_val_multi_axis(ImR2yCtrlSup *self, T_IM_R2Y_CTRL_RDMA_MCYC_VAL* mcyc_ctrl, UCHAR pipe_no, const T_IM_R2Y_CTRL_MULTI_AXIS* const r2y_ctrl_multi_axis );
+void im_r2y_ctrl_sup_set_rdma_val_multi_axis(ImR2yCtrlSup *self, CtrlRdmaMcycVal* mcyc_ctrl, kuint16 pipeNo, const CtrlMultiAxis* const r2y_ctrl_multi_axis );
 
 #endif /* __IM_R2Y_CTRL_SUP_H__ */
 #endif	// CO_DDIM_UTILITY_USE

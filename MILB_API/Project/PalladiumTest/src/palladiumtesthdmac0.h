@@ -36,7 +36,7 @@ PalladiumTestHdmac0* 	palladium_test_hdmac0_new(void);
 /*
  * PUBLIC
  */
-void                                  palladium_test_hdmac0_dd_main( void );
+void                                  palladium_test_hdmac0_dd_main(PalladiumTestHdmac0 *self);
 
 #endif /* __PALLADIUM_TEST_HDMAC0_H__ */
 

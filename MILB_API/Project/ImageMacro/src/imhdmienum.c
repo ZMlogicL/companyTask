@@ -18,76 +18,107 @@
 #include "imhdmienum.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImHdmiEnum, im_hdmi_enum);
-#define IM_HDMI_ENUM_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImHdmiEnumPrivate, IM_TYPE_HDMI_ENUM	))
+G_DEFINE_TYPE(ImHdmiEnum, im_hdmi_enum, G_TYPE_OBJECT);
+#define IM_HDMI_ENUM_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_HDMI_ENUM, ImHdmiEnumPrivate));
 
 
 struct _ImHdmiEnumPrivate
 {
-	kint a;
+	gint a;
 };
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  * IMPL
  */
-static void im_hdmi_enum_constructor(ImHdmiEnum *self)
+static void 		im_hdmi_enum_class_init(ImHdmiEnumClass *klass)
 {
-//	ImHdmiEnumPrivate *priv = IM_HDMI_ENUM_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImHdmiEnumPrivate));
 }
 
-static void im_hdmi_enum_destructor(ImHdmiEnum *self)
+static void 		im_hdmi_enum_init(ImHdmiEnum *self)
 {
-//	ImHdmiEnumPrivate *priv = IM_HDMI_ENUM_GET_PRIVATE(self);
+	ImHdmiEnumPrivate *priv = IM_HDMI_ENUM_GET_PRIVATE(self);
+	self->ddimUserCustomTest =ddim_user_custom_test_new();
+	self->imHdmi = im_hdmi_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImHdmiEnumPrivate *priv = IM_HDMI_ENUM_GET_PRIVATE(object);
+	ImHdmiEnum *self = im_hdmi_enum_new();
+	if(self->ddimUserCustomTest){
+		g_object_unref(self->ddimUserCustomTest);
+		self->ddimUserCustomTest = NULL;
+	}
+	if(self->imHdmi){
+		g_object_unref(self->imHdmi);
+		self->imHdmi = NULL;
+	}
+	G_OBJECT_CLASS(im_hdmi_enum_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImHdmiEnumPrivate *priv = IM_HDMI_ENUM_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_hdmi_enum_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
 /**
  * @brief	Get interrupt type.
- * @param[in]	int_reg		Interrupt register.
- * @param[in]	reg_bit		Bit of the specified interrupt register.
+ * @param[in]	intReg		Interrupt register.
+ * @param[in]	regBit		Bit of the specified interrupt register.
  * @retval		EhdmiIntType		Interrupt type.
  */
-EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
+EhdmiIntType im_hdmi_enum_get_interrupt_type(ImHdmiEnum*self, EhdmiIntReg intReg, guchar regBit)
 {
-	EhdmiIntType interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
+	EhdmiIntType interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_MAX;
 
 	// Interrupt register.
-	switch (int_reg) {
+	switch (intReg) {
 		// ihFcStat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// NULL.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_NULL:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_NULL;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_NULL;
 					break;
 				// ACR.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_ACR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ACR;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ACR;
 					break;
 				// AUDS.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_AUDS:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AUDS;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AUDS;
 					break;
 				// NVBI.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_NVBI:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_NVBI;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_NVBI;
 					break;
 				// MAS.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_MAS:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_MAS;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_MAS;
 					break;
 				// hbr.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_HBR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_HBR;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_HBR;
 					break;
 				// ACP.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_ACP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ACP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ACP;
 					break;
 				// AUDI.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT0_AUDI:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AUDI;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AUDI;
 					break;
 				default:
 					// no process.
@@ -98,38 +129,38 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ihFcStat1.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT1:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// GCP.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_GCP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_GCP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_GCP;
 					break;
 				// AVI.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_AVI:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AVI;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AVI;
 					break;
 				// AMP.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_AMP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AMP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_AMP;
 					break;
 				// SPD.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_SPD:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_SPD;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_SPD;
 					break;
 				// VSD.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_VSD:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_VSD;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_VSD;
 					break;
 				// ISCR2.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_ISCR2:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ISCR2;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ISCR2;
 					break;
 				// ISCR1.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_ISCR1:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ISCR1;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_ISCR1;
 					break;
 				// GMD.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT1_GMD:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_GMD;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_GMD;
 					break;
 				default:
 					// no process.
@@ -140,14 +171,14 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ihFcStat2.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_FC_STAT2:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// HighPriority_overflow.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT2_HP_OF:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_HP_OF;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_HP_OF;
 					break;
 				// LowPriority_overflow.
 				case ImHdmiEnum_E_IM_HDMI_IH_FC_STAT2_LP_OF:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_LP_OF;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_FC_LP_OF;
 					break;
 				default:
 					// no process.
@@ -158,18 +189,18 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_as_stat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_AS_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// Aud_fifo_overflow.
 				case ImHdmiEnum_E_IM_HDMI_IH_AS_STAT0_OF:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_OF;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_OF;
 					break;
 				// Aud_fifo_underflow.
 				case ImHdmiEnum_E_IM_HDMI_IH_AS_STAT0_UF:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_UF;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_UF;
 					break;
 				// fifo_overrun.
 				case ImHdmiEnum_E_IM_HDMI_IH_AS_STAT0_OR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_OR;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_AS_OR;
 					break;
 				default:
 					// no process.
@@ -180,30 +211,30 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_phy_stat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_PHY_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// HDP.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_HDP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_HDP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_HDP;
 					break;
 				// txPhyLock.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_TX_PHY_LOCK:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_TX_PHY_LOCK;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_TX_PHY_LOCK;
 					break;
 				// pxSense0.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_0:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_0;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_0;
 					break;
 				// rxSense1.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_1:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_1;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_1;
 					break;
 				// rxSense2.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_2:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_2;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_2;
 					break;
 				// rxSense3.
 				case ImHdmiEnum_E_IM_HDMI_IH_PHY_STAT0_RX_SENSE_3:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_3;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_PHY_RX_SENSE_3;
 					break;
 				default:
 					// no process.
@@ -214,18 +245,18 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_i2cm_stat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_I2CM_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// I2Cmastererror.
 				case ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_MASTER_ERR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_M_ERR;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_M_ERR;
 					break;
 				// I2Cmasterdone.
 				case ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_MASTER_DONE:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_M_DONE;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_M_DONE;
 					break;
 				// scdc_readreq.
 				case ImHdmiEnum_E_IM_HDMI_IH_I2CM_STAT0_SDSC:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_SDSC;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CM_SDSC;
 					break;
 				default:
 					// no process.
@@ -236,34 +267,34 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_cec_stat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_CEC_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// DONE.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_DONE:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_DONE;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_DONE;
 					break;
 				// EOM.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_EOM:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_EOM;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_EOM;
 					break;
 				// NACK.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_NACK:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_NACK;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_NACK;
 					break;
 				// ARB_LOST.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_ARB_LOST:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ARB_LOST;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ARB_LOST;
 					break;
 				// ERROR_INITIATOR.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_ERR_INITIATOR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ERR_INIT;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ERR_INIT;
 					break;
 				// ERROR_FOLLOW.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_ERR_FOLLOW:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ERR_FOL;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_ERR_FOL;
 					break;
 				// WAKEUP.
 				case ImHdmiEnum_E_IM_HDMI_IH_CEC_STAT0_WAKEUP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_WAKEUP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_CEC_WAKEUP;
 					break;
 				default:
 					// no process.
@@ -274,38 +305,38 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_vp_stat0.
 		case ImHdmiEnum_E_IM_HDMI_INT_REG_VP_STAT0:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// fifoemptybyp.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_BYP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_BYP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_BYP;
 					break;
 				// fifofullbyp.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_FULL_BYP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_BYP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_BYP;
 					break;
 				// fifoemptyremap.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_REMAP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_REMAP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_REMAP;
 					break;
 				// fifofullremap.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_FULL_REMAP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_REMAP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_REMAP;
 					break;
 				// fifoemptypp.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_PP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_PP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_PP;
 					break;
 				// fifofullpp.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_FULL_PP:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_PP;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_PP;
 					break;
 				// fifoemptyrepet.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_EMPTY_REPET:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_REPET;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_E_REPET;
 					break;
 				// fifofullrepet.
 				case ImHdmiEnum_E_IM_HDMI_IH_VP_STAT0_FULL_REPET:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_REPET;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_VP_F_REPET;
 					break;
 				default:
 					// no process.
@@ -316,14 +347,14 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			// ih_i2cmphy_stat0.
 		default:
 			// register bit.
-			switch (reg_bit) {
+			switch (regBit) {
 				// I2Cmphyerror.
 				case ImHdmiEnum_E_IM_HDMI_IH_I2CMPHY_STAT0_MASTER_ERR:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CMPHY_ERR;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CMPHY_ERR;
 					break;
 				// I2Cmphydone.
 				case ImHdmiEnum_E_IM_HDMI_IH_I2CMPHY_STAT0_MASTER_DONE:
-					interrupt_type = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CMPHY_DONE;
+					interruptType = ImHdmiEnum_E_IM_HDMI_INT_TYPE_I2CMPHY_DONE;
 					break;
 				default:
 					// no process.
@@ -332,7 +363,7 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 			break;
 	}
 
-	return interrupt_type;
+	return interruptType;
 }
 
 /*----------------------------------------------------------------------*/
@@ -341,11 +372,11 @@ EhdmiIntType im_hdmi_get_interrupt_type(EhdmiIntReg int_reg, kuchar reg_bit)
 /**
  * @brief	HDMI PHY Power On/Off.
  */
-kint32 im_hdmi_power_on(ImHdmiEnum*self, kuchar power)
+gint32 im_hdmi_enum_power_on(ImHdmiEnum*self, guchar power)
 {
 #ifdef CO_PARAM_CHECK
 	if ((power != ImHdmi_D_IM_HDMI_ENABLE_OFF) && (power != ImHdmi_D_IM_HDMI_ENABLE_ON)) {
-		Ddim_Assertion(("im_hdmi_power_on Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_enum_power_on Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
@@ -359,9 +390,9 @@ kint32 im_hdmi_power_on(ImHdmiEnum*self, kuchar power)
 /**
  * @brief	Initialize HDMI Transmitter macro.
  */
-kint32 im_hdmi_init(ImHdmiEnum*self,)
+gint32 im_hdmi_enum_init(ImHdmiEnum*self,)
 {
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// status clear
 	ioDisp.hdmiTx.ihFcStat0.byte[0] = 0xff;
@@ -396,7 +427,7 @@ kint32 im_hdmi_init(ImHdmiEnum*self,)
 	// Power-on the HDMI TX PHY hpd Detector.
 	ioDisp.hdmiTx.phyConf0.bit.enhpdrxsense = 1;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -404,16 +435,16 @@ kint32 im_hdmi_init(ImHdmiEnum*self,)
 /**
  * @brief	Configure VGA DVI Video Mode.
  */
-kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig const *const pllConfig)
+gint32 im_hdmi_enum_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig const *const pllConfig)
 {
 #ifdef CO_PARAM_CHECK
 	if (pllConfig == NULL) {
-		Ddim_Assertion(("im_hdmi_configure_vga_dvi_video_mode Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_enum_configure_vga_dvi_video_mode Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
 
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Clock Domain Disable
 	ioDisp.hdmiTx.mcClkdis.bit.pixelclkDisable = 1;
@@ -453,9 +484,9 @@ kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig cons
 	ioDisp.hdmiTx.fcInvidconf.bit.dviModez = ImHdmi_D_IM_HDMI_DVI_MODEZ_DVI;
 
 	// Configuring the PLL.
-	if (im_hdmi_configure_pll(pllConfig) != D_DDIM_OK) {
+	if (im_hdmi_configure_pll(self->imHdmi, pllConfig) != D_DDIM_OK) {
 		// the PLL does not lock and no activity.
-		im_hdmi_pclk_off();
+		im_hdmi_pclk_off(self->imHdmi);
 		return ImHdmi_D_IM_HDMI_NG;
 	}
 
@@ -478,7 +509,7 @@ kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig cons
 	ioDisp.hdmiTx.mcClkdis.bit.tmdsclkDisable = 0;
 	ioDisp.hdmiTx.fcVsyncinwidth.bit.vInWidth = 0x02;
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -488,14 +519,14 @@ kint32 im_hdmi_configure_vga_dvi_video_mode(ImHdmiEnum*self, ThdmiPllConfig cons
  * @retval	D_DDIM_OK						Success.
  * @retval	ImHdmi_D_IM_HDMI_TIMEOUT				timeout.
  */
-kint32 im_hdmi_set_tmds_scramble(ImHdmiEnum*self, BOOL enable)
+gint32 im_hdmi_enum_set_tmds_scramble(ImHdmiEnum*self, BOOL enable)
 {
-	DDIM_USER_FLGPTN flg_ptn;
+	DdimUserCustom_FLGPTN flgPtn;
 
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// clear Interrupt flag.
-	DDIM_User_Clr_Flg(FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
+	ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
 
 	// configure.
 	// PHY I2C SW reset control register.
@@ -518,12 +549,13 @@ kint32 im_hdmi_set_tmds_scramble(ImHdmiEnum*self, BOOL enable)
 	ioDisp.hdmiTx.i2cmOperation.byte[0] = 0x10;
 
 	// Wait for interruption.
-	if (DDIM_User_Twai_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM, D_DDIM_USER_TWF_ORW, &flg_ptn, D_DDIM_WAIT_END_TIME) != D_DDIM_USER_E_OK) {
-		im_hdmi_pclk_off();
+	if (ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM,
+		DdimUserCustom_TWF_ORW, &flgPtn, D_DDIM_WAIT_END_TIME) != DdimUserCustom_E_OK) {
+		im_hdmi_pclk_off(self->imHdmi);
 		return ImHdmi_D_IM_HDMI_TIMEOUT;
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
@@ -531,21 +563,21 @@ kint32 im_hdmi_set_tmds_scramble(ImHdmiEnum*self, BOOL enable)
 /**
  * @brief		Read Sink's E-EDID.
  */
-kint32 im_hdmi_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i2cmConfig, kuchar readData[8])
+gint32 im_hdmi_enum_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i2cmConfig, guchar readData[8])
 {
-	DDIM_USER_FLGPTN flg_ptn;
-	kint32 index;
+	DdimUserCustom_FLGPTN flgPtn;
+	gint32 index;
 #ifdef CO_PARAM_CHECK
 	if (i2cmConfig == NULL) {
-		Ddim_Assertion(("im_hdmi_read_sinks_e_edid Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_enum_read_sinks_e_edid Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// clear Interrupt flag.
-	DDIM_User_Clr_Flg(FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
+	ddim_user_custom_clr_flg(self->ddimUserCustomTest, FID_IM_HDMI, ~(ImHdmi_D_IM_HDMI_INT_FLG_I2CM));
 
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// configure.
 	// I2C slave address.
@@ -567,9 +599,10 @@ kint32 im_hdmi_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i
 	ioDisp.hdmiTx.i2cmOperation.byte[0] = i2cmConfig->i2cmOperation;
 
 	// Wait for interruption.
-	if (DDIM_User_Twai_Flg(FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM, D_DDIM_USER_TWF_ORW, &flg_ptn, D_DDIM_WAIT_END_TIME) != D_DDIM_USER_E_OK) {
-		Ddim_Print(("im_hdmi_read_sinks_e_edid Wait i2cmphy INT is timeout!!\n"));
-		im_hdmi_pclk_off();
+	if (ddim_user_custom_twai_flg(self->ddimUserCustomTest, FID_IM_HDMI, ImHdmi_D_IM_HDMI_INT_FLG_I2CM,
+		DdimUserCustom_TWF_ORW, &flgPtn, D_DDIM_WAIT_END_TIME) != DdimUserCustom_E_OK) {
+		Ddim_Print(("im_hdmi_enum_read_sinks_e_edid Wait i2cmphy INT is timeout!!\n"));
+		im_hdmi_pclk_off(self->imHdmi);
 		return ImHdmi_D_IM_HDMI_TIMEOUT;
 	}
 
@@ -584,20 +617,20 @@ kint32 im_hdmi_read_sinks_e_edid(ImHdmiEnum*self, ThdmiI2cmConfig const *const i
 		readData[0] = ioDisp.hdmiTx.i2cmDatai;
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 
 	return D_DDIM_OK;
 }
-kint32 im_hdmi_ctrl(ImHdmiEnum*self, ThdmiCtrl const *const ctrl )
+gint32 im_hdmi_enum_ctrl(ImHdmiEnum*self, ImHdmiStruct const *const ctrl )
 {
-	kint32 ret = D_DDIM_OK;
+	gint32 ret = D_DDIM_OK;
 #ifdef CO_PARAM_CHECK
 	if (ctrl == NULL) {
-		Ddim_Assertion(("im_hdmi_ctrl Input_Param_Err status NULL\n"));
+		Ddim_Assertion(("im_hdmi_enum_ctrl Input_Param_Err status NULL\n"));
 		return ImHdmi_D_IM_HDMI_INPUT_PARAM_ERROR;
 	}
 #endif
-	im_hdmi_pclk_on();
+	im_hdmi_pclk_on(self->imHdmi);
 
 	// Power-down HDMI TX PHY Detector.
 	// PHY SVSRET, PHY ENHPDRXSENSE signal.
@@ -649,9 +682,9 @@ kint32 im_hdmi_ctrl(ImHdmiEnum*self, ThdmiCtrl const *const ctrl )
 	ioDisp.hdmiTx.i2cmDiv.byte[0] = 0x03;
 
 	// Configuring the PLL.
-	if (im_hdmi_configure_pll(&(ctrl->pllConfig)) != D_DDIM_OK) {
+	if (im_hdmi_configure_pll(self->imHdmi, &(ctrl->pllConfig)) != D_DDIM_OK) {
 		// the PLL does not lock and no activity.
-		im_hdmi_pclk_off();
+		im_hdmi_pclk_off(self->imHdmi);
 		return ImHdmi_D_IM_HDMI_NG;
 	}
 
@@ -661,17 +694,18 @@ kint32 im_hdmi_ctrl(ImHdmiEnum*self, ThdmiCtrl const *const ctrl )
 	ioDisp.hdmiTx.fcVsyncinwidth.bit.vInWidth = ctrl->fcVsyncinwidth;
 
 	// configure Infoframes.
-	ret = im_hdmi_configure_infoframes(&(ctrl->infoFrames));
+	ret = im_hdmi_configure_infoframes(self->imHdmi, &(ctrl->infoFrames));
 	if (ret != D_DDIM_OK) {
 		// result NG.
 	}
 
-	im_hdmi_pclk_off();
+	im_hdmi_pclk_off(self->imHdmi);
 	return ret;
 }
 
-ImHdmiEnum* im_hdmi_enum_new(void)
+ImHdmiEnum* 		im_hdmi_enum_new(void)
 {
-	ImHdmiEnum *self = k_object_new_with_private(IM_TYPE_HDMI_ENUM, sizeof(ImHdmiEnumPrivate));
+	ImHdmiEnum *self = g_object_new(IM_TYPE_HDMI_ENUM, NULL);
 	return self;
 }
+

@@ -107,28 +107,28 @@ static void run_od(AbsHeaderTest *self)
  */
 void timestamp_test()
 {
-	IntErnals_RS_printf("TIMESTAMP\n");
+	CheckHeaderMain_RS_PRINTF("TIMESTAMP\n");
 #if 0
-	IntErnals_RS_printf("ioTimestamp\n");
-	IntErnals_RS_printf("ioTimestamp                  = %p\n", &ioTimestamp );
-	IntErnals_RS_printf("ioTimestamp.cntcr            = %p\n", &ioTimestamp.cntcr );
-	IntErnals_RS_printf("ioTimestamp.cntsr            = %p\n", &ioTimestamp.cntsr );
-	IntErnals_RS_printf("ioTimestamp.cntcvl           = %p\n", &ioTimestamp.cntcvl );
-	IntErnals_RS_printf("ioTimestamp.cntcvu           = %p\n", &ioTimestamp.cntcvu );
-	IntErnals_RS_printf("Reserved                      = %p\n", &ioTimestamp.dmy0010001f );
-	IntErnals_RS_printf("ioTimestamp.cntfid0          = %p\n", &ioTimestamp.cntfid0 );
-	IntErnals_RS_printf("Reserved                      = %p\n", &ioTimestamp.dmy00240fcf );
-	IntErnals_RS_printf("ioTimestamp.pidr4            = %p\n", &ioTimestamp.pidr4 );
-	IntErnals_RS_printf("Reserved                      = %p\n", &ioTimestamp.dmy0fd40fdf );
-	IntErnals_RS_printf("ioTimestamp.pidr0            = %p\n", &ioTimestamp.pidr0 );
-	IntErnals_RS_printf("ioTimestamp.pidr1            = %p\n", &ioTimestamp.pidr1 );
-	IntErnals_RS_printf("ioTimestamp.pidr2            = %p\n", &ioTimestamp.pidr2 );
-	IntErnals_RS_printf("ioTimestamp.pidr3            = %p\n", &ioTimestamp.pidr3 );
-	IntErnals_RS_printf("ioTimestamp.cidr0            = %p\n", &ioTimestamp.cidr0 );
-	IntErnals_RS_printf("ioTimestamp.cidr1            = %p\n", &ioTimestamp.cidr1 );
-	IntErnals_RS_printf("ioTimestamp.cidr2            = %p\n", &ioTimestamp.cidr2 );
-	IntErnals_RS_printf("ioTimestamp.cidr3            = %p\n", &ioTimestamp.cidr3 );
-	IntErnals_RS_printf(" \n");
+	CheckHeaderMain_RS_PRINTF("ioTimestamp\n");
+	CheckHeaderMain_RS_PRINTF("ioTimestamp                  = %p\n", &ioTimestamp );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cntcr            = %p\n", &ioTimestamp.cntcr );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cntsr            = %p\n", &ioTimestamp.cntsr );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cntcvl           = %p\n", &ioTimestamp.cntcvl );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cntcvu           = %p\n", &ioTimestamp.cntcvu );
+	CheckHeaderMain_RS_PRINTF("Reserved                      = %p\n", &ioTimestamp.dmy0010001f );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cntfid0          = %p\n", &ioTimestamp.cntfid0 );
+	CheckHeaderMain_RS_PRINTF("Reserved                      = %p\n", &ioTimestamp.dmy00240fcf );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.pidr4            = %p\n", &ioTimestamp.pidr4 );
+	CheckHeaderMain_RS_PRINTF("Reserved                      = %p\n", &ioTimestamp.dmy0fd40fdf );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.pidr0            = %p\n", &ioTimestamp.pidr0 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.pidr1            = %p\n", &ioTimestamp.pidr1 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.pidr2            = %p\n", &ioTimestamp.pidr2 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.pidr3            = %p\n", &ioTimestamp.pidr3 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cidr0            = %p\n", &ioTimestamp.cidr0 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cidr1            = %p\n", &ioTimestamp.cidr1 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cidr2            = %p\n", &ioTimestamp.cidr2 );
+	CheckHeaderMain_RS_PRINTF("ioTimestamp.cidr3            = %p\n", &ioTimestamp.cidr3 );
+	CheckHeaderMain_RS_PRINTF(" \n");
 #endif
 }
 

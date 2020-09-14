@@ -85,36 +85,36 @@ static void impro_senslvs_destructor(ImproSenslvs *self)
 Software reset of SLVS-EC RX macro(excluding PMA, termination resistor adjustment circuit and CNT block).
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senslvs_sr( E_IM_PRO_SLVS_STREAM_TYPE streamType )
+INT32 impro_senslvs_sr( EimproSlvsStreamType streamType )
 {
 #ifdef CO_PARAM_CHECK
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
 		Ddim_Assertion(("I:impro_senslvs_sr stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	switch( streamType ) {
-		case E_IM_PRO_SLVS_STREAM_TYPE_A:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_A:
 			ioPro.sen.slvsec.common.sr.bit.inita	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET;
 			break;
 
-		case E_IM_PRO_SLVS_STREAM_TYPE_B:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B:
 			ioPro.sen.slvsec.common.sr.bit.initb	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET;
 			break;
 
-		//case E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
+		//case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
 		default:
 			ioPro.sen.slvsec.common.sr.bit.inita	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET;
 			ioPro.sen.slvsec.common.sr.bit.initb	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET;
 			break;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -122,36 +122,36 @@ INT32 impro_senslvs_sr( E_IM_PRO_SLVS_STREAM_TYPE streamType )
 Update of the SLVS-EC configuration parameters.
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senslvs_update_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType )
+INT32 impro_senslvs_update_cfg( EimproSlvsStreamType streamType )
 {
 #ifdef CO_PARAM_CHECK
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
 		Ddim_Assertion(("I:Im_PRO_SLVS_SR_Rls_And_Update_Cfg stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	switch( streamType ) {
-		case E_IM_PRO_SLVS_STREAM_TYPE_A:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_A:
 			ioPro.sen.slvsec.common.sr.bit.upda	= ImproSenslvs_D_IM_PRO_SLVS_CFG_UPDATE;
 			break;
 
-		case E_IM_PRO_SLVS_STREAM_TYPE_B:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B:
 			ioPro.sen.slvsec.common.sr.bit.updb	= ImproSenslvs_D_IM_PRO_SLVS_CFG_UPDATE;
 			break;
 
-		//case E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
+		//case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
 		default:
 			ioPro.sen.slvsec.common.sr.bit.upda	= ImproSenslvs_D_IM_PRO_SLVS_CFG_UPDATE;
 			ioPro.sen.slvsec.common.sr.bit.updb	= ImproSenslvs_D_IM_PRO_SLVS_CFG_UPDATE;
 			break;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -159,36 +159,36 @@ INT32 impro_senslvs_update_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType )
 Software reset release of SLVS-EC.
 @param[in]	streamType : stream type of SLVS
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-INT32 impro_senslvs_sr_rlease( E_IM_PRO_SLVS_STREAM_TYPE streamType )
+INT32 impro_senslvs_sr_rlease( EimproSlvsStreamType streamType )
 {
 #ifdef CO_PARAM_CHECK
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
 		Ddim_Assertion(("I:Im_PRO_SLVS_SR_Rls_And_Update_Cfg stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	switch( streamType ) {
-		case E_IM_PRO_SLVS_STREAM_TYPE_A:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_A:
 			ioPro.sen.slvsec.common.sr.bit.inita	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET_RELEASE;
 			break;
 
-		case E_IM_PRO_SLVS_STREAM_TYPE_B:
+		case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B:
 			ioPro.sen.slvsec.common.sr.bit.initb	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET_RELEASE;
 			break;
 
-		//case E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
+		//case ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH:
 		default:
 			ioPro.sen.slvsec.common.sr.bit.inita	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET_RELEASE;
 			ioPro.sen.slvsec.common.sr.bit.initb	= ImproSenslvs_D_IM_PRO_SLVS_SW_RESET_RELEASE;
 			break;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -198,19 +198,19 @@ Physical Media Attachment initialization.
 @param[in]	pmaInit : PMA initialization parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 INT32 impro_senslvs_pma_init( TimproSlvsPmaInit* pmaInit )
 {
 #ifdef CO_PARAM_CHECK
 	if (pmaInit == NULL){
 		Ddim_Assertion(("I:impro_senslvs_pma_init error. pmaInit=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.common.phycr2.bit.pdx			= ImproSenslvs_E_IM_PRO_SLVS_PD_STATE_NORMAL;
 	im_pro_wait_usec( ImproSenslvs_D_IM_PRO_SLVS_INIT_WAIT_PD );
 
@@ -229,7 +229,7 @@ INT32 impro_senslvs_pma_init( TimproSlvsPmaInit* pmaInit )
 		ioPro.sen.slvsec.common.phycr0.bit.icpcode	= pmaInit->optInitParam.icpcode;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -239,19 +239,19 @@ Physical Media Attachment Power Down control.
 @param[in]	pmaPd : PMA Power Down control parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 INT32 impro_senslvs_pma_power_down( TimproSlvsPmaPd* pmaPd )
 {
 #ifdef CO_PARAM_CHECK
 	if (pmaPd == NULL){
 		Ddim_Assertion(("I:impro_senslvs_pma_power_down error. pmaPd=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.common.phycr2.bit.irxpdx0		= pmaPd->lane0PdState;
 	ioPro.sen.slvsec.common.phycr2.bit.irxpdx1		= pmaPd->lane1PdState;
 	ioPro.sen.slvsec.common.phycr2.bit.irxpdx2		= pmaPd->lane2PdState;
@@ -261,7 +261,7 @@ INT32 impro_senslvs_pma_power_down( TimproSlvsPmaPd* pmaPd )
 	ioPro.sen.slvsec.common.phycr2.bit.irxpdx6		= pmaPd->lane6PdState;
 	ioPro.sen.slvsec.common.phycr2.bit.irxpdx7		= pmaPd->lane7PdState;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -270,15 +270,15 @@ Physical Media Attachment PLL Power Down control.
 @param[in]	pdState : PMA PLL Power Down control parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 INT32 impro_senslvs_pma_pll_power_down( EimproSlvsPdState pdState )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.common.phycr2.bit.ipdpllx	= pdState;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -287,19 +287,19 @@ SLVS-EC Common Configuration.
 @param[in]	commonCfg : Common configuration parameters.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
 INT32 impro_senslvs_common_cfg( TimproSlvsCommonCfg* commonCfg )
 {
 #ifdef CO_PARAM_CHECK
 	if (commonCfg == NULL){
 		Ddim_Assertion(("I:impro_senslvs_common_cfg error. commonCfg=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.common.attr1.bit.StandbyLength		= commonCfg->StandbyLength;
 	ioPro.sen.slvsec.common.attr1.bit.StandbySymbolType	= commonCfg->StandbySymbolType;
 	ioPro.sen.slvsec.common.attr1.bit.StandbySymbol		= commonCfg->StandbySymbol;
@@ -316,7 +316,7 @@ INT32 impro_senslvs_common_cfg( TimproSlvsCommonCfg* commonCfg )
 	ioPro.sen.slvsec.common.attr4.bit.IdleSymbolType2		= commonCfg->IdleSymbolType2;
 	ioPro.sen.slvsec.common.attr4.bit.IdleSymbol2			= commonCfg->IdleSymbol2;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -327,29 +327,29 @@ SLVS-EC Configuration.
 @param[in]	slvsCtrl : configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-INT32 impro_senslvs_ctrl( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsCtrl* slvsCtrl )
+INT32 impro_senslvs_ctrl( EimproSlvsStreamType streamType, TimproSlvsCtrl* slvsCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (slvsCtrl == NULL){
 		Ddim_Assertion(("I:impro_senslvs_ctrl error. streamType=%d slvsCtrl=NULL\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_B ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B ) {
 		Ddim_Assertion(("I:impro_senslvs_ctrl stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.stream[streamType].rampd.bit.rampd		= slvsCtrl->ramPdState;
 	ioPro.sen.slvsec.stream[streamType].trgr.bit.vden			= slvsCtrl->vdoutCtrl;
 	ioPro.sen.slvsec.stream[streamType].cfgr0.bit.ecccrc		= slvsctrl->ecccrcopt;
 	iopro.sen.slvsec.stream[streamtype].mmode.bit.lnmaxclp	= slvsCtrl->expectVal;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -360,23 +360,23 @@ SLVS-EC Mode Configuration.
 @param[in]	modeCtrl : mode configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-INT32 impro_senslvs_mode_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsModeCfg* modeCtrl )
+INT32 impro_senslvs_mode_cfg( EimproSlvsStreamType streamType, TimproSlvsModeCfg* modeCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (modeCtrl == NULL){
 		Ddim_Assertion(("I:impro_senslvs_mode_cfg error. streamType=%d modeCtrl=NULL\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_B ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B ) {
 		Ddim_Assertion(("I:impro_senslvs_mode_cfg stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.stream[streamType].cfgr0.bit.PixelBit	= modeCtrl->pixelbit;
 	ioPro.sen.slvsec.stream[streamType].cfgr0.bit.LaneNum		= modeCtrl->lanenum;
 	ioPro.sen.slvsec.stream[streamType].cfgr1.bit.LineLength	= modeCtrl->linelength;
@@ -398,7 +398,7 @@ INT32 impro_senslvs_mode_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsMo
 	ioPro.sen.slvsec.stream[streamType].vlane.bit.lane6		= modeCtrl->valid_lane.lane6;
 	ioPro.sen.slvsec.stream[streamType].vlane.bit.lane7		= modeCtrl->valid_lane.lane7;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -409,28 +409,28 @@ SLVS-EC Trimming Configuration.
 @param[in]	trimCtrl : trimming configuration parameters for each stream.
 @retval		D_DDIM_OK					: Setting OK
 @retval		D_IM_PRO_NG					: Processing NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Parameter invalid
 */
-INT32 impro_senslvs_trim_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsTrimCfg* trimCtrl )
+INT32 impro_senslvs_trim_cfg( EimproSlvsStreamType streamType, TimproSlvsTrimCfg* trimCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (trimCtrl == NULL){
 		Ddim_Assertion(("I:impro_senslvs_trim_cfg error. streamType=%d trimCtrl=NULL\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_B ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B ) {
 		Ddim_Assertion(("I:impro_senslvs_trim_cfg stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.slvsec.stream[streamType].outmd.bit.trmg	= trimCtrl->enabled;
 	ioPro.sen.slvsec.stream[streamType].hsadd.bit.hsadd	= trimCtrl->startX;
 	ioPro.sen.slvsec.stream[streamType].hsize.bit.hsize	= trimCtrl->width;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	return D_DDIM_OK;
 }
 
@@ -440,27 +440,27 @@ INT32 impro_senslvs_trim_cfg( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsTr
 Get SLVS-EC status.
 @param[out]	status : status parameter pointer.
 */
-INT32 impro_senslvs_get_status( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvsStatus* status )
+INT32 impro_senslvs_get_status( EimproSlvsStreamType streamType, TimproSlvsStatus* status )
 {
 #ifdef CO_PARAM_CHECK
 	if (status == NULL){
 		Ddim_Assertion(("I:impro_senslvs_get_status error. streamType=%d status=NULL\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_B ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B ) {
 		Ddim_Assertion(("I:impro_senslvs_get_status stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	status->embeddedDataDetect		= (EimproSlvsStatusEbd)ioPro.sen.slvsec.stream[streamType].ebdst.bit.ebd;
 	status->ebdStoredLineNum			= ioPro.sen.slvsec.stream[streamType].ebdst.bit.lnum;
 	status->expectValueDiscontinuity	= ioPro.sen.slvsec.stream[streamType].lnest.bit.expln;
 	status->lineNumDiscontinuity		= ioPro.sen.slvsec.stream[streamType].lnest.bit.detln;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -469,33 +469,33 @@ INT32 impro_senslvs_get_status( E_IM_PRO_SLVS_STREAM_TYPE streamType, TimproSlvs
 /**
 SLVS-EC macro start.
 */
-INT32 impro_senslvs_status( E_IM_PRO_SLVS_STREAM_TYPE streamType )
+INT32 impro_senslvs_status( EimproSlvsStreamType streamType )
 {
 #ifdef CO_PARAM_CHECK
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
 		Ddim_Assertion(("I:impro_senslvs_status stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
-	if( streamType == E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
-		ioPro.sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg	= D_IM_PRO_TRG_START;
-		ioPro.sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_B].trgr.bit.trg	= D_IM_PRO_TRG_START;
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	if( streamType == ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+		ioPro.sen.slvsec.stream[ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg	= D_IM_PRO_TRG_START;
+		ioPro.sen.slvsec.stream[ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B].trgr.bit.trg	= D_IM_PRO_TRG_START;
 	}
 	else {
 		ioPro.sen.slvsec.stream[streamType].trgr.bit.trg	= D_IM_PRO_TRG_START;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	if( streamType == E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
-		im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC0, 0);
-		im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC1, 0);
+	if( streamType == ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+		im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC0, 0);
+		im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC1, 0);
 	}
 	else {
-		im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC0, streamType);
+		im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_SLVSEC0, streamType);
 	}
 
 	return D_DDIM_OK;
@@ -506,19 +506,19 @@ INT32 impro_senslvs_status( E_IM_PRO_SLVS_STREAM_TYPE streamType )
 Stop SLVS-EC information
 @param[in]	force : force stop option
 */
-INT32 impro_senslvs_stop( E_IM_PRO_SLVS_STREAM_TYPE streamType, UCHAR force )
+INT32 impro_senslvs_stop( EimproSlvsStreamType streamType, UCHAR force )
 {
 	UCHAR stop_type = ImproSenslvs_D_IM_PRO_SLVS_TRG_FRAME_STOP;
 
 #ifdef CO_PARAM_CHECK
-	if( streamType > E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+	if( streamType > ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
 		Ddim_Assertion(("I:impro_senslvs_stop stream type illegal. streamType=%d\n", streamType));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if (force == 0){
 		// frame stop
 		stop_type = ImproSenslvs_D_IM_PRO_SLVS_TRG_FRAME_STOP;
@@ -528,22 +528,22 @@ INT32 impro_senslvs_stop( E_IM_PRO_SLVS_STREAM_TYPE streamType, UCHAR force )
 		stop_type = ImproSenslvs_D_IM_PRO_SLVS_TRG_FORCE_STOP;
 	}
 
-	if( streamType == E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
-		ioPro.sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg = stop_type;
-		ioPro.sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_B].trgr.bit.trg = stop_type;
+	if( streamType == ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+		ioPro.sen.slvsec.stream[ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg = stop_type;
+		ioPro.sen.slvsec.stream[ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_B].trgr.bit.trg = stop_type;
 	}
 	else {
 		ioPro.sen.slvsec.stream[streamType].trgr.bit.trg = stop_type;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	if( streamType == E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
-		im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC0, 0);
-		im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC1, 0);
+	if( streamType == ImproBase_E_IM_PRO_SLVS_STREAM_TYPE_BOTH ) {
+		im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC0, 0);
+		im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC1, 0);
 	}
 	else {
-		im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC0, streamType);
+		im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_SLVSEC0, streamType);
 	}
 
 	return D_DDIM_OK;
@@ -567,7 +567,7 @@ wait end of SLVS-EC macro.
 							<li>@ref D_IM_PRO_SLVS_INTST_RDY_WAITEND_FLG
 							<li>@ref D_IM_PRO_SLVS_INTST_STBY_WAITEND_FLG</ul>
 @retval			D_DDIM_OK                  : SLVS-EC normal end. and set end cause to p_flgptn.
-@retval			D_IM_PRO_INPUT_PARAM_ERROR : parameter error.
+@retval			ImproBase_D_IM_PRO_INPUT_PARAM_ERROR : parameter error.
 @retval			ImproSenslvs_D_IM_PRO_TIMEOUT     : wait timeout.
 */
 INT32 impro_senslvs_wait_end( DDIM_USER_FLGPTN* const p_flgptn,
@@ -580,7 +580,7 @@ INT32 impro_senslvs_wait_end( DDIM_USER_FLGPTN* const p_flgptn,
 	if( (waiptn & ImproSenslvs_D_IM_PRO_SLVS_INTST_ALL_WAITEND_FLG) != waiptn ) {
 		// Parameter setting error
 		Ddim_Assertion(("I:impro_senslvs_wait_end error. waiptn\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	Im_Pro_Dsb();
@@ -602,7 +602,7 @@ INT32 impro_senslvs_wait_end( DDIM_USER_FLGPTN* const p_flgptn,
 			return ImproSenslvs_D_IM_PRO_TIMEOUT;
 		default:
 			Ddim_Print(( "impro_senslvs_wait_end twai_flg NG return\n" ));
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 }
 

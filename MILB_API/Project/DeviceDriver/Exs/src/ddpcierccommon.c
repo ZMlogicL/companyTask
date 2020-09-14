@@ -35,13 +35,13 @@ volatile DdPcieRcIntEpCb gddPcieRcIntEpCb[C_PCIE_RC_MAX_CH] =
 		{{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}, {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
 volatile DdPciRcIntOwnCb gddPcieRcIntOwnCb[C_PCIE_RC_MAX_CH] = {
 		{ NULL, NULL, NULL, NULL }, { NULL, NULL, NULL, NULL } };
-volatile vpCallbackPcieFunc gddPcieRcHpDetectCard[C_PCIE_RC_MAX_CH] = {NULL, NULL};
+volatile VpCallbackPcieFunc gddPcieRcHpDetectCard[C_PCIE_RC_MAX_CH] = {NULL, NULL};
 volatile kuint16 gddPcieRcConfigAdr[C_PCIE_RC_MAX_CH] = {(D_DD_PCIE_0_PIO_ADR >> 16), (D_DD_PCIE_1_PIO_ADR >> 16)};
 
 /** PCIe IP mode */
 volatile kuchar	gddPcieRcReType = E_DD_PCIE_RE_TYPE_US;	/**< Type Undettled */
 volatile DdPcieIntDmaCb gddPcieRcIntDmaCb[C_PCIE_RC_MAX_CH] = {{NULL, NULL}, {NULL, NULL}};
-volatile vpCallbackPcieFunc gddPcieRcIntMsiCb[C_PCIE_RC_MAX_CH] = {NULL, NULL};
+volatile VpCallbackPcieFunc gddPcieRcIntMsiCb[C_PCIE_RC_MAX_CH] = {NULL, NULL};
 
 /**
 DECLS

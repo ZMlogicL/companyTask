@@ -28,12 +28,12 @@ struct _CtDdRelcJugde
 {
 	KObject parent;
 	kint32 ret;
-	T_DD_RELC_CTRL_CMN ctrlCom;
-	T_DD_RELC_CTRL_REG ctrlReg;
-	T_DD_RELC_CTRL_DESC ctrlDesc;
-	T_DD_RELC_SET_MOD_NORMAL setModNorm;
-	T_DD_RELC_SET_MOD_DESC setModDesc;
-	T_DD_RELC_DEC_INFO decInfo;
+	TDdRelcCtrlCmn ctrlCom;
+	TDdRelcCtrlReg ctrlReg;
+	TDdRelcCtrlDesc ctrlDesc;
+	TDdRelcSetModNormal setModNorm;
+	TDdRelcSetModDesc setModDesc;
+	TDdRelcDecInfo decInfo;
 	kulong setAddr;
 	kuint32 setSize;
 	kushort inBufSize;
@@ -46,6 +46,7 @@ struct _CtDdRelcJugde
 #ifdef PC_DEBUG
 	kulong testPat;
 #endif
+	CtDdRelcJugdePrivate *priv;
 };
 
 KConstType 			ct_dd_relc_jugde_get_type(void);
@@ -53,5 +54,5 @@ CtDdRelcJugde* 		ct_dd_relc_jugde_new(void);
 
 void 						ct_dd_relc_buffer_dump( void );
 void 						ct_dd_relc_judge(CtDdRelcJugde *self,kint argc, kchar** argv );
-
+DdRelc* 				ct_dd_relc_judge_get_ddrelc(CtDdRelcJugde* self);
 #endif /* __CT_DD_RELC_JUGDE_H__ */

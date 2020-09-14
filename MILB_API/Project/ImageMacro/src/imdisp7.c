@@ -38,19 +38,19 @@ static void im_disp7_destructor(ImDisp7 *self)
 
 /* Set Luminance correct table.
 */
-INT32 Im_DISP_Set_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl)
+INT32 im_disp7_set_luminance_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (tbl == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Luminance_Table: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_set_luminance_table: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 
 	if ((surface != D_IM_DISP_TABLE_SURFACE_A) &&
 		(surface != D_IM_DISP_TABLE_SURFACE_B)) {
-		Ddim_Print(("E:Im_DISP_Set_Luminance_Table: Paramter check error\n"));
+		Ddim_Print(("E:im_disp7_set_luminance_table: Paramter check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -58,7 +58,7 @@ INT32 Im_DISP_Set_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 	im_disp_pclk_on(im_disp_new());
 
 	// check trigger.
-	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
+	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
 		(IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATSL != surface)) {
 		// Data output block is stopped, or or specified surface is unused.
 
@@ -69,19 +69,19 @@ INT32 Im_DISP_Set_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 		if (surface == D_IM_DISP_TABLE_SURFACE_A) {
 			// Set Luminance table (surface A)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLAYT)),
-										E_IM_DISP_CORRECT_SELECT_LUMINANCE, E_IM_DISP_ACCESS_GAMMA_SET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE, ImDisp_E_IM_DISP_ACCESS_GAMMA_SET);
 		}
 		else {
 			// Set Luminance table (surface B)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLBYT)),
-										E_IM_DISP_CORRECT_SELECT_LUMINANCE, E_IM_DISP_ACCESS_GAMMA_SET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE, ImDisp_E_IM_DISP_ACCESS_GAMMA_SET);
 		}
 
 		im_disp_hclk_off(im_disp_new());
 		DDIM_User_AhbReg_SpinUnLock();
 	}
 	else {
-		Ddim_Print(("E:Im_DISP_Set_Luminance_Table: Output layer busy and specified surface is being used\n"));
+		Ddim_Print(("E:im_disp7_set_luminance_table: Output layer busy and specified surface is being used\n"));
 		ret = D_IM_DISP_MACRO_BUSY_NG;
 	}
 
@@ -92,19 +92,19 @@ INT32 Im_DISP_Set_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 
 /* Get Luminance correct table.
 */
-INT32 Im_DISP_Get_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl)
+INT32 im_disp7_get_luminance_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (tbl == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Luminance_Table: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_luminance_table: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 
 	if ((surface != D_IM_DISP_TABLE_SURFACE_A) &&
 		(surface != D_IM_DISP_TABLE_SURFACE_B)) {
-		Ddim_Print(("E:Im_DISP_Get_Luminance_Table: Parameter check error\n"));
+		Ddim_Print(("E:im_disp7_get_luminance_table: Parameter check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -112,7 +112,7 @@ INT32 Im_DISP_Get_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 	im_disp_pclk_on(im_disp_new());
 
 	// check trigger.
-	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
+	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
 		(IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATSL != surface)) {
 		// Data output block is stopped, or or specified surface is unused.
 
@@ -123,19 +123,19 @@ INT32 Im_DISP_Get_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 		if (surface == D_IM_DISP_TABLE_SURFACE_A) {
 			// Get Luminance table (surface A)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLAYT)),
-										E_IM_DISP_CORRECT_SELECT_LUMINANCE, E_IM_DISP_ACCESS_GAMMA_GET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE, ImDisp_E_IM_DISP_ACCESS_GAMMA_GET);
 		}
 		else {
 			// Get Luminance table (surface B)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLBYT)),
-										E_IM_DISP_CORRECT_SELECT_LUMINANCE, E_IM_DISP_ACCESS_GAMMA_GET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE, ImDisp_E_IM_DISP_ACCESS_GAMMA_GET);
 		}
 
 		im_disp_hclk_off(im_disp_new());
 		DDIM_User_AhbReg_SpinUnLock();
 	}
 	else {
-		Ddim_Print(("E:Im_DISP_Set_Luminance_Table: Output layer busy and specified surface is being used\n"));
+		Ddim_Print(("E:im_disp7_set_luminance_table: Output layer busy and specified surface is being used\n"));
 		ret = D_IM_DISP_MACRO_BUSY_NG;
 	}
 
@@ -146,19 +146,19 @@ INT32 Im_DISP_Get_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl
 
 /* Set Chroma correct gain table.
 */
-INT32 Im_DISP_Set_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl)
+INT32 im_disp7_set_chroma_gain_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (tbl == NULL) {
-		Ddim_Print(("E:Im_DISP_Set_Chroma_Gain_Table: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_set_chroma_gain_table: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 
 	if ((surface != D_IM_DISP_TABLE_SURFACE_A) &&
 		(surface != D_IM_DISP_TABLE_SURFACE_B)) {
-		Ddim_Print(("E:Im_DISP_Set_Chroma_Gain_Table: Paramter check error\n"));
+		Ddim_Print(("E:im_disp7_set_chroma_gain_table: Paramter check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -166,7 +166,7 @@ INT32 Im_DISP_Set_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 	im_disp_pclk_on(im_disp_new());
 
 	// check trigger.
-	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
+	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
 		(IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATSL != surface)) {
 		// Data output block is stopped, or or specified surface is unused.
 
@@ -177,19 +177,19 @@ INT32 Im_DISP_Set_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 		if (surface == D_IM_DISP_TABLE_SURFACE_A) {
 			// Set Chroma gain table (surface A)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLACG)),
-										E_IM_DISP_CORRECT_SELECT_CHROMA, E_IM_DISP_ACCESS_GAMMA_SET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA, ImDisp_E_IM_DISP_ACCESS_GAMMA_SET);
 		}
 		else {
 			// Set Chroma gain table (surface B)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLBCG)),
-										E_IM_DISP_CORRECT_SELECT_CHROMA, E_IM_DISP_ACCESS_GAMMA_SET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA, ImDisp_E_IM_DISP_ACCESS_GAMMA_SET);
 		}
 
 		im_disp_hclk_off(im_disp_new());
 		DDIM_User_AhbReg_SpinUnLock();
 	}
 	else {
-		Ddim_Print(("E:Im_DISP_Set_Chroma_Gain_Table: Output layer busy and specified surface is being used\n"));
+		Ddim_Print(("E:im_disp7_set_chroma_gain_table: Output layer busy and specified surface is being used\n"));
 		ret = D_IM_DISP_MACRO_BUSY_NG;
 	}
 
@@ -200,19 +200,19 @@ INT32 Im_DISP_Set_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 
 /* Get Chroma correct gain table.
 */
-INT32 Im_DISP_Get_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl)
+INT32 im_disp7_get_chroma_gain_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (tbl == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Chroma_Gain_Table: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_chroma_gain_table: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 
 	if ((surface != D_IM_DISP_TABLE_SURFACE_A) &&
 		(surface != D_IM_DISP_TABLE_SURFACE_B)) {
-		Ddim_Print(("E:Im_DISP_Get_Chroma_Gain_Table: Paramter check error\n"));
+		Ddim_Print(("E:im_disp7_get_chroma_gain_table: Paramter check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -220,7 +220,7 @@ INT32 Im_DISP_Get_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 	im_disp_pclk_on(im_disp_new());
 
 	// check trigger.
-	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT) ||
+	if ((IO_DISP.MAIN[block].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT) ||
 		(IO_DISP.MAIN[block].DCORE.TBLASET.bit.YSATSL != surface)) {
 		// Data output block is stopped, or or specified surface is unused.
 
@@ -231,19 +231,19 @@ INT32 Im_DISP_Get_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 		if (surface == D_IM_DISP_TABLE_SURFACE_A) {
 			// Get Chroma gain table (surface A)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLACG)),
-										E_IM_DISP_CORRECT_SELECT_CHROMA, E_IM_DISP_ACCESS_GAMMA_GET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA, ImDisp_E_IM_DISP_ACCESS_GAMMA_GET);
 		}
 		else {
 			// Get Chroma gain table (surface B)
 			im_disp_access_gamma_table(im_disp_new(),(BYTE*)(tbl), (BYTE*)(&(IO_DISP_TBL.MAIN[block].DCORE.YSTBLBCG)),
-										E_IM_DISP_CORRECT_SELECT_CHROMA, E_IM_DISP_ACCESS_GAMMA_GET);
+										ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA, ImDisp_E_IM_DISP_ACCESS_GAMMA_GET);
 		}
 
 		im_disp_hclk_off(im_disp_new());
 		DDIM_User_AhbReg_SpinUnLock();
 	}
 	else {
-		Ddim_Print(("E:Im_DISP_Get_Chroma_Gain_Table: Output layer busy and specified surface is being used\n"));
+		Ddim_Print(("E:im_disp7_get_chroma_gain_table: Output layer busy and specified surface is being used\n"));
 		ret = D_IM_DISP_MACRO_BUSY_NG;
 	}
 
@@ -254,18 +254,18 @@ INT32 Im_DISP_Get_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* t
 
 /* Set MIPI-DSI IP input pin control 0.
 */
-INT32 Im_DISP_Set_Mipi_Dsi_Ctrl0(BYTE shudown, BYTE color_mode)
+INT32 im_disp7_set_mipi_dsi_ctrl0(ImDisp7 * self, BYTE shudown, BYTE color_mode)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((shudown != D_IM_DISP_ENABLE_OFF) && (shudown != D_IM_DISP_ENABLE_ON)) {
-		Ddim_Print(("E:Im_DISP_Set_Mipi_Dsi_Ctrl0: parameter error - shudown\n"));
+		Ddim_Print(("E:im_disp7_set_mipi_dsi_ctrl0: parameter error - shudown\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 
 	if ((color_mode != D_IM_DISP_ENABLE_OFF) && (color_mode != D_IM_DISP_ENABLE_ON)) {
-		Ddim_Print(("E:Im_DISP_Set_Mipi_Dsi_Ctrl0: parameter error - color_mode\n"));
+		Ddim_Print(("E:im_disp7_set_mipi_dsi_ctrl0: parameter error - color_mode\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -285,13 +285,13 @@ INT32 Im_DISP_Set_Mipi_Dsi_Ctrl0(BYTE shudown, BYTE color_mode)
 
 /* Get MIPI-DSI IP input pin control 0.
 */
-INT32 Im_DISP_Get_Mipi_Dsi_Ctrl0(BYTE* shudown, BYTE* color_mode)
+INT32 im_disp7_get_mipi_dsi_ctrl0(ImDisp7 * self, BYTE* shudown, BYTE* color_mode)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((shudown == NULL) || (color_mode == NULL)) {
-		Ddim_Print(("E:Im_DISP_Get_Mipi_Dsi_Ctrl0: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_mipi_dsi_ctrl0: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -309,7 +309,7 @@ INT32 Im_DISP_Get_Mipi_Dsi_Ctrl0(BYTE* shudown, BYTE* color_mode)
 
 /* Set MIPI-DSI IP input pin control 1.
 */
-INT32 Im_DISP_Set_Mipi_Dsi_Ctrl1(void)
+INT32 im_disp7_set_mipi_dsi_ctrl1(ImDisp7 * self)
 {
 	INT32 ret = D_DDIM_OK;
 
@@ -322,7 +322,7 @@ INT32 Im_DISP_Set_Mipi_Dsi_Ctrl1(void)
 	}
 	else {
 		// status NG.
-		Ddim_Print(("E:Im_DISP_Set_Mipi_Dsi_Ctrl1: Status NG - 1 shot signal input in update waiting.\n"));
+		Ddim_Print(("E:im_disp7_set_mipi_dsi_ctrl1: Status NG - 1 shot signal input in update waiting.\n"));
 		ret = D_IM_DISP_STATUS_ABNORMAL;
 	}
 
@@ -333,13 +333,13 @@ INT32 Im_DISP_Set_Mipi_Dsi_Ctrl1(void)
 
 /* Get MIPI-DSI IP input pin control 1.
 */
-INT32 Im_DISP_Get_Mipi_Dsi_Ctrl1(BYTE* update_config)
+INT32 im_disp7_get_mipi_dsi_ctrl1(ImDisp7 * self, BYTE* update_config)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (update_config == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Mipi_Dsi_Ctrl1: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_mipi_dsi_ctrl1: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -355,18 +355,18 @@ INT32 Im_DISP_Get_Mipi_Dsi_Ctrl1(BYTE* update_config)
 
 /* Set SR of IP (HDMI, MIPI).
 */
-INT32 Im_DISP_Set_SR_IP(BYTE ip, BYTE sr)
+INT32 im_disp7_set_sr_ip(ImDisp7 * self, BYTE ip, BYTE sr)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (((ip & D_IM_DISP_IP_HDMI) != D_IM_DISP_IP_HDMI) &&
 		((ip & D_IM_DISP_IP_MIPI) != D_IM_DISP_IP_MIPI)) {
-		Ddim_Print(("E:Im_DISP_Set_SR_IP: ip parameter error\n"));
+		Ddim_Print(("E:im_disp7_set_sr_ip: ip parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((sr != D_IM_DISP_SR_CANCEL) && (sr != D_IM_DISP_SR_RESET)) {
-		Ddim_Print(("E:Im_DISP_Set_SR_IP: sr parameter error\n"));
+		Ddim_Print(("E:im_disp7_set_sr_ip: sr parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -375,13 +375,13 @@ INT32 Im_DISP_Set_SR_IP(BYTE ip, BYTE sr)
 
 	// HDMI IP Reset.
 	if (((ip & D_IM_DISP_IP_HDMI) == D_IM_DISP_IP_HDMI) &&
-		(IO_DISP.MAIN[E_IM_DISP_HDMI].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT)) {
+		(IO_DISP.MAIN[ImDisp_E_IM_DISP_HDMI].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)) {
 		IO_DISP.JDDISP_HDMI_HDMIC.HDMISR.bit.SR = sr;	// software reset.
 	}
 
 	// MIPI-DSI IP Reset.
 	if (((ip & D_IM_DISP_IP_MIPI) == D_IM_DISP_IP_MIPI) &&
-		(IO_DISP.MAIN[E_IM_DISP_LCD_MIPI].DCORE.TRG.bit.TRG == E_IM_DISP_TRG_READ_NO_ACT)) {
+		(IO_DISP.MAIN[ImDisp_E_IM_DISP_LCD_MIPI].DCORE.TRG.bit.TRG == ImDisp_E_IM_DISP_TRG_READ_NO_ACT)) {
 		IO_DISP.MDSCTL.MDSSR.bit.SR = sr;				// software reset.
 	}
 
@@ -393,13 +393,13 @@ INT32 Im_DISP_Set_SR_IP(BYTE ip, BYTE sr)
 
 /* Get SR of IP (HDMI, MIPI).
 */
-INT32 Im_DISP_Get_SR_IP(BYTE *sr)
+INT32 im_disp7_get_sr_ip(ImDisp7 * self, BYTE *sr)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (sr == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_SR_IP: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_sr_ip: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -423,13 +423,13 @@ INT32 Im_DISP_Get_SR_IP(BYTE *sr)
 
 /* Set Write Channel control.
 */
-INT32 Im_DISP_Set_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M const *const p2m, T_IM_DISP_CTRL_PWCH const *const pwch)
+INT32 im_disp7_set_write_channel_ctrl(ImDisp7 * self, E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M const *const p2m, T_IM_DISP_CTRL_PWCH const *const pwch)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((p2m == NULL) || (pwch == NULL)) {
-		Ddim_Print(("E:Im_DISP_Set_Write_Channel_Ctrl: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_set_write_channel_ctrl: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -505,13 +505,13 @@ INT32 Im_DISP_Set_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M
 
 /* Get Write Channel control.
 */
-INT32 Im_DISP_Get_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M  *const p2m, T_IM_DISP_CTRL_PWCH *const pwch)
+INT32 im_disp7_get_write_channel_ctrl(ImDisp7 * self, E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M  *const p2m, T_IM_DISP_CTRL_PWCH *const pwch)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if ((p2m == NULL) || (pwch == NULL)) {
-		Ddim_Print(("E:Im_DISP_Get_Write_Channel_Ctrl: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_write_channel_ctrl: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -564,13 +564,13 @@ INT32 Im_DISP_Get_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M
 
 /* Get write channel response.
 */
-INT32 Im_DISP_Get_Write_Channel_Response(E_IM_DISP_WC_NUM number, ULONG *response)
+INT32 im_disp7_get_write_channel_response(ImDisp7 * self, E_IM_DISP_WC_NUM number, ULONG *response)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (response == NULL) {
-		Ddim_Print(("E:Im_DISP_Get_Write_Channel_Response: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_get_write_channel_response: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -590,7 +590,7 @@ INT32 Im_DISP_Get_Write_Channel_Response(E_IM_DISP_WC_NUM number, ULONG *respons
 //---------------------- utility section -------------------------------
 /* Set CSC matrix to covert from BT.601 to BT.709's RGB or no any convert.
 */
-INT32 Im_DISP_Change_CSC_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_CC_MATRIX convert)
+INT32 im_disp7_change_csc_matrix(ImDisp7 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_CC_MATRIX convert)
 {
 	INT32 i;
 	INT32 ret = D_DDIM_OK;
@@ -626,7 +626,7 @@ INT32 Im_DISP_Change_CSC_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 #ifdef CO_PARAM_CHECK
 	if ((layer & E_IM_DISP_SEL_LAYER_ALL) == E_IM_DISP_SEL_LAYER_NONE) {
-		Ddim_Print(("E:Im_DISP_Change_CSC_Matrix: layer parameter error\n"));
+		Ddim_Print(("E:im_disp7_change_csc_matrix: layer parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -642,17 +642,17 @@ INT32 Im_DISP_Change_CSC_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 	// Main
 	if((layer & E_IM_DISP_SEL_LAYER_MAIN) == E_IM_DISP_SEL_LAYER_MAIN) {
-		ret = Im_DISP_Set_Matrix(block, ycc2rgb);
+		ret = im_disp3_set_matrix(im_disp3_new(),block, ycc2rgb);
 	}
 	// OSD
 	for(i = 0; i < 2; i++) {
 		if((layer & osd_layer[i]) == osd_layer[i]) {
-			ret = Im_DISP_Set_OSD_Matrix(block, layer, ycc2rgb_osd);
+			ret = im_disp6_set_osd_matrix(im_disp6_new(),block, layer, ycc2rgb_osd);
 		}
 	}
 	// Output
 	if((layer & E_IM_DISP_SEL_LAYER_DCORE) == E_IM_DISP_SEL_LAYER_DCORE) {
-		ret = Im_DISP_Set_Output_Matrix(block, E_IM_DISP_MATRIX_KIND_Y2R, ycc2rgb);
+		ret = im_disp4_set_output_matrix(im_disp4_new(),block, E_IM_DISP_MATRIX_KIND_Y2R, ycc2rgb);
 	}
 
 	return ret;
@@ -660,7 +660,7 @@ INT32 Im_DISP_Change_CSC_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, 
 
 /* Change color bar's color which was used as black back.
 */
-VOID Im_DISP_Change_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR black_back_color)
+VOID im_disp7_change_bb_color(ImDisp7 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR black_back_color)
 {
 	im_disp_pclk_on(im_disp_new());
 	// Set CLBHSIZE/CLBDT0
@@ -671,13 +671,13 @@ VOID Im_DISP_Change_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR black_ba
 
 /* Get the color bar's color which was used as black back.
 */
-INT32 Im_DISP_Check_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR* black_back_color)
+INT32 im_disp7_check_bb_color(ImDisp7 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR* black_back_color)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (black_back_color == NULL) {
-		Ddim_Print(("E:Im_DISP_Check_BB_Color: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_check_bb_color: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -692,7 +692,7 @@ INT32 Im_DISP_Check_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR* black_b
 
 /* Change grid.
 */
-INT32 Im_DISP_Change_Grid(E_IM_DISP_SEL block, UINT32 ghnum, UINT32 gvnum)
+INT32 im_disp7_change_grid(ImDisp7 * self, ImDispEImDispSel block, UINT32 ghnum, UINT32 gvnum)
 {
 	ULONG ohsize;
 	ULONG ovsize;
@@ -702,7 +702,7 @@ INT32 Im_DISP_Change_Grid(E_IM_DISP_SEL block, UINT32 ghnum, UINT32 gvnum)
 
 #ifdef CO_PARAM_CHECK
 	if ((ghnum >= D_IM_DISP_GRID_NUM) || (gvnum >= D_IM_DISP_GRID_NUM)) {
-		Ddim_Print(("E:Im_DISP_Change_Grid: ghnum/gvnum parameter error\n"));
+		Ddim_Print(("E:im_disp7_change_grid: ghnum/gvnum parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK
@@ -729,25 +729,25 @@ INT32 Im_DISP_Change_Grid(E_IM_DISP_SEL block, UINT32 ghnum, UINT32 gvnum)
 
 /* Draw single face frame.
 */
-INT32 Im_DISP_Draw_Face_Frame_Single(E_IM_DISP_SEL block, INT32 index, INT32 enable, T_IM_DISP_FACE_FRAME_PARAM const *const face)
+INT32 im_disp7_draw_face_frame_single(ImDisp7 * self, ImDispEImDispSel block, INT32 index, INT32 enable, T_IM_DISP_FACE_FRAME_PARAM const *const face)
 {
 	INT32 ret = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (face == NULL){
-		Ddim_Print(("E:Im_DISP_Draw_Face_Frame_Single: NULL check error\n"));
+		Ddim_Print(("E:im_disp7_draw_face_frame_single: NULL check error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (index >= D_IM_DISP_FACE_FRAME_COUNT){
-		Ddim_Print(("E:Im_DISP_Draw_Face_Frame_Single: index parameter error\n"));
+		Ddim_Print(("E:im_disp7_draw_face_frame_single: index parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if ((enable != D_IM_DISP_ENABLE_OFF) && (enable != D_IM_DISP_ENABLE_ON)){
-		Ddim_Print(("E:Im_DISP_Draw_Face_Frame_Single: enable parameter error\n"));
+		Ddim_Print(("E:im_disp7_draw_face_frame_single: enable parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 	if (im_disp_param_check_face_frame(face) != D_DDIM_OK){
-		Ddim_Print(("E:Im_DISP_Draw_Face_Frame_Single: FFDSTA/FFSIZE/FFWIDTH parameter error\n"));
+		Ddim_Print(("E:im_disp7_draw_face_frame_single: FFDSTA/FFSIZE/FFWIDTH parameter error\n"));
 		return D_IM_DISP_INPUT_PARAM_ERROR;
 	}
 #endif // CO_PARAM_CHECK

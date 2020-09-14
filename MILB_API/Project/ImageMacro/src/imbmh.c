@@ -24,6 +24,7 @@
 #include "jmlbmh.h"
 #include"imbmh1.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(ImBmh, im_bmh);
 #define IM_BMH_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImBmhPrivate, IM_TYPE_BMH))
 
@@ -49,7 +50,7 @@ struct _ImBmhPrivate
 #define ImBmh_D_IM_BMH_SYNC				(0)				// Sync Processing
 #define ImBmh_D_IM_BMH_ASYNC				(1)				// Async Processing
 #define ImBmh_D_IM_BMH_SRAM_WAIT_USEC		(1)
-#define ImBmh_D_IM_BMH_WAIT_FLGPTN		(D_IM_BMH_FLG_BMH_END | D_IM_BMH_FLG_BMH_AXI_ERR)
+#define ImBmh_D_IM_BMH_WAIT_FLGPTN		(ImBmh_D_IM_BMH_FLG_BMH_END | ImBmh_D_IM_BMH_FLG_BMH_AXI_ERR)
 
 #define ImBmh_IM_BMH_DSB()				Dd_ARM_Dsb_Pou()
 #define ImBmh_IM_BMH_WAIT_USEC( usec )	Dd_ARM_Wait_ns( (usec * 1000) )
@@ -72,7 +73,7 @@ typedef struct {
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
-static volatile T_IM_BMH_CALLBACK S_G_IM_BMH_CALL_BACK_FUNC = NULL;
+static volatile ImBmhCallback S_G_IM_BMH_CALL_BACK_FUNC = NULL;
 
 #if defined(ImBmh_CO_ACT_BMH_ICLK) || defined(ImBmh_CO_ACT_BMHCLOCK)
 // Spin_lock.
@@ -127,7 +128,7 @@ static INT32 imBmhStartCore( BYTE channel_no, const UCHAR sync, const INT32 wait
 	INT32 ercd;
 	UINT32 flg_ptn;
 	union io_bmh_bmhtrg bmhtrg;
-	T_IM_BMH_BMHRE sram;
+	ImBmhBmhre sram;
 
 	// BMH End Flag disable
 	DDIM_User_Clr_Flg( FID_IM_BMH, ~ImBmh_D_IM_BMH_WAIT_FLGPTN );
@@ -159,8 +160,8 @@ static INT32 imBmhStartCore( BYTE channel_no, const UCHAR sync, const INT32 wait
 	if( ercd != D_DDIM_OK ){
 		return ercd;
 	}
-	if(( flg_ptn & D_IM_BMH_FLG_BMH_AXI_ERR ) != 0 ){
-		return D_IM_BMH_AXI_ERR;
+	if(( flg_ptn & ImBmh_D_IM_BMH_FLG_BMH_AXI_ERR ) != 0 ){
+		return ImBmh_D_IM_BMH_AXI_ERR;
 	}
 
 	return D_DDIM_OK;
@@ -290,7 +291,7 @@ INT32 Im_BMH_Init( BYTE channel_no )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Init. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	imBmhOnBmhClk( channel_no );
@@ -326,7 +327,7 @@ INT32 Im_BMH_Start_Sync( BYTE channel_no, const INT32 wait_time )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Start_Sync. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -342,7 +343,7 @@ INT32 Im_BMH_Start_Async( BYTE channel_no )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Start_Async. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -362,12 +363,12 @@ INT32 Im_BMH_Wait_End( BYTE channel_no, UINT32* const p_wait_factor, const INT32
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Wait_End. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( p_wait_factor == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Wait_End. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -376,21 +377,21 @@ INT32 Im_BMH_Wait_End( BYTE channel_no, UINT32* const p_wait_factor, const INT32
 	if( ercd == D_DDIM_USER_E_TMOUT ){
 		// A semaphore acquisition processing time out
 		Ddim_Print(("Im_BMH_Wait_End() time out. ercd = %d\n", ercd ));
-		return D_IM_BMH_SEM_TIMEOUT_ERR;
+		return ImBmh_D_IM_BMH_SEM_TIMEOUT_ERR;
 	}
 
 	if( ercd != D_DDIM_USER_E_OK ){
 		// A semaphore acquisition processing error
 		Ddim_Print(("Im_BMH_Wait_End() system error. ercd = %d\n", ercd ));
-		return D_IM_BMH_SEM_NG;
+		return ImBmh_D_IM_BMH_SEM_NG;
 	}
 
 	DDIM_User_Clr_Flg( FID_IM_BMH, ~flgptn );
 
 	*p_wait_factor = (UINT32)flgptn;
 
-	if(( flgptn & D_IM_BMH_AXI_ERR ) != 0 ){
-		return D_IM_BMH_AXI_ERR;
+	if(( flgptn & ImBmh_D_IM_BMH_AXI_ERR ) != 0 ){
+		return ImBmh_D_IM_BMH_AXI_ERR;
 	}
 
 	return D_DDIM_OK;
@@ -408,7 +409,7 @@ INT32 Im_BMH_Stop( BYTE channel_no )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Stop. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -448,7 +449,7 @@ INT32 Im_BMH_Close( BYTE channel_no )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Close. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -460,7 +461,7 @@ INT32 Im_BMH_Close( BYTE channel_no )
 	if( ercd != D_DDIM_USER_E_OK ){
 		// BMH processing error
 		Ddim_Print(("I:Im_BMH_Close() Error.\n"));
-		return D_IM_BMH_SEM_NG;
+		return ImBmh_D_IM_BMH_SEM_NG;
 	}
 	return D_DDIM_OK;
 }
@@ -468,7 +469,7 @@ INT32 Im_BMH_Close( BYTE channel_no )
 /*
 Get BMH Control
 */
-INT32 Im_BMH_Get_Ctrl( BYTE channel_no, T_IM_BMH_CTRL* const bmh_ctrl )
+INT32 Im_BMH_Get_Ctrl( BYTE channel_no, ImBmhCtrl* const bmh_ctrl )
 {
 	union io_bmh_bmhmd bmhmd;
 	union io_bmh_bmhprm bmhprm;
@@ -477,12 +478,12 @@ INT32 Im_BMH_Get_Ctrl( BYTE channel_no, T_IM_BMH_CTRL* const bmh_ctrl )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Ctrl. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( bmh_ctrl == NULL ){
 		// bmh_ctrl setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Ctrl. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -506,7 +507,7 @@ INT32 Im_BMH_Get_Ctrl( BYTE channel_no, T_IM_BMH_CTRL* const bmh_ctrl )
 /*
 BMH BMHRE set
 */
-INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const T_IM_BMH_BMHRE* const sram )
+INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const ImBmhBmhre* const sram )
 {
 	union io_bmh_bmhre bmhre;
 
@@ -514,17 +515,17 @@ INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const T_IM_BMH_BMHRE* const sram )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhre. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( sram == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhre. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	bmhre.word = 0;
@@ -542,7 +543,7 @@ INT32 Im_BMH_Set_Bmhre( BYTE channel_no, const T_IM_BMH_BMHRE* const sram )
 /*
 Get BMH BMHRE
 */
-INT32 Im_BMH_Get_Bmhre( BYTE channel_no, T_IM_BMH_BMHRE* const sram )
+INT32 Im_BMH_Get_Bmhre( BYTE channel_no, ImBmhBmhre* const sram )
 {
 	union io_bmh_bmhre bmhre;
 
@@ -550,12 +551,12 @@ INT32 Im_BMH_Get_Bmhre( BYTE channel_no, T_IM_BMH_BMHRE* const sram )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Bmhre. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( sram == NULL ){
 		// cnt setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Bmhre. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -569,7 +570,7 @@ INT32 Im_BMH_Get_Bmhre( BYTE channel_no, T_IM_BMH_BMHRE* const sram )
 /*
 Get BMH BMHINTFS-RSST
 */
-INT32 Im_BMH_Get_Rsst( BYTE channel_no, T_IM_BMH_RSST* const rsst )
+INT32 Im_BMH_Get_Rsst( BYTE channel_no, ImBmhRsst* const rsst )
 {
 	union io_bmh_bmhintfs bmhintfs;
 
@@ -577,12 +578,12 @@ INT32 Im_BMH_Get_Rsst( BYTE channel_no, T_IM_BMH_RSST* const rsst )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Rsst. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( rsst == NULL ){
 		// cnt setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Rsst. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -596,7 +597,7 @@ INT32 Im_BMH_Get_Rsst( BYTE channel_no, T_IM_BMH_RSST* const rsst )
 /*
 BMH BMHCONT set
 */
-INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const T_IM_BMH_BMHCONT* const cont )
+INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const ImBmhBmhcont* const cont )
 {
 	union io_bmh_bmhcont bmhcont;
 
@@ -604,12 +605,12 @@ INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const T_IM_BMH_BMHCONT* const cont )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhcont. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( cont == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhcont. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -625,7 +626,7 @@ INT32 Im_BMH_Set_Bmhcont( BYTE channel_no, const T_IM_BMH_BMHCONT* const cont )
 /*
 Get BMH BMHCONT
 */
-INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, T_IM_BMH_BMHCONT* const cont )
+INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, ImBmhBmhcont* const cont )
 {
 	union io_bmh_bmhcont bmhcont;
 
@@ -633,12 +634,12 @@ INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, T_IM_BMH_BMHCONT* const cont )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Bmhcont. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( cont == NULL ){
 		// cnt setting error
 		Ddim_Assertion(("I:Im_BMH_Get_Bmhcont. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
@@ -652,7 +653,7 @@ INT32 Im_BMH_Get_Bmhcont( BYTE channel_no, T_IM_BMH_BMHCONT* const cont )
 /*
 BMH Control set AXI bus I/F Control
 */
-INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const T_IM_BMH_AXI* const axi_ctrl )
+INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const ImBmhAxi* const axi_ctrl )
 {
 	union io_bmh_bmhaxictrl bmhaxictrl;
 
@@ -660,21 +661,21 @@ INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const T_IM_BMH_AXI* const axi_ctrl )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhaxi. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( axi_ctrl == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhaxi. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	bmhaxictrl.word = 0;
 
-	bmhaxictrl.bit.AWPROT  = axi_ctrl->write_protection_type;
-	bmhaxictrl.bit.AWCACHE = axi_ctrl->write_cache_type;
-	bmhaxictrl.bit.ARPROT  = axi_ctrl->read_protection_type;
-	bmhaxictrl.bit.ARCACHE = axi_ctrl->read_cache_type;
+	bmhaxictrl.bit.AWPROT  = axi_ctrl->writeProtectionType;
+	bmhaxictrl.bit.AWCACHE = axi_ctrl->writeCacheType;
+	bmhaxictrl.bit.ARPROT  = axi_ctrl->readProtectionType;
+	bmhaxictrl.bit.ARCACHE = axi_ctrl->readCacheType;
 
 	IO_BMH[channel_no].BMHAXICTRL.word = bmhaxictrl.word;
 
@@ -684,7 +685,7 @@ INT32 Im_BMH_Set_Bmhaxi( BYTE channel_no, const T_IM_BMH_AXI* const axi_ctrl )
 /*
 BMH BMHHCNT set
 */
-INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const T_IM_BMH_BMHHCNT* const cnt )
+INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const ImBmhBmhhcnt* const cnt )
 {
 	union io_bmh_bmhhcnt bmhhcnt;
 
@@ -692,17 +693,17 @@ INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const T_IM_BMH_BMHHCNT* const cnt )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhhcnt. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( cnt == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhhcnt. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	bmhhcnt.word = 0;
@@ -718,7 +719,7 @@ INT32 Im_BMH_Set_Bmhhcnt( BYTE channel_no, const T_IM_BMH_BMHHCNT* const cnt )
 /*
 BMH BMHSAD_WR set
 */
-INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const T_IM_BMH_BMHSAD_WR* const sad_wr )
+INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const ImBmhBmhsadWr* const sadWr )
 {
 	union io_bmh_bmhsad_wr bmhsad_wr;
 
@@ -726,22 +727,22 @@ INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const T_IM_BMH_BMHSAD_WR* const sad
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhsad_wr. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
-	if( sad_wr == NULL ){
+	if( sadWr == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Bmhsad_wr. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	bmhsad_wr.word = 0;
 
-	bmhsad_wr.bit.SAD_WR = sad_wr->sad_wr;
+	bmhsad_wr.bit.SAD_WR = sadWr->sadWr;
 
 	IO_BMH[channel_no].BMHSAD_WR.word = bmhsad_wr.word;
 
@@ -751,7 +752,7 @@ INT32 Im_BMH_Set_Bmhsad_wr( BYTE channel_no, const T_IM_BMH_BMHSAD_WR* const sad
 /*
 BMH LUT set
 */
-INT32 Im_BMH_Set_Lut( BYTE channel_no, const T_IM_BMH_LUT* const lut_data )
+INT32 Im_BMH_Set_Lut( BYTE channel_no, const ImBmhLut* const lut_data )
 {
 	ULONG count;
 	typedef union {
@@ -770,17 +771,17 @@ INT32 Im_BMH_Set_Lut( BYTE channel_no, const T_IM_BMH_LUT* const lut_data )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Lut. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( lut_data == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Set_Lut. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	lut.word = 0;
@@ -797,7 +798,7 @@ INT32 Im_BMH_Set_Lut( BYTE channel_no, const T_IM_BMH_LUT* const lut_data )
 /*
 BMH Dma mode control
 */
-INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const T_IM_BMH_CTRL_DMA* const bmh_ctrl_dma )
+INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const ImBmhCtrlDma* const bmh_ctrl_dma )
 {
 	union io_bmh_bmhdma    bmhdma;
 	union io_bmh_bmhghsize bmhghsize;
@@ -812,17 +813,17 @@ INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const T_IM_BMH_CTRL_DMA* const bmh_ctrl_
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Ctrl_Dma. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( bmh_ctrl_dma == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Ctrl_Dma. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	bmhdma.word    = 0;
@@ -835,10 +836,10 @@ INT32 Im_BMH_Ctrl_Dma( BYTE channel_no, const T_IM_BMH_CTRL_DMA* const bmh_ctrl_
 	bmhsadgh.word  = 0;
 
 	bmhdma.bit.DMAMD         = bmh_ctrl_dma->dmamd;
-	bmhghsize.bit.GHSIZE_CUR = bmh_ctrl_dma->ghsize_cur;
-	bmhghsize.bit.GHSIZE_REF = bmh_ctrl_dma->ghsize_ref;
-	bmhhsize.bit.HSIZE_REF   = bmh_ctrl_dma->hsize_ref;
-	bmhvsize.bit.VSIZE_REF   = bmh_ctrl_dma->vsize_ref;
+	bmhghsize.bit.GHSIZE_CUR = bmh_ctrl_dma->ghsizeCur;
+	bmhghsize.bit.GHSIZE_REF = bmh_ctrl_dma->ghsizeRef;
+	bmhhsize.bit.HSIZE_REF   = bmh_ctrl_dma->hsizeRef;
+	bmhvsize.bit.VSIZE_REF   = bmh_ctrl_dma->vsizeRef;
 	bmhcurad.bit.CURSTAD     = bmh_ctrl_dma->curstad;
 	bmhrefad.bit.REFSTAD     = bmh_ctrl_dma->refstad;
 	bmhsadad.bit.SADSTAD     = bmh_ctrl_dma->sadstad;
@@ -880,10 +881,10 @@ VOID Im_BMH_Int_Handler( BYTE channel_no )
 		// clear interrupt end register
 		imBmhClearAxif( channel_no );
 
-		flg = D_IM_BMH_FLG_BMH_AXI_ERR;
+		flg = ImBmh_D_IM_BMH_FLG_BMH_AXI_ERR;
 
 		// Set End Flag
-		DDIM_User_Set_Flg( FID_IM_BMH, D_IM_BMH_FLG_BMH_AXI_ERR );
+		DDIM_User_Set_Flg( FID_IM_BMH, ImBmh_D_IM_BMH_FLG_BMH_AXI_ERR );
 
 		// User Function Check
 		if( S_G_IM_BMH_CALL_BACK_FUNC != NULL ){
@@ -897,7 +898,7 @@ VOID Im_BMH_Int_Handler( BYTE channel_no )
 
 		imBmhMhOffBmhClk( channel_no );
 
-		flg = D_IM_BMH_FLG_BMH_END;
+		flg = ImBmh_D_IM_BMH_FLG_BMH_END;
 
 		// Set End Flag
 		(VOID)DDIM_User_Set_Flg( FID_IM_BMH, flg );
@@ -914,7 +915,7 @@ VOID Im_BMH_Int_Handler( BYTE channel_no )
 /*
 BMH Control
 */
-INT32 Im_BMH_Ctrl( BYTE channel_no, const T_IM_BMH_CTRL* const bmh_ctrl )
+INT32 Im_BMH_Ctrl( BYTE channel_no, const ImBmhCtrl* const bmh_ctrl )
 {
 	union io_bmh_bmhmd bmhmd;
 	union io_bmh_bmhprm bmhprm;
@@ -923,17 +924,17 @@ INT32 Im_BMH_Ctrl( BYTE channel_no, const T_IM_BMH_CTRL* const bmh_ctrl )
 	if( channel_no >= ImBmh1_E_IM_BMH_CHANNEL_END ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Ctrl. channel_no is abnormal.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 	if( bmh_ctrl == NULL ){
 		// Parameter setting error
 		Ddim_Assertion(("I:Im_BMH_Ctrl. Parameter is NULL.\n"));
-		return D_IM_BMH_INPUT_PARAMETER_ERROR;
+		return ImBmh_D_IM_BMH_INPUT_PARAMETER_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	if( imBmhIsAct( channel_no ) ){
-		return D_IM_BMH_BUSY_NG;
+		return ImBmh_D_IM_BMH_BUSY_NG;
 	}
 
 	bmhmd.word = 0;

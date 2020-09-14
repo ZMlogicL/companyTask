@@ -34,8 +34,8 @@
 #define K_IS_JDSLTM1A(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), K_TYPE_JDSLTM1A))
 
 
-typedef struct _KJdsltm1a KJdsltm1a;
-typedef struct _KJdsltm1aPrivate KJdsltm1aPrivate;
+typedef struct _KJdsltm1a 				KJdsltm1a;
+typedef struct _KJdsltm1aPrivate 	KJdsltm1aPrivate;
 
 
 struct _KJdsltm1a
@@ -50,56 +50,56 @@ typedef struct _IoLtmTop
 	/* 2841_(3000 - 31FFh) */
 	ioltmchrbk rbk;
 	/* 2841_(3200 - 33FFh) */
-	unsigned char dmy320033ff[0x0400 - 0x0200];
+	kuchar dmy320033ff[0x0400 - 0x0200];
 	/* 2841_(3400 - 37FFh) */
 	IoLtmChMap map;
 	/* 2841_(3800 - 3BFFh) */
 	IoLtmChLtm ltm;
 	/* 2841_(3C00 - 3FFFh) */
-	unsigned char dmy3c003fff[0x1000 - 0x0C00];
+	kuchar dmy3c003fff[0x1000 - 0x0C00];
 } IoLtmTop;
 
 /*	structure of mylog0tbl0 (2949_0000h)	*/
 typedef union _MapSramMylog0tbl0
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog0tbl0 :13;
-		unsigned short :3;
+		kushort ylog0tbl0 :13;
+		kushort :3;
 	} bit[512];
 } MapSramMylog0tbl0;
 
 /*	structure of mylog1tbl0 (2949_0400h)	*/
 typedef union _MapSramMylog1tbl0
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog1tbl0 :13;
-		unsigned short :3;
+		kushort ylog1tbl0 :13;
+		kushort :3;
 	} bit[512];
 } MapSramMylog1tbl0;
 
 /*	structure of mylog0tbl1 (2949_0800h)	*/
 typedef union _MapSramMylog0tbl1
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog0tbl1 :13;
-		unsigned short :3;
+		kushort ylog0tbl1 :13;
+		kushort :3;
 	} bit[512];
 } MapSramMylog0tbl1;
 
 /*	structure of mylog1tbl1 (2949_0C00h)	*/
 typedef union _MapSramMylog1tbl1
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog0tbl1 :13;
-		unsigned short :3;
+		kushort ylog0tbl1 :13;
+		kushort :3;
 	} bit[512];
 } MapSramMylog1tbl1;
 
@@ -116,44 +116,44 @@ typedef struct _IoLtmMapSram
 /*	structure of lylog0tbl0 (2949_1000h)	*/
 typedef union _ItmSramLylog0tbl0
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog0tbl0 :13;
-		unsigned short :3;
+		kushort ylog0tbl0 :13;
+		kushort :3;
 	} bit[512];
 } ItmSramLylog0tbl0;
 
 /*	structure of lylog1tbl0 (2949_1400h)	*/
 typedef union _ItmSramLylog1tbl0
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog1tbl0 :13;
-		unsigned short :3;
+		kushort ylog1tbl0 :13;
+		kushort :3;
 	} bit[512];
 } ItmSramLylog1tbl0;
 
 /*	structure of lylog0tbl1 (2949_1800h)	*/
 typedef union _ItmSramLylog0tbl1
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog0tbl1 :13;
-		unsigned short :3;
+		kushort ylog0tbl1 :13;
+		kushort :3;
 	} bit[512];
 } ItmSramLylog0tbl1;
 
 /*	structure of lylog1tbl1 (2949_1C00h)	*/
 typedef union _ItmSramLylog1tbl1
 {
-	unsigned short hword[512];
+	kushort hword[512];
 	struct
 	{
-		unsigned short ylog1tbl1 :13;
-		unsigned short :3;
+		kushort ylog1tbl1 :13;
+		kushort :3;
 	} bit[512];
 } ItmSramLylog1tbl1;
 
@@ -176,7 +176,7 @@ typedef struct _LoLtmSram
 	/* 2949_(1000 - 1FFFh) */
 	IoLtmLtmSram ltmSram;
 	/* 2949_2000 - 2949_FFFFh */
-	unsigned char dmy294920002949ffff[0x294A0000 - 0x29492000];
+	kuchar dmy294920002949ffff[0x294A0000 - 0x29492000];
 } LoLtmSram;
 
 

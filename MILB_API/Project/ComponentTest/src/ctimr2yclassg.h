@@ -29,6 +29,12 @@ typedef struct _CtImR2yClassgPrivate CtImR2yClassgPrivate;
 struct _CtImR2yClassg 
 {
 	KObject parent;
+	ImR2yCtrl4*imR2yCtrl4;
+	ImR2yClk*imR2yClk;
+	CtImR2yClassm*ctImR2yClassm;
+	CtImR2yClassn*ctImR2yClassn;
+	CtImR2yClasso*ctImR2yClasso;
+
 };
 
 

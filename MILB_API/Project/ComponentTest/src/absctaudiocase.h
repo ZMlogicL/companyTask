@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :zhaoxin
 *@brief               :AbsCtAudioCase类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -16,7 +16,7 @@
 #define __ABS_CT_AUDIO_CASE_H__
 #include <string.h>
 #include <stdlib.h>
-#include <klib.h>
+#include <glib-object.h>
 #include "audio_if.h"
 #include "dd_audio.h"
 #include "dd_hdmac0.h"
@@ -25,6 +25,16 @@
 #include "dd_pdm.h"
 #include "dd_gic.h"
 #include "peripheral.h"
+#include "audio_if.h"
+#include "dd_audio.h"
+#include "dd_hdmac0.h"
+#include "dd_top.h"
+#include "dd_cache.h"
+#include "dd_pdm.h"
+#include "dd_gic.h"
+#include "peripheral.h"
+#include <string.h>
+#include <stdlib.h>
 #include "ctddaudio.h"
 #include "ctddaudioint.h"
 #include "ctddaudioctrl.h"
@@ -62,14 +72,16 @@
 #include "ctddaudiothree14.h"
 #include "ctddaudiothree15.h"
 #include "ctddaudiothree16.h"
-#include "ctddaudiofifo.h"
-#include "ctddaudiofifo1.h"
-#include "ctddaudiofifo2.h"
-#include "ctddaudiofifo3.h"
+#include "ctddaudiovariable.h"
 
-#define ABS_TYPE_CT_AUDIO_CASE   (abs_ct_audio_case_get_type())
-#define ABS_IS_CT_AUDIO_CASE(obj)    K_TYPE_CHECK_INSTANCE_TYPE(obj, AbsCtAudioCase)
-#define ABS_CT_AUDIO_CASE(obj)     (K_TYPE_CHECK_INSTANCE_CAST(obj, AbsCtAudioCase))
+G_BEGIN_DECLS
+
+#define ABS_TYPE_CT_AUDIO_CASE					(abs_ct_audio_case_get_type())
+#define ABS_CT_AUDIO_CASE(obj)						(G_TYPE_CHECK_INSTANCE_CAST (obj, AbsCtAudioCase))
+#define ABS_CT_AUDIO_CASE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), ABS_TYPE_CT_AUDIO_CASE, AbsCtAudioCaseClass))
+#define ABS_IS_CT_AUDIO_CASE(obj)					(G_TYPE_CHECK_INSTANCE_TYPE ((obj), ABS_TYPE_CT_AUDIO_CASE))
+#define ABS_IS_CT_AUDIO_CASE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), ABS_TYPE_CT_AUDIO_CASE))
+#define ABS_CT_AUDIO_CASE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), ABS_TYPE_CT_AUDIO_CASE, AbsCtAudioCaseClass))
 
 typedef enum
 {
@@ -90,22 +102,29 @@ typedef enum
 }AbsCtAudioCaseType;
 
 
-typedef struct 				_AbsCtAudioCase AbsCtAudioCase;
-typedef struct 				_AbsCtAudioCasePrivate AbsCtAudioCasePrivate;
+typedef struct 			_AbsCtAudioCase AbsCtAudioCase;
+typedef struct 			_AbsCtAudioCaseClass AbsCtAudioCaseClass;
+typedef struct 			_AbsCtAudioCasePrivate AbsCtAudioCasePrivate;
 
 struct _AbsCtAudioCase
 {
-	KObject parent;
-	void (*doWithArgs)(AbsCtAudioCase *self, kint caseValue);
-	void (*doNoArgs)(AbsCtAudioCase *self, kchar *str);
+	GObject parent;
+	void (*doWithArgs)(AbsCtAudioCase *self, gint caseValue);
+	void (*doNoArgs)(AbsCtAudioCase *self, gchar *str);
 };
 
+struct _AbsCtAudioCaseClass
+{
+	GObjectClass parentclass;
+};
 
-KConstType		            	abs_ct_audio_case_get_type(void);
+GType		            			abs_ct_audio_case_get_type(void);
 AbsCtAudioCase           *abs_ct_audio_case_new(void);
 
-void 								abs_ct_audio_case_do_with_args(AbsCtAudioCase *self, kint caseValue);
-void 								abs_ct_audio_case_do_no_args(AbsCtAudioCase *self, kchar *str);
+void 								abs_ct_audio_case_do_with_args(AbsCtAudioCase *self, gint caseValue);
+void 								abs_ct_audio_case_do_no_args(AbsCtAudioCase *self, gchar *str);
+
+G_END_DECLS
 
 #endif /* __K_CT_AUDIO_CASE_H__ */
 

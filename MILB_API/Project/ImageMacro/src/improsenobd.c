@@ -72,9 +72,9 @@ static void impro_senobd_destructor(ImproSenobd *self)
 Start OBD
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobd_start( E_IM_PRO_OBD_CH ch )
+INT32 impro_senobd_start( EimproObdCh ch )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -82,11 +82,11 @@ INT32 impro_senobd_start( E_IM_PRO_OBD_CH ch )
 	im_pro_comm_get_obd_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obd[blockNum][chNum].obdtrg.bit.obdtrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
-	im_pro_sen_set_start_status(D_IM_SEN_STATUS_OBD00, ch);
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_sen_set_start_status(D_IM_SEN_STATUS_OBD00, ch);
 
 	return D_DDIM_OK;
 }
@@ -96,9 +96,9 @@ Stop OBD
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobd_stop( E_IM_PRO_OBD_CH ch, UCHAR force )
+INT32 impro_senobd_stop( EimproObdCh ch, UCHAR force )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -106,7 +106,7 @@ INT32 impro_senobd_stop( E_IM_PRO_OBD_CH ch, UCHAR force )
 	im_pro_comm_get_obd_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	if (force == 0){
 		// frame stop
 		ioPro.sen.obd[blockNum][chNum].obdtrg.bit.obdtrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -116,9 +116,9 @@ INT32 impro_senobd_stop( E_IM_PRO_OBD_CH ch, UCHAR force )
 		ioPro.sen.obd[blockNum][chNum].obdtrg.bit.obdtrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
-	im_pro_sen_set_stop_status(D_IM_SEN_STATUS_OBD00, ch);
+	im_pro_common_fig_im_pro_sen_set_stop_status(D_IM_SEN_STATUS_OBD00, ch);
 
 	return D_DDIM_OK;
 }
@@ -128,9 +128,9 @@ The control parameter of OBD compensation is set.
 @param[in]	ch : Channel No.
 @param[in]	obCtrl	:	OBD Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_senobd_ctrl( E_IM_PRO_OBD_CH ch, TimproObdCtrl* obCtrl )
+INT32 impro_senobd_ctrl( EimproObdCh ch, TimproObdCtrl* obCtrl )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -138,18 +138,18 @@ INT32 impro_senobd_ctrl( E_IM_PRO_OBD_CH ch, TimproObdCtrl* obCtrl )
 #ifdef CO_PARAM_CHECK
 	if (obCtrl == NULL){
 		Ddim_Assertion(("I:impro_senobd_ctrl error. obCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	im_pro_comm_get_obd_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdthbit.bit.obdlthbit	= obCtrl->obMinValue;
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdthbit.bit.obdhthbit	= obCtrl->obMaxValue;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -167,9 +167,9 @@ The area for OBD detection is set up.
 					value range :lines[2 - 8192] 2pixel boundary<br>
 					target registor :@@OBDVW<br>
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
-INT32 impro_senobd_set_area( E_IM_PRO_OBD_CH ch, T_IM_PRO_AREA_INFO* obArea )
+INT32 impro_senobd_set_area( EimproObdCh ch, TimproAreaInfo* obArea )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -177,35 +177,35 @@ INT32 impro_senobd_set_area( E_IM_PRO_OBD_CH ch, T_IM_PRO_AREA_INFO* obArea )
 #ifdef CO_PARAM_CHECK
 	if (obArea == NULL){
 		Ddim_Assertion(("I:impro_senobd_set_area error. obArea=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobd_D_IM_PRO_OBD_OBDH_MIN, ImproSenobd_D_IM_PRO_OBD_OBDH_MAX,
 					obArea->posX , "impro_senobd_set_area : posX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobd_D_IM_PRO_OBD_OBDV_MIN, ImproSenobd_D_IM_PRO_OBD_OBDV_MAX,
 					obArea->posY , "impro_senobd_set_area : posY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobd_D_IM_PRO_OBD_OBDHW_MIN, ImproSenobd_D_IM_PRO_OBD_OBDHW_MAX,
 					obArea->width , "impro_senobd_set_area : width" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSenobd_D_IM_PRO_OBD_OBDVW_MIN, ImproSenobd_D_IM_PRO_OBD_OBDVW_MAX,
 					obArea->lines , "impro_senobd_set_area : lines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_pro_comm_get_obd_block_ch( ch, &blockNum, &chNum );
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_common_fig_im_pro_on_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdh.bit.obdh		= obArea->posX;
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdv.bit.obdv		= obArea->posY;
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdhw.bit.obdhw	= obArea->width;
 	ioPro.sen.obd[blockNum][chNum].obdcore.obdvw.bit.obdvw	= obArea->lines;
 	// Dd_Top_Start_Clock
-	im_pro_off_pclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SEN );
+	im_pro_off_pclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SEN );
 
 	return D_DDIM_OK;
 }
@@ -216,9 +216,9 @@ Get OBD count
 @param[out]	obcnt :	OBCNT<br>
 			each colors count value range :0 - 0xFFFFF<br>
 @retval		D_DDIM_OK					: Getting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
 */
-INT32 impro_senobd_get_ob_cnt( E_IM_PRO_OBD_CH ch, TimproRgb4* obcnt )
+INT32 impro_senobd_get_ob_cnt( EimproObdCh ch, TimproRgb4* obcnt )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;
@@ -234,9 +234,9 @@ Get OBD data
 @param[out]	obdata : OBD Data
 @retval		D_DDIM_OK					: Getting OK
 @retval		D_IM_PRO_NG					: Getting NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
 */
-INT32 impro_senobd_get_ob_data( E_IM_PRO_OBD_CH ch, TimproRgb4* obdata )
+INT32 impro_senobd_get_ob_data( EimproObdCh ch, TimproRgb4* obdata )
 {
 	UCHAR blockNum = 0;
 	UCHAR chNum = 0;

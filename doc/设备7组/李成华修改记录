@@ -1,3 +1,8 @@
+文件名变更。
+exif_controller.h   --> exifcontroller.h
+exif_controller.c   --> exifcontroller.c
+exif_attr.h              --> exifattr.h
+
 结构体修改
 
 1. T_BF_DCF_EXIF_MP_ENTRY                           -->>BfDcfExifMpEntry

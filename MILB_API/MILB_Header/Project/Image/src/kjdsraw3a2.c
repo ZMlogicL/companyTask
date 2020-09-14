@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kjdsraw3a2.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KJdsraw3a2, k_jdsraw3a2);
+
 #define K_JDSRAW3A2_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KJdsraw3a2Private, K_TYPE_JDSRAW3A2))
+
 
 struct _KJdsraw3a2Private
 {
@@ -41,4 +45,3 @@ KJdsraw3a2* k_jdsraw3a2_new(void)
     KJdsraw3a2* self = k_object_new_with_private(K_TYPE_JDSRAW3A2, sizeof(KJdsraw3a2Private));
     return self;
 }
-

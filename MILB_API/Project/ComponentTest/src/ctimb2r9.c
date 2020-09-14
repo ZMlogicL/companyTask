@@ -12,16 +12,20 @@
 *
 */
 
-#include "ct_im_b2r.h"
+#include "ctimb2r.h"
 
-#include "im_b2r.h"
+// #include "im_b2r.h"
+#include "../../ImageMacro/src/imb2r.h"
 #include "im_pro.h"
-#include "im_pro_common.h"
+// #include "im_pro_common.h"
+#include "../../ImageMacro/src/improcommon.h"
 
 #include "driver_common.h"
-#include "ddim_user_custom.h"
+// #include "ddim_user_custom.h"
+#include "../../../../milb_api_usercustom/src/ddimusercustom.h"
 #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+// #include "dd_top.h"
+#include "../../DeviceDriver/LSITop/src/ddtop.h"
 #endif
 
 #include "jdsb2r.h"
@@ -42,8 +46,8 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImB2r9, ct_im_b2r9);
 /*----------------------------------------------------------------------*/
 /* Macro																*/
 /*----------------------------------------------------------------------*/
-#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (D_IM_B2R_PIPE1+1))
-#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (D_IM_B2R_PIPE2+1))
+#define ct_im_b2r_check_target_pipe_no_1(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE1+1))
+#define ct_im_b2r_check_target_pipe_no_2(a)		(((a)+1) & (ImB2r_D_IM_B2R_PIPE2+1))
 
 
 struct _CtImB2r9Private
@@ -56,16 +60,16 @@ struct _CtImB2r9Private
 static T_IM_B2R_RECT S_GCT_IM_B2R_RECT_PARAM_OUT_RGB_U16 = {
 	.input_size.img_left = 0,
 	.input_size.img_top = 0,
-	.input_size.img_width = D_IM_B2R_SRC_IMG_PIXS_WIDTH,
-	.input_size.img_lines = D_IM_B2R_SRC_IMG_PIXS_LINES,
+	.input_size.img_width = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_WIDTH,
+	.input_size.img_lines = CtImB2r_D_IM_B2R_SRC_IMG_PIXS_LINES,
 	.output_size = {
-		.output_global_w = D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U16,
+		.output_global_w = CtImB2r_D_IM_B2R_DST_IMG_GLOBAL_WIDTH_RGB_U16,
 	},
 };
 
 
 // Deknee table.
-static const USHORT S_GCT_IM_B2R_DEKNEE_TBL[D_IM_B2R_TABLE_MAX_BAYER_DEKNEE] = {
+static const USHORT S_GCT_IM_B2R_DEKNEE_TBL[ImB2r_D_IM_B2R_TABLE_MAX_BAYER_DEKNEE] = {
 	     0,    16,    32,    48,    64,    80,    96,   112,   128,   144,   160,   176,   192,   208,   224,   240,
 	   256,   273,   289,   305,   321,   337,   353,   369,   385,   401,   417,   433,   449,   465,   481,   497,
 	   513,   529,   546,   562,   578,   594,   610,   626,   642,   658,   674,   690,   706,   722,   738,   754,
@@ -116,22 +120,22 @@ kint32 ct_im_b2r9_3_28( CtImB2r9 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbP12;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_ctrl.ybw.output_dtype = D_IM_B2R_STL_DTYP_PACK12;
+	b2r_ctrl.ybw.output_dtype = ImB2r_D_IM_B2R_STL_DTYP_PACK12;
 	b2r_ctrl.ybw.knee_enable = 0;
 	b2r_ctrl.deknee_enable = 1;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_P12_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_P12_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_P12_B_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_P12_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_P12_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_P12_B_ADDR_TOP;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Ctrl( self->pipeNo, &b2r_ctrl );
@@ -171,7 +175,7 @@ kint32 ct_im_b2r9_3_28( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -189,10 +193,10 @@ kint32 ct_im_b2r9_3_28( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -205,10 +209,10 @@ kint32 ct_im_b2r9_3_28( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 * 10 );
@@ -234,7 +238,7 @@ kint32 ct_im_b2r9_3_28( CtImB2r9 *self )
 	ct_im_b2r1_print_axi_reg();
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R End Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -269,7 +273,7 @@ kint32 ct_im_b2r9_3_30( CtImB2r9 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
@@ -328,7 +332,7 @@ kint32 ct_im_b2r9_3_30( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -346,10 +350,10 @@ kint32 ct_im_b2r9_3_30( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -362,10 +366,10 @@ kint32 ct_im_b2r9_3_30( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 * 10 );
@@ -391,7 +395,7 @@ kint32 ct_im_b2r9_3_30( CtImB2r9 *self )
 	ct_im_b2r1_print_axi_reg();
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R End Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -411,7 +415,7 @@ kint32 ct_im_b2r9_3_31( CtImB2r9 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
@@ -469,7 +473,7 @@ kint32 ct_im_b2r9_3_31( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -487,10 +491,10 @@ kint32 ct_im_b2r9_3_31( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -503,10 +507,10 @@ kint32 ct_im_b2r9_3_31( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 * 10 );
@@ -532,7 +536,7 @@ kint32 ct_im_b2r9_3_31( CtImB2r9 *self )
 	ct_im_b2r1_print_axi_reg();
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R End Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -553,18 +557,18 @@ kint32 ct_im_b2r9_3_32( CtImB2r9 *self )
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_CTRL_TRIMMING b2r_ctrl_trimming;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_ctrl_trimming.trimming_enable = D_IM_B2R_ENABLE_ON;
-	b2r_ctrl_trimming.start_x = D_IM_B2R_DST_IMG_PIXS_WIDTH / 4;
-	b2r_ctrl_trimming.start_y = D_IM_B2R_DST_IMG_PIXS_LINES / 4;
-	b2r_ctrl_trimming.width = D_IM_B2R_DST_IMG_PIXS_WIDTH / 2;
-	b2r_ctrl_trimming.lines = D_IM_B2R_DST_IMG_PIXS_LINES / 2;
+	b2r_ctrl_trimming.trimming_enable = ImB2r_D_IM_B2R_ENABLE_ON;
+	b2r_ctrl_trimming.start_x = CtImB2r_D_IM_B2R_DST_IMG_PIXS_WIDTH / 4;
+	b2r_ctrl_trimming.start_y = CtImB2r_D_IM_B2R_DST_IMG_PIXS_LINES / 4;
+	b2r_ctrl_trimming.width = CtImB2r_D_IM_B2R_DST_IMG_PIXS_WIDTH / 2;
+	b2r_ctrl_trimming.lines = CtImB2r_D_IM_B2R_DST_IMG_PIXS_LINES / 2;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
@@ -619,7 +623,7 @@ kint32 ct_im_b2r9_3_32( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -635,10 +639,10 @@ kint32 ct_im_b2r9_3_32( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -651,10 +655,10 @@ kint32 ct_im_b2r9_3_32( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -672,7 +676,7 @@ kint32 ct_im_b2r9_3_32( CtImB2r9 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_other_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -689,7 +693,7 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 	T_IM_B2R_RECT b2r_rect_param = gctImB2rRectParamOutRgbU8;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
@@ -700,13 +704,13 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 	b2r_out_addr = gctImB2rOutAddrRgb;
 
 	// 180 degree rotation.
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)(((ULONG)b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R)
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)(((ULONG)b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R)
 															  + (b2r_rect_param.output_size.output_global_w
 															  * (b2r_rect_param.input_size.img_lines -1)));
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)(((ULONG)b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G)
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)(((ULONG)b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G)
 															  + (b2r_rect_param.output_size.output_global_w
 															  * (b2r_rect_param.input_size.img_lines -1)));
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)(((ULONG)b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B)
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)(((ULONG)b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B)
 															  + (b2r_rect_param.output_size.output_global_w
 															  * (b2r_rect_param.input_size.img_lines -1)));
 
@@ -758,7 +762,7 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "Status\n" ));
 	Im_B2R_Print_Status();
 #endif
@@ -774,10 +778,10 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -790,10 +794,10 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 );
@@ -814,7 +818,7 @@ kint32 ct_im_b2r9_3_33( CtImB2r9 *self )
 	ct_im_b2r1_print_rect_reg();
 	ct_im_b2r1_print_fb2r_ctrl_reg();
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Im_B2R_Print_Status();
 #endif
 
@@ -846,21 +850,21 @@ kint32 ct_im_b2r9_3_35( CtImB2r9 *self )
 	T_IM_B2R_RECT b2r_rect_param = S_GCT_IM_B2R_RECT_PARAM_OUT_RGB_U16;
 	T_IM_B2R_INADDR_INFO b2r_in_addr = gctImB2rInAddrRaw;
 	T_IM_B2R_OUTBANK_INFO b2r_out_addr;
-	DDIM_USER_FLGPTN flgptn = 0;
+	DdimUserCustom_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
 	kint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_B2R_FUNC_NAME ));
 
-	b2r_ctrl.ybw.output_dtype = D_IM_B2R_STL_DTYP_PACK16;
+	b2r_ctrl.ybw.output_dtype = ImB2r_D_IM_B2R_STL_DTYP_PACK16;
 	b2r_ctrl.ybw.knee_enable = 0;
 
 	memset( &b2r_out_addr, '\x00', sizeof(b2r_out_addr) );
 	b2r_out_addr = gctImB2rOutAddrRgb;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U16_R_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U16_G_ADDR_TOP;
-	b2r_out_addr.output_addr[D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)D_IM_B2R_IMG_MEM_OUT_RGB_U16_B_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_R = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U16_R_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_G = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U16_G_ADDR_TOP;
+	b2r_out_addr.output_addr[ImB2r_D_IM_B2R_YBW_BANK_0].rgb.addr_B = (void*)CtImB2r_D_IM_B2R_IMG_MEM_OUT_RGB_U16_B_ADDR_TOP;
 
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_Ctrl( self->pipeNo, &b2r_ctrl );
@@ -896,7 +900,7 @@ kint32 ct_im_b2r9_3_35( CtImB2r9 *self )
 
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", 0 ));
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();
@@ -914,10 +918,10 @@ kint32 ct_im_b2r9_3_35( CtImB2r9 *self )
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R Start\n" ));
 
 #ifdef CO_MSG_PRINT_ON
-	ercd = Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	ercd = Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "0x%x\n", ercd ));
 #else
-	Im_B2R_Start( self->pipeNo, D_IM_B2R_START_WITH_YBW );
+	Im_B2R_Start( self->pipeNo, ImB2r_D_IM_B2R_START_WITH_YBW );
 #endif
 
 #ifdef D_IM_B2R_DEBUG_ON_PC
@@ -930,10 +934,10 @@ kint32 ct_im_b2r9_3_35( CtImB2r9 *self )
 #endif
 
 	if( ct_im_b2r_check_target_pipe_no_1( self->pipeNo ) ){
-		flgptn |= D_IM_B2R1_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R1_INT_FLG_YBW_END;
 	}
 	if( ct_im_b2r_check_target_pipe_no_2( self->pipeNo ) ){
-		flgptn |= D_IM_B2R2_INT_FLG_YBW_END;
+		flgptn |= ImB2r_D_IM_B2R2_INT_FLG_YBW_END;
 	}
 #ifdef CO_MSG_PRINT_ON
 	ercd = Im_B2R_WaitEnd( NULL, flgptn, 60 * 10 );
@@ -959,7 +963,7 @@ kint32 ct_im_b2r9_3_35( CtImB2r9 *self )
 	ct_im_b2r1_print_axi_reg();
 
 
-#ifdef IM_B2R_STATUS_PRINT
+#ifdef ImB2r_IM_B2R_STATUS_PRINT
 	Ddim_Print(( D_IM_B2R_FUNC_NAME "B2R End Status\n" ));
 	Im_B2R_Print_Status();
 	Im_B2R_Print_ClockStatus();

@@ -14,32 +14,52 @@
 #include "imiipfrectregister.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipFrectRegister, im_iip_frect_register);
-#define IM_IIP_FRECT_REGISTER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipFrectRegisterPrivate, IM_TYPE_IIP_FRECT_REGISTER))
+G_DEFINE_TYPE(ImIipFrectRegister, im_iip_frect_register, G_TYPE_OBJECT);
+#define IM_IIP_FRECT_REGISTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_FRECT_REGISTER, ImIipFrectRegisterPrivate));
 
 
 struct _ImIipFrectRegisterPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_frect_register_constructor(ImIipFrectRegister *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_frect_register_class_init(ImIipFrectRegisterClass *klass)
 {
-//	ImIipFrectRegisterPrivate *priv = IM_IIP_FRECT_REGISTER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipFrectRegisterPrivate));
 }
 
-static void im_iip_frect_register_destructor(ImIipFrectRegister *self)
+static void 		im_iip_frect_register_init(ImIipFrectRegister *self)
 {
-//	ImIipFrectRegisterPrivate *priv = IM_IIP_FRECT_REGISTER_GET_PRIVATE(self);
+	ImIipFrectRegisterPrivate *priv = IM_IIP_FRECT_REGISTER_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipFrectRegisterPrivate *priv = IM_IIP_FRECT_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_frect_register_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipFrectRegisterPrivate *priv = IM_IIP_FRECT_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_frect_register_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipFrectRegister* im_iip_frect_register_new(void)
+ImIipFrectRegister* 		im_iip_frect_register_new(void)
 {
-	ImIipFrectRegister *self = k_object_new_with_private(IM_TYPE_IIP_FRECT_REGISTER, sizeof(ImIipFrectRegisterPrivate));
+	ImIipFrectRegister *self = g_object_new(IM_TYPE_IIP_FRECT_REGISTER, NULL);
 	return self;
 }
 

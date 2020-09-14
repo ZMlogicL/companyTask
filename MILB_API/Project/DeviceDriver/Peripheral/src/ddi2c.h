@@ -90,11 +90,11 @@ typedef union _DdI2cSlaveAddr DdI2cSlaveAddr;
 /* Structure															*/
 /*----------------------------------------------------------------------*/
 union _DdI2cSlaveAddr {
-	UCHAR		addrByte[DdI2cCtrl_ADDR_BYTE_END];	// Used to access whole byte
+	kuchar		addrByte[DdI2cCtrl_ADDR_BYTE_END];	// Used to access whole byte
 	struct {
-		UCHAR	rw				:1;		// 1: Read from slave	0:Write	to slave
-		UCHAR	addr			:7;		// 7 bit slave address
-		UCHAR					:8;		// reserve
+		kuchar	rw				:1;		// 1: Read from slave	0:Write	to slave
+		kuchar	addr			:7;		// 7 bit slave address
+		kuchar					:8;		// reserve
 	} bit;	// Used to 7 bit data
 };
 
@@ -116,15 +116,15 @@ struct  _DdI2c {
 KConstType 	dd_i2c_get_type(void);
 DdI2c* 		dd_i2c_get(void);
 
-UINT32 		dd_i2c_get_event_flg(DdI2c *self, UCHAR ch);
+kuint32 	dd_i2c_get_event_flg(DdI2c *self, kuchar ch);
 
-VOID 		dd_i2c_init_pec_info(DdI2c *self, UCHAR ch);
+void 		dd_i2c_init_pec_info(DdI2c *self, kuchar ch);
 
 /**
 Terminate the I2C.
 @param[in] ch	I2C channel number (0 to 2)
 */
-VOID 		dd_i2c_terminate(DdI2c *self, UCHAR ch);
+void 		dd_i2c_terminate(DdI2c *self, kuchar ch);
 
 /**
 Get Test SDA.
@@ -133,7 +133,7 @@ Get Test SDA.
 @retval D_DDIM_OK					: OK
 @retval DdI2c_INPUT_PARAM_ERROR	: Input Parameter Error
 */
-INT32 		dd_i2c_get_test_sda(DdI2c *self, UCHAR ch, UCHAR* sda);
+kint32 		dd_i2c_get_test_sda(DdI2c *self, kuchar ch, kuchar* sda);
 
 /**
 Get Error Cause.
@@ -146,7 +146,7 @@ Get Error Cause.
 @retval	DdI2c_PEC_ERROR			: Packet Error
 @remarks	This API uses DDIM_User_Set_Flg().
 */
-UINT32 		dd_i2c_get_error_cause(DdI2c *self, UCHAR ch);
+kuint32 	dd_i2c_get_error_cause(DdI2c *self, kuchar ch);
 
 /**
 Set Toggle SCL.
@@ -156,7 +156,7 @@ Setting 1 to this API while SDA is high is ignored.<br>
 @retval D_DDIM_OK					: OK
 @retval DdI2c_INPUT_PARAM_ERROR	: Input Parameter Error
 */
-INT32 		dd_i2c_set_toggle_scl(DdI2c *self, UCHAR ch);
+kint32 		dd_i2c_set_toggle_scl(DdI2c *self, kuchar ch);
 
 /**
 Intterupt handler.
@@ -164,35 +164,35 @@ The interruption flag is cleared, and the CallBack function is called when slave
 (Only an interruption clear flag of CallBack when it is unregistered.)
 @param [in] ch	I2C channel number (0 to 2)
 */
-VOID 		dd_i2c_int_handler(DdI2c *self, UCHAR ch);
+void 		dd_i2c_int_handler(DdI2c *self, kuchar ch);
 
-INT32 		dd_i2c_open(DdI2c *self, UCHAR ch, INT32 timeout);
-INT32	 	dd_i2c_close(DdI2c *self, UCHAR ch);
-INT32 		dd_i2c_start_master(DdI2c *self, UCHAR ch, const DdI2cStartInfo* const startInfo);
-INT32 		dd_i2c_stop_master(DdI2c *self, UCHAR ch);
-INT32 		dd_i2c_start_slave(DdI2c *self, UCHAR ch);
-INT32 		dd_i2c_stop_slave(DdI2c *self, UCHAR ch);
-INT32 		dd_i2c_ctrl_master(DdI2c *self, UCHAR ch, const DdI2cCtrlMaster* const ctrlMaster);
-INT32 		dd_i2c_get_ctrl_master(DdI2c *self, UCHAR ch, DdI2cCtrlMaster* const ctrlMaster);
-INT32 		dd_i2c_ctrl_slave(DdI2c *self, UCHAR ch, const DdI2cCtrlSlave* const ctrlSlave);
-INT32 		dd_i2c_get_ctrl_slave(DdI2c *self, UCHAR ch, DdI2cCtrlSlave* const ctrlSlave);
-INT32 		dd_i2c_ctrl_smbus(DdI2c *self, UCHAR ch, const DdI2cCtrlSmbus* const ctrlSmbus);
-INT32 		dd_i2c_get_ctrl_smbus(DdI2c *self, UCHAR ch, DdI2cCtrlSmbus* const ctrlSmbus);
+kint32 		dd_i2c_open(DdI2c *self, kuchar ch, kint32 timeout);
+kint32	 	dd_i2c_close(DdI2c *self, kuchar ch);
+kint32 		dd_i2c_start_master(DdI2c *self, kuchar ch, const DdI2cStartInfo* const startInfo);
+kint32 		dd_i2c_stop_master(DdI2c *self, kuchar ch);
+kint32 		dd_i2c_start_slave(DdI2c *self, kuchar ch);
+kint32 		dd_i2c_stop_slave(DdI2c *self, kuchar ch);
+kint32 		dd_i2c_ctrl_master(DdI2c *self, kuchar ch, const DdI2cCtrlMaster* const ctrlMaster);
+kint32 		dd_i2c_get_ctrl_master(DdI2c *self, kuchar ch, DdI2cCtrlMaster* const ctrlMaster);
+kint32 		dd_i2c_ctrl_slave(DdI2c *self, kuchar ch, const DdI2cCtrlSlave* const ctrlSlave);
+kint32 		dd_i2c_get_ctrl_slave(DdI2c *self, kuchar ch, DdI2cCtrlSlave* const ctrlSlave);
+kint32 		dd_i2c_ctrl_smbus(DdI2c *self, kuchar ch, const DdI2cCtrlSmbus* const ctrlSmbus);
+kint32 		dd_i2c_get_ctrl_smbus(DdI2c *self, kuchar ch, DdI2cCtrlSmbus* const ctrlSmbus);
 #ifdef CO_DDIM_UTILITY_USE
-INT32 		dd_i2c_set_scl(DdI2c *self, UCHAR ch, UCHAR scl);
-INT32 		dd_i2c_get_scl(DdI2c *self, UCHAR ch, UCHAR* scl);
+kint32 		dd_i2c_set_scl(DdI2c *self, kuchar ch, kuchar scl);
+kint32 		dd_i2c_get_scl(DdI2c *self, kuchar ch, kuchar* scl);
 #endif
 
-DdI2cState dd_i2c_get_state(DdI2c *self, UCHAR ch);
-void 		dd_i2c_set_state(DdI2c *self, UCHAR ch, DdI2cState state);
-void 		dd_i2c_set_next_event(DdI2c *self, UCHAR ch, DdI2cEvent nextEvent);
-UINT32 		dd_i2c_get_error(DdI2c *self, UCHAR ch);
-void 		dd_i2c_set_error(DdI2c *self, UCHAR ch, UINT32 err);
-void 		dd_i2c_set_data_count(DdI2c *self, UCHAR ch, UINT32 dataCount);
-void 		dd_i2c_set_data(DdI2c *self, UCHAR ch, UCHAR* data);
-void 		dd_i2c_set_data_num(DdI2c *self, UCHAR ch, UINT32 dataNum);
-UINT32 		dd_i2c_get_pec_byte_num(DdI2c *self, UCHAR ch);
-void 		dd_i2c_set_pec_byte_num(DdI2c *self, UCHAR ch, UINT32 pecByteNum);
+DdI2cState 	dd_i2c_get_state(DdI2c *self, kuchar ch);
+void 		dd_i2c_set_state(DdI2c *self, kuchar ch, DdI2cState state);
+void 		dd_i2c_set_next_event(DdI2c *self, kuchar ch, DdI2cEvent nextEvent);
+kuint32 	dd_i2c_get_error(DdI2c *self, kuchar ch);
+void 		dd_i2c_set_error(DdI2c *self, kuchar ch, kuint32 err);
+void 		dd_i2c_set_data_count(DdI2c *self, kuchar ch, kuint32 dataCount);
+void 		dd_i2c_set_data(DdI2c *self, kuchar ch, kuchar* data);
+void 		dd_i2c_set_data_num(DdI2c *self, kuchar ch, kuint32 dataNum);
+kuint32 	dd_i2c_get_pec_byte_num(DdI2c *self, kuchar ch);
+void 		dd_i2c_set_pec_byte_num(DdI2c *self, kuchar ch, kuint32 pecByteNum);
 
 
 #ifdef __cplusplus

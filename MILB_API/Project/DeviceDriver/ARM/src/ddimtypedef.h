@@ -81,7 +81,7 @@ typedef unsigned char* kpbyte; /**< Type is defined to PBYTE */
 //typedef int BOOL; /**< Type is defined to BOOL */
 //#endif	// __TYPEDEF_H__
 //typedef unsigned int SIZE_T; /**< Type is defined to SIZE_T */
-typedef void (*VpCallback)(); /**< Type is defined to Callback function pointer */
+typedef void (*VpCallbackFunc)(); /**< Type is defined to Callback function pointer */
 
 
 #endif	// _DDIM_TYPEDEF_H_

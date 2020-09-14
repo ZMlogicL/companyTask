@@ -1,7 +1,7 @@
 /*
  *ctimdisp1b.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -26,25 +29,49 @@
 #include "imdisp1group.h"
 #include "ctimdisp1b.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp1b, ct_im_disp1b, IM_TYPE_DISP1_PARENT)
-#define CT_IM_DISP1B_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp1bPrivate, CT_TYPE_IM_DISP1B))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp1b, ct_im_disp1b, IM_TYPE_DISP1_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP1B_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP1B, CtImDisp1bPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp1bPrivate
 {
-	kpointer qwertyu;
+//
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo);
+static gboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, gint32 *pSeqNo);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp1b_constructor(CtImDisp1b *self)
+static void ct_im_disp1b_class_init(CtImDisp1bClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp1bPrivate));
+}
+
+static void ct_im_disp1b_init(CtImDisp1b *self)
 {
 	//CtImDisp1bPrivate *priv = CT_IM_DISP1B_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -53,19 +80,37 @@ static void ct_im_disp1b_constructor(CtImDisp1b *self)
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 }
 
-static void ct_im_disp1b_destructor(CtImDisp1b *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp1b *self = CT_IM_DISP1B(object);
+//	CtImDisp1bPrivate *priv = CT_IM_DISP1B_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp1b_parent_class)->dispose(object);
 }
 
-/*
- * PUBLIC
- * */
+static void finalize_od(GObject *object)
+{
+//	CtImDisp1b *self = CT_IM_DISP1B(object);
+//	CtImDisp1bPrivate *priv = CT_IM_DISP1B_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp1b_parent_class)->finalize(object);
+}
+
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
+static gboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, gint32 *pSeqNo)
 {
 //	CtImDisp1b *self = (CtImDisp1b *)parent;
-	kint32 seqNo = *pSeqNo;
+	gint32 seqNo = *pSeqNo;
 	ImDisp1Group *imDisp1Group = (ImDisp1Group *)im_disp1_parent_get_group(parent);
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_SR() normal\n", seqNo++));
@@ -602,7 +647,7 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Warning() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetWrng 0 1 0 0 0 0 0 0 0 0 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetWrng 0 1 0 0 0 0 0 0 0 0 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Parameter error
 	im_disp1_parent_pctest_wrap(parent, "imdisp SetWrng 1 0 0x00000301 0x00050002 0xFFF3FFF4 0x00000003 "
 			"0xFFF5FFF60000FFF8 0xFFF9FFFA0000FFFC 0x00000003 0xFFFDFFFE0000FFF0 0xEEE1EEE20000EEE3 0x00000001");
@@ -649,9 +694,9 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 			"0x0005000600000008 0x0009000A0000000C 0x00000003 0x000D000E00000001 0x0001000200000003 0x00000001");
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetWrng 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetWrng 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetWrng 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetWrng 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Warning() error\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetWrng 0 0");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
@@ -659,20 +704,20 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Blink_Timer()\n", seqNo++));
 	// HDMI setting, Normal(BTIMH/BTIML/BTIMD)
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 0 0x0001F1F2");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 0 0x0001F1F2");
 	// LCD setting, Normal(BTIMH/BTIML/BTIMD)
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 1 0x00013F3F");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 1 0x00013F3F");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Blink_Timer() normal\n", seqNo++));
 	// HDMI setting, Normal(BTIMH/BTIML/BTIMD)
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 0 0x0001F1F2");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 0 0x0001F1F2");
 	// LCD setting, Normal(BTIMH/BTIML/BTIMD)
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 1 0x00013F3F");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetBTim 1 0x00013F3F");
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetBTim 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetBTim 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetBTim 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetBTim 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Blink_Timer() error\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetBTim 0 0");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
@@ -680,34 +725,34 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Zebra() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000203 0x00000100 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000203 0x00000100 0x00000001");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x0000F2F3 0x00000001 0x00000000");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x0000F2F3 0x00000001 0x00000000");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Zebra() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 0 0 0x00000102 0x00000101 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 0 0 0x00000102 0x00000101 0x00000001");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 0 1 0x00000201 0x00000101 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 0 1 0x00000201 0x00000101 0x00000001");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000102 0x00000101 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000102 0x00000101 0x00000001");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x00000201 0x00000101 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x00000201 0x00000101 0x00000001");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Zebra() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000203 0x00000100 0x00000001");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 0 0x00000203 0x00000100 0x00000001");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, LZBWID, LZBV, LZBPT
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x0000F2F3 0x00000001 0x00000000");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetZebra 1 1 0x0000F2F3 0x00000001 0x00000000");
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Zebra() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 0 0");
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetZebra 0 1");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Matrix() normal\n", seqNo++));
@@ -741,9 +786,9 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 			"0xE101F1000000F102 0xE111F1100000F112 0xE121E1200000E122");
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetMax 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetMax 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetMax 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetMax 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Matrix() error\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetMax 0 0");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
@@ -763,35 +808,35 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 	im_disp1_group_ct_im_disp3_pclk_counter_off(imDisp1Group);
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x02 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 1 1 1");
 
 	im_disp1_group_ct_im_disp3_pclk_counter_on(imDisp1Group);
 	IO_DISP.MAIN[0].LCH.LTRG.word = 3;
@@ -805,41 +850,41 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 	im_disp1_group_ct_im_disp3_pclk_counter_off(imDisp1Group);
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 0 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x01 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x04 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Gamma_Enable() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 0 0 0x01 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 0 0 0x01 1 0 0");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 0 1 0x02 1 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 0 1 0x02 1 0 0");
 
 	im_disp1_group_ct_im_disp3_pclk_counter_on(imDisp1Group);
 	IO_DISP.MAIN[0].LCH.LTRG.word = 3;
@@ -853,43 +898,43 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 	im_disp1_group_ct_im_disp3_pclk_counter_off(imDisp1Group);
 
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 0 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 0 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 0 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x02 0 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 0 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x04 0 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 0 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 0 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Parameter error
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 0 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x10 0 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Gamma_Enable() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x01 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 0 0x08 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x08 1 1 1");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, Normal
-	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamEn 1 1 0x10 1 1 1");
 
 	// CtImDisp3_D_CT_IM_DISP_BOTH_PARA, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 3 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 3 0");
 	// CtImDisp3_D_CT_IM_DISP_BOTH_PARA, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 3 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 3 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Gamma_Enable() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 0 0");
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 0 1");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 1 1");
 	// CtImDisp3_D_CT_IM_DISP_SECOND_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 2 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 2 0");
 	// CtImDisp3_D_CT_IM_DISP_SECOND_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 2 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamEn 2 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Gamma_Mode() normal\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp SetGamMod 0 1");	// HDMI setting, GMMD
@@ -897,15 +942,15 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Gamma_Mode() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting, GMMD
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting, GMMD
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Gamma_Mode() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting, GMMD
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 0 0");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting, GMMD
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetGamMod 0 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Alpha_Value() normal\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp SetAlpVal 0 0x00000001");	// HDMI setting, lalp
@@ -913,15 +958,15 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Alpha_Value() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Alpha_Value() error\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 0 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 0 0");
 	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 0 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetAlpVal 0 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Set_Display_Position() normal\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp SetPos 0 0x00000000");	// HDMI setting, Normal
@@ -935,22 +980,26 @@ static kboolean imDisp1bDoPctest_od(ImDisp1Parent *parent, kint32 *pSeqNo)
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Display_Position() normal\n", seqNo++));
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, HDMI setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 1 0");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 1 0");
 	// CtImDisp3_D_CT_IM_DISP_FIRST_PARA_ONLY, LCD setting
-	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 1 1");	
+	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 1 1");
 
 	Ddim_Print(("*** [CT] 01-01-%03d : Im_DISP_Get_Display_Position() error\n", seqNo++));
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 0 0");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, HDMI setting
 	im_disp1_parent_pctest_wrap(parent, "imdisp GetPos 0 1");	// CtImDisp3_D_CT_IM_DISP_NO_PARA, LCD setting
 
 	*pSeqNo = seqNo;
-	return ktrue;
+	return gtrue;
 }
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
+/*
+ * PUBLIC
+ * */
+
 CtImDisp1b *ct_im_disp1b_new()
 {
-	CtImDisp1b *self = (CtImDisp1b *) k_object_new_with_private(CT_TYPE_IM_DISP1B,sizeof(CtImDisp1bPrivate));
+	CtImDisp1b *self = (CtImDisp1b *) g_object_new(CT_TYPE_IM_DISP1B, NULL);
 	if(!self){//Ddim_Assertion(self)
 		Ddim_Print(("!! new CtImDisp1b NULL: %s (%d)", __FILE__, __LINE__));
 		return NULL;

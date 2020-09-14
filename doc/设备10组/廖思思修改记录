@@ -5,22 +5,22 @@ mdf_user_custom
 
 2、公有方法命名规范
 VOID FS_ipcu_callback_dummy(UCHAR id, UINT32 pdata, UINT32 length, UINT32 cont, UINT32 totalLength) 
-改为 VOID mdf_user_custom_ipcu_callback_dummy(MdfUserCustom* self, CallbackDummy callbackDummy);
+改为 void mdf_user_custom_ipcu_callback_dummy(MdfUserCustom* self, CallbackDummy callbackDummy);
 
 FS_VOID FS_localtime(tm *time)  
-改为 FS_VOID  mdf_user_custom_localtime(MdfUserCustom* self)
+改为 void mdf_user_custom_localtime(MdfUserCustom* self);
 
 FS_VOID FS_SD_getTaskID(FS_DWORD *Taskid) 
-改为 FS_VOID mdf_user_custom_sd_get_task_id(MdfUserCustom* self, FS_DWORD* Taskid);
+改为 void mdf_user_custom_sd_get_task_id(MdfUserCustom* self, kulong* Taskid);
 
 FS_VOID *FS_SD_malloc(FS_DWORD size)  
-改为 FS_VOID* mdf_user_custom_sd_malloc(MdfUserCustom* self, FS_DWORD size);
+改为 kpointer mdf_user_custom_sd_malloc(MdfUserCustom* self, kulong size);
 
 FS_VOID FS_SD_free(FS_VOID *address)  
-改为 FS_VOID mdf_user_custom_sd_free(MdfUserCustom* self, FS_VOID* address);
+改为 void mdf_user_custom_sd_free(MdfUserCustom* self, kpointer address);
 
 void *FS_memcpy(void *buf1, const void *buf2, SIZE_T n) 
-改为 kpointer mdf_user_custom_memcpy(MdfUserCustom* self, kpointer buf1, kconstpointer buf2, SIZE_T n);
+改为 kpointer mdf_user_custom_memcpy(MdfUserCustom* self, kpointer buf1, kconstpointer buf2, kuint32 n);
 
 
 
@@ -36,133 +36,133 @@ vfs
 
 3、公有方法命名规范：
 extern FW_INT32 BF_Vfs_Open(const FW_CHAR* fname, FW_USHORT mode, FW_USHORT amode);  
-修改为  FW_INT32 vfs_two_open(VfsTwo* self, const FW_CHAR* fname, FW_USHORT mode, FW_USHORT amode);
+修改为 kint vfs_two_open(VfsTwo* self, KConstType fname, kushort mode, kushort amode);
 
 extern FW_INT32 BF_Vfs_Close(FW_INT32 fileNo);  
-修改为  FW_INT32   vfs_two_close(VfsTwo* self, FW_INT32 fileNo);
+修改为 kint vfs_two_close(VfsTwo* self, kint fileNo);
 
 extern FW_INT32 BF_Vfs_Read(FW_INT32 fileNo, FW_VOID* addr, FW_ULONG count, FW_ULONG* length);  
-修改为  FW_INT32 vfs_two_read(VfsTwo* self, FW_INT32 fileNo, const FW_VOID* addr, FW_ULONG count, FW_ULONG* length);
+修改为 kint vfs_two_read(VfsTwo* self, kint fileNo, kconstpointer addr, kulong count, kulong* length);
 
 extern FW_INT32 BF_Vfs_Write(FW_INT32 fileNo, const  FW_VOID* addr, FW_ULONG count, FW_ULONG* length);  
-修改为  FW_INT32 vfs_two_write(VfsTwo* self, FW_INT32 fileNo, const  FW_VOID* addr, FW_ULONG count, FW_ULONG* length);
+修改为 kint vfs_two_write(VfsTwo* self, kint fileNo, kconstpointer addr, kulong count, kulong* length);
 
 extern FW_INT32 BF_Vfs_Lseek(FW_INT32 fileNo, FW_INT32 offset, FW_USHORT whence, FW_ULONG* length);  
-修改为  FW_INT32 vfs_two_lseek(VfsTwo* self, FW_INT32 fileNo, FW_INT32 offset, FW_USHORT whence, FW_ULONG* length);
+修改为 kint vfs_two_lseek(VfsTwo* self, kint fileNo, kint offset, kushort whence, kulong* length);
 
 extern FW_INT32 BF_Vfs_Lseek64(FW_INT32 fileNo, FW_INT64 offset, FW_USHORT whence, FW_INT64* length);  
-修改为  FW_INT32 vfs_two_lseek64(VfsTwo* self, FW_INT32 fileNo, FW_INT64 offset, FW_USHORT whence, FW_INT64* length);
+修改为 kint vfs_two_lseek64(VfsTwo* self, kint fileNo, klonglong offset, kushort whence, klonglong* length);
 
 extern FW_INT32 BF_Vfs_Start_MDF( FW_VOID );  
-修改为  FW_INT32 vfs_two_start_mdf(VfsTwo* self);
+修改为 kint vfs_two_start_mdf(VfsTwo* self);
 
 extern FW_INT32 BF_Vfs_Init_Drv( FW_CHAR* drvname, FW_INT32 mediaid );  
-修改为  FW_INT32 vfs_two_init_drv(VfsTwo* self, FW_CHAR* drvname, FW_INT32 mediaid);
+修改为 kint vfs_two_init_drv(VfsTwo* self, KType drvname, kint mediaid);
 
 extern FW_INT32 BF_Vfs_End_Drv( FW_CHAR* drvname );  
-修改为  FW_INT32 vfs_two_end_drv(VfsTwo* self, FW_CHAR* drvname);
+修改为 kint vfs_two_end_drv(VfsTwo* self, KType drvname);
 
 extern FW_INT32 BF_Vfs_Set_Write_Err_Cb( FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback );  
-修改为  FW_INT32 vfs_two_set_write_err_cb(VfsTwo* self, FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback);
+修改为 kint vfs_two_set_write_err_cb(VfsTwo* self, kuint fNo, VFS_SET_WRITE_ERR_CB pCallback);
 
 extern FW_INT32 BF_Vfs_Stat_VFS( FW_CHAR* drvname, T_BF_FS_IF_STATVFS* buf ); 
-修改为  FW_INT32 vfs_one_stat_vfs(VfsOne* self, const FW_CHAR* drvname, FsIfStatVfs* buf);
+修改为 kint vfs_one_stat_vfs(VfsOne* self, KConstType drvname, FsIfStatVfs* buf);
 
 extern FW_INT32 BF_Vfs_Get_Free_Space( FW_CHAR* drvname, FW_UINT32* blksize, FW_UINT32* blocks, FW_UINT32* bfree );  
-修改为 FW_INT32 vfs_one_get_free_space(VfsOne* self, const FW_CHAR* drvname,FW_UINT32* blksize, FW_UINT32* blocks, FW_UINT32* bfree);
+修改为 kint vfs_one_get_free_space(VfsOne* self, KConstType drvname, kuint* blksize, kuint* blocks, kuint* bfree);
 
 extern FW_INT32 BF_Vfs_Get_Cur_Drv( FW_CHAR* drvname ); 
- 修改为  FW_INT32 vfs_one_get_cur_drv(VfsOne* self, FW_CHAR* drvname);
+ 修改为 kint vfs_one_get_cur_drv(VfsOne* self, KType drvname);
  
 extern FW_INT32 BF_Vfs_Set_Vol_Label( FW_CHAR* drvname, FW_CHAR* label );  
-修改为  FW_INT32 vfs_one_set_vol_label(VfsOne* self, const FW_CHAR* drvname, const FW_CHAR* label);
+修改为 kint vfs_one_set_vol_label(VfsOne* self, KConstType drvname, KConstType label);
 
 extern FW_INT32 BF_Vfs_Get_Vol_Label( FW_CHAR* drvname, FW_CHAR* label );  
-修改为  FW_INT32 vfs_one_get_vol_label(VfsOne* self, FW_CHAR* drvname, FW_CHAR* label);
+修改为 kint vfs_one_get_vol_label(VfsOne* self, KType drvname, KType label);
 
 extern FW_INT32 BF_Vfs_Fsync( FW_INT32 fileNo );  
-修改为  FW_INT32 vfs_one_fsync(VfsOne* self, FW_INT32 fileNo);
+修改为 kint vfs_one_fsync(VfsOne* self, kint fileNo);
 
 extern FW_INT32 BF_Vfs_Sync( FW_CHAR* drvname );  
-修改为  FW_INT32 vfs_one_sync(VfsOne* self, const FW_CHAR* drvname);
+修改为 kint vfs_one_sync(VfsOne* self, KConstType drvname);
 
 extern FW_INT32 BF_Vfs_Set_Protection_Mode( FW_CHAR* drvname, FW_UINT32 mode );  
-修改为  FW_INT32 vfs_one_set_protection_mode(VfsOne* self, const FW_CHAR* drvname, FW_UINT32 mode);
+修改为 kint vfs_one_set_protection_mode(VfsOne* self, KConstType drvname, kuint mode);
 
 extern FW_INT32 BF_Vfs_Rename( FW_CHAR* srcname, FW_CHAR* dstname );  
-修改为  FW_INT32 vfs_one_rename(VfsOne* self, const FW_CHAR* srcname, const FW_CHAR* dstname);
+修改为 kint vfs_one_rename(VfsOne* self, KConstType srcname, KConstType dstname);
 
 extern FW_INT32 BF_Vfs_Stat( FW_CHAR* fname, T_BF_FS_IF_STAT* sbuf );  
-修改为  FW_INT32 vfs_one_stat(VfsOne* self, const FW_CHAR* fname, FsIfStat* sbuf);
+修改为 kint vfs_one_stat(VfsOne* self, KConstType fname, FsIfStat* sbuf);
 
 extern FW_INT32 BF_Vfs_Set_Attribute( FW_CHAR* fname, FW_INT32 attributes ); 
-修改为  FW_INT32 vfs_one_set_attribute(VfsOne* self, const FW_CHAR* fname, FW_INT32 attributes);
+修改为 kint vfs_one_set_attribute(VfsOne* self, KConstType fname, kint attributes);
 
 extern FW_INT32 BF_Vfs_Set_Attribute_Multi( FW_CHAR* filename_list[][D_BF_FS_VFS_SETATTRIBUTE_MULTI_SHORTNAME_MAX], FW_UCHAR* attributes, FW_UCHAR* attr_mode, FW_INT32* fnum ); 
- 修改为  FW_INT32 vfs_one_set_attribute_multi(VfsOne* self, const FW_CHAR* filenameList[][VfsOne_SETATTRIBUTE_MULTI_SHORTNAME_MAX], const FW_UCHAR* attributes, const FW_UCHAR* attrMode, const FW_INT32* fnum);
+修改为 kint vfs_one_set_attribute_multi(VfsOne* self, KConstType filenameList[][VfsOne_SETATTRIBUTE_MULTI_SHORTNAME_MAX], const kuchar* attributes, const kuchar* attrMode, const kint* fnum);
 
 extern FW_INT32 BF_Vfs_Get_Attribute( FW_CHAR* fname, FW_UCHAR* attributes );  
-修改为  FW_INT32 vfs_one_get_attribute(VfsOne* self, const FW_CHAR* fname, FW_UCHAR* attributes);
+修改为 kint vfs_one_get_attribute(VfsOne* self, KConstType fname, kuchar* attributes);
 
 extern FW_INT32 BF_Vfs_Utime( FW_CHAR* fname, T_BF_FS_utimbuf* times );  
-修改为  FW_INT32 vfs_one_utime(VfsOne* self, const FW_CHAR* fname, const FsUtimbuf* times);
+修改为 kint vfs_one_utime(VfsOne* self, KConstType fname, const FsUtimbuf* times);
 
 extern FW_INT32 BF_Vfs_Utime_Ex( FW_CHAR* fname, FW_UINT32 utime_mode, FsUtimbufEx* times );  
-修改为  FW_INT32 vfs_one_utime_ex(VfsOne* self, const FW_CHAR* fname, const FW_UINT32 utimeMode, const FsUtimbufEx* times);
+修改为 kint vfs_one_utime_ex(VfsOne* self, KConstType fname, const kuint utimeMode, const FsUtimbufEx* times);
 
 extern FW_INT32 BF_Vfs_Create(FW_CHAR* dirname, FW_INT32 amode);
-修改为  FW_INT32   vfs_one_create(VfsOne* self, const FW_CHAR* dirname, const FW_INT32 amode);
+修改为 kint vfs_three_create(VfsThree* self, KConstType dirname, const kint amode);
 
 extern FW_INT32 BF_Vfs_Copy(FW_CHAR* srcname, FW_CHAR* dstname);
-修改为FW_INT32   vfs_one_copy(VfsOne* self, const FW_CHAR* srcname, const FW_CHAR* dstname);
+修改为 kint vfs_three_copy(VfsThree* self, KConstType srcname, KConstType dstname);
 
 extern FW_INT32 BF_Vfs_Remove(FW_CHAR* fname);
-修改为 FW_INT32   vfs_one_remove(VfsOne* self, const FW_CHAR* fname);
+修改为 kint vfs_three_remove(VfsThree* self, KConstType fname);
 
 extern FW_INT32 BF_Vfs_RemoveMulti(FW_CHAR* dirname, FW_CHAR filename_list[][13], FW_INT32 fnum);
-修改为 FW_INT32   vfs_one_removemulti(VfsOne* self, const FW_CHAR* dirname, FW_CHAR filenameList[][13], FW_INT32 fnum);
+修改为 kint vfs_three_removemulti(VfsThree* self, KConstType dirname, kchar filenameList[][13], kint fnum);
 
 extern FW_INT32 BF_Vfs_Fstat(FW_INT32 fileNo, T_BF_FS_IF_STAT* sbuf);
-修改为 FW_INT32   vfs_one_fstat(VfsOne* self, FW_INT32 fileNo, FsIfStat* sbuf);
+修改为 kint vfs_one_fstat(VfsOne* self, kint fileNo, FsIfStat* sbuf);
 
 extern FW_INT32 BF_Vfs_Mkdir(FW_CHAR* dirname);
-修改为 FW_INT32   vfs_three_mkdir(VfsThree* self, const FW_CHAR* dirname);
+修改为 FW_INT32 kint vfs_three_mkdir(VfsThree* self, KConstType dirname);
 
 extern FW_INT32 BF_Vfs_Rmdir(FW_CHAR* dirname);
-修改为 FW_INT32   vfs_three_rmdir(VfsThree* self, const FW_CHAR* dirname);
+修改为 kint vfs_three_rmdir(VfsThree* self, KConstType dirname);
 
 extern FW_INT32 BF_Vfs_Opendir(FW_CHAR* dirname, FW_INT32* dNo);
-修改为 FW_INT32   vfs_three_opendir(VfsThree* self, const FW_CHAR* dirname, FW_INT32* dNo);
+修改为 kint vfs_three_opendir(VfsThree* self, KConstType dirname, kint* dNo);
 
 extern FW_INT32 BF_Vfs_Readdir(FW_INT32 dNo, T_BF_FS_IF_Dir_Info* fsdirent);
-修改为 FW_INT32   vfs_three_readdir(VfsThree* self, FW_INT32 dNo, FsIfDirInfo* fsdirent);
+修改为 kint vfs_three_readdir(VfsThree* self, kint dNo, FsIfDirInfo* fsdirent);
 
 extern FW_INT32 BF_Vfs_Closedir(FW_INT32 dNo);
-修改为 FW_INT32   vfs_three_closedir(VfsThree* self, FW_INT32 dNo);
+修改为 kint vfs_three_closedir(VfsThree* self, kint dNo);
 
 extern FW_INT32 BF_Vfs_Chdir(FW_CHAR* dirname);
-修改为 FW_INT32   vfs_three_chdir(VfsThree* self, const FW_CHAR* dirname);
+修改为 kint vfs_three_chdir(VfsThree* self, KConstType dirname);
 
 extern FW_INT32 BF_Vfs_Getcurdir(FW_CHAR* dname, FW_CHAR* curpath, FW_INT32 size);
-修改为 FW_INT32   vfs_three_getcurdir(VfsThree* self, const FW_CHAR* dname, FW_CHAR* curpath, FW_INT32 size);
+修改为 kint vfs_three_get_curdir(VfsThree* self, KConstType dname, KType curpath, kint size);
 
 extern FW_INT32 BF_Vfs_Qformat(FW_INT32 media_id);
-修改为 FW_INT32   vfs_three_qformat(VfsThree* self, FW_INT32 mediaId);
+修改为 kint vfs_three_qformat(VfsThree* self, kint mediaId);
 
 extern FW_INT32 BF_Vfs_Nformat(FW_INT32 media_id);
-修改为 FW_INT32   vfs_three_nformat(VfsThree* self, FW_INT32 mediaId);
+修改为 kint vfs_three_nformat(VfsThree* self, kint mediaId);
 
 extern FW_INT32 BF_Vfs_Set_Write_Err_Cb( FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback );
-修改为 FW_INT32   vfs_two_set_write_err_cb(VfsTwo* self, FW_UINT32 fNo, VFS_SET_WRITE_ERR_CB pCallback);
+修改为 kint vfs_two_set_write_err_cb(VfsTwo* self, kuint fNo, VFS_SET_WRITE_ERR_CB pCallback);
 
 extern FW_INT32 BF_Vfs_Set_User_Setting( const FW_VOID* addr, FW_ULONG count );
-修改为 FW_INT32   vfs_three_set_user_setting(VfsThree* self, const FW_VOID* addr, FW_ULONG count);
+修改为 kint  vfs_three_set_user_setting(VfsThree* self, kconstpointer addr, FW_ULONG count);
 
 FW_VOID VFS_sender(INT32 stacd)
-修改为 FW_VOID vfs_three_sender(VfsThree* self, INT32 stacd)
+修改为 void vfs_three_sender(VfsThree* self, kint32 stacd)
 
 FW_VOID VFS_receiver(INT32 stacd)
-修改为 FW_VOID vfs_three_receiver(VfsThree* self, INT32 stacd)
+修改为 void vfs_three_receiver(VfsThree* self, kint32 stacd)
 
 4、结构体修改 
 T_FS_VFS_CTRL_TBL                                            改为 VfsCtrlTbl
@@ -292,6 +292,8 @@ T_FS_VFS_INFO_TABLE_USERSET                          改为 TableUserset
 
 FS_BPB.h  FS_code.h  FS_Endian.h  FS_errno.h  FS_extra.h  FS_lib.h  FS_PARTITION.H  写到 fslib.h 中
 抄写路径：/home/sns/workspace/snsrtos-zzz/target/cpu_tkernel/basefw/fj/file_mng/mdf/src
+
+注：fslib.h中的类型定义已屏蔽，使用ktypes.h中的类型定义
 
 1、宏定义名
 
@@ -522,10 +524,4 @@ FS_CHS                                        改为  FsChs
 FS_MBR                                       改为  FsMbr
 FS_MBR_CAPSULE                        改为  FsMbrCapsule
 FS_EBR_CAPSULE                         改为  FsEbrCapsule
-
-
-
-
-
-
 

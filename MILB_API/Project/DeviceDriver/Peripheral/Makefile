@@ -10,14 +10,23 @@ SUBDIRS      :=
 
 ### List of source files
 ### note: If current directory does not have C/ASM source files in "src" directory, CSRC/ASRC is empty.
-CSRC := dd_audio.c
+CSRC := ddaudio.c
+CSRC +=ddaudioctrl.c
+CSRC +=ddaudioi2s.c
+CSRC +=ddaudioio.c
+CSRC +=ddaudioloopback.c
+CSRC +=ddaudiodma.c
+CSRC +=ddaudioreg.c
 CSRC +=ddcsio.c
 CSRC +=ddcsiocommon.c
 CSRC +=ddcsiodma.c
-CSRC +=dd_hdmac0.c
-CSRC +=dd_hdmac1.c
-CSRC +=dd_i2c.c
-CSRC += dd_pdm.c
+CSRC +=ddhdmac0.c
+CSRC +=ddhdmac0utility.c
+CSRC +=ddhdmac1.c
+CSRC +=ddhdmac1utility.c
+CSRC +=ddi2c.c
+CSRC +=ddi2cctrl.c
+CSRC += ddpdm.c
 CSRC +=ddpwm.c
 CSRC +=ddpwmbranch.c
 CSRC +=ddpwmutility.c

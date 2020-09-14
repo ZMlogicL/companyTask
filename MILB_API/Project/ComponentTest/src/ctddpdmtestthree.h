@@ -27,8 +27,8 @@ typedef struct 															_CtDdPdmTestthreePrivate CtDdPdmTestthreePrivate;
 struct _CtDdPdmTestthree
 {
 	KObject parent;
-	T_DD_PDM_CORE_CFG pdmCfg;
-	T_DD_PDM_DMA_CFG pdmDmaCfg;
+	DdPdmCoreCfg pdmCfg;
+	DdPdmDmaCfg pdmDmaCfg;
 };
 
 KConstType 					ct_dd_pdm_testthree_get_type(void);

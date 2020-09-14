@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :徐廷军
 *@brief               :sns 索喜rtos
-*@redd                :klib
+*@redd                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -16,10 +16,14 @@
 #ifndef __DD_RELC_H__
 #define __DD_RELC_H__
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
 #include "ddimtypedef.h"
 #include "mptk_typedef.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -27,9 +31,12 @@ extern "C" {
 #endif
 
 
-#define DD_TYPE_RELC			(dd_relc_get_type())
-#define DD_RELC(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, DdRelc))
-#define DD_IS_RELC(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, DD_TYPE_RELC))
+#define DD_TYPE_RELC							(dd_relc_get_type ())
+#define DD_RELC(obj)							(G_TYPE_CHECK_INSTANCE_CAST ((obj), DD_TYPE_RELC, DdRelc))
+#define DD_RELC_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST((klass), DD_TYPE_RELC, DdRelcClass))
+#define DD_IS_RELC(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), DD_TYPE_RELC))
+#define DD_IS_RELC_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), DD_TYPE_RELC))
+#define DD_RELC_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), DD_TYPE_RELC, DdRelcClass))
 /**
 @addtogroup dd_relc
 @{
@@ -134,7 +141,7 @@ extern "C" {
 /**< Error interrupt	*/
 #define DdRelc_D_DD_RELC_ERR													(1)
 /**< Sleep interrupt	*/
-#define DdRelc_D_DD_RELC_ERR													(2)
+#define DdRelc_D_DD_RELC_SLEEP												(2)
 /**< Finish interrupt	*/
 #define DdRelc_D_DD_RELC_FINISH											(3)
 /**< Continuous run finish interrupt */
@@ -194,7 +201,7 @@ typedef struct _TDdRelcDecInfo						TDdRelcDecInfo;
 typedef union _UDdRelcSetMode2					UDdRelcSetMode2;
 
 /** Type is defined to Callback function pointer for RELC */
-typedef void (*RELK_CALLBACK)( kuint32 int_factor );
+typedef void (*RELK_CALLBACK)( guint32 int_factor );
 
 typedef struct _TDdRelcSetDesc						TDdRelcSetDesc;
 
@@ -203,8 +210,9 @@ typedef struct _TDdRelcSetModNormal			TDdRelcSetModNormal;
 typedef struct _TDdRelcSetModDesc				TDdRelcSetModDesc;
 #endif	/* CO_DDIM_UTILITY_USE */
 
-typedef struct _DdRelc 										DdRelc;
-typedef struct _DdRelcPrivate 						DdRelcPrivate;
+typedef struct _DdRelc							DdRelc;
+typedef struct _DdRelcClass					DdRelcClass;
+typedef struct _DdRelcPrivate 			DdRelcPrivate;
 
 
 /*----------------------------------------------------------------------*/
@@ -218,81 +226,81 @@ typedef struct _DdRelcPrivate 						DdRelcPrivate;
 struct _TDdRelcCtrlCmn
 {
 		/**< Descriptor Mode*/
-		kuchar descMode;
+		guchar descMode;
 		/**< Continuous Run Mode*/
-		kuchar contRunMode;
+		guchar contRunMode;
 		/**< Sequential Run Number of Times*/
-		kulong seqNum;
+		gulong seqNum;
 		/**< RELC data write side HPROT (default:0x0B)*/
-		kuchar writeHprot;
+		guchar writeHprot;
 		/**< RELC data read side HPROT (default:0x0B)*/
-		kuchar readHprot;
+		guchar readHprot;
 		/**< Callback function pointer*/
-		VpCallback callback;
+		VpCallbackFunc callback;
 };
 
 /** RELC control register table */
 struct _TDdRelcCtrlReg
 {
 		/**< Input End Address Enable*/
-		kuchar inEndAddrEn;
+		guchar inEndAddrEn;
 		/**< Output End Address Enable*/
-		kuchar outEndAddrEn;
+		guchar outEndAddrEn;
 		/**< Input Address Auto Increment*/
-		kuchar inAddrAutoInc;
+		guchar inAddrAutoInc;
 		/**< Output Address Auto Increment*/
-		kuchar outAddrAutoInc;
+		guchar outAddrAutoInc;
 		/**< Input start address*/
-		kulong inStartAddr;
+		gulong inStartAddr;
 		/**< Input end address*/
-		kulong inEndAddr;
+		gulong inEndAddr;
 		/**< Output start address*/
-		kulong outStartAddr;
+		gulong outStartAddr;
 		/**< Output end address*/
-		kulong outEndAddr;
+		gulong outEndAddr;
 };
 
 /** RELC control descriptor table */
 struct _TDdRelcCtrlDesc
 {
 		/**< Descriptor address	*/
-		kulong descriptorAddr;
+		gulong descriptorAddr;
 };
 
 /** RELC decode information */
 struct _TDdRelcDecInfo
 {
 		/**< Number of bytes read	*/
-		kushort readByte;
+		gushort readByte;
 		/**< Number of bytes written	*/
-		kushort writeByte;
+		gushort writeByte;
 		/**< Number of processing blocks */
-		kushort procBlock;
+		gushort procBlock;
 		/**< Decode the total number of bytes to read	*/
-		kulong decTotalReadBytes;
+		gulong decTotalReadBytes;
 		/**< Decode the total number of bytes to write	*/
-		kulong decTotalWriteBytes;
+		gulong decTotalWriteBytes;
 		/**< Sequential run counter	*/
-		kulong seqCnt;
+		gulong seqCnt;
 };
 
 /** RELC control mode2 for descriptor */
 union _UDdRelcSetMode2
 {
-		/**< for kulong access	*/
-		kulong word;
+		/**< for gulong access	*/
+		gulong word;
 		/**< bit field*/
 		struct {
 				/**< Input end address enable	*/
-				kulong imax :1;
+				gulong imax :1;
 				/**< Output end address enable	*/
-				kulong omax :1;
+				gulong omax :1;
 				/**< Input Address Auto Increment	*/
-				kulong iaai :1;
+				gulong iaai :1;
 				/**< Output Address Auto Increment	*/
-				kulong oaai :1;
+				gulong oaai :1;
 				/**< reserved	*/
-				kulong :28;
+				gulong :28;
 		} bit;
 };
 
@@ -302,21 +310,21 @@ struct _TDdRelcSetDesc
 		/**< Mode setting 2*/
 		UDdRelcSetMode2 relcMode2;
 		/**< Reserved 1				*/
-		//	kushort	reserved1;
+		//	gushort	reserved1;
 		/**< Input start address	*/
-		kulong inStartAddr;
+		gulong inStartAddr;
 		/**< Input end address*/
-		kulong inEndAddr;
+		gulong inEndAddr;
 		/**< Output start address	*/
-		kulong outStartAddr;
+		gulong outStartAddr;
 		/**< Output end address*/
-		kulong outEndAddr;
+		gulong outEndAddr;
 		/**< Reserved 2	*/
-		kulong reserved2;
+		gulong reserved2;
 		/**< Reserved 3	*/
-		kulong reserved3;
+		gulong reserved3;
 		/**< Reserved 4	*/
-		kulong reserved4;
+		gulong reserved4;
 };
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -325,47 +333,54 @@ struct _TDdRelcSetDesc
 struct _TDdRelcSetModNormal
 {
 		/**< RELC data write side HPROT (default:0x0B)	*/
-		kuchar writeHprot;
+		guchar writeHprot;
 		/**< RELC data read side HPROT (default:0x0B)	*/
-		kuchar readHprot;
+		guchar readHprot;
 		/**< Input start address	 */
-		kulong inStartAddr;
+		gulong inStartAddr;
 		/**< Input data size*/
-		//	kulong		inDataSize;
+		//	gulong		inDataSize;
 		/**< Output start address	*/
-		kulong outStartAddr;
+		gulong outStartAddr;
 		/**< Output data size	*/
-		//	kulong		outDataSize;
+		//	gulong		outDataSize;
 		/**< Sequential Run Number of Times*/
-		kulong seqNum;
+		gulong seqNum;
 		/**< Callback function pointer*/
-		VpCallback callback;
+		VpCallbackFunc callback;
 } ;
 
 /** RELC control struct for descriptor mode */
 struct _TDdRelcSetModDesc
 {
 		/**< RELC data write side HPROT (default:0x0B)	*/
-		kuchar writeHprot;
+		guchar writeHprot;
 		/**< RELC data read side HPROT (default:0x0B) */
-		kuchar readHprot;
+		guchar readHprot;
 		/**< descriptor address	*/
-		kulong relcDescriptorAddr;
+		gulong relcDescriptorAddr;
 		/**< Sequential Run Number of Times */
-		kulong seqNum;
+		gulong seqNum;
 		/**< Callback function pointer	*/
-		VpCallback callback;
+		VpCallbackFunc callback;
 };
 #endif	/* CO_DDIM_UTILITY_USE */
 
 struct _DdRelc
 {
-	KObject parent;
+	GObject parent;
+	DdExs *ddexs;
+	DdGpv *ddgpv;
+	DdimUserCustom *ddimUserCustom;
 };
 
+struct _DdRelcClass
+{
+	GObjectClass parentClass;
+};
 
-KConstType 		    		dd_relc_get_type(void);
-DdRelc*		        			dd_relc_new(void);
+GType						dd_relc_get_type(void)	G_GNUC_CONST;
+DdRelc*					dd_relc_new(void);
 
 /*----------------------------------------------------------------------	*/
 /* Global Data																*/
@@ -389,7 +404,7 @@ DdRelc*		        			dd_relc_new(void);
  *@param[in] readHprot			RELC data read side HPROT (default:0x0B)
  *@remarks This function performs interrupt permission and soft reset.
  */
-extern	void dd_relc_init(DdRelc*self, kuchar writeHprot, kuchar readHprot );
+extern	void dd_relc_init(DdRelc*self, guchar writeHprot, guchar readHprot );
 
 /**
 RELC is exclusively controlled.
@@ -399,7 +414,7 @@ RELC is exclusively controlled.
 @remarks If RELC is unused, exclusive control OK is sent back as (Lock) while using it.<br>
          Exclusive control NG is sent back when using it (Lock inside of present).
 */
-extern kint32 dd_relc_open (DdRelc*self);
+extern gint32 dd_relc_open (DdRelc*self);
 
 /**
 RELC is exclusively closed.
@@ -407,7 +422,7 @@ RELC is exclusively closed.
 @retval DdRelc_D_DD_RELC_EXT_LOCK_NG		Lock Error (System Using RELC)
 @remarks This API uses DDIM_User_Sig_Sem().
 */
-extern	kint32 dd_relc_close(DdRelc*self);
+extern	gint32 dd_relc_close(DdRelc*self);
 
 /**
 RELC decode is started.(Sync)
@@ -418,7 +433,7 @@ RELC decode is started.(Sync)
 @remarks This API uses DDIM_User_Clr_Flg().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-extern	kint32 dd_relc_start_sync( DdRelc*self );
+extern	gint32 dd_relc_start_sync( DdRelc*self );
 
 /**
 RELC decode is started.(Async)
@@ -427,7 +442,7 @@ RELC decode is started.(Async)
 @remarks The RELC is started by this function, and is waited by RELC_Wait_End().
 @remarks This API uses DDIM_User_Clr_Flg().
 */
-extern	kint32 dd_relc_start_async( DdRelc*self );
+extern	gint32 dd_relc_start_async( DdRelc*self );
 
 /**
 Wait for the completion of the RELC decode.
@@ -436,7 +451,7 @@ Wait for the completion of the RELC decode.
 @remarks This function is used when RELC is started by RELC_Start_Async().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-extern	kint32 dd_relc_wait_end( DdRelc*self );
+extern	gint32 dd_relc_wait_end( DdRelc*self );
 
 /**
 RELC decode is stopped.(both Sync and Async)
@@ -454,7 +469,7 @@ The common control setting for RELC is set.
 			Sequential run number of times	: When 0 or 1 is specified, a value is 1.<br>
 			Callback function pointer 		: To define the function you want to call at interrupt time.
 */
-extern	kint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn );
+extern	gint32 dd_relc_ctrl_common(DdRelc*self, TDdRelcCtrlCmn const* const relcCtrlCmn );
 
 /**
 The register control setting for RELC is set.
@@ -471,7 +486,7 @@ The register control setting for RELC is set.
 			Output start address<br>
 			Output end address
 */
-extern	kint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlReg );
+extern	gint32 dd_relc_ctrl_register(DdRelc*self, TDdRelcCtrlReg const* const relcCtrlReg );
 
 /**
 The descriptor control setting for RELC is set.
@@ -481,7 +496,7 @@ The descriptor control setting for RELC is set.
 @remarks This function can be set below.<br>
 			descriptor address
 */
-extern	kint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtrlDesc );
+extern	gint32 dd_relc_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc const* const relcCtrlDesc );
 
 /**
 The input start address for RELC is set.
@@ -491,7 +506,7 @@ The input start address for RELC is set.
 @remarks If you set during the operation of the SLEEP, without having to reset <br>
 		 the Resume is not guaranteed.
 */
-extern	kint32 dd_relc_set_in_start_addr(DdRelc*self, kulong inStartAddr );
+extern	gint32 dd_relc_set_in_start_addr(DdRelc*self, gulong inStartAddr );
 
 /**
 The input end address for RELC is set.
@@ -500,7 +515,7 @@ The input end address for RELC is set.
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 @remarks To enable this designation should be set relc_mode2[0](IMAX) to 1.
 */
-extern	kint32 dd_relc_set_in_end_addr(DdRelc*self, kulong inEndAddr);
+extern	gint32 dd_relc_set_in_end_addr(DdRelc*self, gulong inEndAddr);
 
 /**
 The output start address for RELC is set.
@@ -510,7 +525,7 @@ The output start address for RELC is set.
 @remarks If you set during the operation of the SLEEP, without having to reset <br>
 		 the Resume is not guaranteed.
 */
-extern	kint32 dd_relc_set_out_start_addr(DdRelc*self, kulong outStartAddr);
+extern	gint32 dd_relc_set_out_start_addr(DdRelc*self, gulong outStartAddr);
 
 /**
 The output end address for RELC is set.
@@ -519,7 +534,7 @@ The output end address for RELC is set.
 @retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
 @remarks To enable this designation should be set relc_mode2[1](OMAX) to 1.
 */
-extern	kint32 dd_relc_set_out_end_addr(DdRelc*self, kulong outEndAddr);
+extern	gint32 dd_relc_set_out_end_addr(DdRelc*self, gulong outEndAddr);
 
 /**
 The common control setting for RELC is get.
@@ -532,7 +547,7 @@ The common control setting for RELC is get.
 			Sequential run number of Times	: When 0 or 1 is specified, a value is 1.<br>
 			Callback function pointer 		: To define the function you want to call at interrupt time.
 */
-extern	kint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn);
+extern	gint32 dd_relc_get_ctrl_common(DdRelc*self, TDdRelcCtrlCmn* const relcCtrlCmn);
 
 /**
 The register control setting for RELC is get.
@@ -549,7 +564,7 @@ The register control setting for RELC is get.
 			Output start address<br>
 			Output end address
 */
-extern	kint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg );
+extern	gint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcCtrlReg );
 
 /**
  *The descriptor control setting for RELC is get.
@@ -558,7 +573,7 @@ extern	kint32 dd_relc_get_ctrl_register(DdRelc*self, TDdRelcCtrlReg* const relcC
  *@retval DdRelc_D_DD_RELC_PARAM_ERR			Parameter error
  *@remarks This function can be get below.<br> descriptor address
  */
-extern	kint32 dd_relc_get_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc* const relcCtrlDesc );
+extern	gint32 dd_relc_get_ctrl_descriptor(DdRelc*self, TDdRelcCtrlDesc* const relcCtrlDesc );
 
 /**
  *It is Interrupt Handler of RELC.<br>
@@ -589,5 +604,7 @@ extern	void dd_relc_int_handler( DdRelc*self );
 
 /*@} --- end of relc_driver_message */
 
+
+G_END_DECLS
 
 #endif /* __DD_RELC_H__ */

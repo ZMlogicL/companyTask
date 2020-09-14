@@ -26,7 +26,7 @@ FJ_AWBSetCalibPgain          fj_awb_set_calib_pgain
 FJ_AWBGetCalibPgain          fj_awb_get_calib_pgain
 
 
-枚举：E_FJ_AWB_PGAIN_DECI_POS    EFjAwbPgainDeciPos
+枚举：E_FJ_AWB_PGAIN_DECI_POS    AwbPgainDeciPos
 枚举项：
 E_FJ_AWB_PGAIN_DECI_POS_8    		FjAwb_E_PGAIN_DECI_POS_8
 E_FJ_AWB_PGAIN_DECI_POS_7         FjAwb_E_PGAIN_DECI_POS_7
@@ -349,7 +349,7 @@ FjMonitor_MXIC_TARGET_SLAVE_R3_PORT_2
 枚举项：	FJ_MONITOR_SDRAMC_CH_0 = 0x00,			FJ_MONITOR_SDRAMC_CH_1,		
 替換为：	FjMonitor_SDRAMC_CH_0 = 0x00,		                FjMonitor_SDRAMC_CH_1,	
 
-枚舉：FJ_MONITOR_SDRAMC_ACCESS_TYPE   FjMonitorSdramcAccessType	
+枚舉：FJ_MONITOR_SDRAMC_ACCESS_TYPE   MonitorSdramcAccessType	
 	FJ_MONITOR_SDRAMC_ACCESS_TYPE_WRITE_READ = 0x00,	
 	FJ_MONITOR_SDRAMC_ACCESS_TYPE_WRITE,				
 	FJ_MONITOR_SDRAMC_ACCESS_TYPE_READ				
@@ -357,7 +357,7 @@ FjMonitor_MXIC_TARGET_SLAVE_R3_PORT_2
 	FjMonitor_SDRAMC_ACCESS_TYPE_WRITE,		
 	FjMonitor_SDRAMC_ACCESS_TYPE_READ	
  
-枚举：FJ_MONITOR_SDRAMC_MONITOR_TYPE     FjMonitorSdramcMonitorType
+枚举：FJ_MONITOR_SDRAMC_MONITOR_TYPE     MonitorSdramcMonitorType
 枚举项：	FJ_MONITOR_SDRAMC_MONITOR_TYPE_TRANSFER = 0x00,		
 	FJ_MONITOR_SDRAMC_MONITOR_TYPE_ACCESS	
 替换为：
@@ -832,7 +832,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_5_R_BMH_1
 FjBusarb_ D_FJ_BUS_ARB_MXIC_6_W_CA7
 FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 
-枚举：E_FJ_BUS_ARB_MXIC_W_ARBITER   EFjBusarbMxicWArbiter
+枚举：E_FJ_BUS_ARB_MXIC_W_ARBITER   BusarbMxicWArbiter
 枚举项：E_FJ_BUS_ARB_MXIC_W_ARBITER_W1 = 0,					/**< W1 arbiter */
 	E_FJ_BUS_ARB_MXIC_W_ARBITER_W2,						/**< W2 arbiter */
 	E_FJ_BUS_ARB_MXIC_W_ARBITER_W3,						/**< W3 arbiter */
@@ -844,7 +844,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_BUS_ARB_MXIC_W_ARBITER_W4,						/**< W4 arbiter */
 	FjBusarb_E_FJ_BUS_ARB_MXIC_W_ARBITER_MAX	
 
-枚举：E_FJ_BUS_ARB_MXIC_UNIT  EFjBusarbMxicUnit
+枚举：E_FJ_BUS_ARB_MXIC_UNIT  FjBusarbMxicUnit
 	E_FJ_BUS_ARB_MXIC_UNIT_0 = 0,						/**< MXIC0				*/
 	E_FJ_BUS_ARB_MXIC_UNIT_1,							/**< MXIC1				*/
 	E_FJ_BUS_ARB_MXIC_UNIT_2,							/**< MXIC2				*/
@@ -863,7 +863,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_BUS_ARB_MXIC_UNIT_MAX	
 
 
-枚举：  E_FJ_BUS_ARB_MXIC_R_ARBITER   EFjBusarbMxicRArbiter
+枚举：  E_FJ_BUS_ARB_MXIC_R_ARBITER   FjBusarbMxicRArbiter
 	E_FJ_BUS_ARB_MXIC_R_ARBITER_R1 = 0,					/**< R1 arbiter */
 	E_FJ_BUS_ARB_MXIC_R_ARBITER_R2,						/**< R2 arbiter */
 	E_FJ_BUS_ARB_MXIC_R_ARBITER_R3,						/**< R3 arbiter */
@@ -877,7 +877,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_BUS_ARB_MXIC_R_ARBITER_MAX	
 
 
-枚举：E_FJ_BUS_ARB_MXIC_PORT    EFjBusarbMxicPort
+枚举：E_FJ_BUS_ARB_MXIC_PORT    FjBusarbMxicPort
 	E_FJ_BUS_ARB_MXIC_PORT_0 = 0,						/**< Port-0	*/
 	E_FJ_BUS_ARB_MXIC_PORT_1,							/**< Port-1	*/
 	E_FJ_BUS_ARB_MXIC_PORT_2,							/**< Port-2	*/
@@ -890,7 +890,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_BUS_ARB_MXIC_PORT_3,							/**< Port-3	*/
 	FjBusarb_E_FJ_BUS_ARB_MXIC_PORT_MAX	
 
-枚举：E_FJ_SUB_ARB_SDRAMC_CH   EFjBusarbSdramcCh
+枚举：E_FJ_SUB_ARB_SDRAMC_CH   FjBusarbSdramcCh
         E_FJ_SUB_ARB_SDRAMC_CH_0 = 0,					/**< Channel 0.				*/
 	E_FJ_SUB_ARB_SDRAMC_CH_1,						/**< Channel 1.				*/
 	E_FJ_SUB_ARB_SDRAMC_CH_MAX	
@@ -899,7 +899,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_SUB_ARB_SDRAMC_CH_1,						/**< Channel 1.				*/
 	FjBusarb_E_FJ_SUB_ARB_SDRAMC_CH_MAX	
 
-枚举：E_FJ_BUS_ARB_MXIC_PORT_GR  EFjBusarbMxicPortGr
+枚举：E_FJ_BUS_ARB_MXIC_PORT_GR  BusarbMxicPortGr
 
         E_FJ_BUS_ARB_MXIC_PORT_GR_0 = 0,					/**< Port-0	*/
 	E_FJ_BUS_ARB_MXIC_PORT_GR_1,						/**< Port-1	*/
@@ -909,7 +909,7 @@ FjBusarb_ D_FJ_BUS_ARB_MXIC_6_R_CA7
 	FjBusarb_E_FJ_BUS_ARB_MXIC_PORT_GR_1,						/**< Port-1	*/
 	FjBusarb_E_FJ_BUS_ARB_MXIC_PORT_GR_MAX						/**< Enumeration stopper */
 
-枚举：E_FJ_SUB_ARB_SDRAMC_PORT   EFjBusarbSdramcPort
+枚举：E_FJ_SUB_ARB_SDRAMC_PORT   FjBusarbSdramcPort
     E_FJ_SUB_ARB_SDRAMC_PORT_MX10 = 0,				
 	E_FJ_SUB_ARB_SDRAMC_PORT_MX11,				
 	E_FJ_SUB_ARB_SDRAMC_PORT_MX12,					
@@ -998,7 +998,7 @@ typedef enum {
 	E_FJ_SUB_ARB_SDRAMC_EN_ENABLE				
 
 
- 枚举：E_FJ_SUB_ARB_SDRAMC_EN   EFjBusarbSdramcEn
+ 枚举：E_FJ_SUB_ARB_SDRAMC_EN   FjBusarbSdramcEn
 	E_FJ_SUB_ARB_SDRAMC_EN_DISABLE = 0,				
 	E_FJ_SUB_ARB_SDRAMC_EN_ENABLE	
 替换为
@@ -1007,14 +1007,14 @@ typedef enum {
 
 
 结构体：
-T_FJ_BUS_ARB_MXIC_W_ARBITER_ASSIGN   MxicWArbiterASsing
-T_FJ_BUS_ARB_MXIC_R_ARBITER_ASSIGN  MxicRArbiterASsing  
-T_FJ_BUS_ARB_MXIC_W_ARBITER_ASSIGN_PORT   WArbiterASsingPort 
-T_FJ_BUS_ARB_MXIC_R_ARBITER_ASSIGN_PORT   RArbiterASsingPort 
-T_FJ_BUS_ARB_MXIC_ALL_ARBITER_ASSIGN    MxicAllArbiterASsing 
+T_FJ_BUS_ARB_MXIC_W_ARBITER_ASSIGN   MxicWArbiterAssing
+T_FJ_BUS_ARB_MXIC_R_ARBITER_ASSIGN  MxicRArbiterAssing  
+T_FJ_BUS_ARB_MXIC_W_ARBITER_ASSIGN_PORT   WArbiterAssingPort 
+T_FJ_BUS_ARB_MXIC_R_ARBITER_ASSIGN_PORT   RArbiterAssingPort 
+T_FJ_BUS_ARB_MXIC_ALL_ARBITER_ASSIGN    MxicAllArbiterAssing 
 T_FJ_BUS_ARB_MXIC_SLOT_PRIORITY_LEVEL    MxicSlotPriorityLevel
-T_FJ_BUS_ARB_MXIC_SLOT_PRIORITY_LEVEL_PORT  MxicSlotPriorityLevelPort  
-T_FJ_BUS_ARB_MXIC_ALL_SLOT_PRIORITY_LEVEL   AllSlotPriorityLevelPort
+T_FJ_BUS_ARB_MXIC_SLOT_PRIORITY_LEVEL_PORT  SlotPriorityLevelPort  
+T_FJ_BUS_ARB_MXIC_ALL_SLOT_PRIORITY_LEVEL   AllSlotPriorityLevel
 T_FJ_BUS_ARB_MXIC_W_OUTPUT_PORT   MxicWOutputPort 
 T_FJ_BUS_ARB_MXIC_R_OUTPUT_PORT   ROutputPort
 T_FJ_BUS_ARB_MXIC_OUTPUT_PORT  MxicOutputPort 
@@ -1036,7 +1036,7 @@ FJ_IQ_CalibrationSetOperate          fj_iq_calibration_set_operate
 FJ_IQ_CalibrationGetOperate          fj_iq_calibration_get_operate
 FJ_IQ_CalibrationSetBayer             fj_iq_calibration_set_bayer
 
-枚举：E_IQ_CALIB_FMT_PIX EIqCalibFmtPix 
+枚举：E_IQ_CALIB_FMT_PIX IqCalibFmtPix 
 枚举项：
 	E_IQ_CALIB_FMT_PIX_ERR = -1,
 	E_IQ_CALIB_FMT_PIX_12PACK = 0,	
@@ -1732,7 +1732,7 @@ E_FJ_GIC_TARGET_CPU      FjArmEGicTarget
 E_FJ_IPCU_MAILBOX        FjArmEIpcuMailbox
 E_FJ_IPCU_BUFF           FjArmEIpcuBuff
 E_FJ_IPCU_NOTIFY         FjArmIpcuNotify
-E_FJ_IPCU_STATE_AFTER_STANDY FjArmIpcuStateAfterStandy
+E_FJ_IPCU_STATE_AFTER_STANDY IpcuStateAfterStandy
 E_FJ_IPCU_STOP           FjArmIpcuStop
 E_FJ_IPCU_START          FjArmIpcuStart
 E_FJ_IPCU_COND           FjArmIpcuCond
@@ -1799,8 +1799,8 @@ FJ_ERR_CODE fj_ae_loading_complete(FjAe *self, E_BF_AE_BIN_IDX type, BYTE* addr,
 FJ_ERR_CODE fj_ae_tbl_get_sdram_common(FjAe *self, VOID* ae_param_tbl );
 FJ_ERR_CODE fj_ae_tbl_set_force_reload(FjAe *self);
 
-枚举：E_BF_AE_BIN_IDX   EBfAeBinIdx
- E_BF_AWB_BIN_IDX    EBfAwbBinIdx
+枚举：E_BF_AE_BIN_IDX   BfAeBinIdx
+ E_BF_AWB_BIN_IDX    BfAwbBinIdx
 
 枚举项：	E_BF_AE_BIN_IDX_NULL = -1,
 	E_BF_AE_BIN_IDX_COMMON= 0,
@@ -1946,33 +1946,33 @@ VOID 			fj_debug_mba_heap_log_printf(FjDebugMba *self,  UCHAR func_id, FJ_MBALOG
      
    17.ddim_user_custom 改爲ddimusercustomtest(不编译)
      公有函数：(不编译)
-     DDIM_User_Tslp_Tsk     ddim_user_custom_tslp_tsk
-     DDIM_User_Ext_Tsk     ddim_user_custom_ext_tsk
-     DDIM_User_Dly_Tsk    ddim_user_custom_dly_tsk
-     DDIM_User_Sig_Sem    ddim_user_custom_sig_sem
-     DDIM_User_Pol_Sem   ddim_user_custom_pol_sem
-     DDIM_User_Wai_Sem   ddim_user_custom_wai_sem 
-     DDIM_User_Twai_Sem   ddim_user_custom_twai_sem
-     DDIM_User_Ref_Sem       ddim_user_custom_ref_sem
-     DDIM_User_Set_Flg    ddim_user_custom_set_flg
-     DDIM_User_Clr_Flg    ddim_user_custom_clr_flg
-     DDIM_User_Pol_Flg    ddim_user_custom_pol_flg
-     DDIM_User_Wai_Flg  ddim_user_custom_wai_flg 
-     DDIM_User_Twai_Flg   ddim_user_custom_twai_flg
-     DDIM_User_Ref_Flg    ddim_user_custom_ref_flg
-     DDIM_User_Get_Tim   ddim_user_custom_get_tim
-     DDIM_User_Acre_Cyc   ddim_user_custom_acre_cyc
-     DDIM_User_Sta_Cyc   ddim_user_custom_sta_cyc
-     DDIM_User_Stp_Cyc    ddim_user_custom_stp_cyc
-     DDIM_User_Sns_Ctx   ddim_user_custom_sns_ctc
-     DDIM_User_Spin_Lock  ddim_user_custom_spin_lock
-    DDIM_User_Spin_Unlock   ddim_user_custom_spin_unlock
-    DDIM_User_L1l2cache_Flush_All   ddim_user_custom_l1l2cache_flush_all
-    DDIM_User_L1l2cache_Clean_All   ddim_user_custom_l1l2cache_clean_all
-    DDIM_User_L1l2cache_Clean_Flush_All   ddim_user_custom_l1l2cache_clean_flush_all
-    DDIM_User_L1l2cache_Flush_Addr    ddim_user_custom_l1l2cache_flush_addr
-    DDIM_User_L1l2cache_Clean_Addr  ddim_user_custom_l1l2cache_clean_addr
-     DDIM_User_L1l2cache_Clean_Flush_Addr   ddim_user_custom_l1l2cache_clean_flush_addr
+     DDIM_User_Tslp_Tsk     ddim_user_custom_test_tslp_tsk
+     DDIM_User_Ext_Tsk     ddim_user_custom_test_ext_tsk
+     DDIM_User_Dly_Tsk    ddim_user_custom_test_dly_tsk
+     DDIM_User_Sig_Sem    ddim_user_custom_test_sig_sem
+     DDIM_User_Pol_Sem   ddim_user_custom_test_pol_sem
+     DDIM_User_Wai_Sem   ddim_user_custom_test_wai_sem 
+     DDIM_User_Twai_Sem   ddim_user_custom_test_twai_sem
+     DDIM_User_Ref_Sem       ddim_user_custom_test_ref_sem
+     DDIM_User_Set_Flg    ddim_user_custom_test_set_flg
+     DDIM_User_Clr_Flg    ddim_user_custom_test_clr_flg
+     DDIM_User_Pol_Flg    ddim_user_custom_test_pol_flg
+     DDIM_User_Wai_Flg  ddim_user_custom_test_wai_flg 
+     DDIM_User_Twai_Flg   ddim_user_custom_test_twai_flg
+     DDIM_User_Ref_Flg    ddim_user_custom_test_ref_flg
+     DDIM_User_Get_Tim   ddim_user_custom_test_get_tim
+     DDIM_User_Acre_Cyc   ddim_user_custom_test_acre_cyc
+     DDIM_User_Sta_Cyc   ddim_user_custom_test_sta_cyc
+     DDIM_User_Stp_Cyc    ddim_user_custom_test_stp_cyc
+     DDIM_User_Sns_Ctx   ddim_user_custom_test_sns_ctc
+     DDIM_User_Spin_Lock  ddim_user_custom_test_spin_lock
+    DDIM_User_Spin_Unlock   ddim_user_custom_test_spin_unlock
+    DDIM_User_L1l2cache_Flush_All   ddim_user_custom_test_l1l2cache_flush_all
+    DDIM_User_L1l2cache_Clean_All   ddim_user_custom_test_l1l2cache_clean_all
+    DDIM_User_L1l2cache_Clean_Flush_All   ddim_user_custom_test_l1l2cache_clean_flush_all
+    DDIM_User_L1l2cache_Flush_Addr    ddim_user_custom_test_l1l2cache_flush_addr
+    DDIM_User_L1l2cache_Clean_Addr  ddim_user_custom_test_l1l2cache_clean_addr
+     DDIM_User_L1l2cache_Clean_Flush_Addr   ddim_user_custom_test_l1l2cache_clean_flush_addr
      
      18./palladium_test_ela.c改为palladiumtestela.c   拆分为imelatestcase.c
      公有函数：
@@ -2132,5 +2132,220 @@ VOID 			fj_debug_mba_heap_log_printf(FjDebugMba *self,  UCHAR func_id, FJ_MBALOG
 	/* USB */
 	FjStd_ERR_USB_MEDIA_ERROR			= 0x0801,	/**< Media Error of USB Storage */
 	FjStd_ERR_USB_DISCONNECT_ERROR		= 0x0802,	/**< USB cable disconnect */
+     
+     枚举修改
+     将fj_pci里e移到  fjpcieep.h里
+     枚举：E_FJ_PCIE_CH    FjPcieCh
+     E_FJ_PCIE_BIFURCATION   FjPcieBifurchation
+     E_FJ_PCIE_DMA_DIR           FjPcieDmaDir
+     E_FJ_PCIE_LINK_SPEED      FjPcieLinkSpeed
+     E_FJ_PCIE_ST_DL_UP          FjPcieStDlUp
+     E_FJ_PCIE_ST_LTSSM         FjPcieStLissm
+     E_FJ_PCIE_MPS                 FjPcieMps
+     E_FJ_PCIE_PMST              FjPciePmst
+     E_FJ_PCIE_MSI_NUM     FjPcieMsiNum
+     
+     
+     结构体：
+     T_FJ_PCIE_DMA_CTRL      FjPcieMdaCtrl
+     T_FJ_PCIE_MEMORY_CTRL    FjPcieMemoryCtrl
+     函数指针类型：
+     PCIE_CALLBACK     PcieFunc
+     
+     枚举项：
+     	E_FJ_PCIE_BIFURCATION_DISABLE = 0,		/**< Bifurcation disable	*/
+	E_FJ_PCIE_BIFURCATION_ENABLE			/**< Bifurcation enable		*/
+	改为
+		FjPcieEp_E_FJ_PCIE_BIFURCATION_DISABLE = 0,		/**< Bifurcation disable	*/
+	FjPcieEp_E_FJ_PCIE_BIFURCATION_ENABLE			/**< Bifurcation enable		*/
+	
+		E_FJ_PCIE_DMA_DIR_DTOS = 0,				/**< Transfer source from the transfer destination.	*/
+	E_FJ_PCIE_DMA_DIR_STOD			
+	改为：
+		FjPcieEp_E_FJ_PCIE_DMA_DIR_DTOS = 0,				/**< Transfer source from the transfer destination.	*/
+	FjPcieEp_E_FJ_PCIE_DMA_DIR_STOD		
+	
+		E_FJ_PCIE_LINK_SPEED_GEN1 = 1,			/**< 2.5GT/s	*/
+	E_FJ_PCIE_LINK_SPEED_GEN2			
+	改为：
+		FjPcieEp_E_FJ_PCIE_LINK_SPEED_GEN1 = 1,			/**< 2.5GT/s	*/
+	FjPcieEp_E_FJ_PCIE_LINK_SPEED_GEN2				/**< 5.0GT/s	*/
+	
+		E_FJ_PCIE_ST_DL_UP_NG = 0,			/**< Not the data link up, TLP communication impossible.	*/
+	E_FJ_PCIE_ST_DL_UP_OK	
+	改为：
+		FjPcieEp_E_FJ_PCIE_ST_DL_UP_NG = 0,			/**< Not the data link up, TLP communication impossible.	*/
+	FjPcieEp_E_FJ_PCIE_ST_DL_UP_OK				/**< Data link-up and TLP possible communication.			*/
+	
+	E_FJ_PCIE_S_DETECT_QUIET = 0,	/**< DETECT_QUIET		*/
+	E_FJ_PCIE_S_DETECT_ACT,			/**< DETECT_ACT			*/
+	E_FJ_PCIE_S_POLL_ACTIVE,		/**< POLL_ACTIVE		*/
+	E_FJ_PCIE_S_POLL_COMPLIANCE,	/**< POLL_COMPLIANCE	*/
+	E_FJ_PCIE_S_POLL_CONFIG,		/**< POLL_CONFIG		*/
+	E_FJ_PCIE_S_PRE_DETECT_QUIET,	/**< PRE_DETECT_QUIET	*/
+	E_FJ_PCIE_S_DETECT_WAIT,		/**< DETECT_WAIT		*/
+	E_FJ_PCIE_S_CFG_LINKWD_START,	/**< CFG_LINKWD_START	*/
+	E_FJ_PCIE_S_CFG_LINKWD_ACEPT,	/**< CFG_LINKWD_ACEPT	*/
+	E_FJ_PCIE_S_CFG_LANENUM_WAI,	/**< CFG_LANENUM_WAI	*/
+	E_FJ_PCIE_S_CFG_LANENUM_ACEPT,	/**< CFG_LANENUM_ACEPT	*/
+	E_FJ_PCIE_S_CFG_COMPLETE,		/**< CFG_COMPLETE		*/
+	E_FJ_PCIE_S_CFG_IDLE,			/**< CFG_IDLE			*/
+	E_FJ_PCIE_S_RCVRY_LOCK,			/**< RCVRY_LOCK			*/
+	E_FJ_PCIE_S_RCVRY_SPEED,		/**< RCVRY_SPEED		*/
+	E_FJ_PCIE_S_RCVRY_RCVRCFG,		/**< RCVRY_RCVRCFG		*/
+	E_FJ_PCIE_S_RCVRY_IDLE,			/**< RCVRY_IDLE			*/
+	E_FJ_PCIE_S_L0,					/**< L0					*/
+	E_FJ_PCIE_S_L0S,				/**< L0S				*/
+	E_FJ_PCIE_S_L123_SEND_EIDLE,	/**< L123_SEND_EIDLE	*/
+	E_FJ_PCIE_S_L1_IDLE,			/**< L1_IDLE			*/
+	E_FJ_PCIE_S_L2_IDLE,			/**< L2_IDLE			*/
+	E_FJ_PCIE_S_L2_WAKE,			/**< L2_WAKE			*/
+	E_FJ_PCIE_S_DISABLED_ENTRY,		/**< DISABLED_ENTRY		*/
+	E_FJ_PCIE_S_DISABLED_IDLE,		/**< DISABLED_IDLE		*/
+	E_FJ_PCIE_S_DISABLED,			/**< DISABLED			*/
+	E_FJ_PCIE_S_LPBK_ENTRY,			/**< LPBK_ENTRY			*/
+	E_FJ_PCIE_S_LPBK_ACTIVE,		/**< LPBK_ACTIVE		*/
+	E_FJ_PCIE_S_LPBK_EXIT,			/**< LPBK_EXIT			*/
+	E_FJ_PCIE_S_LPBK_EXIT_TIMEOUT,	/**< LPBK_EXIT_TIMEOUT	*/
+	E_FJ_PCIE_S_HOT_RESET_ENTRY,	/**< HOT_RESET_ENTRY	*/
+	E_FJ_PCIE_S_HOT_RESET,			/**< HOT_RESET			*/
+	E_FJ_PCIE_S_RCVRY_EQ0,			/**< RCVRY_EQ0			*/
+	E_FJ_PCIE_S_RCVRY_EQ1,			/**< RCVRY_EQ1			*/
+	E_FJ_PCIE_S_RCVRY_EQ2,			/**< RCVRY_EQ2			*/
+	E_FJ_PCIE_S_RCVRY_EQ3			/**< RCVRY_EQ3			*/
+	改为：
+	FjPcieEp_E_FJ_PCIE_S_DETECT_QUIET = 0,	/**< DETECT_QUIET		*/
+	FjPcieEp_E_FJ_PCIE_S_DETECT_ACT,			/**< DETECT_ACT			*/
+	FjPcieEp_E_FJ_PCIE_S_POLL_ACTIVE,		/**< POLL_ACTIVE		*/
+	FjPcieEp_E_FJ_PCIE_S_POLL_COMPLIANCE,	/**< POLL_COMPLIANCE	*/
+	FjPcieEp_E_FJ_PCIE_S_POLL_CONFIG,		/**< POLL_CONFIG		*/
+	FjPcieEp_E_FJ_PCIE_S_PRE_DETECT_QUIET,	/**< PRE_DETECT_QUIET	*/
+	FjPcieEp_E_FJ_PCIE_S_DETECT_WAIT,		/**< DETECT_WAIT		*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_LINKWD_START,	/**< CFG_LINKWD_START	*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_LINKWD_ACEPT,	/**< CFG_LINKWD_ACEPT	*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_LANENUM_WAI,	/**< CFG_LANENUM_WAI	*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_LANENUM_ACEPT,	/**< CFG_LANENUM_ACEPT	*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_COMPLETE,		/**< CFG_COMPLETE		*/
+	FjPcieEp_E_FJ_PCIE_S_CFG_IDLE,			/**< CFG_IDLE			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_LOCK,			/**< RCVRY_LOCK			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_SPEED,		/**< RCVRY_SPEED		*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_RCVRCFG,		/**< RCVRY_RCVRCFG		*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_IDLE,			/**< RCVRY_IDLE			*/
+	FjPcieEp_E_FJ_PCIE_S_L0,					/**< L0					*/
+	FjPcieEp_E_FJ_PCIE_S_L0S,				/**< L0S				*/
+	FjPcieEp_E_FJ_PCIE_S_L123_SEND_EIDLE,	/**< L123_SEND_EIDLE	*/
+	FjPcieEp_E_FJ_PCIE_S_L1_IDLE,			/**< L1_IDLE			*/
+	FjPcieEp_E_FJ_PCIE_S_L2_IDLE,			/**< L2_IDLE			*/
+	FjPcieEp_E_FJ_PCIE_S_L2_WAKE,			/**< L2_WAKE			*/
+	FjPcieEp_E_FJ_PCIE_S_DISABLED_ENTRY,		/**< DISABLED_ENTRY		*/
+	FjPcieEp_E_FJ_PCIE_S_DISABLED_IDLE,		/**< DISABLED_IDLE		*/
+	FjPcieEp_E_FJ_PCIE_S_DISABLED,			/**< DISABLED			*/
+	FjPcieEp_E_FJ_PCIE_S_LPBK_ENTRY,			/**< LPBK_ENTRY			*/
+	FjPcieEp_E_FJ_PCIE_S_LPBK_ACTIVE,		/**< LPBK_ACTIVE		*/
+	FjPcieEp_E_FJ_PCIE_S_LPBK_EXIT,			/**< LPBK_EXIT			*/
+	FjPcieEp_E_FJ_PCIE_S_LPBK_EXIT_TIMEOUT,	/**< LPBK_EXIT_TIMEOUT	*/
+	FjPcieEp_E_FJ_PCIE_S_HOT_RESET_ENTRY,	/**< HOT_RESET_ENTRY	*/
+	FjPcieEp_E_FJ_PCIE_S_HOT_RESET,			/**< HOT_RESET			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_EQ0,			/**< RCVRY_EQ0			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_EQ1,			/**< RCVRY_EQ1			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_EQ2,			/**< RCVRY_EQ2			*/
+	FjPcieEp_E_FJ_PCIE_S_RCVRY_EQ3			/**< RCVRY_EQ3			*/
+	
+	E_FJ_PCIE_DMA_MPS_128 = 0,		/**< 128 bytes	*/
+	E_FJ_PCIE_DMA_MPS_256,			/**< 256 bytes	*/
+	E_FJ_PCIE_DMA_MPS_512			/**< 512 bytes	*/
+	改为
+	FjPcieEp_E_FJ_PCIE_DMA_MPS_128 = 0,		/**< 128 bytes	*/
+	FjPcieEp_E_FJ_PCIE_DMA_MPS_256,			/**< 256 bytes	*/
+	FjPcieEp_E_FJ_PCIE_DMA_MPS_512			/**< 512 bytes	*/
+	
+		E_FJ_PCIE_PMST_D0 = 0,			/**< D0 State		*/
+	E_FJ_PCIE_PMST_D1,				/**< D1 State		*/
+	E_FJ_PCIE_PMST_D2,				/**< D2 State		*/
+	E_FJ_PCIE_PMST_D3,				/**< D3 State		*/
+	E_FJ_PCIE_PMST_UNINITIALIZED	/**< Uninitialized	*/
+	改为：
+		FjPcieEp_E_FJ_PCIE_PMST_D0 = 0,			/**< D0 State		*/
+	FjPcieEp_E_FJ_PCIE_PMST_D1,				/**< D1 State		*/
+	FjPcieEp_E_FJ_PCIE_PMST_D2,				/**< D2 State		*/
+	FjPcieEp_E_FJ_PCIE_PMST_D3,				/**< D3 State		*/
+	FjPcieEp_E_FJ_PCIE_PMST_UNINITIALIZED
+	
+	
+	E_FJ_PCIE_MSI_NUM_00 = 0,	/**< msi number 0	*/
+	E_FJ_PCIE_MSI_NUM_01,		/**< msi number 1	*/
+	E_FJ_PCIE_MSI_NUM_02,		/**< msi number 2	*/
+	E_FJ_PCIE_MSI_NUM_03,		/**< msi number 3	*/
+	E_FJ_PCIE_MSI_NUM_04,		/**< msi number 4	*/
+	E_FJ_PCIE_MSI_NUM_05,		/**< msi number 5	*/
+	E_FJ_PCIE_MSI_NUM_06,		/**< msi number 6	*/
+	E_FJ_PCIE_MSI_NUM_07,		/**< msi number 7	*/
+	E_FJ_PCIE_MSI_NUM_08,		/**< msi number 8	*/
+	E_FJ_PCIE_MSI_NUM_09,		/**< msi number 9	*/
+	E_FJ_PCIE_MSI_NUM_10,		/**< msi number 10	*/
+	E_FJ_PCIE_MSI_NUM_11,		/**< msi number 11	*/
+	E_FJ_PCIE_MSI_NUM_12,		/**< msi number 12	*/
+	E_FJ_PCIE_MSI_NUM_13,		/**< msi number 13	*/
+	E_FJ_PCIE_MSI_NUM_14,		/**< msi number 14	*/
+	E_FJ_PCIE_MSI_NUM_15,		/**< msi number 15	*/
+	E_FJ_PCIE_MSI_NUM_16,		/**< msi number 16	*/
+	E_FJ_PCIE_MSI_NUM_17,		/**< msi number 17	*/
+	E_FJ_PCIE_MSI_NUM_18,		/**< msi number 18	*/
+	E_FJ_PCIE_MSI_NUM_19,		/**< msi number 19	*/
+	E_FJ_PCIE_MSI_NUM_20,		/**< msi number 20	*/
+	E_FJ_PCIE_MSI_NUM_21,		/**< msi number 21	*/
+	E_FJ_PCIE_MSI_NUM_22,		/**< msi number 22	*/
+	E_FJ_PCIE_MSI_NUM_23,		/**< msi number 23	*/
+	E_FJ_PCIE_MSI_NUM_24,		/**< msi number 24	*/
+	E_FJ_PCIE_MSI_NUM_25,		/**< msi number 25	*/
+	E_FJ_PCIE_MSI_NUM_26,		/**< msi number 26	*/
+	E_FJ_PCIE_MSI_NUM_27,		/**< msi number 27	*/
+	E_FJ_PCIE_MSI_NUM_28,		/**< msi number 28	*/
+	E_FJ_PCIE_MSI_NUM_29,		/**< msi number 29	*/
+	E_FJ_PCIE_MSI_NUM_30,		/**< msi number 30	*/
+	E_FJ_PCIE_MSI_NUM_31		/**< msi number 31	*/
+	改为：
+		FjPcieEp_E_FJ_PCIE_MSI_NUM_00 = 0,	/**< msi number 0	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_01,		/**< msi number 1	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_02,		/**< msi number 2	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_03,		/**< msi number 3	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_04,		/**< msi number 4	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_05,		/**< msi number 5	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_06,		/**< msi number 6	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_07,		/**< msi number 7	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_08,		/**< msi number 8	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_09,		/**< msi number 9	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_10,		/**< msi number 10	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_11,		/**< msi number 11	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_12,		/**< msi number 12	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_13,		/**< msi number 13	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_14,		/**< msi number 14	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_15,		/**< msi number 15	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_16,		/**< msi number 16	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_17,		/**< msi number 17	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_18,		/**< msi number 18	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_19,		/**< msi number 19	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_20,		/**< msi number 20	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_21,		/**< msi number 21	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_22,		/**< msi number 22	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_23,		/**< msi number 23	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_24,		/**< msi number 24	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_25,		/**< msi number 25	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_26,		/**< msi number 26	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_27,		/**< msi number 27	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_28,		/**< msi number 28	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_29,		/**< msi number 29	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_30,		/**< msi number 30	*/
+	FjPcieEp_E_FJ_PCIE_MSI_NUM_31		/**< msi number 31	*/
+	
+		E_FJ_PCIE_CH0 = 0,						/**< PCIe channel 0	*/
+	E_FJ_PCIE_CH1		
+	改为：
+		FjPcieEp_E_FJ_PCIE_CH0 = 0,						/**< PCIe channel 0	*/
+	FjPcieEp_E_FJ_PCIE_CH1							/**< PCIe channel 1	*/
+     
+     
+     
+     
      
      

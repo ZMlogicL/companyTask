@@ -45,9 +45,9 @@ struct _CtImJpeg3
 {
 	GObject    parent;
     // Parameter of Im_JPEG_Ctrl_Enc().
-	TImJpegEncMng				jpegEncTbl;
+	TimgEncMng				jpegEncTbl;
 	// Parameter of Im_JPEG_Ctrl_Enc_Frame().
-	TImJpegEncFrameMng	jpegEncFrameTbl;
+	TimgEncFrameMng	jpegEncFrameTbl;
 	// Encode mode (parameter of Jpgepc_Wrap_Set_Tuning_Param()).
 	CtImJpeg3TCtImJpgSpencMode		mode;
 	// Maximum bytes of JPEG code.

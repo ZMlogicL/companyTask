@@ -81,52 +81,52 @@ typedef struct _DdI2cCtrlSmbus DdI2cCtrlSmbus;
 
 /** Send Action from slave side */
 struct _DdI2cSlaveAction {
-	UCHAR actionMode;	/**< What do at slave.<br> */
+	kuchar actionMode;	/**< What do at slave.<br> */
 						/**< @ref DdI2c_SEND_DATA_2_MASTER : Send data<br> */
 						/**< @ref DdI2c_SEND_ACK_MASTER    : Send ACK <br> */
 						/**< @ref DdI2c_SEND_NO_ACK_MASTER : Send NO ACK<br> */
-	UCHAR sendData;	/**< Send data */
+	kuchar sendData;	/**< Send data */
 };
 
 /**
 Type is defined to Callback function pointer.<br>
-@param [in] UCHAR						Channel number.
+@param [in] kuchar						Channel number.
 @param [in] I2cRecvFromMaster	Recieved action from master side.
-@param [in] UCHAR						Received data from master side.
+@param [in] kuchar						Received data from master side.
 @retval DdI2cSlaveAction	Send action from slave side.
 */
-typedef DdI2cSlaveAction (*DdI2cCtrlFunc)(UCHAR, I2cRecvFromMaster, UCHAR);
+typedef DdI2cSlaveAction (*DdI2cCtrlFunc)(kuchar, I2cRecvFromMaster, kuchar);
 
 /** Start information */
 struct _DdI2cStartInfo {
 	I2cRwMode	rwMode;			/**< Read or Write */
-	UINT32		rwDataLen;		/**< Read/Write data length */
-	UCHAR* 		rwData;			/**< Read/Write data */
-	UINT32		timeout;			/**< Communication timeout value (ms) */
+	kuint32		rwDataLen;		/**< Read/Write data length */
+	kuchar* 		rwData;			/**< Read/Write data */
+	kuint32		timeout;			/**< Communication timeout value (ms) */
 };
 
 /** Control information for Master */
 struct _DdI2cCtrlMaster {
 	DdI2cBps		bps;					/**< Communication rate	*/
 	DdI2cAddrLen	destSlaveAddrLen;	/**< Destination slave address length */
-	USHORT			destSlaveAddr;		/**< Destination slave address */
+	kushort			destSlaveAddr;		/**< Destination slave address */
 };
 
 /** Control information for Slave */
 struct _DdI2cCtrlSlave {
 	DdI2cAddrLen	ownSlaveAddrLen;	/**< Own Slave address length */
-	USHORT			ownSlaveAddr;		/**< Own Slave address */
-	UCHAR 			globalCallEn;		/**< Global Call Match Enable */
+	kushort			ownSlaveAddr;		/**< Own Slave address */
+	kuchar 			globalCallEn;		/**< Global Call Match Enable */
 	DdI2cCtrlFunc	callback;			/**< Callback function pointer. See @ref DdI2cCtrlFunc.<br>
 												 Please must set a callback in the case of Slave operation. */
 };
 
 /** Control information for SMBus (for Master and Slave) */
 struct _DdI2cCtrlSmbus {
-	UCHAR 			alertRespEn;		/**< Alert Response Match Enable (Slave only) */
-	UINT32			pecNum;			/**< PEC(Packet Error Checking) number of bytes (0 is disable) */
+	kuchar 			alertRespEn;		/**< Alert Response Match Enable (Slave only) */
+	kuint32			pecNum;			/**< PEC(Packet Error Checking) number of bytes (0 is disable) */
 	DdI2cToDiv		timeoutDiv;		/**< Timeout Divider */
-	UCHAR			timeoutPresc;		/**< Timeout Prescaler (0 to 255) */
+	kuchar			timeoutPresc;		/**< Timeout Prescaler (0 to 255) */
 };
 
 typedef struct _DdI2cCtrl 			DdI2cCtrl;
@@ -145,9 +145,9 @@ struct  _DdI2cCtrl {
 KConstType 		dd_i2c_ctrl_get_type(void);
 DdI2cCtrl* 		dd_i2c_ctrl_new(void);
 
-VOID 			dd_i2c_ctrl_init_timeout_info(DdI2cCtrl *self, UCHAR ch);
+void 			dd_i2c_ctrl_init_timeout_info(DdI2cCtrl *self, kuchar ch);
 
-UCHAR 			dd_i2c_ctrl_get_scl_frequency(DdI2cCtrl *self, DdI2cBps bps);
+kuchar 			dd_i2c_ctrl_get_scl_frequency(DdI2cCtrl *self, DdI2cBps bps);
 
 /**
 Execute exclusive control for designated I2C channel.<br>
@@ -157,8 +157,8 @@ When timeout occurs, return "DdI2c_TIMEOUT".
 @param [in]	ch		Channel number(0 to 2)
 @param [in] timeout	Time of timeout<br>
 					<ul><li>Positive Value(Time of timeout)
-						<li>@ref D_DDIM_USER_SEM_WAIT_POL
-						<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
+						<li>@ref DdimUserCustom_SEM_WAIT_POL
+						<li>@ref DdimUserCustom_SEM_WAIT_FEVR</ul>
 @retval	D_DDIM_OK					: OK
 @retval	DdI2c_INPUT_PARAM_ERROR	: Input parameter error
 @retval	DdI2c_TIMEOUT			: Semaphore acquisition Time Out
@@ -166,7 +166,7 @@ When timeout occurs, return "DdI2c_TIMEOUT".
 @remarks	This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
 			This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
 */
-INT32 			dd_i2c_ctrl_open(DdI2cCtrl *self, UCHAR ch, INT32 timeout);
+kint32 			dd_i2c_ctrl_open(DdI2cCtrl *self, kuchar ch, kint32 timeout);
 
 /**
 Cancel exclusive control for designated I2C channel.
@@ -177,7 +177,7 @@ Cancel exclusive control for designated I2C channel.
 @remarks	Please note that stop & exclusive control is compulsorily released when I2C is starting.
 @remarks	This API uses DDIM_User_Sig_Sem().
 */
-INT32	 		dd_i2c_ctrl_close(DdI2cCtrl *self, UCHAR ch);
+kint32	 		dd_i2c_ctrl_close(DdI2cCtrl *self, kuchar ch);
 
 /**
 Send start condition.
@@ -194,7 +194,7 @@ Send start condition.
 @remarks This API uses DDIM_User_Clr_Flg().
 @remarks This API uses DDIM_User_Twai_Flg().
 */
-INT32 			dd_i2c_ctrl_start_master(DdI2cCtrl *self, UCHAR ch, const DdI2cStartInfo* const startInfo);
+kint32 			dd_i2c_ctrl_start_master(DdI2cCtrl *self, kuchar ch, const DdI2cStartInfo* const startInfo);
 
 /**
 Send stop condition.
@@ -203,7 +203,7 @@ Send stop condition.
 @retval DdI2c_INPUT_PARAM_ERROR	: Input Parameter Error
 @retval DdI2c_STATUS_ABNORMAL	: Abnormal Status
 */
-INT32 			dd_i2c_ctrl_stop_master(DdI2cCtrl *self, UCHAR ch);
+kint32 			dd_i2c_ctrl_stop_master(DdI2cCtrl *self, kuchar ch);
 
 /**
 Start the communication waiting from the master.
@@ -212,7 +212,7 @@ Start the communication waiting from the master.
 @retval DdI2c_INPUT_PARAM_ERROR	: Input Parameter Error
 @retval DdI2c_STATUS_ABNORMAL	: Abnormal Status
 */
-INT32 			dd_i2c_ctrl_start_slave(DdI2cCtrl *self, UCHAR ch);
+kint32 			dd_i2c_ctrl_start_slave(DdI2cCtrl *self, kuchar ch);
 
 /**
 Stop thje communication waiting from the master.
@@ -220,7 +220,7 @@ Stop thje communication waiting from the master.
 @retval D_DDIM_OK					: OK
 @retval DdI2c_INPUT_PARAM_ERROR	: Input Parameter Error
 */
-INT32 			dd_i2c_ctrl_stop_slave(DdI2cCtrl *self, UCHAR ch);
+kint32 			dd_i2c_ctrl_stop_slave(DdI2cCtrl *self, kuchar ch);
 
 /**
 Set I2C master contorol information.
@@ -230,7 +230,7 @@ Set I2C master contorol information.
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 @remarks Please call either the dd_i2c_ctrl_ctrl_master() or dd_i2c_ctrl_ctrl_slave().
 */
-INT32 			dd_i2c_ctrl_ctrl_master(DdI2cCtrl *self, UCHAR ch, const DdI2cCtrlMaster* const ctrlMaster);
+kint32 			dd_i2c_ctrl_ctrl_master(DdI2cCtrl *self, kuchar ch, const DdI2cCtrlMaster* const ctrlMaster);
 
 /**
 Get I2C master contorol information.
@@ -239,7 +239,7 @@ Get I2C master contorol information.
 @retval D_DDIM_OK						: OK
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 */
-INT32 			dd_i2c_ctrl_get_ctrl_master(DdI2cCtrl *self, UCHAR ch, DdI2cCtrlMaster* const ctrlMaster);
+kint32 			dd_i2c_ctrl_get_ctrl_master(DdI2cCtrl *self, kuchar ch, DdI2cCtrlMaster* const ctrlMaster);
 
 /**
 Set I2C slave contorol information.
@@ -249,7 +249,7 @@ Set I2C slave contorol information.
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 @remarks Please call either the dd_i2c_ctrl_ctrl_master() or dd_i2c_ctrl_ctrl_slave().
 */
-INT32 			dd_i2c_ctrl_ctrl_slave(DdI2cCtrl *self, UCHAR ch, const DdI2cCtrlSlave* const ctrlSlave);
+kint32 			dd_i2c_ctrl_ctrl_slave(DdI2cCtrl *self, kuchar ch, const DdI2cCtrlSlave* const ctrlSlave);
 
 /**
 Get I2C slave contorol information.
@@ -258,7 +258,7 @@ Get I2C slave contorol information.
 @retval D_DDIM_OK						: OK
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 */
-INT32 			dd_i2c_ctrl_get_ctrl_slave(DdI2cCtrl *self, UCHAR ch, DdI2cCtrlSlave* const ctrlSlave);
+kint32 			dd_i2c_ctrl_get_ctrl_slave(DdI2cCtrl *self, kuchar ch, DdI2cCtrlSlave* const ctrlSlave);
 
 /**
 Set SMBus slave contorol information.
@@ -270,7 +270,7 @@ Set SMBus slave contorol information.
 @remarks Please call this API as necessary after the dd_i2c_ctrl_ctrl_master() or dd_i2c_ctrl_ctrl_slave().
 @remarks If you want to enable the PEC, please set the transmit and receive data byte number(DdI2cStartInfo.rwDataLen) + 1.
 */
-INT32 			dd_i2c_ctrl_ctrl_smbus(DdI2cCtrl *self, UCHAR ch, const DdI2cCtrlSmbus* const ctrlSmbus);
+kint32 			dd_i2c_ctrl_ctrl_smbus(DdI2cCtrl *self, kuchar ch, const DdI2cCtrlSmbus* const ctrlSmbus);
 
 /**
 Get SMBus slave contorol information.
@@ -280,7 +280,7 @@ Get SMBus slave contorol information.
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 @retval DdI2c_STATUS_ABNORMAL		: Abnormal Status
 */
-INT32 			dd_i2c_ctrl_get_ctrl_smbus(DdI2cCtrl *self, UCHAR ch, DdI2cCtrlSmbus* const ctrlSmbus);
+kint32 			dd_i2c_ctrl_get_ctrl_smbus(DdI2cCtrl *self, kuchar ch, DdI2cCtrlSmbus* const ctrlSmbus);
 
 #ifdef CO_DDIM_UTILITY_USE
 /**
@@ -291,7 +291,7 @@ Set SCL frequency utility function.<br>
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 @remarks Selecting a value of less than 4 will automatically default by adding an offset of 4.
 */
-INT32 			dd_i2c_ctrl_set_scl(DdI2cCtrl *self, UCHAR ch, UCHAR scl);
+kint32 			dd_i2c_ctrl_set_scl(DdI2cCtrl *self, kuchar ch, kuchar scl);
 
 /**
 Get SCL frequency utility function.<br>
@@ -300,14 +300,14 @@ Get SCL frequency utility function.<br>
 @retval D_DDIM_OK						: OK
 @retval DdI2c_INPUT_PARAM_ERROR		: Input Parameter Error
 */
-INT32 			dd_i2c_ctrl_get_scl(DdI2cCtrl *self, UCHAR ch, UCHAR* scl);
+kint32 			dd_i2c_ctrl_get_scl(DdI2cCtrl *self, kuchar ch, kuchar* scl);
 
 #endif
 
-DdI2cSide 		dd_i2c_ctrl_get_side(DdI2cCtrl *self, UCHAR ch);
-DdI2cAddrLen 	dd_i2c_ctrl_get_master_dest_slave_addr_len(DdI2cCtrl *self, UCHAR ch);
-UCHAR 			dd_i2c_ctrl_get_slave_addr_byte(DdI2cCtrl *self, UCHAR ch, DdI2cAddrCnt cnt);
-DdI2cCtrlFunc 	dd_i2c_ctrl_get_slave_callback(DdI2cCtrl *self, UCHAR ch);
+DdI2cSide 		dd_i2c_ctrl_get_side(DdI2cCtrl *self, kuchar ch);
+DdI2cAddrLen 	dd_i2c_ctrl_get_master_dest_slave_addr_len(DdI2cCtrl *self, kuchar ch);
+kuchar 			dd_i2c_ctrl_get_slave_addr_byte(DdI2cCtrl *self, kuchar ch, DdI2cAddrCnt cnt);
+DdI2cCtrlFunc 	dd_i2c_ctrl_get_slave_callback(DdI2cCtrl *self, kuchar ch);
 
 #ifdef __cplusplus
 }

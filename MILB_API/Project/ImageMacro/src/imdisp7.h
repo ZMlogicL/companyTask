@@ -108,13 +108,13 @@ typedef struct {
 													 <li>@ref D_IM_DISP_FORMAT_VIDEO</ul>				*/
 } T_IM_DISP_CTRL_PWCH;
 
-extern INT32 Im_DISP_Set_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl);
+ INT32 im_disp7_set_luminance_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl);
 
 /**
 Get Luminance correct table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Luminance correct table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -123,13 +123,13 @@ Get Luminance correct table.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Get_Luminance_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl);
+ INT32 im_disp7_get_luminance_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl);
 
 /**
 Set Chroma correct gain table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Chroma correct gain table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -138,13 +138,13 @@ Set Chroma correct gain table.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl);
+ INT32 im_disp7_set_chroma_gain_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl);
 
 /**
 Get Chroma correct gain table.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	surface			Chroma correct gain table surface.<br>
 							<ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 								<li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>
@@ -153,7 +153,7 @@ Get Chroma correct gain table.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Get_Chroma_Gain_Table(E_IM_DISP_SEL block, BYTE surface, USHORT* tbl);
+ INT32 im_disp7_get_chroma_gain_table(ImDisp7 * self, ImDispEImDispSel block, BYTE surface, USHORT* tbl);
 
 /**
 Set MIPI-DSI IP input pin control 0.
@@ -167,7 +167,7 @@ Set MIPI-DSI IP input pin control 0.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy
 */
-extern INT32 Im_DISP_Set_Mipi_Dsi_Ctrl0(BYTE shudown, BYTE color_mode);
+ INT32 im_disp7_set_mipi_dsi_ctrl0(ImDisp7 * self, BYTE shudown, BYTE color_mode);
 
 /**
 Get MIPI-DSI IP input pin control 0.
@@ -180,14 +180,14 @@ Get MIPI-DSI IP input pin control 0.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Mipi_Dsi_Ctrl0(BYTE* shudown, BYTE* color_mode);
+ INT32 im_disp7_get_mipi_dsi_ctrl0(ImDisp7 * self, BYTE* shudown, BYTE* color_mode);
 
 /**
 Set MIPI-DSI IP input pin control 1 (DPIUPDATECFG_I 1shot generation).
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_STATUS_ABNORMAL		DPI configuration update waiting.
 */
-extern INT32 Im_DISP_Set_Mipi_Dsi_Ctrl1(void);
+ INT32 im_disp7_set_mipi_dsi_ctrl1(ImDisp7 * self);
 
 /**
 Get MIPI-DSI IP input pin control 1.
@@ -197,7 +197,7 @@ Get MIPI-DSI IP input pin control 1.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Mipi_Dsi_Ctrl1(BYTE* update_config);
+ INT32 im_disp7_get_mipi_dsi_ctrl1(ImDisp7 * self, BYTE* update_config);
 
 /**
 Set SR of IP (HDMI, MIPI).
@@ -210,7 +210,7 @@ Set SR of IP (HDMI, MIPI).
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_SR_IP(BYTE ip, BYTE sr);
+ INT32 im_disp7_set_sr_ip(ImDisp7 * self, BYTE ip, BYTE sr);
 
 /**
 Get SR of IP (HDMI, MIPI).
@@ -222,7 +222,7 @@ Get SR of IP (HDMI, MIPI).
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_SR_IP(BYTE *sr);
+ INT32 im_disp7_get_sr_ip(ImDisp7 * self, BYTE *sr);
 
 /**
 Set Write Channel control.
@@ -234,7 +234,7 @@ Set Write Channel control.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Set_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M const *const p2m, T_IM_DISP_CTRL_PWCH const *const pwch);
+ INT32 im_disp7_set_write_channel_ctrl(ImDisp7 * self, E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M const *const p2m, T_IM_DISP_CTRL_PWCH const *const pwch);
 
 /**
 Get Write Channel control.
@@ -246,7 +246,7 @@ Get Write Channel control.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Write_Channel_Ctrl(E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M  *const p2m, T_IM_DISP_CTRL_PWCH *const pwch);
+ INT32 im_disp7_get_write_channel_ctrl(ImDisp7 * self, E_IM_DISP_WC_NUM number, T_IM_DISP_CTRL_P2M  *const p2m, T_IM_DISP_CTRL_PWCH *const pwch);
 
 /**
 Get write channel response.
@@ -262,7 +262,7 @@ Get write channel response.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Get_Write_Channel_Response(E_IM_DISP_WC_NUM number, ULONG *response);
+ INT32 im_disp7_get_write_channel_response(ImDisp7 * self, E_IM_DISP_WC_NUM number, ULONG *response);
 
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -274,8 +274,8 @@ extern INT32 Im_DISP_Get_Write_Channel_Response(E_IM_DISP_WC_NUM number, ULONG *
 /**
 Set CSC matrix to covert from BT.601 to BT.709's RGB or no any convert.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_MAIN
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_0
@@ -287,33 +287,33 @@ Set CSC matrix to covert from BT.601 to BT.709's RGB or no any convert.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Change_CSC_Matrix(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_CC_MATRIX convert);
+ INT32 im_disp7_change_csc_matrix(ImDisp7 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_CC_MATRIX convert);
 
 /**
 Change color bar's color which was used as black back.
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	black_back_color	The color used as black back.
 */
-extern VOID Im_DISP_Change_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR black_back_color);
+ VOID im_disp7_change_bb_color(ImDisp7 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR black_back_color);
 
 /**
 Get the color bar's color which was used as black back.
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	black_back_color	The color used as black back.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Check_BB_Color(E_IM_DISP_SEL block, U_IM_DISP_IMAGE_COLOR* black_back_color);
+ INT32 im_disp7_check_bb_color(ImDisp7 * self, ImDispEImDispSel block, U_IM_DISP_IMAGE_COLOR* black_back_color);
 
 /**
 Change grid.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	ghnum			Number of horizontal grid line.<br>
 							Value range:0~7.<br>
 @param[in]	gvnum			Number of vertical grid line.<br>
@@ -321,13 +321,13 @@ Change grid.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Change_Grid(E_IM_DISP_SEL block, UINT32 ghnum, UINT32 gvnum);
+ INT32 im_disp7_change_grid(ImDisp7 * self, ImDispEImDispSel block, UINT32 ghnum, UINT32 gvnum);
 
 /**
 Draw single face frame.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	index			Face frame data index.<br>
 							Value range:0~15.<br>
 @param[in]	enable			Face frame display enable.<br>
@@ -337,7 +337,7 @@ Draw single face frame.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 */
-extern INT32 Im_DISP_Draw_Face_Frame_Single(E_IM_DISP_SEL block, INT32 index, INT32 enable, T_IM_DISP_FACE_FRAME_PARAM const *const face);
+ INT32 im_disp7_draw_face_frame_single(ImDisp7 * self, ImDispEImDispSel block, INT32 index, INT32 enable, T_IM_DISP_FACE_FRAME_PARAM const *const face);
 
 //---------------------- colabo  section -------------------------------
 /*		@}*/ /* end of im_disp_util */

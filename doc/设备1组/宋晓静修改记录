@@ -622,4 +622,4 @@
 33.OS_IF_Task改名为osIfTask_cb
 34.motor_calc_0_task改名爲　motorCalc0Task_cb
 35.motor_calc_1_task改名爲　motorCalc1Task_cb
-36.detect_task改名爲　detectTask_cb
+36.detect_task改名爲　detect_task_task

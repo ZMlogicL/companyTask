@@ -45,39 +45,39 @@ static void im_r2y_utils_destructor(ImR2yUtils *self)
 }
 
 static void ioR2yRegPtrInit(ImR2yUtils *self){
-	self->gIM_Io_R2y_Reg_Ptr[0] = &IO_R2Y_P1;
-	self->gIM_Io_R2y_Reg_Ptr[1] = &IO_R2Y_P2;
-	self->gIM_Io_R2y_Reg_Ptr[2] = &IO_R2Y_P3;
+	self->gImIoR2yRegPtr[0] = &IO_R2Y_P1;
+	self->gImIoR2yRegPtr[1] = &IO_R2Y_P2;
+	self->gImIoR2yRegPtr[2] = &IO_R2Y_P3;
 
 }
 
 static void ioR2yTblPtrInit(ImR2yUtils *self){
-	self->gIM_Io_R2y_Tbl_Ptr[0] = &IO_R2Y_TBL_P1;
-	self->gIM_Io_R2y_Tbl_Ptr[1] = &IO_R2Y_TBL_P2;
-	self->gIM_Io_R2y_Tbl_Ptr[2] = &IO_R2Y_TBL_P3;
+	self->gImIoR2yTblPtr[0] = &IO_R2Y_TBL_P1;
+	self->gImIoR2yTblPtr[1] = &IO_R2Y_TBL_P2;
+	self->gImIoR2yTblPtr[2] = &IO_R2Y_TBL_P3;
 
 }
 /*
  * PUBLIC
  */
-volatile T_IM_R2Y_STATE_MNG* im_r2y_utils_get_state_mng(ImR2yUtils* self)
+volatile R2yStateMng* im_r2y_utils_get_state_mng(ImR2yUtils* self)
 {
-	return self->gIM_R2Y_State;
+	return self->gImR2yState;
 }
 
 volatile struct io_r2y** im_r2y_utils_get_io_reg(ImR2yUtils* self)
 {
-	return self->gIM_Io_R2y_Reg_Ptr;
+	return self->gImIoR2yRegPtr;
 }
 
-volatile T_IM_R2Y_YYRA_OFS_INFO* im_r2y_utils_get_yyra_ofs_info(ImR2yUtils* self)
+volatile R2yYyraOfsInfo* im_r2y_utils_get_yyra_ofs_info(ImR2yUtils* self)
 {
-	return &self->gIM_R2Y_yyra_ofs_info;
+	return &self->gImR2yYyraOfsInfo;
 }
 
 volatile struct io_r2y_sram** im_r2y_utils_get_io_tbl(ImR2yUtils* self)
 {
-	return self->gIM_Io_R2y_Tbl_Ptr;
+	return self->gImIoR2yTblPtr;
 }
 
 #ifdef CO_DDIM_UTILITY_USE
@@ -86,7 +86,7 @@ volatile struct io_r2y_sram** im_r2y_utils_get_io_tbl(ImR2yUtils* self)
 //---------------------- colabo  section -------------------------------
 #ifdef CO_R2Y_RDMA_ON
 //TODO 私转公
-VOID im_r2y_utils_start_rdma(ImR2yUtils *self, T_IM_RDMA_CTRL* ctrl )
+void im_r2y_utils_start_rdma(ImR2yUtils *self, T_IM_RDMA_CTRL* ctrl )
 {
 	INT32 ercd;
 
@@ -99,18 +99,18 @@ VOID im_r2y_utils_start_rdma(ImR2yUtils *self, T_IM_RDMA_CTRL* ctrl )
 #endif	// CO_R2Y_RDMA_ON
 #endif	// CO_DDIM_UTILITY_USE
 
-VOID im_r2y_utils_get_loop_val(ImR2yUtils *self, UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
+void im_r2y_utils_get_loop_val(ImR2yUtils *self, kuint16 pipeNo, kuint16* loop_sta, kuint16* loop_end )
 {
-	switch( pipe_no ){
-		case D_IM_R2Y_PIPE1:
+	switch( pipeNo ){
+		case ImR2yCtrl_PIPE1:
 			*loop_sta = 0;
 			*loop_end = 0;
 			break;
-		case D_IM_R2Y_PIPE2:
+		case ImR2yCtrl_PIPE2:
 			*loop_sta = 1;
 			*loop_end = 1;
 			break;
-//		case D_IM_R2Y_PIPE12:
+//		case ImR2yCtrl_PIPE12:
 		default:
 			*loop_sta = 0;
 			*loop_end = 1;

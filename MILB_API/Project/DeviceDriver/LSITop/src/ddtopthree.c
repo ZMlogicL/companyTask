@@ -64,7 +64,7 @@ Start PLL00.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll00(VOID)
+INT32 dd_topthree_start_pll00(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL00ST() != 0 || DdTopone_Get_PLLCNT2_PL00SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -84,7 +84,7 @@ INT32 dd_topthree_start_pll00(VOID)
 /**
 Stop PLL00.
 */
-VOID dd_topthree_stop_pll00(VOID)
+VOID dd_topthree_stop_pll00(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL00SEL(0);
 	DdTopone_Set_PLLCNT1_PL00ST(0);
@@ -97,7 +97,7 @@ Start PLL01.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll01(VOID)
+INT32 dd_topthree_start_pll01(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL01ST() != 0 || DdTopone_Get_PLLCNT2_PL01SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -117,7 +117,7 @@ INT32 dd_topthree_start_pll01(VOID)
 /**
 Stop PLL01.
 */
-VOID dd_topthree_stop_pll01(VOID)
+VOID dd_topthree_stop_pll01(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL01SEL(0);
 	DdTopone_Set_PLLCNT1_PL01ST(0);
@@ -129,7 +129,7 @@ Start PLL02.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll02(VOID)
+INT32 dd_topthree_start_pll02(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL02ST() != 0 || DdTopone_Get_PLLCNT2_PL02SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -149,7 +149,7 @@ INT32 dd_topthree_start_pll02(VOID)
 /**
 Stop PLL02.
 */
-VOID dd_topthree_stop_pll02(VOID)
+VOID dd_topthree_stop_pll02(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL02SEL(0);
 	DdTopone_Set_PLLCNT1_PL02ST(0);
@@ -161,7 +161,7 @@ Start PLL03.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll03(VOID)
+INT32 dd_topthree_start_pll03(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL03ST() != 0 || DdTopone_Get_PLLCNT2_PL03SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -181,7 +181,7 @@ INT32 dd_topthree_start_pll03(VOID)
 /**
 Stop PLL03.
 */
-VOID dd_topthree_stop_pll03(VOID)
+VOID dd_topthree_stop_pll03(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL03SEL(0);
 	DdTopone_Set_PLLCNT1_PL03ST(0);
@@ -193,7 +193,7 @@ Start PLL04.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll04(VOID)
+INT32 dd_topthree_start_pll04(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL04ST() != 0 || DdTopone_Get_PLLCNT2_PL04SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -213,7 +213,7 @@ INT32 dd_topthree_start_pll04(VOID)
 /**
 Stop PLL04.
 */
-VOID dd_topthree_stop_pll04(VOID)
+VOID dd_topthree_stop_pll04(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL04SEL(0);
 	DdTopone_Set_PLLCNT1_PL04ST(0);
@@ -225,7 +225,7 @@ Start PLL05.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll05(VOID)
+INT32 dd_topthree_start_pll05(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL05ST() != 0 || DdTopone_Get_PLLCNT2_PL05SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -245,7 +245,7 @@ INT32 dd_topthree_start_pll05(VOID)
 /**
 Stop PLL05.
 */
-VOID dd_topthree_stop_pll05(VOID)
+VOID dd_topthree_stop_pll05(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL05SEL(0);
 	DdTopone_Set_PLLCNT1_PL05ST(0);
@@ -257,7 +257,7 @@ Start PLL05A.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll05a(VOID)
+INT32 dd_topthree_start_pll05a(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL05AST() != 0 || DdTopone_Get_PLLCNT1_PL05ST() != 1 || DdTopone_Get_PLLCNT2_PL05ASEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -277,7 +277,7 @@ INT32 dd_topthree_start_pll05a(VOID)
 /**
 Stop PLL05A.
 */
-VOID dd_topthree_stop_pll05a(VOID)
+VOID dd_topthree_stop_pll05a(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL05ASEL(0);
 	DdTopone_Set_PLLCNT1_PL05AST(0);
@@ -289,7 +289,7 @@ Start PLL06.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll06(VOID)
+INT32 dd_topthree_start_pll06(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL06ST() != 0 || DdTopone_Get_PLLCNT2_PL06SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -309,7 +309,7 @@ INT32 dd_topthree_start_pll06(VOID)
 /**
 Stop PLL06.
 */
-VOID dd_topthree_stop_pll06(VOID)
+VOID dd_topthree_stop_pll06(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL06SEL(0);
 	DdTopone_Set_PLLCNT1_PL06ST(0);
@@ -321,7 +321,7 @@ Start PLL07.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll07(VOID)
+INT32 dd_topthree_start_pll07(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL07ST() != 0 || DdTopone_Get_PLLCNT2_PL07SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -341,7 +341,7 @@ INT32 dd_topthree_start_pll07(VOID)
 /**
 Stop PLL07.
 */
-VOID dd_topthree_stop_pll07(VOID)
+VOID dd_topthree_stop_pll07(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL07SEL(0);
 	DdTopone_Set_PLLCNT1_PL07ST(0);
@@ -353,7 +353,7 @@ Start PLL08.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll08(VOID)
+INT32 dd_topthree_start_pll08(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL08ST() != 0 || DdTopone_Get_PLLCNT2_PL08SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -373,7 +373,7 @@ INT32 dd_topthree_start_pll08(VOID)
 /**
 Stop PLL08.
 */
-VOID dd_topthree_stop_pll08(VOID)
+VOID dd_topthree_stop_pll08(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL08SEL(0);
 	DdTopone_Set_PLLCNT1_PL08ST(0);
@@ -385,7 +385,7 @@ Start PLL10.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll10(VOID)
+INT32 dd_topthree_start_pll10(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL10ST() != 0 || DdTopone_Get_PLLCNT2_PL10SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -405,7 +405,7 @@ INT32 dd_topthree_start_pll10(VOID)
 /**
 Stop PLL10.
 */
-VOID dd_topthree_stop_pll10(VOID)
+VOID dd_topthree_stop_pll10(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL10SEL(0);
 	DdTopone_Set_PLLCNT1_PL10ST(0);
@@ -417,7 +417,7 @@ Start PLL10A.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll10a(VOID)
+INT32 dd_topthree_start_pll10a(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL10AST() != 0 || DdTopone_Get_PLLCNT1_PL10ST() != 1 || DdTopone_Get_PLLCNT2_PL10ASEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -437,7 +437,7 @@ INT32 dd_topthree_start_pll10a(VOID)
 /**
 Stop PLL100A.
 */
-VOID dd_topthree_stop_pll10a(VOID)
+VOID dd_topthree_stop_pll10a(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL10ASEL(0);
 	DdTopone_Set_PLLCNT1_PL10AST(0);
@@ -449,7 +449,7 @@ Start PLL11.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_pll11(VOID)
+INT32 dd_topthree_start_pll11(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_PL11ST() != 0 || DdTopone_Get_PLLCNT2_PL11SEL() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -469,7 +469,7 @@ INT32 dd_topthree_start_pll11(VOID)
 /**
 Stop PLL11.
 */
-VOID dd_topthree_stop_pll11(VOID)
+VOID dd_topthree_stop_pll11(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT2_PL11SEL(0);
 	DdTopone_Set_PLLCNT1_PL11ST(0);
@@ -481,7 +481,7 @@ Start DDR 00 PLL.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll00(VOID)
+INT32 dd_topthree_start_ddr_pll00(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL00ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -498,7 +498,7 @@ INT32 dd_topthree_start_ddr_pll00(VOID)
 /**
 Stop DDR PLL00.
 */
-VOID dd_topthree_stop_ddr_pll00(VOID)
+VOID dd_topthree_stop_ddr_pll00(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL00ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -509,7 +509,7 @@ Start DDR PLL01.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll01(VOID)
+INT32 dd_topthree_start_ddr_pll01(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL01ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -526,7 +526,7 @@ INT32 dd_topthree_start_ddr_pll01(VOID)
 /**
 Stop DDR PLL01.
 */
-VOID dd_topthree_stop_ddr_pll01(VOID)
+VOID dd_topthree_stop_ddr_pll01(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL01ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -537,7 +537,7 @@ Start DDR PLL02.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll02(VOID)
+INT32 dd_topthree_start_ddr_pll02(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL02ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -554,7 +554,7 @@ INT32 dd_topthree_start_ddr_pll02(VOID)
 /**
 Stop DDR PLL02.
 */
-VOID dd_topthree_stop_ddr_pll02(VOID)
+VOID dd_topthree_stop_ddr_pll02(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL02ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -565,7 +565,7 @@ Start DDR PLL10.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll10(VOID)
+INT32 dd_topthree_start_ddr_pll10(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL10ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -582,7 +582,7 @@ INT32 dd_topthree_start_ddr_pll10(VOID)
 /**
 Stop DDR PLL10.
 */
-VOID dd_topthree_stop_ddr_pll10(VOID)
+VOID dd_topthree_stop_ddr_pll10(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL10ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -593,7 +593,7 @@ Start DDR PLL11.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll11(VOID)
+INT32 dd_topthree_start_ddr_pll11(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL11ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -610,7 +610,7 @@ INT32 dd_topthree_start_ddr_pll11(VOID)
 /**
 Stop DDR PLL11.
 */
-VOID dd_topthree_stop_ddr_pll11(VOID)
+VOID dd_topthree_stop_ddr_pll11(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL11ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -621,7 +621,7 @@ Start DDR PLL12.
 @retval	D_DD_OK						Success
 @retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
 */
-INT32 dd_topthree_start_ddr_pll12(VOID)
+INT32 dd_topthree_start_ddr_pll12(DdTopthree *self)
 {
 	if (DdTopone_Get_PLLCNT1_DPL12ST() != 0) {
 		return(DdTopone_STATUS_ABNORMAL);
@@ -638,7 +638,7 @@ INT32 dd_topthree_start_ddr_pll12(VOID)
 /**
 Stop DDR PLL12.
 */
-VOID dd_topthree_stop_ddr_pll12(VOID)
+VOID dd_topthree_stop_ddr_pll12(DdTopthree *self)
 {
 	DdTopone_Set_PLLCNT1_DPL12ST(0);
 	Dd_ARM_Dsb_Pou();
@@ -694,7 +694,7 @@ VOID dd_topthree_stop_clock(DdTopthree *self, UCHAR* counter, volatile unsigned 
 Get Frequency of RIBERY clock
 @retval	Hz
 */
-ULONG dd_topthree_get_ribclk(VOID)
+ULONG dd_topthree_get_ribclk(DdTopthree *self)
 {
 	// 0:466.666MHz(=1400MHz/3)
 	// 1:350MHz(=1400MHz/4)
@@ -721,7 +721,7 @@ ULONG dd_topthree_get_ribclk(VOID)
 Get Frequency of NFBCHCLK clock
 @retval	Hz
 */
-ULONG dd_topthree_get_nfbchclk(VOID)
+ULONG dd_topthree_get_nfbchclk(DdTopthree *self)
 {
 	// 0:200MHz(=1600MHz/8)
 	// 1:100MHz(=1600MHz/16)
@@ -734,7 +734,7 @@ ULONG dd_topthree_get_nfbchclk(VOID)
 Get Frequency of MECLK clock
 @retval	Hz
 */
-ULONG dd_topthree_get_meclk(VOID)
+ULONG dd_topthree_get_meclk(DdTopthree *self)
 {
 	// 0: 466.666MHz(=1400MHz/3)
 	// 1: 233.333MHz(=1400MHz/6)
@@ -749,7 +749,7 @@ ULONG dd_topthree_get_meclk(VOID)
 Get Frequency of FPT1 clock
 @retval	Hz
 */
-ULONG dd_topthree_get_fpt1clk(VOID)
+ULONG dd_topthree_get_fpt1clk(DdTopthree *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -777,7 +777,7 @@ ULONG dd_topthree_get_fpt1clk(VOID)
 Get Frequency of FPT0 clock
 @retval	Hz
 */
-ULONG dd_topthree_get_fpt0clk(VOID)
+ULONG dd_topthree_get_fpt0clk(DdTopthree *self)
 {
 	// 0: 300MHz(=1200MHz/4)
 	// 1: 200MHz(=1200MHz/6)
@@ -805,7 +805,7 @@ ULONG dd_topthree_get_fpt0clk(VOID)
 Get Frequency of GYRO clock
 @retval	Hz
 */
-ULONG dd_topthree_get_gyroclk(VOID)
+ULONG dd_topthree_get_gyroclk(DdTopthree *self)
 {
 	// 0:100MHz(=1600MHz/16)
 	// 1:32MHz(=1600MHz/50)
@@ -829,7 +829,7 @@ ULONG dd_topthree_get_gyroclk(VOID)
 Get Frequency of AXI bus 300 clock
 @retval	Hz
 */
-ULONG dd_topthree_get_aclk300(VOID)
+ULONG dd_topthree_get_aclk300(DdTopthree *self)
 {
 	// 0:300MHz(=1200MHz/4)
 	// 1:200MHz(=1200MHz/6)

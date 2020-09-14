@@ -3,7 +3,7 @@
 *@date                :2020-09-10
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __F_MIPIDSI11TX_LP_H__
 
 
-#include <klib.h>
-
-
-#define F_TYPE_MIPIDSI11TX_LP				(f_mipidsi11tx_lp_get_type())
-#define F_MIPIDSI11TX_LP(obj)				(K_TYPE_CHECK_INSTANCE_CAST((obj), FMipidsi11txLp))
-#define F_IS_MIPIDSI11TX_LP(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), F_TYPE_MIPIDSI11TX_LP))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPwrUp IoPwrUp;
@@ -68,465 +64,463 @@ typedef union 				_IoVidModeCfgAct IoVidModeCfgAct;
 typedef union 				_IoPhySetup IoPhySetup;
 typedef union 				_IoPhyTclkost IoPhyTclkost;
 typedef struct 				_IoFMipidsi11txLp IoFMipidsi11txLp;
-typedef struct 				_FMipidsi11txLp FMipidsi11txLp;
-typedef struct 				_FMipidsi11txLpPrivate	FMipidsi11txLpPrivate;
 
 /*  structure of PWR_UP    (2800_C004h)    */
 union _IoPwrUp{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   shutdownz   :1;
-        kulong               :31;
+        gulong   shutdownz   :1;
+        gulong               :31;
     }bit;
 };
 
 /*  structure of CLKMGR_CFG    (2800_C008h)    */
 union _IoClkmgrCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   txEscClkDivision :8;
-        kulong   toClkDivision     :8;
-        kulong                       :16;
+        gulong   txEscClkDivision :8;
+        gulong   toClkDivision     :8;
+        gulong                       :16;
     }bit;
 };
 
 /*  structure of DPI_VCID    (2800_C00Ch)    */
 union _IoDpiVcid{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   dpiVcid    :2;
-        kulong               :30;
+        gulong   dpiVcid    :2;
+        gulong               :30;
     }bit;
 };
 
 /*  structure of DPI_COLOR_CODING    (2800_C010h)    */
 union _IoDpiColorCoding{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   dpiColorCoding    :4;
-        kulong                       :4;
-        kulong   loosely18En        :1;
-        kulong                       :23;
+        gulong   dpiColorCoding    :4;
+        gulong                       :4;
+        gulong   loosely18En        :1;
+        gulong                       :23;
     }bit;
 };
 
 /*  structure of DPI_CFG_POL (2800_C014h)    */
 union _IoDpiCfgPol{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   dataenActiveLow   :1;
-        kulong   vsyncActiveLow    :1;
-        kulong   hsyncActiveLow    :1;
-        kulong   shutdActiveLow    :1;
-        kulong   colormAcviteLow   :1;
-        kulong                       :27;
+        gulong   dataenActiveLow   :1;
+        gulong   vsyncActiveLow    :1;
+        gulong   hsyncActiveLow    :1;
+        gulong   shutdActiveLow    :1;
+        gulong   colormAcviteLow   :1;
+        gulong                       :27;
     }bit;
 };
 
 /*  structure of DPI_LP_CMD_TIM (2800_C018h)    */
 union _IoDpiLpCmdTim{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   invactLpcmdTime   :8;
-        kulong                       :8;
-        kulong   outvactLpcmdTime  :8;
-        kulong                       :8;
+        gulong   invactLpcmdTime   :8;
+        gulong                       :8;
+        gulong   outvactLpcmdTime  :8;
+        gulong                       :8;
     }bit;
 };
 
 /*  structure of PCKHDL_CFG    (2800_C02Ch)    */
 union _IoPckhdlCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   eotpTxEn  :1;
-        kulong               :31;
+        gulong   eotpTxEn  :1;
+        gulong               :31;
     }bit;
 };
 
 /*  structure of MODE_CFG    (2800_C034h)    */
 union _IoModeCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   cmdVideoMode  :1;
-        kulong                   :31;
+        gulong   cmdVideoMode  :1;
+        gulong                   :31;
     }bit;
 };
 
 /*  structure of VID_MODE_CFG  (2800_C038h)    */
 union _IoVidModeCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidModeType   :2;
-        kulong                   :6;
-        kulong   lpVsaEn       :1;
-        kulong   lpVbpEn       :1;
-        kulong   lpVfpEn       :1;
-        kulong   lpVactEn      :1;
-        kulong   lpHbpEn       :1;
-        kulong   lpHfpEn       :1;
-        kulong                   :1;
-        kulong   lpCmdEn       :1;
-        kulong   vpgEn          :1;
-        kulong                   :3;
-        kulong   vpgMode        :1;
-        kulong                   :3;
-        kulong   vpgOrientation :1;
-        kulong                   :7;
+        gulong   vidModeType   :2;
+        gulong                   :6;
+        gulong   lpVsaEn       :1;
+        gulong   lpVbpEn       :1;
+        gulong   lpVfpEn       :1;
+        gulong   lpVactEn      :1;
+        gulong   lpHbpEn       :1;
+        gulong   lpHfpEn       :1;
+        gulong                   :1;
+        gulong   lpCmdEn       :1;
+        gulong   vpgEn          :1;
+        gulong                   :3;
+        gulong   vpgMode        :1;
+        gulong                   :3;
+        gulong   vpgOrientation :1;
+        gulong                   :7;
     }bit;
 };
 
 /*  structure of VID_PKT_SIZE   (2800_C03Ch)    */
 union _IoVidPktSize{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidPktSize    :14;
-        kulong                   :18;
+        gulong   vidPktSize    :14;
+        gulong                   :18;
     }bit;
 };
 
 /*  structure of VID_NUM_CHUNKS    (2800_C040h)    */
 union _IoVidNumChunks{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidNumChunks  :13;
-        kulong                   :19;
+        gulong   vidNumChunks  :13;
+        gulong                   :19;
     }bit;
 };
 
 /*  structure of VID_NULL_SIZE    (2800_C044h)    */
 union _IoVidNullSize{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidNullSize   :13;
-        kulong                   :19;
+        gulong   vidNullSize   :13;
+        gulong                   :19;
     }bit;
 };
 
 /*  structure of VID_HSA_TIME   (2800_C048h)    */
 union _IoVidHsaTime{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidHsaTime    :12;
-        kulong                   :20;
+        gulong   vidHsaTime    :12;
+        gulong                   :20;
     }bit;
 };
 
 /*  structure of VID_HBP_TIME   (2800_C04Ch)    */
 union _IoVidHbpTime{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidHbpTime    :12;
-        kulong                   :20;
+        gulong   vidHbpTime    :12;
+        gulong                   :20;
     }bit;
 };
 
 /*  structure of VID_HLINE_TIME  (2800_C050h)    */
 union _IoVidHlineTime{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidHlineTime  :15;
-        kulong                   :17;
+        gulong   vidHlineTime  :15;
+        gulong                   :17;
     }bit;
 };
 
 /*  structure of VID_VSA_LINES  (2800_C054h)    */
 union _IoVidVsaLines{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vsaLines   :10;
-        kulong               :22;
+        gulong   vsaLines   :10;
+        gulong               :22;
     }bit;
 };
 
 /*  structure of VID_VBP_LINES  (2800_C058h)    */
 union _IoVidVbpLines{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vbpLines   :10;
-        kulong               :22;
+        gulong   vbpLines   :10;
+        gulong               :22;
     }bit;
 };
 
 /*  structure of VID_VFP_LINES  (2800_C05Ch)    */
 union _IoVidVfpLines{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vfpLines   :10;
-        kulong               :22;
+        gulong   vfpLines   :10;
+        gulong               :22;
     }bit;
 };
 
 /*  structure of VID_VACTIVE_LINES  (2800_C060h)    */
 union _IoVidVactiveLines{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vActiveLines  :14;
-        kulong                   :18;
+        gulong   vActiveLines  :14;
+        gulong                   :18;
     }bit;
 };
 
 /*  structure of CMD_MODE_CFG  (2800_C068h)    */
 union _IoCmdModeCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong                   :8;
-        kulong   genSw0pTx    :1;
-        kulong   genSw1pTx    :1;
-        kulong   genSw2pTx    :1;
-        kulong                   :3;
-        kulong   genLwTx       :1;
-        kulong                   :1;
-        kulong   dcsSw0pTx    :1;
-        kulong   dcsSw1pTx    :1;
-        kulong                   :1;
-        kulong   dcsLwTx       :1;
-        kulong                   :12;
+        gulong                   :8;
+        gulong   genSw0pTx    :1;
+        gulong   genSw1pTx    :1;
+        gulong   genSw2pTx    :1;
+        gulong                   :3;
+        gulong   genLwTx       :1;
+        gulong                   :1;
+        gulong   dcsSw0pTx    :1;
+        gulong   dcsSw1pTx    :1;
+        gulong                   :1;
+        gulong   dcsLwTx       :1;
+        gulong                   :12;
     }bit;
 };
 
 /*  structure of GEN_HDR  (2800_C06Ch)    */
 union _IoGenHdr{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   genDt          :6;
-        kulong   genVc          :2;
-        kulong   genWcLsbyte   :8;
-        kulong   genWcMsbyte   :8;
-        kulong                   :8;
+        gulong   genDt          :6;
+        gulong   genVc          :2;
+        gulong   genWcLsbyte   :8;
+        gulong   genWcMsbyte   :8;
+        gulong                   :8;
     }bit;
 };
 
 /*  structure of GEN_PLD_DATA  (2800_C070h)    */
 union _IoGenPldData{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   genPldB1  :8;
-        kulong   genPldB2  :8;
-        kulong   genPldB3  :8;
-        kulong   genPldB4  :8;
+        gulong   genPldB1  :8;
+        gulong   genPldB2  :8;
+        gulong   genPldB3  :8;
+        gulong   genPldB4  :8;
     }bit;
 };
 
 /*  structure of CMD_PKT_STATUS  (2800_C074h)    */
 union _IoCmdPktStatus{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   genCmdEmpty   :1;
-        kulong   genCmdFull    :1;
-        kulong   genPldWEmpty :1;
-        kulong   genPldWFull  :1;
-        kulong                   :28;
+        gulong   genCmdEmpty   :1;
+        gulong   genCmdFull    :1;
+        gulong   genPldWEmpty :1;
+        gulong   genPldWFull  :1;
+        gulong                   :28;
     }bit;
 };
 
 /*  structure of TO_CNT_CFG  (2800_C078h)    */
 union _IoToCntCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong               :16;
-        kulong   hstxToCnt :16;
+        gulong               :16;
+        gulong   hstxToCnt :16;
     }bit;
 };
 
 /*  structure of HS_WR_TO_CNT  (2800_C084h)    */
 union _IoHsWrToCnt{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   hsWrToCnt    :16;
-        kulong                   :16;
+        gulong   hsWrToCnt    :16;
+        gulong                   :16;
     }bit;
 };
 
 /*  structure of LP_WR_TO_CNT  (2800_C088h)    */
 union _IoLpWrToCnt{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   lpWrToCnt    :16;
-        kulong                   :16;
+        gulong   lpWrToCnt    :16;
+        gulong                   :16;
     }bit;
 };
 
 /*  structure of SDF_3D  (2800_C090h)    */
 union _IoSdf3d{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   mode3d         :2;
-        kulong   format3d       :2;
-        kulong   secondVsync    :1;
-        kulong   rightFirst     :1;
-        kulong                   :10;
-        kulong   send3dCfg     :1;
-        kulong                   :15;
+        gulong   mode3d         :2;
+        gulong   format3d       :2;
+        gulong   secondVsync    :1;
+        gulong   rightFirst     :1;
+        gulong                   :10;
+        gulong   send3dCfg     :1;
+        gulong                   :15;
     }bit;
 };
 
 /*  structure of LPCLK_CTRL  (2800_C094h)    */
 union _IoLpclkCtrl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   phyTxrequestclkhs  :1;
-        kulong   autoClklaneCtrl   :1;
-        kulong                       :30;
+        gulong   phyTxrequestclkhs  :1;
+        gulong   autoClklaneCtrl   :1;
+        gulong                       :30;
     }bit;
 };
 
 /*  structure of PHY_TMR_LPCLK_CFG  (2800_C098h)    */
 union _IoPhyTmrLpclkCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   phyClkhs2lpTime   :10;
-        kulong                       :6;
-        kulong   phyClklp2hsTime   :10;
-        kulong                       :6;
+        gulong   phyClkhs2lpTime   :10;
+        gulong                       :6;
+        gulong   phyClklp2hsTime   :10;
+        gulong                       :6;
     }bit;
 };
 
 /*  structure of PHY_TMR_CFG  (2800_C09Ch)    */
 union _IoPhyTmrCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong                   :16;
-        kulong   phyLp2hsTime  :8;
-        kulong   phyHs2lpTime  :8;
+        gulong                   :16;
+        gulong   phyLp2hsTime  :8;
+        gulong   phyHs2lpTime  :8;
     }bit;
 };
 
 /*  structure of PHY_RSTZ  (2800_C0A0h)    */
 union _IoPhyRstz{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   phyShutdownz   :1;
-        kulong                   :31;
+        gulong   phyShutdownz   :1;
+        gulong                   :31;
     }bit;
 };
 
 /*  structure of PHY_IF_CFG  (2800_C0A4h)    */
 union _IoPhyIfCfg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   nLanes     :2;
-        kulong               :30;
+        gulong   nLanes     :2;
+        gulong               :30;
     }bit;
 };
 
 /*  structure of PHY_ULPS_CTRL  (2800_C0A8h)    */
 union _IoPhyUlpsCtrl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   phyTxrequlpsclk    :1;
-        kulong   phyTxexitulpsclk   :1;
-        kulong   phyTxrequlpslan    :1;
-        kulong   phyTxexitulpslan   :1;
-        kulong                       :28;
+        gulong   phyTxrequlpsclk    :1;
+        gulong   phyTxexitulpsclk   :1;
+        gulong   phyTxrequlpslan    :1;
+        gulong   phyTxexitulpslan   :1;
+        gulong                       :28;
     }bit;
 };
 
 /*  structure of PHY_TX_TRIGGERS  (2800_C0ACh)    */
 union _IoPhyTxTriggers{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   phyTxTriggers     :4;
-        kulong                       :28;
+        gulong   phyTxTriggers     :4;
+        gulong                       :28;
     }bit;
 };
 
 /*  structure of PHY_STATUS  (2800_C0B0h)    */
 union _IoPhyStatus{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong                           :1;
-        kulong   phyDirection           :1;
-        kulong   phyStopstateclklane    :1;
-        kulong   phyUlpsactivenotclk    :1;
-        kulong   phyStopstate0lane      :1;
-        kulong   phyUlpsactivenot0lane  :1;
-        kulong                           :1;
-        kulong   phyStopstate1lane      :1;
-        kulong   phyUlpsactivenot1lane  :1;
-        kulong   phyStopstate2lane      :1;
-        kulong   phyUlpsactivenot2lane  :1;
-        kulong   phyStopstate3lane      :1;
-        kulong   phyUlpsactivenot3lane  :1;
-        kulong                           :19;
+        gulong                           :1;
+        gulong   phyDirection           :1;
+        gulong   phyStopstateclklane    :1;
+        gulong   phyUlpsactivenotclk    :1;
+        gulong   phyStopstate0lane      :1;
+        gulong   phyUlpsactivenot0lane  :1;
+        gulong                           :1;
+        gulong   phyStopstate1lane      :1;
+        gulong   phyUlpsactivenot1lane  :1;
+        gulong   phyStopstate2lane      :1;
+        gulong   phyUlpsactivenot2lane  :1;
+        gulong   phyStopstate3lane      :1;
+        gulong   phyUlpsactivenot3lane  :1;
+        gulong                           :19;
     }bit;
 };
 
 /*  structure of INT_ST1  (2800_C0C0h)    */
 union _IoIntSt1{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   toHsTx            :1;
-        kulong                       :6;
-        kulong   dpiPldWrErr      :1;
-        kulong   genCmdWrErr      :1;
-        kulong   genPldWrErr      :1;
-        kulong   genPldSendErr    :1;
-        kulong                       :21;
+        gulong   toHsTx            :1;
+        gulong                       :6;
+        gulong   dpiPldWrErr      :1;
+        gulong   genCmdWrErr      :1;
+        gulong   genPldWrErr      :1;
+        gulong   genPldSendErr    :1;
+        gulong                       :21;
     }bit;
 };
 
 /*  structure of INT_MSK1  (2800_C0C8h)    */
 union _IoIntMsk1{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   toHsTx            :1;
-        kulong                       :6;
-        kulong   dpiPldWrErr      :1;
-        kulong   genCmdWrErr      :1;
-        kulong   genPldWrErr      :1;
-        kulong   genPldSendErr    :1;
-        kulong                       :21;
+        gulong   toHsTx            :1;
+        gulong                       :6;
+        gulong   dpiPldWrErr      :1;
+        gulong   genCmdWrErr      :1;
+        gulong   genPldWrErr      :1;
+        gulong   genPldSendErr    :1;
+        gulong                       :21;
     }bit;
 };
 
 /*  structure of VID_SHADOW_CTRL  (2800_C100h)    */
 union _IoVidShadowCtrl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidShadowEn       :1;
-        kulong                       :7;
-        kulong   vidShadowReq      :1;
-        kulong                       :7;
-        kulong   vidShadowPinReq  :1;
-        kulong                       :15;
+        gulong   vidShadowEn       :1;
+        gulong                       :7;
+        gulong   vidShadowReq      :1;
+        gulong                       :7;
+        gulong   vidShadowPinReq  :1;
+        gulong                       :15;
     }bit;
 };
 
 /*  structure of VID_MODE_CFG_ACT  (2800_C038h)    */
 union _IoVidModeCfgAct{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   vidModeType   :2;
-        kulong                   :6;
-        kulong   lpVsaEn       :1;
-        kulong   lpVbpEn       :1;
-        kulong   lpVfpEn       :1;
-        kulong   lpVactEn      :1;
-        kulong   lpHbpEn       :1;
-        kulong   lpHfpEn       :1;
-        kulong                   :1;
-        kulong   lpCmdEn       :1;
-        kulong                   :16;
+        gulong   vidModeType   :2;
+        gulong                   :6;
+        gulong   lpVsaEn       :1;
+        gulong   lpVbpEn       :1;
+        gulong   lpVfpEn       :1;
+        gulong   lpVactEn      :1;
+        gulong   lpHbpEn       :1;
+        gulong   lpHfpEn       :1;
+        gulong                   :1;
+        gulong   lpCmdEn       :1;
+        gulong                   :16;
     }bit;
 };
 
 /*  structure of PHY_SETUP_CL (2800_C400h) / PHY_SETUP_DL (2800_C404h)    */
 union _IoPhySetup{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   sapTlpx    :8;
-        kulong   sapHs0     :8;
-        kulong   sapTrail   :8;
-        kulong   sapPre     :8;
+        gulong   sapTlpx    :8;
+        gulong   sapHs0     :8;
+        gulong   sapTrail   :8;
+        gulong   sapPre     :8;
     }bit;
 };
 
 /*  structure of PHY_TCLKPOST  (2800_C408h)    */
 union _IoPhyTclkost{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   tclkPost   :6;
-        kulong               :26;
+        gulong   tclkPost   :6;
+        gulong               :26;
     }bit;
 };
 
@@ -534,7 +528,7 @@ union _IoPhyTclkost{
 struct _IoFMipidsi11txLp{
     /* F_MIPIDSI11TX_LP */
 	/* 2800_(C000 - C003h) */
-    kulong					version;
+    gulong					version;
     /* 2800_(C004 - C007h) */
     IoPwrUp					pwrUp;
     /* 2800_(C008 - C00Bh) */
@@ -548,11 +542,11 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C018 - C01Bh) */
     IoDpiLpCmdTim			dpiLpCmdTim;
     /* 2800_(C01C - C02Bh) */
-    kuchar dmyC01cC02b[0xC02C-0xC01C];
+    guchar dmyC01cC02b[0xC02C-0xC01C];
     /* 2800_(C02C - C02Fh) */
     IoPckhdlCfg				pckhdlCfg;
     /* 2800_(C030 - C033h) */
-    kuchar dmyC030C033[0xC034-0xC030];
+    guchar dmyC030C033[0xC034-0xC030];
     /* 2800_(C034 - C037h) */
     IoModeCfg				modeCfg;
     /* 2800_(C038 - C03Bh) */
@@ -578,7 +572,7 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C060 - C063h) */
     IoVidVactiveLines		vidVactiveLines;
     /* 2800_(C064 - C067h) */
-    kuchar dmyC064C067[0xC068-0xC064];
+    guchar dmyC064C067[0xC068-0xC064];
     /* 2800_(C068 - C06Bh) */
     IoCmdModeCfg			cmdModeCfg;
     /* 2800_(C06C - C06Fh) */
@@ -590,13 +584,13 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C078 - C07Bh) */
     IoToCntCfg				toCntCfg;
     /* 2800_(C07C - C083h) */
-    kuchar dmyC07cC083[0xC084-0xC07C];
+    guchar dmyC07cC083[0xC084-0xC07C];
     /* 2800_(C084 - C087h) */
     IoHsWrToCnt			hsWrToCnt;
     /* 2800_(C088 - C08Bh) */
     IoLpWrToCnt			lpWrToCnt;
     /* 2800_(C08C - C08Fh) */
-    kuchar dmyC08cC08f[0xC090-0xC08C];
+    guchar dmyC08cC08f[0xC090-0xC08C];
     /* 2800_(C090 - C093h) */
     IoSdf3d					sdf3d;
     /* 2800_(C094 - C097h) */
@@ -616,29 +610,29 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C0B0 - C0B3h) */
     IoPhyStatus				phyStatus;
     /* 2800_(C0B4 - C0BFh) */
-    kuchar dmyC0b4C0bf[0xC0C0-0xC0B4];
+    guchar dmyC0b4C0bf[0xC0C0-0xC0B4];
     /* 2800_(C0C0 - 0C3Ch) */
     IoIntSt1				intSt1;
     /* 2800_(C0C4 - C0C7h) */
-    kuchar dmyC0c4C0c7[0xC0C8-0xC0C4];
+    guchar dmyC0c4C0c7[0xC0C8-0xC0C4];
     /* 2800_(C0C8 - C0CBh) */
     IoIntMsk1				intMsk1;
     /* 2800_(C0CC - C0FFh) */
-    kuchar dmyC0ccC0ff[0xC100-0xC0CC];
+    guchar dmyC0ccC0ff[0xC100-0xC0CC];
     /* 2800_(C100 - C103h) */
     IoVidShadowCtrl		vidShadowCtrl;
     /* 2800_(C104 - C10Bh) */
-    kuchar dmyC104C10b[0xC10C-0xC104];
+    guchar dmyC104C10b[0xC10C-0xC104];
     /* 2800_(C10C - C10Fh) */
     IoDpiVcid				dpiVcidAct;
     /* 2800_(C110 - C113h) */
     IoDpiColorCoding		dpiColorCodingAct;
     /* 2800_(C114 - C117h) */
-    kuchar dmyC114C117[0xC118-0xC114];
+    guchar dmyC114C117[0xC118-0xC114];
     /* 2800_(C118 - C11Bh) */
     IoDpiLpCmdTim			dpiLpCmdTimAct;
     /* 2800_(C11C - C137h) */
-    kuchar dmyC11cC137[0xC138-0xC11C];
+    guchar dmyC11cC137[0xC138-0xC11C];
     /* 2800_(C138 - C13Bh) */
     IoVidModeCfgAct		vidModeCfgAct;
     /* 2800_(C13C - C13Fh) */
@@ -662,11 +656,11 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C160 - C163h) */
     IoVidVactiveLines		vidVactiveLinesAct;
     /* 2800_(C164 - C18Fh) */
-    kuchar dmyC164C18f[0xC190-0xC164];
+    guchar dmyC164C18f[0xC190-0xC164];
     /* 2800_(C190 - C193h) */
     IoSdf3d					sdf3dAct;
     /* 2800_(C194 - C3FFh) */
-    kuchar dmyC194C3ff[0xC400-0xC194];
+    guchar dmyC194C3ff[0xC400-0xC194];
     /* 2800_(C400 - C403h) */
     IoPhySetup				phySetupCl;
     /* 2800_(C404 - C407h) */
@@ -674,17 +668,8 @@ struct _IoFMipidsi11txLp{
     /* 2800_(C408 - C40Bh) */
     IoPhyTclkost			phyTclkpost;
     /* 2800_(C40C - CFFFCh) */
-    kuchar dmyC40cCfff[0xD000-0xC40C];
+    guchar dmyC40cCfff[0xD000-0xC40C];
 };
-
-struct  _FMipidsi11txLp
-{
-	KObject parent;
-};
-
-
-KConstType					f_mipidsi11tx_lp_get_type(void);
-FMipidsi11txLp*			f_mipidsi11tx_lp_new(void);
 
 
 #endif/*__F_MIPIDSI11TX_LP_H__*/

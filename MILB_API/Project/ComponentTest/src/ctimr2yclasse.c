@@ -27,11 +27,26 @@ struct _CtImR2yClassePrivate
 static void ct_im_r2y_classe_constructor(CtImR2yClasse *self)
 {
 	CtImR2yClassePrivate *priv = CT_IM_R2Y_CLASSE_GET_PRIVATE(self);
+	self->imR2y3=ct_im_r2y3_new();
+	self->imR2yProc=ct_im_r2y_proc_new();
+	self->imR2yClk=im_r2y_clk_new();
 }
 
 static void ct_im_r2y_classe_destructor(CtImR2yClasse *self)
 {
 	CtImR2yClassePrivate *priv = CT_IM_R2Y_CLASSE_GET_PRIVATE(self);
+	if(self->imR2y3){
+							k_object_unref(self->imR2y3);
+							self->imR2y3=NULL;
+						}
+	if(self->imR2yProc){
+							k_object_unref(self->imR2yProc);
+							self->imR2yProc=NULL;
+						}
+	if(self->imR2yClk){
+							k_object_unref(self->imR2yClk);
+							self->imR2yClk=NULL;
+						}
 }
 
 
@@ -423,17 +438,17 @@ INT32 ct_im_r2y_classe_1_41( CtImR2yClasse *self,UCHAR pipeNo )
 	Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 	im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 	Ddim_Print(( "PIPE1\n" ));
-	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP1.R2Y_CMN.RAMAEN.bit.HSTAEN ));
+	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP1.R2yCmn.ramaen.bit.HSTAEN ));
 	Ddim_Print(( "PIPE2\n" ));
-	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP2.R2Y_CMN.RAMAEN.bit.HSTAEN ));
+	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP2.R2yCmn.ramaen.bit.HSTAEN ));
 	im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 	ercd = im_r2y3_set_histogram_access_enable(self->imR2y3, pipeNo, 0, 0 );
 	Ddim_Print(( D_IM_R2Y_FUNC_NAME "0x%x\n", ercd ));
 	im_r2y_clk_on_pclk(self->imR2yClk, pipeNo );
 	Ddim_Print(( "PIPE1\n" ));
-	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP1.R2Y_CMN.RAMAEN.bit.HSTAEN ));
+	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP1.R2yCmn.ramaen.bit.HSTAEN ));
 	Ddim_Print(( "PIPE2\n" ));
-	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP2.R2Y_CMN.RAMAEN.bit.HSTAEN ));
+	Ddim_Print(( D_IM_R2Y_FUNC_NAME "HSTAEN = %u\n", ioR2yP2.R2yCmn.ramaen.bit.HSTAEN ));
 	im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 
@@ -839,17 +854,17 @@ INT32 ct_im_r2y_classe_1_45( CtImR2yClasse *self,UCHAR pipeNo )
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga0  = 0x%x\n",  ioR2yP1.yyw.ee0clppga.bit.ee0clppga0 ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga1  = 0x%x\n",  ioR2yP1.yyw.ee0clppga.bit.ee0clppga1 ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga2  = 0x%x\n",  ioR2yP1.yyw.ee0clppga.bit.ee0clppga2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd1  = 0x%x\n",  ioR2yP1.yyw.EE0CLPPBD.bit.ee0clppbd1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPPBD_2  = 0x%x\n",  ioR2yP1.yyw.EE0CLPPBD.bit.EE0CLPPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_0  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMOF.bit.EE0CLPMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_1  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMOF.bit.EE0CLPMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_2  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMOF.bit.EE0CLPMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA    = 0x%lx\n", ioR2yP1.yyw.EE0CLPMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_0  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMGA.bit.EE0CLPMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_1  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMGA.bit.EE0CLPMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_2  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMGA.bit.EE0CLPMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMBD_1  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMBD.bit.EE0CLPMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMBD_2  = 0x%x\n",  ioR2yP1.yyw.EE0CLPMBD.bit.EE0CLPMBD_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd1  = 0x%x\n",  ioR2yP1.yyw.ee0clppbd.bit.ee0clppbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd2  = 0x%x\n",  ioR2yP1.yyw.ee0clppbd.bit.ee0clppbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof0  = 0x%x\n",  ioR2yP1.yyw.ee0clpmof.bit.ee0clpmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof1  = 0x%x\n",  ioR2yP1.yyw.ee0clpmof.bit.ee0clpmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof2  = 0x%x\n",  ioR2yP1.yyw.ee0clpmof.bit.ee0clpmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga    = 0x%lx\n", ioR2yP1.yyw.ee0clpmga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga0  = 0x%x\n",  ioR2yP1.yyw.ee0clpmga.bit.ee0clpmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga1  = 0x%x\n",  ioR2yP1.yyw.ee0clpmga.bit.ee0clpmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga2  = 0x%x\n",  ioR2yP1.yyw.ee0clpmga.bit.ee0clpmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmbd1  = 0x%x\n",  ioR2yP1.yyw.ee0clpmbd.bit.ee0clpmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmbd2  = 0x%x\n",  ioR2yP1.yyw.ee0clpmbd.bit.ee0clpmbd2 ));
 		Ddim_Print(( "PIPE2\n" ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0en        = 0x%x\n",  ioR2yP2.yyw.ee0ctl.bit.ee0en ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0tc        = 0x%x\n",  ioR2yP2.yyw.ee0ctl.bit.ee0tc ));
@@ -996,17 +1011,17 @@ INT32 ct_im_r2y_classe_1_45( CtImR2yClasse *self,UCHAR pipeNo )
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga0  = 0x%x\n",  ioR2yP2.yyw.ee0clppga.bit.ee0clppga0 ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga1  = 0x%x\n",  ioR2yP2.yyw.ee0clppga.bit.ee0clppga1 ));
 		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppga2  = 0x%x\n",  ioR2yP2.yyw.ee0clppga.bit.ee0clppga2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd1  = 0x%x\n",  ioR2yP2.yyw.EE0CLPPBD.bit.ee0clppbd1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPPBD_2  = 0x%x\n",  ioR2yP2.yyw.EE0CLPPBD.bit.EE0CLPPBD_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_0  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMOF.bit.EE0CLPMOF_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_1  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMOF.bit.EE0CLPMOF_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMOF_2  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMOF.bit.EE0CLPMOF_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA    = 0x%lx\n", ioR2yP2.yyw.EE0CLPMGA.word ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_0  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMGA.bit.EE0CLPMGA_0 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_1  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMGA.bit.EE0CLPMGA_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMGA_2  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMGA.bit.EE0CLPMGA_2 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMBD_1  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMBD.bit.EE0CLPMBD_1 ));
-		Ddim_Print(( D_IM_R2Y_FUNC_NAME "EE0CLPMBD_2  = 0x%x\n",  ioR2yP2.yyw.EE0CLPMBD.bit.EE0CLPMBD_2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd1  = 0x%x\n",  ioR2yP2.yyw.ee0clppbd.bit.ee0clppbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clppbd2  = 0x%x\n",  ioR2yP2.yyw.ee0clppbd.bit.ee0clppbd2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof0  = 0x%x\n",  ioR2yP2.yyw.ee0clpmof.bit.ee0clpmof0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof1  = 0x%x\n",  ioR2yP2.yyw.ee0clpmof.bit.ee0clpmof1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmof2  = 0x%x\n",  ioR2yP2.yyw.ee0clpmof.bit.ee0clpmof2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga    = 0x%lx\n", ioR2yP2.yyw.ee0clpmga.word ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga0  = 0x%x\n",  ioR2yP2.yyw.ee0clpmga.bit.ee0clpmga0 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga1  = 0x%x\n",  ioR2yP2.yyw.ee0clpmga.bit.ee0clpmga1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmga2  = 0x%x\n",  ioR2yP2.yyw.ee0clpmga.bit.ee0clpmga2 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmbd1  = 0x%x\n",  ioR2yP2.yyw.ee0clpmbd.bit.ee0clpmbd1 ));
+		Ddim_Print(( D_IM_R2Y_FUNC_NAME "ee0clpmbd2  = 0x%x\n",  ioR2yP2.yyw.ee0clpmbd.bit.ee0clpmbd2 ));
 		im_r2y_clk_off_pclk(self->imR2yClk, pipeNo );
 #endif
 	}

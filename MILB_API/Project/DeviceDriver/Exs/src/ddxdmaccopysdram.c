@@ -54,14 +54,14 @@ static void dd_xdmac_copy_sdram_destructor(DdXdmacCopySdram *self)
 /**
  * @brief  DMA Copy Sync for SDRAM
  * @param  kuchar		ch				Channel number (0 to 3)
- * @param  kulong		src_addr		source address
- * @param  kulong		dst_addr		destination address
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
  * @param  kulong		size			Copy size
  * @param  kint32		waitMode		DMA end wait mode
  * @return kint32		DriverCommon_DDIM_OK
  */
-kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong src_addr,\
-		kulong dst_addr, kulong size, kuint32 waitMode)
+kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong srcAddr,\
+		kulong dstAddr, kulong size, kuint32 waitMode)
 {
 	DdXdmacCopySdramPrivate *priv = DD_XDMAC_COPY_SDRAM_GET_PRIVATE(self);
 	kint32              				ret;
@@ -74,7 +74,7 @@ kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong src_ad
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [ch] = %x\n", ch));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
-	if((src_addr == 0) || (dst_addr == 0)){
+	if((srcAddr == 0) || (dstAddr == 0)){
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [addr] = 0\n"));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
@@ -88,15 +88,15 @@ kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong src_ad
 	}
 #endif
 	// Check transfer size
-	if(((src_addr & 0x07) == 0) && ((dst_addr & 0x07) == 0) && ((size & 0x07) == 0)){
+	if(((srcAddr & 0x07) == 0) && ((dstAddr & 0x07) == 0) && ((size & 0x07) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_DOUBLEWORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_DOUBLEWORD;
 	}
-	else if(((src_addr & 0x03) == 0) && ((dst_addr & 0x03) == 0) && ((size & 0x03) == 0)){
+	else if(((srcAddr & 0x03) == 0) && ((dstAddr & 0x03) == 0) && ((size & 0x03) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_WORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_WORD;
 	}
-	else if(((src_addr & 0x01) == 0) && ((dst_addr & 0x01) == 0) && ((size & 0x01) == 0)){
+	else if(((srcAddr & 0x01) == 0) && ((dstAddr & 0x01) == 0) && ((size & 0x01) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_HALFWORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_HALFWORD;
 	}
@@ -107,8 +107,8 @@ kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong src_ad
 
 	// Parameter Setting
 	dmaCtrlTrns.trnsSize = size;
-	dmaCtrlTrns.srcAddr = src_addr;
-	dmaCtrlTrns.dstAddr = dst_addr;
+	dmaCtrlTrns.srcAddr = srcAddr;
+	dmaCtrlTrns.dstAddr = dstAddr;
 	dmaCtrlTrns.intHandler = NULL;
 
 	dmaCtrlTrns.configOne.bit.sRL = DdXdmac_XDSAC_SRL_DISABLE;
@@ -175,14 +175,14 @@ kint32 dd_xdmac_copy_sdram_sync(DdXdmacCopySdram *self, kuchar ch, kulong src_ad
 /**
  * @brief  DMA Copy Async SDRAM
  * @param  kuchar		ch				Channel number (0 to 3)
- * @param  kulong		src_addr		source address
- * @param  kulong		dst_addr		destination address
+ * @param  kulong		srcAddr		source address
+ * @param  kulong		dstAddr		destination address
  * @param  kulong		size			Copy size
  * @param  VpCallback	intHandler		Callback function pointer
  * @return kint32  		DriverCommon_DDIM_OK
  */
-kint32 dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch, kulong src_addr,\
-		kulong dst_addr, kulong size, VpCallback intHandler)
+kint32 dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch, kulong srcAddr,\
+		kulong dstAddr, kulong size, VpCallback intHandler)
 {
 	DdXdmacCopySdramPrivate *priv = DD_XDMAC_COPY_SDRAM_GET_PRIVATE(self);
 	kint32             			 	ret;
@@ -194,7 +194,7 @@ kint32 dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch, kulong src_a
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [ch] = %x\n", ch));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
-	if((src_addr == 0) || (dst_addr == 0)){
+	if((srcAddr == 0) || (dstAddr == 0)){
 		DriverCommon_DDIM_ASSERTION(("XDMAC: input param error. [addr] = 0\n"));
 		return DdXdmac_INPUT_PARAM_ERR;
 	}
@@ -204,15 +204,15 @@ kint32 dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch, kulong src_a
 	}
 #endif
 	// Check transfer size
-	if(((src_addr & 0x07) == 0) && ((dst_addr & 0x07) == 0) && ((size & 0x07) == 0)){
+	if(((srcAddr & 0x07) == 0) && ((dstAddr & 0x07) == 0) && ((size & 0x07) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_DOUBLEWORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_DOUBLEWORD;
 	}
-	else if(((src_addr & 0x03) == 0) && ((dst_addr & 0x03) == 0) && ((size & 0x03) == 0)){
+	else if(((srcAddr & 0x03) == 0) && ((dstAddr & 0x03) == 0) && ((size & 0x03) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_WORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_WORD;
 	}
-	else if(((src_addr & 0x01) == 0) && ((dst_addr & 0x01) == 0) && ((size & 0x01) == 0)){
+	else if(((srcAddr & 0x01) == 0) && ((dstAddr & 0x01) == 0) && ((size & 0x01) == 0)){
 		dmaCtrlTrns.configOne.bit.sBS = DdXdmac_XDSAC_SBS_HALFWORD;
 		dmaCtrlTrns.configOne.bit.dBS = DdXdmac_XDDAC_DBS_HALFWORD;
 	}
@@ -223,8 +223,8 @@ kint32 dd_xdmac_copy_sdram_async(DdXdmacCopySdram *self, kuchar ch, kulong src_a
 
 	// Parameter Setting
 	dmaCtrlTrns.trnsSize = size;
-	dmaCtrlTrns.srcAddr = src_addr;
-	dmaCtrlTrns.dstAddr = dst_addr;
+	dmaCtrlTrns.srcAddr = srcAddr;
+	dmaCtrlTrns.dstAddr = dstAddr;
 	dmaCtrlTrns.intHandler = intHandler;
 
 	dmaCtrlTrns.configOne.bit.sRL = DdXdmac_XDSAC_SRL_DISABLE;

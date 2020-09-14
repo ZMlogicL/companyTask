@@ -1,7 +1,7 @@
 /*
  *ctimdisp3.h
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-02
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -13,12 +13,18 @@
 #ifndef __CT_IM_DISP3_H__
 #define __CT_IM_DISP3_H__
 
-#include <klib.h>
-//#include "im_disp.h"
+#include <glib-object.h>
 
-#define CT_TYPE_IM_DISP3	(ct_im_disp3_get_type())
-#define CT_IM_DISP3(obj)		(K_TYPE_CHECK_INSTANCE_CAST(obj, CtImDisp3))
-#define CT_IS_IM_DISP3(obj)			K_TYPE_CHECK_INSTANCE_TYPE(obj, CT_TYPE_IM_DISP3)
+G_BEGIN_DECLS
+/*
+ * 以下开始宏声明
+ * */
+#define CT_TYPE_IM_DISP3					(ct_im_disp3_get_type ())
+#define CT_IM_DISP3(widget)				(G_TYPE_CHECK_INSTANCE_CAST ((widget), CT_TYPE_IM_DISP3, CtImDisp3))
+#define CT_IM_DISP3_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), CT_TYPE_IM_DISP3, CtImDisp3Class))
+#define CT_IS_IM_DISP3(widget)			(G_TYPE_CHECK_INSTANCE_TYPE ((widget), CT_TYPE_IM_DISP3))
+#define CT_IS_IM_DISP3_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), CT_TYPE_IM_DISP3))
+#define CT_IM_DISP3_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), CT_TYPE_IM_DISP3, CtImDisp3Class))
 
 /*----------------------------------------------------------------------*/
 /* Macro																*/
@@ -34,16 +40,31 @@
 #define CtImDisp3_D_CT_IM_DISP_BLOCK_0	('0')			// block 0
 #define CtImDisp3_D_CT_IM_DISP_BLOCK_1	('1')			// block 1
 
-typedef struct _CtImDisp3 CtImDisp3;
-typedef struct _CtImDisp3Private		CtImDisp3Private;
+/*
+ * 以下开始类结构体声明
+ * */
+typedef struct _CtImDisp3 		CtImDisp3;
+typedef struct _CtImDisp3Class 	CtImDisp3Class;
+typedef struct _CtImDisp3Private 	CtImDisp3Private;
 
-struct _CtImDisp3{
-	KObject parent;
+struct _CtImDisp3
+{
+	GObject parent;
+	/*public*/
 	CtImDisp3Private *privCtImDisp3;
 };
 
-KConstType 		ct_im_disp3_get_type(void);
-CtImDisp3 *		ct_im_disp3_new(kuchar *pclkCounter, kuchar *hclkCounter);
+struct _CtImDisp3Class
+{
+	GObjectClass parentclass;
+};
+
+/*
+ * 如下开始public方法声明
+ * */
+GType 				ct_im_disp3_get_type(void) G_GNUC_CONST;
+
+CtImDisp3 *		ct_im_disp3_new(guchar *pclkCounter, guchar *hclkCounter);
 
 #ifdef CtImDisp_CO_DEBUG_DISP
 
@@ -76,16 +97,17 @@ void 				ct_im_disp3_dump_reg_addr(CtImDisp3 *self);
 void 				ct_im_disp3_dump_reg_resize(CtImDisp3 *self);
 void 				ct_im_disp3_dump_reg_csc_matrix(CtImDisp3 *self, E_IM_DISP_SEL block);
 
-void 				ct_im_disp3_pclk_counter_on(kuchar *pclkCounter);
-void 				ct_im_disp3_pclk_counter_off(kuchar *pclkCounter);
-void 				ct_im_disp3_hclk_counter_on(kuchar *hclkCounter);
-void 				ct_im_disp3_hclk_counter_off(kuchar *hclkCounter);
+void 				ct_im_disp3_pclk_counter_on(guchar *pclkCounter);
+void 				ct_im_disp3_pclk_counter_off(guchar *pclkCounter);
+void 				ct_im_disp3_hclk_counter_on(guchar *hclkCounter);
+void 				ct_im_disp3_hclk_counter_off(guchar *hclkCounter);
 
 void 				ct_im_disp3_print_param_resize(T_IM_DISP_RESIZE resize);
 void 				ct_im_disp3_print_param_yhelp(T_IM_DISP_YHLP Yhlp);
 void 				ct_im_disp3_print_param_warning(T_IM_DISP_WARNING warning);
 void 				ct_im_disp3_print_param_zebra(T_IM_DISP_ZEBRA zebra);
-void 				ct_im_disp3_print_param_matrix(U_IM_DISP_YR_MATRIX_COEFFICIENT matrix[D_IM_DISP_MATRIX_SIZE]);
+void 				ct_im_disp3_print_param_matrix(U_IM_DISP_YR_MATRIX_COEFFICIENT
+								matrix[D_IM_DISP_MATRIX_SIZE]);
 void 				ct_im_disp3_print_param_clbdt(U_IM_DISP_IMAGE_COLOR* clbdt);
 void 				ct_im_disp3_print_param_out_matrix(U_IM_DISP_YR_MATRIX_COEFFICIENT* matrix);
 void 				ct_im_disp3_print_param_clip(T_IM_DISP_CLIP_CAL clipCal);
@@ -107,5 +129,7 @@ void 				ct_im_disp3_int_10_cb();
 void 				ct_im_disp3_int_11_cb();
 
 #endif //CtImDisp_CO_DEBUG_DISP
+
+G_END_DECLS
 
 #endif /* __CT_IM_DISP3_H__ */

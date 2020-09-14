@@ -87,25 +87,25 @@ static void finalize_od(GObject *object)
 */
 void ct_dd_audio_set_enable_fifo_full_dmain_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMIE = 0;
+	ioAudio.AUDIOIF[ch].AUST.bit.EDMIE = 0;
 
 	result = dd_audio_set_enable_fifo_full_dmain(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMIE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_full_dmain_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -114,32 +114,32 @@ void ct_dd_audio_set_enable_fifo_full_dmain_test2( CtDdAudioSet *self )
 
 	result = dd_audio_set_enable_fifo_full_dmain(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMIE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_full_dmain_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMIE = 1;
+	ioAudio.AUDIOIF[ch].AUST.bit.EDMIE = 1;
 
 	result = dd_audio_set_enable_fifo_full_dmain(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMIE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_full_dmain_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -151,7 +151,7 @@ void ct_dd_audio_set_enable_fifo_full_dmain_test4( CtDdAudioSet *self )
 
 void ct_dd_audio_set_enable_fifo_full_dmain_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -163,25 +163,25 @@ void ct_dd_audio_set_enable_fifo_full_dmain_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_enable_fifo_empty_dma_out_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMOE = 0;
+	ioAudio.AUDIOIF[ch].AUST.bit.EDMOE = 0;
 
 	result = dd_audio_set_enable_fifo_empty_dma_out(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMOE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_empty_dma_out_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -190,32 +190,32 @@ void ct_dd_audio_set_enable_fifo_empty_dma_out_test2( CtDdAudioSet *self )
 
 	result = dd_audio_set_enable_fifo_empty_dma_out(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMOE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_empty_dma_out_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMOE = 1;
+	ioAudio.AUDIOIF[ch].AUST.bit.EDMOE = 1;
 
 	result = dd_audio_set_enable_fifo_empty_dma_out(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMOE));
+	DriverCommon_DDIM_PRINT(("AUCR.DMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUCR.bit.DMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_enable_fifo_empty_dma_out_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -227,7 +227,7 @@ void ct_dd_audio_set_enable_fifo_empty_dma_out_test4( CtDdAudioSet *self )
 
 void ct_dd_audio_set_enable_fifo_empty_dma_out_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -239,25 +239,25 @@ void ct_dd_audio_set_enable_fifo_empty_dma_out_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_input_dmarequest_enable_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMIE = 0;
+	ioAudio.AUDIOIF[ch].AUCR.bit.DMIE = 0;
 
 	result = dd_audio_set_input_dma_request_enable(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMIE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_input_dmarequest_enable_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -266,32 +266,32 @@ void ct_dd_audio_set_input_dmarequest_enable_test2( CtDdAudioSet *self )
 
 	result = dd_audio_set_input_dma_request_enable(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMIE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_input_dmarequest_enable_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMIE = 1;
+	ioAudio.AUDIOIF[ch].AUCR.bit.DMIE = 1;
 
 	result = dd_audio_set_input_dma_request_enable(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMIE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMIE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMIE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_input_dmarequest_enable_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -303,7 +303,7 @@ void ct_dd_audio_set_input_dmarequest_enable_test4( CtDdAudioSet *self )
 
 void ct_dd_audio_set_input_dmarequest_enable_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -315,25 +315,25 @@ void ct_dd_audio_set_input_dmarequest_enable_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_output_dmarequest_enable_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMOE = 0;
+	ioAudio.AUDIOIF[ch].AUCR.bit.DMOE = 0;
 
 	result = dd_audio_set_output_dma_request_enable(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMOE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_output_dmarequest_enable_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -342,32 +342,32 @@ void ct_dd_audio_set_output_dmarequest_enable_test2( CtDdAudioSet *self )
 
 	result = dd_audio_set_output_dma_request_enable(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMOE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_output_dmarequest_enable_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
 
 	dd_audio_reset(dd_audio_get(), ch);
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.DMOE = 1;
+	ioAudio.AUDIOIF[ch].AUCR.bit.DMOE = 1;
 
 	result = dd_audio_set_output_dma_request_enable(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUST.bit.EDMOE));
+	DriverCommon_DDIM_PRINT(("AUST.EDMOE=0x%x\n", ioAudio.AUDIOIF[ch].AUST.bit.EDMOE));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_output_dmarequest_enable_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -379,7 +379,7 @@ void ct_dd_audio_set_output_dmarequest_enable_test4( CtDdAudioSet *self )
 
 void ct_dd_audio_set_output_dmarequest_enable_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -391,7 +391,7 @@ void ct_dd_audio_set_output_dmarequest_enable_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_swaphw_auidlr_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -406,14 +406,14 @@ void ct_dd_audio_set_swaphw_auidlr_test1( CtDdAudioSet *self )
 
 	result = dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IHW_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IHW_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swaphw_auidlr_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -428,18 +428,18 @@ void ct_dd_audio_set_swaphw_auidlr_test2( CtDdAudioSet *self )
 
 	result = dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IHW_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IHW_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swaphw_auidlr_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_IN ctrlInf;
-	T_DD_AUDIO_CTRL_COMMON ctrlCommon;
-	T_DD_AUDIO_I2S_CMMN i2sCommon;
-	T_DD_AUDIO_I2S_IN i2sIn;
+	guint8 ch = self->ch;
+	AudioCtrlIn ctrlInf;
+	AudioCtrlCommon ctrlCommon;
+	AudioI2sCmmn i2sCommon;
+	AudioI2sIn i2sIn;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -452,32 +452,32 @@ void ct_dd_audio_set_swaphw_auidlr_test3( CtDdAudioSet *self )
 
 	if (ch != 1){
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_SLAVE;
-		i2sCommon.clk_div_enable = DdAudio_DISABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_SLAVE;
+		i2sCommon.clkDivEnable = DdAudio_DISABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
 	}
 	else {
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_SLAVE;
-		i2sCommon.clk_div_enable = DdAudio_DISABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_SLAVE;
+		i2sCommon.clkDivEnable = DdAudio_DISABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
 
 	}
 
 	dd_audio_get_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
-	i2sIn.mode_in = E_DD_AUDIO_MODE_R_JUST;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
+	i2sIn.modeIn = E_DD_AUDIO_MODE_R_JUST;
 	dd_audio_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
 
 	dd_audio_get_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 	dd_audio_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
 
 	dd_audio_get_ctrl_input(dd_audio_get(), ch, &ctrlInf);
-	ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-	ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-	ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-	ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+	ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+	ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+	ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	(void)dd_audio_ctrl_input(dd_audio_get(), ch, &ctrlInf);
 
 	dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
@@ -487,14 +487,14 @@ void ct_dd_audio_set_swaphw_auidlr_test3( CtDdAudioSet *self )
 	}
 	else {
 		dd_audio_get_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
-		ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+		ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 		dd_audio_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
 
 		dd_audio_get_ctrl_input(dd_audio_get(), 0, &ctrlInf);
-		ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-		ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-		ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-		ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+		ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+		ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+		ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+		ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 		(void)dd_audio_ctrl_input(dd_audio_get(), 0, &ctrlInf);
 
 		dd_audio_start_input(dd_audio_get(), DdAudio_IF_CH0_CH1);
@@ -502,28 +502,28 @@ void ct_dd_audio_set_swaphw_auidlr_test3( CtDdAudioSet *self )
 
 #ifdef PC_DEBUG
 	if (ch != 1){
-		IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
 	}
 	else {
-		IO_AUDIO.AUDIOIF[0].AUCR.bit.AUIEF = 1;
-		IO_AUDIO.AUDIOIF[1].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[0].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[1].AUCR.bit.AUIEF = 1;
 	}
 #endif
 
 	result = dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IHW_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IHW_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swaphw_auidlr_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_IN ctrlInf;
-	T_DD_AUDIO_CTRL_COMMON ctrlCommon;
-	T_DD_AUDIO_I2S_CMMN i2sCommon;
-	T_DD_AUDIO_I2S_IN i2sIn;
+	guint8 ch = self->ch;
+	AudioCtrlIn ctrlInf;
+	AudioCtrlCommon ctrlCommon;
+	AudioI2sCmmn i2sCommon;
+	AudioI2sIn i2sIn;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -536,32 +536,32 @@ void ct_dd_audio_set_swaphw_auidlr_test4( CtDdAudioSet *self )
 
 	if (ch != 1){
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
-		i2sCommon.clk_div_enable = DdAudio_ENABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_MASTER;
+		i2sCommon.clkDivEnable = DdAudio_ENABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
 	}
 	else {
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
-		i2sCommon.clk_div_enable = DdAudio_ENABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_MASTER;
+		i2sCommon.clkDivEnable = DdAudio_ENABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
 
 	}
 
 	dd_audio_get_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
-	i2sIn.mode_in = E_DD_AUDIO_MODE_R_JUST;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
+	i2sIn.modeIn = E_DD_AUDIO_MODE_R_JUST;
 	dd_audio_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
 
 	dd_audio_get_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 	dd_audio_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
 
 	dd_audio_get_ctrl_input(dd_audio_get(), ch, &ctrlInf);
-	ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-	ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-	ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-	ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+	ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+	ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+	ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	(void)dd_audio_ctrl_input(dd_audio_get(), ch, &ctrlInf);
 
 	dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_DISABLE);
@@ -571,14 +571,14 @@ void ct_dd_audio_set_swaphw_auidlr_test4( CtDdAudioSet *self )
 	}
 	else {
 		dd_audio_get_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
-		ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+		ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 		dd_audio_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
 
 		dd_audio_get_ctrl_input(dd_audio_get(), 0, &ctrlInf);
-		ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-		ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-		ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-		ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+		ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+		ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+		ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+		ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 		(void)dd_audio_ctrl_input(dd_audio_get(), 0, &ctrlInf);
 
 		dd_audio_start_input(dd_audio_get(), DdAudio_IF_CH0_CH1);
@@ -586,11 +586,11 @@ void ct_dd_audio_set_swaphw_auidlr_test4( CtDdAudioSet *self )
 
 #ifdef PC_DEBUG
 	if (ch != 1){
-		IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
 	}
 	else {
-		IO_AUDIO.AUDIOIF[0].AUCR.bit.AUIEF = 1;
-		IO_AUDIO.AUDIOIF[1].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[0].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[1].AUCR.bit.AUIEF = 1;
 	}
 #else
 	ddim_user_custom_dly_tsk(1);
@@ -598,14 +598,14 @@ void ct_dd_audio_set_swaphw_auidlr_test4( CtDdAudioSet *self )
 
 	result = dd_audio_set_swap_hw_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IHW_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IHW_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IHW_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swaphw_auidlr_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -617,7 +617,7 @@ void ct_dd_audio_set_swaphw_auidlr_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_swaphw_auidlr_test6( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -629,7 +629,7 @@ void ct_dd_audio_set_swaphw_auidlr_test6( CtDdAudioSet *self )
 
 void ct_dd_audio_set_swapbyte_auidlr_test1( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -640,20 +640,20 @@ void ct_dd_audio_set_swapbyte_auidlr_test1( CtDdAudioSet *self )
 
 	dd_audio_init(dd_audio_get());
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 0;
+	ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 0;
 
 	dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_DISABLE);
 
 	result = dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swapbyte_auidlr_test2( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -664,24 +664,24 @@ void ct_dd_audio_set_swapbyte_auidlr_test2( CtDdAudioSet *self )
 
 	dd_audio_init(dd_audio_get());
 
-	IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 0;
+	ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 0;
 
 	dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
 	result = dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_DISABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swapbyte_auidlr_test3( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_IN ctrlInf;
-	T_DD_AUDIO_CTRL_COMMON ctrlCommon;
-	T_DD_AUDIO_I2S_CMMN i2sCommon;
-	T_DD_AUDIO_I2S_IN i2sIn;
+	guint8 ch = self->ch;
+	AudioCtrlIn ctrlInf;
+	AudioCtrlCommon ctrlCommon;
+	AudioI2sCmmn i2sCommon;
+	AudioI2sIn i2sIn;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -694,32 +694,32 @@ void ct_dd_audio_set_swapbyte_auidlr_test3( CtDdAudioSet *self )
 
 	if (ch != 1){
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_SLAVE;
-		i2sCommon.clk_div_enable = DdAudio_DISABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_SLAVE;
+		i2sCommon.clkDivEnable = DdAudio_DISABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
 	}
 	else {
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_SLAVE;
-		i2sCommon.clk_div_enable = DdAudio_DISABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_SLAVE;
+		i2sCommon.clkDivEnable = DdAudio_DISABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
 
 	}
 
 	dd_audio_get_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
-	i2sIn.mode_in = E_DD_AUDIO_MODE_R_JUST;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
+	i2sIn.modeIn = E_DD_AUDIO_MODE_R_JUST;
 	dd_audio_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
 
 	dd_audio_get_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 	dd_audio_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
 
 	dd_audio_get_ctrl_input(dd_audio_get(), ch, &ctrlInf);
-	ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-	ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-	ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-	ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+	ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+	ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+	ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	(void)dd_audio_ctrl_input(dd_audio_get(), ch, &ctrlInf);
 
 	dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
@@ -729,14 +729,14 @@ void ct_dd_audio_set_swapbyte_auidlr_test3( CtDdAudioSet *self )
 	}
 	else {
 		dd_audio_get_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
-		ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+		ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 		dd_audio_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
 
 		dd_audio_get_ctrl_input(dd_audio_get(), 0, &ctrlInf);
-		ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-		ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-		ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-		ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+		ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+		ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+		ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+		ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 		(void)dd_audio_ctrl_input(dd_audio_get(), 0, &ctrlInf);
 
 		dd_audio_start_input(dd_audio_get(), DdAudio_IF_CH0_CH1);
@@ -744,28 +744,28 @@ void ct_dd_audio_set_swapbyte_auidlr_test3( CtDdAudioSet *self )
 
 #ifdef PC_DEBUG
 	if (ch != 1){
-		IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
 	}
 	else {
-		IO_AUDIO.AUDIOIF[0].AUCR.bit.AUIEF = 1;
-		IO_AUDIO.AUDIOIF[1].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[0].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[1].AUCR.bit.AUIEF = 1;
 	}
 #endif
 
 	result = dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swapbyte_auidlr_test4( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
-	T_DD_AUDIO_CTRL_IN ctrlInf;
-	T_DD_AUDIO_CTRL_COMMON ctrlCommon;
-	T_DD_AUDIO_I2S_CMMN i2sCommon;
-	T_DD_AUDIO_I2S_IN i2sIn;
+	guint8 ch = self->ch;
+	AudioCtrlIn ctrlInf;
+	AudioCtrlCommon ctrlCommon;
+	AudioI2sCmmn i2sCommon;
+	AudioI2sIn i2sIn;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -778,31 +778,31 @@ void ct_dd_audio_set_swapbyte_auidlr_test4( CtDdAudioSet *self )
 
 	if (ch != 1){
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
-		i2sCommon.clk_div_enable = DdAudio_ENABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_MASTER;
+		i2sCommon.clkDivEnable = DdAudio_ENABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), ch, &i2sCommon);
 	}
 	else {
 		dd_audio_get_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
-		i2sCommon.master_slave = E_DD_AUDIO_CLK_MASTER;
-		i2sCommon.clk_div_enable = DdAudio_ENABLE;
+		i2sCommon.masterSlave = E_DD_AUDIO_CLK_MASTER;
+		i2sCommon.clkDivEnable = DdAudio_ENABLE;
 		dd_audio_ctrl_i2s_cmmn(dd_audio_get(), 0, &i2sCommon);
 	}
 
 	dd_audio_get_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
-	i2sIn.bit_in = E_DD_AUDIO_BIT_16BIT;
-	i2sIn.mode_in = E_DD_AUDIO_MODE_R_JUST;
+	i2sIn.bitIn = DdAudioI2s_BIT_16BIT;
+	i2sIn.modeIn = E_DD_AUDIO_MODE_R_JUST;
 	dd_audio_ctrl_i2s_in(dd_audio_get(), ch, &i2sIn);
 
 	dd_audio_get_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
-	ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+	ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 	dd_audio_ctrl_common(dd_audio_get(), ch, &ctrlCommon);
 
 	dd_audio_get_ctrl_input(dd_audio_get(), ch, &ctrlInf);
-	ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-	ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-	ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-	ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+	ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+	ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+	ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+	ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 	(void)dd_audio_ctrl_input(dd_audio_get(), ch, &ctrlInf);
 
 	dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_DISABLE);
@@ -812,14 +812,14 @@ void ct_dd_audio_set_swapbyte_auidlr_test4( CtDdAudioSet *self )
 	}
 	else {
 		dd_audio_get_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
-		ctrlCommon.fifo_usage = E_DD_AUDIO_FIFO_USAGE_STAGES_8;
+		ctrlCommon.fifoUsage = DdAudioCtrl_FIFO_USAGE_STAGES_8;
 		dd_audio_ctrl_common(dd_audio_get(), 0, &ctrlCommon);
 
 		dd_audio_get_ctrl_input(dd_audio_get(), 0, &ctrlInf);
-		ctrlInf.format = E_DD_AUDIO_DATA_REG_FRMT_R_JUST;
-		ctrlInf.fifo_stages = E_DD_AUDIO_FIFO_STAGES_1;
-		ctrlInf.ahb_format = E_DD_AUDIO_AHB_FRMT_R_JUST;
-		ctrlInf.bit_shift = E_DD_AUDIO_BIT_SHIFT_0;
+		ctrlInf.format = DdAudioCtrl_DATA_REG_FRMT_R_JUST;
+		ctrlInf.fifoStages = DdAudioCtrl_FIFO_STAGES_1;
+		ctrlInf.ahbFormat = DdAudioCtrl_AHB_FRMT_R_JUST;
+		ctrlInf.bitShift = DdAudioCtrl_BIT_SHIFT_0;
 		(void)dd_audio_ctrl_input(dd_audio_get(), 0, &ctrlInf);
 
 		dd_audio_start_input(dd_audio_get(), DdAudio_IF_CH0_CH1);
@@ -827,11 +827,11 @@ void ct_dd_audio_set_swapbyte_auidlr_test4( CtDdAudioSet *self )
 
 #ifdef PC_DEBUG
 	if (ch != 1){
-		IO_AUDIO.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[ch].AUCR.bit.AUIEF = 1;
 	}
 	else {
-		IO_AUDIO.AUDIOIF[0].AUCR.bit.AUIEF = 1;
-		IO_AUDIO.AUDIOIF[1].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[0].AUCR.bit.AUIEF = 1;
+		ioAudio.AUDIOIF[1].AUCR.bit.AUIEF = 1;
 	}
 #else
 	ddim_user_custom_dly_tsk(1);
@@ -839,14 +839,14 @@ void ct_dd_audio_set_swapbyte_auidlr_test4( CtDdAudioSet *self )
 
 	result = dd_audio_set_swap_byte_auidlr(dd_audio_get(), ch, DdAudio_ENABLE);
 
-	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", IO_AUDIO.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
+	DriverCommon_DDIM_PRINT(("AUMD.IBYTE_SWP=0x%x\n", ioAudio.AUDIOIF[ch].AUMD.bit.IBYTE_SWP));
 
 	DriverCommon_DDIM_PRINT(("<%s> End. result=0x%x, ch=%d\n", __FUNCTION__, result, ch));
 }
 
 void ct_dd_audio_set_swapbyte_auidlr_test5( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));
@@ -858,7 +858,7 @@ void ct_dd_audio_set_swapbyte_auidlr_test5( CtDdAudioSet *self )
 
 void ct_dd_audio_set_swapbyte_auidlr_test6( CtDdAudioSet *self )
 {
-	const guint8 ch = self->ch;
+	guint8 ch = self->ch;
 	gint32 result;
 
 	DriverCommon_DDIM_PRINT(( "<%s> Start\n", __FUNCTION__ ));

@@ -20,8 +20,9 @@ typedef struct   _ImDisp1Private		ImDisp1Private;
 
 struct _ImDisp1 {
 	KObject parent;
-	ImDisp0*	imDisp0;
+	ImDisp0 * imDisp0;
 };
+
 
 KConstType 		im_disp1_get_type(void);
 ImDisp1*	im_disp1_new(void);
@@ -70,19 +71,17 @@ typedef enum {
 	E_IM_DISP_P2M_PWCH_TRG_READ_ACT						// TRG is on
 } E_IM_DISP_P2M_PWCH_TRG;
 
-
-
 //---------------------- driver  section -------------------------------
 /**
 Initialize DISP macro to clear soft-reset bit.
 */
-extern VOID Im_DISP_Init(VOID);
+ VOID im_disp1_init(ImDisp1 * self);
 
 /**
 Set control data of main data input block.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param [in] ctrl_trg_limit	Setting of main data input block.<br>
 							It is not possible to rewrite it while main data input block is operating.<br>
 @param[in]	ctrl			Setting of main data input block.<br>
@@ -94,21 +93,21 @@ Set control data of main data input block.<br>
 			It is necessary to fulfill the following conditions. <br>
 			<ul><li>LISIZE.IHSIZE >= 128
 				<li>LISIZE.IHSIZE is a multiple of 2
-				<li>LDSTA.DSH + LISIZE.IHSIZE * (LRSZ1.HRSZM / LRSZ1.HRSZN) <= OHSIZE
+				<li>LDSTA.DSH + LISIZE.IHSIZE * (LRSZ1.hrszm / LRSZ1.hrszn) <= OHSIZE
 				<li>LISIZE.IVSIZE >= 16
 				<li>LISIZE.IVSIZE is a multiple of 2
-				<li>LDSTA.DSV + LISIZE.IVSIZE * (LRSZ2.VRSZM / LRSZ2.VRSZN) <= OVSIZE
+				<li>LDSTA.DSV + LISIZE.IVSIZE * (LRSZ2.vrszm / LRSZ2.vrszn) <= OVSIZE
 				<li>LYHGA > 0
 				<li>LCHGA > 0
-				<li>LRSZ1.HRSZM / LRSZ1.HRSZN >= 0.5
-				<li>LRSZ1.HRSZM / LRSZ1.HRSZN <= 8
-				<li>(in the case of LRSZ1.HRSZM / LRSZ1.HRSZN = 1.0) LRSZ1.HRSZOF = 0
-				<li>(in the case of LHRSZ0 = E_IM_DISP_RSZSL_PADDING_THINNING) LRSZ1.HRSZOF = 0
-				<li>LRSZ1.HRSZOF < LISIZE.IHSIZE * LRSZ1.HRSZM - (OHSIZE - 1) * LRSZ1.HRSZN
-				<li>LRSZ1.HRSZOF < LRSZ1.HRSZM
-				<li>LRSZ2.VRSZM / LRSZ2.VRSZN >= 0.5
-				<li>LRSZ2.VRSZM / LRSZ2.VRSZN <= 8
-				<li>LYWTH.YWTHH > LYWTH.YWTHL
+				<li>LRSZ1.hrszm / LRSZ1.hrszn >= 0.5
+				<li>LRSZ1.hrszm / LRSZ1.hrszn <= 8
+				<li>(in the case of LRSZ1.hrszm / LRSZ1.hrszn = 1.0) LRSZ1.hrszof = 0
+				<li>(in the case of LHRSZ0 = ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING) LRSZ1.hrszof = 0
+				<li>LRSZ1.hrszof < LISIZE.IHSIZE * LRSZ1.hrszm - (OHSIZE - 1) * LRSZ1.hrszn
+				<li>LRSZ1.hrszof < LRSZ1.hrszm
+				<li>LRSZ2.vrszm / LRSZ2.vrszn >= 0.5
+				<li>LRSZ2.vrszm / LRSZ2.vrszn <= 8
+				<li>LYWTH.ywthh > LYWTH.ywthl
 				<li>LDSTA.DSH is a multiple of 2
 				<li>LDSTA.DSV is a multiple of 2
 				<li>LTCCTL.TCRES < 3
@@ -116,13 +115,13 @@ Set control data of main data input block.<br>
 				<li>(in the case of LTCCTL.TCRES = 2 and LTCCTL.TCBLEN = 1) LTCCTL.TCTBL < 2
 			</ul>
 */
-extern INT32 Im_DISP_Ctrl_Main_Layer(E_IM_DISP_SEL block, T_IM_DISP_CTRL_MAIN_LAYER_TRG_LIMIT const *const ctrl_trg_limit, T_IM_DISP_CTRL_MAIN_LAYER const *const ctrl);
+ INT32 im_disp1_ctrl_main_layer(ImDisp1 * self, ImDispEImDispSel block, T_IM_DISP_CTRL_MAIN_LAYER_TRG_LIMIT const *const ctrl_trg_limit, T_IM_DISP_CTRL_MAIN_LAYER const *const ctrl);
 
 /**
 Get control data of main data input block.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out] ctrl_trg_limit	Setting of main data input block.<br>
 							It is not possible to rewrite it while main data input block is operating.<br>
 @param[out]	ctrl			Setting of main data input block.<br>
@@ -131,13 +130,13 @@ Get control data of main data input block.<br>
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks If NULL is specified for the argument, the acquisition of the item can be skipped.<br>
 */
-extern INT32 Im_DISP_Get_Ctrl_Main_Layer(E_IM_DISP_SEL block, T_IM_DISP_CTRL_MAIN_LAYER_TRG_LIMIT *const ctrl_trg_limit, T_IM_DISP_CTRL_MAIN_LAYER *const ctrl);
+ INT32 im_disp1_get_ctrl_main_layer(ImDisp1 * self, ImDispEImDispSel block, T_IM_DISP_CTRL_MAIN_LAYER_TRG_LIMIT *const ctrl_trg_limit, T_IM_DISP_CTRL_MAIN_LAYER *const ctrl);
 
 /**
 Set control data of data output block.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	ctrl_trg_limit		Setting of data output block.<br>
 								It is not possible to rewrite it while data output block is operating.<br>
 @param[in]	ctrl				Setting of data output block.<br>
@@ -203,13 +202,13 @@ Set control data of data output block.<br>
 				<li>FFWIDTH.FFVWID >= 2
 			</ul>
 */
-INT32 im_disp1_ctrl_output(ImDisp1 *self, E_IM_DISP_SEL block, T_IM_DISP_CTRL_OUTPUT_TRG_LIMIT const *const ctrl_trg_limit, T_IM_DISP_CTRL_OUTPUT const *const ctrl);
+ INT32 im_disp1_ctrl_output(ImDisp1 * self, ImDispEImDispSel block, T_IM_DISP_CTRL_OUTPUT_TRG_LIMIT const *const ctrl_trg_limit, T_IM_DISP_CTRL_OUTPUT const *const ctrl);
 
 /**
 Get control data of data output block.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	ctrl_trg_limit		Setting of data output block.<br>
 								It is not possible to rewrite it while data output block is operating.<br>
 @param[out]	ctrl				Setting of data output block.<br>
@@ -218,13 +217,13 @@ Get control data of data output block.<br>
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks If NULL is specified for the argument, the acquisition of the item can be skipped.<br>
 */
-extern INT32 Im_DISP_Get_Ctrl_Output(E_IM_DISP_SEL block, T_IM_DISP_CTRL_OUTPUT_TRG_LIMIT *const ctrl_trg_limit, T_IM_DISP_CTRL_OUTPUT *const ctrl);
+ INT32 im_disp1_get_ctrl_output(ImDisp1 * self,ImDispEImDispSel block, T_IM_DISP_CTRL_OUTPUT_TRG_LIMIT *const ctrl_trg_limit, T_IM_DISP_CTRL_OUTPUT *const ctrl);
 
 /**
 Set control data of Grid in common block.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	ctrl				Setting of grid data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
@@ -248,31 +247,31 @@ Set control data of Grid in common block.<br>
 				<li>GITVL.GVITV >= GWIDTH.GVWID + 2
 			</ul>
 */
-extern INT32 Im_DISP_Ctrl_Grid_Layer(E_IM_DISP_SEL block, T_IM_DISP_CTRL_GRID_LAYER const *const ctrl);
+ INT32 im_disp1_ctrl_grid_layer(ImDisp1 * self, ImDispEImDispSel block, T_IM_DISP_CTRL_GRID_LAYER const *const ctrl);
 
 /**
 Get control data of Grid in common block.<br>
 @param[in]	block				Common block selection.<br>
-								<ul><li>@ref E_IM_DISP_HDMI
-									<li>@ref E_IM_DISP_LCD_MIPI</ul>
+								<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+									<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[out]	ctrl				Setting of grid data.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks If NULL is specified for the argument, the acquisition of the item can be skipped.<br>
 */
-extern INT32 Im_DISP_Get_Ctrl_Grid_Layer(E_IM_DISP_SEL block, T_IM_DISP_CTRL_GRID_LAYER *const ctrl);
+ INT32 im_disp1_get_ctrl_grid_layer(ImDisp1 * self, ImDispEImDispSel block, T_IM_DISP_CTRL_GRID_LAYER *const ctrl);
 
 /**
 Set control data of OSD data input block.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
 @param[in]	grrpgctl		Register paramter taking control register.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @param[in]	ctrl			Setting of OSD data input block.<br>
 							It is possible to rewrite it while OSD data input block is operating.<br>
 @retval	D_DDIM_OK						Success.
@@ -280,13 +279,13 @@ Set control data of OSD data input block.<br>
 @retval	D_IM_DISP_MACRO_BUSY_NG			Fail - Macro busy.
 @remarks	If NULL is specified for the argument, the setting of the item can be skipped.<br>
 			It is necessary to fulfill the following conditions. <br>
-			<ul><li>GRIDT.IFMT <= @ref D_IM_DISP_GRIDT_IFMT_RGBA5551
+			<ul><li>GRIDT.ifmt <= @ref D_IM_DISP_GRIDT_IFMT_RGBA5551
 				<li>GRTISIZE.TIHSIZE is a multiple of 2
 				<li>GRTISIZE.TIHSIZE >= 8
-				<li>GRDSTA.DSH + GRTISIZE.TIHSIZE * (GRRSZ1.HRSZM / GRRSZ1.HRSZN) <= OHSIZE
+				<li>GRDSTA.DSH + GRTISIZE.TIHSIZE * (GRRSZ1.hrszm / GRRSZ1.hrszn) <= OHSIZE
 				<li>GRTISIZE.TIVSIZE is a multiple of 2
 				<li>GRTISIZE.TIVSIZE >= 8
-				<li>GRDSTA.DSV + GRTISIZE.TIVSIZE * (GRRSZ2.VRSZM / GRRSZ2.VRSZN) <= OVSIZE
+				<li>GRDSTA.DSV + GRTISIZE.TIVSIZE * (GRRSZ2.vrszm / GRRSZ2.vrszn) <= OVSIZE
 				<li>GRTDSTA.DSH is a multiple of 2
 				<li>GRTDSTA.DSV is a multiple of 2
 				<li>GRIPO.IPO1, GRIPO.IPO2, GRIPO.IPO3 and GRIPO.IPO4 do not overlap
@@ -305,45 +304,45 @@ Set control data of OSD data input block.<br>
 				<li>GRDSTA.DSV is a multiple of 2
 				<li>GRDSTA.DSH_0 <= DSH_1 <= DSH_2 ... <= DSH_9 (in order of bank_no)
 				<li>(in case of same DSH) GRDSTA.DSV_0 <= DSV_1 <= DSV_2 ... <= DSV_9
-				<li>GRRSZ1.HRSZM / GRRSZ1.HRSZN >= 0.5
-				<li>GRRSZ1.HRSZM / GRRSZ1.HRSZN <= 8
-				<li>(in the case of GRRSZ1.HRSZM / GRRSZ1.HRSZN = 1.0) GRRSZ1.HRSZOF = 0
-				<li>(in the case of GRRSZ0 = E_IM_DISP_RSZSL_PADDING_THINNING) GRRSZ1.HRSZOF = 0
-				<li>GRRSZ1.HRSZOF < GRISIZE.IHSIZE * GRRSZ1.HRSZM - (pixel count after horizontal resize -1) * GRRSZ1.HRSZN
-				<li>GRRSZ1.HRSZOF < GRRSZ1.HRSZM
-				<li>GRRSZ2.VRSZM / GRRSZ2.VRSZN >= 0.5
-				<li>GRRSZ2.VRSZM / GRRSZ2.VRSZN <= 8
+				<li>GRRSZ1.hrszm / GRRSZ1.hrszn >= 0.5
+				<li>GRRSZ1.hrszm / GRRSZ1.hrszn <= 8
+				<li>(in the case of GRRSZ1.hrszm / GRRSZ1.hrszn = 1.0) GRRSZ1.hrszof = 0
+				<li>(in the case of GRRSZ0 = ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING) GRRSZ1.hrszof = 0
+				<li>GRRSZ1.hrszof < GRISIZE.IHSIZE * GRRSZ1.hrszm - (pixel count after horizontal resize -1) * GRRSZ1.hrszn
+				<li>GRRSZ1.hrszof < GRRSZ1.hrszm
+				<li>GRRSZ2.vrszm / GRRSZ2.vrszn >= 0.5
+				<li>GRRSZ2.vrszm / GRRSZ2.vrszn <= 8
 				<li>GRTCCTL.TCRES < 3
 				<li>(in the case of GRTCCTL.TCRES = 1 and GRTCCTL.TCBLEN = 0) GRTCCTL.TCTBL < 2
 				<li>(in the case of GRTCCTL.TCRES = 2 and GRTCCTL.TCBLEN = 1) GRTCCTL.TCTBL < 2
 			</ul>
 */
-extern INT32 Im_DISP_Ctrl_OSD_Layer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG* grrpgctl, T_IM_DISP_CTRL_OSD_LAYER const *const ctrl);
+ INT32 im_disp1_ctrl_osd_layer(ImDisp1 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg* grrpgctl, T_IM_DISP_CTRL_OSD_LAYER const *const ctrl);
 
 /**
 Get control data of OSD layer in common block.<br>
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	layer			OSD layer selection.<br>
 							<ul><li>@ref E_IM_DISP_SEL_LAYER_OSD_0
 								<li>@ref E_IM_DISP_SEL_LAYER_OSD_1</ul>
 @param[out]	grrpgctl		Register paramter taking control register.<br>
-							<ul><li>@ref E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
-								<li>@ref E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP
+								<li>@ref ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC</ul>
 @param[out]	ctrl			Setting of OSD data input block.<br>
 							It is possible to rewrite it while OSD layer in common block is operating.<br>
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.
 @remarks If NULL is specified for the argument, the acquisition of the item can be skipped.<br>
 */
-extern INT32 Im_DISP_Get_Ctrl_OSD_Layer(E_IM_DISP_SEL block, E_IM_DISP_SEL_LAYER layer, E_IM_DISP_RPGTMG* grrpgctl, T_IM_DISP_CTRL_OSD_LAYER *const ctrl);
+ INT32 im_disp1_get_ctrl_osd_layer(ImDisp1 * self, ImDispEImDispSel block, E_IM_DISP_SEL_LAYER layer, ImDispEImDispRpgtmg* grrpgctl, T_IM_DISP_CTRL_OSD_LAYER *const ctrl);
 
 /**
 Set Gamma table of main data input block.
 @param[in]	block			Common block selection.<br>
-							<ul><li>@ref E_IM_DISP_HDMI
-								<li>@ref E_IM_DISP_LCD_MIPI</ul>
+							<ul><li>@ref ImDisp_E_IM_DISP_HDMI
+								<li>@ref ImDisp_E_IM_DISP_LCD_MIPI</ul>
 @param[in]	ctrl_tbl		Table setting data.
 @retval	D_DDIM_OK						Success.
 @retval	D_IM_DISP_INPUT_PARAM_ERROR		Input parameter error.

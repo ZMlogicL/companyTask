@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMxicMain2类
 *@rely                :klib
@@ -13,7 +13,7 @@
 */
 
 #include "im_mxic.h"
-#include "ct_im_mxic.h"
+//#include "ct_im_mxic.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -30,38 +30,65 @@
 #include "ctimmxicmain.h"
 #include "ctimmxicmain2.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicMain2, ct_im_mxic_main2);
-#define CT_IM_MXIC_MAIN2_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicMain2Private,CT_TYPE_IM_MXIC_MAIN2))
+
+G_DEFINE_TYPE(CtImMxicMain2, ct_im_mxic_main2, G_TYPE_OBJECT);
+#define CT_IM_MXIC_MAIN2_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_MAIN2, CtImMxicMain2Private))
 
 struct _CtImMxicMain2Private
 {
+
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_im_mxic_main2_constructor(CtImMxicMain2 *self) 
+
+static void ct_im_mxic_main2_class_init(CtImMxicMain2Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicMain2Private));
+}
+
+static void ct_im_mxic_main2_init(CtImMxicMain2 *self)
+{
+//	CtImMxicMain2Private *priv = CT_IM_MXIC_MAIN2_GET_PRIVATE(self);
 	self->ctImMxicMain1 = ct_im_mxic_main1_new();
 }
 
-static void ct_im_mxic_main2_destructor(CtImMxicMain2 *self) 
+static void dispose_od(GObject *object)
 {
+	CtImMxicMain2 *self = (CtImMxicMain2*)object;
+//	CtImMxicMain2Private *priv = CT_IM_MXIC_MAIN2_GET_PRIVATE(self);
 	if(self->ctImMxicMain1){
-		k_object_unref(self->ctImMxicMain1);
+		g_object_unref(self->ctImMxicMain1);
+		self->ctImMxicMain1=NULL;
 	}
-	self->ctImMxicMain1=NULL;
 }
+
+static void finalize_od(GObject *object)
+{
+//	CtImMxicMain2 *self = (CtImMxicMain2*)object;
+//	CtImMxicMain2Private *priv = CT_IM_MXIC_MAIN2_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
 */
-void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
+void ct_im_mxic_main2(CtImMxicMain2 *self, gint32 argc, gchar** argv)
 {
-	kuchar	transaction;
-	kuchar	master_priority;
-	kuchar	mask_enable;
-	kuchar	mask_select;
+	guchar	transaction;
+	guchar	master_priority;
+	guchar	mask_enable;
+	guchar	mask_select;
 	E_IM_MXIC_PORT							port;
 	E_IM_MXIC_PORT_GR						portAssign;
 	E_IM_MXIC_LEVEL							level;
@@ -87,9 +114,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					//           P7: Upper priority ratio (0~63. 0 means 64)
 					//           P8: Lower priority ratio (0~63. 0 means 64)
 					if( argc >= 13 ) {
-						levelCtrl.priority_level_type  = (kuchar)atoi((const char *)argv[10]);
-						levelCtrl.upper_priority_level = (kuchar)atoi((const char *)argv[11]);
-						levelCtrl.lower_priority_level = (kuchar)atoi((const char *)argv[12]);
+						levelCtrl.priority_level_type  = (guchar)atoi((const char *)argv[10]);
+						levelCtrl.upper_priority_level = (guchar)atoi((const char *)argv[11]);
+						levelCtrl.lower_priority_level = (guchar)atoi((const char *)argv[12]);
 
 						self->ctImMxicMain1->result = Im_MXIC_Set_Slot_Priority(
 															(E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
@@ -98,7 +125,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 															(E_IM_MXIC_PORT)atoi((const char *)argv[8]),
 															(E_IM_MXIC_SLOT_LEVEL_CTRL)atoi((const char *)argv[9]),
 															&levelCtrl);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Slot_Priority OK.\n"));
 						}
 						else {
@@ -126,7 +153,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 															(E_IM_MXIC_SLOT_LEVEL_CTRL)atoi((const char *)argv[9]),
 															&levelCtrl);
 
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("priority_level_type  = %d\n", levelCtrl.priority_level_type));
 							Ddim_Print(("upper_priority_level = %d\n", levelCtrl.upper_priority_level));
 							Ddim_Print(("lower_priority_level = %d\n", levelCtrl.lower_priority_level));
@@ -152,12 +179,12 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					// Get parameter for Im_MXIC_Set_Slot_Priority_All_Arbiter function.
 					self->ctImMxicMain1->result = ct_im_mxic_create_slot_priority_all_arbiter_param(
 							&allLevelCtrl);
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						// Execute function.
 						self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[5]);
 						self->ctImMxicMain1->result = Im_MXIC_Set_Slot_Priority_All_Arbiter(
 								self->ctImMxicMain1->unit,&allLevelCtrl);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Slot_Priority_All_Arbiter OK.\n"));
 						}
 						else {
@@ -175,7 +202,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[5]);
 					self->ctImMxicMain1->result =
 							Im_MXIC_Get_Slot_Priority_All_Arbiter(self->ctImMxicMain1->unit, &allLevelCtrl);
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_all_slot_priority_level( &allLevelCtrl);
 						Ddim_Print(("Im_MXIC_Get_Slot_Priority_All_Arbiter OK.\n"));
 					}
@@ -201,9 +228,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 				if(argc >= 7) {
 					self->ctImMxicMain1->result = Im_MXIC_Set_Master_Priority(
 														  (E_IM_MXIC_UNIT)atoi((const char *)argv[4]),
-														  (kuchar)ct_im_mxic_print_atoi_hex(argv[5]),
-														  (kuchar)atoi((const char *)argv[6]));
-					if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+														  (guchar)ct_im_mxic_print_atoi_hex(argv[5]),
+														  (guchar)atoi((const char *)argv[6]));
+					if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Im_MXIC_Set_Master_Priority OK.\n"));
 					}
 					else {
@@ -222,8 +249,8 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 				if(argc >= 6) {
 					self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					self->ctImMxicMain1->result = Im_MXIC_Get_Master_Priority( self->ctImMxicMain1->unit,
-							(kuchar)ct_im_mxic_print_atoi_hex(argv[5]), &master_priority );
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+							(guchar)ct_im_mxic_print_atoi_hex(argv[5]), &master_priority );
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("master_priority = %d\n", master_priority));
 						Ddim_Print(("Im_MXIC_Get_Master_Priority OK.\n"));
 					}
@@ -261,8 +288,8 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 													(E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
 													(E_IM_MXIC_PORT)atoi((const char *)argv[7]),
 													(E_IM_MXIC_SLOT)atoi((const char *)argv[8]),
-													(kuchar)atoi((const char *)argv[9]));
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+													(guchar)atoi((const char *)argv[9]));
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_Slot_Mask OK.\n"));
 					}
 					else {
@@ -288,7 +315,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 													(E_IM_MXIC_PORT)atoi((const char *)argv[7]),
 													(E_IM_MXIC_SLOT)atoi((const char *)argv[8]),
 													&mask_enable);
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("mask_enable = %d\n", mask_enable));
 						Ddim_Print(("Im_MXIC_Get_Slot_Mask OK.\n"));
 					}
@@ -314,12 +341,12 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					//           P4: Mask period (4~4096. 0 means 4096.)
 					if(argc >= 9) {
 						self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[5]);
-						masterMask.mask_type   = (kuchar)atoi((const char *)argv[7]);
+						masterMask.mask_type   = (guchar)atoi((const char *)argv[7]);
 						masterMask.mask_period = (USHORT)atoi((const char *)argv[8]);
 
 						self->ctImMxicMain1->result = Im_MXIC_Set_Master_Mask(self->ctImMxicMain1->unit,
-								(kuchar)ct_im_mxic_print_atoi_hex(argv[6]), &masterMask);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+								(guchar)ct_im_mxic_print_atoi_hex(argv[6]), &masterMask);
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Master_Mask OK.\n"));
 						}
 						else {
@@ -337,8 +364,8 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 7) {
 						self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[5]);
 						self->ctImMxicMain1->result = Im_MXIC_Get_Master_Mask(self->ctImMxicMain1->unit,
-								(kuchar)ct_im_mxic_print_atoi_hex(argv[6]), &masterMask);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+								(guchar)ct_im_mxic_print_atoi_hex(argv[6]), &masterMask);
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("masterMask.mask_type   = %d\n", masterMask.mask_type));
 							Ddim_Print(("masterMask.mask_period = %d\n", masterMask.mask_period));
 							Ddim_Print(("Im_MXIC_Get_Master_Mask OK.\n"));
@@ -366,10 +393,10 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 9) {
 						self->ctImMxicMain1->result = Im_MXIC_Set_Master_Mask_Factor(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 																 (E_IM_MXIC_MASK_GROUP)atoi((const char *)argv[7]),
-																 (kuchar)atoi((const char *)argv[8]));
-						if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+																 (guchar)atoi((const char *)argv[8]));
+						if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 							Ddim_Print(("Im_MXIC_Set_Master_Mask_Factor OK.\n"));
 						}
 						else {
@@ -389,10 +416,10 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 8) {
 						self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[5]);
 						self->ctImMxicMain1->result = Im_MXIC_Get_Master_Mask_Factor(self->ctImMxicMain1->unit,
-															   (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+															   (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 															   (E_IM_MXIC_MASK_GROUP)atoi((const char *)argv[7]),
 															   &mask_enable);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("mask_enable = %d\n", mask_enable));
 							Ddim_Print(("Im_MXIC_Get_Master_Mask_Factor OK.\n"));
 						}
@@ -419,10 +446,10 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 9) {
 						self->ctImMxicMain1->result = Im_MXIC_Set_Master_Mask_Target(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 																 (E_IM_MXIC_MASK_GROUP)atoi((const char *)argv[7]),
-																 (kuchar)atoi((const char *)argv[8]));
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+																 (guchar)atoi((const char *)argv[8]));
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Master_Mask_Target OK.\n"));
 						}
 						else {
@@ -442,10 +469,10 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 8) {
 						self->ctImMxicMain1->result = Im_MXIC_Get_Master_Mask_Target(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 																 (E_IM_MXIC_MASK_GROUP)atoi((const char *)argv[7]),
 																 &mask_enable);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("mask_enable = %d\n", mask_enable));
 							Ddim_Print(("Im_MXIC_Get_Master_Mask_Target OK.\n"));
 						}
@@ -471,9 +498,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 8) {
 						self->ctImMxicMain1->result = Im_MXIC_Set_Master_Mask_Select(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
-																 (kuchar)atoi((const char *)argv[7]));
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)atoi((const char *)argv[7]));
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Master_Mask_Select OK.\n"));
 						}
 						else {
@@ -492,9 +519,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 7) {
 						self->ctImMxicMain1->result = Im_MXIC_Get_Master_Mask_Select(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 																 &mask_select);
-						if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+						if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 							Ddim_Print(("mask_select = %d\n", mask_select));
 							Ddim_Print(("Im_MXIC_Get_Master_Mask_Select OK.\n"));
 						}
@@ -520,9 +547,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 8) {
 						self->ctImMxicMain1->result = Im_MXIC_Set_Master_Transaction(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
-																 (kuchar)atoi((const char *)argv[7]));
-						if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)atoi((const char *)argv[7]));
+						if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 							Ddim_Print(("Im_MXIC_Set_Master_Transaction OK.\n"));
 						}
 						else {
@@ -541,9 +568,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 7) {
 						self->ctImMxicMain1->result = Im_MXIC_Get_Master_Transaction(
 																 (E_IM_MXIC_UNIT)atoi((const char *)argv[5]),
-																 (kuchar)ct_im_mxic_print_atoi_hex(argv[6]),
+																 (guchar)ct_im_mxic_print_atoi_hex(argv[6]),
 																 &transaction);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("transaction = %d\n", transaction));
 							Ddim_Print(("Im_MXIC_Get_Master_Transaction OK.\n"));
 						}
@@ -582,9 +609,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 														 (E_IM_MXIC_UNIT)atoi((const char *)argv[4]),
 														 (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[5]),
 														 (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
-														 (kuchar)ct_im_mxic_print_atoi_hex(argv[7]),
+														 (guchar)ct_im_mxic_print_atoi_hex(argv[7]),
 														 (E_IM_MXIC_PORT)atoi((const char *)argv[8]) );
-					if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+					if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Im_MXIC_Set_LevelPort_Port OK.\n"));
 					}
 					else {
@@ -606,9 +633,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 														 (E_IM_MXIC_UNIT)atoi((const char *)argv[4]),
 														 (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[5]),
 														 (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
-														 (kuchar)ct_im_mxic_print_atoi_hex(argv[7]),
+														 (guchar)ct_im_mxic_print_atoi_hex(argv[7]),
 														 &port );
-					if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+					if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Target port = %d\n", port));
 						Ddim_Print(("Im_MXIC_Get_LevelPort_Port OK.\n"));
 					}
@@ -637,9 +664,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 														 (E_IM_MXIC_UNIT)atoi((const char *)argv[4]),
 														 (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[5]),
 														 (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
-														 (kuchar)ct_im_mxic_print_atoi_hex(argv[7]),
+														 (guchar)ct_im_mxic_print_atoi_hex(argv[7]),
 														 (E_IM_MXIC_LEVEL)atoi((const char *)argv[8]) );
-					if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+					if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Im_MXIC_Set_LevelPort_Level OK.\n"));
 					}
 					else {
@@ -661,9 +688,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 														 (E_IM_MXIC_UNIT)atoi((const char *)argv[4]),
 														 (E_IM_MXIC_WR_ARBITER)atoi((const char *)argv[5]),
 														 (E_IM_MXIC_SPEC_ARBITER)atoi((const char *)argv[6]),
-														 (kuchar)ct_im_mxic_print_atoi_hex(argv[7]),
+														 (guchar)ct_im_mxic_print_atoi_hex(argv[7]),
 														 &level );
-					if ( self->ctImMxicMain1->result == D_DDIM_OK ) {
+					if ( self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK ) {
 						Ddim_Print(("Target level = %d\n", level));
 						Ddim_Print(("Im_MXIC_Get_LevelPort_Level OK.\n"));
 					}
@@ -684,12 +711,12 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 				// [command] immxic levelport all set P1
 				//           P1: Target self->ctImMxicMain1->unit number. (0-6)
 				self->ctImMxicMain1->result = ct_im_mxic_create_all_levelport_param( &allLevelport);
-				if (self->ctImMxicMain1->result == D_DDIM_OK) {
+				if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 					// Execute function.
 					self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 					self->ctImMxicMain1->result = Im_MXIC_Set_LevelPort_All(self->ctImMxicMain1->unit,
 							&allLevelport);
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						Ddim_Print(("Im_MXIC_Set_LevelPort_All OK.\n"));
 					}
 					else {
@@ -707,7 +734,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 				// Execute function.
 				self->ctImMxicMain1->unit = (E_IM_MXIC_UNIT)atoi((const char *)argv[4]);
 				self->ctImMxicMain1->result = Im_MXIC_Get_LevelPort_All(self->ctImMxicMain1->unit, &allLevelport);
-				if (self->ctImMxicMain1->result == D_DDIM_OK) {
+				if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 					ct_im_mxic_print_all_levelport(&allLevelport);
 					Ddim_Print(("Im_MXIC_Get_LevelPort_All OK.\n"));
 				}
@@ -732,9 +759,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					//           P2: port (0:port0, 1:port1)
 					if(argc >= 7) {
 						self->ctImMxicMain1->result = Im_MXIC_Set_Output_Port(
-														(kuchar)ct_im_mxic_print_atoi_hex(argv[5]),
+														(guchar)ct_im_mxic_print_atoi_hex(argv[5]),
 														(E_IM_MXIC_PORT_GR)atoi((const char *)argv[6]));
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("Im_MXIC_Set_Output_Port OK.\n"));
 						}
 						else {
@@ -750,8 +777,8 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					//           P1: master number group (Hex value)
 					if(argc >= 6) {
 						self->ctImMxicMain1->result = Im_MXIC_Get_Output_Port(
-								(kuchar)ct_im_mxic_print_atoi_hex(argv[5]), &portAssign);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+								(guchar)ct_im_mxic_print_atoi_hex(argv[5]), &portAssign);
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							Ddim_Print(("portAssign = %d\n", portAssign));
 							Ddim_Print(("Im_MXIC_Get_Output_Port OK.\n"));
 						}
@@ -778,9 +805,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 					if(argc >= 6) {
 						self->ctImMxicMain1->result = ct_im_mxic_create_all_port_set( atoi((const char *)argv[5]),
 								&allPortAssign);
-						if (self->ctImMxicMain1->result == D_DDIM_OK) {
+						if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 							self->ctImMxicMain1->result = Im_MXIC_Set_Output_Port_All(&allPortAssign);
-							if (self->ctImMxicMain1->result == D_DDIM_OK) {
+							if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 								Ddim_Print(("Im_MXIC_Set_Output_Port_All OK.\n"));
 							}
 							else {
@@ -799,7 +826,7 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 				else if (strcmp((const char *)argv[4], "get") == 0) {
 					// [command] immxic port assign all get
 					self->ctImMxicMain1->result = Im_MXIC_Get_Output_Port_All(&allPortAssign);
-					if (self->ctImMxicMain1->result == D_DDIM_OK) {
+					if (self->ctImMxicMain1->result == DriverCommon_D_DDIM_OK) {
 						ct_im_mxic_print_all_port_assign( &allPortAssign);
 						Ddim_Print(("Im_MXIC_Get_Output_Port_All OK.\n"));
 					}
@@ -820,8 +847,9 @@ void ct_im_mxic_main2(CtImMxicMain2 *self, kint32 argc, kchar** argv)
 		}
 	}
 }
-CtImMxicMain2* ct_im_mxic_main2_new(void) 
+
+CtImMxicMain2 *ct_im_mxic_main2_new(void) 
 {
-    CtImMxicMain2 *self = k_object_new_with_private(CT_TYPE_IM_MXIC_MAIN2, sizeof(CtImMxicMain2Private));
+    CtImMxicMain2 *self = g_object_new(CT_TYPE_IM_MXIC_MAIN2, NULL);
     return self;
 }

@@ -79,7 +79,7 @@ void ct_im_pro3_1(CtImPro3* self, const UINT32 idx)
 			Im_PRO_B2BTOP_Init(priv->imProB2b, priv->unitNo);
 			Ddim_Print(
 					("Im_PRO_B2BTOP_Init(%u) result:sr(%u)\n", priv->unitNo,
-							ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.sr.bit.sr));
+							ioPro.imgPipe[priv->unitNo].b2b.b2btop.sr.bit.sr));
 		}
     }
 }
@@ -91,7 +91,7 @@ void ct_im_pro3_2(CtImPro3* self, const UINT32 idx)
 	if (idx == 1) {
 		for (priv->unitNo = 0; priv->unitNo < E_IM_PRO_UNIT_NUM_MAX; priv->unitNo++) {
 //            Ddim_Print(("Target register address\n"));
-//            Ddim_Print(("Im_PRO_B2BTOP_SW_Reset(%u) sr (0x%08lx, %lx)\n", priv->unitNo, (kulong)&ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.sr.word,   ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.sr.word));
+//            Ddim_Print(("Im_PRO_B2BTOP_SW_Reset(%u) sr (0x%08lx, %lx)\n", priv->unitNo, (kulong)&ioPro.imgPipe[priv->unitNo].b2b.b2btop.sr.word,   ioPro.imgPipe[priv->unitNo].b2b.b2btop.sr.word));
 
 // Normal case
 			priv->ercd = Im_PRO_B2BTOP_SW_Reset(priv->imProB2b, priv->unitNo);
@@ -100,7 +100,7 @@ void ct_im_pro3_2(CtImPro3* self, const UINT32 idx)
 			} else {
 				Ddim_Print(
 						("Im_PRO_B2BTOP_SW_Reset(%u) result:sr(%u)\n", priv->unitNo,
-								ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.sr.bit.sr));
+								ioPro.imgPipe[priv->unitNo].b2b.b2btop.sr.bit.sr));
 			}
 
 			// illegal case
@@ -112,7 +112,7 @@ void ct_im_pro3_2(CtImPro3* self, const UINT32 idx)
 			} else {
 				Ddim_Print(
 						("Im_PRO_B2BTOP_SW_Reset(%u) result:sr(%u)\n", priv->unitNo,
-								ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.sr.bit.sr));
+								ioPro.imgPipe[priv->unitNo].b2b.b2btop.sr.bit.sr));
 			}
 			impro_srovrb_stop(priv->imProSro, priv->unitNo, 0);
 		}
@@ -129,7 +129,7 @@ void ct_im_pro3_3(CtImPro3* self, const UINT32 idx)
 	if (idx == 1) {
 		for (priv->unitNo = 0; priv->unitNo < E_IM_PRO_UNIT_NUM_MAX; priv->unitNo++) {
 //            Ddim_Print(("Target register address\n"));
-//            Ddim_Print(("Im_PRO_B2BTOP_Control_Clock(%lu) clkstp1 (0x%08lx, %lx)\n", priv->unitNo, (kulong)&ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.clkstp.word, ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.clkstp.word));
+//            Ddim_Print(("Im_PRO_B2BTOP_Control_Clock(%lu) clkstp1 (0x%08lx, %lx)\n", priv->unitNo, (kulong)&ioPro.imgPipe[priv->unitNo].b2b.b2btop.clkstp.word, ioPro.imgPipe[priv->unitNo].b2b.b2btop.clkstp.word));
 
 			for (waitSkip = 0; waitSkip < 2; waitSkip++) {
 				for (clkType = E_IM_PRO_B2BTOP_CLK_TYPE_B2BCLK; clkType < E_IM_PRO_B2BTOP_CLK_TYPE_B2BCLK + 1;
@@ -145,7 +145,7 @@ void ct_im_pro3_3(CtImPro3* self, const UINT32 idx)
 						Ddim_Print(
 								("Im_PRO_B2BTOP_Control_Clock(%u, %u, %u, %u) result:clkstp1(%lu)\n",
 										priv->unitNo, clkType, onOff, waitSkip,
-										ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.clkstp.word));
+										ioPro.imgPipe[priv->unitNo].b2b.b2btop.clkstp.word));
 					}
 
 					// STATCLK OFF
@@ -159,7 +159,7 @@ void ct_im_pro3_3(CtImPro3* self, const UINT32 idx)
 						Ddim_Print(
 								("Im_PRO_B2BTOP_Control_Clock(%u, %u, %u, %u) result:clkstp1(%lu)\n",
 										priv->unitNo, clkType, onOff, waitSkip,
-										ioPro.imgPipe[priv->unitNo].b2b.B2BTOP.clkstp.word));
+										ioPro.imgPipe[priv->unitNo].b2b.b2btop.clkstp.word));
 					}
                 }
             }

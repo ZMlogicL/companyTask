@@ -659,9 +659,101 @@ struct _DdToptwoClass{
 
 GType 								dd_toptwo_get_type(void) G_GNUC_CONST;
 DdToptwo* 					dd_toptwo_new(void);
+#if 1    // special key control
+INT32 dd_toptwo_set_gpio_cm0_function(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR function );
+INT32 dd_toptwo_get_gpio_cm0_function(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* function );
+INT32 dd_toptwo_set_gpio_cm0_direction(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR direction );
+INT32 dd_toptwo_get_gpio_cm0_direction(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* direction );
+INT32 dd_toptwo_set_gpio_cm0_pull_up_down_enable(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR enable );
+INT32 dd_toptwo_get_gpio_cm0_pull_up_down_enable(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* enable );
+INT32 dd_toptwo_set_gpio_cm0_pull_up_down_ctrl(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR control );
+INT32 dd_toptwo_get_gpio_cm0_pull_up_down_ctrl(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* control );
+INT32 dd_toptwo_set_gpio_cm0_status(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR status );
+/**
+Get the state of a selectable GPIO CM0 port.<br>
+It is get from the PDR(Port Data Register) value.
+@param [in]  port		Port name. See @ref DdTop_GPIO_CM0_PORT
+@param [out] status		Port status.
+						  <ul>
+							  <li>0:@ref DdToptwo_GPIO_STATUS_LOW
+							  <li>1:@ref DdToptwo_GPIO_STATUS_HIGH
+						  </ul>
+@retval D_DDIM_OK					Success.
+@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
+*/
+INT32 dd_toptwo_get_gpio_cm0_status(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* status );
+#endif
+
+/**
+Get Frequency of DSP clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_dspclk(DdToptwo *self);
+
+/**
+Get Frequency of AXI bus clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_aclk(DdToptwo *self);
+
+/**
+Get Frequency of AXI bus EXS clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_aclkexs(DdToptwo *self);
+
+/**
+Get Frequency of AHB bus BMH clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_hclkbmh(DdToptwo *self);
+
+/**
+Get Frequency of AHB bus clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_hclk(DdToptwo *self);
+
+/**
+Get Frequency of APB bus clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_pclk(DdToptwo *self);
+
+/**
+Get Frequency of MXI bus 400 clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_mclk400(DdToptwo *self);
 
 
+/**
+Get Frequency of MXI bus 200 clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_mclk200(DdToptwo *self);
+
+
+/**
+Get Frequency of AXI bus 400 clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_aclk400(DdToptwo *self);
+
+
+#ifdef CO_ES1_HARDWARE
+/**
+Get Frequency of 3DNR clock
+@retval	Hz
+*/
+ULONG dd_toptwo_get_shdrclk(DdToptwo *self);
+#endif
+#ifdef CO_ES3_HARDWARE
+ULONG dd_toptwo_get_shdrclk(DdToptwo *self);
+#endif
 /*@}*/
+
+
 G_END_DECLS
 
 

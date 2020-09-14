@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "jdsrdmacorereg.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(JdsrdmaCoreReg, jdsrdma_core_reg);
+
 #define JDSRDMA_CORE_REG_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), JdsrdmaCoreRegPrivate, JDSRDMA_TYPE_CORE_REG))
+
 
 struct _JdsrdmaCoreRegPrivate
 {
@@ -41,4 +45,3 @@ JdsrdmaCoreReg* jdsrdma_core_reg_new(void)
     JdsrdmaCoreReg* self = k_object_new_with_private(JDSRDMA_TYPE_CORE_REG, sizeof(JdsrdmaCoreRegPrivate));
     return self;
 }
-

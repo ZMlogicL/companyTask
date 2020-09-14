@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kjdsrdma.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KJdsrdma, k_jdsrdma);
+
 #define K_JDSRDMA_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KJdsrdmaPrivate, K_TYPE_JDSRDMA))
+
 
 struct _KJdsrdmaPrivate
 {
 
 };
+
 
 volatile IoRdma ioRdma __attribute__((section(".RDMA")));
 /**
@@ -43,4 +48,3 @@ KJdsrdma* k_jdsrdma_new(void)
     KJdsrdma* self = k_object_new_with_private(K_TYPE_JDSRDMA, sizeof(KJdsrdmaPrivate));
     return self;
 }
-

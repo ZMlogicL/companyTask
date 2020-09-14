@@ -32,7 +32,7 @@ struct _ImR2yUtility2Private
 //---------------------- colabo  section -------------------------------
 
 
-static const T_IM_R2Y_CTRL_RDMA_EENR_ADDR	gIM_R2Y_EENR_Addr[3] = {
+static const CtrlRdmaEenrAddr	gIM_R2Y_EENR_Addr[3] = {
 	{
 		0x2841A180, 0x2841A184,
 	},
@@ -44,7 +44,7 @@ static const T_IM_R2Y_CTRL_RDMA_EENR_ADDR	gIM_R2Y_EENR_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGHW_ADDR	gIM_R2Y_EGHW_Addr[3] = {
+static const CtrlRdmaEghwAddr	gIM_R2Y_EGHW_Addr[3] = {
 	{
 		0x2841A200, 0x2841A208, 0x2841A20C, 0x2841A210, 0x2841A214, 0x2841A218, 0x2841A220, 0x2841A224,
 		0x2841A228, 0x2841A22C, 0x2841A230, 0x2841A238, 0x2841A23C, 0x2841A240, 0x2841A248, 0x2841A24C,
@@ -62,7 +62,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGHW_ADDR	gIM_R2Y_EGHW_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGMW_ADDR	gIM_R2Y_EGMW_Addr[3] = {
+static const CtrlRdmaEgmwAddr	gIM_R2Y_EGMW_Addr[3] = {
 	{
 		0x2841A280, 0x2841A288, 0x2841A28C, 0x2841A290, 0x2841A294, 0x2841A298, 0x2841A2A0, 0x2841A2A4,
 		0x2841A2A8, 0x2841A2AC, 0x2841A2B0, 0x2841A2B8, 0x2841A2BC, 0x2841A2C0, 0x2841A2C8, 0x2841A2CC,
@@ -80,7 +80,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGMW_ADDR	gIM_R2Y_EGMW_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGLW_ADDR	gIM_R2Y_EGLW_Addr[3] = {
+static const CtrlRdmaEglwAddr	gIM_R2Y_EGLW_Addr[3] = {
 	{
 		0x2841A300, 0x2841A310, 0x2841A314, 0x2841A318, 0x2841A320, 0x2841A324, 0x2841A328, 0x2841A330,
 		0x2841A334, 0x2841A338, 0x2841A33C, 0x2841A340, 0x2841A348, 0x2841A34C, 0x2841A350, 0x2841A358,
@@ -98,7 +98,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGLW_ADDR	gIM_R2Y_EGLW_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGDT_ADDR	gIM_R2Y_EGDT_Addr[3] = {
+static const CtrlRdmaEgdtAddr	gIM_R2Y_EGDT_Addr[3] = {
 	{
 		0x2841A380, 0x2841A384, 0x2841A388, 0x2841A38C, 0x2841A390,
 	},
@@ -110,7 +110,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGDT_ADDR	gIM_R2Y_EGDT_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGCMP_ADDR	gIM_R2Y_EGCMP_Addr[3] = {
+static const CtrlRdmaEgcmpAddr	gIM_R2Y_EGCMP_Addr[3] = {
 	{
 		0x2841A3C0, 0x2841A3C8, 0x2841A3CC, 0x2841A3D0, 0x2841A3D8, 0x2841A3DC, 0x2841A3E0, 0x2841A3E8,
 		0x2841A3EC, 0x2841A3F0,
@@ -125,7 +125,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGCMP_ADDR	gIM_R2Y_EGCMP_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_CRV_ADDR	gIM_R2Y_CRV_Addr[3] = {
+static const CtrlRdmaCrvAddr	gIM_R2Y_CRV_Addr[3] = {
 	{
 		0x2841A400, 0x2841A404,
 	},
@@ -137,7 +137,7 @@ static const T_IM_R2Y_CTRL_RDMA_CRV_ADDR	gIM_R2Y_CRV_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGCRV_ADDR	gIM_R2Y_EGCRV_Addr[3] = {
+static const CtrlRdmaEgcrvAddr	gIM_R2Y_EGCRV_Addr[3] = {
 	{
 		0x2841A440, 0x2841A444, 0x2841A448, 0x2841A44C, 0x2841A450, 0x2841A454, 0x2841A458, 0x2841A45C,
 		0x2841A460, 0x2841A464, 0x2841A468, 0x2841A46C, 0x2841A470, 0x2841A474, 0x2841A478, 0x2841A47C,
@@ -152,7 +152,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGCRV_ADDR	gIM_R2Y_EGCRV_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_YBCRV_ADDR	gIM_R2Y_YBCRV_Addr[3] = {
+static const CtrlRdmaYbcrvAddr	gIM_R2Y_YBCRV_Addr[3] = {
 	{
 		0x2841A480, 0x2841A484, 0x2841A488, 0x2841A48C, 0x2841A490, 0x2841A494, 0x2841A498, 0x2841A49C,
 		0x2841A4A0, 0x2841A4A4, 0x2841A4A8, 0x2841A4AC, 0x2841A4B0, 0x2841A4B4, 0x2841A4B8,
@@ -167,7 +167,7 @@ static const T_IM_R2Y_CTRL_RDMA_YBCRV_ADDR	gIM_R2Y_YBCRV_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_CLPF_ADDR	gIM_R2Y_CLPF_Addr[3] = {
+static const CtrlRdmaClpfAddr	gIM_R2Y_CLPF_Addr[3] = {
 	{
 		0x2841A500, 0x2841A520, 0x2841A524, 0x2841A528, 0x2841A52C, 0x2841A530, 0x2841A540, 0x2841A548,
 		0x2841A54C, 0x2841A550, 0x2841A554,
@@ -182,7 +182,7 @@ static const T_IM_R2Y_CTRL_RDMA_CLPF_ADDR	gIM_R2Y_CLPF_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_CSP_ADDR	gIM_R2Y_CSP_Addr[3] = {
+static const CtrlRdmaCspAddr	gIM_R2Y_CSP_Addr[3] = {
 	{
 		0x2841A580, 0x2841A588, 0x2841A58C, 0x2841A590, 0x2841A594, 0x2841A598, 0x2841A59C, 0x2841A5A0,
 		0x2841A5A4, 0x2841A5A8, 0x2841A5AC,
@@ -197,7 +197,7 @@ static const T_IM_R2Y_CTRL_RDMA_CSP_ADDR	gIM_R2Y_CSP_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_TONE_TBL_ADDR	gIM_R2Y_TONE_Tbl_Addr[3] = {
+static const RdmaToneTblAddr	gIM_R2Y_TONE_Tbl_Addr[3] = {
 	{
 		{
 			0x294A0000, 0x294A0004, 0x294A0008, 0x294A000C, 0x294A0010, 0x294A0014, 0x294A0018, 0x294A001C,
@@ -404,7 +404,7 @@ static const T_IM_R2Y_CTRL_RDMA_TONE_TBL_ADDR	gIM_R2Y_TONE_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGHWTON_Tbl_Addr[3] = {
+static const RdmaEgwtonTblAddr	gIM_R2Y_EGHWTON_Tbl_Addr[3] = {
 	{
 		{
 			0x294AC200, 0x294AC204, 0x294AC208, 0x294AC20C, 0x294AC210, 0x294AC214, 0x294AC218, 0x294AC21C,
@@ -467,7 +467,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGHWTON_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGMWTON_Tbl_Addr[3] = {
+static const RdmaEgwtonTblAddr	gIM_R2Y_EGMWTON_Tbl_Addr[3] = {
 	{
 		{
 			0x294AC600, 0x294AC604, 0x294AC608, 0x294AC60C, 0x294AC610, 0x294AC614, 0x294AC618, 0x294AC61C,
@@ -530,7 +530,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGMWTON_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGLWTON_Tbl_Addr[3] = {
+static const RdmaEgwtonTblAddr	gIM_R2Y_EGLWTON_Tbl_Addr[3] = {
 	{
 		{
 			0x294ACA00, 0x294ACA04, 0x294ACA08, 0x294ACA0C, 0x294ACA10, 0x294ACA14, 0x294ACA18, 0x294ACA1C,
@@ -593,7 +593,7 @@ static const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR	gIM_R2Y_EGLWTON_Tbl_Addr[3] = {
 	},
 };
 
-static const T_IM_R2Y_CTRL_RDMA_EGMPSCL_TBL_ADDR	gIM_R2Y_EGMPSCL_Tbl_Addr[3] = {
+static const RdmaEgmpsclTblAddr	gIM_R2Y_EGMPSCL_Tbl_Addr[3] = {
 	{
 		{
 			0x294ACC00, 0x294ACC04, 0x294ACC08, 0x294ACC0C, 0x294ACC10, 0x294ACC14, 0x294ACC18, 0x294ACC1C,
@@ -675,196 +675,196 @@ static void im_r2y_utility2_destructor(ImR2yUtility2 *self)
 */
 #ifdef CO_DDIM_UTILITY_USE
 
-INT32 im_r2y_utility2_get_rdma_addr_eenr_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EENR_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_eenr_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEenrAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eenr_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eenr_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EENR_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EENR_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_eghw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGHW_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_eghw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEghwAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eghw_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eghw_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGHW_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGHW_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egmw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGMW_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egmw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgmwAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egmw_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egmw_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGMW_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGMW_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_eglw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGLW_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_eglw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEglwAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eglw_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_eglw_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGLW_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGLW_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egdt_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGDT_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egdt_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgdtAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egdt_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egdt_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGDT_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGDT_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egcmp_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGCMP_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egcmp_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgcmpAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egcmp_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egcmp_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGCMP_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGCMP_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_crv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CRV_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_crv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaCrvAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_crv_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_crv_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_CRV_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_CRV_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egcrv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGCRV_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egcrv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgcrvAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egcrv_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egcrv_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGCRV_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGCRV_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_ybcrv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_YBCRV_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_ybcrv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaYbcrvAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_ybcrv_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_ybcrv_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_YBCRV_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_YBCRV_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_clpf_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CLPF_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_clpf_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaClpfAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_clpf_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_clpf_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_CLPF_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_CLPF_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_csp_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CSP_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_csp_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaCspAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_csp_cntl error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_csp_cntl error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_CSP_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_CSP_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_tone_table(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_TONE_TBL_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_tone_table(ImR2yUtility2 *self, kuint16 pipeNo, const RdmaToneTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_tone_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_tone_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_TONE_Tbl_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_TONE_Tbl_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egwton_table(ImR2yUtility2 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egwton_table(ImR2yUtility2 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaEgwtonTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( tbl_index > 2 ){
 		Ddim_Assertion(("im_r2y_utility2_get_rdma_addr_egwton_table error. tbl_index > 2\n"));
-		return D_IM_R2Y_PARAM_ERROR;
+		return ImR2yUtils_PARAM_ERROR;
 	}
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egwton_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egwton_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
 	switch( tbl_index ){
 		case 0:
-			*addr = &(gIM_R2Y_EGHWTON_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGHWTON_Tbl_Addr[pipeNo]);
 			break;
 		case 1:
-			*addr = &(gIM_R2Y_EGMWTON_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGMWTON_Tbl_Addr[pipeNo]);
 			break;
 		case 2:
-			*addr = &(gIM_R2Y_EGLWTON_Tbl_Addr[pipe_no]);
+			*addr = &(gIM_R2Y_EGLWTON_Tbl_Addr[pipeNo]);
 			break;
 		default:
 			break;
@@ -873,16 +873,16 @@ INT32 im_r2y_utility2_get_rdma_addr_egwton_table(ImR2yUtility2 *self, UCHAR pipe
 	return D_DDIM_OK;
 }
 
-INT32 im_r2y_utility2_get_rdma_addr_egmpscl_table(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGMPSCL_TBL_ADDR** addr )
+INT32 im_r2y_utility2_get_rdma_addr_egmpscl_table(ImR2yUtility2 *self, kuint16 pipeNo, const RdmaEgmpsclTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egmpscl_table error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_utility2_get_rdma_addr_egmpscl_table error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif
 
-	*addr = &(gIM_R2Y_EGMPSCL_Tbl_Addr[pipe_no]);
+	*addr = &(gIM_R2Y_EGMPSCL_Tbl_Addr[pipeNo]);
 
 	return D_DDIM_OK;
 }

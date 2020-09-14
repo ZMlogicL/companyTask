@@ -15,9 +15,13 @@
 #define __IM_JPEG_H__
 
 
-#include <klib.h>
+#include <stdio.h>
+#include <glib-object.h>
 #include "driver_common.h"
 #include "imjpegcommon.h"
+
+
+G_BEGIN_DECLS
 
 
 #ifdef __cplusplus
@@ -25,23 +29,32 @@ extern "C" {
 #endif
 
 
-#define IM_TYPE_JPEG					(im_jpeg_get_type())
-#define IM_JPEG	(obj)					(K_TYPE_CHECK_INSTANCE_CAST(obj, ImJpeg))
-#define IM_IS_JPEG(obj)				(K_TYPE_CHECK_INSTANCE_TYPE(obj, IM_TYPE_JPEG))
+#define IM_TYPE_JPEG							(im_jpeg_struct_get_type ())
+#define IM_JPEG(obj)								(G_TYPE_CHECK_INSTANCE_CAST ((obj), IM_TYPE_JPEG, ImJpeg))
+#define IM_JPEG_CLASS(klass)				(G_TYPE_CHECK_CLASS_CAST((klass), IM_TYPE_JPEG, ImJpegClass))
+#define IM_IS_JPEG(obj)						(G_TYPE_CHECK_INSTANCE_TYPE ((obj), IM_TYPE_JPEG))
+#define IM_IS_JPEG_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), IM_TYPE_JPEG))
+#define IM_JPEG_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), IM_TYPE_JPEG, ImJpegClass))
 
 
-typedef struct _ImJpeg 					ImJpeg;
-typedef struct _ImJpegPrivate 	ImJpegPrivate;
+typedef struct _ImJpeg							ImJpeg;
+typedef struct _ImJpegClass					ImJpegClass;
+typedef struct _ImJpegPrivate 			ImJpegPrivate;
 
 
 struct _ImJpeg
 {
-	KObject parent;
+	GObject parent;
+	DdTopthree *ddTopthree;
 };
 
+struct _ImJpegClass
+{
+	GObjectClass parentClass;
+};
 
-KConstType 		    im_jpeg_get_type(void);
-ImJpeg*		        	im_jpeg_new(void);
+GType						im_jpeg_struct_get_type(void)	G_GNUC_CONST;
+ImJpeg*					im_jpeg_struct_new(void);
 void 						im_jpeg_on_clk(ImJpeg*self);
 void 						im_jpeg_off_clk(ImJpeg*self);
 void 						im_jpeg_on_hclk(ImJpeg*self);
@@ -51,18 +64,21 @@ void	 					im_jpeg_off_iclk( ImJpeg*self );
 void 						im_jpeg_reset( ImJpeg*self );
 void 						im_jpeg_set_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl );
 void 						im_jpeg_set_next_quant_tbl(ImJpeg*self, TimgQuatTblPack* pQuantTbl );
-void 						im_jpeg_sub_int_handler_enc_core_qtwint(ImJpeg*self, kint32* result );
-void 						im_jpeg_sub_int_handler_enc_core_end(ImJpeg*self, kint32* result );
-void 						im_jpeg_sub_int_handler_dec_core_errint(ImJpeg*self, kint32* result );
-kint32 						im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, kint32* result );
-void 						im_jpeg_sub_int_handler_dec_core_end(ImJpeg*self, kint32* result );
-void 						im_jpeg_sub_int_handler_dec_core_segint(ImJpeg*self, kint32* result );
-void 						im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, kint32* result );
+void 						im_jpeg_sub_int_handler_enc_core_qtwint(ImJpeg*self, gint32* result );
+void 						im_jpeg_sub_int_handler_enc_core_end(ImJpeg*self, gint32* result );
+void 						im_jpeg_sub_int_handler_dec_core_errint(ImJpeg*self, gint32* result );
+gint32 					im_jpeg_sub_int_handler_dec_core_regrdint(ImJpeg*self, gint32* result );
+void 						im_jpeg_sub_int_handler_dec_core_end(ImJpeg*self, gint32* result );
+void 						im_jpeg_sub_int_handler_dec_core_segint(ImJpeg*self, gint32* result );
+void 						im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, gint32* result );
 
 
 #ifdef __cplusplus
 }
 #endif
+
+
+G_END_DECLS
 
 
 #endif /* __IM_JPEG_H__ */
@@ -74,10 +90,10 @@ void 						im_jpeg_sub_int_handler_dec_core_mkint(ImJpeg*self, kint32* result );
 @section JPEG_DECODE	Sample code for jpeg decode.
 @code
 // SAMPLE CODE //
-kint32 jpeg_decode_sample()
+gint32 jpeg_decode_sample()
 {
-	kint32					ret = 0;
-	kint32					result = 0;
+	gint32					ret = 0;
+	gint32					result = 0;
 	TimgDecMng		jpgmng;
 	TimgDecFrameMng	jpg_frm_mng;
 
@@ -152,9 +168,9 @@ kint32 jpeg_decode_sample()
 @section JPEG_ENCODE	Sample code for jpeg encode.
 @code
 // SAMPLE CODE //
-kint32 jpeg_encode_sample()
+gint32 jpeg_encode_sample()
 {
-	kint32					ret = 0;
+	gint32					ret = 0;
 	TimgEncMng		jpg_mng;
 	TimgEncFrameMng	jpg_frm_mng;
 
@@ -256,9 +272,9 @@ kint32 jpeg_encode_sample()
 @section JPEG_DECODE_UTIL	Sample code for jpeg decode(util).
 @code
 // SAMPLE CODE //
-kint32 jpeg_simplicity_decode_sample()
+gint32 jpeg_simplicity_decode_sample()
 {
-	kint32					result;
+	gint32					result;
 	TimgDecInput		inputParam;
 	TimgDecOutput	outputParam;
 

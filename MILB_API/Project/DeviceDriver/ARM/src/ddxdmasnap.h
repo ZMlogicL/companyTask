@@ -467,7 +467,7 @@ struct _TDdXdmasnapCtrl{
 	// Transfer Size (Please specify one or more)
 	kulong			trnsSize;
 	// Interrupt Handler
-	VP_CALLBACK		intHandler;
+	VpCallbackFunc		intHandler;
 };
 
 /** DMA Transfer size */
@@ -729,14 +729,14 @@ kint32		dd_xdmasnap_set_destination_protect(DdXdmasnap *self, kuchar ch, kuchar 
 /**
 The operation of All DMA channel is stopped.
 */
-VOID		dd_xdmasnap_stop_all_ch(DdXdmasnap *self);
+void		dd_xdmasnap_stop_all_ch(DdXdmasnap *self);
 
 /**
 Set Interrupt handler address.
 @param [in]	ch							: Channel number (0 to @ref DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX - 1)
 @param [in]	intHandler					: Callback function pointer
 */
-VOID		dd_xdmasnap_set_int_handler(DdXdmasnap *self, kuchar ch, VOID (*intHandler)(VOID));
+void		dd_xdmasnap_set_int_handler(DdXdmasnap *self, kuchar ch, void (*intHandler)(void));
 
 /**
 Interrupt handler of DMA for transfer process is finished.<br>
@@ -745,7 +745,7 @@ The type of the argument is "kushort*" type.
 @param [in]	ch							: Channel number (0 to @ref DdXdmasnap_D_DD_XDMASNAP_CH_NUM_MAX - 1)
 @remarks	This API uses DDIM_User_Set_Flg().
 */
-VOID		dd_xdmasnap_int_handler(DdXdmasnap *self, kuchar ch);
+void		dd_xdmasnap_int_handler(DdXdmasnap *self, kuchar ch);
 
 #ifdef CO_DDIM_UTILITY_USE
 /** @name Utility Functions
@@ -797,7 +797,7 @@ It doesn't wait until the forwarding completion is done. (Asynchronization)
 			<li>BYTE transfer (source address and destination address are 1byte alignment) : MAX size is 1MByte.<br>
 			</ul>
 */
-kint32		dd_xdmasnap_copy_sdram_async(DdXdmasnap *self, kuchar ch, kulong srcAddr, kulong dstAddr, kulong size, VP_CALLBACK intHandler);
+kint32		dd_xdmasnap_copy_sdram_async(DdXdmasnap *self, kuchar ch, kulong srcAddr, kulong dstAddr, kulong size, VpCallbackFunc intHandler);
 /*@}*/
 #endif
 
@@ -805,4 +805,5 @@ kint32		dd_xdmasnap_copy_sdram_async(DdXdmasnap *self, kuchar ch, kulong srcAddr
 }
 #endif
 
-#endif	// __DD_XDMASNAP_H__
+// __DD_XDMASNAP_H__
+#endif

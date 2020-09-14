@@ -38,131 +38,131 @@ ImR2yUtility2*		        im_r2y_utility2_new(void);
 
 /**
 Get the top address of the address array of EENR control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of EENR control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_eenr_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EENR_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_eenr_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEenrAddr** addr );
 
 /**
 Get the top address of the address array of High frequency edge enhancement control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of High frequency edge enhancement control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_eghw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGHW_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_eghw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEghwAddr** addr );
 
 /**
 Get the top address of the address array of Medium frequency edge enhancement control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Medium frequency edge enhancement control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egmw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGMW_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egmw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgmwAddr** addr );
 
 /**
 Get the top address of the address array of Low frequency edge enhancement control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Low frequency edge enhancement control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_eglw_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGLW_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_eglw_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEglwAddr** addr );
 
 /**
 Get the top address of the address array of Edge dot noise correction control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Edge dot noise correction control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egdt_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGDT_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egdt_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgdtAddr** addr );
 
 /**
 Get the top address of the address array of Edge emphasis blend control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Edge emphasis blend control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egcmp_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGCMP_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egcmp_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgcmpAddr** addr );
 
 /**
 Get the top address of the address array of Chroma referenced edge and texture adjustment control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Chroma referenced edge and texture adjustment control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_crv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CRV_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_crv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaCrvAddr** addr );
 
 /**
 Get the top address of the address array of Chroma referenced edge adjustment control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Chroma referenced edge adjustment control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egcrv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGCRV_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egcrv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaEgcrvAddr** addr );
 
 /**
 Get the top address of the address array of Chroma referenced luminance blend control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Chroma referenced luminance blend control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_ybcrv_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_YBCRV_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_ybcrv_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaYbcrvAddr** addr );
 
 /**
 Get the top address of the address array of Color Noise Reduction(LPF) control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Color Noise Reduction(LPF) control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_clpf_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CLPF_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_clpf_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaClpfAddr** addr );
 
 /**
 Get the top address of the address array of Chroma suppress control.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Chroma suppress control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_csp_cntl(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_CSP_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_csp_cntl(ImR2yUtility2 *self, kuint16 pipeNo, const CtrlRdmaCspAddr** addr );
 
 /**
 Get the top address of the address array of Tone control table.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Tone control table.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_tone_table(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_TONE_TBL_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_tone_table(ImR2yUtility2 *self, kuint16 pipeNo, const RdmaToneTblAddr** addr );
 
 /**
 Get the top address of the address array of (High/Medium/Low) edge emphasis stepping table.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[in]		tbl_index				: Selection of table<br>
 										  0 : High / 1 : Medium / 2 : Low
 @param[out]		addr					: Top address of the address array of High edge emphasis stepping table.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egwton_table(ImR2yUtility2 *self, UCHAR pipe_no, UCHAR tbl_index, const T_IM_R2Y_CTRL_RDMA_EGWTON_TBL_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egwton_table(ImR2yUtility2 *self, kuint16 pipeNo, kuint16 tbl_index, const RdmaEgwtonTblAddr** addr );
 
 /**
 Get the top address of the address array of Map Scale table.
-@param[in]		pipe_no					: Image pipe no(pipe1/pipe2/pipe12).
+@param[in]		pipeNo					: Image pipe no(pipe1/pipe2/pipe12).
 @param[out]		addr					: Top address of the address array of Map Scale table.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 im_r2y_utility2_get_rdma_addr_egmpscl_table(ImR2yUtility2 *self, UCHAR pipe_no, const T_IM_R2Y_CTRL_RDMA_EGMPSCL_TBL_ADDR** addr );
+INT32 im_r2y_utility2_get_rdma_addr_egmpscl_table(ImR2yUtility2 *self, kuint16 pipeNo, const RdmaEgmpsclTblAddr** addr );
 
 #endif	// CO_DDIM_UTILITY_USE
 

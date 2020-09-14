@@ -41,6 +41,7 @@ G_DEFINE_TYPE(CtImJpeg, ct_im_jpeg, G_TYPE_OBJECT);
 
 struct _CtImJpegPrivate
 {
+	CtImJpeg *jpge1;
 };
 
 static guint16 S_GCT_IM_JPEG_CR;
@@ -68,17 +69,23 @@ static void ct_im_jpeg_class_init(CtImJpegClass *klass)
 
 static void ct_im_jpeg_init(CtImJpeg *self)
 {
-//	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
+	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
+	priv->jpge1=ct_im_jpeg1_new();
 }
-
 /*
  *IMPL
  * */
 static void dispose_od(GObject *object)
 {
-//	CtImJpeg *self = (CtImJpeg*)object;
-//	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
+	CtImJpeg *self = (CtImJpeg*)object;
+	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
 	G_OBJECT_CLASS(ct_im_jpeg_parent_class)->dispose(object);
+
+	if(priv->jpge1){
+		g_object_unref(priv->jpge1);
+		priv->jpge1=NULL;
+	}
+
 }
 
 static void finalize_od(GObject *object)
@@ -99,12 +106,10 @@ static gulong ctImJpegCalcTargetSize(guint16 width, guint16 lines, CtImJpeg3TCtI
 	if (width == 160) {
 		if ((cr >= 40) || (cr == 0)) {
 			cr = 1;		// Max 4_5
-		}
-		else if (cr > 19) {
+		}else if (cr > 19) {
 			cr = 19;	// min 20_0
 		}
-	}
-	else {
+	}else{
 		if ((mode == CtImJpeg3_T_CT_IM_JPG_SPENC_MODE_CAPTURE) || (mode == CtImJpeg3_T_CT_IM_JPG_SPENC_MODE_PLAY)) {
 			if (cr >= 41) {
 				cr = 0;		// Max 4_0
@@ -198,18 +203,15 @@ static void ctImJpegSpecialSetTuningParam(CtImJpeg* self,CtImJpeg3* jpgencParam)
 		// ThumbNail
 		self->shift = 0;
 		self->downSpType = ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
-	}
-	else if(pixs <= (640 *480)) {
+	}else if(pixs <= (640 *480)) {
 		// Main VGA
 		self->shift = 5;
 		self->downSpType = ImJpegCommon_D_IM_JPEG_DOWNSP_NONE;
-	}
-	else if(pixs <= (1700 * (1700 *3 /4))) {
+	}else if(pixs <= (1700 * (1700 *3 /4))) {
 		// Main 2M
 		self->downSpType = ImJpegCommon_D_IM_JPEG_DOWNSP_1_2;
 		self->shift = 10;
-	}
-	else {
+	}else {
 		self->downSpType = ImJpegCommon_D_IM_JPEG_DOWNSP_1_8;
 		self->shift = 10;
 	}
@@ -221,23 +223,23 @@ static void ctImJpegSpecialSetTuningParam(CtImJpeg* self,CtImJpeg3* jpgencParam)
 static gint32 ctImJpegSpecialRunEncode(CtImJpeg* self, CtImJpeg3* jpgencParam,
 			 guint32 quality, guint16* errRatio)
 {
+	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
 	gint32 ret;
 
-	ret = Im_JPEG_Set_Quality(quality, 0);
+	ret = im_jpeg_set_quality(quality, 0);
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return ret;
 	}
-	ret = Im_JPEG_Ctrl_Enc_Frame(&jpgencParam->jpegEncFrameTbl);
+	ret = im_jpeg_get_ctrl_enc_frame(&jpgencParam->jpegEncFrameTbl);
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return ret;
 	}
-	*errRatio = Im_JPEG_Set_Down_Sampling_Rate(self->downSpType);
-	ret = Im_JPEG_Start_Enc();
+	*errRatio = im_jpeg_set_down_sampling_rate(self->downSpType);
+	ret = im_jpeg_start_enc();
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return ret;
 	}
-	CtImJpeg1 *self1=ct_im_jpeg1_new();
-	ct_im_jpeg1_start_hclock(self1);
+	ct_im_jpeg1_start_hclock(priv->jpge1);
 	Ddim_Print(("IO_JPG7.JINTEN   	=0x%lX\n", IO_JPG7.JINTEN.word));
 	Ddim_Print(("IO_JPG7.JPSTATUS.bit.JPSTATUS =0x%X\n", IO_JPG7.JPSTATUS.bit.JPSTATUS));
 	Ddim_Print(("IO_JPG7.JPCMD    	=0x%lX\n", IO_JPG7.JPCMD.word));
@@ -255,15 +257,15 @@ static gint32 ctImJpegSpecialRunEncode(CtImJpeg* self, CtImJpeg3* jpgencParam,
 	Ddim_Print(("IO_JPG7.JJBSTA  	 	=0x%lX\n", IO_JPG7.JJBSTA.word));
 	Ddim_Print(("IO_JPG7.JPBSTA   		=0x%lX\n", IO_JPG7.JPBSTA.word));
 	Ddim_Print(("IO_JPG7.JPMODE  	=0x%lX\n", IO_JPG7.JPMODE.word));
-	ct_im_jpeg1_stop_hclock(self1);
+	ct_im_jpeg1_stop_hclock(priv->jpge1);
 
 
 #ifdef CO_DEBUG_ON_PC
 	ct_im_jpeg1_encode_int_handler(1);
 #endif	// CO_DEBUG_ON_PC
 
-	ret = Im_JPEG_Wait_End_Enc(&jpgencParam->jpegEncTbl, 1000);
-	Ddim_Print(("I:Im_JPEG_Wait_End_Enc ret=%d\n", ret));
+	ret = im_jpeg_wait_end_enc(&jpgencParam->jpegEncTbl, 1000);
+	Ddim_Print(("I:im_jpeg_wait_end_enc ret=%d\n", ret));
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		if(ret != ImJpegCommon_D_IM_JPEG_ENCODE_PAUSE) {
 			Ddim_Print(("E:jpeg encode error ret=%d\n", ret));
@@ -273,8 +275,7 @@ static gint32 ctImJpegSpecialRunEncode(CtImJpeg* self, CtImJpeg3* jpgencParam,
 	}
 	if((jpgencParam->jpegEncTbl.codeSize < jpgencParam->limitSize) && (ret == ImJpegCommon_D_IM_JPEG_OK)) {
 		return ImJpegCommon_D_IM_JPEG_OK;
-	}
-	else {
+	}else {
 		return ImJpegCommon_D_IM_JPEG_ENCODE_PAUSE;
 	}
 }
@@ -309,8 +310,7 @@ static void ctImJpegSpecialInitParam(CtImJpeg* self, CtImJpeg3* jpgencParam,guch
 	if(self->downSpType == ImJpegCommon_D_IM_JPEG_DOWNSP_NONE) {
 		jpgencParam->jpegEncFrameTbl.codeCountFlg = ImJpegCommon_D_IM_JPEG_ENABLE_OFF;
 		*realenc = 0;
-	}
-	else {
+	}else {
 		// Pass_1
 		jpgencParam->jpegEncFrameTbl.codeCountFlg = ImJpegCommon_D_IM_JPEG_ENABLE_ON;
 		*realenc = 1;
@@ -329,17 +329,17 @@ static gint32 ctImJpegSpecialInitMacro(CtImJpeg* self, CtImJpeg3* jpgencParam)
 	IO_JPG7.JSTATE.bit.JALLRSTP = 0;
 #endif
 
-	Im_JPEG_Init();
-	Im_JPEG_Set_QTbl(NULL, 0);
-	ret = Im_JPEG_Ctrl_Enc(&jpgencParam->jpegEncTbl);
+	im_jpeg_init();
+	im_jpeg_set_qtbl(NULL, 0);
+	ret = im_jpeg_ctrl_enc(&jpgencParam->jpegEncTbl);
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return ret;
 	}
-	ret = Im_JPEG_Ctrl_Enc_Frame(&jpgencParam->jpegEncFrameTbl);
+	ret = im_jpeg_get_ctrl_enc_frame(&jpgencParam->jpegEncFrameTbl);
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		return ret;
 	}
-	Im_JPEG_Set_Down_Sampling_Rate(self->downSpType);
+	im_jpeg_set_down_sampling_rate(self->downSpType);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -361,8 +361,7 @@ static gint32 ctImJpegSpecialEncodePass1(CtImJpeg* self, CtImJpeg3* jpgencParam,
 	for(retryCnt = 0; retryCnt < self->maxRetry; retryCnt++) {
 		if(0 == retryCnt) {
 			quality0 = *quality = 0x40;
-		}
-		else if(1 == retryCnt) {
+		}else if(1 == retryCnt) {
 			quality1 = *quality = 50<<10;
 		}
 		//---- try ---
@@ -390,25 +389,20 @@ static gint32 ctImJpegSpecialEncodePass1(CtImJpeg* self, CtImJpeg3* jpgencParam,
 				break;
 			}
 			size0 = jpegSizeTry[retryCnt];
-		}
-		else if(1 == retryCnt) {
+		}else if(1 == retryCnt) {
 			if (self->targetBytes > jpegSizeTry[retryCnt]) {
 				if(flgHretry != 0) {
 					Ddim_Print(("Abort1 : High Side SF\n"));
 					break;
-				}
-				else {
+				}else {
 					*quality = 70 << 10;
 					flgHretry++;
 				}
-			}
-			else {
+			}else {
 				size1 = jpegSizeTry[retryCnt];
 				*quality = ((self->targetBytes - size0) * (quality1 - quality0)) / (size1 - size0) + quality0;
 			}
-		}
-		//---- Check & Next Setting ----
-		else {
+		}else {
 			//---- save the best value ----
 			if(self->targetBytes > jpegSizeTry[retryCnt]) {
 				Ddim_Print(("---> Update1\n"));
@@ -421,8 +415,7 @@ static gint32 ctImJpegSpecialEncodePass1(CtImJpeg* self, CtImJpeg3* jpgencParam,
 			if(self->targetBytes > jpegSizeTry[retryCnt]) {
 				quality0 = *quality;
 				size0 = jpegSizeTry[retryCnt];
-			}
-			else {
+			}else {
 				quality1 = *quality;
 				size1 = jpegSizeTry[retryCnt];
 			}
@@ -466,12 +459,10 @@ static gint32 ctImJpegSpecialEncodePass1(CtImJpeg* self, CtImJpeg3* jpgencParam,
 					*quality = qualityBest;
 					Ddim_Print(("**** HOKEN quality BEST ****\n"));
 					break;
-				}
-				else if(jpegSizeTry[retryCnt] < self->targetBytes) {
+				}else if(jpegSizeTry[retryCnt] < self->targetBytes) {
 					Ddim_Print(("**** HOKEN break ****\n"));
 					break;
-				}
-				else {
+				}else {
 					*quality = 10;
 					Ddim_Print(("**** HOKEN Force set High-CompRatio ****\n"));
 				}
@@ -608,7 +599,7 @@ gulong ct_im_jpeg_special_encode(CtImJpeg *self,CtImJpeg3* jpgencParam)
 	ctImJpegSpecialInitParam(self, jpgencParam, &realenc);
 
 	//---- JPEG Open ----
-	ret = Im_JPEG_Open(1000);
+	ret = im_jpeg_open(1000);
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		Ddim_Print(("E:jpeg encode open error ret=%d\n", ret));
 		return 0;
@@ -646,18 +637,13 @@ gulong ct_im_jpeg_special_encode(CtImJpeg *self,CtImJpeg3* jpgencParam)
 		break;
 	}
 
-	ret = Im_JPEG_Close();
+	ret = im_jpeg_close();
 	if(ret != ImJpegCommon_D_IM_JPEG_OK) {
 		Ddim_Print(("E:jpeg encode close error ret=%d\n", ret));
 		jpegSize = 0UL;
 	}
 
 	Ddim_Print(("#### Return : size=%lu  quality=%u ####\n", jpegSize, jpgencParam->quality));
-
-	if(self){
-		g_object_unref(self);
-		self=NULL;
-	}
 
 	return jpegSize;
 }
@@ -681,6 +667,5 @@ gulong ct_im_jpeg_get_code_addr(void)
 CtImJpeg* ct_im_jpeg_new()
 {
 	CtImJpeg *self = g_object_new(CT_TYPE_IM_JPEG,NULL);
-//	CtImJpegPrivate *priv = CT_IM_JPEG_GET_PRIVATE(self);
 	return self;
 }

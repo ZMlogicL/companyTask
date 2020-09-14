@@ -43,7 +43,7 @@ struct _ImproSrohrbPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const UINT32	S_G_IM_PRO_HRB_STATUS_TBL[E_IM_PRO_UNIT_NUM_MAX] = {
+static const UINT32	S_G_IM_PRO_HRB_STATUS_TBL[ImproBase_E_IM_PRO_UNIT_NUM_MAX] = {
 	ImproSrohrb_D_IM_SRO1_STATUS_HRB,	ImproSrohrb_D_IM_SRO2_STATUS_HRB,	ImproSrohrb_D_IM_SRO_STATUS_HRB_BOTH,
 };
 
@@ -81,10 +81,10 @@ Start HRB
 VOID impro_srohrb_start( E_IM_PRO_UNIT_NUM unitNo )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.hrb.hrbtrg.bit.hrbtrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(S_G_IM_PRO_HRB_STATUS_TBL[unitNo], 0);
 }
@@ -97,7 +97,7 @@ Stop HRB
 VOID impro_srohrb_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
 		ioPro.imgPipe[unitNo].sro.hrb.hrbtrg.bit.hrbtrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -107,7 +107,7 @@ VOID impro_srohrb_stop( E_IM_PRO_UNIT_NUM unitNo, UCHAR force )
 		ioPro.imgPipe[unitNo].sro.hrb.hrbtrg.bit.hrbtrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(S_G_IM_PRO_HRB_STATUS_TBL[unitNo], 0);
 }
@@ -117,47 +117,47 @@ HRB control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	hrbCtrl : HRB control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srohrbCtrl( E_IM_PRO_UNIT_NUM unitNo, TimproHrbCtrl* hrbCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (hrbCtrl == NULL){
 		Ddim_Assertion(("I:impro_srohrbCtrl error. hrbCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBH_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBH_MAX,
 			hrbCtrl->inPosX, "impro_srohrbCtrl : inPosX" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBV_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBV_MAX,
 			hrbCtrl->inPosY, "impro_srohrbCtrl : inPosY" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBHW_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBHW_MAX,
 			hrbCtrl->inWidth, "impro_srohrbCtrl : inWidth" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBVW_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBVW_MAX,
 			hrbCtrl->inLines, "impro_srohrbCtrl : inLines" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBOHW_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBOHW_MAX,
 			hrbCtrl->outWidth, "impro_srohrbCtrl : outWidth" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBSCYC_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBSCYC_MAX,
 			hrbCtrl->cycle, "impro_srohrbCtrl : cycle" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	else if( im_pro_check_val_range( ImproSrohrb_D_IM_PRO_HRB_HRBOSM_MIN, ImproSrohrb_D_IM_PRO_HRB_HRBOSM_MAX,
 			hrbCtrl->outTiming, "impro_srohrbCtrl : outTiming" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.hrb.hrbh.bit.hrbh				= hrbCtrl->inPosX;
 	ioPro.imgPipe[unitNo].sro.hrb.hrbv.bit.hrbv				= hrbCtrl->inPosY;
 	ioPro.imgPipe[unitNo].sro.hrb.hrbhw.bit.hrbhw			= hrbCtrl->inWidth;
@@ -267,7 +267,7 @@ INT32 impro_srohrbCtrl( E_IM_PRO_UNIT_NUM unitNo, TimproHrbCtrl* hrbCtrl )
 	ioPro.imgPipe[unitNo].sro.hrb.hrbk.hrbk50.bit.hrbk193    = hrbCtrl->coefficient[19][3];
 	ioPro.imgPipe[unitNo].sro.hrb.hrbk.hrbk50.bit.hrbk194    = hrbCtrl->coefficient[19][4];
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -278,21 +278,21 @@ A setup of enable access to the built-in RAM of hrb.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 INT32 impro_srohrb_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
 	if( ( paenTrg == 0 ) && ( ioPro.imgPipe[unitNo].sro.hrb.hrbtrg.bit.hrbtrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_srohrb_set_paen. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.hrb.HRBPAEN.bit.PAEN = paenTrg;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }

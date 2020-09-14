@@ -132,29 +132,29 @@ ImproSenobt*		impro_senobt_new();
 Start TOP OB macro.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senobt_start( E_IM_PRO_OBT_CH ch );
+extern	INT32			impro_senobt_start( EimproObtCh ch );
 /**
 Stop TOP OB macro.
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobt_stop( E_IM_PRO_OBT_CH ch, UCHAR force );
+extern	INT32			impro_senobt_stop( EimproObtCh ch, UCHAR force );
 /**
 The control parameter of TOP OB compensation is set.
 @param[in]	ch : Channel No.
 @param[in]	obtCtrl	:	TOP OB Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobt_ctrl( E_IM_PRO_OBT_CH ch, TimproObtCtrl* obtCtrl );
+extern	INT32			impro_senobt_ctrl( EimproObtCh ch, TimproObtCtrl* obtCtrl );
 /**
 The area for Top OB detection is set up.
 @param[in]	ch : Channel No.
-@param[in]	obtArea	:The area for Top OB detection. See @ref T_IM_PRO_AREA_INFO<br>
+@param[in]	obtArea	:The area for Top OB detection. See @ref TimproAreaInfo<br>
 							value range  :posX[0 - 12287]<br>
 							target registor  :@@OBTH<br>
 							value range  :posY[0 - 8191]<br>
@@ -166,9 +166,9 @@ The area for Top OB detection is set up.
 															2pixel boundary(OBTMD=1)<br>
 							target registor  :@@OBTVW
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
-extern	INT32			impro_senobt_set_area( E_IM_PRO_OBT_CH ch, T_IM_PRO_AREA_INFO* obtArea );
+extern	INT32			impro_senobt_set_area( EimproObtCh ch, TimproAreaInfo* obtArea );
 /**
 Set TOP OB offset
 @param[in]	ch : Channel No.<br>
@@ -183,19 +183,19 @@ Set TOP OB offset
 					 value range : bb :[0x4000(=-16384) - 0x3FFF(=+16383)]<br>
 					 target registor :@@obtOfsb
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 @remarks	Please set up a minus value by a complement. bit15 is sign bit
 */
-extern	INT32			impro_senobt_set_offset( E_IM_PRO_OBT_CH ch, T_IM_PRO_RGB2* offset );
+extern	INT32			impro_senobt_set_offset( EimproObtCh ch, TimproARgb2* offset );
 /**
 Get TOP OB detection data
 @param[in]	ch : Channel No.<br>
 				 value range:[0 - 1]<br>
 @param[out]	obtdata : OBTDATA
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobt_get_bot_data( E_IM_PRO_OBT_CH ch, T_IM_PRO_RGB2* obtdata );
+extern	INT32			impro_senobt_get_bot_data( EimproObtCh ch, TimproARgb2* obtdata );
 /**
 Get the top address of the address array of OBT control.
 @param[in]		ch : Channel No.
@@ -203,7 +203,7 @@ Get the top address of the address array of OBT control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-extern	INT32			impro_senobt_get_rdma_addr_obt_cntl( E_IM_PRO_OBT_CH ch, const TimproRdmaObtAddr** addr );
+extern	INT32			impro_senobt_get_rdma_addr_obt_cntl( EimproObtCh ch, const TimproRdmaObtAddr** addr );
 
 
 

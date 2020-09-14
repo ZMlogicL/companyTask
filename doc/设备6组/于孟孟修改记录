@@ -503,3 +503,114 @@ fr2y6a.h修改结构体域的命名
 scutest.c 中 struct io_scu 找中不到定义
 ptimertest.c 中 struct io_timer 找不到定义
 暂时不改
+
+
+
+
+
+
+__jdsltm1a_ltm.h 	文件名 改为	jdsltm1altm.h， 修改结构体命名，修改结构体域命名
+ 结构/联合体原名									改后												用到的文件
+union io_ltm_ch_ltm_lhsta			IoLtmChLtmLhsta								im_ltm_ltm.c 
+union io_ltm_ch_ltm_lvsta			IoLtmChLtmLvsta								im_ltm_ltm.c 
+union io_ltm_ch_ltm_bldga_1		IoLtmChLtmBldga1							im_ltm_ltm.c
+union io_ltm_ch_ltm_bldga_2		IoLtmChLtmBldga2							im_ltm_ltm.c
+union io_ltm_ch_ltm_bldga_3		IoLtmChLtmBldga3							im_ltm_ltm.c
+union io_ltm_ch_ltm_bldga_4		IoLtmChLtmBldga4							im_ltm_ltm.c
+union io_ltm_ch_ltm_cgga_1		IoLtmChLtmCgga1							im_ltm_ltm.c
+union io_ltm_ch_ltm_cgga_2		IoLtmChLtmCgga2							im_ltm_ltm.c
+union io_ltm_ch_ltm_cgga_3		IoLtmChLtmCgga3							im_ltm_ltm.c
+union io_ltm_ch_ltm_cgga_4		IoLtmChLtmCgga4							im_ltm_ltm.c
+struct io_ltm_ch_ltm						IoLtmChLtm										_jdsltm1a_top.h/im_ltm_ltm.c
+	
+	
+__jdsltm1a_map.h	文件名 改为	jdsltm1amap.h	， 修改结构体命名，修改结构体域命名
+ 结构/联合体原名									改后												用到的文件
+struct io_ltm_ch_map					IoLtmChMap								im_ltm_map.c
+
+__jdsltm1a_rbk.h	文件名 改为	jdsltm1arbk.h， 修改结构体命名，修改结构体域命名	
+结构/联合体原名							改后									用到的文件
+struct io_ltm_ch_rbk				IoLtmChRbk							im_ltm_rbk.c/__jdsltm1a_rbk.h
+
+
+
+__jdspro_cag.h	文件名 改为	jdsprocag.h， 修改结构体命名，修改结构体域命名	
+结构/联合体原名							改后									用到的文件
+union io_cagmd							IoCagmd								im_pro.h
+union io_rbr								IoRbr									im_pro.h
+union io_aboarv						IoAboarv							im_pro.h/im_pro_sro.c
+union io_aboarh						IoAboarh							im_pro.h/im_pro_sro.c
+union io_aboagv						IoAboagv							im_pro.h/im_pro_sro.c
+union io_aboagh						IoAboagh							im_pro.h/im_pro_sro.c
+union io_aboabv						IoAboabv							im_pro.h/im_pro_sro.c
+union io_aboabh						IoAboabh							im_pro.h/im_pro_sro.c
+union io_abgar							IoAbgar								im_pro.h/im_pro_sro.c
+union io_abgag							IoAbgag								im_pro.h/im_pro_sro.c
+union io_abgab							IoAbgab								im_pro.h/im_pro_sro.c
+union io_ablrv							IoAblrv								im_pro.h/im_pro_sro.c
+union io_ablrh							IoAblrh								im_pro.h/im_pro_sro.c
+union io_ablgv							IoAblgv								im_pro.h/im_pro_sro.c
+union io_ablgh							IoAblgh								im_pro.h/im_pro_sro.c
+union io_ablbv							IoAblbv								im_pro.h/im_pro_sro.c
+union io_ablbh							IoAblbh								im_pro.h/im_pro_sro.c
+union io_abofsrv						IoAbofsrv								im_pro.h/im_pro_sro.c
+union io_abofsrh						IoAbofsrh								im_pro.h/im_pro_sro.c
+union io_abofsgv						IoAbofsgv								im_pro.h/im_pro_sro.c
+union io_abofsgh						IoAbofsgh								im_pro.h/im_pro_sro.c
+union io_abofsbv						IoAbofsbv								im_pro.h/im_pro_sro.c
+union io_abofsbh						IoAbofsbh								im_pro.h/im_pro_sro.c
+union io_abnlthr1						IoAbnlthr1								im_pro.h
+union io_abnlthg1						IoAbnlthg1								im_pro.h
+union io_abnlthb1						IoAbnlthb1								im_pro.h
+union io_abnlgar1						IoAbnlgar1								im_pro.h/im_pro_sro.c
+union io_abnlgag1					IoAbnlgag1							im_pro.h/im_pro_sro.c
+union io_abnlgab1					IoAbnlgab1							im_pro.h
+union io_abnlthr2						IoAbnlthr2								im_pro.h
+union io_abnlthg2						IoAbnlthg2								im_pro.h
+union io_abnlthb2						IoAbnlthb2								im_pro.h/im_pro_sro.c
+union io_abnlgar2						IoAbnlgar2								im_pro.h/im_pro_sro.c
+union io_abnlgag2					IoAbnlgag2							im_pro.h/im_pro_sro.c
+union io_abnlgab2					IoAbnlgab2							im_pro.h/im_pro_sro.c
+union io_abnlthr3						IoAbnlthr3								im_pro.h
+union io_abnlthg3						IoAbnlthg3								im_pro.h
+union io_abnlthb3						IoAbnlthb3								im_pro.h
+union io_abnlgar3						IoAbnlgar3								im_pro.h/im_pro_sro.c
+union io_abnlgag3					IoAbnlgag3							im_pro.h/im_pro_sro.c
+union io_abnlgab3					IoAbnlgab3							im_pro.h/im_pro_sro.c
+union io_abnlthr4						IoAbnlthr4								im_pro.h
+union io_abnlthg4						IoAbnlthg4								im_pro.h
+union io_abnlthb4						IoAbnlthb4								im_pro.h
+union io_abnlgar4						IoAbnlgar4								im_pro.h/im_pro_sro.c
+union io_abnlgag4					IoAbnlgag4							im_pro.h/im_pro_sro.c
+union io_abnlgab4					IoAbnlgab4							im_pro.h/im_pro_sro.c
+union io_bfglmt							IoBfglmt										im_pro.h
+union io_bfgth							IoBfgth										im_pro.h
+struct io_cag								IoCag											__jdspro_sro_top_apb.h
+		
+__jdspro_lnr.h	文件名 改为	jdsprolnr.h， 修改结构体命名，修改结构体域命名	
+结构/联合体原名							改后									用到的文件
+struct io_lnrbr							IoLnrbr									im_pro.h
+struct io_lnrincr							IoLnrincr									im_pro.h
+struct io_lnrofsr							IoLnrofsr								im_pro.h
+struct io_lnrbgr							IoLnrbgr									im_pro.h
+struct io_lnrincgr						IoLnrincgr								im_pro.h
+struct io_lnrofsgr						IoLnrofsgr								im_pro.h
+struct io_lnrbgb							IoLnrbgb									im_pro.h
+struct io_lnrincgb						IoLnrincgb								im_pro.h
+struct io_lnrofsgb						IoLnrofsgb								im_pro.h
+struct io_lnrbb							IoLnrbb									im_pro.h
+struct io_lnrincb							IoLnrincb								im_pro.h
+struct io_lnrofsb						IoLnrofsb								im_pro.h
+struct io_lnr								IoLnr										im_pro_common.h/__jdspro_pas_top_apb.h/__jdspro_sen_top_apb.h
+
+
+internals.h  改为  checkheadermaindefs.h
+枚举类型 EProBlockType 枚举值前缀由  IntErnals_ 改为 CheckHeaderMain_
+checkheadermaindefs.h 中宏 IntErnals_RS_printf		CheckHeaderMain_RS_PRINTF
+CheckHeaderMain.c	中 
+宏ioPro 修改为  		 CheckHeaderMain_IO_PRO
+宏ioProTbl 修改为    CheckHeaderMain_IO_PRO_TBL
+
+snsjmlexs.h/snspcie.h/snsrelc.h中
+unsigned char改为 kuchar
+unsigned long 改为 kulong

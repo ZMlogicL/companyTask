@@ -71,83 +71,76 @@ G_BEGIN_DECLS
 #	define CO_ACT_CNR_PCLK
 #endif
 
-#define D_IM_CNR_OFF_LINE				(0)				// Off Line Mode
-#define D_IM_CNR_ON_THE_FLY				(1)				// On The Fly mode
+#define ImCnr_OFF_LINE				(0)				// Off Line Mode
+#define ImCnr_ON_THE_FLY				(1)				// On The Fly mode
 
-#define D_IM_CNR_SYNC					(0)				// Sync Processing
-#define D_IM_CNR_ASYNC					(1)				// Async Processing
-#define D_IM_CNR_SRAM_WAIT_USEC			(1)
+#define ImCnr_SYNC					(0)				// Sync Processing
+#define ImCnr_ASYNC					(1)				// Async Processing
+#define ImCnr_SRAM_WAIT_USEC			(1)
 
-#define D_IM_CNR_OFL_0_WAIT_FLGPTN		(D_IM_CNR_FLG_0_OFL_SPR_END | D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR)
-#define D_IM_CNR_OFL_1_WAIT_FLGPTN		(D_IM_CNR_FLG_1_OFL_SPR_END | D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR)
-#define D_IM_CNR_OTF_0_WAIT_FLGPTN		(D_IM_CNR_FLG_0_OTF_SPR_END | D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR | D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR)
-#define D_IM_CNR_OTF_1_WAIT_FLGPTN		(D_IM_CNR_FLG_1_OTF_SPR_END | D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR | D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR)
+#define ImCnr_OFL_0_WAIT_FLGPTN		(ImCnr_FLG_0_OFL_SPR_END | ImCnr_FLG_0_OFL_SPR_AXI_ERR)
+#define ImCnr_OFL_1_WAIT_FLGPTN		(ImCnr_FLG_1_OFL_SPR_END | ImCnr_FLG_1_OFL_SPR_AXI_ERR)
+#define ImCnr_OTF_0_WAIT_FLGPTN		(ImCnr_FLG_0_OTF_SPR_END | ImCnr_FLG_0_OTF_SPR_AXI_ERR | ImCnr_FLG_0_OTF_SPR_DRT_ERR)
+#define ImCnr_OTF_1_WAIT_FLGPTN		(ImCnr_FLG_1_OTF_SPR_END | ImCnr_FLG_1_OTF_SPR_AXI_ERR | ImCnr_FLG_1_OTF_SPR_DRT_ERR)
 
 
-#define Im_CNR_Dsb()	Dd_ARM_Dsb_Pou()
+#define ImCnr_DSB()	Dd_ARM_Dsb_Pou()
 
-#define	IO_CNR(ch)		((D_IM_CNR_CH_0 == ((ch))) ? &IO_CNR1 : (D_IM_CNR_CH_1 == ((ch))) ? &IO_CNR2 : &IO_CNR3)
+#define	IO_CNR(ch)		((ImCnr_CH_0 == ((ch))) ? &IO_CNR1 : (ImCnr_CH_1 == ((ch))) ? &IO_CNR2 : &IO_CNR3)
 
-#define	Im_CNR_OFL_Enable(ch)			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 1;
-#define	Im_CNR_OFL_Disable(ch)			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 0;
-#define	Im_CNR_OFL_Softreset(ch)		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 1;
-#define	Im_CNR_OTF_Enable(ch)			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 1;
-#define	Im_CNR_OTF_Disable(ch)			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 0;
-#define	Im_CNR_OTF_Softreset(ch)		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 1;
+#define	ImCnr_OFL_ENABLE(ch)			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 1;
+#define	ImCnr_OFL_DISABLE(ch)			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 0;
+#define	ImCnr_OFL_SOFTRESET(ch)		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 1;
+#define	ImCnr_OTF_ENABLE(ch)			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 1;
+#define	ImCnr_OTF_DISABLE(ch)			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 0;
+#define	ImCnr_OTF_SOFTRESET(ch)		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 1;
 
-#define im_cnr_wait_usec( usec )		Dd_ARM_Wait_ns( (usec * 1000) )
+#define ImCnr_WAIT_USEC( usec )		Dd_ARM_Wait_ns( (usec * 1000) )
 
 #ifdef CO_CNR_REG_TYPE_CHECK
-#define im_cnr_check_reg_type( dst, src )	(dst) = (src);
+#define ImCnr_CHECK_REG_TYPE( dst, src )	(dst) = (src);
 #else
-#define im_cnr_check_reg_type( dst, src )
+#define ImCnr_CHECK_REG_TYPE( dst, src )
 #endif
 
-#define im_cnr_set_reg_signed( reg, type, member, val )		\
+#define ImCnr_SET_REG_SIGNED( reg, type, member, val )		\
 		{ \
 			type work = { .word = 0UL }; \
 			work.bit.member = (val); \
 			(reg).bit.member = work.bit.member; \
-			im_cnr_check_reg_type( work, (reg) ); \
+			ImCnr_CHECK_REG_TYPE( work, (reg) ); \
 		}
 
-#define	D_IM_CNR_SEM_TIMEOUT_ERR		(D_IM_CNR | D_DDIM_SEM_TIMEOUT)			/**< Time Out                 (0x14000011) */
-#define	D_IM_CNR_NG						(D_IM_CNR | D_DDIM_SYSTEM_ERROR)		/**< Processing NG            (0x14000099) */
-#define D_IM_CNR_SEM_NG					(D_IM_CNR | D_DDIM_SEM_NG)				/**< Semaphore acquisition NG (0x14000010) */
-#define D_IM_CNR_INPUT_PARAM_ERROR		(D_IM_CNR | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error.         (0x14000001) */
-#define	D_IM_CNR_AXI_ERR				(D_IM_CNR | 0x100)						/**< AXI bus error.           (0x14000100) */
-#define	D_IM_CNR_DRT_ERR				(D_IM_CNR | 0x200)						/**< DRT error.               (0x14000200) */
+#define	ImCnr_SEM_TIMEOUT_ERR		(D_IM_CNR | D_DDIM_SEM_TIMEOUT)			/**< Time Out                 (0x14000011) */
+#define	ImCnr_NG						(D_IM_CNR | D_DDIM_SYSTEM_ERROR)		/**< Processing NG            (0x14000099) */
+#define ImCnr_SEM_NG					(D_IM_CNR | D_DDIM_SEM_NG)				/**< Semaphore acquisition NG (0x14000010) */
+#define ImCnr_INPUT_PARAM_ERROR		(D_IM_CNR | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error.         (0x14000001) */
+#define	ImCnr_AXI_ERR				(D_IM_CNR | 0x100)						/**< AXI bus error.           (0x14000100) */
+#define	ImCnr_DRT_ERR				(D_IM_CNR | 0x200)						/**< DRT error.               (0x14000200) */
 
-#define D_IM_CNR_FLG_0_OFL_SPR_END		(0x00000001)	/**< Suppre end flag ch 0 Off Line			*/
-#define D_IM_CNR_FLG_1_OFL_SPR_END		(0x00000002)	/**< Suppre end flag ch 1 Off Line			*/
-#define D_IM_CNR_FLG_0_OTF_SPR_END		(0x00000004)	/**< Suppre end flag ch 0 On The Fly		*/
-#define D_IM_CNR_FLG_1_OTF_SPR_END		(0x00000008)	/**< Suppre end flag ch 1 On The Fly		*/
-#define D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR	(0x00000010)	/**< Suppre AXI error flag ch 0 Off Line	*/
-#define D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR	(0x00000020)	/**< Suppre AXI error flag ch 1 Off Line	*/
-#define D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR	(0x00000040)	/**< Suppre AXI error flag ch 0 On The Fly	*/
-#define D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR	(0x00000080)	/**< Suppre AXI error flag ch 1 On The Fly	*/
-#define D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR	(0x00000400)	/**< Suppre DRT error flag ch 0 On The Fly	*/
-#define D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR	(0x00000800)	/**< Suppre DRT error flag ch 1 On The Fly	*/
+#define ImCnr_FLG_0_OFL_SPR_END		(0x00000001)	/**< Suppre end flag ch 0 Off Line			*/
+#define ImCnr_FLG_1_OFL_SPR_END		(0x00000002)	/**< Suppre end flag ch 1 Off Line			*/
+#define ImCnr_FLG_0_OTF_SPR_END		(0x00000004)	/**< Suppre end flag ch 0 On The Fly		*/
+#define ImCnr_FLG_1_OTF_SPR_END		(0x00000008)	/**< Suppre end flag ch 1 On The Fly		*/
+#define ImCnr_FLG_0_OFL_SPR_AXI_ERR	(0x00000010)	/**< Suppre AXI error flag ch 0 Off Line	*/
+#define ImCnr_FLG_1_OFL_SPR_AXI_ERR	(0x00000020)	/**< Suppre AXI error flag ch 1 Off Line	*/
+#define ImCnr_FLG_0_OTF_SPR_AXI_ERR	(0x00000040)	/**< Suppre AXI error flag ch 0 On The Fly	*/
+#define ImCnr_FLG_1_OTF_SPR_AXI_ERR	(0x00000080)	/**< Suppre AXI error flag ch 1 On The Fly	*/
+#define ImCnr_FLG_0_OTF_SPR_DRT_ERR	(0x00000400)	/**< Suppre DRT error flag ch 0 On The Fly	*/
+#define ImCnr_FLG_1_OTF_SPR_DRT_ERR	(0x00000800)	/**< Suppre DRT error flag ch 1 On The Fly	*/
 
 
-#define D_IM_CNR_CH_0					(0)				/**< CNR Channel 0						*/
-#define D_IM_CNR_CH_1					(1)				/**< CNR Channel 1						*/
-#define D_IM_CNR_CH_2					(2)				/**< CNR Channel 0/1 Simultaneous write	*/
-#define D_IM_CNR_CH_READ_NUM_MAX		(2)				/**< Read Channel Max Number			*/
-#define D_IM_CNR_CH_NUM_MAX				(3)				/**< Channel Max Number					*/
+#define ImCnr_CH_0					(0)				/**< CNR Channel 0						*/
+#define ImCnr_CH_1					(1)				/**< CNR Channel 1						*/
+#define ImCnr_CH_2					(2)				/**< CNR Channel 0/1 Simultaneous write	*/
+#define ImCnr_CH_READ_NUM_MAX		(2)				/**< Read Channel Max Number			*/
+#define ImCnr_CH_NUM_MAX				(3)				/**< Channel Max Number					*/
 
-#define D_IM_CNR_MODE_OFL				(0)				/**< CNR Off Line mode		*/
-#define D_IM_CNR_MODE_OTF				(1)				/**< CNR On The Fly mode	*/
+#define ImCnr_MODE_OFL				(0)				/**< CNR Off Line mode		*/
+#define ImCnr_MODE_OTF				(1)				/**< CNR On The Fly mode	*/
 
-#define D_IM_CNR_ADDR_BANK_MAX			(4)				/**< Maximum output bank index number of WCTA */
-#define ADDR_BNK_LIMIT(pos, total) ((pos < total) ? pos : 0)
-
-#ifdef CO_DDIM_UTILITY_USE
-//---------------------------- utility section ---------------------------
-// Nothing Special
-//---------------------------- colabo section ----------------------------
-// Nothing Special
-#endif
+#define ImCnr_ADDR_BANK_MAX			(4)				/**< Maximum output bank index number of WCTA */
+#define ImCnr_ADDR_BNK_LIMIT(pos, total) ((pos < total) ? pos : 0)
 
 /*----------------------------------------------------------------------*/
 /* Enumeration															*/
@@ -212,9 +205,9 @@ typedef enum {
 /** SPR C Blend mode
 */
 typedef enum {
-	ImCnr_C_BLEND_MD_FIX = 0,		/**< Fixed value blend				*/
-	ImCnr_C_BLEND_MD_COL_DIFF_EDGE,	/**< Color difference edge blend	*/
-	ImCnr_C_BLEND_MD_HUE_SPEC,		/**< Hue specified blend			*/
+	ImCnr_C_BLEND_MD_FIX = 0,		/**< Fixed value BLEND				*/
+	ImCnr_C_BLEND_MD_COL_DIFF_EDGE,	/**< Color difference edge BLEND	*/
+	ImCnr_C_BLEND_MD_HUE_SPEC,		/**< Hue specified BLEND			*/
 } ImCnrBlendMd;
 
 /** SPR C range mode
@@ -236,26 +229,18 @@ typedef enum {
 	ImCnr_ONOFF_ENABLE			/**< SPR enable		*/
 } ImCnrOnoff;
 
-#ifdef CO_DDIM_UTILITY_USE
-//---------------------------- utility section ---------------------------
-// Nothing Special
-//---------------------------- colabo section ----------------------------
-// Nothing Special
-#endif
-
-
 /*----------------------------------------------------------------------*/
 /* Structure															*/
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
 
-typedef VOID (*T_IM_CNR_CALLBACK)( UCHAR ch, ULONG interrupt_flag_mask, UINT32 user_param );	/**< Callback function pointer	*/
+typedef VOID (*T_IM_CNR_CALLBACK)( UCHAR ch, ULONG interrupt_flag_mask, UINT32 userParam );	/**< Callback function pointer	*/
 
-static volatile T_IM_CNR_CALLBACK	gIM_CNR_OFL_CallBack_Func[D_IM_CNR_CH_READ_NUM_MAX] = {NULL, NULL};
-static volatile T_IM_CNR_CALLBACK	gIM_CNR_OTF_CallBack_Func[D_IM_CNR_CH_READ_NUM_MAX] = {NULL, NULL};
-static volatile UINT32 gIM_CNR_OFL_UserParam[D_IM_CNR_CH_READ_NUM_MAX] = {0, 0};
-static volatile UINT32 gIM_CNR_OTF_UserParam[D_IM_CNR_CH_READ_NUM_MAX] = {0, 0};
-static UCHAR gim_cnr_mode[2] = { D_IM_CNR_MODE_OFL, D_IM_CNR_MODE_OFL };
+static volatile T_IM_CNR_CALLBACK	S_IM_CNR_OFL_CALLBACK_FUNC[ImCnr_CH_READ_NUM_MAX] = {NULL, NULL};
+static volatile T_IM_CNR_CALLBACK	S_IM_CNR_OTF_CALLBACK_FUNC[ImCnr_CH_READ_NUM_MAX] = {NULL, NULL};
+static volatile UINT32 S_IM_CNR_OFL_USERPARAM[ImCnr_CH_READ_NUM_MAX] = {0, 0};
+static volatile UINT32 S_IM_CNR_OTF_USERPARAM[ImCnr_CH_READ_NUM_MAX] = {0, 0};
+static UCHAR 	S_IM_CNR_MODE[2] = { ImCnr_MODE_OFL, ImCnr_MODE_OFL };
 
 
 /** SPR Control info for common
@@ -265,24 +250,6 @@ static UCHAR gim_cnr_mode[2] = { D_IM_CNR_MODE_OFL, D_IM_CNR_MODE_OFL };
 /*----------------------------------------------------------------------*/
 //---------------------------- driver section ----------------------------
 // Output address management information
-typedef struct {
-	UCHAR	use_bank_num;							// Output bank number
-	UCHAR	bank_area;								// Target bank number
-	ULONG	output_addr[D_IM_CNR_ADDR_BANK_MAX];	// Output bank address information.
-} T_IM_CNR_OUTPUT_MNG;
-
-// Output latest management information
-typedef struct {
-	UCHAR	bank_area;								// Latest bank number
-	ULONG	addr;									// Latest Output address.
-} T_IM_CNR_LATEST_MNG;
-
-// Output address parameter
-static volatile T_IM_CNR_OUTPUT_MNG gIM_CNR_Output_Mng[D_IM_CNR_CH_READ_NUM_MAX];
-// Output address parameter
-static volatile T_IM_CNR_LATEST_MNG gIM_CNR_Latest_Mng[D_IM_CNR_CH_READ_NUM_MAX];
-
-
 typedef struct _ImCnr 							ImCnr;
 typedef struct _ImCnrClass 				ImCnrClass;
 typedef struct _ImCnrPrivate 				ImCnrPrivate;
@@ -295,6 +262,24 @@ struct _ImCnrClass{
 	GObjectClass parentclass;
 };
 
+
+typedef struct _ImCnrOutputMng{
+	UCHAR		useBankNum;							// Output bank number
+	UCHAR		bankArea;								// Target bank number
+	ULONG	outputAddr[ImCnr_ADDR_BANK_MAX];	// Output bank address information.
+} ImCnrOutputMng;
+
+// Output latest management information
+typedef struct _ImCnrLatestMng{
+	UCHAR		bankArea;								// Latest bank number
+	ULONG	addr;									// Latest Output address.
+} ImCnrLatestMng;
+
+// Output address parameter
+static volatile ImCnrOutputMng S_IM_CNR_OUTPUT_MNG[ImCnr_CH_READ_NUM_MAX];
+// Output address parameter
+static volatile ImCnrLatestMng S_IM_CNR_LATEST_MNG[ImCnr_CH_READ_NUM_MAX];
+
 typedef struct _ImCnroneOflCtrl{
 	ImCnrOflYccMode	mode;		/**< SPR YCC mode	@@YUV_MODE	<br>
 														 <ul><li>@ref ImCnr_OFL_YCC_MODE_YCC444_PLANE
@@ -306,31 +291,31 @@ typedef struct _ImCnroneOflCtrl{
 	USHORT				width;		/**< SPR valid data width [64 ~ 16384(aligned on 16pixel)]		@@HSIZE	*/
 	USHORT				lines;		/**< SPR valid data lines [64 ~ 16384(aligned on 16pixel)]		@@VSIZE	*/
 
-	ULONG				r_y_width;	/**< Y width for read (aligned on 16byte)			@@RYDEF	*/
-	ULONG				r_y_addr;	/**< Y address for read (aligned on 16byte)			@@RYTA	*/
+	ULONG				rYWidth;	/**< Y width for read (aligned on 16byte)			@@RYDEF	*/
+	ULONG				rYAddr;	/**< Y address for read (aligned on 16byte)			@@RYTA	*/
 
-	ULONG				r_c_width;	/**< CbCr width for read (aligned on 16byte)		@@RCDEF	*/
-	ULONG				r_cb_addr;	/**< Cb address for read (aligned on 16byte)		@@RCBTA	*/
-	ULONG				r_cr_addr;	/**< Cr address for read (aligned on 16byte)		@@RCRTA	*/
+	ULONG				rCWidth;	/**< CbCr width for read (aligned on 16byte)		@@RCDEF	*/
+	ULONG				rCbAddr;	/**< Cb address for read (aligned on 16byte)		@@RCBTA	*/
+	ULONG				rCrAddr;	/**< Cr address for read (aligned on 16byte)		@@RCRTA	*/
 
-	ULONG				w_y_width;	/**< Y width for write (aligned on 16byte)			@@WYDEF	*/
-	ULONG				w_y_addr;	/**< Y address for write (aligned on 16byte)		@@WYTA	*/
+	ULONG				wYWidth;	/**< Y width for write (aligned on 16byte)			@@WYDEF	*/
+	ULONG				wYAddr;	/**< Y address for write (aligned on 16byte)		@@WYTA	*/
 
-	ULONG				w_c_width;	/**< CbCr width for write (aligned on 16byte)		@@WCDEF	*/
-	ULONG				w_cb_addr;	/**< Cb address for write (aligned on 16byte)		@@WCBTA	*/
-	ULONG				w_cr_addr;	/**< Cr address for write (aligned on 16byte)		@@WCRTA	*/
+	ULONG				wCWidth;	/**< CbCr width for write (aligned on 16byte)		@@WCDEF	*/
+	ULONG				wCbAddr;	/**< Cb address for write (aligned on 16byte)		@@WCBTA	*/
+	ULONG				wCrAddr;	/**< Cr address for write (aligned on 16byte)		@@WCRTA	*/
 
-	ULONG				work_addr;	/**< Address fir work area[288 * VSIZE]		@@TMPTA	*/
+	ULONG				workAddr;	/**< Address fir work area[288 * VSIZE]		@@TMPTA	*/
 
-	ImCnrVprocess	divide_top;	/**< Virtucal process devide	@@VDIVT	<br>
+	ImCnrVprocess	divideTop;	/**< Virtucal process devide	@@VDIVT	<br>
 														 <ul><li>@ref ImCnr_VPROCESS_NORM
 															 <li>@ref ImCnr_VPROCESS_DIV</ul>	*/
-	ImCnrVprocess	divide_bot;	/**< Virtucal process devide	@@VDIVB	<br>
+	ImCnrVprocess	divideBot;	/**< Virtucal process devide	@@VDIVB	<br>
 														 <ul><li>@ref ImCnr_VPROCESS_NORM
 															 <li>@ref ImCnr_VPROCESS_DIV</ul>	*/
 
 	T_IM_CNR_CALLBACK	pCallBack;	/**< callback function	*/
-	UINT32				user_param;		/**< This set value will return to callback argument value when interrupt occurs.	*/
+	UINT32				userParam;		/**< This set value will return to callback argument value when interrupt occurs.	*/
 } ImCnrOflCtrl;
 
 /** SPR Control info for common
@@ -340,59 +325,59 @@ typedef struct _ImCnrOtfCtrl{
 														 <ul><li>@ref ImCnr_OTF_YCC_MODE_YCC422_SIMPLE
 															 <li>@ref ImCnr_OTF_YCC_MODE_YCC420_SIMPLE</ul>		*/
 
-	UCHAR				extra_mode;		/**< extra_mode @@EXMODE */
-	UCHAR				video_format;	/**< video_format @@CNRVFM */
+	UCHAR					extra_mode;		/**< extra_mode @@EXMODE */
+	UCHAR					videoFormat;	/**< videoFormat @@CNRVFM */
 	USHORT				width;			/**< SPR valid data width [64 ~ 16384(aligned on 16pixel)]		@@HSIZE	*/
 	USHORT				lines;			/**< SPR valid data lines [64 ~ 16384(aligned on 16pixel)]		@@VSIZE	*/
 
-	ULONG				w_c_width;		/**< CbCr width for write (aligned on 16byte)		@@WCDEF	*/
+	ULONG				wCWidth;		/**< CbCr width for write (aligned on 16byte)		@@WCDEF	*/
 
-	ULONG				w_offset_x;		/**< write offset work X direction (aligned on 2byte)		@@CNRWOFSX	*/
+	ULONG				wOffsetX;		/**< write offset work X direction (aligned on 2byte)		@@CNRWOFSX	*/
 
-	ImCnrHprocess	divide_left;	/**< Virtucal process devide	@@HDIVL	<br>
+	ImCnrHprocess	divideLeft;	/**< Virtucal process devide	@@HDIVL	<br>
 														 <ul><li>@ref ImCnr_HPROCESS_NORM
 															 <li>@ref ImCnr_HPROCESS_DIV</ul>	*/
-	ImCnrHprocess	divide_right;	/**< Virtucal process devide	@@HDIVR	<br>
+	ImCnrHprocess	divideRight;	/**< Virtucal process devide	@@HDIVR	<br>
 														 <ul><li>@ref ImCnr_HPROCESS_NORM
 															 <li>@ref ImCnr_HPROCESS_DIV</ul>	*/
 	ImCnrOnoff		continuous;		/**< Continuous processing enable @@CNRCSE <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
 	T_IM_CNR_CALLBACK	pCallBack;		/**< callback function	*/
-	UINT32				user_param;		/**< This set value will return to callback argument value when interrupt occurs.	*/
+	UINT32				userParam;		/**< This set value will return to callback argument value when interrupt occurs.	*/
 } ImCnrOtfCtrl;
 
 /** im_cnrone_otf_set_outaddr_info() parameter structure */
 typedef struct _ImCnrOtfOutaddrInfo{
-	UCHAR				use_bank_num;						/**< CbCr address bank number @@WCTA
+	UCHAR				useBankNum;						/**< CbCr address bank number @@WCTA
 																	Use only one bank in the setting of 1 (d),
 																	and use of the four banks in the setting of 4 (d).	*/
-	ULONG				w_c_addr[D_IM_CNR_ADDR_BANK_MAX];	/**< CbCr address for write (aligned on 2bytes)		@@WCTA	*/
+	ULONG			wCAddr[ImCnr_ADDR_BANK_MAX];	/**< CbCr address for write (aligned on 2bytes)		@@WCTA	*/
 } ImCnrOtfOutaddrInfo;
 
 /** im_cnrone_ofl_ctrl_Axi() parameter structure */
 typedef struct _ImCnrOflAxi{
-	UINT32	read_cache_type;			/**< Read Cache type. */
-	UINT32	read_protection_type;		/**< Read Protection type. */
-	UINT32	write_cache_type;			/**< Write Cache type. */
-	UINT32	write_protection_type;		/**< Write Protection type. */
+	UINT32	readCacheType;			/**< Read Cache type. */
+	UINT32	readProtectionType;		/**< Read Protection type. */
+	UINT32	writeCacheType;			/**< Write Cache type. */
+	UINT32	writeProtectionType;		/**< Write Protection type. */
 } ImCnrOflAxi;
 
 /** im_cnrone_ofl_get_axi_status() parameter structure */
 typedef struct _ImCnrOflAxiStatus{
-	UCHAR	read_channel_response;	/**< RRESP register */
-	UCHAR	write_channel_response;	/**< WRESP register */
+	UCHAR		readChannelResponse;	/**< RRESP register */
+	UCHAR		writeChannelResponse;	/**< WRESP register */
 } ImCnrOflAxiStatus;
 
 /** im_cnrone_otf_ctrl_axi() parameter structure */
 typedef struct _ImCnrOtfAxi{
-	UINT32	write_cache_type;			/**< Write Cache type. */
-	UINT32	write_protection_type;		/**< Write Protection type. */
+	UINT32	writeCacheType;			/**< Write Cache type. */
+	UINT32	writeProtectionType;		/**< Write Protection type. */
 } ImCnrOtfAxi;
 
 /** im_cnrone_otf_get_axi_status() parameter structure */
 typedef struct _ImCnrOtfAxiStatus{
-	UCHAR	write_channel_response;	/**< WRESP register */
+	UCHAR	writeChannelResponse;	/**< WRESP register */
 } ImCnrOtfAxiStatus;
 
 /** SPR Control info for Low/Middle frequency CbCr
@@ -401,23 +386,23 @@ typedef struct _ImCnrCtrlCMcLc{
 	ImCnrOnoff			enable;				/**< Low/Middle CbCr SPR enable @@MCEN, @@LCEN	<br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	UCHAR					h_y_threshold[4];	/**< Low/Middle SPR Y threshold for horizontal		@@MCYTHH, @@LCYTHH	*/
-	UCHAR					v_y_threshold[4];	/**< Low/Middle SPR Y threshold for vertical		@@MCYTHV, @@LCYTHV	*/
-	UCHAR					h_c_threshold[4];	/**< Low/Middle SPR CbCr threshold for horizontal	@@MCCTHH, @@LCCTHH	*/
-	UCHAR					v_c_threshold[4];	/**< Low/Middle SPR CbCr threshold for vertical	@@MCCTHV, @@LCCTHV	*/
-	UCHAR					y_threshold_cor;	/**< Low/Middle SPR Y threshold coring	@@MCYDYMYCR, @@LCYDYMYCR	*/
-	USHORT					y_threshold_gain;	/**< Low/Middle SPR Y threshold gain (9bit)	@@MCYDYMYG, @@LCYDYMYG	<br>
+	UCHAR					hYThreshold[4];	/**< Low/Middle SPR Y threshold for horizontal		@@MCYTHH, @@LCYTHH	*/
+	UCHAR					vYThreshold[4];	/**< Low/Middle SPR Y threshold for vertical		@@MCYTHV, @@LCYTHV	*/
+	UCHAR					hCThreshold[4];	/**< Low/Middle SPR CbCr threshold for horizontal	@@MCCTHH, @@LCCTHH	*/
+	UCHAR					vCThreshold[4];	/**< Low/Middle SPR CbCr threshold for vertical	@@MCCTHV, @@LCCTHV	*/
+	UCHAR					yThresholdCor;	/**< Low/Middle SPR Y threshold coring	@@MCYDYMYCR, @@LCYDYMYCR	*/
+	USHORT				yThresholdGain;	/**< Low/Middle SPR Y threshold gain (9bit)	@@MCYDYMYG, @@LCYDYMYG	<br>
 													value range: [0 - 511(=0/256 - 511/256)]	*/
-	ImCnrOnoff			y_threshold_dym_en;	/**< Low/Middle Y threshold dynamic setting enable @@MCYDYM, @@LCYDYM <br>
+	ImCnrOnoff		yThresholdDymEn;	/**< Low/Middle Y threshold dynamic setting enable @@MCYDYM, @@LCYDYM <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrOnoff			y_threshold_scl_en;	/**< Low/Middle Y threshold scale enable @@MCYSCL, @@LCYSCL <br>
+	ImCnrOnoff		yThresholdSclEn;	/**< Low/Middle Y threshold scale enable @@MCYSCL, @@LCYSCL <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrOnoff			c_y_threshold_scl_en;	/**< Low/Middle CbCr threshold Y scale enable @@MCSSCL, @@LCSSCL <br>
+	ImCnrOnoff		cYThresholdSclEn;	/**< Low/Middle CbCr threshold Y scale enable @@MCSSCL, @@LCSSCL <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrOnoff			c_threshold_scl_en;	/**< Low/Middle CbCr threshold scale enable @@MCCSCL, @@LCCSCL <br>
+	ImCnrOnoff	 	cThresholdSclEn;	/**< Low/Middle CbCr threshold scale enable @@MCCSCL, @@LCCSCL <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
 } ImCnrCtrlCMcLc;
@@ -428,28 +413,28 @@ typedef struct _ImCnrCtrlC{
 	ImCnrOnoff			enable;				/**< CbCr SPR enable @@CSPREN	<br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrOnoff			gradation_keep_en;	/**< gradation keep enable @@CGDKEN <br>
+	ImCnrOnoff			gradationKeepEn;	/**< gradation keep enable @@CGDKEN <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrCtrlCMcLc	mid_freq_nr;		/**< Middle range frequency Color NR parmeters */
-	ImCnrCtrlCMcLc	low_freq_nr;		/**< Low range frequency Color NR parmeters */
-	ImCnrOnoff			whitening_enable;	/**< Whitening enable @@WHTEN <br>
+	ImCnrCtrlCMcLc		midFreqNr;		/**< Middle range frequency Color NR parmeters */
+	ImCnrCtrlCMcLc		lowFreqNr;		/**< Low range frequency Color NR parmeters */
+	ImCnrOnoff			whiteningEnable;	/**< Whitening enable @@WHTEN <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	USHORT					whitening_value;	/**< Whitening value[0~31]			@@WHTVAL	*/
-	ImCnrWhitenBase	whitening_base;		/**< Whitening base @@WHTBASE <br>
+	USHORT					whiteningValue;	/**< Whitening value[0~31]			@@WHTVAL	*/
+	ImCnrWhitenBase	whiteningBase;		/**< Whitening base @@WHTBASE <br>
 														 <ul><li>@ref ImCnr_WHITEN_BASE_LOW
 															 <li>@ref ImCnr_WHITEN_BASE_MIDDLE
 															 <li>@ref ImCnr_WHITEN_BASE_HIGH</ul>	*/
-	ImCnrBlendMd		c_blend_md;			/**< Blend mode @@BLENDMD <br>
+	ImCnrBlendMd		cBlendMd;			/**< Blend mode @@BLENDMD <br>
 														 <ul><li>@ref ImCnr_C_BLEND_MD_FIX
 															 <li>@ref ImCnr_C_BLEND_MD_COL_DIFF_EDGE
 															 <li>@ref ImCnr_C_BLEND_MD_HUE_SPEC</ul>	*/
-	USHORT					c_alpha_blend;		/**< Alpha blend value[0~31] @@CSPRALPBD */
-	ImCnrOnoff			c_range;			/**< C range enable @@CSRGEN <br>
+	USHORT					cAlphaBlend;		/**< Alpha BLEND value[0~31] @@CSPRALPBD */
+	ImCnrOnoff			cRange;			/**< C range enable @@CSRGEN <br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrCRangeMode	c_range_mode;		/**< C range mode @@CSRGMD <br>
+	ImCnrCRangeMode	cRangeMode;		/**< C range mode @@CSRGMD <br>
 														 <ul><li>@ref ImCnr_C_RANGE_MODE_0_1
 															 <li>@ref ImCnr_C_RANGE_MODE_0_2
 															 <li>@ref ImCnr_C_RANGE_MODE_0_4
@@ -465,18 +450,18 @@ typedef struct _ImCnrOflCtrlY{
 	ImCnrOnoff		enable;				/**< Y SPR enable @@YSPREN	<br>
 														 <ul><li>@ref ImCnr_ONOFF_DISABLE
 															 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrThreshold	threshold_type;		/**< threshold type			@@YSPRMODE YSPRMD	<br>
+	ImCnrThreshold	thresholdType;		/**< threshold type			@@YSPRMODE YSPRMD	<br>
 														 <ul><li>@ref ImCnr_THRES_REGISTER
 															 <li>@ref ImCnr_THRES_DYNAMIC</ul>	*/
 	ImCnrLevel		level;				/**< SPR filter level		@@YSPRMODE YSPRFE	<br>
 														 <ul><li>@ref ImCnr_LEVEL_HIGH
 															 <li>@ref ImCnr_LEVEL_MID
 															 <li>@ref ImCnr_LEVEL_LOW</ul>	*/
-	UCHAR				h_y_threshold;		/**< SPR Y threshold for horizontal		@@YSPRFXEYH	*/
-	UCHAR				v_y_threshold;		/**< SPR Y threshold for vertical		@@YSPRFXEYV	*/
-	UCHAR				h_c_threshold;		/**< SPR CbCr threshold for horizontal	@@YSPRFXECH	*/
-	UCHAR				v_c_threshold;		/**< SPR CbCr threshold for vertical	@@YSPRFXECV	*/
-	UCHAR				alpha_blend_ratio;	/**< Alpha blend ratio[0~31]			@@YSPRALPBD	*/
+	UCHAR				hYThreshold;		/**< SPR Y threshold for horizontal		@@YSPRFXEYH	*/
+	UCHAR				vYThreshold;		/**< SPR Y threshold for vertical		@@YSPRFXEYV	*/
+	UCHAR				hCThreshold;		/**< SPR CbCr threshold for horizontal	@@YSPRFXECH	*/
+	UCHAR				vCThreshold;		/**< SPR CbCr threshold for vertical	@@YSPRFXECV	*/
+	UCHAR				alphaBlendRatio;	/**< Alpha BLEND ratio[0~31]			@@YSPRALPBD	*/
 } ImCnrOflCtrlY;
 
 /** SPR YSPRDYEY/MCYSCL/MCCSCL/MCSSCL/LCYSCL/LCCSCL/LCSSCL/CESCL table
@@ -538,10 +523,10 @@ typedef struct _ImCnrCcTableSrcDst{
 /** SPR CPHPT/CPHPTK/CDSCLOF/CDSCLGA/CDSCLBD table
 */
 typedef struct _ImCnrHueSpecTable{
-	INT8	cd_cb;	/**< Origin coordinate for Cb	@@CDCB */
-	INT8	cd_cr;	/**< Origin coordinate for Cr	@@CDCR */
-	USHORT	k_cb;	/**< Origin coordinate coefficient	@@KCB */
-	USHORT	k_cr;	/**< Origin coordinate coefficient	@@KCR */
+	INT8		cdCb;	/**< Origin coordinate for Cb	@@CDCB */
+	INT8		cdCr;	/**< Origin coordinate for Cr	@@CDCR */
+	USHORT	kCb;	/**< Origin coordinate coefficient	@@KCB */
+	USHORT	kCr;	/**< Origin coordinate coefficient	@@KCR */
 	USHORT	bd1;	/**< Boundary1	@@CDSCLBD_1 */
 	USHORT	bd2;	/**< Boundary2	@@CDSCLBD_2 */
 	USHORT	bd3;	/**< Boundary3	@@CDSCLBD_3 */
@@ -573,8 +558,8 @@ typedef struct _ImCnrCtrlCcSrcDst{
 	ImCnrOnoff					enable;		/**< Source/Destination CbCr adjustment enable @@SPRS, @@SPRD	<br>
 													 <ul><li>@ref ImCnr_ONOFF_DISABLE
 														 <li>@ref ImCnr_ONOFF_ENABLE</ul>	*/
-	ImCnrCcTableSrcDst		cb_table;	/**< Source/Destination Cb adjustment table	*/
-	ImCnrCcTableSrcDst		cr_table;	/**< Source/Destination Cr adjustment table	*/
+	ImCnrCcTableSrcDst		cbTable;	/**< Source/Destination Cb adjustment table	*/
+	ImCnrCcTableSrcDst		crTable;	/**< Source/Destination Cr adjustment table	*/
 } ImCnrCtrlCcSrcDst;
 
 /* @} */	// im_cnr
@@ -621,16 +606,16 @@ typedef struct _ImCnrRdmaDataCtrlC{
 	union	io_cnr_cspr_reg_cspren		CSPREN;		/**< 2842_(1000 - 1003h),	2842_(3000 - 3003h) */
 	union	io_cnr_cspr_reg_cgdken		CGDKEN;		/**< 2842_(1008 - 100Bh),	2842_(3008 - 300Bh) */
 	union	io_cnr_cspr_reg_mcen		MCEN;		/**< 2842_(1020 - 1023h),	2842_(3020 - 3023h) */
-	union	io_cnr_cspr_reg_mcythh		MCYTHH;		/**< 2842_(1024 - 1027h),	2842_(3024 - 3027h) */
+	union	io_cnr_cspr_reg_mcythh	MCYTHH;		/**< 2842_(1024 - 1027h),	2842_(3024 - 3027h) */
 	union	io_cnr_cspr_reg_mcythv		MCYTHV;		/**< 2842_(1028 - 102Bh),	2842_(3028 - 302Bh) */
-	union	io_cnr_cspr_reg_mccthh		MCCTHH;		/**< 2842_(102C - 102Fh),	2842_(302C - 302Fh) */
+	union	io_cnr_cspr_reg_mccthh	MCCTHH;		/**< 2842_(102C - 102Fh),	2842_(302C - 302Fh) */
 	union	io_cnr_cspr_reg_mccthv		MCCTHV;		/**< 2842_(1030 - 1033h),	2842_(3030 - 3033h) */
 	union	io_cnr_cspr_reg_mcydym		MCYDYM;		/**< 2842_(1034 - 1037h),	2842_(3034 - 3037h) */
 	union	io_cnr_cspr_reg_mcydymdt	MCYDYMDT;	/**< 2842_(1038 - 103Bh),	2842_(3038 - 303Bh) */
 	union	io_cnr_cspr_reg_mcyscl		MCYSCL;		/**< 2842_(1040 - 1043h),	2842_(3040 - 3043h) */
 	union	io_cnr_cspr_reg_mccscl		MCCSCL;		/**< 2842_(1060 - 1063h),	2842_(3060 - 3063h) */
 	union	io_cnr_cspr_reg_mcsscl		MCSSCL;		/**< 2842_(1080 - 1083h),	2842_(3080 - 3083h) */
-	union	io_cnr_cspr_reg_lcen		LCEN;		/**< 2842_(10C0 - 10C3h),	2842_(30C0 - 30C3h) */
+	union	io_cnr_cspr_reg_lcen			LCEN;		/**< 2842_(10C0 - 10C3h),	2842_(30C0 - 30C3h) */
 	union	io_cnr_cspr_reg_lcythh		LCYTHH;		/**< 2842_(10C4 - 10C7h),	2842_(30C4 - 30C7h) */
 	union	io_cnr_cspr_reg_lcythv		LCYTHV;		/**< 2842_(10C8 - 10CBh),	2842_(30C8 - 30CBh) */
 	union	io_cnr_cspr_reg_lccthh		LCCTHH;		/**< 2842_(10CC - 10CFh),	2842_(30CC - 30CFh) */
@@ -661,8 +646,8 @@ data
 typedef struct _ImCnrRdmaDataOflCtrlY{
 	union	io_cnr_ofl_reg_yspr_yspren		YSPREN;		/**< 2842_(4000 - 4003h) */
 	union	io_cnr_ofl_reg_yspr_ysprmode	YSPRMODE;	/**< 2842_(4004 - 4007h) */
-	union	io_cnr_ofl_reg_yspr_ysprfxey	YSPRFXEY;	/**< 2842_(4020 - 4023h) */
-	union	io_cnr_ofl_reg_yspr_ysprfxec	YSPRFXEC;	/**< 2842_(4024 - 4027h) */
+	union	io_cnr_ofl_reg_yspr_ysprfxey		YSPRFXEY;	/**< 2842_(4020 - 4023h) */
+	union	io_cnr_ofl_reg_yspr_ysprfxec		YSPRFXEC;	/**< 2842_(4024 - 4027h) */
 	union	io_cnr_ofl_reg_yspr_yspralpbd	YSPRALPBD;	/**< 2842_(4028 - 402Bh) */
 } ImCnrRdmaDataOflCtrlY;
 
@@ -682,7 +667,7 @@ typedef struct _ImCnrRdmaAddrOflYsprTbl{
 data
 */
 typedef struct _ImCnrRdmaDataOflYsprTbl{
-	struct	io_cnr_ofl_reg_yspr_ysprdyeyof	YSPRDYEYOF;	/**< 2842_(4030 - 4037h) */
+	struct	io_cnr_ofl_reg_yspr_ysprdyeyof		YSPRDYEYOF;	/**< 2842_(4030 - 4037h) */
 	struct	io_cnr_ofl_reg_yspr_ysprdyeyga	YSPRDYEYGA;	/**< 2842_(4038 - 403Fh) */
 	struct	io_cnr_ofl_reg_yspr_ysprdyeybd	YSPRDYEYBD;	/**< 2842_(4040 - 4047h) */
 } ImCnrRdmaDataOflYsprTbl;
@@ -700,6 +685,7 @@ typedef struct _ImCnrRdmaAddrCsprMidYTbl{
 	ULONG	MCYSCLBD_1;		/**< 2842_(1058 - 105Bh),	2842_(3058 - 305Bh) */
 	ULONG	MCYSCLBD_2;		/**< 2842_(105C - 105Fh),	2842_(305C - 305Fh) */
 } ImCnrRdmaAddrCsprMidYTbl;
+
 /** CSPR Middle Y Table (OTF/OFL)
 data
 */
@@ -774,8 +760,8 @@ typedef struct _ImCnrRdmaAddrCsprLowYTbl{
 data
 */
 typedef struct _ImCnrRdmaDataCsprLowYTbl{
-	//											OTF							OFL
-	struct io_cnr_cspr_reg_lcysclof	LCYSCLOF;	/**< 2842_(10E8 - 10EFh),	2842_(30E8 - 30EFh) */
+	//						s					OTF							OFL
+	struct io_cnr_cspr_reg_lcysclof		LCYSCLOF;	/**< 2842_(10E8 - 10EFh),	2842_(30E8 - 30EFh) */
 	struct io_cnr_cspr_reg_lcysclga	LCYSCLGA;	/**< 2842_(10F0 - 10F7h),	2842_(30F0 - 30F7h) */
 	struct io_cnr_cspr_reg_lcysclbd	LCYSCLBD;	/**< 2842_(10F8 - 10FFh),	2842_(30F8 - 30FFh) */
 } ImCnrRdmaDataCsprLowYTbl;
@@ -825,7 +811,7 @@ extern	INT32 im_cnr_ofl_stop(ImCnr *self, UCHAR ch );
 The semaphore of SPR is returned for Off Line
 @param [in]	ch				channel[0 - 1]
 @retval		D_DDIM_OK						Success
-@retval		D_IM_CNR_SEM_NG					Fail - Processing NG (system error)
+@retval		ImCnr_SEM_NG					Fail - Processing NG (system error)
 @remarks	This API uses DDIM_User_Sig_Sem().
 */
 extern	INT32 im_cnr_ofl_close(ImCnr *self, UCHAR ch );
@@ -842,13 +828,13 @@ extern	INT32 im_cnr_ofl_reset(ImCnr *self, UCHAR ch );
 SPR Macro Interrupt handler for ch0
 @remarks This API uses DDIM_User_Set_Flg().
 */
-extern	VOID im_cnr_0_int_handler( VOID );
+extern	VOID im_cnr_0_int_handler( ImCnr *self );
 
 /**
 SPR Macro Interrupt handler for ch1
 @remarks This API uses DDIM_User_Set_Flg().
 */
-extern	VOID im_cnr_1_int_handler( VOID );
+extern	VOID im_cnr_1_int_handler( ImCnr *self );
 
 /**
 Set software reset and operating mode for On The Fly
@@ -869,7 +855,7 @@ extern	INT32 im_cnr_otf_stop(ImCnr *self, UCHAR ch );
 The semaphore of SPR is returned for On The Fly
 @param [in]	ch				channel[0 - 1]
 @retval		D_DDIM_OK						Success
-@retval		D_IM_CNR_SEM_NG					Fail - Processing NG (system error)
+@retval		ImCnr_SEM_NG					Fail - Processing NG (system error)
 @remarks	This API uses DDIM_User_Sig_Sem().
 */
 extern	INT32 im_cnr_otf_close(ImCnr *self, UCHAR ch );

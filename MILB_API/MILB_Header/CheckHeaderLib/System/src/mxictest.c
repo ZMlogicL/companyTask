@@ -10,6 +10,8 @@
 *@version
 *1.0.0 2020年09月开始开发
 */
+
+
 #include "defs.h"
 #include "mxictest.h"
 
@@ -23,7 +25,6 @@ struct _MxicPrivate
 {
 	 gint preserved;
 };
-
 /**
  * DECLS
  */
@@ -70,234 +71,233 @@ static void run_od(AbsHeaderTest *self)
 /**
  * PUBLIC
  */
-/*************************************************************************/
-void mxic_test()
+void mxic_test(Mxic* self)
 {
 	RS_printf("MXIC\n");
 #if 0
-	RS_printf("IO_MXIC0.TMIRST         = %x\n", (unsigned int)&IO_MXIC0.TMIRST );
-	RS_printf("IO_MXIC0.TCKEN          = %x\n", (unsigned int)&IO_MXIC0.TCKEN );
-	RS_printf("IO_MXIC0.TCKENP         = %x\n", (unsigned int)&IO_MXIC0.TCKENP );
-	RS_printf("IO_MXIC0.TMIE           = %x\n", (unsigned int)&IO_MXIC0.TMIE );
-	RS_printf("IO_MXIC0.TMIF           = %x\n", (unsigned int)&IO_MXIC0.TMIF );
-	RS_printf("IO_MXIC0.TDESTW         = %x\n", (unsigned int)&IO_MXIC0.TDESTW );
-	RS_printf("IO_MXIC0.TDESTR         = %x\n", (unsigned int)&IO_MXIC0.TDESTR );
-	RS_printf("IO_MXIC0.TCFTRG         = %x\n", (unsigned int)&IO_MXIC0.TCFTRG );
-	RS_printf("IO_MXIC0.TCFMD          = %x\n", (unsigned int)&IO_MXIC0.TCFMD );
-	RS_printf("IO_MXIC0.TDECLR         = %x\n", (unsigned int)&IO_MXIC0.TDECLR );
-	RS_printf("IO_MXIC0.TRVSW          = %x\n", (unsigned int)&IO_MXIC0.TRVSW );
+	RS_printf("ioMxic0.tmirst         = %x\n", (kuint)&ioMxic0.tmirst );
+	RS_printf("ioMxic0.tcken          = %x\n", (kuint)&ioMxic0.tcken );
+	RS_printf("ioMxic0.tckenp         = %x\n", (kuint)&ioMxic0.tckenp );
+	RS_printf("ioMxic0.tmie           = %x\n", (kuint)&ioMxic0.tmie );
+	RS_printf("ioMxic0.tmif           = %x\n", (kuint)&ioMxic0.tmif );
+	RS_printf("ioMxic0.tdestw         = %x\n", (kuint)&ioMxic0.tdestw );
+	RS_printf("ioMxic0.tdestr         = %x\n", (kuint)&ioMxic0.tdestr );
+	RS_printf("ioMxic0.tcftrg         = %x\n", (kuint)&ioMxic0.tcftrg );
+	RS_printf("ioMxic0.tcfmd          = %x\n", (kuint)&ioMxic0.tcfmd );
+	RS_printf("ioMxic0.tdeclr         = %x\n", (kuint)&ioMxic0.tdeclr );
+	RS_printf("ioMxic0.trvsw          = %x\n", (kuint)&ioMxic0.trvsw );
 
-	RS_printf("IO_MXIC0.TAEN           = %x\n", (unsigned int)&IO_MXIC0.TAEN );
-	RS_printf("IO_MXIC0.TACPTCW        = %x\n", (unsigned int)&IO_MXIC0.TACPTCW );
-	RS_printf("IO_MXIC0.TACPTCR        = %x\n", (unsigned int)&IO_MXIC0.TACPTCR );
+	RS_printf("ioMxic0.taen           = %x\n", (kuint)&ioMxic0.taen );
+	RS_printf("ioMxic0.tacptcw        = %x\n", (kuint)&ioMxic0.tacptcw );
+	RS_printf("ioMxic0.tacptcr        = %x\n", (kuint)&ioMxic0.tacptcr );
 
-	RS_printf("IO_MXIC0.TSMTRG         = %x\n", (unsigned int)&IO_MXIC0.TSMTRG );
+	RS_printf("ioMxic0.tsmtrg         = %x\n", (kuint)&ioMxic0.tsmtrg );
 
-	RS_printf("IO_MXIC0.TREGION[0]     = %x\n", (unsigned int)&IO_MXIC0.TREGION[0] );
-	RS_printf("IO_MXIC0.TREGION[1]     = %x\n", (unsigned int)&IO_MXIC0.TREGION[1] );
-	RS_printf("IO_MXIC0.TREGION[2]     = %x\n", (unsigned int)&IO_MXIC0.TREGION[2] );
-	RS_printf("IO_MXIC0.TREGION[3]     = %x\n", (unsigned int)&IO_MXIC0.TREGION[3] );
+	RS_printf("ioMxic0.tregion[0]     = %x\n", (kuint)&ioMxic0.tregion[0] );
+	RS_printf("ioMxic0.tregion[1]     = %x\n", (kuint)&ioMxic0.tregion[1] );
+	RS_printf("ioMxic0.tregion[2]     = %x\n", (kuint)&ioMxic0.tregion[2] );
+	RS_printf("ioMxic0.tregion[3]     = %x\n", (kuint)&ioMxic0.tregion[3] );
 
-	RS_printf("IO_MXIC0.TSASETW[0]     = %x\n", (unsigned int)&IO_MXIC0.TSASETW[0] );
-	RS_printf("IO_MXIC0.TSASETW[1]     = %x\n", (unsigned int)&IO_MXIC0.TSASETW[1] );
-	RS_printf("IO_MXIC0.TSASETW[2]     = %x\n", (unsigned int)&IO_MXIC0.TSASETW[2] );
-	RS_printf("IO_MXIC0.TSASETW[3]     = %x\n", (unsigned int)&IO_MXIC0.TSASETW[3] );
+	RS_printf("ioMxic0.tsasetw[0]     = %x\n", (kuint)&ioMxic0.tsasetw[0] );
+	RS_printf("ioMxic0.tsasetw[1]     = %x\n", (kuint)&ioMxic0.tsasetw[1] );
+	RS_printf("ioMxic0.tsasetw[2]     = %x\n", (kuint)&ioMxic0.tsasetw[2] );
+	RS_printf("ioMxic0.tsasetw[3]     = %x\n", (kuint)&ioMxic0.tsasetw[3] );
 
-	RS_printf("IO_MXIC0.TMTRG          = %x\n", (unsigned int)&IO_MXIC0.TMTRG );
-	RS_printf("IO_MXIC0.TMMD           = %x\n", (unsigned int)&IO_MXIC0.TMMD );
-	RS_printf("IO_MXIC0.TMONTRG        = %x\n", (unsigned int)&IO_MXIC0.TMONTRG );
-	RS_printf("IO_MXIC0.TMUPTRG        = %x\n", (unsigned int)&IO_MXIC0.TMUPTRG );
-	RS_printf("IO_MXIC0.TMLIMSEL       = %x\n", (unsigned int)&IO_MXIC0.TMLIMSEL );
-	RS_printf("IO_MXIC0.TMLIMIT        = %x\n", (unsigned int)&IO_MXIC0.TMLIMIT );
-	RS_printf("IO_MXIC0.TMSEL          = %x\n", (unsigned int)&IO_MXIC0.TMSEL );
-	RS_printf("IO_MXIC0.TMCNT[0]       = %x\n", (unsigned int)&IO_MXIC0.TMCNT[0] );
-	RS_printf("IO_MXIC0.TMCNT[1]       = %x\n", (unsigned int)&IO_MXIC0.TMCNT[1] );
-	RS_printf("IO_MXIC0.TMCNT[2]       = %x\n", (unsigned int)&IO_MXIC0.TMCNT[2] );
-	RS_printf("IO_MXIC0.TMCNT[3]       = %x\n", (unsigned int)&IO_MXIC0.TMCNT[3] );
+	RS_printf("ioMxic0.tmtrg          = %x\n", (kuint)&ioMxic0.tmtrg );
+	RS_printf("ioMxic0.tmmd           = %x\n", (kuint)&ioMxic0.tmmd );
+	RS_printf("ioMxic0.tmontrg        = %x\n", (kuint)&ioMxic0.tmontrg );
+	RS_printf("ioMxic0.tmuptrg        = %x\n", (kuint)&ioMxic0.tmuptrg );
+	RS_printf("ioMxic0.tmlimsel       = %x\n", (kuint)&ioMxic0.tmlimsel );
+	RS_printf("ioMxic0.tmlimit        = %x\n", (kuint)&ioMxic0.tmlimit );
+	RS_printf("ioMxic0.tmsel          = %x\n", (kuint)&ioMxic0.tmsel );
+	RS_printf("ioMxic0.tmcnt[0]       = %x\n", (kuint)&ioMxic0.tmcnt[0] );
+	RS_printf("ioMxic0.tmcnt[1]       = %x\n", (kuint)&ioMxic0.tmcnt[1] );
+	RS_printf("ioMxic0.tmcnt[2]       = %x\n", (kuint)&ioMxic0.tmcnt[2] );
+	RS_printf("ioMxic0.tmcnt[3]       = %x\n", (kuint)&ioMxic0.tmcnt[3] );
 
-	RS_printf("IO_MXIC0.THSTW[0][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTW[0][0] );
-	RS_printf("IO_MXIC0.THSTW[1][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTW[1][0] );
-	RS_printf("IO_MXIC0.THSTW[2][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTW[2][0] );
-	RS_printf("IO_MXIC0.THSTW[3][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTW[3][0] );
+	RS_printf("ioMxic0.thstw[0][0]    = %x\n", (kuint)&ioMxic0.thstw[0][0] );
+	RS_printf("ioMxic0.thstw[1][0]    = %x\n", (kuint)&ioMxic0.thstw[1][0] );
+	RS_printf("ioMxic0.thstw[2][0]    = %x\n", (kuint)&ioMxic0.thstw[2][0] );
+	RS_printf("ioMxic0.thstw[3][0]    = %x\n", (kuint)&ioMxic0.thstw[3][0] );
 
-	RS_printf("IO_MXIC0.THSTR[0][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTR[0][0] );
-	RS_printf("IO_MXIC0.THSTR[1][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTR[1][0] );
-	RS_printf("IO_MXIC0.THSTR[2][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTR[2][0] );
-	RS_printf("IO_MXIC0.THSTR[3][0]    = %x\n", (unsigned int)&IO_MXIC0.THSTR[3][0] );
+	RS_printf("ioMxic0.thstr[0][0]    = %x\n", (kuint)&ioMxic0.thstr[0][0] );
+	RS_printf("ioMxic0.thstr[1][0]    = %x\n", (kuint)&ioMxic0.thstr[1][0] );
+	RS_printf("ioMxic0.thstr[2][0]    = %x\n", (kuint)&ioMxic0.thstr[2][0] );
+	RS_printf("ioMxic0.thstr[3][0]    = %x\n", (kuint)&ioMxic0.thstr[3][0] );
 
-	RS_printf("IO_MXIC0.TMARLP_W_1[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_W_1[0] );
-	RS_printf("IO_MXIC0.TMARLP_W_2[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_W_2[0] );
-	RS_printf("IO_MXIC0.TMARLP_W_3[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_W_3[0] );
-	RS_printf("IO_MXIC0.TMARLP_W_4[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_W_4[0] );
+	RS_printf("ioMxic0.tmarlpW1[0]  = %x\n", (kuint)&ioMxic0.tmarlpW1[0] );
+	RS_printf("ioMxic0.tmarlpW2[0]  = %x\n", (kuint)&ioMxic0.tmarlpW2[0] );
+	RS_printf("ioMxic0.tmarlpW3[0]  = %x\n", (kuint)&ioMxic0.tmarlpW3[0] );
+	RS_printf("ioMxic0.tmarlpW4[0]  = %x\n", (kuint)&ioMxic0.tmarlpW4[0] );
 
-	RS_printf("IO_MXIC0.TMARLP_R_1[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_R_1[0] );
-	RS_printf("IO_MXIC0.TMARLP_R_2[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_R_2[0] );
-	RS_printf("IO_MXIC0.TMARLP_R_3[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_R_3[0] );
-	RS_printf("IO_MXIC0.TMARLP_R_4[0]  = %x\n", (unsigned int)&IO_MXIC0.TMARLP_R_4[0] );
+	RS_printf("ioMxic0.tmarlpR1[0]  = %x\n", (kuint)&ioMxic0.tmarlpR1[0] );
+	RS_printf("ioMxic0.tmarlpR2[0]  = %x\n", (kuint)&ioMxic0.tmarlpR2[0] );
+	RS_printf("ioMxic0.tmarlpR3[0]  = %x\n", (kuint)&ioMxic0.tmarlpR3[0] );
+	RS_printf("ioMxic0.tmarlpR4[0]  = %x\n", (kuint)&ioMxic0.tmarlpR4[0] );
 
-	RS_printf("IO_MXIC0.TRMCW[0]       = %x\n", (unsigned int)&IO_MXIC0.TRMCW[0] );
-	RS_printf("IO_MXIC0.TRMCR[0]       = %x\n", (unsigned int)&IO_MXIC0.TRMCR[0] );
+	RS_printf("ioMxic0.trmcw[0]       = %x\n", (kuint)&ioMxic0.trmcw[0] );
+	RS_printf("ioMxic0.trmcr[0]       = %x\n", (kuint)&ioMxic0.trmcr[0] );
 
-	RS_printf("IO_MXIC0.TLVLW1[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW1[0] );
-	RS_printf("IO_MXIC0.TLVLW1[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW1[1] );
-	RS_printf("IO_MXIC0.TLVLW1[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW1[2] );
-	RS_printf("IO_MXIC0.TLVLW1[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW1[3] );
+	RS_printf("ioMxic0.tlvlw1[0]      = %x\n", (kuint)&ioMxic0.tlvlw1[0] );
+	RS_printf("ioMxic0.tlvlw1[1]      = %x\n", (kuint)&ioMxic0.tlvlw1[1] );
+	RS_printf("ioMxic0.tlvlw1[2]      = %x\n", (kuint)&ioMxic0.tlvlw1[2] );
+	RS_printf("ioMxic0.tlvlw1[3]      = %x\n", (kuint)&ioMxic0.tlvlw1[3] );
 
-	RS_printf("IO_MXIC0.TLVLW2[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW2[0] );
-	RS_printf("IO_MXIC0.TLVLW2[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW2[1] );
-	RS_printf("IO_MXIC0.TLVLW2[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW2[2] );
-	RS_printf("IO_MXIC0.TLVLW2[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW2[3] );
+	RS_printf("ioMxic0.tlvlw2[0]      = %x\n", (kuint)&ioMxic0.tlvlw2[0] );
+	RS_printf("ioMxic0.tlvlw2[1]      = %x\n", (kuint)&ioMxic0.tlvlw2[1] );
+	RS_printf("ioMxic0.tlvlw2[2]      = %x\n", (kuint)&ioMxic0.tlvlw2[2] );
+	RS_printf("ioMxic0.tlvlw2[3]      = %x\n", (kuint)&ioMxic0.tlvlw2[3] );
 
-	RS_printf("IO_MXIC0.TLVLW3[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW3[0] );
-	RS_printf("IO_MXIC0.TLVLW3[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW3[1] );
-	RS_printf("IO_MXIC0.TLVLW3[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW3[2] );
-	RS_printf("IO_MXIC0.TLVLW3[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW3[3] );
+	RS_printf("ioMxic0.tlvlw3[0]      = %x\n", (kuint)&ioMxic0.tlvlw3[0] );
+	RS_printf("ioMxic0.tlvlw3[1]      = %x\n", (kuint)&ioMxic0.tlvlw3[1] );
+	RS_printf("ioMxic0.tlvlw3[2]      = %x\n", (kuint)&ioMxic0.tlvlw3[2] );
+	RS_printf("ioMxic0.tlvlw3[3]      = %x\n", (kuint)&ioMxic0.tlvlw3[3] );
 
-	RS_printf("IO_MXIC0.TLVLW4[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW4[0] );
-	RS_printf("IO_MXIC0.TLVLW4[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW4[1] );
-	RS_printf("IO_MXIC0.TLVLW4[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW4[2] );
-	RS_printf("IO_MXIC0.TLVLW4[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLW4[3] );
+	RS_printf("ioMxic0.tlvlw4[0]      = %x\n", (kuint)&ioMxic0.tlvlw4[0] );
+	RS_printf("ioMxic0.tlvlw4[1]      = %x\n", (kuint)&ioMxic0.tlvlw4[1] );
+	RS_printf("ioMxic0.tlvlw4[2]      = %x\n", (kuint)&ioMxic0.tlvlw4[2] );
+	RS_printf("ioMxic0.tlvlw4[3]      = %x\n", (kuint)&ioMxic0.tlvlw4[3] );
 
-	RS_printf("IO_MXIC0.TLVLR1[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR1[0] );
-	RS_printf("IO_MXIC0.TLVLR1[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR1[1] );
-	RS_printf("IO_MXIC0.TLVLR1[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR1[2] );
-	RS_printf("IO_MXIC0.TLVLR1[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR1[3] );
+	RS_printf("ioMxic0.tlvlr1[0]      = %x\n", (kuint)&ioMxic0.tlvlr1[0] );
+	RS_printf("ioMxic0.tlvlr1[1]      = %x\n", (kuint)&ioMxic0.tlvlr1[1] );
+	RS_printf("ioMxic0.tlvlr1[2]      = %x\n", (kuint)&ioMxic0.tlvlr1[2] );
+	RS_printf("ioMxic0.tlvlr1[3]      = %x\n", (kuint)&ioMxic0.tlvlr1[3] );
 
-	RS_printf("IO_MXIC0.TLVLR2[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR2[0] );
-	RS_printf("IO_MXIC0.TLVLR2[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR2[1] );
-	RS_printf("IO_MXIC0.TLVLR2[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR2[2] );
-	RS_printf("IO_MXIC0.TLVLR2[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR2[3] );
+	RS_printf("ioMxic0.tlvlr2[0]      = %x\n", (kuint)&ioMxic0.tlvlr2[0] );
+	RS_printf("ioMxic0.tlvlr2[1]      = %x\n", (kuint)&ioMxic0.tlvlr2[1] );
+	RS_printf("ioMxic0.tlvlr2[2]      = %x\n", (kuint)&ioMxic0.tlvlr2[2] );
+	RS_printf("ioMxic0.tlvlr2[3]      = %x\n", (kuint)&ioMxic0.tlvlr2[3] );
 
-	RS_printf("IO_MXIC0.TLVLR3[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR3[0] );
-	RS_printf("IO_MXIC0.TLVLR3[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR3[1] );
-	RS_printf("IO_MXIC0.TLVLR3[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR3[2] );
-	RS_printf("IO_MXIC0.TLVLR3[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR3[3] );
+	RS_printf("ioMxic0.tlvlr3[0]      = %x\n", (kuint)&ioMxic0.tlvlr3[0] );
+	RS_printf("ioMxic0.tlvlr3[1]      = %x\n", (kuint)&ioMxic0.tlvlr3[1] );
+	RS_printf("ioMxic0.tlvlr3[2]      = %x\n", (kuint)&ioMxic0.tlvlr3[2] );
+	RS_printf("ioMxic0.tlvlr3[3]      = %x\n", (kuint)&ioMxic0.tlvlr3[3] );
 
-	RS_printf("IO_MXIC0.TLVLR4[0]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR4[0] );
-	RS_printf("IO_MXIC0.TLVLR4[1]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR4[1] );
-	RS_printf("IO_MXIC0.TLVLR4[2]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR4[2] );
-	RS_printf("IO_MXIC0.TLVLR4[3]      = %x\n", (unsigned int)&IO_MXIC0.TLVLR4[3] );
+	RS_printf("ioMxic0.tlvlr4[0]      = %x\n", (kuint)&ioMxic0.tlvlr4[0] );
+	RS_printf("ioMxic0.tlvlr4[1]      = %x\n", (kuint)&ioMxic0.tlvlr4[1] );
+	RS_printf("ioMxic0.tlvlr4[2]      = %x\n", (kuint)&ioMxic0.tlvlr4[2] );
+	RS_printf("ioMxic0.tlvlr4[3]      = %x\n", (kuint)&ioMxic0.tlvlr4[3] );
 
-	RS_printf("IO_MXIC0.TMSTW[0]       = %x\n", (unsigned int)&IO_MXIC0.TMSTW[0] );
-	RS_printf("IO_MXIC0.TMSTR[0]       = %x\n", (unsigned int)&IO_MXIC0.TMSTR[0] );
+	RS_printf("ioMxic0.tmstw[0]       = %x\n", (kuint)&ioMxic0.tmstw[0] );
+	RS_printf("ioMxic0.tmstr[0]       = %x\n", (kuint)&ioMxic0.tmstr[0] );
 
-	RS_printf("IO_MXIC0.TSLSW_1[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_1[0][0] );
-	RS_printf("IO_MXIC0.TSLSW_1[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_1[1][0] );
-	RS_printf("IO_MXIC0.TSLSW_1[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_1[2][0] );
-	RS_printf("IO_MXIC0.TSLSW_1[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_1[3][0] );
-	RS_printf("IO_MXIC0.TSLSW_2[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_2[0][0] );
-	RS_printf("IO_MXIC0.TSLSW_2[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_2[1][0] );
-	RS_printf("IO_MXIC0.TSLSW_2[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_2[2][0] );
-	RS_printf("IO_MXIC0.TSLSW_2[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_2[3][0] );
-	RS_printf("IO_MXIC0.TSLSW_3[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_3[0][0] );
-	RS_printf("IO_MXIC0.TSLSW_3[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_3[1][0] );
-	RS_printf("IO_MXIC0.TSLSW_3[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_3[2][0] );
-	RS_printf("IO_MXIC0.TSLSW_3[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_3[3][0] );
-	RS_printf("IO_MXIC0.TSLSW_4[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_4[0][0] );
-	RS_printf("IO_MXIC0.TSLSW_4[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_4[1][0] );
-	RS_printf("IO_MXIC0.TSLSW_4[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_4[2][0] );
-	RS_printf("IO_MXIC0.TSLSW_4[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSW_4[3][0] );
+	RS_printf("ioMxic0.tslsw1[0][0]  = %x\n", (kuint)&ioMxic0.tslsw1[0][0] );
+	RS_printf("ioMxic0.tslsw1[1][0]  = %x\n", (kuint)&ioMxic0.tslsw1[1][0] );
+	RS_printf("ioMxic0.tslsw1[2][0]  = %x\n", (kuint)&ioMxic0.tslsw1[2][0] );
+	RS_printf("ioMxic0.tslsw1[3][0]  = %x\n", (kuint)&ioMxic0.tslsw1[3][0] );
+	RS_printf("ioMxic0.tslsw2[0][0]  = %x\n", (kuint)&ioMxic0.tslsw2[0][0] );
+	RS_printf("ioMxic0.tslsw2[1][0]  = %x\n", (kuint)&ioMxic0.tslsw2[1][0] );
+	RS_printf("ioMxic0.tslsw2[2][0]  = %x\n", (kuint)&ioMxic0.tslsw2[2][0] );
+	RS_printf("ioMxic0.tslsw2[3][0]  = %x\n", (kuint)&ioMxic0.tslsw2[3][0] );
+	RS_printf("ioMxic0.tslsw3[0][0]  = %x\n", (kuint)&ioMxic0.tslsw3[0][0] );
+	RS_printf("ioMxic0.tslsw3[1][0]  = %x\n", (kuint)&ioMxic0.tslsw3[1][0] );
+	RS_printf("ioMxic0.tslsw3[2][0]  = %x\n", (kuint)&ioMxic0.tslsw3[2][0] );
+	RS_printf("ioMxic0.tslsw3[3][0]  = %x\n", (kuint)&ioMxic0.tslsw3[3][0] );
+	RS_printf("ioMxic0.tslsw4[0][0]  = %x\n", (kuint)&ioMxic0.tslsw4[0][0] );
+	RS_printf("ioMxic0.tslsw4[1][0]  = %x\n", (kuint)&ioMxic0.tslsw4[1][0] );
+	RS_printf("ioMxic0.tslsw4[2][0]  = %x\n", (kuint)&ioMxic0.tslsw4[2][0] );
+	RS_printf("ioMxic0.tslsw4[3][0]  = %x\n", (kuint)&ioMxic0.tslsw4[3][0] );
 
-	RS_printf("IO_MXIC0.TSLSR_1[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_1[0][0] );
-	RS_printf("IO_MXIC0.TSLSR_1[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_1[1][0] );
-	RS_printf("IO_MXIC0.TSLSR_1[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_1[2][0] );
-	RS_printf("IO_MXIC0.TSLSR_1[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_1[3][0] );
-	RS_printf("IO_MXIC0.TSLSR_2[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_2[0][0] );
-	RS_printf("IO_MXIC0.TSLSR_2[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_2[1][0] );
-	RS_printf("IO_MXIC0.TSLSR_2[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_2[2][0] );
-	RS_printf("IO_MXIC0.TSLSR_2[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_2[3][0] );
-	RS_printf("IO_MXIC0.TSLSR_3[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_3[0][0] );
-	RS_printf("IO_MXIC0.TSLSR_3[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_3[1][0] );
-	RS_printf("IO_MXIC0.TSLSR_3[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_3[2][0] );
-	RS_printf("IO_MXIC0.TSLSR_3[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_3[3][0] );
-	RS_printf("IO_MXIC0.TSLSR_4[0][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_4[0][0] );
-	RS_printf("IO_MXIC0.TSLSR_4[1][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_4[1][0] );
-	RS_printf("IO_MXIC0.TSLSR_4[2][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_4[2][0] );
-	RS_printf("IO_MXIC0.TSLSR_4[3][0]  = %x\n", (unsigned int)&IO_MXIC0.TSLSR_4[3][0] );
+	RS_printf("ioMxic0.tslsr1[0][0]  = %x\n", (kuint)&ioMxic0.tslsr1[0][0] );
+	RS_printf("ioMxic0.tslsr1[1][0]  = %x\n", (kuint)&ioMxic0.tslsr1[1][0] );
+	RS_printf("ioMxic0.tslsr1[2][0]  = %x\n", (kuint)&ioMxic0.tslsr1[2][0] );
+	RS_printf("ioMxic0.tslsr1[3][0]  = %x\n", (kuint)&ioMxic0.tslsr1[3][0] );
+	RS_printf("ioMxic0.tslsr2[0][0]  = %x\n", (kuint)&ioMxic0.tslsr2[0][0] );
+	RS_printf("ioMxic0.tslsr2[1][0]  = %x\n", (kuint)&ioMxic0.tslsr2[1][0] );
+	RS_printf("ioMxic0.tslsr2[2][0]  = %x\n", (kuint)&ioMxic0.tslsr2[2][0] );
+	RS_printf("ioMxic0.tslsr2[3][0]  = %x\n", (kuint)&ioMxic0.tslsr2[3][0] );
+	RS_printf("ioMxic0.tslsr3[0][0]  = %x\n", (kuint)&ioMxic0.tslsr3[0][0] );
+	RS_printf("ioMxic0.tslsr3[1][0]  = %x\n", (kuint)&ioMxic0.tslsr3[1][0] );
+	RS_printf("ioMxic0.tslsr3[2][0]  = %x\n", (kuint)&ioMxic0.tslsr3[2][0] );
+	RS_printf("ioMxic0.tslsr3[3][0]  = %x\n", (kuint)&ioMxic0.tslsr3[3][0] );
+	RS_printf("ioMxic0.tslsr4[0][0]  = %x\n", (kuint)&ioMxic0.tslsr4[0][0] );
+	RS_printf("ioMxic0.tslsr4[1][0]  = %x\n", (kuint)&ioMxic0.tslsr4[1][0] );
+	RS_printf("ioMxic0.tslsr4[2][0]  = %x\n", (kuint)&ioMxic0.tslsr4[2][0] );
+	RS_printf("ioMxic0.tslsr4[3][0]  = %x\n", (kuint)&ioMxic0.tslsr4[3][0] );
 
-	RS_printf("IO_MXIC0.TGCKEN         = %x\n", (unsigned int)&IO_MXIC0.TGCKEN );
-	RS_printf("IO_MXIC0.TGCFMD         = %x\n", (unsigned int)&IO_MXIC0.TGCFMD );
+	RS_printf("ioMxic0.tgcken         = %x\n", (kuint)&ioMxic0.tgcken );
+	RS_printf("ioMxic0.tgcfmd         = %x\n", (kuint)&ioMxic0.tgcfmd );
 
-	RS_printf("IO_MXIC0.TGACPTCW       = %x\n", (unsigned int)&IO_MXIC0.TGACPTCW );
-	RS_printf("IO_MXIC0.TGACPTCR       = %x\n", (unsigned int)&IO_MXIC0.TGACPTCR );
-	RS_printf("IO_MXIC0.TPORTMW        = %x\n", (unsigned int)&IO_MXIC0.TPORTMW );
-	RS_printf("IO_MXIC0.TPORTMR        = %x\n", (unsigned int)&IO_MXIC0.TPORTMR );
+	RS_printf("ioMxic0.tgacptcw       = %x\n", (kuint)&ioMxic0.tgacptcw );
+	RS_printf("ioMxic0.tgacptcr       = %x\n", (kuint)&ioMxic0.tgacptcr );
+	RS_printf("ioMxic0.tportmw        = %x\n", (kuint)&ioMxic0.tportmw );
+	RS_printf("ioMxic0.tportmr        = %x\n", (kuint)&ioMxic0.tportmr );
 
-	RS_printf("IO_MXIC0.TRMCW_GR[0]    = %x\n", (unsigned int)&IO_MXIC0.TRMCW_GR[0] );
-	RS_printf("IO_MXIC0.TRMCR_GR[0]    = %x\n", (unsigned int)&IO_MXIC0.TRMCR_GR[0] );
-	RS_printf("IO_MXIC0.TMSTW_GR[0]    = %x\n", (unsigned int)&IO_MXIC0.TMSTW_GR[0] );
-	RS_printf("IO_MXIC0.TMSTR_GR[0]    = %x\n", (unsigned int)&IO_MXIC0.TMSTR_GR[0] );
+	RS_printf("ioMxic0.trmcwGr[0]    = %x\n", (kuint)&ioMxic0.trmcwGr[0] );
+	RS_printf("ioMxic0.trmcrGr[0]    = %x\n", (kuint)&ioMxic0.trmcrGr[0] );
+	RS_printf("ioMxic0.tmstwGr[0]    = %x\n", (kuint)&ioMxic0.tmstwGr[0] );
+	RS_printf("ioMxic0.tmstrGr[0]    = %x\n", (kuint)&ioMxic0.tmstrGr[0] );
 
-	RS_printf("IO_MXIC0.TGSLSW[0]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[0] );
-	RS_printf("IO_MXIC0.TGSLSW[1]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[1] );
-	RS_printf("IO_MXIC0.TGSLSW[2]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[2] );
-	RS_printf("IO_MXIC0.TGSLSW[3]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[3] );
-	RS_printf("IO_MXIC0.TGSLSW[4]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[4] );
-	RS_printf("IO_MXIC0.TGSLSW[5]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[5] );
-	RS_printf("IO_MXIC0.TGSLSW[6]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[6] );
-	RS_printf("IO_MXIC0.TGSLSW[7]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSW[7] );
-	RS_printf("IO_MXIC0.TGSLSR[0]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[0] );
-	RS_printf("IO_MXIC0.TGSLSR[1]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[1] );
-	RS_printf("IO_MXIC0.TGSLSR[2]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[2] );
-	RS_printf("IO_MXIC0.TGSLSR[3]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[3] );
-	RS_printf("IO_MXIC0.TGSLSR[4]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[4] );
-	RS_printf("IO_MXIC0.TGSLSR[5]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[5] );
-	RS_printf("IO_MXIC0.TGSLSR[6]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[6] );
-	RS_printf("IO_MXIC0.TGSLSR[7]      = %x\n", (unsigned int)&IO_MXIC0.TGSLSR[7] );
+	RS_printf("ioMxic0.tgslsw[0]      = %x\n", (kuint)&ioMxic0.tgslsw[0] );
+	RS_printf("ioMxic0.tgslsw[1]      = %x\n", (kuint)&ioMxic0.tgslsw[1] );
+	RS_printf("ioMxic0.tgslsw[2]      = %x\n", (kuint)&ioMxic0.tgslsw[2] );
+	RS_printf("ioMxic0.tgslsw[3]      = %x\n", (kuint)&ioMxic0.tgslsw[3] );
+	RS_printf("ioMxic0.tgslsw[4]      = %x\n", (kuint)&ioMxic0.tgslsw[4] );
+	RS_printf("ioMxic0.tgslsw[5]      = %x\n", (kuint)&ioMxic0.tgslsw[5] );
+	RS_printf("ioMxic0.tgslsw[6]      = %x\n", (kuint)&ioMxic0.tgslsw[6] );
+	RS_printf("ioMxic0.tgslsw[7]      = %x\n", (kuint)&ioMxic0.tgslsw[7] );
+	RS_printf("ioMxic0.tgslsr[0]      = %x\n", (kuint)&ioMxic0.tgslsr[0] );
+	RS_printf("ioMxic0.tgslsr[1]      = %x\n", (kuint)&ioMxic0.tgslsr[1] );
+	RS_printf("ioMxic0.tgslsr[2]      = %x\n", (kuint)&ioMxic0.tgslsr[2] );
+	RS_printf("ioMxic0.tgslsr[3]      = %x\n", (kuint)&ioMxic0.tgslsr[3] );
+	RS_printf("ioMxic0.tgslsr[4]      = %x\n", (kuint)&ioMxic0.tgslsr[4] );
+	RS_printf("ioMxic0.tgslsr[5]      = %x\n", (kuint)&ioMxic0.tgslsr[5] );
+	RS_printf("ioMxic0.tgslsr[6]      = %x\n", (kuint)&ioMxic0.tgslsr[6] );
+	RS_printf("ioMxic0.tgslsr[7]      = %x\n", (kuint)&ioMxic0.tgslsr[7] );
 
-	RS_printf("IO_MXIC1.TMIRST         = %x\n", (unsigned int)&IO_MXIC1.TMIRST );
-	RS_printf("IO_MXIC2.TMIRST         = %x\n", (unsigned int)&IO_MXIC2.TMIRST );
-	RS_printf("IO_MXIC3.TMIRST         = %x\n", (unsigned int)&IO_MXIC3.TMIRST );
-	RS_printf("IO_MXIC4.TMIRST         = %x\n", (unsigned int)&IO_MXIC4.TMIRST );
-	RS_printf("IO_MXIC5.TMIRST         = %x\n", (unsigned int)&IO_MXIC5.TMIRST );
-	RS_printf("IO_MXIC6.TMIRST         = %x\n", (unsigned int)&IO_MXIC6.TMIRST );
+	RS_printf("IO_MXIC1.tmirst         = %x\n", (kuint)&IO_MXIC1.tmirst );
+	RS_printf("IO_MXIC2.tmirst         = %x\n", (kuint)&IO_MXIC2.tmirst );
+	RS_printf("IO_MXIC3.tmirst         = %x\n", (kuint)&IO_MXIC3.tmirst );
+	RS_printf("IO_MXIC4.tmirst         = %x\n", (kuint)&IO_MXIC4.tmirst );
+	RS_printf("IO_MXIC5.tmirst         = %x\n", (kuint)&IO_MXIC5.tmirst );
+	RS_printf("IO_MXIC6.tmirst         = %x\n", (kuint)&IO_MXIC6.tmirst );
 
 	RS_printf(" \n");
 
 /* io_jdsmxic */
-	RS_printf("IO_MXIC1_TBL.TSLW_1[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_1[0] );
-	RS_printf("IO_MXIC1_TBL.TSLW_1[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_1[1] );
-	RS_printf("IO_MXIC1_TBL.TSLW_1[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_1[2] );
-	RS_printf("IO_MXIC1_TBL.TSLW_1[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_1[3] );
-	RS_printf("IO_MXIC1_TBL.TSLW_2[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_2[0] );
-	RS_printf("IO_MXIC1_TBL.TSLW_2[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_2[1] );
-	RS_printf("IO_MXIC1_TBL.TSLW_2[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_2[2] );
-	RS_printf("IO_MXIC1_TBL.TSLW_2[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_2[3] );
-	RS_printf("IO_MXIC1_TBL.TSLW_3[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_3[0] );
-	RS_printf("IO_MXIC1_TBL.TSLW_3[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_3[1] );
-	RS_printf("IO_MXIC1_TBL.TSLW_3[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_3[2] );
-	RS_printf("IO_MXIC1_TBL.TSLW_3[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_3[3] );
-	RS_printf("IO_MXIC1_TBL.TSLW_4[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_4[0] );
-	RS_printf("IO_MXIC1_TBL.TSLW_4[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_4[1] );
-	RS_printf("IO_MXIC1_TBL.TSLW_4[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_4[2] );
-	RS_printf("IO_MXIC1_TBL.TSLW_4[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLW_4[3] );
+	RS_printf("ioMxic1Tbl.tslw1[0]  = %x\n", (kuint)&ioMxic1Tbl.tslw1[0] );
+	RS_printf("ioMxic1Tbl.tslw1[1]  = %x\n", (kuint)&ioMxic1Tbl.tslw1[1] );
+	RS_printf("ioMxic1Tbl.tslw1[2]  = %x\n", (kuint)&ioMxic1Tbl.tslw1[2] );
+	RS_printf("ioMxic1Tbl.tslw1[3]  = %x\n", (kuint)&ioMxic1Tbl.tslw1[3] );
+	RS_printf("ioMxic1Tbl.tslw2[0]  = %x\n", (kuint)&ioMxic1Tbl.tslw2[0] );
+	RS_printf("ioMxic1Tbl.tslw2[1]  = %x\n", (kuint)&ioMxic1Tbl.tslw2[1] );
+	RS_printf("ioMxic1Tbl.tslw2[2]  = %x\n", (kuint)&ioMxic1Tbl.tslw2[2] );
+	RS_printf("ioMxic1Tbl.tslw2[3]  = %x\n", (kuint)&ioMxic1Tbl.tslw2[3] );
+	RS_printf("ioMxic1Tbl.tslw3[0]  = %x\n", (kuint)&ioMxic1Tbl.tslw3[0] );
+	RS_printf("ioMxic1Tbl.tslw3[1]  = %x\n", (kuint)&ioMxic1Tbl.tslw3[1] );
+	RS_printf("ioMxic1Tbl.tslw3[2]  = %x\n", (kuint)&ioMxic1Tbl.tslw3[2] );
+	RS_printf("ioMxic1Tbl.tslw3[3]  = %x\n", (kuint)&ioMxic1Tbl.tslw3[3] );
+	RS_printf("ioMxic1Tbl.tslw4[0]  = %x\n", (kuint)&ioMxic1Tbl.tslw4[0] );
+	RS_printf("ioMxic1Tbl.tslw4[1]  = %x\n", (kuint)&ioMxic1Tbl.tslw4[1] );
+	RS_printf("ioMxic1Tbl.tslw4[2]  = %x\n", (kuint)&ioMxic1Tbl.tslw4[2] );
+	RS_printf("ioMxic1Tbl.tslw4[3]  = %x\n", (kuint)&ioMxic1Tbl.tslw4[3] );
 
-	RS_printf("IO_MXIC1_TBL.TSLR_1[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_1[0] );
-	RS_printf("IO_MXIC1_TBL.TSLR_1[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_1[1] );
-	RS_printf("IO_MXIC1_TBL.TSLR_1[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_1[2] );
-	RS_printf("IO_MXIC1_TBL.TSLR_1[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_1[3] );
-	RS_printf("IO_MXIC1_TBL.TSLR_2[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_2[0] );
-	RS_printf("IO_MXIC1_TBL.TSLR_2[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_2[1] );
-	RS_printf("IO_MXIC1_TBL.TSLR_2[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_2[2] );
-	RS_printf("IO_MXIC1_TBL.TSLR_2[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_2[3] );
-	RS_printf("IO_MXIC1_TBL.TSLR_3[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_3[0] );
-	RS_printf("IO_MXIC1_TBL.TSLR_3[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_3[1] );
-	RS_printf("IO_MXIC1_TBL.TSLR_3[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_3[2] );
-	RS_printf("IO_MXIC1_TBL.TSLR_3[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_3[3] );
-	RS_printf("IO_MXIC1_TBL.TSLR_4[0]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_4[0] );
-	RS_printf("IO_MXIC1_TBL.TSLR_4[1]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_4[1] );
-	RS_printf("IO_MXIC1_TBL.TSLR_4[2]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_4[2] );
-	RS_printf("IO_MXIC1_TBL.TSLR_4[3]  = %x\n", (unsigned int)&IO_MXIC1_TBL.TSLR_4[3] );
+	RS_printf("ioMxic1Tbl.tslr1[0]  = %x\n", (kuint)&ioMxic1Tbl.tslr1[0] );
+	RS_printf("ioMxic1Tbl.tslr1[1]  = %x\n", (kuint)&ioMxic1Tbl.tslr1[1] );
+	RS_printf("ioMxic1Tbl.tslr1[2]  = %x\n", (kuint)&ioMxic1Tbl.tslr1[2] );
+	RS_printf("ioMxic1Tbl.tslr1[3]  = %x\n", (kuint)&ioMxic1Tbl.tslr1[3] );
+	RS_printf("ioMxic1Tbl.tslr2[0]  = %x\n", (kuint)&ioMxic1Tbl.tslr2[0] );
+	RS_printf("ioMxic1Tbl.tslr2[1]  = %x\n", (kuint)&ioMxic1Tbl.tslr2[1] );
+	RS_printf("ioMxic1Tbl.tslr2[2]  = %x\n", (kuint)&ioMxic1Tbl.tslr2[2] );
+	RS_printf("ioMxic1Tbl.tslr2[3]  = %x\n", (kuint)&ioMxic1Tbl.tslr2[3] );
+	RS_printf("ioMxic1Tbl.tslr3[0]  = %x\n", (kuint)&ioMxic1Tbl.tslr3[0] );
+	RS_printf("ioMxic1Tbl.tslr3[1]  = %x\n", (kuint)&ioMxic1Tbl.tslr3[1] );
+	RS_printf("ioMxic1Tbl.tslr3[2]  = %x\n", (kuint)&ioMxic1Tbl.tslr3[2] );
+	RS_printf("ioMxic1Tbl.tslr3[3]  = %x\n", (kuint)&ioMxic1Tbl.tslr3[3] );
+	RS_printf("ioMxic1Tbl.tslr4[0]  = %x\n", (kuint)&ioMxic1Tbl.tslr4[0] );
+	RS_printf("ioMxic1Tbl.tslr4[1]  = %x\n", (kuint)&ioMxic1Tbl.tslr4[1] );
+	RS_printf("ioMxic1Tbl.tslr4[2]  = %x\n", (kuint)&ioMxic1Tbl.tslr4[2] );
+	RS_printf("ioMxic1Tbl.tslr4[3]  = %x\n", (kuint)&ioMxic1Tbl.tslr4[3] );
 
-	RS_printf("IO_MXIC2_TBL.TSLW_1[0]  = %x\n", (unsigned int)&IO_MXIC2_TBL.TSLW_1[0] );
+	RS_printf("ioMxic2Tbl.tslw1[0]  = %x\n", (kuint)&ioMxic2Tbl.tslw1[0] );
 
-	RS_printf("IO_MXIC3_TBL.TSLW_1[0]  = %x\n", (unsigned int)&IO_MXIC3_TBL.TSLW_1[0] );
+	RS_printf("ioMxic3Tbl.tslw1[0]  = %x\n", (kuint)&ioMxic3Tbl.tslw1[0] );
 
 	RS_printf(" \n");
 #endif
 }
 
-Mxic *mxic_test_new()
+Mxic *mxic_test_new(void)
 {
 	Mxic *self = g_object_new(MXIC_TYPE_TEST, NULL);
 	return self;

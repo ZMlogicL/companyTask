@@ -61,7 +61,7 @@ struct _DdWdogCtrl{
 	 */
 	kuchar 		intEnable;
 	/* Callback function called when interrupt is generated */
-	VP_CALLBACK pCallback;
+	VpCallbackFunc pCallback;
 };
 
 /* Peripheral Identification */
@@ -91,7 +91,7 @@ extern "C" {
  * Initialize Watchdog Register.<br>
  * Default status : WDOGCONTROL = 0, WDOGLOAD = 0xFFFFFFFF.<br>
  */
-VOID		dd_wdog_init(DdWdog *self);
+void		dd_wdog_init(DdWdog *self);
 
 /**
  * The Watchdog fuction is exclusively controlled.<br>
@@ -121,7 +121,7 @@ kint32		dd_wdog_ctrl(DdWdog *self, DdWdogCtrl *wdogCtrl);
 /**
  * Reload Watchdog Counter.
  */
-VOID		dd_wdog_reload(DdWdog *self);
+void		dd_wdog_reload(DdWdog *self);
 
 /**
  * The exclusive control of Watchdog is released.
@@ -181,6 +181,7 @@ kint32		dd_wdog_get_lock(DdWdog *self, kuchar *wdogLock);
  * @retval	D_DD_WDOG_INPUT_PARAM_ERR	: Input Parameter Error
  */
 kint32		dd_wdog_get_test_mode(DdWdog *self, kuchar *testMode);
+kint32 		dd_wdog_get_peri_identification(DdWdog *self, DdWdogPeriIdentification *identification);
 
 /**
  * Get value of WDOGPERIPHID0~3 register.
@@ -249,7 +250,7 @@ kint32		dd_wdog_set_test_mode(DdWdog *self, kuchar testMode, kuchar testRes, kuc
  * It is Interrupt Handler of Watchdog.<br>
  * The CallBack function is called.
  */
-VOID		dd_wdog_int_handler(DdWdog *self);
+void		dd_wdog_int_handler(DdWdog *self);
 
 #ifdef CO_DDIM_UTILITY_USE
 /** @name Utility Functions
@@ -299,4 +300,5 @@ kint32 		dd_wdog_set_timer(DdWdog *self, kulong wdogWdmode, kulong msec);
 }
 #endif
 
-#endif	// __DD_WDOG_H__
+// __DD_WDOG_H__
+#endif

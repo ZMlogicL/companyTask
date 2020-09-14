@@ -161,7 +161,7 @@ struct _DdCsio
 	DdCsioDataLength dataLength; /**< Data length */
 	kuchar sop; /**< Serial output port setting (0:uninfluential, 1:High ) */
 	DdCsioFifoCtrl* fifoCtrl; /**< FIFO control table */
-	VpCallback pcallback;
+	VpCallbackFunc pcallback;
 /**< Callback function pointer<br>
  If pcallback was specified, dd_csio_start_send and dd_csio_start_recv is asynchronization.<br>
  If pcallback was not specified, dd_csio_start_send and dd_csio_start_recv is synchronization.
@@ -180,14 +180,14 @@ When timeout occurs, return "C_CSIO_SEM_TIMEOUT".
 @param [in]	ch		Channel number(0 to 7)
 @param [in] tmout	Time of timeout<br>
 					<ul><li>Positive Value(Time of timeout)
-						<li>@ref D_DDIM_USER_SEM_WAIT_POL
+						<li>@ref DdimUserCustom_SEM_WAIT_POL
 						<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
 @retval		D_DDIM_OK					: OK
 @retval		C_CSIO_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_CSIO_SEM_TIMEOUT		: Semaphore acquisition Time Out
 @retval		C_CSIO_SEM_NG			: Semaphore acquisition NG
-@remarks	This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
-			This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
+@remarks	This API uses ddim_user_custom_pol_sem() when wait_time is set to 0. <br>
+			This API uses ddim_user_custom_twai_sem() when wait_time is set to the value except for 0.
 */
 kint32			dd_csio_open (DdCsio *self,kuchar ch, kint32 tmout);
 
@@ -197,7 +197,7 @@ Cancel exclusive control for designated CSIO channel.<br>
 @retval		D_DDIM_OK					: OK
 @retval		C_CSIO_INPUT_PARAM_ERROR	: Input parameter error
 @retval		C_CSIO_SEM_NG			: Semaphore release NG
-@remarks	This API uses DDIM_User_Sig_Sem().
+@remarks	This API uses ddim_user_custom_sig_sem(NULL, ).
 */
 kint32			dd_csio_close(DdCsio *self, kuchar ch);
 

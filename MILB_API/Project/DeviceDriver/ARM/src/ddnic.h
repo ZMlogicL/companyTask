@@ -65,13 +65,13 @@ extern "C" {
 #define C_NIC_FM_VAL_MAX				(1)
 /**< Func Mod Max Value */
 
-#define DdNic_GET_ASIB_WR_TIDEMARK(num)		(IO_NIC_ASIB[num].WR_TIDEMARK.bit.WT)
+#define DdNic_GET_ASIB_WR_TIDEMARK(num)		(ioNicAsib[num].wrTidemark.bit.wt)
 /**< Get Tidemark (num: 0 to @ref C_NIC_NODE_NUM_MAX) */
-#define DdNic_GET_ASIB_READ_QOS(num)			(IO_NIC_ASIB[num].READ_QOS.bit.RQ)
+#define DdNic_GET_ASIB_READ_QOS(num)			(ioNicAsib[num].readQos.bit.rq)
 /**< Get Read channel QoS (num: 0 to @ref C_NIC_NODE_NUM_MAX) */
-#define DdNic_GET_ASIB_WRITE_QOS(num)			(IO_NIC_ASIB[num].WRITE_QOS.bit.WQ)
+#define DdNic_GET_ASIB_WRITE_QOS(num)			(ioNicAsib[num].writeQos.bit.wq)
 /**< Get Write channel QoS (num: 0 to @ref C_NIC_NODE_NUM_MAX) */
-#define DdNic_GET_ASIB_FUNC_MOD(num)			(IO_NIC_ASIB[num].FN_MOD.bit.FM)
+#define DdNic_GET_ASIB_FUNC_MOD(num)			(ioNicAsib[num].fnMod.bit.fm)
 /**< Get Functionality Modification (num: 0 to @ref C_NIC_NODE_NUM_MAX) */
 
 

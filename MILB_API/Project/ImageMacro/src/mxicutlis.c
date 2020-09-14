@@ -19,35 +19,35 @@ K_TYPE_DEFINE_WITH_PRIVATE(MxicUtlis, mxic_utlis)
 /*----------------------------------------------------------------------*/
 // Spin_lock.
 typedef struct {
-	ULONG							lock;
-	ULONG							dummy[ ( 64 / 4 ) - 1 ];
-} ImMxicSpinLockVar;
+	kulong							lock;
+	kulong							dummy[ ( 64 / 4 ) - 1 ];
+} MxicSpinLockVar;
 
 
 struct _MxicUtlisPrivate
 {
     int a;
 	// TAEN setting user counter.
-	volatile INT32 gImMxicTaenCounter[MxicUtlis_UNIT_MAX];
+	volatile kint32 gImMxicTaenCounter[MxicUtlis_UNIT_MAX];
 #ifdef MxicUtlis_CO_ACT_MXIC_HCLOCK
-	volatile UCHAR imMxic1HclkCounter;
-	volatile UCHAR imMxic2HclkCounter;
-	volatile UCHAR imMxic3HclkCounter;
+	volatile kuchar imMxic1HclkCounter;
+	volatile kuchar imMxic2HclkCounter;
+	volatile kuchar imMxic3HclkCounter;
 #endif
 #ifdef MxicUtlis_CO_ACT_MXIC_PCLOCK
-	volatile UCHAR imMxic0PclkCounter;
-	volatile UCHAR imMxic1PclkCounter;
-	volatile UCHAR imMxic2PclkCounter;
-	volatile UCHAR imMxic3PclkCounter;
-	volatile UCHAR imMxic4PclkCounter;
-	volatile UCHAR imMxic5PclkCounter;
-	volatile UCHAR imMxic6PclkCounter;
+	volatile kuchar imMxic0PclkCounter;
+	volatile kuchar imMxic1PclkCounter;
+	volatile kuchar imMxic2PclkCounter;
+	volatile kuchar imMxic3PclkCounter;
+	volatile kuchar imMxic4PclkCounter;
+	volatile kuchar imMxic5PclkCounter;
+	volatile kuchar imMxic6PclkCounter;
 #endif
 };
 
 
 // Spin_lock.
-static volatile ImMxicSpinLockVar S_G_IM_MXIC_SPIN_LOCK[MxicUtlis_UNIT_MAX] \
+static volatile MxicSpinLockVar S_G_IM_MXIC_SPIN_LOCK[MxicUtlis_UNIT_MAX] \
 										__attribute__((section(".LOCK_SECTION"), aligned(64)));
 
 
@@ -55,7 +55,7 @@ static volatile ImMxicSpinLockVar S_G_IM_MXIC_SPIN_LOCK[MxicUtlis_UNIT_MAX] \
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckUnit( ImMxicUnit unit );
+static kint32 imMxicCheckUnit( ImMxicUnit unit );
 #endif // CO_PARAM_CHECK
 
 
@@ -98,9 +98,9 @@ Check unit parameter.
 @retval			D_DDIM_OK							Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail	Parameter error.
 */
-static INT32 imMxicCheckUnit( ImMxicUnit unit )
+static kint32 imMxicCheckUnit( ImMxicUnit unit )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -126,10 +126,10 @@ Check port specifies parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_utlis_check_port( MxicUtlis *self, ImMxicWrArbiter wrArbiter, 
+kint32 mxic_utlis_check_port( MxicUtlis *self, ImMxicWrArbiter wrArbiter, 
 							ImMxicSpecArbiter arbiter, ImMxicPort port )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -151,10 +151,10 @@ Get unit table address.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_get_unit_tbl_address( MxicUtlis *self, ImMxicUnit unit, 
+kint32 mxic_utlis_get_unit_tbl_address( MxicUtlis *self, ImMxicUnit unit, 
 										volatile struct io_jdsmxic_tbl** ioMxicTbl )
 {
-	INT32 result;
+	kint32 result;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckUnit( unit ) != D_DDIM_OK ) {
@@ -197,7 +197,7 @@ Set TAEN register for power saving.
 @param[in]		enable					TRUE : Enable  TSL* access.<br>
 										FALSE: Disable TSL* access.<br>
 */
-VOID mxic_utlis_set_taen( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, BOOL enable )
+void mxic_utlis_set_taen( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, kboolean enable )
 {
 	MxicUtlisPrivate *priv = MXIC_UTLIS_GET_PRIVATE(self);
 
@@ -207,7 +207,7 @@ VOID mxic_utlis_set_taen( MxicUtlis *self, ImMxicUnit unit, volatile struct io_j
 
 	mxic_utlis_on_pclk( self, unit );
 
-	if ( enable == TRUE ) {
+	if ( enable == ktrue ) {
 		// Enable TSL* access.
 		priv->gImMxicTaenCounter[unit]++;
 
@@ -242,10 +242,10 @@ Init arbiter assign setting.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_init_arbiter_assign( MxicUtlis *self, ImMxicUnit unit, MxicAllArbiterAssign* allAssign )
+kint32 mxic_utlis_init_arbiter_assign( MxicUtlis *self, ImMxicUnit unit, MxicAllArbiterAssign* allAssign )
 {
-	INT32	i, j, k;
-	INT32	result;
+	kint32	i, j, k;
+	kint32	result;
 
 	result = D_DDIM_OK;
 
@@ -641,32 +641,32 @@ INT32 mxic_utlis_init_arbiter_assign( MxicUtlis *self, ImMxicUnit unit, MxicAllA
 
 /* MXIC PCLK change to ON.
  */
-VOID mxic_utlis_on_pclk( MxicUtlis *self, ImMxicUnit unit )
+void mxic_utlis_on_pclk( MxicUtlis *self, ImMxicUnit unit )
 {
 #ifdef MxicUtlis_CO_ACT_MXIC_PCLOCK
 	MxicUtlisPrivate *priv = MXIC_UTLIS_GET_PRIVATE(self);
 
 	switch ( unit ) {
 		case MxicUtlis_UNIT_0:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic0PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP0_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic0PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP0_BIT );
 			break;
 		case MxicUtlis_UNIT_1:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic1PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP1_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic1PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP1_BIT );
 			break;
 		case MxicUtlis_UNIT_2:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic2PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP2_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic2PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP2_BIT );
 			break;
 		case MxicUtlis_UNIT_3:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic3PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP3_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic3PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP3_BIT );
 			break;
 		case MxicUtlis_UNIT_4:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic4PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP4_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic4PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP4_BIT );
 			break;
 		case MxicUtlis_UNIT_5:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic5PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP5_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic5PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP5_BIT );
 			break;
 		case MxicUtlis_UNIT_6:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic6PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP6_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic6PclkCounter, &Dd_Top_Get_CLKSTOP5(), ~D_DD_TOP_MICAP6_BIT );
 			break;
 		default:
 			break;
@@ -676,32 +676,32 @@ VOID mxic_utlis_on_pclk( MxicUtlis *self, ImMxicUnit unit )
 
 /* MXIC PCLK change to OFF.
  */
-VOID mxic_utlis_off_pclk( MxicUtlis *self, ImMxicUnit unit )
+void mxic_utlis_off_pclk( MxicUtlis *self, ImMxicUnit unit )
 {
 #ifdef MxicUtlis_CO_ACT_MXIC_PCLOCK
 	MxicUtlisPrivate *priv = MXIC_UTLIS_GET_PRIVATE(self);
 
 	switch ( unit ) {
 		case MxicUtlis_UNIT_0:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic0PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP0_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic0PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP0_BIT );
 			break;
 		case MxicUtlis_UNIT_1:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic1PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP1_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic1PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP1_BIT );
 			break;
 		case MxicUtlis_UNIT_2:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic2PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP2_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic2PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP2_BIT );
 			break;
 		case MxicUtlis_UNIT_3:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic3PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP3_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic3PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP3_BIT );
 			break;
 		case MxicUtlis_UNIT_4:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic4PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP4_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic4PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP4_BIT );
 			break;
 		case MxicUtlis_UNIT_5:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic5PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP5_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic5PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP5_BIT );
 			break;
 		case MxicUtlis_UNIT_6:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic6PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP6_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic6PclkCounter, &Dd_Top_Get_CLKSTOP5(), D_DD_TOP_MICAP6_BIT );
 			break;
 		default:
 			break;
@@ -711,20 +711,20 @@ VOID mxic_utlis_off_pclk( MxicUtlis *self, ImMxicUnit unit )
 
 /* MXIC HCLK change to ON.
  */
-VOID mxic_utlis_on_hclk( MxicUtlis *self, ImMxicUnit unit )
+void mxic_utlis_on_hclk( MxicUtlis *self, ImMxicUnit unit )
 {
 #ifdef MxicUtlis_CO_ACT_MXIC_HCLOCK
 	MxicUtlisPrivate *priv = MXIC_UTLIS_GET_PRIVATE(self);
 
 	switch ( unit ) {
 		case MxicUtlis_UNIT_1:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic1HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH1_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic1HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH1_BIT );
 			break;
 		case MxicUtlis_UNIT_2:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic2HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH2_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic2HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH2_BIT );
 			break;
 		case MxicUtlis_UNIT_3:
-			Dd_Top_Start_Clock( (UCHAR*)&priv->imMxic3HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH3_BIT );
+			Dd_Top_Start_Clock( (kuchar*)&priv->imMxic3HclkCounter, &Dd_Top_Get_CLKSTOP6(), ~D_DD_TOP_MICAH3_BIT );
 			break;
 		default:
 			break;
@@ -734,20 +734,20 @@ VOID mxic_utlis_on_hclk( MxicUtlis *self, ImMxicUnit unit )
 
 /* MXIC HCLK change to OFF.
  */
-VOID mxic_utlis_off_hclk( MxicUtlis *self, ImMxicUnit unit )
+void mxic_utlis_off_hclk( MxicUtlis *self, ImMxicUnit unit )
 {
 #ifdef MxicUtlis_CO_ACT_MXIC_HCLOCK
 	MxicUtlisPrivate *priv = MXIC_UTLIS_GET_PRIVATE(self);
 
 	switch ( unit ) {
 		case MxicUtlis_UNIT_1:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic1HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH1_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic1HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH1_BIT );
 			break;
 		case MxicUtlis_UNIT_2:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic2HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH2_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic2HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH2_BIT );
 			break;
 		case MxicUtlis_UNIT_3:
-			Dd_Top_Stop_Clock( (UCHAR*)&priv->imMxic3HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH3_BIT );
+			Dd_Top_Stop_Clock( (kuchar*)&priv->imMxic3HclkCounter, &Dd_Top_Get_CLKSTOP6(), D_DD_TOP_MICAH3_BIT );
 			break;
 		default:
 			break;
@@ -762,9 +762,9 @@ Get unit address.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_get_unit_address( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic** ioMxic )
+kint32 mxic_utlis_get_unit_address( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic** ioMxic )
 {
-	INT32 result;
+	kint32 result;
 
 #ifdef CO_PARAM_CHECK
 	if ( imMxicCheckUnit( unit ) != D_DDIM_OK ) {
@@ -817,7 +817,7 @@ Waits until the command becomes executable.
 										Please refer to @ref ImMxicUnit for a set value. <br>
 @param[in]		ioMxic					MXIC address.<br>
 */
-VOID mxic_utlis_wait_command_enable( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic )
+void mxic_utlis_wait_command_enable( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic )
 {
 	mxic_utlis_on_pclk( self, unit );
 
@@ -837,7 +837,7 @@ VOID mxic_utlis_wait_command_enable( MxicUtlis *self, ImMxicUnit unit, volatile 
 Configuration start and wait complete.
 @param[in]		ioMxic					MXIC address.<br>
 */
-VOID mxic_utlis_process_configuration( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic )
+void mxic_utlis_process_configuration( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic )
 {
 	static const union io_mxic_tmif clearTcf = {
 		.bit.__TCF = 1,
@@ -877,10 +877,10 @@ This function get acceptance capability of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_utlis_get_acceptance_capability( MxicUtlis *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiter arbiter, ImMxicPort port, UCHAR* capability )
+kint32 mxic_utlis_get_acceptance_capability( MxicUtlis *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiter arbiter, ImMxicPort port, kuchar* capability )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 
 #ifdef CO_PARAM_CHECK

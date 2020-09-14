@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtMxicCheckErr2类
 *@rely                :klib
@@ -11,8 +11,9 @@
 *@version
 *
 */
+
 #include "im_mxic.h"
-#include "ct_im_mxic.h"
+//#include "ct_im_mxic.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -22,24 +23,50 @@
 
 #include "ctmxiccheckerr2.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtMxicCheckErr2, ct_mxic_check_err2);
-#define CT_MXIC_CHECK_ERR2_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtMxicCheckErr2Private,CT_TYPE_MXIC_CHECK_ERR2))
+
+G_DEFINE_TYPE(CtMxicCheckErr2, ct_mxic_check_err2, G_TYPE_OBJECT);
+#define CT_MXIC_CHECK_ERR2_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_MXIC_CHECK_ERR2, CtMxicCheckErr2Private))
 
 struct _CtMxicCheckErr2Private
 {
+
 };
 
 
 /*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+/*
 *IMPL
 */
-static void ct_mxic_check_err2_constructor(CtMxicCheckErr2 *self) 
+
+static void ct_mxic_check_err2_class_init(CtMxicCheckErr2Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtMxicCheckErr2Private));
 }
 
-static void ct_mxic_check_err2_destructor(CtMxicCheckErr2 *self) 
+static void ct_mxic_check_err2_init(CtMxicCheckErr2 *self)
 {
+//	CtMxicCheckErr2Private *priv = CT_MXIC_CHECK_ERR2_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+//	CtMxicCheckErr2 *self = (CtMxicCheckErr2*)object;
+//	CtMxicCheckErr2Private *priv = CT_MXIC_CHECK_ERR2_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtMxicCheckErr2 *self = (CtMxicCheckErr2*)object;
+//	CtMxicCheckErr2Private *priv = CT_MXIC_CHECK_ERR2_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
@@ -47,7 +74,7 @@ static void ct_mxic_check_err2_destructor(CtMxicCheckErr2 *self)
 // Error test of Im_MXIC_Set_Slot_Priority_All_Arbiter and Im_MXIC_Get_Slot_Priority_All_Arbiter function.
 void ct_mxic_check_err2_slot_priority_all_arbiter(void)
 {
-	kint32								result;
+	gint32								result;
 	T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL	allLevelCtrl;
 
 	// --- Im_MXIC_Set_Slot_Priority_All_Arbiter ---
@@ -78,8 +105,8 @@ void ct_mxic_check_err2_slot_priority_all_arbiter(void)
 // Error test of Im_MXIC_Set_Master_Priority and Im_MXIC_Get_Master_Priority function.
 void ct_mxic_check_err2_master_priority(void)
 {
-	kint32	result;
-	kuchar	masterPriority;
+	gint32	result;
+	guchar	masterPriority;
 
 	// --- Im_MXIC_Set_Master_Priority ---
 	// unit range error check
@@ -108,8 +135,8 @@ void ct_mxic_check_err2_master_priority(void)
 // Error test of Im_MXIC_Set_Slot_Mask and Im_MXIC_Get_Slot_Mask function.
 void ct_mxic_check_err2_slot_mask(void)
 {
-	kint32 result;
-	kuchar maskEnable;
+	gint32 result;
+	guchar maskEnable;
 
 	// --- Im_MXIC_Set_Slot_Mask ---
 	// unit range error check
@@ -191,7 +218,7 @@ void ct_mxic_check_err2_slot_mask(void)
 // Error test of Im_MXIC_Set_Master_Mask and Im_MXIC_Get_Master_Mask function.
 void ct_mxic_check_err2_master_mask(void)
 {
-	kint32					result;
+	gint32					result;
 	T_IM_MXIC_MASTER_MASK	masterMask;
 
 	// --- Im_MXIC_Set_Master_Mask ---
@@ -222,8 +249,8 @@ void ct_mxic_check_err2_master_mask(void)
 // Error test of Im_MXIC_Set_Master_Mask_Factor and Im_MXIC_Get_Master_Mask_Factor function.
 void ct_mxic_check_err2_master_mask_factor(void)
 {
-	kint32 result;
-	kuchar enable;
+	gint32 result;
+	guchar enable;
 
 	// --- Im_MXIC_Set_Master_Mask_Factor ---
 	// unit range error check
@@ -268,8 +295,8 @@ void ct_mxic_check_err2_master_mask_factor(void)
 // Error test of Im_MXIC_Set_Master_Mask_Target and Im_MXIC_Get_Master_Mask_Target function.
 void ct_mxic_check_err2_master_mask_target(void)
 {
-	kint32 result;
-	kuchar enable;
+	gint32 result;
+	guchar enable;
 
 	// --- Im_MXIC_Set_Master_Mask_Target ---
 	// unit range error check
@@ -314,8 +341,8 @@ void ct_mxic_check_err2_master_mask_target(void)
 // Error test of Im_MXIC_Set_Master_Mask_Select and Im_MXIC_Get_Master_Mask_Select function.
 void ct_mxic_check_err2_master_mask_select(void)
 {
-	kint32	result;
-	kuchar	maskSelect;
+	gint32	result;
+	guchar	maskSelect;
 
 	// --- Im_MXIC_Set_Master_Mask_Select ---
 	// unit range error check
@@ -345,8 +372,8 @@ void ct_mxic_check_err2_master_mask_select(void)
 // Error test of Im_MXIC_Set_Master_Transaction and Im_MXIC_Get_Master_Transaction function.
 void ct_mxic_check_err2_master_transaction(void)
 {
-	kint32	result;
-	kuchar	transaction;
+	gint32	result;
+	guchar	transaction;
 
 	// --- Im_MXIC_Set_Master_Transaction ---
 	// unit range error check
@@ -376,7 +403,7 @@ void ct_mxic_check_err2_master_transaction(void)
 // Error test of Im_MXIC_Set_History_Monitor_Stop_Enable and Im_MXIC_Get_History_Monitor_Stop_Enable function.
 void ct_mxic_check_err2_history_monitor_stop_enable(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Set_History_Monitor_Stop_Enable ---
 	// enable range error check
@@ -396,7 +423,7 @@ void ct_mxic_check_err2_history_monitor_stop_enable(void)
 // Error test of Im_MXIC_Get_History_Monitor function.
 void ct_mxic_check_err2_history_monitor(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_HISTORY_MONITOR history;
 
 	// --- Im_MXIC_Get_History_Monitor ---
@@ -430,7 +457,7 @@ void ct_mxic_check_err2_history_monitor(void)
 // Error test of Im_MXIC_Get_History_Monitor_All_Port function.
 void ct_mxic_check_err2_history_monitor_all_port(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Get_History_Monitor_All_Port ---
 	// all_history NULL check
@@ -444,7 +471,7 @@ void ct_mxic_check_err2_history_monitor_all_port(void)
 // Error test of Im_MXIC_Get_Slot_Status_Monitor_All_Arbiter function.
 void ct_mxic_check_err2_slot_status_monitor_all_arbiter(void)
 {
-	kint32								result;
+	gint32								result;
 	T_IM_MXIC_ALL_SLOT_STATUS_MONITOR	allSlotStatus;
 
 	// --- Im_MXIC_Get_Slot_Status_Monitor_All_Arbiter ---
@@ -464,7 +491,7 @@ void ct_mxic_check_err2_slot_status_monitor_all_arbiter(void)
 // Error test of Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter function.
 void ct_mxic_check_err2_slot_status_monitor_w_arbiter(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_W_ARBITER_ASSIGN_PORT status;
 
 	// --- Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter ---
@@ -489,7 +516,7 @@ void ct_mxic_check_err2_slot_status_monitor_w_arbiter(void)
 // Error test of Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter function.
 void ct_mxic_check_err2_slot_status_monitor_r_arbiter(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_R_ARBITER_ASSIGN_PORT status;
 
 	// --- Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter ---
@@ -514,7 +541,7 @@ void ct_mxic_check_err2_slot_status_monitor_r_arbiter(void)
 // Error test of Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter_Group function.
 void ct_mxic_check_err2_slot_status_monitor_w_arbiter_group(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_W_ARBITER_ASSIGN_GR status;
 
 	// --- Im_MXIC_Get_Slot_Status_Monitor_W_Arbiter_Group ---
@@ -534,7 +561,7 @@ void ct_mxic_check_err2_slot_status_monitor_w_arbiter_group(void)
 // Error test of Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter_Group function.
 void ct_mxic_check_err2_slot_status_monitor_r_arbiter_group(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_R_ARBITER_ASSIGN_GR status;
 
 	// --- Im_MXIC_Get_Slot_Status_Monitor_R_Arbiter_Group ---
@@ -554,7 +581,7 @@ void ct_mxic_check_err2_slot_status_monitor_r_arbiter_group(void)
 // Error test of Im_MXIC_Get_Master_Status_Monitor function.
 void ct_mxic_check_err2_master_status_monitor(void)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_MASTER_STATUS_MONITOR	masterStatus;
 
 	// --- Im_MXIC_Get_Master_Status_Monitor ---
@@ -574,7 +601,7 @@ void ct_mxic_check_err2_master_status_monitor(void)
 // Error test of Im_MXIC_Set_Access_Or_Trans_Monitor_Parameter function.
 void ct_mxic_check_err2_set_access_or_trans_monitor_parameter(void)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_MONITOR_PARAMETER param;
 
 	// Initialize
@@ -625,7 +652,7 @@ void ct_mxic_check_err2_set_access_or_trans_monitor_parameter(void)
 // Error test of Im_MXIC_Get_Access_Or_Trans_Monitor_Parameter function.
 void ct_mxic_check_err2_get_access_or_trans_monitor_parameter(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Get_Access_Or_Trans_Monitor_Parameter ---
 	// param NULL check
@@ -639,8 +666,8 @@ void ct_mxic_check_err2_get_access_or_trans_monitor_parameter(void)
 // Error test of Im_MXIC_Get_Access_Or_Trans_Monitor function.
 void ct_mxic_check_err2_access_or_trans_monitor(void)
 {
-	kint32 result;
-	kuint32 monitorResult;
+	gint32 result;
+	guint32 monitorResult;
 
 	// --- Im_MXIC_Get_Access_Or_Trans_Monitor ---
 	// entry range error check
@@ -659,7 +686,7 @@ void ct_mxic_check_err2_access_or_trans_monitor(void)
 // Error test of Im_MXIC_Get_Access_Or_Trans_Monitor_All_Entry function.
 void ct_mxic_check_err2_access_or_trans_monitor_all_entry(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Get_Access_Or_Trans_Monitor_All_Entry ---
 	// all_result NULL check
@@ -673,7 +700,7 @@ void ct_mxic_check_err2_access_or_trans_monitor_all_entry(void)
 // Error test of Im_MXIC_Get_Access_Or_Trans_Monitor_Limit_End_State function.
 void ct_mxic_check_err2_sccess_or_trans_monitor_limit_end_state(void)
 {
-	kint32 result;
+	gint32 result;
 
 	// --- Im_MXIC_Get_Access_Or_Trans_Monitor_Limit_End_State ---
 	// mon_state NULL check
@@ -687,7 +714,7 @@ void ct_mxic_check_err2_sccess_or_trans_monitor_limit_end_state(void)
 // Error test of Im_MXIC_Start_Memory_Access_Detect function.
 void ct_mxic_check_err2_memory_access_start(void)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_MEMORY_ACCESS_SLAVE	memoryAccess;
 
 	// --- Im_MXIC_Start_Memory_Access_Detect ---
@@ -707,7 +734,7 @@ void ct_mxic_check_err2_memory_access_start(void)
 // Error test of Im_MXIC_Set_Memory_Access_Detect function.
 void ct_mxic_check_err2_memory_access_set(void)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_MEMORY_ACCESS_SLAVE	memoryAccess;
 
 	// --- Im_MXIC_Set_Memory_Access_Detect ---
@@ -727,7 +754,7 @@ void ct_mxic_check_err2_memory_access_set(void)
 // Error test of Im_MXIC_Get_Memory_Access_Detect function.
 void ct_mxic_check_err2_memory_access_get(void)
 {
-	kint32							result;
+	gint32							result;
 	T_IM_MXIC_MEMORY_ACCESS_SLAVE	memoryAccess;
 
 	// --- Im_MXIC_Get_Memory_Access_Detect ---
@@ -744,8 +771,8 @@ void ct_mxic_check_err2_memory_access_get(void)
 	return;
 }
 
-CtMxicCheckErr2* ct_mxic_check_err2_new(void) 
+CtMxicCheckErr2 *ct_mxic_check_err2_new(void) 
 {
-    CtMxicCheckErr2 *self = k_object_new_with_private(CT_TYPE_MXIC_CHECK_ERR2, sizeof(CtMxicCheckErr2Private));
+    CtMxicCheckErr2 *self = g_object_new(CT_TYPE_MXIC_CHECK_ERR2, NULL);
     return self;
 }

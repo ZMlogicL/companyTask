@@ -1,7 +1,7 @@
 /*
  *ctimdisp2o.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-09
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,6 +10,9 @@
  *@version: 
  */
 
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -28,8 +31,19 @@
 #include "imdisp2group.h"
 #include "ctimdisp2o.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2o, ct_im_disp2o, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2O_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2oPrivate, CT_TYPE_IM_DISP2O))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2o, ct_im_disp2o, IM_TYPE_DISP2_PARENT);
+
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2O_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2O, CtImDisp2oPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 
 typedef enum {
 	CtImDisp2o_LCD_OSD_0 = 0,			/**< OSD-0.		*/
@@ -39,22 +53,35 @@ typedef enum {
 
 struct _CtImDisp2oPrivate
 {
-	kpointer qwertyu;
 	T_IM_DISP_CTRL_OSD_LAYER gLcdDispTblOsdCtrl[CtImDisp4_LCD_DISP_SEL_END][CtImDisp2o_LCD_OSD_END];
 };
 
 /*
+ * 文件级全局变量定义
+ * */
+
+/*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2oDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 static void initTblOsdCtrl(CtImDisp2o *self);
 
 /*
  * IMPL
  * */
-static void ct_im_disp2o_constructor(CtImDisp2o *self)
+static void ct_im_disp2o_class_init(CtImDisp2oClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2oPrivate));
+}
+
+static void ct_im_disp2o_init(CtImDisp2o *self)
 {
 	CtImDisp2oPrivate *priv = CT_IM_DISP2O_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -65,21 +92,42 @@ static void ct_im_disp2o_constructor(CtImDisp2o *self)
 	initTblOsdCtrl(self);
 }
 
-static void ct_im_disp2o_destructor(CtImDisp2o *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2o *self = CT_IM_DISP2O(object);
+//	CtImDisp2oPrivate *priv = CT_IM_DISP2O_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2o_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImDisp2o *self = CT_IM_DISP2O(object);
+//	CtImDisp2oPrivate *priv = CT_IM_DISP2O_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2o_parent_class)->finalize(object);
 }
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void disp2oDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
 {
-	kint32 error = D_DDIM_OK;
-	kuint32 layer = 0;
+	gint32 error = D_DDIM_OK;
+	guint32 layer = 0;
 	CtImDisp2o *self = (CtImDisp2o *)parent;
 	CtImDisp2oPrivate *priv = self->privCtImDisp2o;
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
 	CtImDisp3a *disp3a = (CtImDisp3a *)im_disp2_group_get_disp3a(imDisp2Group);
 
-	if (strcmp((kchar*) argv[1], "Ctrl_OSDs") == 0)
+	if (strcmp((gchar *) argv[1], "Ctrl_OSDs") == 0)
 	{
 		//Im_DISP_Ctrl_OSD_Layer
 
@@ -96,7 +144,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 		{
 			E_IM_DISP_SEL block = strtoul(argv[3], NULL, 0);
 			layer = strtoul(argv[4], NULL, 0);
-			kuint32 layer_idx = 0;
+			guint32 layer_idx = 0;
 			if (layer == 8)
 			{
 				layer_idx = 1;
@@ -137,118 +185,118 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			}
 
 			// Check in im_disp_param_check_gridt
-			if (strcmp((kchar*) argv[6], "1") == 0)
+			if (strcmp((gchar *) argv[6], "1") == 0)
 			{
 				osdCtrl.gridt.bit.IFMT = 5;
 			}
 			// Check in im_disp_param_check_grtisize
-			else if (strcmp((kchar*) argv[6], "2") == 0)
+			else if (strcmp((gchar *) argv[6], "2") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00080009;
 			}
-			else if (strcmp((kchar*) argv[6], "3") == 0)
+			else if (strcmp((gchar *) argv[6], "3") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00080006;
 			}
-			else if (strcmp((kchar*) argv[6], "4") == 0)
+			else if (strcmp((gchar *) argv[6], "4") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00090008;
 			}
-			else if (strcmp((kchar*) argv[6], "5") == 0)
+			else if (strcmp((gchar *) argv[6], "5") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00060008;
 			}
 			// im_disp_param_check_grtdsta
-			else if (strcmp((kchar*) argv[6], "6") == 0)
+			else if (strcmp((gchar *) argv[6], "6") == 0)
 			{
 				osdCtrl.grtdsta.word = 0x00000001;
 			}
-			else if (strcmp((kchar*) argv[6], "7") == 0)
+			else if (strcmp((gchar *) argv[6], "7") == 0)
 			{
 				osdCtrl.grtdsta.word = 0x00010000;
 			}
 			// im_disp_param_check_gripo
-			else if (strcmp((kchar*) argv[6], "8") == 0)
+			else if (strcmp((gchar *) argv[6], "8") == 0)
 			{
 				osdCtrl.gripo.word = 0x03020101;
 			}
-			else if (strcmp((kchar*) argv[6], "9") == 0)
+			else if (strcmp((gchar *) argv[6], "9") == 0)
 			{
 				osdCtrl.gripo.word = 0x03010201;
 			}
-			else if (strcmp((kchar*) argv[6], "10") == 0)
+			else if (strcmp((gchar *) argv[6], "10") == 0)
 			{
 				osdCtrl.gripo.word = 0x01030201;
 			}
-			else if (strcmp((kchar*) argv[6], "11") == 0)
+			else if (strcmp((gchar *) argv[6], "11") == 0)
 			{
 				osdCtrl.gripo.word = 0x03020201;
 			}
-			else if (strcmp((kchar*) argv[6], "12") == 0)
+			else if (strcmp((gchar *) argv[6], "12") == 0)
 			{
 				osdCtrl.gripo.word = 0x02030201;
 			}
-			else if (strcmp((kchar*) argv[6], "13") == 0)
+			else if (strcmp((gchar *) argv[6], "13") == 0)
 			{
 				osdCtrl.gripo.word = 0x03030201;
 			}
 			// im_disp_param_check_grisize
-			else if (strcmp((kchar*) argv[6], "14") == 0)
+			else if (strcmp((gchar *) argv[6], "14") == 0)
 			{
 				osdCtrl.grisize[0].word = 0x0008000A;
 			}
-			else if (strcmp((kchar*) argv[6], "15") == 0)
+			else if (strcmp((gchar *) argv[6], "15") == 0)
 			{
 				osdCtrl.grisize[0].word = 0x0008000B;
 			}
-			else if (strcmp((kchar*) argv[6], "16") == 0)
+			else if (strcmp((gchar *) argv[6], "16") == 0)
 			{
 				osdCtrl.grisize[1].word = 0x00080000;
 			}
-			else if (strcmp((kchar*) argv[6], "17") == 0)
+			else if (strcmp((gchar *) argv[6], "17") == 0)
 			{
 				osdCtrl.grisize[8].word = 0x00090008;
 			}
-			else if (strcmp((kchar*) argv[6], "18") == 0)
+			else if (strcmp((gchar *) argv[6], "18") == 0)
 			{
 				osdCtrl.grisize[9].word = 0x00060008;
 			}
 			// im_disp_param_check_ctrl_osd_layer
-			else if (strcmp((kchar*) argv[6], "19") == 0)
+			else if (strcmp((gchar *) argv[6], "19") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00080008;
 				osdCtrl.grisize[0].word = 0x00080008;
 				osdCtrl.grdsta[0].word = 0x00000002;
 			}
-			else if (strcmp((kchar*) argv[6], "20") == 0)
+			else if (strcmp((gchar *) argv[6], "20") == 0)
 			{
 				osdCtrl.grtisize.word = 0x00080008;
 				osdCtrl.grisize[9].word = 0x00080008;
 				osdCtrl.grdsta[9].word = 0x00020000;
 			}
 			// im_disp_param_check_grhga
-			else if (strcmp((kchar*) argv[6], "21") == 0)
+			else if (strcmp((gchar *) argv[6], "21") == 0)
 			{
 				osdCtrl.grhga[0] = 0;
 			}
-			else if (strcmp((kchar*) argv[6], "22") == 0)
+			else if (strcmp((gchar *) argv[6], "22") == 0)
 			{
 				osdCtrl.grhga[8] = 0xFFF9;
 			}
-			else if (strcmp((kchar*) argv[6], "23") == 0)
+			else if (strcmp((gchar *) argv[6], "23") == 0)
 			{
 				osdCtrl.grhga[9] = 0x00000001;
 			}
-			else if (strcmp((kchar*) argv[6], "24") == 0)
+			else if (strcmp((gchar *) argv[6], "24") == 0)
 			{
 				osdCtrl.grdsta[5].word = 0x00000002;
 			}
-			else if (strcmp((kchar*) argv[6], "25") == 0)
+			else if (strcmp((gchar *) argv[6], "25") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00010000;
 			}
 			// im_disp_param_check_grdsta
-			else if (strcmp((kchar*) argv[6], "26") == 0)
+			else if (strcmp((gchar *) argv[6], "26") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000001;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -261,7 +309,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[8].word = 0x00000000;
 				osdCtrl.grdsta[9].word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "27") == 0)
+			else if (strcmp((gchar *) argv[6], "27") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000000;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -274,7 +322,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[8].word = 0x00000000;
 				osdCtrl.grdsta[9].word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "28") == 0)
+			else if (strcmp((gchar *) argv[6], "28") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000000;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -288,7 +336,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[9].word = 0x00000001;
 			}
 			// im_disp_param_check_grdsta
-			else if (strcmp((kchar*) argv[6], "29") == 0)
+			else if (strcmp((gchar *) argv[6], "29") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00010000;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -301,7 +349,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[8].word = 0x00000000;
 				osdCtrl.grdsta[9].word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "30") == 0)
+			else if (strcmp((gchar *) argv[6], "30") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000000;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -314,7 +362,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[8].word = 0x00000000;
 				osdCtrl.grdsta[9].word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "31") == 0)
+			else if (strcmp((gchar *) argv[6], "31") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000000;
 				osdCtrl.grdsta[1].word = 0x00000000;
@@ -327,7 +375,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[8].word = 0x00000000;
 				osdCtrl.grdsta[9].word = 0x00010000;
 			}
-			else if (strcmp((kchar*) argv[6], "32") == 0)
+			else if (strcmp((gchar *) argv[6], "32") == 0)
 			{
 				osdCtrl.grdsta[0].word = 0x00000000;
 				osdCtrl.grdsta[1].word = 0x00000002;
@@ -341,39 +389,39 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grdsta[9].word = 0x00000010;
 			}
 			// im_disp_param_check_grsa
-			else if (strcmp((kchar*) argv[6], "33") == 0)
+			else if (strcmp((gchar *) argv[6], "33") == 0)
 			{
 				osdCtrl.grsa0[0] = 0xFFFFFFF9;
 			}
-			else if (strcmp((kchar*) argv[6], "34") == 0)
+			else if (strcmp((gchar *) argv[6], "34") == 0)
 			{
 				osdCtrl.grsa0[3] = 0x00000007;
 			}
 			// im_disp_param_check_grsa
-			else if (strcmp((kchar*) argv[6], "35") == 0)
+			else if (strcmp((gchar *) argv[6], "35") == 0)
 			{
 				osdCtrl.grsa[0] = 0xFFFFFFFF;
 			}
-			else if (strcmp((kchar*) argv[6], "36") == 0)
+			else if (strcmp((gchar *) argv[6], "36") == 0)
 			{
 				osdCtrl.grsa[8] = 0x00000001;
 			}
 			// im_disp_param_check_resize
-			else if (strcmp((kchar*) argv[6], "37") == 0)
+			else if (strcmp((gchar *) argv[6], "37") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000C04;		// rsz1.bit.HRSZM / rsz1.bit.HRSZN < 0.5
 				osdCtrl.grrsz2.word = 0x00000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "38") == 0)
+			else if (strcmp((gchar *) argv[6], "38") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000212;		//rsz1.bit.HRSZM / rsz1.bit.HRSZN > 8.0
 				osdCtrl.grrsz2.word = 0x00000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "39") == 0)
+			else if (strcmp((gchar *) argv[6], "39") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				//(rszsl == E_IM_DISP_RSZSL_PADDING_THINNING) && (rsz1.bit.HRSZOF != 0)
@@ -381,7 +429,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grrsz2.word = 0x00000408;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "40") == 0)
+			else if (strcmp((gchar *) argv[6], "40") == 0)
 			{
 				osdCtrl.grrsz0 = 1;
 				//rsz1.bit.HRSZM / rsz1.bit.HRSZN == 1.0) && (rsz1.bit.HRSZOF != 0)
@@ -389,28 +437,28 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grrsz2.word = 0x00000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "41") == 0)
+			else if (strcmp((gchar *) argv[6], "41") == 0)
 			{
 				osdCtrl.grrsz0 = 1;
 				osdCtrl.grrsz1.word = 0x0A000408;	//rsz1.bit.HRSZOF >= rsz1.bit.HRSZM
 				osdCtrl.grrsz2.word = 0x00000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "42") == 0)
+			else if (strcmp((gchar *) argv[6], "42") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000404;
 				osdCtrl.grrsz2.word = 0x00000C04;	// rsz2.bit.VRSZM / rsz2.bit.VRSZN < 0.5
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "43") == 0)
+			else if (strcmp((gchar *) argv[6], "43") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000404;	//
 				osdCtrl.grrsz2.word = 0x00000214;	// rsz2.bit.VRSZM / rsz2.bit.VRSZN > 8
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "44") == 0)
+			else if (strcmp((gchar *) argv[6], "44") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000404;
@@ -418,7 +466,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grrsz2.word = 0x01000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "45") == 0)
+			else if (strcmp((gchar *) argv[6], "45") == 0)
 			{
 				osdCtrl.grrsz0 = 1;
 				osdCtrl.grrsz1.word = 0x00000404;
@@ -426,14 +474,14 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				osdCtrl.grrsz2.word = 0x01000404;
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "46") == 0)
+			else if (strcmp((gchar *) argv[6], "46") == 0)
 			{
 				osdCtrl.grrsz0 = 1;
 				osdCtrl.grrsz1.word = 0x00000404;
 				osdCtrl.grrsz2.word = 0x0A000408;	// (rsz2.bit.VRSZOF >= rsz2.bit.VRSZM)
 				osdCtrl.grrsz3.word = 0x00000000;
 			}
-			else if (strcmp((kchar*) argv[6], "47") == 0)
+			else if (strcmp((gchar *) argv[6], "47") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000404;
@@ -441,7 +489,7 @@ static void disp2oDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				// (rszsl == E_IM_DISP_RSZSL_PADDING_THINNING) && (rsz3.bit.HCSTA != 0)
 				osdCtrl.grrsz3.word = 0x00000001;
 			}
-			else if (strcmp((kchar*) argv[6], "48") == 0)
+			else if (strcmp((gchar *) argv[6], "48") == 0)
 			{
 				osdCtrl.grrsz0 = 0;
 				osdCtrl.grrsz1.word = 0x00000404;
@@ -926,6 +974,7 @@ static void initTblOsdCtrl(CtImDisp2o *self)
  * */
 CtImDisp2o *ct_im_disp2o_new(void)
 {
-	CtImDisp2o *self = (CtImDisp2o *) k_object_new_with_private(CT_TYPE_IM_DISP2O,sizeof(CtImDisp2oPrivate));
+	CtImDisp2o *self = (CtImDisp2o *) g_object_new(CT_TYPE_IM_DISP2O, NULL);
 	return self;
 }
+

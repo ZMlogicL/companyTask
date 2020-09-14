@@ -267,639 +267,58 @@ GType 								dd_top_get_type(void) G_GNUC_CONST;
 DdTop* 							dd_top_new(void);
 
 /**
-Get Frequency of eMMC clock
-@retval	Hz
-*/
-ULONG dd_topone_get_emmcclk(VOID);
-
-/**
-Get Frequency of NAND Flash clock
-@retval	Hz
-*/
-ULONG dd_topone_get_nfclk(VOID);
-
-/**
-Get Frequency of UHS2 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_uhs2clk(VOID);
-
-/**
-Get Frequency of UHS1 ch2 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_uhs1clk2(VOID);
-
-/**
-Get Frequency of UHS1 ch1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_uhs1clk1(VOID);
-
-/**
-Get Frequency of UHS1 ch0 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_uhs1clk0(VOID);
-
-/**
-Get Frequency of Cortex-A7 MPCore Peri clock
-@retval	Hz
-*/
-ULONG dd_topone_get_rclk(VOID);
-
-/**
-Get Frequency of RAW clock
-@retval	Hz
-*/
-ULONG dd_topone_get_rawclk(VOID);
-
-/**
-Get Frequency of DISP HIF clock
-@retval	Hz
-*/
-ULONG dd_topone_get_hifclk(VOID);
-
-/**
-Get Frequency of DISP MIF clock
-@retval	Hz
-*/
-ULONG dd_topone_get_mifclk(VOID);
-
-/**
-Get Frequency of IPU system clock
-@retval	Hz
-*/
-ULONG dd_topone_get_ipuclk(VOID);
-
-/**
-Get Frequency of IPU TME clock
-@retval	Hz
-*/
-ULONG dd_topone_get_iputmeclk(VOID);
-
-/**
-Get Frequency of GPU clock
-@retval	Hz
-*/
-ULONG dd_topone_get_gpuclk(VOID);
-
-/**
-Get Frequency of JPEG clock
-@retval	Hz
-*/
-ULONG DdTopone_Get_JPEGCLK(VOID);
-
-/**
-Get Frequency of ELA clock
-@retval	Hz
-*/
-ULONG dd_topone_get_elaclk(VOID);
-
-/**
-Get Frequency of SENSOR clock
-@retval	Hz
-*/
-ULONG dd_topone_get_senclk(VOID);
-
-/**
-Get Frequency of SENSOR clock
-@retval	Hz
-*/
-ULONG dd_topone_get_senmskclk(VOID);
-
-/**
-Get Frequency of IIP clock
-@retval	Hz
-*/
-ULONG dd_topone_get_iipclk(VOID);
-
-/**
-Get Frequency of STAT clock
-@retval	Hz
-*/
-ULONG dd_topone_get_pasclk(VOID);
-
-/**
-Get Frequency of HEVC IPP clock
-@retval	Hz
-*/
-ULONG dd_topone_get_ippclk(VOID);
-
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#ifdef CO_ES1_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-// --- REMOVE_ES1_HARDWARE BEGIN ---
-/**
-Get Frequency of HEVC PXF clock
-@retval	Hz
-*/
-ULONG dd_topone_get_pxfclk(VOID);
-// --- REMOVE_ES1_HARDWARE END ---
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#endif // CO_ES1_HARDWARE
-#ifdef CO_ES3_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-// --- REMOVE_ES3_HARDWARE BEGIN ---
-/**
-Get Frequency of HEVC ENC clock
-@retval	Hz
-*/
-ULONG dd_topone_get_hevencclk(VOID);
-// --- REMOVE_ES3_HARDWARE END ---
-// --- REMOVE_ES_COMPILE_OPT BEGIN ---
-#endif // CO_ES3_HARDWARE
-// --- REMOVE_ES_COMPILE_OPT END ---
-
-/**
-Get Frequency of HEVC VDF clock
-@retval	Hz
-*/
-ULONG dd_topone_get_vdfclk(VOID);
-
-/**
-Get Frequency of SRO pipe1 input2 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_sro1clk_2(VOID);
-
-/**
-Get Frequency of R2Y pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_r2y1clk(VOID);
-
-/**
-Get Frequency of LTM pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_ltm1clk(VOID);
-
-/**
-Get Frequency of B2R pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_b2r1clk(VOID);
-
-/**
-Get Frequency of CNR pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_cnr1clk(VOID);
-
-/**
-Get Frequency of SRO pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_sro1clk(VOID);
-
-/**
-Get Frequency of B2B pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_b2b1clk(VOID);
-
-/**
-Get Frequency of LTMRBK pipe1 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_ltmrbk1clk(VOID);
-
-/**
-Get Frequency of SRO pipe2 input2 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_sro2clk_2(VOID);
-
-/**
-Get Frequency of R2Y pipe2 clock
-@retval	Hz
-*/
-ULONG dd_topone_get_r2y2clk(VOID);
-
-/**
 Get Frequency of LTM pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_ltm2clk(VOID);
+ULONG dd_top_get_ltm2clk(DdTop *self);
 
 /**
 Get Frequency of B2R pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_b2r2clk(VOID);
+ULONG dd_top_get_b2r2clk(DdTop *self);
 
 /**
 Get Frequency of CNR pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_cnr2clk(VOID);
+ULONG dd_top_get_cnr2clk(DdTop *self);
 
 /**
 Get Frequency of SRO pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_sro2clk(VOID);
+ULONG dd_top_get_sro2clk(DdTop *self);
 
 /**
 Get Frequency of B2B pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_b2b2clk(VOID);
+ULONG dd_top_get_b2b2clk(DdTop *self);
 
 /**
 Get Frequency of LTMRBK pipe2 clock
 @retval	Hz
 */
-ULONG dd_top_get_ltmrbk2clk(VOID);
+ULONG dd_top_get_ltmrbk2clk(DdTop *self);
 
 /**
 Get Frequency of APCLK clock
 @retval	Hz
 */
-ULONG dd_top_get_apclk(VOID);
+ULONG dd_top_get_apclk(DdTop *self);
 
 /**
 Get Frequency of Audio clock
 @retval	Hz
 */
-ULONG dd_top_get_auclk(VOID);
+ULONG dd_top_get_auclk(DdTop *self);
 
 /**
 Get Frequency of SPI clock
 @retval	Hz
 */
-ULONG dd_top_get_spiclk(VOID);
-
-/**
-Get Frequency of DSP clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_dspclk(VOID);
-
-/**
-Get Frequency of AXI bus clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_aclk(VOID);
-
-/**
-Get Frequency of AXI bus EXS clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_aclkexs(VOID);
-
-/**
-Get Frequency of AHB bus BMH clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_hclkbmh(VOID);
-
-/**
-Get Frequency of AHB bus clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_hclk(VOID);
-
-/**
-Get Frequency of APB bus clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_pclk(VOID);
-
-/**
-Get Frequency of MXI bus 400 clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_mclk400(VOID);
-
-/**
-Get Frequency of MXI bus 200 clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_mclk200(VOID);
-
-/**
-Get Frequency of AXI bus 400 clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_aclk400(VOID);
-
-/**
-Get Frequency of RIBERY clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_ribclk(VOID);
-
-/**
-Get Frequency of NF Bch clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_nfbchclk(VOID);
-
-/**
-Get Frequency of ME clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_meclk(VOID);
-
-/**
-Get Frequency of FPT1 clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_fpt1clk(VOID);
-
-/**
-Get Frequency of FPT0 clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_fpt0clk(VOID);
-
-/**
-Get Frequency of 3DNR clock
-@retval	Hz
-*/
-ULONG dd_toptwo_get_shdrclk(VOID);
-
-/**
-Get Frequency of GYRO clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_gyroclk(VOID);
-
-/**
-Get Frequency of AXI bus 300 clock
-@retval	Hz
-*/
-ULONG dd_topthree_get_aclk300(VOID);
-
-
-/**
-Control Clock Stop to start clock.<br>
-@param[in,out]	counter		address of Garding counter
-@param[in,out]	reg_addr	address of clock stop register
-@param[in]		val			setting value
-@remarks Set 1 to XXXSTOPC register internally.<br><br>
-		*(reg_addr + DdTopone_CLKSTOPC_OFFSET) |= ~val
-*/
-VOID dd_topthree_start_clock(DdTopthree *self, UCHAR* counter, volatile unsigned long* reg_addr, unsigned long val );
-
-/**
-Control Clock Stop to stop clock.
-@param[in,out]	counter		address of Garding counter
-@param[in,out]	reg_addr	address of clock stop register
-@param[in]		val			setting value
-@remarks Set 1 to XXXSTOPS register internally.<br><br>
-		*(reg_addr + DdTopone_CLKSTOPS_OFFSET) |= val
-*/
-VOID dd_topthree_stop_clock(DdTopthree *self, UCHAR* counter, volatile unsigned long* reg_addr, unsigned long val );
-
-/**
-Start PLL00.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll00(VOID);
-
-/**
-Stop PLL00.
-*/
-VOID dd_topthree_stop_pll00(VOID);
-
-/**
-Start PLL01.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll01(VOID);
-
-/**
-Stop PLL01.
-*/
-VOID dd_topthree_stop_pll01(VOID);
-
-/**
-Start PLL02.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll02(VOID);
-
-/**
-Stop PLL02.
-*/
-VOID dd_topthree_stop_pll02(VOID);
-
-/**
-Start PLL03.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll03(VOID);
-
-/**
-Stop PLL03.
-*/
-VOID dd_topthree_stop_pll03(VOID);
-
-/**
-Start PLL04.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll04(VOID);
-
-/**
-Stop PLL04.
-*/
-VOID dd_topthree_stop_pll04(VOID);
-
-/**
-Start PLL05.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll05(VOID);
-
-/**
-Stop PLL05.
-*/
-VOID dd_topthree_stop_pll05(VOID);
-
-/**
-Start PLL05A.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll05a(VOID);
-
-/**
-Stop PLL05A.
-*/
-VOID dd_topthree_stop_pll05a(VOID);
-
-/**
-Start PLL06.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll06(VOID);
-
-/**
-Stop PLL06.
-*/
-VOID dd_topthree_stop_pll06(VOID);
-
-/**
-Start PLL07.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll07(VOID);
-
-/**
-Stop PLL07.
-*/
-VOID dd_topthree_stop_pll07(VOID);
-
-/**
-Start PLL08.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll08(VOID);
-
-/**
-Stop PLL08.
-*/
-VOID dd_topthree_stop_pll08(VOID);
-
-/**
-Start PLL10.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll10(VOID);
-
-/**
-Stop PLL10.
-*/
-VOID dd_topthree_stop_pll10(VOID);
-
-/**
-Start PLL10A.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll10a(VOID);
-
-/**
-Stop PLL100A.
-*/
-VOID dd_topthree_stop_pll10a(VOID);
-
-/**
-Start PLL11.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_pll11(VOID);
-
-/**
-Stop PLL11.
-*/
-VOID dd_topthree_stop_pll11(VOID);
-
-/**
-Start DDR 00 PLL.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll00(VOID);
-
-/**
-Stop DDR PLL00.
-*/
-VOID dd_topthree_stop_ddr_pll00(VOID);
-
-/**
-Start DDR PLL01.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll01(VOID);
-
-/**
-Stop DDR PLL01.
-*/
-VOID dd_topthree_stop_ddr_pll01(VOID);
-
-/**
-Start DDR PLL02.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll02(VOID);
-
-/**
-Stop DDR PLL02.
-*/
-VOID dd_topthree_stop_ddr_pll02(VOID);
-
-/**
-Start DDR PLL10.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll10(VOID);
-
-/**
-Stop DDR PLL10.
-*/
-VOID dd_topthree_stop_ddr_pll10(VOID);
-
-/**
-Start DDR PLL11.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll11(VOID);
-
-/**
-Stop DDR PLL11.
-*/
-VOID dd_topthree_stop_ddr_pll11(VOID);
-
-/**
-Start DDR PLL12.
-@retval	D_DD_OK						Success
-@retval	DdTopone_STATUS_ABNORMAL	Fail - output condition
-@remarks	This API uses DDIM_User_Dly_Tsk().
-*/
-INT32 dd_topthree_start_ddr_pll12(VOID);
-
-/**
-Stop DDR PLL12.
-*/
-VOID dd_topthree_stop_ddr_pll12(VOID);
+ULONG dd_top_get_spiclk(DdTop *self);
 
 
 /**
@@ -910,124 +329,15 @@ Set parameters for Audio PLL.
 							<li>select[1]:Audio ch1 Clock
 							<li>select[2]:Audio ch2 Clock
 							<li>select[3]:Audio Ethernet Clock</ul>
-@param [in]	pll_select	Audio PLL select
+@param [in]	pllSelect	Audio PLL select
 */
-VOID DdTopone_Set_Aud_Pll(UCHAR clock, UCHAR const *const select, UCHAR pll_select);
+VOID dd_top_set_aud_pll(DdTop *self, UCHAR clock, UCHAR const *const select, UCHAR pllSelect);
 
 /**
 Get Frequency of Audio PLL.
 @retval	Hz
 */
-ULONG DdTopone_Get_Aud_Pll(VOID);
-
-/**
-Set the functionality of a selectable GPIO port.<br>
-It is set to the EPCR(External Port Control Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [in]  function	Function type.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_FUNC_GPIO
-							  <li>1:@ref DdToptwo_GPIO_FUNC_HWMODE
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Input parameter error.
-*/
-INT32 dd_topfour_set_gpio_function(DdTopfour *self, DdTop_GPIO_PORT port, UCHAR function );
-
-/**
-Get the functionality of a selectable GPIO port.<br>
-It is get from the EPCR(External Port Control Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [out] function	Function type.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_FUNC_GPIO
-							  <li>1:@ref DdToptwo_GPIO_FUNC_HWMODE
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Input parameter error.
-*/
-INT32 dd_topfour_get_gpio_function(DdTopfour *self, DdTop_GPIO_PORT port, UCHAR* function );
-
-/**
-Set the direction of a selectable GPIO port.<br>
-It is set to the DDR(Data Direction Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [in]  direction	Direction type.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_DIR_IN
-							  <li>1:@ref DdToptwo_GPIO_DIR_OUT
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
-*/
-INT32 dd_topthree_set_gpio_direction(DdTopthree *self, DdTop_GPIO_PORT port, UCHAR direction );
-
-/**
-Get the direction of a selectable GPIO port.<br>
-It is get from the DDR(Data Direction Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [out] direction	Direction type.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_DIR_IN
-							  <li>1:@ref DdToptwo_GPIO_DIR_OUT
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
-*/
-INT32 dd_topfour_get_gpio_direction(DdTopfour *self, DdTop_GPIO_PORT port, UCHAR* direction );
-
-/**
-Set the state of a selectable GPIO port.<br>
-It is set to the PDR(Port Data Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [in]  status		Port status.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_STATUS_LOW
-							  <li>1:@ref DdToptwo_GPIO_STATUS_HIGH
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
-*/
-INT32 dd_toptwo_set_gpio_status(DdTopfour *self, DdTop_GPIO_PORT port, UCHAR status );
-
-/**
-Get the state of a selectable GPIO port.<br>
-It is get from the PDR(Port Data Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_PORT
-@param [out] status		Port status.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_STATUS_LOW
-							  <li>1:@ref DdToptwo_GPIO_STATUS_HIGH
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
-*/
-INT32 dd_topfour_get_gpio_status(DdTopfour *self, DdTop_GPIO_PORT port, UCHAR* status );
-
-#if 1    // special key control
-INT32 dd_toptwo_set_gpio_cm0_function(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR function );
-INT32 dd_toptwo_get_gpio_cm0_function(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* function );
-INT32 dd_toptwo_set_gpio_cm0_direction(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR direction );
-INT32 dd_toptwo_get_gpio_cm0_direction(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* direction );
-INT32 dd_toptwo_set_gpio_cm0_pull_up_down_enable(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR enable );
-INT32 dd_toptwo_get_gpio_cm0_pull_up_down_enable(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* enable );
-INT32 dd_toptwo_set_gpio_cm0_pull_up_down_ctrl(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR control );
-INT32 dd_toptwo_get_gpio_cm0_pull_up_down_ctrl(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* control );
-INT32 dd_toptwo_set_gpio_cm0_status(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR status );
-/**
-Get the state of a selectable GPIO CM0 port.<br>
-It is get from the PDR(Port Data Register) value.
-@param [in]  port		Port name. See @ref DdTop_GPIO_CM0_PORT
-@param [out] status		Port status.
-						  <ul>
-							  <li>0:@ref DdToptwo_GPIO_STATUS_LOW
-							  <li>1:@ref DdToptwo_GPIO_STATUS_HIGH
-						  </ul>
-@retval D_DDIM_OK					Success.
-@retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
-*/
-INT32 dd_toptwo_get_gpio_cm0_status(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UCHAR* status );
-#endif
+ULONG dd_top_get_aud_pll(DdTop *self);
 
 /**
 Set the Pull-up/down enable state of a selectable GPIO port.<br>
@@ -1083,7 +393,7 @@ It is get from the PUDCR(Pull-up/down Control Register) value.
 @retval D_DDIM_OK					Success.
 @retval DdTopone_INPUT_PARAM_ERROR	Error occurred.
 */
-INT32 dd_top_get_gpio_pull_up_down_ctrl( DdTop *selfm, DdTop_GPIO_PORT port, UCHAR* control );
+INT32 dd_top_get_gpio_pull_up_down_ctrl(DdTop *self, DdTop_GPIO_PORT port, UCHAR* control );
 
 #ifdef __cplusplus
 }

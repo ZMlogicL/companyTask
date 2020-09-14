@@ -63,8 +63,8 @@
 #include "ctddaudiofifo1.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioFifo1, ct_dd_audio_fifo1);
-#define CT_DD_AUDIO_FIFO1_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdAudioFifo1Private,CT_TYPE_DD_AUDIO_FIFO1))
+G_DEFINE_TYPE(CtDdAudioFifo1, ct_dd_audio_fifo1, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_FIFO1_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_FIFO1, CtDdAudioFifo1Private))
 
 struct _CtDdAudioFifo1Private
 {
@@ -72,18 +72,36 @@ struct _CtDdAudioFifo1Private
 /*
  * DECLS
  */
-static void ct_dd_audio_fifo1_constructor(CtDdAudioFifo1 *self);
-static void ct_dd_audio_fifo1_destructor(CtDdAudioFifo1 *self);
-
+static void ct_dd_audio_fifo1_class_init(CtDdAudioFifo1Class *klass);
+static void ct_dd_audio_fifo1_init(CtDdAudioFifo1 *self);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 /*
  * IMPL
  */
-static void ct_dd_audio_fifo1_constructor(CtDdAudioFifo1 *self) 
+static void ct_dd_audio_fifo1_class_init(CtDdAudioFifo1Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioFifo1Private));
 }
 
-static void ct_dd_audio_fifo1_destructor(CtDdAudioFifo1 *self) 
+static void ct_dd_audio_fifo1_init(CtDdAudioFifo1 *self)
 {
+	CtDdAudioFifo1Private *priv = CT_DD_AUDIO_FIFO1_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioFifo1 *self = (CtDdAudioFifo1*)object;
+	CtDdAudioFifo1Private *priv = CT_DD_AUDIO_FIFO1_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioFifo1 *self = (CtDdAudioFifo1*)object;
+	CtDdAudioFifo1Private *priv = CT_DD_AUDIO_FIFO1_GET_PRIVATE(self);
 }
 /*
  * PUBLIC
@@ -870,7 +888,7 @@ void ct_dd_audio_fifo1_monitor_play0_slave(CtDdAudioFifo1 *self)
 
 CtDdAudioFifo1 *ct_dd_audio_fifo1_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioFifo1 *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_FIFO1, sizeof(CtDdAudioFifo1Private));
+    CtDdAudioFifo1 *self = g_object_new(CT_TYPE_DD_AUDIO_FIFO1, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

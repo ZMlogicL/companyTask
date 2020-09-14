@@ -1,7 +1,7 @@
 1.osd_general.c修改为类osdgeneral
 (1)移动osd_general.h到cpu_tkernel/basefw/fj/disp/src/osdgeneral.h
 
-公有函数名修改
+公有函数名修改(加参数　OsdGeneral* self)
 (2)BF_Osd_General_Strnicmp　修改为osd_general_bf_osd_general_strnicmp
 (3)BF_Osd_General_Fill_Box 修改为 osd_general_bf_osd_general_fill_box
 (4)BF_Osd_General_Fill_Box_For_GR 修改为osd_general_bf_osd_general_fill_box_for_gr　
@@ -63,25 +63,22 @@
 
 
 枚举名与枚举变量
-(1) D_BF_OSD_GENERAL_YCC 修改为 OsdGeneral_DBfOsdGeneralYcc
-D_BF_OSD_GENERAL_YCC_Y 修改为 D_BF_OSD_GENERAL_YCC_Y
+(1) D_BF_OSD_GENERAL_YCC 修改为 DBfOsdGeneralYcc
+D_BF_OSD_GENERAL_YCC_Y 修改为 OsdGeneral_D_BF_OSD_GENERAL_YCC_Y
 D_BF_OSD_GENERAL_YCC_CB 修改为 OsdGeneral_D_BF_OSD_GENERAL_YCC_CB
-
-
 D_BF_OSD_GENERAL_YCC_CR 修改为 OsdGeneral_D_BF_OSD_GENERAL_YCC_CR
 D_BF_OSD_GENERAL_YCC_END 修改为OsdGeneral_D_BF_OSD_GENERAL_YCC_END
 
 
 
-(2) D_BF_OSD_GENERAL_RGBA 修改为 OsdGeneral_DBfOsdGeneralRgba
-
+(2) D_BF_OSD_GENERAL_RGBA 修改为 DBfOsdGeneralRgba
 D_BF_OSD_GENERAL_RGBA_R 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_R
 D_BF_OSD_GENERAL_RGBA_G 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_G
 D_BF_OSD_GENERAL_RGBA_B 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_B
 D_BF_OSD_GENERAL_RGBA_A 修改为 OsdGeneral_D_BF_OSD_GENERAL_RGBA_A
 D_BF_OSD_GENERAL_RGBA_END  修改为OsdGeneral_D_BF_OSD_GENERAL_RGBA_END
 
-(3) E_BF_OSD_GENERAL_RGBA_MASK 修改为 OsdGeneral_EBfOsdGeneralRgbaMask
+(3) E_BF_OSD_GENERAL_RGBA_MASK 修改为 EBfOsdGeneralRgbaMask
 
 E_BF_OSD_GENERAL_RGBA_MASK_A  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_A
 E_BF_OSD_GENERAL_RGBA_MASK_B  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_B
@@ -90,29 +87,23 @@ E_BF_OSD_GENERAL_RGBA_MASK_R 修改为
 OsdGeneral_E_BF_OSD_GENERAL_RGBA_MASK_R
 
 
-(4) E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT   修改为OsdGeneral_EBfOsdGeneralRgbaRightShift
-
+(4) E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT   修改为EBfOsdGeneralRgbaRightShift
 E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_B  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_B
 E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_G  修改为
 OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_G
 E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_R  修改为OsdGeneral_E_BF_OSD_GENERAL_RGBA_RIGHT_SHIFT_R
 
-
-
-(5) E_BF_OSD_GENERAL_CLK 修改为 OsdGeneral_EBfOsdGeneralClk
-
+(5) E_BF_OSD_GENERAL_CLK 修改为 EBfOsdGeneralClk
 E_BF_OSD_GENERAL_CLK_ON 修改为 OsdGeneral_E_BF_OSD_GENERAL_CLK_ON
 E_BF_OSD_GENERAL_CLK_OFF 修改为 OsdGeneral_E_BF_OSD_GENERAL_CLK_OFF
 
 
 
 (6) E_BF_OSD_GENERAL_CLK_SEL 修改为 OsdGeneral_EBfOsdGeneralClkSel
-
 E_BF_OSD_GENERAL_CLK_SEL_594  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_594
 E_BF_OSD_GENERAL_CLK_SEL_297  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_297
 E_BF_OSD_GENERAL_CLK_SEL_148_5 修改为
 OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_148_5
-
 
 E_BF_OSD_GENERAL_CLK_SEL_74_25  修改为OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_74_25
 E_BF_OSD_GENERAL_CLK_SEL_27 修改为
@@ -124,7 +115,7 @@ OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_27
 
 2． osd_histogram_comm.c 修改为类 osdhistogramcomm
 
-公有函数修改
+公有函数修改(参数加　OsdHistogramComm* self)
 (1) 移动osd_histogram_comm.h到　cpu_tkernel/basefw/fj/disp/src/osdhistogramcomm.h
 (2) BF_Osd_Histogram_Comm_Set_Histogram　　修改为osd_histogram_comm_bf_osd_histogram_comm_set_histogram
 (3) BF_Osd_Histogram_Comm_Draw_Histogram_Box　修改为　osd_histogram_comm_bf_osd_histogram_comm_draw_histogram
@@ -146,13 +137,13 @@ OsdGeneral_E_BF_OSD_GENERAL_CLK_SEL_27
 
 
 结构体
-(1) T_BF_OSD_HISTOGRAM_COMM_HIST_DRAW_INFO  TBfOsdHistogramCommHistDrawInfo
+(1) T_BF_OSD_HISTOGRAM_COMM_HIST_DRAW_INFO  BfOsdHistogramCommHistDrawInfo
 
 write_address  writeAddress
 draw_rect  drawRect
 
 (2)T_BF_OSD_HISTOGRAM_COMM_HIST_ATTR
-TBfOsdHistogramCommHistAttr
+BfOsdHistogramCommHistAttr
 
 out_pos_x   outPosX
 out_pos_y   outPosY
@@ -184,7 +175,7 @@ gBF_Osd_Histogram_Comm_HDMI_Hist_Attr
 
 
 
-4. osd_icon_cache.c 修改为类　osdiconcache（原.h也删，公用函数改完）
+4. osd_icon_cache.c 修改为类　osdiconcache（原.h也删，公用函数改完，加参数OsdIcon* self, ）
 (1) 移动osd_icon_cache.h　到　cpu_tkernel/basefw/fj/disp/src/osdiconcache.h
 (2) 修改宏名M_MBA_PRINTF　为　OsdIconCache_M_MBA_PRINTF
 (3) BF_Osd_Icon_Cache_Clear_Nodes　　修改为osd_icon_cache_bf_osd_icon_cache_clear_nodes
@@ -367,7 +358,7 @@ gBF_Osd_Histogram_Comm_HDMI_Hist_Attr
 
 
 枚举(枚举变量全是加类名　OsdIconComm_)
-(1) E_BF_OSD_ICON_COMM_ICON_FMT  修改为 OsdIconComm_EBfOsdIconCommIconFmt
+(1) E_BF_OSD_ICON_COMM_ICON_FMT  修改为 EBfOsdIconCommIconFmt
 
 E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON
 E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_1bit
@@ -377,13 +368,13 @@ E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_8bit
 E_BF_OSD_ICON_COMM_ICON_FMT_VGR_ICON_16bit
 
 
-(2) E_BF_OSD_ICON_COMM_ICON_SIZE  修改为  OsdIconComm_EBfOsdIconCommIconSize
+(2) E_BF_OSD_ICON_COMM_ICON_SIZE  修改为  EBfOsdIconCommIconSize
 
 E_BF_OSD_ICON_COMM_ICON_SIZE_WIDTH
 E_BF_OSD_ICON_COMM_ICON_SIZE_LINES
 E_BF_OSD_ICON_COMM_ICON_SIZE_END
 
-(3) E_BF_OSD_ICON_COMM_ICON_FORMAT  修改为  OsdIconComm_EBfOsdIconCommIconFormat
+(3) E_BF_OSD_ICON_COMM_ICON_FORMAT  修改为  EBfOsdIconCommIconFormat
 
 E_BF_OSD_ICON_COMM_ICON_FORMAT_RGBA
 E_BF_OSD_ICON_COMM_ICON_FORMAT_16BIT
@@ -393,7 +384,7 @@ E_BF_OSD_ICON_COMM_ICON_FORMAT_2BIT
 E_BF_OSD_ICON_COMM_ICON_FORMAT_1BIT
 E_BF_OSD_ICON_COMM_ICON_FORMAT_NON
 
-(4) E_BF_OSD_ICON_COMM_COMPRESS_FORMAT 修改为  OsdIconComm_EBfOsdIconCommCompressFormat
+(4) E_BF_OSD_ICON_COMM_COMPRESS_FORMAT 修改为  EBfOsdIconCommCompressFormat
 
 E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_NONE
 E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_LZW
@@ -401,7 +392,7 @@ E_BF_OSD_ICON_COMM_COMPRESS_FORMAT_OTHER
 
 
 结构体
-(1) T_BF_OSD_ICON_COMM_ICON_INFO 修改为 TBfOsdIconCommIconInfo
+(1) T_BF_OSD_ICON_COMM_ICON_INFO 修改为 BfOsdIconCommIconInfo
 
 mWidth_Height  mWidthHeight
 icon_format  iconFormat
@@ -418,23 +409,23 @@ short_data  shortData
 (4) T_BF_OSD_ICON_COMM_ICON_FILE_FMT 修改为 TBfOsdIconCommIconFileFmt
 
 mIcon_offset  mIconOffset
-(5) T_BF_OSD_ICON_COMM_STRING_INFO  修改为  TBfOsdIconCommIconStringInfo
+(5) T_BF_OSD_ICON_COMM_STRING_INFO  修改为  BfOsdIconCommIconStringInfo
 
 Icon_id_num  iconIdNum
 icon_id_list_ptr  iconIdListPtr
 
-(6) T_BF_OSD_ICON_COMM_PARAMETER4CACHE  修改为 TBfOsdIconCommParameter4cache
+(6) T_BF_OSD_ICON_COMM_PARAMETER4CACHE  修改为 BfOsdIconCommParameter4cache
 
 IconKind_id  iconKindId
 compressed_size  compressedSize
 uncompressed_size  uncompressedSize
 Compress_Format_Icon_num  compressFormatIconNum
 
-(7) T_BF_OSD_ICON_COMM_STRING_FILE_FMT  修改为 TBfOsdIconCommStringFileFmt
+(7) T_BF_OSD_ICON_COMM_STRING_FILE_FMT  修改为 BfOsdIconCommStringFileFmt
 
 string_data_offset  stringDataOffset
 
-(8) T_BF_OSD_ICON_COMM_DRAW_ICON_INFO  修改为 TBfOsdIconCommDrawIconInfo
+(8) T_BF_OSD_ICON_COMM_DRAW_ICON_INFO  修改为 BfOsdIconCommDrawIconInfo
 
 string_iocn_pos  stringIocnPos
 icon_data  iconData
@@ -461,7 +452,7 @@ start_pos_is_odd  startPosIsOdd
 (2) 公有函数BF_Osd_Image_Comm_Draw_Jpeg_To_HD、BF_Osd_Drawfile在汇编中调用，没有改名
 
 枚举(枚举变量名加类名前缀　OsdImageComm_)
-(1) E_BF_OSD_IMAGE_COMM_FILE_KIND  修改为OsdImageComm_EBfOsdImageCommFileKind
+(1) E_BF_OSD_IMAGE_COMM_FILE_KIND  修改为EBfOsdImageCommFileKind
 
 	E_BF_OSD_IMAGE_COMM_FILE_KIND_PHOTFRAME 
 	E_BF_OSD_IMAGE_COMM_FILE_KIND_JPEG,				E_BF_OSD_IMAGE_COMM_FILE_KIND_ERROR
@@ -494,9 +485,9 @@ Osdshapecomm１里面
 
 
 枚举(枚举变量名加类名前缀　OsdShapeComm1_)
-(1) E_BF_OSD_SHAPE_COMM_SHAPE_PARTS  OsdShapeComm1_EBfOsdShapeCommShapeParts
+(1) E_BF_OSD_SHAPE_COMM_SHAPE_PARTS  EBfOsdShapeCommShapeParts
 	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_OUTLINE 	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_BODY	E_BF_OSD_SHAPE_COMM_SHAPE_PARTS_END
-(2) E_BF_OSD_SHAPE_COMM_ROUND_POS  OsdShapeComm1_EBfOsdShapeCommRoundPos
+(2) E_BF_OSD_SHAPE_COMM_ROUND_POS  EBfOsdShapeCommRoundPos
 
 	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_RIGHT_TOP	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_LEFT_TOP
 	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_LEFT_BOTTOM	E_BF_OSD_SHAPE_COMM_ROUND_POS_CIRCLE_RIGHT_BOTTOM
@@ -505,12 +496,12 @@ Osdshapecomm１里面
 	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_TOP_BODY	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_CENCER
 	E_BF_OSD_SHAPE_COMM_ROUND_POS_RECT_BOTTOM_BODY	E_BF_OSD_SHAPE_COMM_ROUND_POS_END
 
-(3) E_BF_OSD_SHAPE_COMM_QUADRANT  OsdShapeComm1_EBfOsdShapeCommQuadrant
+(3) E_BF_OSD_SHAPE_COMM_QUADRANT  EBfOsdShapeCommQuadrant
 
 	E_BF_OSD_SHAPE_COMM_QUADRANT_ONE	E_BF_OSD_SHAPE_COMM_QUADRANT_TWO	E_BF_OSD_SHAPE_COMM_QUADRANT_THREE
 	E_BF_OSD_SHAPE_COMM_QUADRANT_FOUR	E_BF_OSD_SHAPE_COMM_QUADRANT_ALL	
 
-(4) E_BF_OSD_SHAPE_COMM_DIV_RECT  OsdShapeComm1_EBfOsdShapeCommDivRect
+(4) E_BF_OSD_SHAPE_COMM_DIV_RECT  EBfOsdShapeCommDivRect
 
 	E_BF_OSD_SHAPE_COMM_DIV_RECT_CENTER
 	E_BF_OSD_SHAPE_COMM_DIV_RECT_LEFT
@@ -518,23 +509,23 @@ Osdshapecomm１里面
 	E_BF_OSD_SHAPE_COMM_DIV_RECT_TOP	E_BF_OSD_SHAPE_COMM_DIV_RECT_BOTTOM
 	E_BF_OSD_SHAPE_COMM_DIV_RECT_END
 
-(5) E_BF_OSD_SHAPE_COMM_DIV_DONUT_RECT  OsdShapeComm1_EBfOsdShapeCommDivDonutRect
+(5) E_BF_OSD_SHAPE_COMM_DIV_DONUT_RECT  EBfOsdShapeCommDivDonutRect
 
 
 结构体
-(1) T_BF_OSD_SHAPE_COMM_SHAPE_INFO  TBfOsdShapeCommShapeInfo	
-(2) T_BF_OSD_SHAPE_COMM_COLOR_SHAPE_INFO  TBfOsdShapeCommColorShapeInfo
+(1) T_BF_OSD_SHAPE_COMM_SHAPE_INFO  BfOsdShapeCommShapeInfo	
+(2) T_BF_OSD_SHAPE_COMM_COLOR_SHAPE_INFO  BfOsdShapeCommColorShapeInfo
 rect_data rectData
 Color_Blending  colorBlending
 
-(3) T_BF_OSD_SHAPE_COMM_RING  TBfOsdShapeCommRing
+(3) T_BF_OSD_SHAPE_COMM_RING  BfOsdShapeCommRing
 
 	Circle_Start1  circleStart1
 	Circle_End1  circleEnd1
 Circle_Start2  circleStart2
 	Circle_End2  circleEnd2
 
-(4) T_BF_OSD_SHAPE_COMM_ROUND_CORNER  TBfOsdShapeCommRoundCurner
+(4) T_BF_OSD_SHAPE_COMM_ROUND_CORNER  BfOsdShapeCommRoundCurner
 
 
 round_corner_data  roundCornerData
@@ -708,29 +699,29 @@ dcf_if_assert　　　　DcfIf1_DCF_IF_ASSERT
 dcf_if_bf_dcf_if_assert　　　	DcfIf1_DCF_IF_BF_DCF_IF_ASSERT
 
 枚举变量全部加类名前缀（DcfIf1_），下面是枚举名修改
-(1) E_BF_DCF_IF_EXPOSURE  DcfIf1_EBfDcfIfExposure
-(2) E_BF_DCF_IF_METERING  DcfIf1_EBfDcfIfMetering
-(3) E_BF_DCF_IF_WB  DcfIf1_EBfDcfIfWb
-(4) E_BF_DCF_IF_SCENE  DcfIf1_EBfDcfIfScene
-(5) E_BF_DCF_IF_FILE_TYPE  DcfIf1_EBfDcfIfFileType
-(6) E_BF_DCF_IF_FILE_INDEX_TYPE  DcfIf1_EBfDcfIfFileIndexType
+(1) E_BF_DCF_IF_EXPOSURE  EBfDcfIfExposure
+(2) E_BF_DCF_IF_METERING  EBfDcfIfMetering
+(3) E_BF_DCF_IF_WB  EBfDcfIfWb
+(4) E_BF_DCF_IF_SCENE  EBfDcfIfScene
+(5) E_BF_DCF_IF_FILE_TYPE  EBfDcfIfFileType
+(6) E_BF_DCF_IF_FILE_INDEX_TYPE  EBfDcfIfFileIndexType
 (7) E_BF_DCF_IF_ATTR  DcfIf1_EBfDcfIfAttr
-(8) E_BF_DCF_IF_DUPLICATION_STATUS  DcfIf1_EBfDcfIfDuplicationStatus
-(9) E_BF_DCF_IF_OPTION_FILE  DcfIf1_EBfDcfIfOptionFile
-(10) E_BF_DCF_IF_ROTATE  DcfIf1_EBfDcfIfRotate
-(11) E_BF_DCF_IF_DPOF_SET  DcfIf1_EBfDcfIfDpofSet
-(12) E_BF_DCF_IF_DPOF_INDEX  DcfIf1_EBfDcfIfDpofIndex
-(13) E_BF_DCF_IF_DPOF_SIZE  DcfIf1_EBfDcfIfDpofSize
-(14) E_BF_DCF_IF_JPEG_FORMAT  DcfIf1_EBfDcfIfJpegFormat
-(15) E_BF_DCF_IF_REMOVE_FLG  DcfIf1_EBfDcfIfRemoveFlg
-(16) E_BF_DCF_IF_FILE_NAME  DcfIf1_EBfDcfIfFileName
-(17) E_BF_DCF_IF_QT_TYPE  DcfIf1_EBfDcfIfQtType
-(18) E_BF_DCF_IF_LATEST_TYPE  DcfIf1_EBfDcfIfLatestType
-(19) E_BF_DCF_IF_CREATE  DcfIf1_EBfDcfIfCreate
-(20) E_BF_DCF_IF_UPDATE_KIND  DcfIf1_EBfDcfIfUpdateKind
-(21) E_BF_DCF_IF_MPF_EXT_MP_SELECT  DcfIf1_EBfDcfIfMpfExtMpSelect
-(22) E_BF_DCF_IF_APP11_FLG  DcfIf1_EBfDcfIfApp11Flg
-(23) E_BF_DCF_IF_DATA_TYPE  DcfIf1_EBfDcfIfDataType
+(8) E_BF_DCF_IF_DUPLICATION_STATUS  EBfDcfIfDuplicationStatus
+(9) E_BF_DCF_IF_OPTION_FILE  EBfDcfIfOptionFile
+(10) E_BF_DCF_IF_ROTATE  EBfDcfIfRotate
+(11) E_BF_DCF_IF_DPOF_SET  EBfDcfIfDpofSet
+(12) E_BF_DCF_IF_DPOF_INDEX  EBfDcfIfDpofIndex
+(13) E_BF_DCF_IF_DPOF_SIZE  EBfDcfIfDpofSize
+(14) E_BF_DCF_IF_JPEG_FORMAT  EBfDcfIfJpegFormat
+(15) E_BF_DCF_IF_REMOVE_FLG  EBfDcfIfRemoveFlg
+(16) E_BF_DCF_IF_FILE_NAME  EBfDcfIfFileName
+(17) E_BF_DCF_IF_QT_TYPE  EBfDcfIfQtType
+(18) E_BF_DCF_IF_LATEST_TYPE  EBfDcfIfLatestType
+(19) E_BF_DCF_IF_CREATE  EBfDcfIfCreate
+(20) E_BF_DCF_IF_UPDATE_KIND  EBfDcfIfUpdateKind
+(21) E_BF_DCF_IF_MPF_EXT_MP_SELECT  EBfDcfIfMpfExtMpSelect
+(22) E_BF_DCF_IF_APP11_FLG  EBfDcfIfApp11Flg
+(23) E_BF_DCF_IF_DATA_TYPE  EBfDcfIfDataType
 
 
 
@@ -1035,6 +1026,10 @@ filter_attr   filterAttr
 (62) T_BF_DCF_IF_UPDATE_FILTER_ATTR  BfDcfIfUpdateFilterAttr
 
 DateIndex   dateIndex
+
+
+回调函数命名
+DCF_ENTRY　　　DcfEntryFunc
 
 
 

@@ -1,7 +1,7 @@
 /*
  *ctimdisp4.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-02
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -9,6 +9,10 @@
  *设计的主要功能:
  *@version: 
  */
+
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -23,39 +27,49 @@
 #include "ctimdisp3.h"
 #include "ctimdisp4.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp4, ct_im_disp4, K_TYPE_OBJECT)
-#define CT_IM_DISP4_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp4Private, CT_TYPE_IM_DISP4))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp4, ct_im_disp4, G_TYPE_OBJECT);
 
-/*----------------------------------------------------------------------*/
-/* Definition															*/
-/*----------------------------------------------------------------------*/
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP4_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP4, CtImDisp4Private))
 
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp4Private
 {
-	kpointer qwertyu;
 	T_IM_DISP_CTRL_OUTPUT gLcdDispTblOutctrl[CtImDisp4_LCD_DISP_SEL_END];
-	kuint32 rAntiTblA[32/2];//2m
-	kuint32 gAntiTblA[32/2];//2m
-	kuint32 bAntiTblA[32/2];//2m
-	kushort rGammaOutTblA[33];//2m
-	kushort gGammaOutTblA[33];//2m
-	kushort bGammaOutTblA[33];//2m
-	kushort rGammaOutTblB[33];//2m
-	kushort gGammaOutTblB[33];//2m
-	kushort bGammaOutTblB[33];//2m
-	kuint32 rFullTbl[32/2];//2m
-	kuint32 gFullTbl[32/2];//2m
-	kuint32 bFullTbl[32/2];//2m
-	kushort luminanceTblA[33];//2m
-	kushort luminanceTblB[33];//2m
-	kushort gainTblA[33];//2n
-	kushort gainTblB[33];//2n
+	guint32 rAntiTblA[32/2];//2m
+	guint32 gAntiTblA[32/2];//2m
+	guint32 bAntiTblA[32/2];//2m
+	gushort rGammaOutTblA[33];//2m
+	gushort gGammaOutTblA[33];//2m
+	gushort bGammaOutTblA[33];//2m
+	gushort rGammaOutTblB[33];//2m
+	gushort gGammaOutTblB[33];//2m
+	gushort bGammaOutTblB[33];//2m
+	guint32 rFullTbl[32/2];//2m
+	guint32 gFullTbl[32/2];//2m
+	guint32 bFullTbl[32/2];//2m
+	gushort luminanceTblA[33];//2m
+	gushort luminanceTblB[33];//2m
+	gushort gainTblA[33];//2n
+	gushort gainTblB[33];//2n
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
-
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 static void initAntiTabl(CtImDisp4 *self);
 static void initGammaOutTabl(CtImDisp4 *self);
 static void initFullTabl(CtImDisp4 *self);
@@ -65,7 +79,15 @@ static void initGainTabl(CtImDisp4 *self);
 /*
  * IMPL
  * */
-static void ct_im_disp4_constructor(CtImDisp4 *self)
+static void ct_im_disp4_class_init(CtImDisp4Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp4Private));
+}
+
+static void ct_im_disp4_init(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = CT_IM_DISP4_GET_PRIVATE(self);
 	self->privCtImDisp4 = priv;
@@ -77,8 +99,29 @@ static void ct_im_disp4_constructor(CtImDisp4 *self)
 	initGainTabl(self);
 }
 
-static void ct_im_disp4_destructor(CtImDisp4 *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp4 *self = CT_IM_DISP4(object);
+//	CtImDisp4Private *priv = CT_IM_DISP4_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp4_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImDisp4 *self = CT_IM_DISP4(object);
+//	CtImDisp4Private *priv = CT_IM_DISP4_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp4_parent_class)->finalize(object);
 }
 
 static void initAntiTabl(CtImDisp4 *self)
@@ -86,9 +129,9 @@ static void initAntiTabl(CtImDisp4 *self)
 	CtImDisp4Private *priv = self->privCtImDisp4;
 
 	// Pointer of R data anti gamma table A.<br>
-	//	Please specify the address of the array of kushort[32].<br>
+	//	Please specify the address of the array of gushort[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 rAntiTblA[32/2] = {
+	guint32 rAntiTblA[32/2] = {
 		DISP_TBL_REVERSE_IGTBLR0	,
 		DISP_TBL_REVERSE_IGTBLR1	,
 		DISP_TBL_REVERSE_IGTBLR2	,
@@ -108,9 +151,9 @@ static void initAntiTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of G data anti gamma table A.<br>
-	//	Please specify the address of the array of kushort[32].<br>
+	//	Please specify the address of the array of gushort[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 gAntiTblA[32/2] = {
+	guint32 gAntiTblA[32/2] = {
 		DISP_TBL_REVERSE_IGTBLG0	,
 		DISP_TBL_REVERSE_IGTBLG1	,
 		DISP_TBL_REVERSE_IGTBLG2	,
@@ -130,9 +173,9 @@ static void initAntiTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of B data anti gamma table A.<br>
-	//	Please specify the address of the array of kushort[32].<br>
+	//	Please specify the address of the array of gushort[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 bAntiTblA[32/2] = {
+	guint32 bAntiTblA[32/2] = {
 		DISP_TBL_REVERSE_IGTBLB0	,
 		DISP_TBL_REVERSE_IGTBLB1	,
 		DISP_TBL_REVERSE_IGTBLB2	,
@@ -161,9 +204,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 	CtImDisp4Private *priv = self->privCtImDisp4;
 
 	// Pointer of R data gamma out table A.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort rGammaOutTblA[33] = {
+	gushort rGammaOutTblA[33] = {
 		DISP_TBL_REVERSE_GTBLAR0,
 		DISP_TBL_REVERSE_GTBLAR1,
 		DISP_TBL_REVERSE_GTBLAR2,
@@ -200,9 +243,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of G data gamma out table A.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort gGammaOutTblA[33] = {
+	gushort gGammaOutTblA[33] = {
 		DISP_TBL_REVERSE_GTBLAG0	,
 		DISP_TBL_REVERSE_GTBLAG1	,
 		DISP_TBL_REVERSE_GTBLAG2	,
@@ -239,9 +282,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of B data gamma out table A.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort bGammaOutTblA[33] = {
+	gushort bGammaOutTblA[33] = {
 		DISP_TBL_REVERSE_GTBLAB0	,
 		DISP_TBL_REVERSE_GTBLAB1	,
 		DISP_TBL_REVERSE_GTBLAB2	,
@@ -279,9 +322,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 
 
 	// Pointer of R data gamma out table B.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort rGammaOutTblB[33] = {
+	gushort rGammaOutTblB[33] = {
 		DISP_TBL_REVERSE_GTBLBR0	,
 		DISP_TBL_REVERSE_GTBLBR1	,
 		DISP_TBL_REVERSE_GTBLBR2	,
@@ -318,9 +361,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of G data gamma out table B.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort gGammaOutTblB[33] = {
+	gushort gGammaOutTblB[33] = {
 		DISP_TBL_REVERSE_GTBLBG0	,
 		DISP_TBL_REVERSE_GTBLBG1	,
 		DISP_TBL_REVERSE_GTBLBG2	,
@@ -357,9 +400,9 @@ static void initGammaOutTabl(CtImDisp4 *self)
 	};
 
 	// Pointer of B data gamma out table B.<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort bGammaOutTblB[33] = {
+	gushort bGammaOutTblB[33] = {
 		DISP_TBL_REVERSE_GTBLBB0	,
 		DISP_TBL_REVERSE_GTBLBB1	,
 		DISP_TBL_REVERSE_GTBLBB2	,
@@ -411,7 +454,7 @@ static void initFullTabl(CtImDisp4 *self)
 	// Pointer of R data gamma table (Full bit)<br>
 	//	Please specify the address of the array of USHORT[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 rFullTbl[32 / 2] = {
+	guint32 rFullTbl[32 / 2] = {
 		DISP_TBL_DGTBLFR0,
 		DISP_TBL_DGTBLFR1,
 		DISP_TBL_DGTBLFR2,
@@ -433,7 +476,7 @@ static void initFullTabl(CtImDisp4 *self)
 	// Pointer of G data gamma table (Full bit)<br>
 	//	Please specify the address of the array of USHORT[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 gFullTbl[32 / 2] = {
+	guint32 gFullTbl[32 / 2] = {
 		DISP_TBL_DGTBLFG0,
 		DISP_TBL_DGTBLFG1,
 		DISP_TBL_DGTBLFG2,
@@ -455,7 +498,7 @@ static void initFullTabl(CtImDisp4 *self)
 	// Pointer of B data gamma table (Full bit)<br>
 	//	Please specify the address of the array of USHORT[32].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kuint32 bFullTbl[32 / 2] = {
+	guint32 bFullTbl[32 / 2] = {
 		DISP_TBL_DGTBLFB0,
 		DISP_TBL_DGTBLFB1,
 		DISP_TBL_DGTBLFB2,
@@ -484,9 +527,9 @@ static void initLuminanceTbl(CtImDisp4 *self)
 	CtImDisp4Private *priv = self->privCtImDisp4;
 
 	// Pointer of Luminance correction data table A (Full bit)<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort luminanceTblA[33] = {
+	gushort luminanceTblA[33] = {
 		DISP_TBL_REVERSE_YSTBLA0		,
 		DISP_TBL_REVERSE_YSTBLA1		,
 		DISP_TBL_REVERSE_YSTBLA2		,
@@ -523,9 +566,9 @@ static void initLuminanceTbl(CtImDisp4 *self)
 	};
 
 	// Pointer of Luminance correction data table B (Full bit)<br>
-	//	Please specify the address of the array of kushort[33].<br>
+	//	Please specify the address of the array of gushort[33].<br>
 	//	If NULL is specified, this setting is skipped.<br>
-	kushort luminanceTblB[33] = {
+	gushort luminanceTblB[33] = {
 		DISP_TBL_REVERSE_YSTBLB0		,
 		DISP_TBL_REVERSE_YSTBLB1		,
 		DISP_TBL_REVERSE_YSTBLB2		,
@@ -569,7 +612,7 @@ static void initGainTabl(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 
-	kushort gainTblA[33] = {
+	gushort gainTblA[33] = {
 		DISP_TBL_REVERSE_YSTBLACG0	,
 		DISP_TBL_REVERSE_YSTBLACG1	,
 		DISP_TBL_REVERSE_YSTBLACG2	,
@@ -605,7 +648,7 @@ static void initGainTabl(CtImDisp4 *self)
 		DISP_TBL_REVERSE_YSTBLACG32
 	};
 
-	kushort gainTblB[33] = {
+	gushort gainTblB[33] = {
 		DISP_TBL_REVERSE_YSTBLBCG0	,
 		DISP_TBL_REVERSE_YSTBLBCG1	,
 		DISP_TBL_REVERSE_YSTBLBCG2	,
@@ -649,97 +692,97 @@ static void initGainTabl(CtImDisp4 *self)
  * PUBLIC
  * */
 
-kuint32 *ct_im_disp4_get_r_anti_tbla(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_r_anti_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->rAntiTblA;
 }
 
-kuint32 *ct_im_disp4_get_g_anti_tbla(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_g_anti_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gAntiTblA;
 }
 
-kuint32 *ct_im_disp4_get_b_anti_tbla(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_b_anti_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->bAntiTblA;
 }
 
-kushort *ct_im_disp4_get_r_gamma_out_tbla(CtImDisp4 *self)
+gushort *ct_im_disp4_get_r_gamma_out_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->rGammaOutTblA;
 }
 
-kushort *ct_im_disp4_get_g_gamma_out_tbla(CtImDisp4 *self)
+gushort *ct_im_disp4_get_g_gamma_out_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gGammaOutTblA;
 }
 
-kushort *ct_im_disp4_get_b_gamma_out_tbla(CtImDisp4 *self)
+gushort *ct_im_disp4_get_b_gamma_out_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->bGammaOutTblA;
 }
 
-kushort *ct_im_disp4_get_r_gamma_out_tblb(CtImDisp4 *self)
+gushort *ct_im_disp4_get_r_gamma_out_tblb(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->rGammaOutTblB;
 }
 
-kushort *ct_im_disp4_get_g_gamma_out_tblb(CtImDisp4 *self)
+gushort *ct_im_disp4_get_g_gamma_out_tblb(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gGammaOutTblB;
 }
 
-kushort *ct_im_disp4_get_b_gamma_out_tblb(CtImDisp4 *self)
+gushort *ct_im_disp4_get_b_gamma_out_tblb(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->bGammaOutTblB;
 }
 
-kuint32 *ct_im_disp4_get_r_full_tbl(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_r_full_tbl(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->rFullTbl;
 }
 
-kuint32 *ct_im_disp4_get_g_full_tbl(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_g_full_tbl(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gFullTbl;
 }
 
-kuint32 *ct_im_disp4_get_b_full_tbl(CtImDisp4 *self)
+guint32 *ct_im_disp4_get_b_full_tbl(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->bFullTbl;
 }
 
-kushort *ct_im_disp4_get_luminance_tbla(CtImDisp4 *self)
+gushort *ct_im_disp4_get_luminance_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->luminanceTblA;
 }
 
-kushort *ct_im_disp4_get_luminance_tblb(CtImDisp4 *self)
+gushort *ct_im_disp4_get_luminance_tblb(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->luminanceTblB;
 }
 
-kushort *ct_im_disp4_get_gain_tbla(CtImDisp4 *self)
+gushort *ct_im_disp4_get_gain_tbla(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gainTblA;
 }
 
-kushort *ct_im_disp4_get_gain_tblb(CtImDisp4 *self)
+gushort *ct_im_disp4_get_gain_tblb(CtImDisp4 *self)
 {
 	CtImDisp4Private *priv = self->privCtImDisp4;
 	return priv->gainTblB;
@@ -747,6 +790,6 @@ kushort *ct_im_disp4_get_gain_tblb(CtImDisp4 *self)
 
 CtImDisp4 *ct_im_disp4_new(void)
 {
-	CtImDisp4 *self = (CtImDisp4 *) k_object_new_with_private(CT_TYPE_IM_DISP4,sizeof(CtImDisp4Private));
+	CtImDisp4 *self = (CtImDisp4 *) g_object_new(CT_TYPE_IM_DISP4, NULL);
 	return self;
 }

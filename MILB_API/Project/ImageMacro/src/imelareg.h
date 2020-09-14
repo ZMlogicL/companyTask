@@ -138,7 +138,7 @@ ImElaReg*		        im_ela_reg_new(void);
 extern "C" {
 #endif	// __cplusplus
 //---------------------------- driver section ----------------------------
-
+VOID im_ela_reg_ctrl_next_eirch_register( ImElaReg*self);
 VOID im_ela_reg_ctrl_next_register(ImElaReg*self);
 VOID im_ela_reg_ctrl_eiwch_register(ImElaReg*self);
 VOID im_ela_reg_ctrl_enwch_register(ImElaReg*self);
@@ -200,7 +200,7 @@ ELA is executed by asynchronization processing.<br>
 @retval	D_DDIM_OK				Success
 @retval	ImEla_D_IM_ELA_MACRO_BUSY		Fail - Macro busy
 @remarks When the processing of ELA is completed, the callback function is started.<br>
-         Please wait for the completion of processing with @ref im_ela_reg_wait_end(NULL) when you do not use the callback function.
+         Please wait for the completion of processing with @ref im_ela_reg_wait_end(im_ela_reg_new()) when you do not use the callback function.
 @remarks	This API uses DDIM_User_Dly_Tsk().
 @remarks	This API uses DDIM_User_Clr_Flg().
 @remarks	This API uses DDIM_User_Twai_Flg().
@@ -208,7 +208,7 @@ ELA is executed by asynchronization processing.<br>
 INT32  im_ela_reg_start_async(ImElaReg*self);
 
 /**
-Wait the end of the asynchronization processing started with im_ela_reg_start_async(NULL).
+Wait the end of the asynchronization processing started with im_ela_reg_start_async(im_ela_reg_new()).
 @retval	D_DDIM_OK			Success
 @retval ImEla_D_IM_ELA_TIMEOUT	Fail - Time-out
 @retval	ImEla_D_IM_ELA_NG			Fail - Processing NG (system error)

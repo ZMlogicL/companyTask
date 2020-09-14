@@ -70,7 +70,7 @@ kint32 dd_nic_set_addrctrl_security1(DdNic *self, kulong val)
 	}
 #endif
 	DD_ARM_CRITICAL_SECTION_START(S_GDD_NIC_SPIN_LOCK);
-	IO_NIC_ADDRCTRL.SECURITY1.word = val;
+	ioNicAddrctrl.security1.word = val;
 	DD_ARM_DMB_POU();
 	DD_ARM_CRITICAL_SECTION_END(S_GDD_NIC_SPIN_LOCK);
 	return D_DDIM_OK;
@@ -93,7 +93,7 @@ kint32 dd_nic_set_asib_wr_tidemark(DdNic *self, kuint32 num, kulong val)
 		return C_NIC_INPUT_PARAM_ERR;
 	}
 #endif
-	IO_NIC_ASIB[num].WR_TIDEMARK.bit.WT = val;
+	ioNicAsib[num].wrTidemark.bit.wt = val;
 
 	return D_DDIM_OK;
 }
@@ -115,7 +115,7 @@ kint32 dd_nic_set_asib_read_qos(DdNic *self, kuint32 num, kulong val)
 		return C_NIC_INPUT_PARAM_ERR;
 	}
 #endif
-	IO_NIC_ASIB[num].READ_QOS.bit.RQ = val;
+	ioNicAsib[num].readQos.bit.rq = val;
 
 	return D_DDIM_OK;
 }
@@ -138,7 +138,7 @@ kint32 dd_nic_set_asib_write_qos(DdNic *self, kuint32 num, kulong val)
 	}
 #endif
 
-	IO_NIC_ASIB[num].WRITE_QOS.bit.WQ = val;
+	ioNicAsib[num].writeQos.bit.wq = val;
 	return D_DDIM_OK;
 }
 
@@ -159,7 +159,7 @@ kint32 dd_nic_set_asib_func_mod(DdNic *self, kuint32 num, kulong val)
 		return C_NIC_INPUT_PARAM_ERR;
 	}
 #endif
-	IO_NIC_ASIB[num].FN_MOD.bit.FM = val;
+	ioNicAsib[num].fnMod.bit.fm = val;
 
 	return D_DDIM_OK;
 }

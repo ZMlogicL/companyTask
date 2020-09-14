@@ -13,9 +13,8 @@
 */
 #include "ddimusercustom.h"
 #include "peripheral.h"
-#include "dd_udc.h"
+#include "ddudc.h"
 #include "ddtop.h"
-#include "dd_tmr32.h"
 #include "stdlib.h"
 #include "string.h"
 #include "ddgic.h"
@@ -38,9 +37,9 @@ static void ct_dd_udc1_destructor(CtDdUdc1 *self)
 {
 // CtDdUdc1Private *priv = CT_DD_UDC1_GET_PRIVATE(self);
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Grobal Function														*/
 /*----------------------------------------------------------------------*/
@@ -52,33 +51,35 @@ static void ct_dd_udc1_destructor(CtDdUdc1 *self)
 void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 {
 	kuchar				ch;
-	kboolean			isTimerMode   = FALSE;
-	kboolean			isUpDownMode  = FALSE;
-	CtDdUdc *			cdUdc = ct_dd_udc_new();
+	kboolean			isTimerMode   	= FALSE;
+	kboolean			isUpDownMode  	= FALSE;
+	CtDdUdc *			cdUdc 			= ct_dd_udc_new();
+	DdUdc *				ddUdc 			= dd_udc_get();
+	DdimUserCustom *	ddimUserCus 	= ddim_user_custom_new();
 	
-	memset(&self->udcCrl, 0, sizeof(T_DD_UDC_CTRL_CMN));
+	memset(&self->udcCrl, 0, sizeof(DdUdcCtrlCmn));
 
 	if (strcmp((KConstType)argv[1], "init") == 0) {
 		// UDC initialize test 
 		// [command] udc init
-		Dd_UDC_Init();
+		dd_udc_init(ddUdc);
 
 		// General-purpose port setting for UDC test.
 		for (cdUdc->i = 0; cdUdc->i < 6; cdUdc->i++, cdUdc->ch = cdUdc->i) { // AIN
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR, 0);
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR, 0);
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_EPCR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_DDR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_PDR, 0);
 
 			// BIN
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR, 0);
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR, 0);
-			ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_EPCR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_DDR, 0);
+			ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_PDR, 0);
 
 			// ZIN
-			if ((cdUdc->i == D_DD_UDC_CH0) || (cdUdc->i == D_DD_UDC_CH1)) {
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_EPCR, 0);
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_DDR, 0);
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);
+			if ((cdUdc->i == DdUdc_CH0) || (cdUdc->i == DdUdc_CH1)) {
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_ZIN, CtDdUdc_PORT_KIND_EPCR, 0);
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_ZIN, CtDdUdc_PORT_KIND_DDR, 0);
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_ZIN, CtDdUdc_PORT_KIND_PDR, 0);
 			}
 		}
 
@@ -87,24 +88,24 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 		ct_dd_udc_print_reg_info(cdUdc);
 
 		// GIC set (ch0-5)
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH0_INT,1,C_PRI30,2);
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH1_INT,1,C_PRI30,2);
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH2_INT,1,C_PRI30,2);
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH3_INT,1,C_PRI30,2);
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH4_INT,1,C_PRI30,2);
-		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH5_INT,1,C_PRI30,2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH0_INT, 1, C_PRI30, 2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH1_INT, 1, C_PRI30, 2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH2_INT, 1, C_PRI30, 2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH3_INT, 1, C_PRI30, 2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH4_INT, 1, C_PRI30, 2);
+		dd_gic_ctrl(DdGic_INTID_UPDOWN_COUNTER_CH5_INT, 1, C_PRI30, 2);
 
-		Ddim_Print(("Dd_UDC_Init OK.\n"));
+		Ddim_Print(("dd_udc_init OK.\n"));
 	} else if(strcmp((KConstType)argv[1], "open") == 0) {
 		// UDC open
 		// [command] udc open P1
 		//           P1: Channel number(0~3)
 		if(argc >= 3) {
-			self->ercd = Dd_UDC_Open((atoi((KConstType)argv[2])),DdimUserCustom_SEM_WAIT_POL);
+			self->ercd = dd_udc_open(ddUdc, (atoi((KConstType)argv[2])),DdimUserCustom_SEM_WAIT_POL);
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Open NG. ercd=%d\n", self->ercd));
+				Ddim_Print(("dd_udc_open NG. ercd=%d\n", self->ercd));
 			} else {
-				Ddim_Print(("Dd_UDC_Open OK.\n"));
+				Ddim_Print(("dd_udc_open OK.\n"));
 			}
 		} else {
 			Ddim_Print(("Command parameter error.\n"));
@@ -114,11 +115,11 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 		// [command] udc close P1
 		//           P1: Channel number(0~3)
 		if(argc >= 3) {
-			self->ercd = Dd_UDC_Close(atoi((KConstType)argv[2]));
+			self->ercd = dd_udc_close(ddUdc, atoi((KConstType)argv[2]));
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Close NG. ercd=%d\n", self->ercd));
+				Ddim_Print(("dd_udc_close NG. ercd=%d\n", self->ercd));
 			} else {
-				Ddim_Print(("Dd_UDC_Close OK.\n"));
+				Ddim_Print(("dd_udc_close OK.\n"));
 			}
 		} else {
 			Ddim_Print(("Command parameter error.\n"));
@@ -142,17 +143,17 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 		// (Phase)   P12: Not used.
 		if(argc >= 13) {
 			// Set common parameter
-			ch                  	 = atoi((KConstType)argv[3]);
-			self->udcCrl.udcr        = atoi((KConstType)argv[4]);
-			self->udcCrl.rcr         = atoi((KConstType)argv[5]);
-			self->udcCrl.comp_clear  = atoi((KConstType)argv[6]);
-			self->udcCrl.reload      = atoi((KConstType)argv[7]);
-			self->udcCrl.zin_mode    = atoi((KConstType)argv[8]);
-			self->udcCrl.zin_edge    = atoi((KConstType)argv[9]);
-			self->udcCrl.cmp_int     = atoi((KConstType)argv[10]);
-			self->udcCrl.under_over  = atoi((KConstType)argv[11]);
-			self->udcCrl.cnt_dir_int = atoi((KConstType)argv[12]);
-			self->udcCrl.pCallBack   = ct_dd_udc_callback;
+			ch                  	= atoi((KConstType)argv[3]);
+			self->udcCrl.udcr       = atoi((KConstType)argv[4]);
+			self->udcCrl.rcr        = atoi((KConstType)argv[5]);
+			self->udcCrl.compClear  = atoi((KConstType)argv[6]);
+			self->udcCrl.reload     = atoi((KConstType)argv[7]);
+			self->udcCrl.zinMode    = atoi((KConstType)argv[8]);
+			self->udcCrl.zinEdge    = atoi((KConstType)argv[9]);
+			self->udcCrl.cmpInt     = atoi((KConstType)argv[10]);
+			self->udcCrl.underOver  = atoi((KConstType)argv[11]);
+			self->udcCrl.cntDirInt 	= atoi((KConstType)argv[12]);
+			self->udcCrl.pCallBack  = ctDdUdcCallback_cd;
 
 			cdUdc->ch = ch;
 			if (strcmp((KConstType)argv[2], "timer") == 0) {
@@ -162,8 +163,8 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 					Ddim_Print(("Command parameter error.\n"));
 					return;
 				}
-				self->udcCrl.count_mode = D_DD_UDC_CMS_TIMER;
-				isTimerMode      = TRUE;
+				self->udcCrl.countMode 	= DdUdc_CMS_TIMER;
+				isTimerMode      		= TRUE;
 			} else if (strcmp((KConstType)argv[2], "up_down") == 0) {
 				// Up/Down count mode
 				Ddim_Print(("Up/Down count mode.\n"));
@@ -171,25 +172,25 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 					Ddim_Print(("Command parameter error.\n"));
 					return;
 				}
-				self->udcCrl.count_mode = D_DD_UDC_CMS_UP_DOWN;
+				self->udcCrl.countMode = DdUdc_CMS_UP_DOWN;
 				isUpDownMode    = TRUE;
 			} else if (strcmp((KConstType)argv[2], "phase2") == 0) { // Phase lag count mode 2
 				Ddim_Print(("Phase lag count mode 2 mode.\n"));
-				self->udcCrl.count_mode = D_DD_UDC_CMS_PHASE_LAG_2;
+				self->udcCrl.countMode = DdUdc_CMS_PHASE_LAG_2;
 
 				// Preparation for test of phase lag count mode. (Initial state is Low.)
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_PDR, 0);
 				// AIN -> Low
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);	
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_PDR, 0);	
 				// BIN -> Low
 			} else if (strcmp((KConstType)argv[2], "phase4") == 0) { // Phase lag count mode 4
 				Ddim_Print(("Phase lag count mode 4 mode.\n"));
-				self->udcCrl.count_mode = D_DD_UDC_CMS_PHASE_LAG_4;
+				self->udcCrl.countMode = DdUdc_CMS_PHASE_LAG_4;
 
 				// Preparation for test of phase lag count mode. (Initial state is Low.)
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);	
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_PDR, 0);	
 				// AIN -> Low
-				ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);	
+				ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_PDR, 0);	
 				// BIN -> Low
 			} else { // Command error
 				Ddim_Print(("Command parameter error.\n"));
@@ -197,55 +198,55 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			}
 
 			cdUdc->ch = ch;
-			// Display settings berore Dd_UDC_Ctrl_Common
+			// Display settings berore dd_udc_ctrl_common
 			Ddim_Print(("Setting before write\n"));
 			ct_dd_udc_print_crl_common(cdUdc, &self->udcCrl);
 
 			// Set execution parameter
-			self->ercd = Dd_UDC_Ctrl_Common(ch, &self->udcCrl);
+			self->ercd = dd_udc_ctrl_common(ddUdc, ch, &self->udcCrl);
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Ctrl_Common error. ercd=%d\n", self->ercd));
+				Ddim_Print(("dd_udc_ctrl_common error. ercd=%d\n", self->ercd));
 				return;
 			} else {
-				Ddim_Print(("Dd_UDC_Ctrl_Common OK.\n"));
+				Ddim_Print(("dd_udc_ctrl_common OK.\n"));
 			}
 
-			// Display settings after Dd_UDC_Ctrl_Common
+			// Display settings after dd_udc_ctrl_common
 			Ddim_Print(("Setting after write\n"));
-			self->ercd = Dd_UDC_Get_Ctrl_Common(ch, &self->udcCrl);
+			self->ercd = dd_udc_get_ctrl_common(ddUdc, ch, &self->udcCrl);
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Common NG. ercd=%d\n", self->ercd));
+				Ddim_Print(("dd_udc_get_ctrl_common NG. ercd=%d\n", self->ercd));
 				return;
 			}
 			ct_dd_udc_print_crl_common(cdUdc, &self->udcCrl);
 
 			if (isTimerMode == TRUE) {
-				self->ercd = Dd_UDC_Ctrl_Timer(ch, atoi((KConstType)argv[13]));
+				self->ercd = dd_udc_ctrl_timer(ddUdc, ch, atoi((KConstType)argv[13]));
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Ctrl_Timer error. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_ctrl_timer error. ercd=%d\n", self->ercd));
 					return;
 				} else {
-					Ddim_Print(("Dd_UDC_Ctrl_Timer OK. prescaler=%d\n", atoi((KConstType)argv[13])));
+					Ddim_Print(("dd_udc_ctrl_timer OK. prescaler=%d\n", atoi((KConstType)argv[13])));
 				}
 			} else if(isUpDownMode == TRUE) {
-				self->ercd = Dd_UDC_Ctrl_Up_Down(ch, atoi((KConstType)argv[13]));
+				self->ercd = dd_udc_ctrl_up_down(ddUdc, ch, atoi((KConstType)argv[13]));
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Ctrl_Up_Down error. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_ctrl_up_down error. ercd=%d\n", self->ercd));
 					return;
 				} else {
-					Ddim_Print(("Dd_UDC_Ctrl_Up_Down OK. edge=%d\n", atoi((KConstType)argv[13])));
+					Ddim_Print(("dd_udc_ctrl_up_down OK. edge=%d\n", atoi((KConstType)argv[13])));
 				}
 			} else { 
 				// DO NOTHING
 			}
 
 			// UDC start
-			self->ercd = Dd_UDC_Start(ch);
+			self->ercd = dd_udc_start(ddUdc, ch);
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Start(%d) NG. ercd=%d\n", ch, self->ercd));
+				Ddim_Print(("dd_udc_start(%d) NG. ercd=%d\n", ch, self->ercd));
 			} else {
 				ct_dd_udc_print_trg_info(cdUdc);
-				Ddim_Print(("Dd_UDC_Start(%d) OK.\n", ch));
+				Ddim_Print(("dd_udc_start(%d) OK.\n", ch));
 			}
 		} else {
 			Ddim_Print(("Command parameter error.\n"));
@@ -256,12 +257,12 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 		//           P1 : Channel number(0~3)
 		if(argc >= 3) {
 			ch = atoi((KConstType)argv[2]);
-			self->ercd = Dd_UDC_Stop(ch);
+			self->ercd = dd_udc_stop(ddUdc, ch);
 			if(self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Stop(%d) NG. ercd=%d\n", ch, self->ercd));
+				Ddim_Print(("dd_udc_stop(%d) NG. ercd=%d\n", ch, self->ercd));
 			} else {
 				ct_dd_udc_print_trg_info(cdUdc);
-				Ddim_Print(("Dd_UDC_Stop(%d) OK.\n", ch));
+				Ddim_Print(("dd_udc_stop(%d) OK.\n", ch));
 			}
 		} else {
 			Ddim_Print(("Command parameter error.\n"));
@@ -275,32 +276,32 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			ch = atoi((KConstType)argv[3]);
 			cdUdc->ch = ch;
 			if (strcmp((KConstType)argv[2], "common") == 0) { // Get common control data
-				self->ercd = Dd_UDC_Get_Ctrl_Common(ch, &self->udcCrl);
+				self->ercd = dd_udc_get_ctrl_common(ddUdc, ch, &self->udcCrl);
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Get_Ctrl_Common NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_get_ctrl_common NG. ercd=%d\n", self->ercd));
 					return;
 				}
-				Ddim_Print(("---- Dd_UDC_Get_Ctrl_Common(Ch%d) ----\n", ch));
+				Ddim_Print(("---- dd_udc_get_ctrl_common(Ch%d) ----\n", ch));
 				ct_dd_udc_print_crl_common(cdUdc, &self->udcCrl);
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Common OK.\n"));
+				Ddim_Print(("dd_udc_get_ctrl_common OK.\n"));
 			} else if (strcmp((KConstType)argv[2], "timer") == 0) { // Get timer control data
-				self->ercd = Dd_UDC_Get_Ctrl_Timer(ch, &self->prescaler);
+				self->ercd = dd_udc_get_ctrl_timer(ddUdc, ch, &self->prescaler);
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Get_Ctrl_Timer NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_get_ctrl_timer NG. ercd=%d\n", self->ercd));
 					return;
 				}
-				Ddim_Print(("---- Dd_UDC_Get_Ctrl_Timer(Ch%d) ----\n", ch));
+				Ddim_Print(("---- dd_udc_get_ctrl_timer(Ch%d) ----\n", ch));
 				Ddim_Print(("CCR.CLKS = 0x%x\n", self->prescaler));
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Timer OK.\n"));
+				Ddim_Print(("dd_udc_get_ctrl_timer OK.\n"));
 			} else if (strcmp((KConstType)argv[2], "up_down") == 0) { // Get up/donw control data
-				self->ercd = Dd_UDC_Get_Ctrl_Up_Down(ch, &self->edge);
+				self->ercd = dd_udc_get_ctrl_up_down(ddUdc, ch, &self->edge);
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Get_Ctrl_Up_Down NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_get_ctrl_up_down NG. ercd=%d\n", self->ercd));
 					return;
 				}
-				Ddim_Print(("---- Dd_UDC_Get_Ctrl_Up_Down(Ch%d) ----\n", ch));
+				Ddim_Print(("---- dd_udc_get_ctrl_up_down(Ch%d) ----\n", ch));
 				Ddim_Print(("CCR.CES  = 0x%x\n", self->edge));
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Up_Down OK.\n"));
+				Ddim_Print(("dd_udc_get_ctrl_up_down OK.\n"));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
@@ -320,18 +321,18 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 				switch (atoi((KConstType)argv[4])) {
 					case 0:
 						// Main function
-						self->callback = ct_dd_udc_callback;
+						self->callback = ctDdUdcCallback_cd;
 						break;
 
 					default:
 						// Sub function
-						self->callback = ct_dd_udc_callback_sub;
+						self->callback = ctDdUdcCallbackSub_cd;
 						break;
 				}
-				Dd_UDC_Set_CallBack(ch, self->callback);
-				Ddim_Print(("---- Dd_UDC_Set_CallBack(Ch%d) ----\n", ch));
+				dd_udc_set_callback(ddUdc, ch, self->callback);
+				Ddim_Print(("---- dd_udc_set_callback(Ch%d) ----\n", ch));
 				Ddim_Print(("callback = %p\n", self->callback));
-				Ddim_Print(("Dd_UDC_Set_CallBack OK.\n"));
+				Ddim_Print(("dd_udc_set_callback OK.\n"));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
@@ -347,11 +348,11 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			if(argc >= 5) {
 				ch = atoi((KConstType)argv[3]);
 
-				self->ercd = Dd_UDC_Set_RCR_Counter(ch, atoi((KConstType)argv[4]));
+				self->ercd = dd_udc_set_rcr_counter(ddUdc, ch, atoi((KConstType)argv[4]));
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Set_RCR_Counter NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_set_rcr_counter NG. ercd=%d\n", self->ercd));
 				} else {
-					Ddim_Print(("Dd_UDC_Set_RCR_Counter OK.\n"));
+					Ddim_Print(("dd_udc_set_rcr_counter OK.\n"));
 				}
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
@@ -366,9 +367,9 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			//           P1 : Channel number(0~3)
 			if(argc >= 4) {
 				ch = atoi((KConstType)argv[3]);
-				Ddim_Print(("---- Dd_UDC_Get_UDCR_Counter(Ch%d) ----\n", ch));
-				Ddim_Print(("UDCR = 0x%x\n", Dd_UDC_Get_UDCR_Counter(ch)));
-				Ddim_Print(("Dd_UDC_Get_UDCR_Counter OK.\n"));
+				Ddim_Print(("---- dd_udc_get_udcr_counter(Ch%d) ----\n", ch));
+				Ddim_Print(("UDCR = 0x%x\n", dd_udc_get_udcr_counter(ddUdc, ch)));
+				Ddim_Print(("dd_udc_get_udcr_counter OK.\n"));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
@@ -380,11 +381,11 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			if(argc >= 5) {
 				ch = atoi((KConstType)argv[3]);
 
-				self->ercd = Dd_UDC_Set_UDCR_Counter(ch, atoi((KConstType)argv[4]));
+				self->ercd = dd_udc_set_udcr_counter(ddUdc, ch, atoi((KConstType)argv[4]));
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Set_UDCR_Counter NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_set_udcr_counter NG. ercd=%d\n", self->ercd));
 				} else {
-					Ddim_Print(("Dd_UDC_Set_UDCR_Counter OK.\n"));
+					Ddim_Print(("dd_udc_set_udcr_counter OK.\n"));
 				}
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
@@ -396,14 +397,14 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			if(argc >= 4) {
 				ch = atoi((KConstType)argv[3]);
 
-				Ddim_Print(("---- Dd_UDC_Force_Clear_UDCR(Ch%d) ----\n", ch));
-				Ddim_Print(("Before UDCR = 0x%x\n", Dd_UDC_Get_UDCR_Counter(ch)));
-				self->ercd = Dd_UDC_Force_Clear_UDCR(ch);
-				Ddim_Print(("After UDCR = 0x%x\n", Dd_UDC_Get_UDCR_Counter(ch)));
+				Ddim_Print(("---- dd_udc_force_clear_udcr(Ch%d) ----\n", ch));
+				Ddim_Print(("Before UDCR = 0x%x\n", dd_udc_get_udcr_counter(ddUdc, ch)));
+				self->ercd = dd_udc_force_clear_udcr(ddUdc, ch);
+				Ddim_Print(("After UDCR = 0x%x\n", dd_udc_get_udcr_counter(ddUdc, ch)));
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Force_Clear_UDCR NG. ercd=%d\n", self->ercd));
+					Ddim_Print(("dd_udc_force_clear_udcr NG. ercd=%d\n", self->ercd));
 				} else {
-					Ddim_Print(("Dd_UDC_Force_Clear_UDCR OK.\n"));
+					Ddim_Print(("dd_udc_force_clear_udcr OK.\n"));
 				}
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
@@ -421,14 +422,14 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 				ch = atoi((KConstType)argv[3]);
 				Ddim_Print(("Before set: IO_PERI.UDC[%d].CCR.bit.__CMS=%d\n", 
 					ch, ioPeri.udc[ch].ccr.bit.__cms));
-				self->ercd = Dd_UDC_Set_Count_Mode(ch, atoi((KConstType)argv[4]));
+				self->ercd = dd_udc_set_count_mode(ddUdc, ch, atoi((KConstType)argv[4]));
 				Ddim_Print(("After set : IO_PERI.UDC[%d].CCR.bit.__CMS=%d\n", 
 					ch, ioPeri.udc[ch].ccr.bit.__cms));
 
 				if(self->ercd != D_DDIM_OK) {
-					Ddim_Print(("Dd_UDC_Set_Count_Mode NG.\n"));
+					Ddim_Print(("dd_udc_set_count_mode NG.\n"));
 				} else {
-					Ddim_Print(("Dd_UDC_Set_Count_Mode OK.\n"));
+					Ddim_Print(("dd_udc_set_count_mode OK.\n"));
 				}
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
@@ -437,8 +438,8 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			Ddim_Print(("Command parameter error.\n"));
 		}
 	} else if(strcmp((KConstType)argv[1], "port") == 0) { // Virtual input control(AIN, BIN, ZIN)
-		self->tmrAinCh = CtDdUdc1_D_CT_DD_UDC_TMR_AIN_CH; // Timer channel number
-		self->tmrBinCh = CtDdUdc1_D_CT_DD_UDC_TMR_BIN_CH; // Timer channel number
+		self->tmrAinCh = CtDdUdc1_TMR_AIN_CH; // Timer channel number
+		self->tmrBinCh = CtDdUdc1_TMR_BIN_CH; // Timer channel number
 		cdUdc->tmrChA = self->tmrAinCh;
 		cdUdc->tmrChB = self->tmrBinCh;
 		
@@ -471,15 +472,15 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 						Ddim_Print(("ct_dd_udc_start_virtual_ain NG. ercd=%d\n", self->ercd));
 						return;
 					}
-					ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_AIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 1);
+					ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_AIN, CtDdUdc_PORT_KIND_PDR, 1);
 					// AIN -> High
 					Ddim_Print((
 						"[AIN] (Ch=%d) (TIM=0) (UDCR=%d) (PDR=1)\n",
 						ct_dd_udc_get_ain_ch(cdUdc),
-						Dd_UDC_Get_UDCR_Counter(ct_dd_udc_get_ain_ch(cdUdc))));
+						dd_udc_get_udcr_counter(ddUdc, ct_dd_udc_get_ain_ch(cdUdc))));
 
 					// Wait gap time
-					DDIM_User_Dly_Tsk((DdimUserCustom_RELTIM)atoi((KConstType)argv[7]));
+					ddim_user_custom_dly_tsk(ddimUserCus, (kuint32)atoi((KConstType)argv[7]));
 
 					// Start virtual BIN input.
 					self->ercd = ct_dd_udc_start_virtual_bin(cdUdc, 
@@ -490,12 +491,12 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 						Ddim_Print(("ct_dd_udc_start_virtual_bin NG. ercd=%d\n", self->ercd));
 						return;
 					}
-					ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_BIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 1);
+					ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_BIN, CtDdUdc_PORT_KIND_PDR, 1);
 					// BIN -> High
 					Ddim_Print((
 						"[BIN] (Ch=%d) (TIM=0) (UDCR=%d) (PDR=1)\n",
 						ct_dd_udc_get_bin_ch(cdUdc),
-						Dd_UDC_Get_UDCR_Counter(ct_dd_udc_get_bin_ch(cdUdc))));
+						dd_udc_get_udcr_counter(ddUdc, ct_dd_udc_get_bin_ch(cdUdc))));
 				} else {
 					Ddim_Print(("Command parameter error.\n"));
 				}
@@ -594,10 +595,10 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 				}
 
 				if (strcmp((KConstType)argv[4], "h") == 0) { // ZIN -> High
-					ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 1);
+					ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_ZIN, CtDdUdc_PORT_KIND_PDR, 1);
 					Ddim_Print(("ZIN -> High.\n"));
 				} else if (strcmp((KConstType)argv[4], "l") == 0) { // ZIN -> Low
-					ct_dd_udc_set_port(cdUdc, CtDdUdc_E_CT_DD_UDC_TRG_KIND_ZIN, CtDdUdc_E_CT_DD_UDC_PORT_KIND_PDR, 0);
+					ct_dd_udc_set_port(cdUdc, CtDdUdc_TRG_KIND_ZIN, CtDdUdc_PORT_KIND_PDR, 0);
 					Ddim_Print(("ZIN -> Low.\n"));
 				} else {
 					Ddim_Print(("Command parameter error.\n"));
@@ -619,10 +620,10 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 				cdUdc->gctDdUdcObsCh = atoi((KConstType)argv[3]); // UDC channel number
 
 				// Start timer
-				cdUdc->tmrCh = CtDdUdc1_D_CT_DD_UDC_TMR_OBS_CH;
+				cdUdc->tmrCh = CtDdUdc1_TMR_OBS_CH;
 				self->ercd = ct_dd_udc_start_timer32(cdUdc, 
 					(atoi((KConstType)argv[4]) * 1000), 
-					ct_dd_udc_observe_udcr);
+					ctDdUdcObserveUdcr_cd);
 				if (self->ercd != D_DDIM_OK) { // Timer execution error.
 					Ddim_Print(("ct_dd_udc_start_timer32 NG. ercd=%d\n", self->ercd));
 					return;
@@ -635,7 +636,7 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 		} else if (strcmp((KConstType)argv[2], "stop") == 0) {
 			// Stop cycle handler.
 			// [command] udc observe stop
-			cdUdc->tmrCh = CtDdUdc1_D_CT_DD_UDC_TMR_OBS_CH;
+			cdUdc->tmrCh = CtDdUdc1_TMR_OBS_CH;
 			ct_dd_udc_stop_timer32(cdUdc);
 			Ddim_Print(("Stop UDCR observer.\n"));
 		} else {
@@ -694,40 +695,40 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 			}
 
 			// Set utility function parameter
-			self->ercd = Dd_UDC_Write_Timer_Mode(ch, self->usec, ct_dd_udc_utility_callback);
+			self->ercd = dd_udc_utility_write_timer_mode(ddUdc, ch, self->usec, ctDdUdcUtilityCallback_cd);
 			if (self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Write_Timer_Mode NG. ercd=%d\n",self->ercd));
+				Ddim_Print(("dd_udc_utility_write_timer_mode NG. ercd=%d\n",self->ercd));
 				return;
 			}
 
 			// Check dividing rate
-			self->ercd = Dd_UDC_Get_Ctrl_Timer(ch, &self->prescaler);
+			self->ercd = dd_udc_get_ctrl_timer(ddUdc, ch, &self->prescaler);
 			if (self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Timer NG. ercd=%d\n",self->ercd));
+				Ddim_Print(("dd_udc_get_ctrl_timer NG. ercd=%d\n",self->ercd));
 				return;
 			} else {
 				Ddim_Print(("CLKS = %d\n",self->prescaler));
 			}
 
-			self->ercd = DDIM_User_Get_Tim(&cdUdc->gctDdUdcTimUtilSta);
+			self->ercd = ddim_user_custom_get_tim(ddimUserCus, &cdUdc->gctDdUdcTimUtilSta);
 			if (self->ercd != DdimUserCustom_E_OK) {
 				Ddim_Print(("UDC utility function: get_tim NG. ercd=%d\n", self->ercd));
 				return;
 			}
 
 			// Check utility function parameter
-			self->ercd = Dd_UDC_Get_Ctrl_Common(ch,&self->udcCrl);
+			self->ercd = dd_udc_get_ctrl_common(ddUdc, ch,&self->udcCrl);
 			if (self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Get_Ctrl_Common NG. ercd=%d\n",self->ercd));
+				Ddim_Print(("dd_udc_get_ctrl_common NG. ercd=%d\n",self->ercd));
 				return;
 			}
 			cdUdc->ch = ch;
 			ct_dd_udc_print_crl_common(cdUdc, &self->udcCrl);
 
 			// Start utility function
-			self->ercd = Dd_UDC_Start(ch);
+			self->ercd = dd_udc_start(ddUdc, ch);
 			if (self->ercd != D_DDIM_OK) {
-				Ddim_Print(("Dd_UDC_Start NG. ercd=%d\n",self->ercd));
+				Ddim_Print(("dd_udc_start NG. ercd=%d\n",self->ercd));
 				return;
 			}
 		} else {
@@ -736,145 +737,146 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 	} else if(strcmp((KConstType)argv[1], "err") == 0) {
 		// Error processing test
 		// [command] udc err
-		if(strcmp((KConstType)argv[2], "ctrl_common") == 0) { // [Dd_UDC_Ctrl_Common]
+		if(strcmp((KConstType)argv[2], "ctrl_common") == 0) { // [dd_udc_ctrl_common]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {     //   - Channel number is illegal.
-				self->ercd = Dd_UDC_Ctrl_Common(6, &self->udcCrl);
+				self->ercd = dd_udc_ctrl_common(ddUdc, 6, &self->udcCrl);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Common(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_common(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { //   - udcCrl parameter is NULL.
-				self->ercd = Dd_UDC_Ctrl_Common(0, NULL);
+				self->ercd = dd_udc_ctrl_common(ddUdc, 0, NULL);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Common(): udcCrl parameter is NULL. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_common(): udcCrl parameter is NULL. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "get_ctrl_common") == 0) { // [Dd_UDC_Get_Ctrl_Common]
+		} else if(strcmp((KConstType)argv[2], "get_ctrl_common") == 0) { // [dd_udc_get_ctrl_common]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {     			//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Get_Ctrl_Common(6, &self->udcCrl);
+				self->ercd = dd_udc_get_ctrl_common(ddUdc, 6, &self->udcCrl);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Common(): Channel number is illegal.ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_common(): Channel number is illegal.ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { 			//   - udcCrl parameter is NULL.
-				self->ercd = Dd_UDC_Get_Ctrl_Common(0, NULL);
+				self->ercd = dd_udc_get_ctrl_common(ddUdc, 0, NULL);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Common(): udcCrl parameter is NULL. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_common(): udcCrl parameter is NULL. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "ctrl_timer") == 0) { 		// [Dd_UDC_Ctrl_Timer]
+		} else if(strcmp((KConstType)argv[2], "ctrl_timer") == 0) { 		// [dd_udc_ctrl_timer]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {     			//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Ctrl_Timer(6, D_DD_UDC_CLKS_2_CLOCK);
+				self->ercd = dd_udc_ctrl_timer(ddUdc, 6, DdUdc_CLKS_2_CLOCK);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Timer(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_timer(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { 			//   - Prescaler is illegal.
-				self->ercd = Dd_UDC_Ctrl_Timer(D_DD_UDC_CH0, 2);
+				self->ercd = dd_udc_ctrl_timer(ddUdc, DdUdc_CH0, 2);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Timer(): Prescaler is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_timer(): Prescaler is illegal. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "get_ctrl_timer") == 0) { 	// [Dd_UDC_Get_Ctrl_Timer]
+		} else if(strcmp((KConstType)argv[2], "get_ctrl_timer") == 0) { 	// [dd_udc_get_ctrl_timer]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {      			//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Get_Ctrl_Timer(6, &self->prescaler);
+				self->ercd = dd_udc_get_ctrl_timer(ddUdc, 6, &self->prescaler);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Timer(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_timer(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { 			//   - prescaler parameter is NULL.
-				self->ercd = Dd_UDC_Get_Ctrl_Timer(0, NULL);
+				self->ercd = dd_udc_get_ctrl_timer(ddUdc, 0, NULL);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Timer(): prescaler parameter is NULL.ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_timer(): prescaler parameter is NULL.ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "ctrl_up_down") == 0) { 	// [Dd_UDC_Ctrl_Up_Down]
+		} else if(strcmp((KConstType)argv[2], "ctrl_up_down") == 0) { 	// [dd_udc_ctrl_up_down]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {     			//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Ctrl_Up_Down(6, D_DD_UDC_CES_RISE);
+				self->ercd = dd_udc_ctrl_up_down(ddUdc, 6, DdUdc_CES_RISE);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Up_Down(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_up_down(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { 			//   - Edge is illegal.
-				self->ercd = Dd_UDC_Ctrl_Up_Down(D_DD_UDC_CH0, 4);
+				self->ercd = dd_udc_ctrl_up_down(ddUdc, DdUdc_CH0, 4);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Ctrl_Up_Down(): Edge is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_ctrl_up_down(): Edge is illegal. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "get_ctrl_up_down") == 0) { // [Dd_UDC_Get_Ctrl_Up_Down]
+		} else if(strcmp((KConstType)argv[2], "get_ctrl_up_down") == 0) { // [dd_udc_get_ctrl_up_down]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {				//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Get_Ctrl_Up_Down(6, &self->edge);
+				self->ercd = dd_udc_get_ctrl_up_down(ddUdc, 6, &self->edge);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Up_Down(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_up_down(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) {
 				//   - edge parameter is NULL.
-				self->ercd = Dd_UDC_Get_Ctrl_Up_Down(0, NULL);
+				self->ercd = dd_udc_get_ctrl_up_down(ddUdc, 0, NULL);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Get_Ctrl_Up_Down(): edge parameter is NULL. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_get_ctrl_up_down(): edge parameter is NULL. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
 		} else if(strcmp((KConstType)argv[2], "start") == 0) {
-			// [Dd_UDC_Start]
+			// [dd_udc_start]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Start(6);
-			Ddim_Print(("[Error Test] Dd_UDC_Start(): Channel number is illegal. ercd=%d\n", self->ercd));
+			self->ercd = dd_udc_start(ddUdc, 6);
+			Ddim_Print(("[Error Test] dd_udc_start(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "stop") == 0) {
-			// [Dd_UDC_Stop]
+			// [dd_udc_stop]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Stop(6);
-			Ddim_Print(("[Error Test] Dd_UDC_Stop(): Channel number is illegal. ercd=%d\n", self->ercd));
+			self->ercd = dd_udc_stop(ddUdc, 6);
+			Ddim_Print(("[Error Test] dd_udc_stop(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "callback") == 0) {
-			// [Dd_UDC_Set_CallBack]
+			// [dd_udc_set_callback]
 			//   - Channel number is illegal.
-			Dd_UDC_Set_CallBack(6, ct_dd_udc_callback);
+			dd_udc_set_callback(ddUdc, 6, ctDdUdcCallback_cd);
 		} else if(strcmp((KConstType)argv[2], "set_rcr_counter") == 0) {
-			// [Dd_UDC_Set_RCR_Counter]
+			// [dd_udc_set_rcr_counter]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Set_RCR_Counter(6, 10000);
+			self->ercd = dd_udc_set_rcr_counter(ddUdc, 6, 10000);
 			Ddim_Print((
-				"[Error Test] Dd_UDC_Set_RCR_Counter(): Channel number is illegal. ercd=%d\n", self->ercd));
+				"[Error Test] dd_udc_set_rcr_counter(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "get_udcr_counter") == 0) {
-			// [Dd_UDC_Get_UDCR_Counter]
+			// [dd_udc_get_udcr_counter]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Get_UDCR_Counter(6);
+			self->ercd = dd_udc_get_udcr_counter(ddUdc, 6);
 			Ddim_Print((
-				"[Error Test] Dd_UDC_Get_UDCR_Counter(): Channel number is illegal. ercd=%d\n", self->ercd));
+				"[Error Test] dd_udc_get_udcr_counter(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "set_udcr_counter") == 0) {
-			// [Dd_UDC_Set_UDCR_Counter]
+			// [dd_udc_set_udcr_counter]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Set_UDCR_Counter(6, 10000);
+			self->ercd = dd_udc_set_udcr_counter(ddUdc, 6, 10000);
 			Ddim_Print((
-				"[Error Test] Dd_UDC_Set_UDCR_Counter(): Channel number is illegal. ercd=%d\n", self->ercd));
+				"[Error Test] dd_udc_set_udcr_counter(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "force_clear_udcr") == 0) {
-			// [Dd_UDC_Force_Clear_UDCR]
+			// [dd_udc_force_clear_udcr]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Force_Clear_UDCR(6);
+			self->ercd = dd_udc_force_clear_udcr(ddUdc, 6);
 			Ddim_Print((
-				"[Error Test] Dd_UDC_Force_Clear_UDCR(): Channel number is illegal. ercd=%d\n", self->ercd));
+				"[Error Test] dd_udc_force_clear_udcr(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "get_up_down_flg") == 0) {
-			// [Dd_UDC_Get_Up_Down_Flg]
+			// [dd_udc_get_up_down_flg]
 			//   - Channel number is illegal.
-			self->ercd = Dd_UDC_Get_Up_Down_Flg(6);
+			self->ercd = dd_udc_get_up_down_flg(ddUdc, 6);
 			Ddim_Print((
-				"[Error Test] Dd_UDC_Get_Up_Down_Flg(): Channel number is illegal. ercd=%d\n", self->ercd));
+				"[Error Test] dd_udc_get_up_down_flg(): Channel number is illegal. ercd=%d\n", self->ercd));
 		} else if(strcmp((KConstType)argv[2], "set_count_mode") == 0) {
-			// [Dd_UDC_Set_Count_Mode]
+			// [dd_udc_set_count_mode]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {     //   - Channel number is illegal.
-				self->ercd = Dd_UDC_Set_Count_Mode(6, D_DD_UDC_CMS_TIMER);
+				self->ercd = dd_udc_set_count_mode(ddUdc, 6, DdUdc_CMS_TIMER);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Set_Count_Mode(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_set_count_mode(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p2") == 0) { //   - Count mode is illegal.
-				self->ercd = Dd_UDC_Set_Count_Mode(D_DD_UDC_CH0, 4);
+				self->ercd = dd_udc_set_count_mode(ddUdc, DdUdc_CH0, 4);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Set_Count_Mode(): Count mode is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_set_count_mode(): Count mode is illegal. ercd=%d\n", self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
-		} else if(strcmp((KConstType)argv[2], "write_timer_mode") == 0) { // [Dd_UDC_Write_Timer_Mode]
+		} else if(strcmp((KConstType)argv[2], "write_timer_mode") == 0) { // [dd_udc_utility_write_timer_mode]
 			if(strcmp((KConstType)argv[3], "p1") == 0) {      			//   - Channel number is illegal.
-				self->ercd = Dd_UDC_Write_Timer_Mode(6, 100, ct_dd_udc_utility_callback);
+				self->ercd = dd_udc_utility_write_timer_mode(ddUdc, 6, 100, ctDdUdcUtilityCallback_cd);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Write_Timer_Mode(): Channel number is illegal. ercd=%d\n", self->ercd));
+					"[Error Test] dd_udc_utility_write_timer_mode(): Channel number is illegal. ercd=%d\n", self->ercd));
 			} else if(strcmp((KConstType)argv[3], "p3") == 0) { 			//   - timer_callback parameter is NULL.
-				self->ercd = Dd_UDC_Write_Timer_Mode(D_DD_UDC_CH0, 100, NULL);
+				self->ercd = dd_udc_utility_write_timer_mode(ddUdc, DdUdc_CH0, 100, NULL);
 				Ddim_Print((
-					"[Error Test] Dd_UDC_Write_Timer_Mode(): timer_callback parameter is NULL. ercd=%d\n",self->ercd));
+					"[Error Test] dd_udc_utility_write_timer_mode(): timer_callback parameter is NULL. ercd=%d\n",
+					self->ercd));
 			} else {
 				Ddim_Print(("Command parameter error.\n"));
 			}
@@ -887,6 +889,10 @@ void ct_dd_udc1_main(CtDdUdc1 *self, kint argc, KType* argv)
 	}
 	k_object_unref(cdUdc);
 	cdUdc = NULL;
+	k_object_unref(ddUdc);
+	ddUdc = NULL;
+	k_object_unref(ddimUserCus);
+	ddimUserCus = NULL; 
 }
 
 kuchar ct_dd_udc1_get_obs_ch(CtDdUdc1 *self)

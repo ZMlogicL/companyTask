@@ -25,7 +25,7 @@ typedef struct _AudioDma AudioDma;
 
 /** Audio DMA Control */
 struct _AudioDma {
-	UINT8	dma2Ch;									/**< DMA 2ch Transfer Enable<BR><BR>
+	kuint8	dma2Ch;									/**< DMA 2ch Transfer Enable<BR><BR>
 													 Value Range:DdAudio_DISABLE / DdAudio_ENABLE<BR>
 													 Default value : DdAudio_DISABLE */
 	UINT16	dmaTrnsfCnt;							/**< DMA Transfer Sample Count<BR><BR>
@@ -62,7 +62,7 @@ Set DMA control information of input<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32		dd_audio_dma_ctrl_dma_in(DdAudioDma *self, UINT8 ch, AudioDma* dmaSetting);
+kint32		dd_audio_dma_ctrl_dma_in(DdAudioDma *self, kuint8 ch, AudioDma* dmaSetting);
 
 /**
 Get DMA control information of input<br>
@@ -76,7 +76,7 @@ Get DMA control information of input<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_get_ctrl_dma_in(DdAudioDma *self, UINT8 ch, AudioDma* dmaSetting);
+kint32		dd_audio_dma_get_ctrl_dma_in(DdAudioDma *self, kuint8 ch, AudioDma* dmaSetting);
 
 /**
 Set DMA control information of output<br>
@@ -90,7 +90,7 @@ Set DMA control information of output<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32		dd_audio_dma_ctrl_dma_out(DdAudioDma *self, UINT8 ch, AudioDma* dmaSetting);
+kint32		dd_audio_dma_ctrl_dma_out(DdAudioDma *self, kuint8 ch, AudioDma* dmaSetting);
 
 /**
 Set DMA control information of output<br>
@@ -104,7 +104,7 @@ Set DMA control information of output<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32		dd_audio_dma_get_ctrl_dma_out(DdAudioDma *self, UINT8 ch, AudioDma* dmaSetting);
+kint32		dd_audio_dma_get_ctrl_dma_out(DdAudioDma *self, kuint8 ch, AudioDma* dmaSetting);
 
 /**
 Set enable DMA start request when the input register is full<br>
@@ -118,7 +118,7 @@ Set enable DMA start request when the input register is full<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_enable_fifo_full_dmain(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_enable_fifo_full_dmain(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Set enable DMA start request when the output register is empty<br>
@@ -131,7 +131,7 @@ Set enable DMA start request when the output register is empty<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_enable_fifo_empty_dma_out(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_enable_fifo_empty_dma_out(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Set enable DMA start request(input operation) according to FIFO Usage(See @ref AudioCtrlCommon)<br>
@@ -145,7 +145,7 @@ Set enable DMA start request(input operation) according to FIFO Usage(See @ref A
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_input_dma_request_enable(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_input_dma_request_enable(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Set enable DMA start request(output operation) according to FIFO Usage(See @ref AudioCtrlCommon)<br>
@@ -158,7 +158,7 @@ Set enable DMA start request(output operation) according to FIFO Usage(See @ref 
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_output_dma_request_enable(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_output_dma_request_enable(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Get input data DMA transfer sample count<br>
@@ -170,7 +170,7 @@ Get input data DMA transfer sample count<br>
 							<li>@ref DdAudio_IF_CH5</ul>
 @retval sample count
 */
-UINT16		dd_audio_dma_get_in_dma_sample(DdAudioDma *self, UINT8 ch);
+UINT16		dd_audio_dma_get_in_dma_sample(DdAudioDma *self, kuint8 ch);
 
 /**
 Get output data DMA transfer sample count<br>
@@ -181,7 +181,7 @@ Get output data DMA transfer sample count<br>
 							<li>@ref DdAudio_IF_CH3</ul>
 @retval sample count
 */
-UINT16		dd_audio_dma_get_out_dma_sample(DdAudioDma *self, UINT8 ch);
+UINT16		dd_audio_dma_get_out_dma_sample(DdAudioDma *self, kuint8 ch);
 
 /**
 Replace the write value to the input register(AUIDLR) by 1Byte unit<br>
@@ -195,7 +195,7 @@ Replace the write value to the input register(AUIDLR) by 1Byte unit<br>
 @retval D_DDIM_OK					OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_swapbyte_auidlr(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_swapbyte_auidlr(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Replace the write value to the input register(AUIDLR) by 2Byte unit<br>
@@ -209,7 +209,7 @@ Replace the write value to the input register(AUIDLR) by 2Byte unit<br>
 @retval D_DDIM_OK					OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_swap_hw_auidlr(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_swap_hw_auidlr(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Replace the write value to the input register(AUODLR) by 1Byte unit<br>
@@ -222,7 +222,7 @@ Replace the write value to the input register(AUODLR) by 1Byte unit<br>
 @retval D_DDIM_OK					OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_swap_byte_auodlr(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_swap_byte_auodlr(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
 /**
 Replace the write value to the input register(AUODLR) by 2Byte unit<br>
@@ -235,12 +235,12 @@ Replace the write value to the input register(AUODLR) by 2Byte unit<br>
 @retval D_DDIM_OK					OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32		dd_audio_dma_set_swap_hw_auodlr(DdAudioDma *self, UINT8 ch, UINT8 enable);
+kint32		dd_audio_dma_set_swap_hw_auodlr(DdAudioDma *self, kuint8 ch, kuint8 enable);
 
-void 		dd_audio_dma_set_in_2ch(DdAudioDma *self, UINT8 ch, UINT8 dma2ch);
-void 		dd_audio_dma_set_in_trnsf_cnt(DdAudioDma *self, UINT8 ch, UINT16 trnsfCnt);
-void 		dd_audio_dma_set_out_2ch(DdAudioDma *self, UINT8 ch, UINT8 dma2ch);
-void 		dd_audio_dma_set_out_trnsf_cnt(DdAudioDma *self, UINT8 ch, UINT16 trnsfCnt);
+void 		dd_audio_dma_set_in_2ch(DdAudioDma *self, kuint8 ch, kuint8 dma2ch);
+void 		dd_audio_dma_set_in_trnsf_cnt(DdAudioDma *self, kuint8 ch, UINT16 trnsfCnt);
+void 		dd_audio_dma_set_out_2ch(DdAudioDma *self, kuint8 ch, kuint8 dma2ch);
+void 		dd_audio_dma_set_out_trnsf_cnt(DdAudioDma *self, kuint8 ch, UINT16 trnsfCnt);
 
 
 #ifdef __cplusplus

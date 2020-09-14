@@ -148,14 +148,14 @@ void				dd_pcie_rc_deinit(DdPcieRc *self);
 Execute exclusive control for PCIe channel.<br>
 @param [in]	tmout	Time of timeout<br>
 						<ul><li>Positive Value(Time of timeout)
-							<li>@ref D_DDIM_USER_SEM_WAIT_POL
+							<li>@ref DdimUserCustom_SEM_WAIT_POL
 							<li>@ref D_DDIM_USER_SEM_WAIT_FEVR</ul>
 @retval D_DDIM_OK					OK
 @retval C_PCIE_INPUT_PARAM_ERROR	Input parameter error.
 @retval D_DD_PCIE_SEM_TIMEOUT		Semaphore acquisition Time Out.
 @retval D_DD_PCIE_SEM_NG			Semaphore acquisition NG.
-@remarks This API uses DDIM_User_Pol_Sem() when wait_time is set to 0. <br>
-		 This API uses DDIM_User_Twai_Sem() when wait_time is set to the value except for 0.
+@remarks This API uses ddim_user_custom_pol_sem() when wait_time is set to 0. <br>
+		 This API uses ddim_user_custom_twai_sem() when wait_time is set to the value except for 0.
 */
 kint32				dd_pcie_rc_open(DdPcieRc *self, kint32 tmout);
 
@@ -163,7 +163,7 @@ kint32				dd_pcie_rc_open(DdPcieRc *self, kint32 tmout);
 Cancel exclusive control for PCIe channel.<br>
 @retval D_DDIM_OK			OK
 @retval D_DD_PCIE_SEM_NG	Semaphore release NG.
-@remarks This API uses DDIM_User_Sig_Sem().
+@remarks This API uses ddim_user_custom_sig_sem(NULL, ).
 */
 kint32				dd_pcie_rc_close(DdPcieRc *self);
 
@@ -350,7 +350,7 @@ It will be setting up Detect Card.
 @remarks
 			- Value of callback argument. 0:Insert , 1:Eject
 */
-kint32				dd_pcie_rc_ctrl_detect_card(DdPcieRc *self, DdPcieCh ch, vpCallbackPcieFunc callback);
+kint32				dd_pcie_rc_ctrl_detect_card(DdPcieRc *self, DdPcieCh ch, VpCallbackPcieFunc callback);
 
 /**
 Set max payload size.
@@ -458,7 +458,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 		DdPciRcIntOwnCb int_own_cb
 
 		memset(&int_own_cb, 0, sizeof(int_own_cb));
-		int_own_cb.rdlhLinkUpCb = (vpCallbackPcieFunc)pcie_rc_link_up_cb;
+		int_own_cb.rdlhLinkUpCb = (VpCallbackPcieFunc)pcie_rc_link_up_cb;
 		dd_pcie_rc_int_set_int_own_func(NULL, E_DD_PCIE_CH0, &int_own_cb);
 
 		ret = dd_pcie_rc_init1(NULL, E_DD_PCIE_BIFURCATION_DISABLE);
@@ -467,7 +467,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 			return;
 		}
 
-		ret = dd_pcie_rc_open(NULL, D_DDIM_USER_SEM_WAIT_POL);
+		ret = dd_pcie_rc_open(NULL, DdimUserCustom_SEM_WAIT_POL);
 		if(ret != D_DDIM_OK){
 			Ddim_Print(("dd_pcie_rc_open Error. ret=0x%08x\n", ret));
 			return;
@@ -545,7 +545,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 			ret = dd_pcie_rc_ctrl_memory(NULL, &pcieCtrlMem);
 			if(ret == D_DDIM_OK){
 				memcpy((void*)0x0x19600000, "PCIe Start 1", 12);
-				DDIM_User_L1l2cache_Clean_Flush_Addr(0x0x19600000, 12);
+				ddim_user_custom_l1l2cache_clean_flush_addr(NULL, 0x0x19600000, 12);
 			}
 			else{
 				Ddim_Print(("dd_pcie_rc_ctrl_memory Error. ret=0x%08x\n", ret));
@@ -583,7 +583,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 		pcieCtrlDma.dmndDstAddrL	= 0x5F000000;
 		pcieCtrlDma.dmnd_trans_size	= 0x3FC000;
 		pcieCtrlDma.direction			= E_DD_PCIE_DMA_DIR_STOD;
-		pcieCtrlDma.int_dma_callback	= (vpCallbackPcieFunc)pcie_rc_int_dma_cb;
+		pcieCtrlDma.int_dma_callback	= (VpCallbackPcieFunc)pcie_rc_int_dma_cb;
 		ret = dd_pcie_rc_ctrl_dma(NULL, &pcieCtrlDma);
 		if(ret == D_DDIM_OK){
 			dd_pcie_rc_start_dma(NULL, pcieCtrlDma.ch, pcieCtrlDma.direction);
@@ -632,7 +632,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 		Linked_list[21]	= 0x0;
 
 		memcpy((void*)PCIE_DMA_LL_ADDR, (void*)Linked_list, sizeof(Linked_list));
-		DDIM_User_L1l2cache_Clean_Flush_Addr(PCIE_DMA_LL_ADDR, sizeof(Linked_list));
+		ddim_user_custom_l1l2cache_clean_flush_addr(NULL, PCIE_DMA_LL_ADDR, sizeof(Linked_list));
 	}
 
 	void PCIe_RC_Sample_LL_DMA_Transfer(void)
@@ -647,7 +647,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 		pcieCtrlDma.dmaCh			= E_DD_PCIE_DMA_CH0;
 		pcieCtrlDma.llAddr			= PCIE_DMA_LL_ADDR;
 		pcieCtrlDma.direction			= E_DD_PCIE_DMA_DIR_STOD;
-		pcieCtrlDma.int_dma_callback	= (vpCallbackPcieFunc)pcie_rc_int_dma_cb;
+		pcieCtrlDma.int_dma_callback	= (VpCallbackPcieFunc)pcie_rc_int_dma_cb;
 		ret = dd_pcie_rc_ctrl_dma(NULL, &pcieCtrlDma);
 		if(ret == D_DDIM_OK){
 			dd_pcie_rc_start_dma(NULL, pcieCtrlDma.ch, pcieCtrlDma.direction);
@@ -716,10 +716,10 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 	{
 		DdPciRcIntOwnCb int_own_cb;
 
-		int_own_cb.cfgPmeCb		= (vpCallbackPcieFunc)pcie_rc_int_own_pme_cb;
-		int_own_cb.hpCb			= (vpCallbackPcieFunc)pcie_rc_int_own_hp_cb;
-		int_own_cb.rdlhLinkUpCb	= (vpCallbackPcieFunc)pcie_rc_int_own_link_up_cb;
-		int_own_cb.wakeCb			= (vpCallbackPcieFunc)pcie_rc_int_own_wake_cb;
+		int_own_cb.cfgPmeCb		= (VpCallbackPcieFunc)pcie_rc_int_own_pme_cb;
+		int_own_cb.hpCb			= (VpCallbackPcieFunc)pcie_rc_int_own_hp_cb;
+		int_own_cb.rdlhLinkUpCb	= (VpCallbackPcieFunc)pcie_rc_int_own_link_up_cb;
+		int_own_cb.wakeCb			= (VpCallbackPcieFunc)pcie_rc_int_own_wake_cb;
 		dd_pcie_rc_int_set_int_own_func(NULL, E_DD_PCIE_CH0, &int_own_cb);
 	}
 
@@ -772,14 +772,14 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 	{
 		DdPcieRcIntEpCb int_own_cb;
 
-		int_ep_cb.radmIntxCb				= (vpCallbackPcieFunc)pcie_rc_int_ep_intx_cb;
-		int_ep_cb.radmPmPmeCb			= (vpCallbackPcieFunc)pcie_rc_int_ep_pm_pme_cb;
-		int_ep_cb.radmCorrectableErrCb	= (vpCallbackPcieFunc)pcie_rc_int_ep_correctable_err_cb;
-		int_ep_cb.radmNonfatalErrCb		= (vpCallbackPcieFunc)pcie_rc_int_ep_nonfatal_err_cb;
-		int_ep_cb.radmFatalErrCb			= (vpCallbackPcieFunc)pcie_rc_int_ep_fatal_err_cb;
-		int_ep_cb.radmMsgLtrCb			= (vpCallbackPcieFunc)pcie_rc_int_ep_msg_ltr_cb;
-		int_ep_cb.radmPmToAckCb			= (vpCallbackPcieFunc)pcie_rc_int_ep_pm_to_ack_cb;
-		int_ep_cb.radmVendorMsgCb		= (vpCallbackPcieFunc)pcie_rc_int_ep_vendor_msg_cb;
+		int_ep_cb.radmIntxCb				= (VpCallbackPcieFunc)pcie_rc_int_ep_intx_cb;
+		int_ep_cb.radmPmPmeCb			= (VpCallbackPcieFunc)pcie_rc_int_ep_pm_pme_cb;
+		int_ep_cb.radmCorrectableErrCb	= (VpCallbackPcieFunc)pcie_rc_int_ep_correctable_err_cb;
+		int_ep_cb.radmNonfatalErrCb		= (VpCallbackPcieFunc)pcie_rc_int_ep_nonfatal_err_cb;
+		int_ep_cb.radmFatalErrCb			= (VpCallbackPcieFunc)pcie_rc_int_ep_fatal_err_cb;
+		int_ep_cb.radmMsgLtrCb			= (VpCallbackPcieFunc)pcie_rc_int_ep_msg_ltr_cb;
+		int_ep_cb.radmPmToAckCb			= (VpCallbackPcieFunc)pcie_rc_int_ep_pm_to_ack_cb;
+		int_ep_cb.radmVendorMsgCb		= (VpCallbackPcieFunc)pcie_rc_int_ep_vendor_msg_cb;
 		dd_pcie_rc_int_set_int_ep_func(NULL, E_DD_PCIE_CH0, &int_ep_cb);
 	}
 
@@ -805,8 +805,8 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 	{
 		DdPcieRcIntSysErrCb sys_err_cb;
 
-		sys_err_cb.cfgAerRcErrCb	= (vpCallbackPcieFunc)pcie_rc_int_aer_rc_err_cb;
-		sys_err_cb.cfgSysErrRcCb	= (vpCallbackPcieFunc)pcie_rc_int_sys_err_rc_cb;
+		sys_err_cb.cfgAerRcErrCb	= (VpCallbackPcieFunc)pcie_rc_int_aer_rc_err_cb;
+		sys_err_cb.cfgSysErrRcCb	= (VpCallbackPcieFunc)pcie_rc_int_sys_err_rc_cb;
 		dd_pcie_rc_int_set_int_sys_err_func(NULL, E_DD_PCIE_CH0, &sys_err_cb);
 	}
 
@@ -830,9 +830,9 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 	{
 		DdPcieRcIntTrsIcsMsiCb int_trs_ics_msi_cb;
 
-		int_trs_ics_msi_cb.cfgLinkAutoBwIntCb	= (vpCallbackPcieFunc)pcie_rc_int_cfg_link_auto_bw_int_cb;
-		int_trs_ics_msi_cb.cfgBwMgtIntCb		= (vpCallbackPcieFunc)pcie_rc_int_cfg_bw_mgt_int_cb;
-		int_trs_ics_msi_cb.smlhReqRstNotCb		= (vpCallbackPcieFunc)pcie_rc_int_smlh_req_rst_not_cb;
+		int_trs_ics_msi_cb.cfgLinkAutoBwIntCb	= (VpCallbackPcieFunc)pcie_rc_int_cfg_link_auto_bw_int_cb;
+		int_trs_ics_msi_cb.cfgBwMgtIntCb		= (VpCallbackPcieFunc)pcie_rc_int_cfg_bw_mgt_int_cb;
+		int_trs_ics_msi_cb.smlhReqRstNotCb		= (VpCallbackPcieFunc)pcie_rc_int_smlh_req_rst_not_cb;
 		dd_pcie_rc_int_set_int_sys_err_func(NULL, E_DD_PCIE_CH0, &int_trs_ics_msi_cb);
 	}
 
@@ -874,7 +874,7 @@ kint32				dd_pcie_rc_set_wr_acc_to_ro_reg(DdPcieRc *self, DdPcieCh ch, kboolean 
 
 	void PCIe_RC_Sample_Detect_Card(void)
 	{
-		Dd_Pcie_Rc_Ctrl_Hp_Detect_Card(E_DD_PCIE_CH0, (vpCallbackPcieFunc)pcie_rc_detect_card_cb);
+		Dd_Pcie_Rc_Ctrl_Hp_Detect_Card(E_DD_PCIE_CH0, (VpCallbackPcieFunc)pcie_rc_detect_card_cb);
 	}
 	@endcode
 

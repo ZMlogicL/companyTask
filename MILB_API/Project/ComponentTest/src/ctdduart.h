@@ -20,14 +20,14 @@
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
-#define D_UART_SRC_ADDR			(0x5A000000)	// UART TRANSFER SOURCE BUFFER ADDRESS
-#define D_UART_SRC_SIZE			(0x1000)		// UART TRANSFER SOURCE BUFFER SIZE(sizeof(CHAR[4096]))
-#define D_UART_SLAVE_ADDR_0		(0x01)			// UART slave address
-#define D_UART_SLAVE_ADDR_1		(0x02)			// UART slave address
-#define D_UART_SLAVE_ADDR_2		(0x04)			// UART slave address
-#define D_UART_SLAVE_ADDR_3		(0x08)			// UART slave address
+#define CtDdUart_D_UART_SRC_ADDR			(0x5A000000)	// UART TRANSFER SOURCE BUFFER ADDRESS
+#define CtDdUart_D_UART_SRC_SIZE			(0x1000)		// UART TRANSFER SOURCE BUFFER SIZE(sizeof(CHAR[4096]))
+#define CtDdUart_D_UART_SLAVE_ADDR_0		(0x01)			// UART slave address
+#define CtDdUart_D_UART_SLAVE_ADDR_1		(0x02)			// UART slave address
+#define CtDdUart_D_UART_SLAVE_ADDR_2		(0x04)			// UART slave address
+#define CtDdUart_D_UART_SLAVE_ADDR_3		(0x08)			// UART slave address
 //#define D_UART_SLAVE_ADDR_4	(0x10)			// UART slave address
-#define D_UART_SLAVE_ADDR_5		(0x20)			// UART slave address
+#define CtDdUart_D_UART_SLAVE_ADDR_5		(0x20)			// UART slave address
 
 typedef struct 			_CtDdUart CtDdUart;
 typedef struct 			_CtDdUartPrivate CtDdUartPrivate;
@@ -72,8 +72,8 @@ void  				ct_dd_uart_receive_callback_dma_cb( void const *const r_result );
 void 				ct_dd_uart_send_dma_callback_cb(kint32 status);
 void 				ct_dd_uart_recv_dma_callback_cb(kint32 status);
 
-void				ct_dd_uart_main(int argc, char** argv);
-void				ct_dd_uart_pcsim_test( void );
+void				ct_dd_uart_main(CtDdUart* self,int argc, char** argv);
+void				ct_dd_uart_pcsim_test( CtDdUart* self );
 
 
 #endif	// _CT_DD_UART_H_

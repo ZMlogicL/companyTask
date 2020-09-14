@@ -16,7 +16,7 @@
 #define __CT_IM_IIP_UTILITY1_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_IM_IIP_UTILITY1                 (ct_im_iip_utility1_get_type())
 #define CT_IM_IIP_UTILITY1(obj)                 (K_TYPE_CHECK_INSTANCE_CAST (obj, CtImIipUtility1)) 

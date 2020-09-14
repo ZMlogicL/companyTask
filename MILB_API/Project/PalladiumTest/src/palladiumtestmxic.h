@@ -36,7 +36,7 @@ PalladiumTestMxic* 	palladium_test_mxic_new(void);
 /*
  * PUBLIC
  */
-void                            palladium_test_mxic_im_main( void );
+void                            palladium_test_mxic_im_main(PalladiumTestMxic *self);
 
 #endif /* __PALLADIUM_TEST_MXIC_H__ */
 

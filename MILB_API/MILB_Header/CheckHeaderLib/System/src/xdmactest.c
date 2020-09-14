@@ -107,7 +107,7 @@ static void run_od(AbsHeaderTest *self)
  */
 void xdmac_test()
 {
-	IntErnals_RS_printf("Xdmac\n");
+	CheckHeaderMain_RS_PRINTF("Xdmac\n");
 #if 0
 #if 0	// for PC debug
 #define XdmacTest_IO_XDMAC	(*ioXdmac2)
@@ -116,47 +116,47 @@ void xdmac_test()
 	volatile IoXdmac*		ioXdmacs2		= (gpointer)0x1C250000;
 #endif
 
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.xdacs            = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.xdacs );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xdtbc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdtbc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xdssa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdssa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddsa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddsa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xdsac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdsac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddcc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddcc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddes      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddes );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddpc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddpc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[0].xddsd      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddsd );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xdtbc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdtbc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xdssa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdssa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddsa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddsa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xdsac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdsac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddcc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddcc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddes      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddes );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddpc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddpc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMAC.ch[7].xddsd      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddsd );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.xdacs           = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.xdacs );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xdtbc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdtbc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xdssa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdssa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddsa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddsa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xdsac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdsac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddcc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddcc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddes     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddes );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddpc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddpc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[0].xddsd     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddsd );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xdtbc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdtbc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xdssa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdssa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddsa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddsa );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xdsac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdsac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddac );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddcc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddcc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddes     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddes );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddpc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddpc );
-	IntErnals_RS_printf("XdmacTest_IO_XDMACS.ch[7].xddsd     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddsd );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.xdacs            = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.xdacs );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xdtbc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdtbc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xdssa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdssa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddsa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddsa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xdsac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xdsac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddcc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddcc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddes      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddes );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddpc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddpc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[0].xddsd      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[0].xddsd );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xdtbc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdtbc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xdssa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdssa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddsa      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddsa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xdsac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xdsac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddac      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddcc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddcc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddes      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddes );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddpc      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddpc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMAC.ch[7].xddsd      = 0x%lX\n", (gulong)&XdmacTest_IO_XDMAC.ch[7].xddsd );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.xdacs           = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.xdacs );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xdtbc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdtbc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xdssa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdssa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddsa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddsa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xdsac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xdsac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddcc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddcc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddes     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddes );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddpc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddpc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[0].xddsd     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[0].xddsd );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xdtbc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdtbc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xdssa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdssa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddsa     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddsa );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xdsac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xdsac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddac     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddac );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddcc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddcc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddes     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddes );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddpc     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddpc );
+	CheckHeaderMain_RS_PRINTF("XdmacTest_IO_XDMACS.ch[7].xddsd     = 0x%lX\n", (gulong)&XdmacTest_IO_XDMACS.ch[7].xddsd );
 #endif
 
-	IntErnals_RS_printf(" \n");
+	CheckHeaderMain_RS_PRINTF(" \n");
 }
 
 XdmacTest *xdmac_test_new()

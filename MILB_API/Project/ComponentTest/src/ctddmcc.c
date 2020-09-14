@@ -41,8 +41,9 @@ static void ct_dd_mcc_destructor(CtDdMcc *self)
 {
 	// CtDdMccPrivate *priv = CT_DD_MCC_GET_PRIVATE(self);
 }
-
-/*PUBLIC*/
+/*
+ *PUBLIC
+ */
 
 /*----------------------------------------------------------------------*/
 /* Definition															*/
@@ -90,21 +91,21 @@ static void ct_dd_mcc_destructor(CtDdMcc *self)
 void ct_dd_mcc_main(CtDdMcc *self, kint argc, KType* argv)
 {
 	if(0 == strcmp(argv[1], "display")) {
-		self->dat = DdMcc_GET_CA70_WFI();
+		self->dat = DD_MCC_GET_CA70_WFI();
 		Ddim_Print(("CA70_WFI=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA71_WFI();
+		self->dat = DD_MCC_GET_CA71_WFI();
 		Ddim_Print(("CA71_WFI=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA72_WFI();
+		self->dat = DD_MCC_GET_CA72_WFI();
 		Ddim_Print(("CA72_WFI=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA73_WFI();
+		self->dat = DD_MCC_GET_CA73_WFI();
 		Ddim_Print(("CA73_WFI=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA70_WFE();
+		self->dat = DD_MCC_GET_CA70_WFE();
 		Ddim_Print(("CA70_WFE=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA71_WFE();
+		self->dat = DD_MCC_GET_CA71_WFE();
 		Ddim_Print(("CA71_WFE=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA72_WFE();
+		self->dat = DD_MCC_GET_CA72_WFE();
 		Ddim_Print(("CA72_WFE=%d\n", self->dat));
-		self->dat = DdMcc_GET_CA73_WFE();
+		self->dat = DD_MCC_GET_CA73_WFE();
 		Ddim_Print(("CA73_WFE=%d\n", self->dat));
 	}
 }

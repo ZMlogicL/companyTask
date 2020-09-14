@@ -56,8 +56,8 @@ struct _CtImJpeg2Class
 GType     		  	ct_im_jpeg2_get_type(void);
 CtImJpeg2*     ct_im_jpeg2_new();
 
-void 	ct_im_jpeg2_set_ycc_out_bytes(CtImJpeg2 *self,const EImJpegSmplType smplType,
-			const EImJpegMemForm memFormat,
+void 	ct_im_jpeg2_set_ycc_out_bytes(CtImJpeg2 *self,const EimgSmplType smplType,
+			const EimgMemForm memFormat,
 			const gulong globalYWidth, const gulong globalCWidth, const gulong lines);
 void 	ct_im_jpeg2_main(CtImJpeg2 *self,gint32 argc, gchar** argv);
 

@@ -55,7 +55,7 @@ Set SPR table for Y for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre YSPR table for Y is set.
 */
-INT32 im_cnr_cspr_ofl_set_yspr_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_yspr );
+INT32 im_cnr_cspr_ofl_set_yspr_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_yspr );
 
 /**
 Set SPR Y table for Middle frequency CbCr for Off Line
@@ -65,7 +65,7 @@ Set SPR Y table for Middle frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_mid_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_y );
+INT32 im_cnr_cspr_ofl_set_cspr_mid_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_y );
 
 /**
 Set SPR Y table for Middle frequency CbCr for On The Fly
@@ -75,7 +75,7 @@ Set SPR Y table for Middle frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_mid_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_y );
+INT32 im_cnr_cspr_otf_set_cspr_mid_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_y );
 
 /**
 Set SPR Y table for Middle frequency CbCr for Off Line
@@ -85,7 +85,7 @@ Set SPR Y table for Middle frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_mid_cc_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_c );
+INT32 im_cnr_cspr_ofl_set_cspr_mid_cc_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_c );
 
 /**
 Set SPR Y table for Middle frequency CbCr for On The Fly
@@ -95,7 +95,7 @@ Set SPR Y table for Middle frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_mid_cc_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_c );
+INT32 im_cnr_cspr_otf_set_cspr_mid_cc_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_c );
 /**
 Set SPR CbCr table for Middle frequency CbCr for Off Line
 @param [in]	ch				channel[0 - 2]
@@ -104,7 +104,7 @@ Set SPR CbCr table for Middle frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR CbCr table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_mid_cc_c_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_c );
+INT32 im_cnr_cspr_ofl_set_cspr_mid_cc_c_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_c );
 
 /**
 Set SPR CbCr table for Middle frequency CbCr for On The Fly
@@ -114,7 +114,7 @@ Set SPR CbCr table for Middle frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR CbCr table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_mid_cc_c_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_mid_c );
+INT32 im_cnr_cspr_otf_set_cspr_mid_cc_c_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_mid_c );
 
 /**
 Set SPR Y table for Low frequency CbCr for Off Line
@@ -124,7 +124,7 @@ Set SPR Y table for Low frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_low_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_y );
+INT32 im_cnr_cspr_ofl_set_cspr_low_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_y );
 
 /**
 Set SPR Y table for Low frequency CbCr for On The Fly
@@ -134,7 +134,7 @@ Set SPR Y table for Low frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_low_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_y );
+INT32 im_cnr_cspr_otf_set_cspr_low_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_y );
 
 /**
 Set SPR Y table for Low frequency CbCr for Off Line
@@ -144,7 +144,7 @@ Set SPR Y table for Low frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_low_cc_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_c );
+INT32 im_cnr_cspr_ofl_set_cspr_low_cc_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_c );
 
 /**
 Set SPR Y table for Low frequency CbCr for On The Fly
@@ -154,7 +154,7 @@ Set SPR Y table for Low frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Y table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_low_cc_y_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_c );
+INT32 im_cnr_cspr_otf_set_cspr_low_cc_y_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_c );
 
 /**
 Set SPR CbCr table for Low frequency CbCr for Off Line
@@ -164,7 +164,7 @@ Set SPR CbCr table for Low frequency CbCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR CbCr table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_low_cc_c_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_c );
+INT32 im_cnr_cspr_ofl_set_cspr_low_cc_c_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_c );
 
 /**
 Set SPR CbCr table for Low frequency CbCr for On The Fly
@@ -174,7 +174,7 @@ Set SPR CbCr table for Low frequency CbCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR CbCr table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_low_cc_c_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_low_c );
+INT32 im_cnr_cspr_otf_set_cspr_low_cc_c_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_low_c );
 
 /**
 Set SPR Edge for CbcCr for Off Line
@@ -184,7 +184,7 @@ Set SPR Edge for CbcCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Edge table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_edge_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_edge );
+INT32 im_cnr_cspr_ofl_set_cspr_edge_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_edge );
 
 /**
 Set SPR Edge for CbcCr for On The Fly
@@ -194,7 +194,7 @@ Set SPR Edge for CbcCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Edge table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_edge_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_TABLE* const cnr_cspr_edge );
+INT32 im_cnr_cspr_otf_set_cspr_edge_table(ImCnrCspr*self, UCHAR ch, const TImCnrTable* const cnr_cspr_edge );
 
 /**
 Set SPR Hue specified for CbcCr for Off Line
@@ -204,7 +204,7 @@ Set SPR Hue specified for CbcCr for Off Line
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Hue specified table for CbCr is set.
 */
-INT32 im_cnr_cspr_ofl_set_cspr_hue_specified_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_HUE_SPEC_TABLE* const spr_cspr_hue );
+INT32 im_cnr_cspr_ofl_set_cspr_hue_specified_table(ImCnrCspr*self, UCHAR ch, const TImCnrHueSpecTable* const spr_cspr_hue );
 
 /**
 Set SPR Hue specified for CbcCr for On The Fly
@@ -214,6 +214,6 @@ Set SPR Hue specified for CbcCr for On The Fly
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 @remarks	Suppre CSPR Hue specified table for CbCr is set.
 */
-INT32 im_cnr_cspr_otf_set_cspr_hue_specified_table(ImCnrCspr*self, UCHAR ch, const T_IM_CNR_HUE_SPEC_TABLE* const spr_cspr_fue );
+INT32 im_cnr_cspr_otf_set_cspr_hue_specified_table(ImCnrCspr*self, UCHAR ch, const TImCnrHueSpecTable* const spr_cspr_fue );
 
 #endif// _IM_CNR_CSPR_H_

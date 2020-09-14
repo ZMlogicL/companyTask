@@ -25,6 +25,19 @@
 #define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_ALL			(0x00003F00)			/**< All flags(PIPE2)				*/
 #define	ImLtmMapList_D_IM_LTM_MAP_INT_FLG_ALL			(0x00003F3F)			/**< All flags						*/
 
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_HISTINI_END	(0x00000020)			/**< RAM initialize End				*/
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_LINE_END		(0x00000002)			/**< Line transferred				*/
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_STATE_HISTINI_END	(0x00000020)			/**< RAM initialize End				*/
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_AXR_ERR		(0x00000004)			/**< AXI Read channel error			*/
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_AXW_ERR		(0x00000008)			/**< AXI Write channel error		*/
+#define	ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_YLOG_ERR		(0x00000010)			/**< YLOG Table CPU access error	*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_LINE_END		(0x00000200)			/**< Line transferred				*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_STATE_HISTINI_END	(0x00002000)			/**< RAM initialize End				*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_HISTINI_END	(0x00002000)			/**< RAM initialize End				*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_AXR_ERR		(0x00000400)			/**< AXI Read channel error			*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_AXW_ERR		(0x00000800)			/**< AXI Write channel error		*/
+#define	ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_YLOG_ERR		(0x00001000)			/**< YLOG Table CPU access error	*/
+
 #define ImLtmMapList_Im_LTM_Dsb()	Dd_ARM_Dsb_Pou()
 
 // SW reset
@@ -103,26 +116,25 @@ typedef struct {
 KConstType 		    					 im_ltm_map_list_get_type(void);
 ImLtmMapList*		       			 im_ltm_map_list_get(void);
 
-VOID 												im_ltm_map_get_loop_val( UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end );
-INT32											Im_LTM_MAP_Set_AxiCtrlParam( UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm );
-INT32 											Im_LTM_MAP_Set_FrameStop( UCHAR pipe_no, UCHAR onoff );
-INT32 											Im_LTM_MAP_Set_ParamHold( UCHAR pipe_no, const UCHAR hold_enable );
-INT32										    Im_LTM_MAP_Get_MapBusy( UCHAR pipe_no, BOOL* const busy_status );
-INT32 											Im_LTM_MAP_ContStart( UCHAR pipe_no );
-INT32 											Im_LTM_MAP_Start( UCHAR pipe_no );
-INT32 											Im_LTM_MAP_Stop( UCHAR pipe_no );
-VOID 												Im_LTM_MAP_Int_Handler( UCHAR pipe_no );
+VOID 												im_ltm_map_list_im_ltm_map_get_loop_val(ImLtmMapList*self,UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end);
+INT32											im_ltm_map_list_im_ltm_map_set_axictrlparam(UCHAR pipe_no, const T_IM_LTM_MAP_AXI_CTRL_PARAM* const axi_ctrl_prm);
+INT32 											Im_LTM_MAP_Set_FrameStop(UCHAR pipe_no, UCHAR onoff );
+INT32 											im_ltm_map_list_im_ltm_map_set_paramhold(ImLtmMapList*self,UCHAR pipe_no, const UCHAR hold_enable);
+INT32										    im_ltm_map_list_im_ltm_map_get_mapbusy(UCHAR pipe_no, BOOL* const busy_status );
+INT32 											im_ltm_map_list_im_ltm_map_contstart(ImLtmMapList*self,UCHAR pipe_no);
+INT32 											Im_LTM_MAP_Start(UCHAR pipe_no);
+INT32 											Im_LTM_MAP_Stop(UCHAR pipe_no);
+VOID 												Im_LTM_MAP_Int_Handler(UCHAR pipe_no);
 INT32 											Im_LTM_MAP_Set_WB_Gain( UCHAR pipe_no, const T_IM_LTM_MAP_GAIN* const wb_gain );
- INT32 											Im_LTM_MAP_Get_Internal_Param( UCHAR pipe_no, T_IM_LTM_INTERNAL_PARAM* const param );
+ INT32 											Im_LTM_MAP_Get_Internal_Param(UCHAR pipe_no, T_IM_LTM_INTERNAL_PARAM* const param );
  INT32					 						Im_LTM_MAP_Ctrl_Generation_Mode( UCHAR pipe_no, const T_IM_LTM_MAP_CTRL_GENERATION_MODE* const mode );
 INT32 											Im_LTM_MAP_Ctrl_Ylog_Tbl( UCHAR pipe_no, const T_IM_LTM_CTRL_YLOG* const ylog_ctrl );
 INT32 											Im_LTM_MAP_Get_Active_Ylog_Tbl_No( UCHAR pipe_no, UCHAR* const tbl_no );
 INT32 											Im_LTM_MAP_Set_YLOG_Table( UCHAR pipe_no, UCHAR tbl_sel, const USHORT* const src_tbl );
-VOID 												Im_LTM_MAP_Print_Status( VOID );
-VOID 												Im_LTM_MAP_Print_AccEnStatus( VOID );
+VOID 												im_ltm_map_list_im_ltm_map_print_status(ImLtmMapList*self);
+VOID 												im_ltm_map_list_im_ltm_map_print_accenstatus(ImLtmMapList*self);
 
 #define im_ltm_map_list_get_gIM_LTM_MAP_Mng(self,i)          (self->gIMLtmMapMng[i])
 #define im_ltm_map_list_get_gIM_Io_Ltm_Map_Reg_Ptr(self,i)          (self->gIMIoLtmMapRegPtr[i])
-//ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
 #endif /* __IM_LTM_MAP_LIST_H__ */

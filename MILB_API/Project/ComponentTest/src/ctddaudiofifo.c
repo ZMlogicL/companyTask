@@ -3,7 +3,7 @@
 *@date                :2020-09-04
 *@author              :zhaoxin
 *@brief               :CtDdAudioFifo类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -62,9 +62,8 @@
 #include "ctddaudiofifo.h"
 #include "ctddaudiovariable.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioFifo, ct_dd_audio_fifo);
-#define CT_DD_AUDIO_FIFO_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o), \
-		CtDdAudioFifoPrivate,CT_TYPE_DD_AUDIO_FIFO))
+G_DEFINE_TYPE(CtDdAudioFifo, ct_dd_audio_fifo, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_FIFO_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_FIFO, CtDdAudioFifoPrivate))
 
 struct _CtDdAudioFifoPrivate
 {
@@ -72,19 +71,38 @@ struct _CtDdAudioFifoPrivate
 /*
  * DECLS
  */
-static void ct_dd_audio_fifo_constructor(CtDdAudioFifo *self);
-static void ct_dd_audio_fifo_destructor(CtDdAudioFifo *self);
-
+static void ct_dd_audio_fifo_class_init(CtDdAudioFifoClass *klass);
+static void ct_dd_audio_fifo_init(CtDdAudioFifo *self);
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 /*
  * IMPL
  */
-static void ct_dd_audio_fifo_constructor(CtDdAudioFifo *self) 
+static void ct_dd_audio_fifo_class_init(CtDdAudioFifoClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioFifoPrivate));
 }
 
-static void ct_dd_audio_fifo_destructor(CtDdAudioFifo *self) 
+static void ct_dd_audio_fifo_init(CtDdAudioFifo *self)
 {
+	CtDdAudioFifoPrivate *priv = CT_DD_AUDIO_FIFO_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioFifo *self = (CtDdAudioFifo*)object;
+	CtDdAudioFifoPrivate *priv = CT_DD_AUDIO_FIFO_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioFifo *self = (CtDdAudioFifo*)object;
+	CtDdAudioFifoPrivate *priv = CT_DD_AUDIO_FIFO_GET_PRIVATE(self);
+}
+
 /*
  * PUBLIC
  */
@@ -823,7 +841,7 @@ void ct_dd_audio_fifo_monitor_rec2(CtDdAudioFifo *self)
 
 CtDdAudioFifo *ct_dd_audio_fifo_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioFifo *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_FIFO, sizeof(CtDdAudioFifoPrivate));
+    CtDdAudioFifo *self = g_object_new(CT_TYPE_DD_AUDIO_FIFO, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

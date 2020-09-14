@@ -23,7 +23,9 @@ K_TYPE_DEFINE_WITH_PRIVATE(CtImpro71, ct_impro_7_1)
 
 struct _CtImpro71Private
 {
-
+    TImProIntSentopCtrl intCtrl;
+    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMax;
+    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMin;
 };
 
 
@@ -33,6 +35,20 @@ struct _CtImpro71Private
 static void ct_impro_7_1_constructor(CtImpro71 *self)
 {
 	CtImpro71Private *priv = CT_IMPRO_7_1_GET_PRIVATE(self);
+
+    priv->intCtrl.intMode = E_IM_PRO_INT_INTMD_ORAND;
+    priv->intCtrl.vdEnable.interruptBit = 0;
+    priv->intCtrl.vdEnable.permissionFlg = 0;
+    priv->intCtrl.hdEnable.interruptBit = 0;
+    priv->intCtrl.hdEnable.permissionFlg = 0;
+
+    priv->intCtrlMax.hdDelay = 12288;
+    priv->intCtrlMax.vdHDelay = 12288;
+    priv->intCtrlMax.vdVDelay = 16383;
+
+    priv->intCtrlMin.hdDelay = 0;
+    priv->intCtrlMin.vdHDelay = 0;
+    priv->intCtrlMin.vdVDelay = 0;
 }
 
 static void ct_impro_7_1_destructor(CtImpro71 *self)
@@ -45,46 +61,40 @@ static void ct_impro_7_1_destructor(CtImpro71 *self)
  *PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_10(const kuint32 idx)
+void ct_im_pro_7_1_0(CtImpro71* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_11(const kuint32 idx)
+void ct_im_pro_7_1_1(CtImpro71* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_12(const kuint32 idx)
+void ct_im_pro_7_1_2(CtImpro71* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_13(const kuint32 idx)
+void ct_im_pro_7_1_3(CtImpro71* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_14(const kuint32 idx)
+void ct_im_pro_7_1_4(CtImpro71* self,const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_15(const kuint32 idx)
+void ct_im_pro_7_1_5(CtImpro71* self,const kuint32 idx)
 {
+    CtImpro71Private *priv = CT_IMPRO_7_1_GET_PRIVATE(self);
     kint32 ercd;
     kuchar permissionFlg;
     kuchar  intMode;
-    TImProIntSentopCtrl intCtrl = {
-        .intMode = E_IM_PRO_INT_INTMD_ORAND,
-        .vdEnable.interruptBit = 0,
-        .vdEnable.permissionFlg = 0,
-        .hdEnable.interruptBit = 0,
-        .hdEnable.permissionFlg = 0,
-    };
 
     if(idx == 1) {
         for(permissionFlg = 0; permissionFlg < 2; permissionFlg++) {
-            for(intMode = E_IM_PRO_INT_INTMD_OR; intMode < E_IM_PRO_INT_INTMD_ORAND + 1; intMode++) {
-                intCtrl.vdEnable.permissionFlg = permissionFlg;
-                intCtrl.hdEnable.permissionFlg = permissionFlg;
+            for(intMode = ImPro_INT_INTMD_OR; intMode < E_IM_PRO_INT_INTMD_ORAND + 1; intMode++) {
+                priv->intCtrl.vdEnable.permissionFlg = permissionFlg;
+                priv->intCtrl.hdEnable.permissionFlg = permissionFlg;
 
-                intCtrl.vdEnable.interruptBit = (D_IM_PRO_INT_VDE00 |
+                priv->intCtrl.vdEnable.interruptBit = (D_IM_PRO_INT_VDE00 |
                                                 D_IM_PRO_INT_VDE01 |
                                                 D_IM_PRO_INT_VDE10 |
                                                 D_IM_PRO_INT_VDE11 |
@@ -93,7 +103,7 @@ void ct_im_pro_7_15(const kuint32 idx)
                                                 D_IM_PRO_INT_VDE30 |
                                                 D_IM_PRO_INT_VDE31);
 
-                intCtrl.hdEnable.interruptBit = (D_IM_PRO_INT_HDE00 |
+                priv->intCtrl.hdEnable.interruptBit = (D_IM_PRO_INT_HDE00 |
                                                 D_IM_PRO_INT_HDE01 |
                                                 D_IM_PRO_INT_HDE10 |
                                                 D_IM_PRO_INT_HDE11 |
@@ -102,19 +112,19 @@ void ct_im_pro_7_15(const kuint32 idx)
                                                 D_IM_PRO_INT_HDE30 |
                                                 D_IM_PRO_INT_HDE31);
 
-                intCtrl.intMode = intMode;
+                priv->intCtrl.intMode = intMode;
 #ifdef CO_DEBUG_ON_PC
                 ioPro.sen.sentop.vhdintflg.vhdintflg1.word = 0xFFFFFFFF;
                 ioPro.sen.sentop.vhdintflg.vhdintflg2.word = 0xFFFFFFFF;
 #endif  // CO_DEBUG_ON_PC
-                ercd = interrupt_clear1_sentop_interrupt_ctrl(&intCtrl);
-                im_pro_7_15_Print(NULL,ercd, &intCtrl, permissionFlg);
+                ercd = interrupt_clear1_sentop_interrupt_ctrl(&priv->intCtrl);
+                im_pro_7_print_15(im_pro_7_print_get(),ercd, &priv->intCtrl, permissionFlg);
             }
         }
     }
 }
 
-void ct_im_pro_7_16(const kuint32 idx)
+void ct_im_pro_7_1_6(CtImpro71* self,const kuint32 idx)
 {
     kint32 ercd;
     kuchar permissionFlg;
@@ -162,14 +172,14 @@ void ct_im_pro_7_16(const kuint32 idx)
                 ioPro.sen.sentop.sgvhdintflg.word = 0xFFFFFFFF;
 #endif  // CO_DEBUG_ON_PC
                 ercd = Im_PRO_SENTOP_SG_Interrupt_Ctrl(&intCtrl);
-                im_pro_7_16_Print(NULL,ercd, &intCtrl, permissionFlg, vhdeg);
+                im_pro_7_print_16(im_pro_7_print_get(),ercd, &intCtrl, permissionFlg, vhdeg);
 
             }
         }
     }
 }
 
-void ct_im_pro_7_17(const kuint32 idx)
+void ct_im_pro_7_1_7(CtImpro71* self,const kuint32 idx)
 {
     kint32 ercd;
     kuchar permissionFlg;
@@ -199,64 +209,44 @@ void ct_im_pro_7_17(const kuint32 idx)
             ioPro.sen.sentop.gintflg.word = 0xFFFFFFFF;
 #endif  // CO_DEBUG_ON_PC
             ercd = Im_PRO_SENTOP_Gyro_Interrupt_Ctrl(&intCtrl);
-            im_pro_7_17_Print(NULL,ercd, &intCtrl, permissionFlg);
+            im_pro_7_print_17(im_pro_7_print_get(),ercd, &intCtrl, permissionFlg);
         }
     }
 }
 
-void ct_im_pro_7_18(const kuint32 idx)
+void ct_im_pro_7_1_8(CtImpro71* self,const kuint32 idx)
 {
+    CtImpro71Private *priv = CT_IMPRO_7_1_GET_PRIVATE(self);
     kint32 ercd;
     kuchar blockNum;
     kuchar ch;
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMax = {
-        .hdDelay = 12288,
-        .vdHDelay = 12288,
-        .vdVDelay = 16383,
-    };
-
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMin = {
-        .hdDelay = 0,
-        .vdHDelay = 0,
-        .vdVDelay = 0,
-    };
 
     if(idx == 1) {
         for(blockNum = 0; blockNum < 4; blockNum++) {
             for(ch = 0; ch < 2; ch++) {
-                ercd = Im_PRO_SENTOP_Set_VHD_Delay(blockNum, ch, &intCtrlMax);
-                im_pro_7_18_Print(NULL,"max_para", blockNum, ch, ercd, &intCtrlMax);
+                ercd = Im_PRO_SENTOP_Set_VHD_Delay(blockNum, ch, &priv->intCtrlMax);
+                im_pro_7_print_18(im_pro_7_print_get(),"max_para", blockNum, ch, ercd, &priv->intCtrlMax);
 
-                ercd = Im_PRO_SENTOP_Set_VHD_Delay(blockNum, ch, &intCtrlMin);
-                im_pro_7_18_Print(NULL,"min_para", blockNum, ch, ercd, &intCtrlMin);
+                ercd = Im_PRO_SENTOP_Set_VHD_Delay(blockNum, ch, &priv->intCtrlMin);
+                im_pro_7_print_18(im_pro_7_print_get(),"min_para", blockNum, ch, ercd, &priv->intCtrlMin);
             }
         }
     }
 }
 
-void ct_im_pro_7_19(const kuint32 idx)
+void ct_im_pro_7_1_9(CtImpro71* self,const kuint32 idx)
 {
+    CtImpro71Private *priv = CT_IMPRO_7_1_GET_PRIVATE(self);
     kint32 ercd;
     kuchar blockNum;
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMax = {
-        .hdDelay = 12288,
-        .vdHDelay = 12288,
-        .vdVDelay = 16383,
-    };
-
-    T_IM_PRO_INT_VHD_DELAY_CTRL intCtrlMin = {
-        .hdDelay = 0,
-        .vdHDelay = 0,
-        .vdVDelay = 0,
-    };
 
     if(idx == 1) {
         for(blockNum = 0; blockNum < 4; blockNum++) {
-            ercd = Im_PRO_SENTOP_Set_Gyro_Int_Delay(blockNum, &intCtrlMax);
-            im_pro_7_19_Print(NULL,"max_para", blockNum, ercd, &intCtrlMax);
+            ercd = Im_PRO_SENTOP_Set_Gyro_Int_Delay(blockNum, &priv->intCtrlMax);
+            im_pro_7_print_19(im_pro_7_print_get(),"max_para", blockNum, ercd, &priv->intCtrlMax);
 
-            ercd = Im_PRO_SENTOP_Set_Gyro_Int_Delay(blockNum, &intCtrlMin);
-            im_pro_7_19_Print(NULL,"min_para", blockNum, ercd, &intCtrlMin);
+            ercd = Im_PRO_SENTOP_Set_Gyro_Int_Delay(blockNum, &priv->intCtrlMin);
+            im_pro_7_print_19(im_pro_7_print_get(),"min_para", blockNum, ercd, &priv->intCtrlMin);
         }
     }
 }

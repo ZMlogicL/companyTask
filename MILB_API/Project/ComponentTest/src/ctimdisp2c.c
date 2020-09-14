@@ -1,7 +1,7 @@
 /*
  *ctimdisp2c.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -9,6 +9,10 @@
  *设计的主要功能:
  *@version: 
  */
+
+/*
+ * 以下开始include语句
+ * */
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,27 +33,51 @@
 #include "imdisp2group.h"
 #include "ctimdisp2c.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2c, ct_im_disp2c, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2C_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2cPrivate, CT_TYPE_IM_DISP2C))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2c, ct_im_disp2c, IM_TYPE_DISP2_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2C_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2C, CtImDisp2cPrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp2cPrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 	T_IM_DISP_CTRL_GRID_LAYER gLcdDispTblGridCtrl[CtImDisp4_LCD_DISP_SEL_END];
 };
 
 /*
+ * 文件级全局变量定义
+ * */
+
+/*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2cDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2cDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 static void initTblGridCtrl(CtImDisp2c *self);
 
 /*
  * IMPL
  * */
-static void ct_im_disp2c_constructor(CtImDisp2c *self)
+static void ct_im_disp2c_class_init(CtImDisp2cClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2cPrivate));
+}
+
+static void ct_im_disp2c_init(CtImDisp2c *self)
 {
 	CtImDisp2cPrivate *priv = CT_IM_DISP2C_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -61,21 +89,43 @@ static void ct_im_disp2c_constructor(CtImDisp2c *self)
 	initTblGridCtrl(self);
 }
 
-static void ct_im_disp2c_destructor(CtImDisp2c *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2c *self = CT_IM_DISP2C(object);
+//	CtImDisp2cPrivate *priv = CT_IM_DISP2C_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2c_parent_class)->dispose(object);
 }
 
-#ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2cDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void finalize_od(GObject *object)
 {
-	kuint32 layer = 0;
-	kint32 error = D_DDIM_OK;
+//	CtImDisp2c *self = CT_IM_DISP2C(object);
+//	CtImDisp2cPrivate *priv = CT_IM_DISP2C_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2c_parent_class)->finalize(object);
+}
+
+
+#ifdef CtImDisp_CO_DEBUG_DISP
+static void disp2cDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
+{
+	guint32 layer = 0;
+	gint32 error = D_DDIM_OK;
 	CtImDisp2c *self =(CtImDisp2c *)parent;
 	CtImDisp2cPrivate *priv = self->privCtImDisp2c;
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
 	CtImDisp3a *disp3a = (CtImDisp3a *)im_disp2_group_get_disp3a(imDisp2Group);
 
-	if (strcmp((kchar*) argv[1], "CtrlGRIDs") == 0)
+	if (strcmp((gchar *) argv[1], "CtrlGRIDs") == 0)
 	{
 		//Im_DISP_Ctrl_Grid_Layer
 
@@ -99,110 +149,110 @@ static void disp2cDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			T_IM_DISP_CTRL_GRID_LAYER* pGrid_ctrl = (void *) &ctrl;
 			memcpy(pGrid_ctrl, (void *) &(priv->gLcdDispTblGridCtrl[block]), sizeof(T_IM_DISP_CTRL_GRID_LAYER));
 
-			if (strcmp((kchar*) argv[4], "1") == 0)
+			if (strcmp((gchar *) argv[4], "1") == 0)
 			{
 				pGrid_ctrl->grid.ghdsta.bit.DSH = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "2") == 0)
+			else if (strcmp((gchar *) argv[4], "2") == 0)
 			{
 				pGrid_ctrl->grid.ghdsta.bit.DSV = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "3") == 0)
+			else if (strcmp((gchar *) argv[4], "3") == 0)
 			{
 				pGrid_ctrl->grid.gvdsta.bit.DSH = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "4") == 0)
+			else if (strcmp((gchar *) argv[4], "4") == 0)
 			{
 				pGrid_ctrl->grid.gvdsta.bit.DSV = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "5") == 0)
+			else if (strcmp((gchar *) argv[4], "5") == 0)
 			{
 				pGrid_ctrl->grid.glength.bit.GHLEN = 9;
 			}
-			else if (strcmp((kchar*) argv[4], "6") == 0)
+			else if (strcmp((gchar *) argv[4], "6") == 0)
 			{
 				pGrid_ctrl->grid.glength.bit.GHLEN = 6;
 			}
-			else if (strcmp((kchar*) argv[4], "7") == 0)
+			else if (strcmp((gchar *) argv[4], "7") == 0)
 			{
 				pGrid_ctrl->grid.glength.bit.GVLEN = 9;
 			}
-			else if (strcmp((kchar*) argv[4], "8") == 0)
+			else if (strcmp((gchar *) argv[4], "8") == 0)
 			{
 				pGrid_ctrl->grid.glength.bit.GVLEN = 6;
 			}
-			else if (strcmp((kchar*) argv[4], "9") == 0)
+			else if (strcmp((gchar *) argv[4], "9") == 0)
 			{
 				pGrid_ctrl->grid.gwidth.bit.GHWID = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "10") == 0)
+			else if (strcmp((gchar *) argv[4], "10") == 0)
 			{
 				pGrid_ctrl->grid.gwidth.bit.GHWID = 0;
 			}
-			else if (strcmp((kchar*) argv[4], "11") == 0)
+			else if (strcmp((gchar *) argv[4], "11") == 0)
 			{
 				pGrid_ctrl->grid.gwidth.bit.GVWID = 3;
 			}
-			else if (strcmp((kchar*) argv[4], "12") == 0)
+			else if (strcmp((gchar *) argv[4], "12") == 0)
 			{
 				pGrid_ctrl->grid.gwidth.bit.GVWID = 0;
 			}
-			else if (strcmp((kchar*) argv[4], "13") == 0)
+			else if (strcmp((gchar *) argv[4], "13") == 0)
 			{
 				pGrid_ctrl->grid.gitvl.bit.GHITV = 5;
 			}
-			else if (strcmp((kchar*) argv[4], "14") == 0)
+			else if (strcmp((gchar *) argv[4], "14") == 0)
 			{
 				pGrid_ctrl->grid.gitvl.bit.GHITV = 2;
 			}
-			else if (strcmp((kchar*) argv[4], "15") == 0)
+			else if (strcmp((gchar *) argv[4], "15") == 0)
 			{
 				pGrid_ctrl->grid.gitvl.bit.GVITV = 5;
 			}
-			else if (strcmp((kchar*) argv[4], "16") == 0)
+			else if (strcmp((gchar *) argv[4], "16") == 0)
 			{
 				pGrid_ctrl->grid.gitvl.bit.GVITV = 2;
 			}
-			/*				else if(strcmp((kchar*)argv[4], "17")==0) {
+			/*				else if(strcmp((gchar *)argv[4], "17")==0) {
 			 pGrid_ctrl->grid.gnum.bit.GHNUM = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "18")==0) {
+			 else if(strcmp((gchar *)argv[4], "18")==0) {
 			 pGrid_ctrl->grid.gnum.bit.GHNUM = 7;
 			 }
-			 else if(strcmp((kchar*)argv[4], "19")==0) {
+			 else if(strcmp((gchar *)argv[4], "19")==0) {
 			 pGrid_ctrl->grid.gnum.bit.GVNUM = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "20")==0) {
+			 else if(strcmp((gchar *)argv[4], "20")==0) {
 			 pGrid_ctrl->grid.gnum.bit.GVNUM = 7;
 			 }
-			 else if(strcmp((kchar*)argv[4], "21")==0) {
+			 else if(strcmp((gchar *)argv[4], "21")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRR = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "22")==0) {
+			 else if(strcmp((gchar *)argv[4], "22")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRR = 0xFF;
 			 }
-			 else if(strcmp((kchar*)argv[4], "23")==0) {
+			 else if(strcmp((gchar *)argv[4], "23")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRG = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "24")==0) {
+			 else if(strcmp((gchar *)argv[4], "24")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRG = 0xFF;
 			 }
-			 else if(strcmp((kchar*)argv[4], "25")==0) {
+			 else if(strcmp((gchar *)argv[4], "25")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRG = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "26")==0) {
+			 else if(strcmp((gchar *)argv[4], "26")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GCLRB = 0xFF;
 			 }
-			 else if(strcmp((kchar*)argv[4], "27")==0) {
+			 else if(strcmp((gchar *)argv[4], "27")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GALP = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "28")==0) {
+			 else if(strcmp((gchar *)argv[4], "28")==0) {
 			 pGrid_ctrl->grid.gdctl.bit.GALP = 3;
 			 }*/
-			/*				else if(strcmp((kchar*)argv[4], "29")==0) {
+			/*				else if(strcmp((gchar *)argv[4], "29")==0) {
 			 pGrid_ctrl->gdispen = 1;
 			 }
-			 else if(strcmp((kchar*)argv[4], "30")==0) {
+			 else if(strcmp((gchar *)argv[4], "30")==0) {
 			 pGrid_ctrl->gdispen = 0;
 			 }*/
 
@@ -239,7 +289,7 @@ static void disp2cDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "CtrlGRIDg") == 0)
+	else if (strcmp((gchar *) argv[1], "CtrlGRIDg") == 0)
 	{
 		//Im_DISP_Get_Ctrl_Grid_Layer
 
@@ -297,7 +347,7 @@ static void disp2cDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "Ctrl_OSDg") == 0)
+	else if (strcmp((gchar *) argv[1], "Ctrl_OSDg") == 0)
 	{
 		//Im_DISP_Get_Ctrl_OSD_Layer
 
@@ -402,7 +452,6 @@ static void initTblGridCtrl(CtImDisp2c *self)
 
 CtImDisp2c *ct_im_disp2c_new(void)
 {
-	CtImDisp2c *self = (CtImDisp2c *) k_object_new_with_private(CT_TYPE_IM_DISP2C,sizeof(CtImDisp2cPrivate));
+	CtImDisp2c *self = (CtImDisp2c *) g_object_new(CT_TYPE_IM_DISP2C, NULL);
 	return self;
 }
-

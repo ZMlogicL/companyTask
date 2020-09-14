@@ -1,0 +1,970 @@
+修改包含的头文件名：
+disp.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+fb_disp.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+hdmi.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+mipi.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+osd_icon_comm.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+play_macro_wrap.h
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+bf_startup.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+interrupt.c
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../MILB_API/Project/ImageMacro/src/imdisp8.h"
+ct_im_disp.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp2.h"
+#include "../../ImageMacro/src/imdisp3.h"
+#include "../../ImageMacro/src/imdisp4.h"
+#include "../../ImageMacro/src/imdisp5.h"
+#include "../../ImageMacro/src/imdisp6.h"
+#include "../../ImageMacro/src/imdisp7.h"
+#include "../../ImageMacro/src/imdisp8.h"
+ct_im_hdmi.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp8.h"
+ct_im_mipi.c
+#include "../../ImageMacro/src/imdisp.h"
+#include "../../ImageMacro/src/imdisp1.h"
+#include "../../ImageMacro/src/imdisp8.h"
+im_hdmi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+im_mipi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_disp.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_hdmi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+palladium_test_mipi.c
+#include "imdisp.h"
+#include "imdisp1.h"
+#include "imdisp8.h"
+sdram_map_common.h
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp3.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp5.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp6.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp7.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp8.h"
+user_utility_disp.c
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp1.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp2.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp4.h"
+#include "../../../basefw/MILB_API/Project/ImageMacro/src/imdisp8.h"
+
+修改的公有方法名：
+ct_im_disp.c
+8588
+// im_disp_param_check_ctrl_osd_layer    	// imDispParamCheckCtrlOsdLayer
+
+
+imdisp
+E_IM_DISP_INT_CB    ImDispEImDispIntCb  其成员前面加上ImDisp_
+E_IM_DISP_ACCESS_GAMMA    ImDispEImDispAccessGamma  其成员前面加上ImDisp_
+E_IM_DISP_TRG   ImDispEImDispTrg    其成员前面加上ImDisp_
+D_IM_DISP_OSD_DISPLAY_AREA_COUNT     ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT
+D_IM_DISP_OSD_ADDR_0_BANK_SIZE          ImDisp_D_IM_DISP_OSD_ADDR_0_BANK_SIZE
+D_IM_DISP_OSD_ADDR_BANK_SIZE            ImDisp_D_IM_DISP_OSD_ADDR_BANK_SIZE
+E_IM_DISP_SEL            ImDispEImDispSel  其成员前面加上ImDisp_
+E_IM_DISP_CORRECT_SELECT     ImDispEImDispCorrectSelect  其成员前面加上ImDisp_
+E_IM_DISP_TABLE_ACCESS     ImDispEImDispTableAccess   其成员前面加上ImDisp_
+E_IM_DISP_INTERRUPTION_SELECT   ImDispEImDispInterruptionSelect  其成员前面加上ImDisp_
+E_IM_DISP_RPGTMG      ImDispEImDispRpgtmg   其成员前面加上ImDisp_
+E_IM_DISP_RSZSL             ImDispEImDispRszsl  其成员前面加上ImDisp_
+E_IM_DISP_YWMD          ImDispEImDispYwmd  其成员前面加上ImDisp_
+E_IM_DISP_GDISPEN      ImDispEImDispGdispen    其成员前面加上ImDisp_
+E_IM_DISP_INPUT_DATA_AREA       ImDispEImDispInputDataArea  其成员前面加上ImDisp_
+E_IM_DISP_TGKMD      ImDispEImDispTgkmd       其成员前面加上ImDisp_
+E_IM_DISP_PLPF     ImDispEImDispPlpf    其成员前面加上ImDisp_
+E_IM_DISP_P2MTYP    ImDispEImDispP2mtyp   其成员前面加上ImDisp_
+E_IM_DISP_P2M2PMD    ImDispEImDispP2m2pmd   其成员前面加上ImDisp_
+ 
+typedef union {
+	ULONG		word[2];	/**< All bits */
+	struct {
+		/* LIDT0 */
+		ULONG	IFMT	:5;		/**< Input format selection.<br>
+									 <ul><li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_12BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_16BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_10BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC420_RP_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC420_RP_10BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_16BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BITx2</ul>							*/
+		ULONG			:3;		/**< Reserve																		*/
+		ULONG	NBT		:2;		/**< Burst size selection.<br>
+									 <ul><li>@ref D_IM_DISP_NBT_128BYTE
+										 <li>@ref D_IM_DISP_NBT_256BYTE
+										 <li>@ref D_IM_DISP_NBT_512BYTE</ul>										*/
+		ULONG			:2;		/**< Reserve																		*/
+		ULONG	IFEW	:2;		/**< Input format effective bit width selection.<br>
+									 <ul><li>@ref D_IM_DISP_IFEW_16BIT
+									     <li>@ref D_IM_DISP_IFEW_14BIT
+										 <li>@ref D_IM_DISP_IFEW_12BIT
+										 <li>@ref D_IM_DISP_IFEW_10BIT</ul>											*/
+		ULONG			:2;		/**< Reserve																		*/
+		ULONG	LVFM	:1;		/**< LVFM: Video format selection.<br>
+									 <ul><li>@ref D_IM_DISP_FORMAT_NORMAL
+										 <li>@ref D_IM_DISP_FORMAT_VIDEO</ul>											*/
+		ULONG			:15;	/**< Reserve																		*/
+		/* LIDT1 */
+		ULONG	PKGDV	:4;		/**< PKGDV: Continuous forwarding demand control.<br>
+									 Value : 0 (fix).																*/
+		ULONG	CACHE	:4;		/**< CACHE: Cache type.<br>
+									 d[0]:Bufferable bit. Value 0:Nonbufferable, 1:Bufferable.<br>
+									 d[1]:Cacheable bit. Value 0:Noncacheable, 1:Cacheable.<br>
+									 d[2]:Read allocate bit. Value 0:Read through, 1:Allocate on Reads.<br>
+									 d[3]:Write allocate bit. Value 0:Write through, 1:Allocate on writes.<br>		*/
+		ULONG	PROT	:3;		/**< PROT: Protect type.<br>
+									 d[0]:Normal or privileged. Value 0:Normal access, 1:Privileged access.<br>
+									 d[1]:Secure or non-secure. Value 0:Secure access, 1:Non-secure access.<br>
+									 d[2]:Instruction or Data. Value 0:Data access, 1:Instrauction access.<br>		*/
+		ULONG			:1;		/**< Reserve																		*/
+		ULONG	YSLVSL	:1;		/**< YSLVSL: Master interface selection of Y.<br>
+									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
+										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
+		ULONG	CSLVSL	:1;		/**< CSLVSL: Master interface selection of Cb/Cr.<br>
+									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
+										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
+		ULONG			:18;	/**< Reserve																		*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LIDT;
+修改为：
+typedef union {
+	ULONG		word[2];	/**< All bits */
+	struct {
+		/* LIDT0 */
+		ULONG	ifmt	:5;		/**< Input format selection.<br>
+									 <ul><li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_12BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_16BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_10BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC420_RP_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC420_RP_10BIT_PACK
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_8BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_16BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BIT
+										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BITx2</ul>							*/
+		ULONG			:3;		/**< Reserve																		*/
+		ULONG	nbt		:2;		/**< Burst size selection.<br>
+									 <ul><li>@ref D_IM_DISP_NBT_128BYTE
+										 <li>@ref D_IM_DISP_NBT_256BYTE
+										 <li>@ref D_IM_DISP_NBT_512BYTE</ul>										*/
+		ULONG			:2;		/**< Reserve																		*/
+		ULONG	ifew	:2;		/**< Input format effective bit width selection.<br>
+									 <ul><li>@ref D_IM_DISP_IFEW_16BIT
+									     <li>@ref D_IM_DISP_IFEW_14BIT
+										 <li>@ref D_IM_DISP_IFEW_12BIT
+										 <li>@ref D_IM_DISP_IFEW_10BIT</ul>											*/
+		ULONG			:2;		/**< Reserve																		*/
+		ULONG	lvfm	:1;		/**< lvfm: Video format selection.<br>
+									 <ul><li>@ref D_IM_DISP_FORMAT_NORMAL
+										 <li>@ref D_IM_DISP_FORMAT_VIDEO</ul>											*/
+		ULONG			:15;	/**< Reserve																		*/
+		/* LIDT1 */
+		ULONG	pkgdv	:4;		/**< pkgdv: Continuous forwarding demand control.<br>
+									 Value : 0 (fix).																*/
+		ULONG	cache	:4;		/**< cache: Cache type.<br>
+									 d[0]:Bufferable bit. Value 0:Nonbufferable, 1:Bufferable.<br>
+									 d[1]:Cacheable bit. Value 0:Noncacheable, 1:Cacheable.<br>
+									 d[2]:Read allocate bit. Value 0:Read through, 1:Allocate on Reads.<br>
+									 d[3]:Write allocate bit. Value 0:Write through, 1:Allocate on writes.<br>		*/
+		ULONG	pROT	:3;		/**< pROT: Protect type.<br>
+									 d[0]:Normal or privileged. Value 0:Normal access, 1:Privileged access.<br>
+									 d[1]:Secure or non-secure. Value 0:Secure access, 1:Non-secure access.<br>
+									 d[2]:Instruction or Data. Value 0:Data access, 1:Instrauction access.<br>		*/
+		ULONG			:1;		/**< Reserve																		*/
+		ULONG	yslvsl	:1;		/**< yslvsl: Master interface selection of Y.<br>
+									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
+										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
+		ULONG	cslvsl	:1;		/**< cslvsl: Master interface selection of Cb/Cr.<br>
+									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
+										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
+		ULONG			:18;	/**< Reserve																		*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLidt;
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	HRSZM	:5;		/**< HRSZM: Horizontal resize magnification setting (M of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:3;		/**< Reserve																							*/
+		ULONG	HRSZN	:5;		/**< HRSZM: Horizontal resize magnification setting (N of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:11;	/**< Reserve																							*/
+		ULONG	HRSZOF	:5;		/**< HRSZOF: Horizontal resize offset.<br>
+									 Value range:0~31.<br>
+									 fulfill the following conditions.<br>
+									 HRSZOF < (pixel count before resizing) * HRSZM - (pixel count before resizing - 1) * HRSZM.<br>
+									 HRSZOF < HRSZM.<br>
+									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL=0.<br>									*/
+		ULONG			:3;		/**< Reserve																							*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_RSZ1;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	hrszm	:5;		/**< hrszm: Horizontal resize magnification setting (M of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:3;		/**< Reserve																							*/
+		ULONG	hrszn	:5;		/**< hrszm: Horizontal resize magnification setting (N of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:11;	/**< Reserve																							*/
+		ULONG	hrszof	:5;		/**< hrszof: Horizontal resize offset.<br>
+									 Value range:0~31.<br>
+									 fulfill the following conditions.<br>
+									 hrszof < (pixel count before resizing) * hrszm - (pixel count before resizing - 1) * hrszm.<br>
+									 hrszof < hrszm.<br>
+									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL=0.<br>									*/
+		ULONG			:3;		/**< Reserve																							*/
+	} bit;	/**< Bit field */
+} ImDispUImDispRsz1;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	VRSZM	:5;		/**< VRSZM: Vertical resize magnification setting (M of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:3;		/**< Reserve																							*/
+
+		ULONG	VRSZN	:5;		/**< VRSZN: Vertical resize magnification setting (N of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:11;	/**< Reserve																							*/
+		ULONG	VRSZOF	:5;		/**< VRSZOF: Vertical resize offset.<br>
+									 Value range:0~31.<br>
+									 fulfill the following conditions.<br>
+									 VRSZOF < (pixel count before resizing) * VRSZM - (pixel count before resizing - 1) * VRSZM.<br>
+									 VRSZOF < VRSZM.<br>
+									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL(GRRSZ0.RSZSL)=0.<br>						*/
+		ULONG			:3;		/**< Reserve																							*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_RSZ2;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	vrszm	:5;		/**< vrszm: Vertical resize magnification setting (M of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:3;		/**< Reserve																							*/
+
+		ULONG	vrszn	:5;		/**< vrszn: Vertical resize magnification setting (N of M/N)<br>
+									 Value range:1~31.<br>
+									 Resize magnification range:M/N=1/2~8.																*/
+		ULONG			:11;	/**< Reserve																							*/
+		ULONG	vrszof	:5;		/**< vrszof: Vertical resize offset.<br>
+									 Value range:0~31.<br>
+									 fulfill the following conditions.<br>
+									 vrszof < (pixel count before resizing) * vrszm - (pixel count before resizing - 1) * vrszm.<br>
+									 vrszof < vrszm.<br>
+									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL(GRRSZ0.RSZSL)=0.<br>						*/
+		ULONG			:3;		/**< Reserve																							*/
+	} bit;	/**< Bit field */
+} ImDispUImDispRsz2;
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	HCSTA	:6;		/**< HCSTA: Horizontal chrominance start position adjustment.<br>
+									 Value range:0~63.												*/
+		ULONG			:2;		/**< Reserve														*/
+
+		ULONG	VCSTA	:6;		/**< VCSTA: Vertical chrominance start position adjustment.<br>
+									 Value range:0~63.												*/
+		ULONG			:18;	/**< Reserve														*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_RSZ3;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	hcsta	:6;		/**< hcsta: Horizontal chrominance start position adjustment.<br>
+									 Value range:0~63.												*/
+		ULONG			:2;		/**< Reserve														*/
+
+		ULONG	vcsta	:6;		/**< vcsta: Vertical chrominance start position adjustment.<br>
+									 Value range:0~63.												*/
+		ULONG			:18;	/**< Reserve														*/
+	} bit;	/**< Bit field */
+} ImDispUImDispRsz3;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	YHLPEN	:1;	/**< YHLPEN: YHLP enable<br>
+								 Value 0:disable, 1:enable.<br>								*/
+		ULONG			:7;	/**< Reserve													*/
+		ULONG	YHLPMD	:2;	/**< YHLPMD: YHLP mode<br>
+								 <ul><li>@ref E_IM_DISP_YHLPMD_HORIZONTAL_SPACE_FILTER
+									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_ENHANCEMENT
+									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_COLOR</ul>			*/
+		ULONG			:22;/**< Reserve													*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LYHLPCTL;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	yhlpen	:1;	/**< yhlpen: YHLP enable<br>
+								 Value 0:disable, 1:enable.<br>								*/
+		ULONG			:7;	/**< Reserve													*/
+		ULONG	yhlpmd	:2;	/**< yhlpmd: YHLP mode<br>
+								 <ul><li>@ref E_IM_DISP_YHLPMD_HORIZONTAL_SPACE_FILTER
+									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_ENHANCEMENT
+									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_COLOR</ul>			*/
+		ULONG			:22;/**< Reserve													*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLyhlpctl;
+
+
+
+typedef union {
+	ULONG		word[2];	/**< All bits */
+	struct {
+		ULONG	YHLPK0	:9;	/**< YHLPK0: YHLP filter coefficient 0<br>
+								 Value range:0~511.											*/
+		ULONG			:7;	/**< Reserve													*/
+		ULLONG	YHLPK1	:8;	/**< YHLPK1: YHLP filter coefficient 1<br>
+								 Value range:0~255.											*/
+		ULONG			:8;/**< Reserve														*/
+		ULONG	YHLPK2	:8;	/**< YHLPK0: YHLP filter coefficient 2<br>
+								 Value range:0~255.											*/
+		ULONG			:8;	/**< Reserve													*/
+		ULONG	YHLPK3	:8;	/**< YHLPK3: YHLP filter coefficient 3<br>
+								 Value range:0~255.											*/
+		ULONG			:8;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LYHLPK;
+修改为：
+typedef union {
+	ULONG		word[2];	/**< All bits */
+	struct {
+		ULONG	yhlpk0	:9;	/**< yhlpk0: YHLP filter coefficient 0<br>
+								 Value range:0~511.											*/
+		ULONG			:7;	/**< Reserve													*/
+		ULLONG	yhlpk1	:8;	/**< yhlpk1: YHLP filter coefficient 1<br>
+								 Value range:0~255.											*/
+		ULONG			:8;/**< Reserve														*/
+		ULONG	yhlpk2	:8;	/**< yhlpk0: YHLP filter coefficient 2<br>
+								 Value range:0~255.											*/
+		ULONG			:8;	/**< Reserve													*/
+		ULONG	yhlpk3	:8;	/**< yhlpk3: YHLP filter coefficient 3<br>
+								 Value range:0~255.											*/
+		ULONG			:8;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLyhlpk;
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	YHLPCOR	:16;	/**< YHLPCOR: Outline coring value <br>
+									 Value range:0~65535.									*/
+		ULONG	YHLPTH	:16;	/**< YHLPTH: Outline color threshold<br>
+									 Value range:0~65535.									*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LYHLPOL;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	yhlpcor	:16;	/**< yhlpcor: Outline coring value <br>
+									 Value range:0~65535.									*/
+		ULONG	yhlpth	:16;	/**< yhlpth: Outline color threshold<br>
+									 Value range:0~65535.									*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLyhlpol;
+
+
+
+typedef union {
+	ULLONG		dword;	/**< All bits */
+	struct {
+		ULLONG	YHLPY	:16;	/**< YHLPY: Outline color pixel Y.<br>
+									 Value range:0~65535.									*/
+		ULLONG	YHLPCB	:16;	/**< YHLPCB: Outline color pixel Cb.<br>
+									 Value range:0~65535.									*/
+		ULLONG	YHLPCR	:16;	/**< YHLPCR: Outline color pixel Cr.<br>
+									 Value range:0~65535.									*/
+		ULLONG			:16;	/**< Reserve												*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LYHLPCLR;
+修改为：
+typedef union {
+	ULLONG		dword;	/**< All bits */
+	struct {
+		ULLONG	yhlpy	:16;	/**< yhlpy: Outline color pixel Y.<br>
+									 Value range:0~65535.									*/
+		ULLONG	yhlpcb	:16;	/**< yhlpcb: Outline color pixel Cb.<br>
+									 Value range:0~65535.									*/
+		ULLONG	yhlpcr	:16;	/**< yhlpcr: Outline color pixel Cr.<br>
+									 Value range:0~65535.									*/
+		ULLONG			:16;	/**< Reserve												*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLyhlpclr;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	YWEN	:1;		/**< YWEN: Warning enable.<br>
+									 <ul><li>@ref D_IM_DISP_ENABLE_OFF
+										 <li>@ref D_IM_DISP_ENABLE_ON</ul>					*/
+		ULONG			:7;		/**< Reserve												*/
+		ULONG	YWSL	:2;		/**< YWSL: Warning type select.<br>
+									 <ul><li>@ref E_IM_DISP_YWSL_BRIGHTNESS_SPECIFIED_COLOR
+										 <li>@ref E_IM_DISP_YWSL_BRIGHTNESS_ZEBRA
+										 <li>@ref E_IM_DISP_YWSL_RGB_SPECIFIED_COLOR
+										 <li>@ref E_IM_DISP_YWSL_RGB_ZEBRA</ul>				*/
+		ULONG			:22;	/**< Reserve												*/
+	}bit;	/**< Bit field */
+} U_IM_DISP_LYWCTL;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	ywen	:1;		/**< ywen: Warning enable.<br>
+									 <ul><li>@ref D_IM_DISP_ENABLE_OFF
+										 <li>@ref D_IM_DISP_ENABLE_ON</ul>					*/
+		ULONG			:7;		/**< Reserve												*/
+		ULONG	ywsl	:2;		/**< ywsl: Warning type select.<br>
+									 <ul><li>@ref E_IM_DISP_YWSL_BRIGHTNESS_SPECIFIED_COLOR
+										 <li>@ref E_IM_DISP_YWSL_BRIGHTNESS_ZEBRA
+										 <li>@ref E_IM_DISP_YWSL_RGB_SPECIFIED_COLOR
+										 <li>@ref E_IM_DISP_YWSL_RGB_ZEBRA</ul>				*/
+		ULONG			:22;	/**< Reserve												*/
+	}bit;	/**< Bit field */
+} ImDispUImDispLywctl;
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	YWTHH	:16;	/**< YW0THH/YW1THH: Warning level upper limit.<br>
+									 Value range:0~65535.									*/
+		ULONG	YWTHL	:16;	/**< YW0THL/YW1THL: Warning level lower limit.<br>
+									 Value range:0~65535.									*/
+	}bit;	/**< Bit field */
+} U_IM_DISP_LYWTH;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	ywthh	:16;	/**< YW0THH/YW1THH: Warning level upper limit.<br>
+									 Value range:0~65535.									*/
+		ULONG	ywthl	:16;	/**< YW0THL/YW1THL: Warning level lower limit.<br>
+									 Value range:0~65535.									*/
+	}bit;	/**< Bit field */
+} ImDispUImDispLywth;
+
+
+
+
+typedef union {
+	ULLONG		dword;	/**< All bits */
+	struct {
+		ULLONG	YWY		:16;	/**< YW0AY/YW0BY/YW1AY/YW1BY: Warning color Y(R).<br>
+									 LYWCTL.ywsl=0or1 -> Y data.<br>
+									 LYWCTL.ywsl=2or3 -> R data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	YWCB	:16;	/**< YW0ACB/YW0BCB/YW1ACB/YW1BCB: Warning color Cb(G).<br>
+									 LYWCTL.ywsl=0or1 -> Cb data.<br>
+									 LYWCTL.ywsl=2or3 -> G data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	YWCR	:16;	/**< YW0ACR/YW0BCR/YW1ACR/YW1BCR: Warning color Cr(B).<br>
+									 LYWCTL.ywsl=0or1 -> Cr data.<br>
+									 LYWCTL.ywsl=2or3 -> B data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	YWA		:8;		/**< YW0AA/YW0BA/YW1AA/YW1BA: Warning color A.<br>
+									 Value range:0~255.										*/
+		ULLONG			:8;		/**< Reserve												*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LYWC;
+修改为：
+typedef union {
+	ULLONG		dword;	/**< All bits */
+	struct {
+		ULLONG	ywy		:16;	/**< YW0AY/YW0BY/YW1AY/YW1BY: Warning color Y(R).<br>
+									 LYWCTL.ywsl=0or1 -> Y data.<br>
+									 LYWCTL.ywsl=2or3 -> R data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	ywcb	:16;	/**< YW0ACB/YW0BCB/YW1ACB/YW1BCB: Warning color Cb(G).<br>
+									 LYWCTL.ywsl=0or1 -> Cb data.<br>
+									 LYWCTL.ywsl=2or3 -> G data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	ywcr	:16;	/**< YW0ACR/YW0BCR/YW1ACR/YW1BCR: Warning color Cr(B).<br>
+									 LYWCTL.ywsl=0or1 -> Cr data.<br>
+									 LYWCTL.ywsl=2or3 -> B data.<br>
+									 Value range:0~65535.									*/
+		ULLONG	ywa		:8;		/**< YW0AA/YW0BA/YW1AA/YW1BA: Warning color A.<br>
+									 Value range:0~255.										*/
+		ULLONG			:8;		/**< Reserve												*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLywc;
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	BTIMH	:8;	/**< BTIMH: Setting of luminance warning display period.<br>
+								 Value range:0~255.<br>
+								 BTIMH = frame cout - 1.<br>									*/
+		ULONG	BTIML	:8;	/**< BTIML: Setting of luminance warning non-display period.<br>
+								 Value range:0~255.<br>
+								 BTIML = frame cout - 1.<br>									*/
+		ULONG	BTIMD	:1;	/**< BTIMD: Warning display period mode.<br>
+									 <ul><li>@ref D_IM_DISP_BTIMD_NORMAL
+										 <li>@ref D_IM_DISP_BTIMD_BLINK</ul>					*/
+		ULONG			:15;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LBLTMR;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	btimh	:8;	/**< btimh: Setting of luminance warning display period.<br>
+								 Value range:0~255.<br>
+								 btimh = frame cout - 1.<br>									*/
+		ULONG	btiml	:8;	/**< btiml: Setting of luminance warning non-display period.<br>
+								 Value range:0~255.<br>
+								 btiml = frame cout - 1.<br>									*/
+		ULONG	btimd	:1;	/**< btimd: Warning display period mode.<br>
+									 <ul><li>@ref D_IM_DISP_BTIMD_NORMAL
+										 <li>@ref D_IM_DISP_BTIMD_BLINK</ul>					*/
+		ULONG			:15;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLbltmr;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	ZBHH	:8;		/**< ZBHH: Zebra warning horizontal high brightness width.<br>
+									 Value range : 2~255.<br>									*/
+		ULONG	ZBHL	:8;		/**< ZBHL: Zebra warning horizontal low brightness width.<br>
+									 Value range : 2~255.<br>									*/
+		ULONG			:16;	/**< Reserve													*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LZBWID;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	zbhh	:8;		/**< zbhh: Zebra warning horizontal high brightness width.<br>
+									 Value range : 2~255.<br>									*/
+		ULONG	zbhl	:8;		/**< zbhl: Zebra warning horizontal low brightness width.<br>
+									 Value range : 2~255.<br>									*/
+		ULONG			:16;	/**< Reserve													*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLzbwid;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	ZBVSTA	:1;		/**< ZBVSTA: Zebra warning dispay vertical start position.<br>
+									 Value :0 or 1.												*/
+		ULONG			:7;		/**< Reserve													*/
+		ULONG	ZBVCYC	:1;		/**< ZBVCYC: Zebra warning dispay vertical cycle.<br>
+									 Value 0:a pixel cycle, 1:2 pixels cycle.<br>				*/
+		ULONG			:23;	/**< Reserve													*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LZBV;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	zbvsta	:1;		/**< zbvsta: Zebra warning dispay vertical start position.<br>
+									 Value :0 or 1.												*/
+		ULONG			:7;		/**< Reserve													*/
+		ULONG	zbvcyc	:1;		/**< zbvcyc: Zebra warning dispay vertical cycle.<br>
+									 Value 0:a pixel cycle, 1:2 pixels cycle.<br>				*/
+		ULONG			:23;	/**< Reserve													*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLzbv;
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	ZBDIR	:1;	/**< ZBDIR: Zebra warning dispay pattern direction.<br>
+								 Value 0:right down, 1:left down.<br>							*/
+		ULONG			:31;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LZBPT;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	zbdir	:1;	/**< zbdir: Zebra warning dispay pattern direction.<br>
+								 Value 0:right down, 1:left down.<br>							*/
+		ULONG			:31;/**< Reserve														*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLzbpt;
+
+
+
+
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	IGTAEN	:1;		/**< IGTAEN : Inverse gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	IGEN	:1;		/**< IGEN: Inverse gamma correction enable.<br>
+									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
+										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
+		ULONG	IGTSL	:1;		/**< IGTSL: Inverse gamma correction table surface.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:5;		/**< Reserve												*/
+		ULONG	GTAEN	:1;		/**< GTAEN : Gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	GMEN	:1;		/**< GMEN: Gamma correction enable.<br>
+									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
+										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
+		ULONG	GMTSL	:1;		/**< GMTSL: Gamma correction table surface.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:5;		/**< Reserve												*/
+		ULONG	IGTMN	:1;		/**< IGTMN: Inverse gamma correction monitor.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:7;		/**< Reserve												*/
+		ULONG	GMTMN   :1;		/**< GMTMN: Gamma correction monitor.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:7;		/**< Reserve												*/
+	} bit;	/**< Bit field */
+} U_IM_DISP_LTBLASET;
+修改为：
+typedef union {
+	ULONG		word;	/**< All bits */
+	struct {
+		ULONG	igtaen	:1;		/**< igtaen : Inverse gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	igen	:1;		/**< igen: Inverse gamma correction enable.<br>
+									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
+										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
+		ULONG	igtsl	:1;		/**< igtsl: Inverse gamma correction table surface.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:5;		/**< Reserve												*/
+		ULONG	gtaen	:1;		/**< gtaen : Gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	gmen	:1;		/**< gmen: Gamma correction enable.<br>
+									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
+										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
+		ULONG	gmtsl	:1;		/**< gmtsl: Gamma correction table surface.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:5;		/**< Reserve												*/
+		ULONG	igtmn	:1;		/**< igtmn: Inverse gamma correction monitor.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:7;		/**< Reserve												*/
+		ULONG	gmtmn   :1;		/**< gmtmn: Gamma correction monitor.<br>
+									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
+										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
+		ULONG			:7;		/**< Reserve												*/
+	} bit;	/**< Bit field */
+} ImDispUImDispLtblaset;
+
+
+
+
+
+
+imdisp0
+im_disp0_gim_Disp_Interrupt_Callback1    im_disp0_gim_disp_interrupt_callback1
+Im_DISP_Set_Int_Callback           im_disp0_set_int_callback
+Im_DISP_Get_Int_Callback        im_disp0_get_int_callback
+
+
+
+
+imdisp1
+Im_DISP_Init          im_disp1_init
+Im_DISP_Ctrl_Main_Layer    im_disp1_ctrl_main_layer
+Im_DISP_Get_Ctrl_Main_Layer   im_disp1_get_ctrl_main_layer
+Im_DISP_Ctrl_Output    im_disp1_ctrl_output
+Im_DISP_Get_Ctrl_Output    im_disp1_get_ctrl_output
+Im_DISP_Ctrl_Grid_Layer        im_disp1_ctrl_grid_layer
+Im_DISP_Get_Ctrl_Grid_Layer   im_disp1_get_ctrl_grid_layer
+Im_DISP_Ctrl_OSD_Layer   im_disp1_ctrl_osd_layer
+Im_DISP_Get_Ctrl_OSD_Layer   im_disp1_get_ctrl_osd_layer
+
+
+
+
+imdisp2
+Im_DISP_Ctrl_Main_Tbl   im_disp2_ctrl_main_tbl
+Im_DISP_Get_Ctrl_Main_Tbl   im_disp2_get_ctrl_main_tbl
+Im_DISP_Ctrl_Output_Tbl    im_disp2_ctrl_output_tbl
+Im_DISP_Get_Ctrl_Output_Tbl  im_disp2_get_ctrl_output_tbl
+Im_DISP_Start    im_disp2_start
+Im_DISP_Stop  im_disp2_stop
+Im_DISP_Get_Status   im_disp2_get_status
+Im_DISP_Wait_Vsync    im_disp2_wait_vsync
+Im_DISP_Wait_Stop    im_disp2_wait_stop
+Im_DISP_Int_Handler     im_disp2_int_handler
+Im_DISP_Set_SR    im_disp2_set_sr
+Im_DISP_Get_SR    im_disp2_get_sr
+
+
+
+
+imdisp3
+Im_DISP_Set_Parameter_Reflect_Timing    im_disp3_set_parameter_reflect_timing
+Im_DISP_Get_Parameter_Reflect_Timing    im_disp3_get_parameter_reflect_timing
+Im_DISP_Set_Input_Data_Transfer         im_disp3_set_input_data_transfer
+Im_DISP_Get_Input_Data_Transfer         im_disp3_get_input_data_transfer
+Im_DISP_Set_Input_Size                  im_disp3_set_input_size
+Im_DISP_Get_Input_Size                  im_disp3_get_input_size
+Im_DISP_Set_Addr                        im_disp3_set_addr
+Im_DISP_Get_Addr                        im_disp3_get_addr
+Im_DISP_Set_Lfd                         im_disp3_set_lfd
+Im_DISP_Get_Lfd                         im_disp3_get_lfd
+Im_DISP_Set_Main_Bank                   im_disp3_set_main_bank
+Im_DISP_Get_Main_Bank                   im_disp3_get_main_bank
+Im_DISP_Get_Main_Bank_Monitor           im_disp3_get_main_bank_monitor
+Im_DISP_Set_Resize                      im_disp3_set_resize
+Im_DISP_Get_Resize                      im_disp3_get_resize
+Im_DISP_Set_Yhlp                        im_disp3_set_yhlp
+Im_DISP_Get_Yhlp                        im_disp3_get_yhlp
+
+
+
+imdisp4
+Im_DISP_Set_Display_Interface        im_disp4_set_display_interface
+Im_DISP_Get_Display_Interface        im_disp4_get_display_interface
+Im_DISP_Set_External_Startup_Mode    im_disp4_set_external_startup_mode
+Im_DISP_Get_External_Startup_Mode    im_disp4_get_external_startup_mode
+Im_DISP_Set_External_Startup_Timing  im_disp4_set_external_startup_timing
+Im_DISP_Get_External_Startup_Timing  im_disp4_get_external_startup_timing
+Im_DISP_Set_Vsync_Int_Timing         im_disp4_set_vsync_int_timing
+Im_DISP_Get_Vsync_Int_Timing         im_disp4_get_vsync_int_timing
+Im_DISP_Set_Int                      im_disp4_set_int
+Im_DISP_Get_Int                      im_disp4_get_int
+Im_DISP_Get_AXI_Status               im_disp4_get_axi_status
+Im_DISP_Set_Output_Parameter_Reflect_Timing    im_disp4_set_output_parameter_reflect_timing
+Im_DISP_Get_Output_Parameter_Reflect_Timing    im_disp4_get_output_parameter_reflect_timing
+Im_DISP_Set_Output_Parameter_Reflect_Enable    im_disp4_set_output_parameter_reflect_enable
+Im_DISP_Get_Output_Parameter_Reflect_Enable    im_disp4_get_output_parameter_reflect_enable
+Im_DISP_Set_TSL                      im_disp4_set_tsl
+Im_DISP_Get_TSL                      im_disp4_get_tsl
+Im_DISP_Get_Output_Size              im_disp4_get_output_size
+Im_DISP_Set_Force_Out_Data_Enable    im_disp4_set_force_out_data_enable
+Im_DISP_Get_Force_Out_Data_Enable    im_disp4_get_force_out_data_enable
+Im_DISP_Set_Force_Out_Data           im_disp4_set_force_out_data
+Im_DISP_Get_Force_Out_Data           im_disp4_get_force_out_data
+Im_DISP_Set_Color_Bar_Size           im_disp4_set_color_bar_size
+Im_DISP_Get_Color_Bar_Size           im_disp4_get_color_bar_size
+Im_DISP_Set_Color_Bar                im_disp4_set_color_bar
+Im_DISP_Get_Color_Bar                im_disp4_get_color_bar
+Im_DISP_Set_Blend                    im_disp4_set_blend
+Im_DISP_Get_Blend                    im_disp4_get_blendim_disp4_set_clip
+Im_DISP_Set_Output_Matrix            im_disp4_set_output_matrix
+Im_DISP_Get_Output_Matrix            im_disp4_get_output_matrix
+Im_DISP_Set_Clip                     im_disp4_set_clip
+Im_DISP_Get_Clip                     im_disp4_get_clip
+Im_DISP_Set_Output_Order             im_disp4_set_output_order
+Im_DISP_Get_Output_Order             im_disp4_get_output_order
+Im_DISP_Set_Grid                     im_disp4_set_grid
+Im_DISP_Get_Grid                     im_disp4_get_grid
+Im_DISP_Set_Grid_Enable              im_disp4_set_grid_enable
+Im_DISP_Get_Grid_Enable              im_disp4_get_grid_enable
+
+
+
+
+imdisp5
+Im_DISP_Set_Face_Frame              im_disp5_set_face_frame
+Im_DISP_Get_Face_Frame              im_disp5_get_face_frame
+Im_DISP_Set_Face_Frame_Enable       im_disp5_set_face_frame_enable
+Im_DISP_Get_Face_Frame_Enable       im_disp5_get_face_frame_enable
+Im_DISP_Set_OSD_Parameter_Reflect_Timing    im_disp5_set_osd_parameter_reflect_timing
+Im_DISP_Get_OSD_Parameter_Reflect_Timing    im_disp5_get_osd_parameter_reflect_timing
+Im_DISP_Set_OSD_Input_Data_Transfer         im_disp5_set_osd_input_data_transfer
+Im_DISP_Get_OSD_Input_Data_Transfer         im_disp5_get_osd_input_data_transfer
+Im_DISP_Set_OSD_Territory_Size              im_disp5_set_osd_territory_size
+Im_DISP_Get_OSD_Territory_Size              im_disp5_get_osd_territory_size
+Im_DISP_Set_OSD_Territory_Position          im_disp5_set_osd_territory_position
+Im_DISP_Get_OSD_Territory_Position          im_disp5_get_osd_territory_position
+Im_DISP_Set_OSD_IPO                         im_disp5_set_osd_ipo
+Im_DISP_Get_OSD_IPO                         im_disp5_get_osd_ipo
+Im_DISP_Set_OSD_Area0_Switch                im_disp5_set_osd_area0_switch
+Im_DISP_Get_OSD_Area0_Switch                im_disp5_get_osd_area0_switch
+Im_DISP_Get_OSD_Area0_Monitor               im_disp5_get_osd_area0_monitor
+Im_DISP_Set_OSD_Area_Size                   im_disp5_set_osd_area_size
+Im_DISP_Get_OSD_Area_Size                   im_disp5_get_osd_area_size
+Im_DISP_Set_OSD_Area_Addr                   im_disp5_set_osd_area_addr
+Im_DISP_Get_OSD_Area_Addr                   im_disp5_get_osd_area_addr
+Im_DISP_Set_OSD_Area_Adata_Addr             im_disp5_set_osd_area_adata_addr
+Im_DISP_Get_OSD_Area_Adata_Addr             im_disp5_get_osd_area_adata_addr
+Im_DISP_Set_OSD_Lfd                         im_disp5_set_osd_lfd
+Im_DISP_Get_OSD_Lfd                         im_disp5_get_osd_lfd
+Im_DISP_Set_OSD_Adata_Lfd                   im_disp5_set_osd_adata_lfd
+Im_DISP_Get_OSD_Adata_Lfd                   im_disp5_get_osd_adata_lfd
+
+
+
+imdisp6
+Im_DISP_Set_OSD_Display_Position    im_disp6_set_osd_display_position
+Im_DISP_Get_OSD_Display_Position    im_disp6_get_osd_display_position
+Im_DISP_Set_OSD_Area_Enable         im_disp6_set_osd_area_enable
+Im_DISP_Get_OSD_Area_Enable         im_disp6_get_osd_area_enable
+Im_DISP_Set_OSD_Blink               im_disp6_set_osd_blink
+Im_DISP_Get_OSD_Blink               im_disp6_get_osd_blink
+Im_DISP_Set_OSD_Blink_Timer         im_disp6_set_osd_blink_timer                
+Im_DISP_Get_OSD_Blink_Timer         im_disp6_get_osd_blink_timer
+Im_DISP_Set_OSD_Blink_Sync          im_disp6_set_osd_blink_sync
+Im_DISP_Get_OSD_Blink_Sync          im_disp6_get_osd_blink_sync
+Im_DISP_Set_OSD_Resize              im_disp6_set_osd_resize
+Im_DISP_Get_OSD_Resize              im_disp6_get_osd_resize
+Im_DISP_Set_OSD_Matrix              im_disp6_set_osd_matrix
+Im_DISP_Get_OSD_Matrix              im_disp6_get_osd_matrix
+Im_DISP_Set_OSD_Alpha               im_disp6_set_osd_alpha
+Im_DISP_Get_OSD_Alpha               im_disp6_get_osd_alpha
+Im_DISP_Set_Anti_Gamma_Table        im_disp6_set_anti_gamma_table
+Im_DISP_Get_Anti_Gamma_Table        im_disp6_get_anti_gamma_table
+Im_DISP_Set_Main_Gamma_Table        im_disp6_set_main_gamma_table
+Im_DISP_Get_Main_Gamma_Table        im_disp6_get_main_gamma_table
+Im_DISP_Set_Dcore_Gamma_Table       im_disp6_set_dcore_gamma_table
+Im_DISP_Get_Dcore_Gamma_Table       im_disp6_get_dcore_gamma_table
+
+
+
+imdisp7
+Im_DISP_Set_Luminance_Table    im_disp7_set_luminance_table
+Im_DISP_Get_Luminance_Table    im_disp7_get_luminance_table
+Im_DISP_Set_Chroma_Gain_Table  im_disp7_set_chroma_gain_table
+Im_DISP_Get_Chroma_Gain_Table  im_disp7_get_chroma_gain_table
+Im_DISP_Set_Mipi_Dsi_Ctrl0     im_disp7_set_mipi_dsi_ctrl0
+Im_DISP_Get_Mipi_Dsi_Ctrl0     im_disp7_get_mipi_dsi_ctrl0
+Im_DISP_Set_Mipi_Dsi_Ctrl1     im_disp7_set_mipi_dsi_ctrl1
+Im_DISP_Get_Mipi_Dsi_Ctrl1     im_disp7_get_mipi_dsi_ctrl1
+Im_DISP_Set_SR_IP              im_disp7_set_sr_ip
+Im_DISP_Get_SR_IP              im_disp7_get_sr_ip
+Im_DISP_Set_Write_Channel_Ctrl  im_disp7_set_write_channel_ctrl
+Im_DISP_Get_Write_Channel_Ctrl  im_disp7_get_write_channel_ctrl
+Im_DISP_Get_Write_Channel_Response    im_disp7_get_write_channel_response
+Im_DISP_Change_CSC_Matrix     im_disp7_change_csc_matrix
+Im_DISP_Change_BB_Color       im_disp7_change_bb_color
+Im_DISP_Check_BB_Color        im_disp7_check_bb_color
+Im_DISP_Change_Grid           im_disp7_change_grid
+Im_DISP_Draw_Face_Frame_Single    im_disp7_draw_face_frame_single
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

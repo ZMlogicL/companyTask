@@ -16,7 +16,7 @@
 #define __CT_DD_PCIE_EP_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 #include "ddpcieep.h"
 #include "ddtimestamp.h"
 #include "ddpciecomm.h"
@@ -30,18 +30,18 @@ typedef struct                              _CtDdPcieEp CtDdPcieEp;
 typedef struct                              _CtDdPcieEpPrivate CtDdPcieEpPrivate;
 
 struct _CtDdPcieEp {
-    KObject                 parent;
-    DdPcieDmaCh				dmach;
-	DdPcieDmaDir			dir;
-	kushort					offset;
-	kuint32					data;
-	EDdPcieEpMsiNum			msiNum;
-	TDdTimestampCtrl		timestampCtrl;
-	DdPcieCtrlDma			ctrlDma;
-	DdPcieCtrlMem			ctrlMem;
-	DdPcieLinkSpeed			currentLinkSpeed;
-	DdPcieAspmControl		aspmStatus;
-	DdPcieMps 				mps;
+    KObject             parent;
+    DdPcieDmaCh			dmach;
+	DdPcieDmaDir		dir;
+	kushort				offset;
+	kuint32				data;
+	EDdPcieEpMsiNum		msiNum;
+	DdTimestamp			timestampCtrl;
+	DdPcieCtrlDma		ctrlDma;
+	DdPcieCtrlMem		ctrlMem;
+	DdPcieLinkSpeed		currentLinkSpeed;
+	DdPcieAspmControl	aspmStatus;
+	DdPcieMps 			mps;
 };
 
 KConstType      ct_dd_pcie_ep_get_type(void);

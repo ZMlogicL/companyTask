@@ -42,8 +42,8 @@ struct _CtDdUart2
 	USHORT				baudrate;
 	kuchar				slave_addr;
 	ULONG				s_write_pos;
-	T_DD_UART_MNG		uart_mng;
-	E_DD_UART_BAUD_RATE	baud_rate;
+	DdUartMng		uart_mng;
+	DdUartBaudRate	baud_rate;
 	ULONG				data_addr;
 	ULONG				data_num;
 

@@ -38,7 +38,7 @@ This function set slave area setting of specified slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_set_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_set_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
 										  ImMxicSlaveNumber slaveNumber, 
 										  ImMxicSlaveArea const* const slaveArea );
 
@@ -52,7 +52,7 @@ This function get slave area setting of specified slave number.<br>
 @retval			D_DDIM_OK					Success
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error
 */
-INT32	mxic_master_slave_get_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_slave_area( MxicMasterSlave *self, ImMxicUnit unit, 
 										  ImMxicSlaveNumber slaveNumber, ImMxicSlaveArea* const slaveArea );
 
 /**
@@ -63,7 +63,7 @@ This function set slave area setting of all slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_set_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_set_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
 											  const MxicAllSlaveArea* const allSlaveArea );
 
 /**
@@ -74,7 +74,7 @@ This function get slave area setting of all slave number.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_slave_area_all( MxicMasterSlave *self, ImMxicUnit unit, 
 											  MxicAllSlaveArea* const allSlaveArea );
 
 /**
@@ -87,7 +87,7 @@ This function set interruption setting of salave area decode error.<br>
 @remarks		Please acquire error status with an mxic_master_slave_get_decode_error function 
 				at the time of decode error interruption generating. 
 */
-INT32	mxic_master_slave_set_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_set_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
 												const MxicDecErrInt* const decErrInt );
 
 /**
@@ -98,7 +98,7 @@ This function get interruption setting of salave area decode error.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_decode_error_int( MxicMasterSlave *self, ImMxicUnit unit, 
 												MxicDecErrInt* const decErrInt );
 
 /**
@@ -111,7 +111,7 @@ This function get decode error status.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_decode_error( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_decode_error( MxicMasterSlave *self, ImMxicUnit unit, 
 											ImMxicDecErr* const status );
 
 /**
@@ -126,7 +126,7 @@ This function set the W master to the W arbiter.<br>
 @remarks		The setting changed by this function is reflected by the configration start.
 @remarks		MxicUtlis_W_RESERVE is set to the part where the channel is not set up without fail.
 */
-INT32	mxic_master_slave_set_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
+kint32	mxic_master_slave_set_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
 												const MxicWarbiterAssignPort* const assign );
 
 /**
@@ -139,7 +139,7 @@ This function get the W master from the W arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
+kint32	mxic_master_slave_get_master_w_arbiter( MxicMasterSlave *self, ImMxicUnit unit, ImMxicWArbiter arbiter, 
 												MxicWarbiterAssignPort* const assign );
 
 /**
@@ -154,7 +154,7 @@ This function set the R master to the R arbiter.<br>
 @remarks		The setting changed by this function is reflected by the configration start.
 @remarks		MxicUtlis_R_RESERVE is set to the part where the channel is not set up without fail.
 */
-INT32	mxic_master_slave_set_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_set_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												ImMxicRArbiter arbiter, 
 												const MxicRarbiterAssignPort* const assign );
 
@@ -168,7 +168,7 @@ This function get the R master from the R arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_master_r_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												ImMxicRArbiter arbiter, 
 												MxicRarbiterAssignPort* const assign );
 
@@ -181,7 +181,7 @@ This function set the master to the all arbiter.<br>
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		The setting changed by this function is reflected by the configration start.
 */
-INT32	mxic_master_slave_set_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_set_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												  const MxicAllArbiterAssign* const allAssign );
 
 /**
@@ -192,9 +192,9 @@ This function get the master from the all arbiter.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_master_slave_get_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
+kint32	mxic_master_slave_get_master_all_arbiter( MxicMasterSlave *self, ImMxicUnit unit, 
 												  MxicAllArbiterAssign* const allAssign );
 
-void mxic_master_slave_for_dec_err(MxicMasterSlave *self, ImMxicUnit unit, INT32 decErrCh);
+void mxic_master_slave_for_dec_err(MxicMasterSlave *self, ImMxicUnit unit, kint32 decErrCh);
 
 #endif	// __MXIC_MASTER_SLAVE_H__

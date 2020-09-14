@@ -1,3 +1,4 @@
+如有　疑问　或　修改记录不全请发邮件　youzhenglong@sns.com
 Audio_aac_dec类:
 .C文件
 修改宏名：
@@ -39,6 +40,7 @@ out_sampling_rate -> outSamplingRate
 out_bit_rate -> outBitRate
 out_channel -> outChannel
 
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 audio_aac_enc类:
 .C文件
 修改宏名：
@@ -92,6 +94,7 @@ in_data_size -> inDataSize
 out_data_addr -> outDataAddr
 out_data_size -> outDataSize
 
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 audio_auif类:
 .C文件
 修改宏名：
@@ -171,7 +174,7 @@ D_AUDIO_AUIF_CH0_CH1 -> AudioAuif_D_AUDIO_AUIF_CH0_CH1
 D_AUDIO_AUIF_CH4_CH5 -> AudioAuif_D_AUDIO_AUIF_CH4_CH5
 D_AUDIO_AUIF_CH_NUM -> AudioAuif_D_AUDIO_AUIF_CH_NUM
 D_AUDIO_AUIF_AHB_FORMAT_R -> AudioAuif_D_AUDIO_AUIF_AHB_FORMAT_R
-D_AUDIO_AUIF_AHB_FORMAT_L	 -> AudioAuif_D_AUDIO_AUIF_AHB_FORMAT_L
+D_AUDIO_AUIF_AHB_FORMAT_L -> AudioAuif_D_AUDIO_AUIF_AHB_FORMAT_L
 D_AUDIO_AUIF_GAIN_0DB -> AudioAuif_D_AUDIO_AUIF_GAIN_0DB
 D_AUDIO_AUIF_GAIN_6DB -> AudioAuif_D_AUDIO_AUIF_GAIN_6DB
 D_AUDIO_AUIF_GAIN_12DB -> AudioAuif_D_AUDIO_AUIF_GAIN_12DB
@@ -185,3 +188,414 @@ E_AUDIO_DMA_MODE_OUT_1CH -> AudioAuif_E_AUDIO_DMA_MODE_OUT_1CH
 E_AUDIO_DMA_MODE_OUT_2CH -> AudioAuif_E_AUDIO_DMA_MODE_OUT_2CH
 
 修改枚举变量名：E_AUDIO_DMA_MODE -> EAudioDmaMode
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+audio_buzzer类:
+.C文件
+修改宏名：
+所有小写改为大写，添加类名前缀AudioBuzzer_
+D_AUDIO_BUZZER_ON -> AudioBuzzer_D_AUDIO_BUZZER_ON
+D_AUDIO_BUZZER_OFF -> AudioBuzzer_D_AUDIO_BUZZER_OFF
+D_AUDIO_BUZZER_DATA_CNT -> AudioBuzzer_D_AUDIO_BUZZER_DATA_CNT
+D_AUDIO_BZ_WAV_START_NUM -> AudioBuzzer_D_AUDIO_BZ_WAV_START_NUM
+D_AUDIO_BZ_NUM_SAMPLE -> AudioBuzzer_D_AUDIO_BZ_NUM_SAMPLE
+D_AUDIO_BZ_NUM_FRAME_ADDR_TBL -> AudioBuzzer_D_AUDIO_BZ_NUM_FRAME_ADDR_TBL
+D_AUDIO_BZ_OUT_CH0 -> AudioBuzzer_D_AUDIO_BZ_OUT_CH0
+D_AUDIO_BZ_OUT_CH1 -> AudioBuzzer_D_AUDIO_BZ_OUT_CH1
+
+
+修改结构体T_AUDIO_BZ_SOUND_DATA -> TAudioBzSoundData
+规范其内变量名
+smpl_rate -> smplRate
+data_size -> dataSize
+bits_per_sample -> bitsPerSample
+
+修改结构体T_AUDIO_BZ_BUFF -> TAudioBzBuff
+
+修改静态变量名：
+所有小写改为大写，添加S_前缀
+gBF_AudioBZ_WAV_ID_Current -> S_GBF_AUDIOBZ_WAV_ID_CURRENT
+gBF_AudioBZ_WAV_ID_Index -> S_GBF_AUDIOBZ_WAV_ID_INDEX
+gBF_AudioBZ_WAV_Data_Remain_Size -> S_GBF_AUDIOBZ_WAV_DATA_REMAIN_SIZE
+gBF_AudioBZ_WAV_Data_Last_Addr -> S_GBF_AUDIOBZ_WAV_DATA_LAST_ADDR
+gBF_AudioBZ_WAV_Data_Addr_Tbl -> S_GBF_AUDIOBZ_WAV_DATA_ADDR_TBL
+gBF_AudioBZ_WAV_Data_Addr_Tbl_Pos -> S_GBF_AUDIOBZ_WAV_DATA_ADDR_TBL_POS
+gBF_AudioBZ_WAV_Data_Addr_Tbl_Pos_End -> S_GBF_AUDIOBZ_WAV_DATA_ADDR_TBL_POS_END
+gBF_Audio_WAV_Sound -> S_GBF_AUDIO_WAV_SOUND
+gBF_Audio_WavFile_Addr_Base -> S_GBF_AUDIO_WAVFILE_ADDR_BASE
+gBF_Audio_WavFile_Addr_Current -> S_GBF_AUDIO_WAVFILE_ADDR_CURRENT
+gBF_AudioBZ_WAV_Data_BitsPerSample -> S_GBF_AUDIOBZ_WAV_DATA_BITSPERSAMPLE
+gBF_AudioBZ_WAV_Data_Channel -> S_GBF_AUDIOBZ_WAV_DATA_CHANNEL
+gBF_AudioBZ_Tbl_Pos -> S_GBF_AUDIOBZ_TBL_POS
+
+修改公有方法名：
+所有大写修改为小写，添加AudioAacEnc *self参数
+添加类名前缀audio_auif_
+BF_AudioBuzzer_DirectLoadWav -> audio_buzzer_bf_audiobuzzer_directloadwav
+BF_AudioBuzzer_DirectUnloadWav -> audio_buzzer_bf_audiobuzzer_directunloadwav
+BF_AudioBuzzer_DirectPlayWav -> audio_buzzer_bf_audiobuzzer_directplaywav
+BF_AudioBuzzer_DirectStopWav -> audio_buzzer_bf_audiobuzzer_directstopwav
+BF_AudioBuzzer_DirectControlWav -> audio_buzzer_bf_audiobuzzer_directcontrolwav
+BF_AudioBuzzer_Renov_Buff -> audio_buzzer_bf_audiobuzzer_renov_buff
+BF_AudioBuzzer_Get_BuffAddr -> audio_buzzer_bf_audiobuzzer_get_buffaddr
+BF_AudioBuzzer_Get_BuffSize -> audio_buzzer_bf_audiobuzzer_get_buffsize
+BF_AudioBuzzer_Get_Buff_BitsPerSample -> audio_buzzer_bf_audiobuzzer_get_buff_bitspersample
+BF_AudioBuzzer_Get_Buff_Channel -> audio_buzzer_bf_audiobuzzer_get_buff_channel
+BF_AudioBuzzer_Set_WavFile_Addr -> audio_buzzer_bf_audiobuzzer_set_wavfile_addr
+BF_AudioBuzzer_Get_WavFile_Addr -> BF_AudioBuzzer_Get_WavFile_Addr//暂不修改，不添加self参数
+BF_AudioBuzzer_Clear_WavFile_Addr -> audio_buzzer_bf_audiobuzzer_clear_wavfile_addr
+wav_write -> audio_buzzer_wav_write_od //重载，不添加self参数
+wav_read -> audio_buzzer_wav_read_od //重载，不添加self参数
+wav_seek -> audio_buzzer_wav_seek_od //重载，不添加self参数
+wav_seek_cur -> audio_buzzer_wav_seek_cur_od //重载，不添加self参数
+
+new方法：audio_buzzer_new()
+使用：a文件调用本类中方法时，在a.c文件中添加 AudioBuzzer* xxx;
+在a_constructor中添加priv->xxx = audio_buzzer_new();
+在a_destructor中添加if (priv->xxx) {
+	    	k_object_unref(priv->xxx);
+	    	priv->xxx = NULL;
+	}
+在调用方法的内部添加　APrivate* priv = A_GET_PRIVATE(self);
+在调用的地方将NULL替换为priv->xxx
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+audio_data类:
+.C文件
+修改静态变量名：
+所有小写改为大写，添加S_前缀
+gBF_Audio_Data_NullData -> S_GBF_AUDIO_DATA_NULLDATA
+
+修改公有方法名：
+所有大写修改为小写，添加AudioAacEnc *self参数，添加类名前缀audio_data_
+BF_Audio_Data_Clean_Flush_Dcache -> audio_data_bf_audio_data_clean_flush_dcache
+BF_Audio_Data_Flush_Dcache -> audio_data_bf_audio_data_flush_dcache
+BF_Audio_Data_Clean_Dcache -> BF_Audio_Data_Clean_Dcache //暂不修改，不添加self参数
+BF_Audio_Data_Reverse2Byte -> BF_Audio_Data_Reverse2Byte //暂不修改，不添加self参数
+BF_Audio_Data_ChangeEndian -> audio_data_bf_audio_data_changeendian
+BF_Audio_Data_4ByteTo3Byte -> audio_data_bf_audio_data_4byteto3byte
+BF_Audio_Data_3ByteTo4Byte -> audio_data_bf_audio_data_3byteto4byte
+BF_Audio_Data_Pcm_24bitTo16bit -> audio_data_bf_audio_data_pcm_24bitto16bit
+BF_Audio_Data_Pcm_16bitTo24bit -> audio_data_bf_audio_data_pcm_16bitto24bit
+BF_Audio_Data_Pcm_8to16 -> audio_data_bf_audio_data_pcm_8to16
+BF_Audio_Data_Pcm_16to8 -> audio_data_bf_audio_data_pcm_16to8
+BF_Audio_Data_24bitPcm_MonoToStereo -> audio_data_bf_audio_data_24bitpcm_monotostereo
+BF_Audio_Data_24bitPcm_StereoToMono -> audio_data_bf_audio_data_24bitpcm_stereotomono
+BF_Audio_Data_Add_16bitPcm -> audio_data_bf_audio_data_add_16bitpcm
+BF_Audio_Data_Add_24bitPcm -> audio_data_bf_audio_data_add_24bitpcm
+BF_Audio_Data_Swp_16bitPcm_2chTo4ch -> audio_data_bf_audio_data_swp_16bitpcm_2chto4ch
+BF_Audio_Data_Swp_32bitPcm_2chTo4ch -> audio_data_bf_audio_data_swp_32bitpcm_2chto4ch
+BF_Audio_Data_Swp_16bitPcm_2chTo3ch -> audio_data_bf_audio_data_swp_16bitpcm_2chto3ch
+BF_Audio_Data_Swp_32bitPcm_2chTo3ch -> audio_data_bf_audio_data_swp_32bitpcm_2chto3ch
+BF_Audio_Data_Swp_16bitPcm_4chTo2ch -> audio_data_bf_audio_data_swp_16bitpcm_4chto2ch
+BF_Audio_Data_Swp_32bitPcm_4chTo2ch -> audio_data_bf_audio_data_swp_32bitpcm_4chto2ch
+BF_Audio_Data_Swp_16bitPcm_3chTo2ch -> audio_data_bf_audio_data_swp_16bitpcm_3chto2ch
+BF_Audio_Data_Swp_32bitPcm_3chTo2ch -> audio_data_bf_audio_data_swp_32bitpcm_3chto2ch
+BF_Audio_Data_24bitPcm_Cnv2chTo3ch -> audio_data_bf_audio_data_24bitpcm_cnv2chto3ch
+BF_Audio_Data_24bitPcm_Cnv2chTo4ch -> audio_data_bf_audio_data_24bitpcm_cnv2chto4ch
+BF_Audio_Data_16bitPcm_Cnv2chTo3ch -> audio_data_bf_audio_data_16bitpcm_cnv2chto3ch
+BF_Audio_Data_16bitPcm_Cnv2chTo4ch -> audio_data_bf_audio_data_16bitpcm_cnv2chto4ch
+BF_Audio_Data_16bitPcm_BitShift_L -> BF_Audio_Data_16bitPcm_BitShift_L //暂不修改，不添加self参数
+BF_Audio_Data_32bitPcm_BitShift_L -> BF_Audio_Data_32bitPcm_BitShift_L //暂不修改，不添加self参数
+BF_Audio_Data_Get_NullData_Addr -> audio_data_bf_audio_data_get_nulldata_addr
+
+new方法：audio_data_new()
+使用：a文件调用本类中方法时，在a.c文件中添加 AudioData* xxx;
+在a_constructor中添加priv->xxx = audio_data_new();
+在a_destructor中添加if (priv->xxx) {
+	    	k_object_unref(priv->xxx);
+	    	priv->xxx = NULL;
+	}
+在调用方法的内部添加　APrivate* priv = A_GET_PRIVATE(self);
+在调用的地方将NULL替换为priv->xxx
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+audio类:　修改文件名为baseaudio
+.C文件
+修改变量名字:
+去掉下划线，gBF变为小写gbf
+gBF_Instance_AudioSRC -> gbfInstanceAudioSrc
+gBF_Instance_AudioCap -> gbfInstanceAudioCap
+gBF_Instance_AudioOut -> gbfInstanceAudioOut
+gBF_Instance_AudioEnc -> gbfInstanceAudioEnc
+gBF_Instance_AudioDec -> gbfInstanceAudioDec
+
+修改公有方法名字：
+所有大写改为小写，添加BaseAudio* self参数，添加前缀base_audio_
+fj_audio_src_open -> base_audio_fj_audio_src_open
+fj_audio_src_close -> base_audio_fj_audio_src_close
+fj_audio_src_connect -> base_audio_fj_audio_src_connect
+fj_audio_src_disconnect -> base_audio_fj_audio_src_disconnect
+fj_audio_capture_open -> base_audio_fj_audio_capture_open
+fj_audio_capture_close -> base_audio_fj_audio_capture_close
+fj_audio_capture_connect_out -> base_audio_fj_audio_capture_connect_out
+fj_audio_capture_disconnect_out -> base_audio_fj_audio_capture_disconnect_out
+fj_audio_capture_connect_enc -> base_audio_fj_audio_capture_connect_enc
+fj_audio_capture_disconnect_enc -> base_audio_fj_audio_capture_disconnect_enc
+fj_audio_capture_config -> base_audio_fj_audio_capture_config
+fj_audio_capture_sample_config -> base_audio_fj_audio_capture_sample_config
+fj_audio_capture_set_volume -> fj_audio_capture_set_volume //暂不修改，不添加self参数
+fj_audio_capture_start -> base_audio_fj_audio_capture_start
+fj_audio_capture_stop -> base_audio_fj_audio_capture_stop
+fj_audio_capture_enable_plugin1 -> base_audio_fj_audio_capture_enable_plugin1
+fj_audio_capture_complete_plugin1 -> base_audio_fj_audio_capture_complete_plugin1
+fj_audio_out_open -> base_audio_fj_audio_out_open
+fj_audio_out_close -> base_audio_fj_audio_out_close
+fj_audio_out_config -> base_audio_fj_audio_out_config
+fj_audio_out_set_volume -> base_audio_out_set_volume
+fj_audio_out_direct_load_wav -> base_audio_fj_audio_out_direct_load_wav
+fj_audio_out_direct_unload_wav -> base_audio_fj_audio_out_direct_unload_wav
+fj_audio_out_direct_play_wav -> base_audio_fj_audio_out_direct_play_wav
+fj_audio_out_direct_stop_wav -> base_audio_fj_audio_out_direct_stop_wav
+fj_audio_out_direct_control_wav -> base_audio_fj_audio_out_direct_control_wav
+fj_audio_encoder_open -> base_audio_fj_audio_encoder_open
+fj_audio_encoder_close -> base_audio_fj_audio_encoder_close
+fj_audio_encoder_free_index -> base_audio_fj_audio_encoder_free_index
+fj_audio_encoder_config -> base_audio_fj_audio_encoder_config
+fj_audio_encoder_setup -> base_audio_fj_audio_encoder_setup
+fj_audio_encoder_start -> base_audio_fj_audio_encoder_start
+fj_audio_encoder_stop -> base_audio_fj_audio_encoder_stop
+fj_audio_encoder_startmute -> base_audio_fj_audio_encoder_startmute
+fj_audio_encoder_stopmute -> base_audio_fj_audio_encoder_stopmute
+fj_audio_decoder_open -> base_audio_fj_audio_decoder_open
+fj_audio_decoder_close -> base_audio_fj_audio_decoder_close
+fj_audio_decoder_connect -> base_audio_fj_audio_decoder_connect
+fj_audio_decoder_disconnect -> base_audio_fj_audio_decoder_disconnect
+fj_audio_decoder_init -> base_audio_fj_audio_decoder_init
+fj_audio_decoder_config -> base_audio_fj_audio_decoder_config
+fj_audio_decoder_set_audio_stream -> base_audio_fj_audio_decoder_set_audio_stream
+fj_audio_decoder_start_decode -> base_audio_fj_audio_decoder_start_decode
+fj_audio_decoder_stop_decode -> base_audio_fj_audio_decoder_stop_decode
+fj_audio_decoder_start_output -> base_audio_fj_audio_decoder_start_output
+fj_audio_decoder_stop_output -> base_audio_fj_audio_decoder_stop_output
+fj_audio_decoder_mem_allocate -> base_audio_fj_audio_decoder_mem_allocate
+fj_videoplayback_audioinit -> base_audio_fj_videoplayback_audioinit
+fj_videoplayback_setaudiostream -> base_audio_fj_videoplayback_setaudiostream
+fj_videoplayback_startaudiodecode -> base_audio_fj_videoplayback_startaudiodecode
+fj_videoplayback_startaudiooutput -> base_audio_fj_videoplayback_startaudiooutput
+fj_videoplayback_stopaudiooutput -> base_audio_fj_videoplayback_stopaudiooutput
+fj_videoplayback_stopaudiodecode -> base_audio_fj_videoplayback_stopaudiodecode
+
+new方法：fj_audio_new()
+使用：a文件调用本类中方法时，在a.c文件中添加 BaseAuido* xxx;
+在a_constructor中添加priv->xxx = base_audio_new();
+在a_destructor中添加if (priv->xxx) {
+	    	k_object_unref(priv->xxx);
+	    	priv->xxx = NULL;
+	}
+在调用方法的内部添加　APrivate* priv = A_GET_PRIVATE(self);
+在调用的地方将NULL替换为priv->xxx
+
+.h文件
+移动原audio.h文件代码至baseaudio.h文件中，与baseaudio.c在同一目录下
+
+修改宏名：
+添加类名前缀BaseAudio_
+D_AUDIO_OK -> BaseAudio_D_AUDIO_OK
+D_AUDIO_ERR -> BaseAudio_D_AUDIO_ERR		
+D_AUDIO_ERR_PARAM -> BaseAudio_D_AUDIO_ERR_PARAM
+D_AUDIO_ERR_TIMEOUT -> BaseAudio_D_AUDIO_ERR_TIMEOUT
+D_AUDIO_WAV_HEADER_ERR -> BaseAudio_D_AUDIO_WAV_HEADER_ERR
+D_AUDIO_WAV_TIME_ERR -> BaseAudio_D_AUDIO_WAV_TIME_ERR
+D_AUDIO_WAV_FORMAT_OVER -> BaseAudio_D_AUDIO_WAV_FORMAT_OVER
+D_AUDIO_END -> BaseAudio_D_AUDIO_END
+D_AUDIO_BZ_PCM_END -> BaseAudio_D_AUDIO_BZ_PCM_END
+D_AUDIO_ERR_OVERFLOW -> BaseAudio_D_AUDIO_ERR_OVERFLOW
+D_AUDIO_ERR_INST_DISABLE -> BaseAudio_D_AUDIO_ERR_INST_DISABLE
+
+D_AUDIO_ON	 -> BaseAudio_D_AUDIO_ON
+D_AUDIO_OFF -> BaseAudio_D_AUDIO_OFF		
+
+D_AUDIO_SAMPLE_RATE_192000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_192000
+D_AUDIO_SAMPLE_RATE_96000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_96000
+D_AUDIO_SAMPLE_RATE_88200 -> BaseAudio_D_AUDIO_SAMPLE_RATE_88200
+D_AUDIO_SAMPLE_RATE_64000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_64000
+D_AUDIO_SAMPLE_RATE_48000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_48000	
+D_AUDIO_SAMPLE_RATE_44100 -> BaseAudio_D_AUDIO_SAMPLE_RATE_44100	
+D_AUDIO_SAMPLE_RATE_32000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_32000	
+D_AUDIO_SAMPLE_RATE_24000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_24000
+D_AUDIO_SAMPLE_RATE_22050 -> BaseAudio_D_AUDIO_SAMPLE_RATE_22050
+D_AUDIO_SAMPLE_RATE_16000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_16000
+D_AUDIO_SAMPLE_RATE_12000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_12000	
+D_AUDIO_SAMPLE_RATE_11025 -> BaseAudio_D_AUDIO_SAMPLE_RATE_11025
+D_AUDIO_SAMPLE_RATE_8000 -> BaseAudio_D_AUDIO_SAMPLE_RATE_8000
+
+D_AUDIO_BIT_RATE_8000 -> BaseAudio_D_AUDIO_BIT_RATE_8000
+D_AUDIO_BIT_RATE_11025 -> 	BaseAudio_D_AUDIO_BIT_RATE_11025	
+D_AUDIO_BIT_RATE_16000 -> 	BaseAudio_D_AUDIO_BIT_RATE_16000
+D_AUDIO_BIT_RATE_22050 -> 	BaseAudio_D_AUDIO_BIT_RATE_22050
+D_AUDIO_BIT_RATE_32000 -> 	BaseAudio_D_AUDIO_BIT_RATE_32000
+D_AUDIO_BIT_RATE_40000 -> BaseAudio_D_AUDIO_BIT_RATE_40000
+D_AUDIO_BIT_RATE_48000 -> BaseAudio_D_AUDIO_BIT_RATE_48000
+D_AUDIO_BIT_RATE_56000 -> BaseAudio_D_AUDIO_BIT_RATE_56000
+D_AUDIO_BIT_RATE_64000 -> BaseAudio_D_AUDIO_BIT_RATE_64000
+D_AUDIO_BIT_RATE_80000 -> 	BaseAudio_D_AUDIO_BIT_RATE_80000
+D_AUDIO_BIT_RATE_96000 -> BaseAudio_D_AUDIO_BIT_RATE_96000
+D_AUDIO_BIT_RATE_112000 -> BaseAudio_D_AUDIO_BIT_RATE_112000
+D_AUDIO_BIT_RATE_128000 -> BaseAudio_D_AUDIO_BIT_RATE_128000	
+D_AUDIO_BIT_RATE_160000 -> BaseAudio_D_AUDIO_BIT_RATE_160000
+D_AUDIO_BIT_RATE_192000 -> BaseAudio_D_AUDIO_BIT_RATE_192000
+D_AUDIO_BIT_RATE_224000 -> BaseAudio_D_AUDIO_BIT_RATE_224000
+D_AUDIO_BIT_RATE_256000 -> BaseAudio_D_AUDIO_BIT_RATE_256000	
+D_AUDIO_BIT_RATE_320000 -> BaseAudio_D_AUDIO_BIT_RATE_320000		
+D_AUDIO_BIT_RATE_384000 -> BaseAudio_D_AUDIO_BIT_RATE_384000	
+	
+FLG_AUDIO_CAP_IN0_INIT -> BaseAudio_FLG_AUDIO_CAP_IN0_INIT	
+FLG_AUDIO_CAP_IN1_INIT -> BaseAudio_FLG_AUDIO_CAP_IN1_INIT
+FLG_AUDIO_CAP_IN0_START -> BaseAudio_FLG_AUDIO_CAP_IN0_START
+FLG_AUDIO_CAP_IN1_START -> BaseAudio_FLG_AUDIO_CAP_IN1_START		
+FLG_AUDIO_CAP_IN0_STOP -> BaseAudio_FLG_AUDIO_CAP_IN0_STOP		
+FLG_AUDIO_CAP_IN1_STOP -> BaseAudio_FLG_AUDIO_CAP_IN1_STOP 	
+FLG_AUDIO_CAP_IN0_PLUGIN -> BaseAudio_FLG_AUDIO_CAP_IN0_PLUGIN		
+FLG_AUDIO_CAP_IN1_PLUGIN -> BaseAudio_FLG_AUDIO_CAP_IN1_PLUGIN	
+FLG_AUDIO_CAP_IN0_PCM_RCV -> BaseAudio_FLG_AUDIO_CAP_IN0_PCM_RCV		
+FLG_AUDIO_CAP_IN1_PCM_RCV -> BaseAudio_FLG_AUDIO_CAP_IN1_PCM_RCV		
+FLG_AUDIO_CAP_IN0_PCM_RCV_2ND -> BaseAudio_FLG_AUDIO_CAP_IN0_PCM_RCV_2ND		
+FLG_AUDIO_CAP_IN1_PCM_RCV_2ND -> BaseAudio_FLG_AUDIO_CAP_IN1_PCM_RCV_2ND
+FLG_AUDIO_CAP_IN_STATE_CHANGE -> BaseAudio_FLG_AUDIO_CAP_IN_STATE_CHANGE
+FLG_AUDIO_CAP_IN_STATE_ERR -> BaseAudio_FLG_AUDIO_CAP_IN_STATE_ERR
+
+FLG_AUDIO_OUT_OUT0_INIT -> BaseAudio_FLG_AUDIO_OUT_OUT0_INIT
+FLG_AUDIO_OUT_OUT1_INIT -> BaseAudio_FLG_AUDIO_OUT_OUT1_INIT			
+FLG_AUDIO_OUT_OUT0_START -> BaseAudio_FLG_AUDIO_OUT_OUT0_START		
+FLG_AUDIO_OUT_OUT1_START -> BaseAudio_FLG_AUDIO_OUT_OUT1_START	
+FLG_AUDIO_OUT_OUT0_STOP -> BaseAudio_FLG_AUDIO_OUT_OUT0_STOP	
+FLG_AUDIO_OUT_OUT1_STOP -> BaseAudio_FLG_AUDIO_OUT_OUT1_STOP		
+FLG_AUDIO_OUT_OUT_PCM_SND0 -> BaseAudio_FLG_AUDIO_OUT_OUT_PCM_SND0			
+FLG_AUDIO_OUT_OUT_PCM_SND1 -> BaseAudio_FLG_AUDIO_OUT_OUT_PCM_SND1	
+FLG_AUDIO_OUT_OUT_PCM_SND0_2ND -> BaseAudio_FLG_AUDIO_OUT_OUT_PCM_SND0_2ND		
+FLG_AUDIO_OUT_OUT_PCM_SND1_2ND -> BaseAudio_FLG_AUDIO_OUT_OUT_PCM_SND1_2ND
+FLG_AUDIO_OUT_BZ_STOP_NTFY0 -> BaseAudio_FLG_AUDIO_OUT_BZ_STOP_NTFY0
+FLG_AUDIO_OUT_BZ_STOP_NTFY1 -> BaseAudio_FLG_AUDIO_OUT_BZ_STOP_NTFY1		
+FLG_AUDIO_OUT_OUT_STATE_CHANGE -> BaseAudio_FLG_AUDIO_OUT_OUT_STATE_CHANGE	
+FLG_AUDIO_OUT_OUT_STATE_ERR -> BaseAudio_FLG_AUDIO_OUT_OUT_STATE_ERR	
+
+FLG_AUDIO_ENCDEC_ENC0_INIT -> BaseAudio_FLG_AUDIO_ENCDEC_ENC0_INIT	
+FLG_AUDIO_ENCDEC_ENC1_INIT -> BaseAudio_FLG_AUDIO_ENCDEC_ENC1_INIT	
+FLG_AUDIO_ENCDEC_ENC0_TX_DATA -> BaseAudio_FLG_AUDIO_ENCDEC_ENC0_TX_DATA	
+FLG_AUDIO_ENCDEC_ENC1_TX_DATA -> BaseAudio_FLG_AUDIO_ENCDEC_ENC1_TX_DATA
+FLG_AUDIO_ENCDEC_ENC0_START -> BaseAudio_FLG_AUDIO_ENCDEC_ENC0_START	
+FLG_AUDIO_ENCDEC_ENC1_START -> BaseAudio_FLG_AUDIO_ENCDEC_ENC1_START		
+FLG_AUDIO_ENCDEC_ENC0_STOP	 -> BaseAudio_FLG_AUDIO_ENCDEC_ENC0_STOP	
+FLG_AUDIO_ENCDEC_ENC1_STOP	 -> BaseAudio_FLG_AUDIO_ENCDEC_ENC1_STOP	
+FLG_AUDIO_ENCDEC_DEC_INIT -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_INIT	
+FLG_AUDIO_ENCDEC_DEC_DEC_CB -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_DEC_CB		
+FLG_AUDIO_ENCDEC_DEC_REQ_STRM -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_REQ_STRM	
+FLG_AUDIO_ENCDEC_DEC_START -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_START
+FLG_AUDIO_ENCDEC_DEC_STOP -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_STOP
+FLG_AUDIO_ENCDEC_DEC_STOP_NTFY -> BaseAudio_FLG_AUDIO_ENCDEC_DEC_STOP_NTFY
+		
+D_AUDIO_PCM_8_BIT -> BaseAudio_D_AUDIO_PCM_8_BIT
+D_AUDIO_PCM_16_BIT -> BaseAudio_D_AUDIO_PCM_16_BIT
+D_AUDIO_PCM_24_BIT -> BaseAudio_D_AUDIO_PCM_24_BIT		
+D_AUDIO_I2S_CYCLE_32FS -> BaseAudio_D_AUDIO_I2S_CYCLE_32FS
+D_AUDIO_I2S_CYCLE_64FS -> BaseAudio_D_AUDIO_I2S_CYCLE_64FS
+
+修改结构体T_AUDIO_TASK_PROCESS -> TAudioTaskProcess
+规范其内变量名
+event_flag -> eventFlag
+
+移动instance.h中函数声明，将其放至fjaudio.h中
+T_BF_INSTANCE_AUDIO_SRC* 	BF_Instance_Get_AudioSrc(kuchar audioSrcId);
+T_BF_INSTANCE_AUDIO_CAP* 	BF_Instance_Get_AudioCapture(kuchar audioCaptureId);
+T_BF_INSTANCE_AUDIO_OUT* 	BF_Instance_Get_AudioOut(kuchar audioOutId);
+T_BF_INSTANCE_AUDIO_ENC* 	BF_Instance_Get_AudioEncoder(kuchar audioEncId);
+T_BF_INSTANCE_AUDIO_DEC* 	BF_Instance_Get_AudioDecoder(kuchar audioDecId);
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+audio_capture类:
+.C文件
+将audiocapture重构成audiocapture1.c audiocapture2.c audiocapture3.c
+Audiocapturedef.h audiocaptureutils.c等文件
+
+修改公有方法名字：
+所有大写改为小写，添加对应* self参数，添加对应前缀
+auidocapture:
+BF_AudioCapture_InputInit -> audio_capture_bf_audiocapture_inputinit
+BF_AudioCapture_InputStart -> audio_capture_bf_audiocapture_inputstart
+BF_AudioCapture_Set_EncStartBuffPos -> audio_capture_bf_audiocapture_set_encstartbuffpos
+BF_AudioCapture_Clear_EncStartFlag -> audio_capture_bf_audiocapture_clear_encstartflag
+BF_AudioCapture_Get_InstanceInfo -> audio_capture_bf_audiocapture_get_instanceinfo
+
+audiocapture2:
+BF_AudioCapture_Get_BuffAddr_Enc -> audio_capture2_bf_audiocapture_get_buffaddr_enc
+BF_AudioCapture_Get_BuffSize_Enc -> audio_capture2_bf_audiocapture_get_buffsize_enc
+BF_AudioCapture_Get_BuffBankCount_Enc -> audio_capture2_bf_audiocapture_get_buffbankcount_enc
+BF_AudioCapture_Get_BuffChType -> audio_capture2_bf_audiocapture_get_buffchtype
+BF_AudioCapture_Get_SampleOffset -> audio_capture2_bf_audiocapture_get_sampleoffset
+BF_AudioCapture_Get_Status -> audio_capture2_bf_audiocapture_get_status
+BF_AudioCapture_Set_Volume -> audio_capture2_bf_audiocapture_set_volume
+
+audiocapture3:
+Audio_Cap_Process -> audio_capture3_audio_cap_process_od //未添加参数
+BF_AudioCapture_TaskStart -> audio_capture3_bf_audiocapture_taskstart
+BF_AudioCapture_TaskStop -> BF_AudioCapture_TaskStop //暂未修改，未添加参数
+BF_AudioCapture_Open -> audio_capture3_bf_audiocapture_open 
+BF_AudioCapture_Close -> audio_capture3_bf_audiocapture_close
+BF_AudioCapture_ConnectOut -> audio_capture3_bf_audiocapture_connectout
+BF_AudioCapture_DisconnectOut -> audio_capture3_bf_audiocapture_disconnectout
+BF_AudioCapture_ConnectEnc -> audio_capture3_bf_audiocapture_connectenc 
+BF_AudioCapture_DisconnectEnc -> audio_capture3_bf_audiocapture_disconnectenc
+BF_AudioCapture_Config -> audio_capture3_bf_audiocapture_config
+BF_AudioCapture_SampleConfig -> audio_capture3_bf_audiocapture_sampleconfig
+BF_AudioCapture_Start -> audio_capture3_bf_audiocapture_start
+BF_AudioCapture_Stop -> audio_capture3_bf_audiocapture_stop
+BF_AudioCapture_EnablePlugIn1 -> audio_capture3_bf_audiocapture_enableplugin1
+BF_AudioCapture_CompletePlugIn1 -> audio_capture3_bf_audiocapture_completeplugin1
+BF_AudioCapture_SetTestMode -> BF_AudioCapture_SetTestMode //暂未修改，未添加参数
+BF_AudioCapture_InputStop -> audio_capture3_bf_audiocapture_inputstop
+BF_AudioCapture_PcmReceive -> audio_capture3_bf_audiocapture_pcmreceive
+BF_AudioCapture_TxPlugIn1 -> audio_capture3_bf_audiocapture_txplugin1
+BF_AudioCapture_Renov_Buff_Out -> audio_capture3_bf_audiocapture_renov_buff_out
+BF_AudioCapture_Get_BuffAddr_Out -> audio_capture3_bf_audiocapture_get_buffaddr_out
+BF_AudioCapture_Get_BuffSize_Out -> audio_capture3_bf_audiocapture_get_buffsize_out
+BF_AudioCapture_Get_Buff_InPos -> audio_capture3_bf_audiocapture_get_buff_inpos
+BF_AudioCapture_Get_Buff_BytePerSample -> audio_capture3_bf_audiocapture_get_buff_bytepersample
+BF_AudioCapture_Renov_Buff_Enc -> audio_capture3_bf_audiocapture_renov_buff_enc
+
+
+
+new方法：audio_capture_new() audio_capture1_new() ......
+使用：a文件调用本类中方法时，在a.c文件中添加 AudioCapture* xxx;
+在a_constructor中添加priv->xxx = audio_capture_new();
+在a_destructor中添加if (priv->xxx) {
+	    	k_object_unref(priv->xxx);
+	    	priv->xxx = NULL;
+	}
+在调用方法的内部添加　APrivate* priv = A_GET_PRIVATE(self);
+在调用的地方将NULL替换为priv->xxx
+
+.h文件
+移动原audio_capture.h文件代码至audiocapture.h文件中，与audiocapture.c在同一目录下
+在包含头文件时请包对应的.h文件或者直接包audiocaptureutils.h
+
+audiocapture.h:
+宏:
+D_AUDIO_CAPTURE_INST_NUM -> AudioCapture_D_AUDIO_CAPTURE_INST_NUM
+D_AUDIO_CAPTURE_STATUS_INIT -> AudioCapture_D_AUDIO_CAPTURE_STATUS_INIT
+D_AUDIO_CAPTURE_STATUS_START -> AudioCapture_D_AUDIO_CAPTURE_STATUS_START
+D_AUDIO_CAPTURE_STATUS_STOP -> AudioCapture_D_AUDIO_CAPTURE_STATUS_STOP
+
+结构体:
+T_AUDIO_CAPTURE_INSTANCE -> TAudioCaptureInstance
+内部成员:
+audio_capture_id -> audioCaptureId
+connect_enc_id -> connectEncId
+connect_out_id -> connectOutId
+out_start_flg -> outStartFlg
+in_port -> inPort
+i2s_cfg -> i2sCfg
+plug_in1_enable -> plugIn1Enable
+in_smpl_rate -> inSmplRate
+out_smpl_rate -> outSmplRate
+in_ch_type -> inChType
+out_ch_type -> outChType
+in_out_addr_mode -> inOutAddrMode
+dma_id -> dmaId
+input_count -> inputCount
+
+
+
+
+
+

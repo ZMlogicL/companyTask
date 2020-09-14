@@ -273,7 +273,7 @@ typedef struct {
 	/**< LVDS Inverted output for use 1ch sensor target registor	:@@LMIR */
 	EimproLvdsInverted							invertedOutput;
 	/**< LVDS synchronous code detection mode. target registor	:@@DOLMD */
-	E_IM_PRO_LVDS_OUTPUT_MODE		outputMode;
+	EimproLvdsOutputMode		outputMode;
 	/**< LVDS sync code mask setting value range		:[0x00 - 0xFFFF] target registor	:@@LMSK */
 	USHORT												laneMask;
 	/**< LVDS select serial clock for SP0 target registor	:@@LVDSCLKS */
@@ -388,7 +388,7 @@ typedef struct {
 typedef struct {
 	/**< the synchronous code of LVDS. LVDS can set up to 3 groups of synchronous code and
 	 * can output the data with different synchronous codes as the data of different frames separately.	*/
-	TimproLvdsSyncCode				syncCode[ E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
+	TimproLvdsSyncCode				syncCode[ ImproBase_E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
 } TimproLvdsSyncCodeCtrl;
 
 /** LVDS Sync Code Mask Information */
@@ -406,7 +406,7 @@ typedef struct {
 /** LVDS Sync Code Mask Control */
 typedef struct {
 	/**< exclude the specific bit from comparison object in the synchronous code match detection processing.	*/
-	TimproLvdsSyncMask	syncMask[ E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
+	TimproLvdsSyncMask	syncMask[ ImproBase_E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
 } TimproLvdsSyncMaskCtrl;
 
 /** SOL/EOL detection interrupt vertical address. */
@@ -420,7 +420,7 @@ typedef struct {
 /** SOL/EOL detection interrupt vertical address Control */
 typedef struct {
 	/**< SOL/EOL detection interrupt vertical address.	*/
-	TimproLvdsIntAddr			intAddr[ E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
+	TimproLvdsIntAddr			intAddr[ ImproBase_E_IM_PRO_LVDS_OUTPUT_MODE_MAX ];
 } TimproLvdsIntAddrCtrl;
 
 /*类型定义区域*/
@@ -442,24 +442,24 @@ ImproSenlvds*		impro_senlvds_new();
 LVDS macro start.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Macro Start OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: LVDS has not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: LVDS has not stopped NG
 */
-extern	INT32			impro_senlvds_start( E_IM_PRO_LVDS_CH ch );
+extern	INT32			impro_senlvds_start( EimproLvdsCh ch );
 /**
 LVDS macro stop.
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Macro Stop OK
 @retval		D_IM_PRO_NG					: Macro Stop NG
 */
-extern	INT32			impro_senlvds_stop( E_IM_PRO_LVDS_CH ch );
+extern	INT32			impro_senlvds_stop( EimproLvdsCh ch );
 /**
 The control parameter of LVDS is set.
 @param[in]	ch : Channel No.
 @param[in]	lvdsCtrl : LVDS control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senlvds_ctrl( E_IM_PRO_LVDS_CH ch, TimproLvdsCtrl* lvdsCtrl );
+extern	INT32			impro_senlvds_ctrl( EimproLvdsCh ch, TimproLvdsCtrl* lvdsCtrl );
 /**
 LVDS Input starting position setup .
 @param[in]	ch : Channel No.
@@ -471,24 +471,24 @@ LVDS Input starting position setup .
 						 maximum size that can be set by each SENCORE block set by SENTOP.SENRAMSW.<br>
 						 target registor:@@LHSIZE
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 @remarks	Only in the case of @@SZEN = 1 (see impro_senlvds_ctrl), the value set up by this API is effective.
 */
-extern	INT32			impro_senlvds_set_area( E_IM_PRO_LVDS_CH ch, USHORT input_pos, USHORT inputSize );
+extern	INT32			impro_senlvds_set_area( EimproLvdsCh ch, USHORT input_pos, USHORT inputSize );
 /**
 LVDS output data rearrangement setup.
 @param[in]	ch : Channel No.
 @param[in]	lvdsOrder : LVDS pixel order information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
-extern	INT32			impro_senlvds_set_pixel_order( E_IM_PRO_LVDS_CH ch, TimproLvdsPixelOrder* lvdsOrder );
+extern	INT32			impro_senlvds_set_pixel_order( EimproLvdsCh ch, TimproLvdsPixelOrder* lvdsOrder );
 /**
 The sync code parameter of LVDS is set.
 @param[in]	ch : Channel No.
 @param[in]	syncCode : LVDS sync code information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 @code
 		//sample code
 		TimproLvdsSyncCode		syncCode;
@@ -516,13 +516,13 @@ The sync code parameter of LVDS is set.
 		impro_senlvds_set_sync_code( &syncCode );
 @endcode
 */
-extern	INT32			impro_senlvds_set_sync_code( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncCodeCtrl* syncCode );
+extern	INT32			impro_senlvds_set_sync_code( EimproLvdsCh ch, TimproLvdsSyncCodeCtrl* syncCode );
 /**
 LVDS sync code Mask setup.
 @param[in]	ch : Channel No.
 @param[in]	syncMask : LVDS sync mask information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 @code
 		//sample code
 		TimproLvdsSyncMask		syncCode;
@@ -550,25 +550,25 @@ LVDS sync code Mask setup.
 		impro_senlvds_set_sync_mask( &syncMask );
 @endcode
 */
-extern	INT32			impro_senlvds_set_sync_mask( E_IM_PRO_LVDS_CH ch, TimproLvdsSyncMaskCtrl* syncMask );
+extern	INT32			impro_senlvds_set_sync_mask( EimproLvdsCh ch, TimproLvdsSyncMaskCtrl* syncMask );
 /**
 LVDS Input starting position setup .
 @param[in]	ch : Channel No.
 @param[in]	intAddr	: SOL/EOL interrupt address information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senlvds_set_int_adr( E_IM_PRO_LVDS_CH ch, TimproLvdsIntAddrCtrl* intAddr );
+extern	INT32			impro_senlvds_set_int_adr( EimproLvdsCh ch, TimproLvdsIntAddrCtrl* intAddr );
 /**
 A setup of enable access to the built-in RAM of LVDS.
 @param[in]	ch : Channel No.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
-extern	INT32			impro_senlvds_set_paen( E_IM_PRO_LVDS_CH ch, UCHAR paenTrg );
+extern	INT32			impro_senlvds_set_paen( EimproLvdsCh ch, UCHAR paenTrg );
 
 
 #endif /* __IMPRO_SENLVDS_H__ */

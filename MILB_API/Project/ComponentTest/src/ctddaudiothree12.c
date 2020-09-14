@@ -3,7 +3,7 @@
 *@date                :2020-09-03
 *@author              :zhaoxin
 *@brief               :CtDdAudioThree12类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -55,9 +55,9 @@
 #include "ctddaudiothree11.h"
 #include "ctddaudiothree12.h"
 #include "ctddaudiovariable.h"
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdAudioThree12, ct_dd_audio_three12);
-#define CT_DD_AUDIO_THREE12_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),\
-		CtDdAudioThree12Private,CT_TYPE_DD_AUDIO_THREE12))
+
+G_DEFINE_TYPE(CtDdAudioThree12, ct_dd_audio_three12, G_TYPE_OBJECT);
+#define CT_DD_AUDIO_THREE12_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_AUDIO_THREE12, CtDdAudioThree12Private))
 
 struct _CtDdAudioThree12Private
 {
@@ -65,8 +65,10 @@ struct _CtDdAudioThree12Private
 /*
 *DECLS
 */
-static void 	ct_dd_audio_three12_constructor(CtDdAudioThree12 *self);
-static void 	ct_dd_audio_three12_destructor(CtDdAudioThree12 *self);
+static void 	ct_dd_audio_three12_class_init(CtDdAudioThree12Class *klass);
+static void 	ct_dd_audio_three12_init(CtDdAudioThree12 *self);
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 static void 	ctDdAudioDmaIntHandler109In_cb( void );
 static void 	ctDdAudioDmaIntHandler109Out_cb( void );
 static void 	ctDdAudioDmaIntHandler110In0_cb( void );
@@ -80,12 +82,29 @@ static void 	ctDdAudioDmaIntHandler112Out_cb( void );
 /*
  * IMPL
  */
-static void ct_dd_audio_three12_constructor(CtDdAudioThree12 *self) 
+static void ct_dd_audio_three12_class_init(CtDdAudioThree12Class *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdAudioThree12Private));
 }
 
-static void ct_dd_audio_three12_destructor(CtDdAudioThree12 *self) 
+static void ct_dd_audio_three12_init(CtDdAudioThree12 *self)
 {
+	CtDdAudioThree12Private *priv = CT_DD_AUDIO_THREE12_GET_PRIVATE(self);
+}
+
+static void dispose_od(GObject *object)
+{
+	CtDdAudioThree12 *self = (CtDdAudioThree12*)object;
+	CtDdAudioThree12Private *priv = CT_DD_AUDIO_THREE12_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+	CtDdAudioThree12 *self = (CtDdAudioThree12*)object;
+	CtDdAudioThree12Private *priv = CT_DD_AUDIO_THREE12_GET_PRIVATE(self);
 }
 
 static void ctDdAudioDmaIntHandler109In_cb( void )
@@ -846,7 +865,7 @@ void ct_dd_audio_three12_112(CtDdAudioThree12 *self)
 
 CtDdAudioThree12 *ct_dd_audio_three12_new(kpointer *temp, kuint8 ch)
 {
-    CtDdAudioThree12 *self = k_object_new_with_private(CT_TYPE_DD_AUDIO_THREE12, sizeof(CtDdAudioThree12Private));
+    CtDdAudioThree12 *self = g_object_new(CT_TYPE_DD_AUDIO_THREE12, NULL);
     if(!temp)
     {
          *temp = (kpointer)self;

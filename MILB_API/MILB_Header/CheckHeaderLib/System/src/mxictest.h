@@ -22,15 +22,15 @@
 G_BEGIN_DECLS
 
 
-#define MXIC_TYPE_TEST								(mxic_test_get_type())
-#define MXIC_TEST(obj)								(G_TYPE_CHECK_INSTANCE_CAST(obj, MXIC_TYPE_TEST, Mxic))
-#define MXIC_TEST_CALSS(klass)              	(G_TYPE_CHECK_CLASS_CAST((klass), MXIC_TYPE_TEST, MxicClass))
-#define MXIC_IS_TEST(obj)                        	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MXIC_TYPE_TEST))
-#define MXIC_IS_TEST_CLASS(klass)         	(G_TYPE_CHECK_CLASS_TYPE ((klass), MXIC_TYPE_TEST))
-#define MXIC_TEST_GET_CLASS(obj)         	(G_TYPE_INSTANCE_GET_CLASS ((obj), MXIC_TYPE_TEST, MxicClass))
+#define MXIC_TYPE_TEST				   (mxic_test_get_type())
+#define MXIC_TEST(obj)				   (G_TYPE_CHECK_INSTANCE_CAST(obj, MXIC_TYPE_TEST, Mxic))
+#define MXIC_TEST_CALSS(klass)         (G_TYPE_CHECK_CLASS_CAST((klass), MXIC_TYPE_TEST, MxicClass))
+#define MXIC_IS_TEST(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MXIC_TYPE_TEST))
+#define MXIC_IS_TEST_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), MXIC_TYPE_TEST))
+#define MXIC_TEST_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), MXIC_TYPE_TEST, MxicClass))
 
 
-typedef struct _Mxic                       	Mxic;
+typedef struct _Mxic                    Mxic;
 typedef struct _MxicClass            	MxicClass;
 typedef struct _MxicPrivate           	MxicPrivate;
 
@@ -46,8 +46,9 @@ struct _MxicClass
 };
 
 
-GType 					mxic_test_get_type(void) G_GNUC_CONST;
-Mxic *         			mxic_test_new(void);
+GType 		mxic_test_get_type(void) G_GNUC_CONST;
+Mxic*       mxic_test_new(void);
+void        mxic_test(Mxic* self);
 
 
 G_END_DECLS

@@ -3,7 +3,7 @@
 *@date                :2020-09-09
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JDSPRO_PWCH_H__
 
 
-#include <klib.h>
-
-
-#define JDSPRO_TYPE_PWCH				(jdspro_pwch_get_type())
-#define JDSPRO_PWCH(obj)					(K_TYPE_CHECK_INSTANCE_CAST((obj), JdsproPwch))
-#define JDSPRO_IS_PWCH(obj)			(K_TYPE_CHECK_INSTANCE_TYPE((obj), JDSPRO_TYPE_PWCH))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPwchtrg IoPwchtrg;
@@ -38,117 +34,115 @@ typedef union 				_IoPwlsize IoPwlsize;
 typedef union 				_IoPwdw IoPwdw;
 typedef union 				_IoPwvfm IoPwvfm;
 typedef struct 				_IoPwch IoPwch;
-typedef struct 				_JdsproPwch JdsproPwch;
-typedef struct 				_JdsproPwchPrivate	JdsproPwchPrivate;
 
 /*  structure of PWCHTRG    (2800_C800h)    */
 union _IoPwchtrg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwchtrg :2;
-        kulong           :30;
+        gulong   pwchtrg :2;
+        gulong           :30;
     }bit;
 };
 
 /*  structure of PWS    (2800_C804h)    */
 union _IoPws{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pws :1;
-        kulong       :31;
+        gulong   pws :1;
+        gulong       :31;
     }bit;
 };
 
 /*  structure of PWAXCTL    (2800_C808h)    */
 union _IoPwaxctl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   awcache :4;
-        kulong           :4;
-        kulong   awprot  :3;
-        kulong           :21;
+        gulong   awcache :4;
+        gulong           :4;
+        gulong   awprot  :3;
+        gulong           :21;
     }bit;
 };
 
 /*  structure of PWCHCTL    (2800_C80Ch)    */
 union _IoPwchctl{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwbmd   :2;
-        kulong           :2;
-        kulong   pwlv    :3;
-        kulong           :1;
-        kulong   pwmw    :1;
-        kulong           :23;
+        gulong   pwbmd   :2;
+        gulong           :2;
+        gulong   pwlv    :3;
+        gulong           :1;
+        gulong   pwmw    :1;
+        gulong           :23;
     }bit;
 };
 
 /*  structure of PWCHINTENB (2800_C810h)    */
 union _IoPwchintenb{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwe     :1;
-        kulong           :3;
-        kulong   pwee    :1;
-        kulong           :3;
-        kulong   pwxe    :1;
-        kulong           :23;
+        gulong   pwe     :1;
+        gulong           :3;
+        gulong   pwee    :1;
+        gulong           :3;
+        gulong   pwxe    :1;
+        gulong           :23;
     }bit;
 };
 
 /*  structure of PWCHINTFLG (2800_C814h)    */
 union _IoPwchintflg{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwfTemp2     :1;
-        kulong             :3;
-        kulong   pwefTemp2    :1;
-        kulong             :3;
-        kulong   pwxfTemp2    :1;
-        kulong             :23;
+        gulong   pwfTemp2     :1;
+        gulong             :3;
+        gulong   pwefTemp2    :1;
+        gulong             :3;
+        gulong   pwxfTemp2    :1;
+        gulong             :23;
     }bit;
 };
 
 /*  structure of PWCHBRESP  (2800_C818h)    */
 union _IoPwchbresp{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwchbresp   :2;
-        kulong               :30;
+        gulong   pwchbresp   :2;
+        gulong               :30;
     }bit;
 };
 
 /*  structure of PWSA   (2800_C81Ch)    */
 union _IoPwsa{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwsa    :32;
+        gulong   pwsa    :32;
     }bit;
 };
 
 /*  structure of PWLSIZE    (2800_C820h)    */
 union _IoPwlsize{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwlsize :32;
+        gulong   pwlsize :32;
     }bit;
 };
 
 /*  structure of PWDW   (2800_C824h)    */
 union _IoPwdw{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwdw    :2;
-        kulong           :30;
+        gulong   pwdw    :2;
+        gulong           :30;
     }bit;
 };
 
 /*  structure of PWVFM  (2800_C828h)    */
 union _IoPwvfm{
-    kulong       word;
+    gulong       word;
     struct {
-        kulong   pwvfm   :1;
-        kulong           :31;
+        gulong   pwvfm   :1;
+        gulong           :31;
     }bit;
 };
 
@@ -178,17 +172,8 @@ struct _IoPwch{
 	/* 2800_(C828 - C82Bh) */
 	IoPwvfm         pwvfm;
 	/* 2800_(C82C - C8FFh) */
-    kuchar dmyC82cC8ff[0xC900-0xC82C];
+    guchar dmyC82cC8ff[0xC900-0xC82C];
 };
-
-struct  _JdsproPwch
-{
-	KObject parent;
-};
-
-
-KConstType				jdspro_pwch_get_type(void);
-JdsproPwch*			jdspro_pwch_new(void);
 
 
 #endif/*__JDSPRO_PWCH_H__*/

@@ -53,7 +53,7 @@ struct _ImproSrosdcPrivate
 
 
 /*文件全局变量(含常量及静态变量)定义区域*/
-static const TimproRdmaSdcAddr S_G_IM_PRO_SDC_ADDR[E_IM_PRO_UNIT_NUM_MAX][ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM] = {
+static const TimproRdmaSdcAddr S_G_IM_PRO_SDC_ADDR[ImproBase_E_IM_PRO_UNIT_NUM_MAX][ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM] = {
 	{
 		{
 			0x28408808,0x28408814,0x28408880,0x28408884,
@@ -266,7 +266,7 @@ static const TimproRdmaSdcAddr S_G_IM_PRO_SDC_ADDR[E_IM_PRO_UNIT_NUM_MAX][ImproS
 	},
 };
 
-static const TimproRdmaSdcGainTblAddr gIM_PRO_SDC_Gain_Tbl_Addr[E_IM_PRO_UNIT_NUM_MAX]
+static const TimproRdmaSdcGainTblAddr gIM_PRO_SDC_Gain_Tbl_Addr[ImproBase_E_IM_PRO_UNIT_NUM_MAX]
                                                                 			[ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM][D_IM_PRO_SRO_SDC_TBL_CNT] = {
 	{
 		{
@@ -300,19 +300,19 @@ static const TimproRdmaSdcGainTblAddr gIM_PRO_SDC_Gain_Tbl_Addr[E_IM_PRO_UNIT_NU
 	},
 };
 
-static const T_IM_PRO_SRO_SDC_INFO	S_G_IM_PRO_SDC_STATUS_TBL[E_IM_PRO_UNIT_NUM_MAX]
+static const T_IM_PRO_SRO_SDC_INFO	S_G_IM_PRO_SDC_STATUS_TBL[ImproBase_E_IM_PRO_UNIT_NUM_MAX]
                                   	                          	  	  	  [ImproSrosdc_D_IM_PRO_SRO_SDC_CH_NUM] = {
-	// E_IM_PRO_UNIT_NUM_1
+	// ImproBase_E_IM_PRO_UNIT_NUM_1
 	{
 		{ &IO_PRO_TBL.SRO1_TBL.SDCGD[0][0],	ImproSrosdc_D_IM_SRO1_STATUS_SDC0	},
 		{ &IO_PRO_TBL.SRO1_TBL.SDCGD[1][0],	ImproSrosdc_D_IM_SRO1_STATUS_SDC1	},
 	},
-	// E_IM_PRO_UNIT_NUM_2
+	// ImproBase_E_IM_PRO_UNIT_NUM_2
 	{
 		{ &IO_PRO_TBL.SRO2_TBL.SDCGD[0][0],	ImproSrosdc_D_IM_SRO2_STATUS_SDC0	},
 		{ &IO_PRO_TBL.SRO2_TBL.SDCGD[1][0],	ImproSrosdc_D_IM_SRO2_STATUS_SDC1	},
 	},
-	// E_IM_PRO_BOTH_UNIT
+	// ImproBase_E_IM_PRO_BOTH_UNIT
 	{
 		{ &IO_PRO_TBL.SRO3_TBL.SDCGD[0][0],	ImproSrosdc_D_IM_SRO_STATUS_SDC0_BOTH	},
 		{ &IO_PRO_TBL.SRO3_TBL.SDCGD[1][0],	ImproSrosdc_D_IM_SRO_STATUS_SDC1_BOTH	},
@@ -347,7 +347,7 @@ static void impro_srosdc_destructor(ImproSrosdc *self)
 
 /*PUBLIC*/
 
-VOID impro_srosdc_comm_get_sdc_reg_info( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, const T_IM_PRO_SRO_SDC_INFO** sdcInfo )
+VOID impro_srosdc_comm_get_sdc_reg_info( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, const T_IM_PRO_SRO_SDC_INFO** sdcInfo )
 {
 	*sdcInfo = &S_G_IM_PRO_SDC_STATUS_TBL[unitNo][ch];
 }
@@ -357,16 +357,16 @@ Compensation mode start
 @param[in]	unitNo : Unit number.
 @param[in]	ch : SDC channel
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not running NG
 */
-INT32 impro_srosdc_start( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch )
+INT32 impro_srosdc_start( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdctrg.bit.sdctrg = D_IM_PRO_TRG_START;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_START_STATUS(S_G_IM_PRO_SDC_STATUS_TBL[unitNo][ch].status, 0);
 
@@ -379,13 +379,13 @@ Compensation mode stop
 @param[in]	ch : SDC channel
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Processing OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: PRCH not stopped NG
 */
-INT32 impro_srosdc_stop( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR force )
+INT32 impro_srosdc_stop( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, UCHAR force )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	if(force == 0) {
 		// stop
 		ioPro.imgPipe[unitNo].sro.sdc[ch].sdctrg.bit.sdctrg = D_IM_PRO_TRG_FRAME_STOP;
@@ -395,7 +395,7 @@ INT32 impro_srosdc_stop( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR for
 		ioPro.imgPipe[unitNo].sro.sdc[ch].sdctrg.bit.sdctrg = D_IM_PRO_TRG_FORCE_STOP;
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	ImproSrotop_IM_PRO_SRO_SET_STOP_STATUS(S_G_IM_PRO_SDC_STATUS_TBL[unitNo][ch].status, 0);
 
@@ -408,25 +408,25 @@ SDC control setup
 @param[in]	ch : SDC channel
 @param[in]	sdcCtrl : SDC control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_srosdc_ctrl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, TimproSdcCtrl* sdcCtrl )
+INT32 impro_srosdc_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, TimproSdcCtrl* sdcCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (sdcCtrl == NULL){
 		Ddim_Assertion(("I:impro_srosdc_ctrl error. sdcCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcctl.bit.sdcmd		= sdcCtrl->sdcMode;
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcctl.bit.sdcpto		= sdcCtrl->afpbOutputPtn;
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcctl.bit.sdcmono		= sdcCtrl->monochromeMode;
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcctl.bit.sdcpdafen	= sdcCtrl->afpbEnabled;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -437,15 +437,15 @@ Select SDC gain table.
 @param[in]	ch : SDC channel
 @param[in]	tblSel : SDC gain table select.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_srosdc_select_gain_table( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, EimproSdcGainTableSel tblSel )
+INT32 impro_srosdc_select_gain_table( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, EimproSdcGainTableSel tblSel )
 {
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcsgd.bit.sdcsgd	= tblSel;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -456,115 +456,115 @@ set SDC gain table.
 @param[in]	ch : SDC channel
 @param[in]	sdcAfpbCtrl : SDC AFPB control information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_srosdc_ctrl_afpb( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, TimproSdcCtrlAfpb* sdcAfpbCtrl )
+INT32 impro_srosdc_ctrl_afpb( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, TimproSdcCtrlAfpb* sdcAfpbCtrl )
 {
 #ifdef CO_PARAM_CHECK
 	if (sdcAfpbCtrl == NULL){
 		Ddim_Assertion(("I:impro_srosdc_ctrl_afpb error. sdcAfpbCtrl=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	for(UINT32 i = 0; i < 9; i++) {
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPHW_MAX,
 				sdcAfpbCtrl->hPattern0ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern0ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPHW_MAX,
 				sdcAfpbCtrl->hPattern1ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern1ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MAX,
 				sdcAfpbCtrl->hPattern0R1ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern0R1ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MAX,
 				sdcAfpbCtrl->hPattern1R1ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern1R1ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MAX,
 				sdcAfpbCtrl->hPattern0R2ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern0R2ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxHW_MAX,
 				sdcAfpbCtrl->hPattern1R2ValidWidth[i], "impro_srosdc_ctrl_afpb : hPattern1R2ValidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MAX,
 				sdcAfpbCtrl->hPattern0R1InvalidWidth[i], "impro_srosdc_ctrl_afpb : hPattern0R1InvalidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MAX,
 				sdcAfpbCtrl->hPattern1R1InvalidWidth[i], "impro_srosdc_ctrl_afpb : hPattern1R1InvalidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MAX,
 				sdcAfpbCtrl->hPattern0R2InvalidWidth[i], "impro_srosdc_ctrl_afpb : hPattern0R2InvalidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNxHW_MAX,
 				sdcAfpbCtrl->hPattern1R2InvalidWidth[i], "impro_srosdc_ctrl_afpb : hPattern1R2InvalidWidth" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 	};
 	for(UINT32 i = 0; i < 64; i++) {
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPC_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPC_MAX,
 				sdcAfpbCtrl->hColumnPattern0[i], "impro_srosdc_ctrl_afpb : hColumnPattern0" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 		if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPC_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPC_MAX,
 				sdcAfpbCtrl->hColumnPattern1[i], "impro_srosdc_ctrl_afpb : hColumnPattern1" ) == FALSE ) {
-			return D_IM_PRO_INPUT_PARAM_ERROR;
+			return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 		}
 	};
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPCW_MAX,
 			sdcAfpbCtrl->hColumnPatternValidWidth0, "impro_srosdc_ctrl_afpb : hColumnPatternValidWidth0" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPCW_MAX,
 			sdcAfpbCtrl->hColumnPatternValidWidth1, "impro_srosdc_ctrl_afpb : hColumnPatternValidWidth1" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern1ValidWidth0, "impro_srosdc_ctrl_afpb : hColumnPattern1ValidWidth0" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern1ValidWidth1, "impro_srosdc_ctrl_afpb : hColumnPattern1ValidWidth1" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern2ValidWidth0, "impro_srosdc_ctrl_afpb : hColumnPattern2ValidWidth0" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern2ValidWidth1, "impro_srosdc_ctrl_afpb : hColumnPattern2ValidWidth1" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCPxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern1InvalidWidth0, "impro_srosdc_ctrl_afpb : hColumnPattern1InvalidWidth0" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNxCW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNxCW_MAX,
 			sdcAfpbCtrl->hColumnPattern1InvalidWidth1, "impro_srosdc_ctrl_afpb : hColumnPattern1InvalidWidth1" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCN2CW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCN2CW_MAX,
 			sdcAfpbCtrl->hColumnPattern2InvalidWidth0, "impro_srosdc_ctrl_afpb : hColumnPattern2InvalidWidth0" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCN2CW_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCN2CW_MAX,
 			sdcAfpbCtrl->hColumnPattern2InvalidWidth1, "impro_srosdc_ctrl_afpb : hColumnPattern2InvalidWidth1" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( im_pro_check_val_range( ImproSrosdc_D_IM_PRO_SDC_SDCNMAX_MIN, ImproSrosdc_D_IM_PRO_SDC_SDCNMAX_MAX,
 			sdcAfpbCtrl->afpbNeighborPixelCorrectionLevel, "impro_srosdc_ctrl_afpb : afpbNeighborPixelCorrectionLevel" ) == FALSE ) {
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcph0.sdcph01.bit.sdcph00		= sdcAfpbCtrl->hPattern0[0];
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcph0.sdcph02.bit.sdcph01		= sdcAfpbCtrl->hPattern0[1];
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcph0.sdcph03.bit.sdcph02		= sdcAfpbCtrl->hPattern0[2];
@@ -815,7 +815,7 @@ INT32 impro_srosdc_ctrl_afpb( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, Timp
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcgmaxmin.bit.sdcgmin				= sdcAfpbCtrl->afpbGainCorrectionIThreshold;
 	ioPro.imgPipe[unitNo].sro.sdc[ch].sdcnmax.bit.sdcnmax				= sdcAfpbCtrl->afpbNeighborPixelCorrectionLevel;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -827,31 +827,31 @@ set SDC gain table.
 @param[in]	tblSel : SDC gain table select.
 @param[in]	gainTable : SDC gain table information.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_srosdc_set_gain_table( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, EimproSdcGainTableSel tblSel,
+INT32 impro_srosdc_set_gain_table( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, EimproSdcGainTableSel tblSel,
 				TimproSdcGainTable* gainTable )
 {
 #ifdef CO_PARAM_CHECK
 	if (gainTable == NULL){
 		Ddim_Assertion(("I:impro_srosdc_set_gain_table error. gainTable=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 	if( ( ioPro.imgPipe[unitNo].sro.sdc[ch].sdctrg.bit.sdctrg != D_IM_PRO_TRG_STATUS_STOPPED )
 			&& ( ioPro.imgPipe[unitNo].sro.sdc[ch].SDCSGD.bit.SDCSGD == tblSel ) ) {
 		Ddim_Assertion(("I:impro_srosdc_set_gain_table error. macro has not stopped, "
 				"and RAM table that referrenced from SDC can not overwrite until macro stopping.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 
 	// Dd_Top_Start_Clock
-	im_pro_on_hclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_hclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	for( INT32 i = 0; i < ImproSrosdc_D_IM_PRO_SDC_GAIN_TBL_NUM; i++ ) {
 		S_G_IM_PRO_SDC_STATUS_TBL[unitNo][ch].tbl_reg_ptr[tblSel].bit[i].SDCGD	= gainTable->gainTable[i];
 	}
 	// Dd_Top_Stop_Clock
-	im_pro_off_hclk( E_IM_PRO_UNIT_NUM_1, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_hclk( ImproBase_E_IM_PRO_UNIT_NUM_1, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -863,21 +863,21 @@ A setup of enable access to the built-in RAM of SDC.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-INT32 impro_srosdc_set_paen( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch, UCHAR paenTrg )
+INT32 impro_srosdc_set_paen( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch, UCHAR paenTrg )
 {
 #ifdef CO_PARAM_CHECK
 	if( ( paenTrg == 0 ) && ( ioPro.imgPipe[unitNo].sro.sdc[ch].sdctrg.bit.sdctrg != D_IM_PRO_TRG_STATUS_STOPPED ) ) {
 		Ddim_Assertion(("I:impro_sensldiv_set_paen. macro has not stopped error.\n"));
-		return D_IM_PRO_MACRO_BUSY_NG;
+		return ImproBase_D_IM_PRO_MACRO_BUSY_NG;
 	}
 #endif
 	// Dd_Top_Start_Clock
-	im_pro_on_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_common_fig_im_pro_on_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 	ioPro.imgPipe[unitNo].sro.sdc[ch].SDCPAEN.bit.SDCPAEN = paenTrg;
 	// Dd_Top_Stop_Clock
-	im_pro_off_pclk( unitNo, E_IM_PRO_CLK_BLOCK_TYPE_SRO );
+	im_pro_off_pclk( unitNo, ImproBase_E_IM_PRO_CLK_BLOCK_TYPE_SRO );
 
 	return D_DDIM_OK;
 }
@@ -890,13 +890,13 @@ Get the top address of the address array of SDC control.
 @retval			D_DDIM_OK				: success.
 @retval			D_IM_B2R_PARAM_ERROR	: parameter error.
 */
-INT32 impro_srosdc_get_rdma_addr_sdc_cntl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch,
+INT32 impro_srosdc_get_rdma_addr_sdc_cntl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch,
 				const TimproRdmaSdcAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_srosdc_get_rdma_addr_sdc_cntl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 
@@ -906,13 +906,13 @@ INT32 impro_srosdc_get_rdma_addr_sdc_cntl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SD
 }
 
 
-INT32 impro_srosdc_get_rdma_addr_sdc_gain_tbl( E_IM_PRO_UNIT_NUM unitNo, E_IM_PRO_SDC_CH ch,
+INT32 impro_srosdc_get_rdma_addr_sdc_gain_tbl( E_IM_PRO_UNIT_NUM unitNo, EimproSdcCh ch,
 				EimproSdcGainTableSel tblSel, const TimproRdmaSdcGainTblAddr** addr )
 {
 #ifdef CO_PARAM_CHECK
 	if( addr == NULL ) {
 		Ddim_Assertion(("I:impro_srosdc_get_rdma_addr_sdc_gain_tbl. error. addr=NULL\n"));
-		return D_IM_PRO_INPUT_PARAM_ERROR;
+		return ImproBase_D_IM_PRO_INPUT_PARAM_ERROR;
 	}
 #endif
 

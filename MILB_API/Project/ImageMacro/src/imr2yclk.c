@@ -60,33 +60,33 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImR2yClk, im_r2y_clk);
 
 // Clock control counter
 #ifdef CO_ACT_R2Y_CLOCK
-static volatile UCHAR gIM_R2Y_Clk_Ctrl_Cnt[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile kuint16 gIM_R2Y_Clk_Ctrl_Cnt[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_CLOCK
 #ifdef CO_ACT_R2Y_HCLOCK
-static volatile UCHAR gIM_R2Y_Hclk_Ctrl_Cnt[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile kuint16 gIM_R2Y_Hclk_Ctrl_Cnt[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_HCLOCK
 #ifdef CO_ACT_R2Y_PCLOCK
-static volatile UCHAR gIM_R2Y_Pclk_Ctrl_Cnt[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile kuint16 gIM_R2Y_Pclk_Ctrl_Cnt[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_PCLOCK
 #ifdef CO_ACT_R2Y_ICLOCK
-static volatile UCHAR gIM_R2Y_Iclk_Ctrl_Cnt[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile kuint16 gIM_R2Y_Iclk_Ctrl_Cnt[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_ICLOCK
 
 // clock off control is disabled(for register dump on debugger)
 #ifdef CO_ACT_R2Y_CLOCK
-static volatile UINT32 gIM_R2Y_Clk_Ctrl_Disable[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile UINT32 gIM_R2Y_Clk_Ctrl_Disable[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_CLOCK
 #ifdef CO_ACT_R2Y_HCLOCK
-static volatile UINT32 gIM_R2Y_Hclk_Ctrl_Disable[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile UINT32 gIM_R2Y_Hclk_Ctrl_Disable[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_HCLOCK
 #ifdef CO_ACT_R2Y_PCLOCK
-static volatile UINT32 gIM_R2Y_Pclk_Ctrl_Disable[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile UINT32 gIM_R2Y_Pclk_Ctrl_Disable[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_PCLOCK
 #ifdef CO_ACT_R2Y_ICLOCK
-static volatile UINT32 gIM_R2Y_Iclk_Ctrl_Disable[D_IM_R2Y_PIPE_COUNT] = {0,0};
+static volatile UINT32 gIM_R2Y_Iclk_Ctrl_Disable[ImR2yUtils_PIPE_COUNT] = {0,0};
 #endif	// CO_ACT_R2Y_ICLOCK
 
-static ULONG gOsUsr_Spin_Lock __attribute__((section(".LOCK_SECTION"), aligned(64)));
+static kulong gOsUsr_Spin_Lock __attribute__((section(".LOCK_SECTION"), aligned(64)));
 
 
 struct _ImR2yClkPrivate
@@ -112,23 +112,23 @@ static void im_r2y_clk_destructor(ImR2yClk *self)
  * PUBLIC
  */
 // Initialize of PCLK/HCLK/CLK control information
-void im_r2y_clk_manager_init(ImR2yClk *self,UCHAR pipe_no, UCHAR size_coef)
+void im_r2y_clk_manager_init(ImR2yClk *self,kuint16 pipeNo, kuint16 size_coef)
 {
 #ifdef CO_ACT_R2Y_CLOCK
-	memset( (USHORT*)&gIM_R2Y_Clk_Ctrl_Cnt[pipe_no], 0, sizeof(gIM_R2Y_Clk_Ctrl_Cnt) * size_coef );
-	memset( (USHORT*)&gIM_R2Y_Clk_Ctrl_Disable[pipe_no], 0, sizeof(gIM_R2Y_Clk_Ctrl_Disable) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[pipeNo], 0, sizeof(gIM_R2Y_Clk_Ctrl_Cnt) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Clk_Ctrl_Disable[pipeNo], 0, sizeof(gIM_R2Y_Clk_Ctrl_Disable) * size_coef );
 #endif	// CO_ACT_R2Y_CLOCK
 	#ifdef CO_ACT_R2Y_PCLOCK
-		memset( (USHORT*)&gIM_R2Y_Pclk_Ctrl_Cnt[pipe_no], 0, sizeof(gIM_R2Y_Pclk_Ctrl_Cnt) * size_coef );
-		memset( (USHORT*)&gIM_R2Y_Pclk_Ctrl_Disable[pipe_no], 0, sizeof(gIM_R2Y_Pclk_Ctrl_Disable) * size_coef );
+		memset( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[pipeNo], 0, sizeof(gIM_R2Y_Pclk_Ctrl_Cnt) * size_coef );
+		memset( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Disable[pipeNo], 0, sizeof(gIM_R2Y_Pclk_Ctrl_Disable) * size_coef );
 	#endif	// CO_ACT_R2Y_PCLOCK
 #ifdef CO_ACT_R2Y_HCLOCK
-	memset( (USHORT*)&gIM_R2Y_Hclk_Ctrl_Cnt[pipe_no], 0, sizeof(gIM_R2Y_Hclk_Ctrl_Cnt) * size_coef );
-	memset( (USHORT*)&gIM_R2Y_Hclk_Ctrl_Disable[pipe_no], 0, sizeof(gIM_R2Y_Hclk_Ctrl_Disable) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[pipeNo], 0, sizeof(gIM_R2Y_Hclk_Ctrl_Cnt) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Disable[pipeNo], 0, sizeof(gIM_R2Y_Hclk_Ctrl_Disable) * size_coef );
 #endif	// CO_ACT_R2Y_HCLOCK
 #ifdef CO_ACT_R2Y_ICLOCK
-	memset( (USHORT*)&gIM_R2Y_Iclk_Ctrl_Cnt[pipe_no], 0, sizeof(gIM_R2Y_Iclk_Ctrl_Cnt) * size_coef );
-	memset( (USHORT*)&gIM_R2Y_Iclk_Ctrl_Disable[pipe_no], 0, sizeof(gIM_R2Y_Iclk_Ctrl_Disable) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[pipeNo], 0, sizeof(gIM_R2Y_Iclk_Ctrl_Cnt) * size_coef );
+	memset( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Disable[pipeNo], 0, sizeof(gIM_R2Y_Iclk_Ctrl_Disable) * size_coef );
 #endif	// CO_ACT_R2Y_ICLOCK
 
 }
@@ -176,23 +176,23 @@ void im_r2y_clk_ddim_print(ImR2yClk *self)
 
 /* R2Y PCLK change to ON
  */
-INT32 im_r2y_clk_on_pclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_on_pclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_PCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_on_pclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_on_pclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, ~D_IM_R2Y1_PCLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, ~D_IM_R2Y1_PCLK_REG_BIT );
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, ~D_IM_R2Y2_PCLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, ~D_IM_R2Y2_PCLK_REG_BIT );
 	}
 
 	Dd_ARM_Critical_Section_End(gOsUsr_Spin_Lock);
@@ -203,36 +203,36 @@ INT32 im_r2y_clk_on_pclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y PCLK change to OFF
  */
-INT32 im_r2y_clk_off_pclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_off_pclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_PCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_off_pclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_off_pclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		if( gIM_R2Y_Pclk_Ctrl_Cnt[0] == 1 ) {
 			if( gIM_R2Y_Pclk_Ctrl_Disable[0] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		if( gIM_R2Y_Pclk_Ctrl_Cnt[1] == 1 ) {
 			if( gIM_R2Y_Pclk_Ctrl_Disable[1] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
 		}
 	}
 
@@ -244,28 +244,28 @@ INT32 im_r2y_clk_off_pclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y PCLK change to OFF force
  */
-INT32 im_r2y_clk_force_off_pclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_force_off_pclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_PCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_force_off_pclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_force_off_pclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		gIM_R2Y_Pclk_Ctrl_Cnt[0] = 1;
 		if( gIM_R2Y_Pclk_Ctrl_Disable[0] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[0], D_IM_R2Y1_PCLK_REG_ADDR, D_IM_R2Y1_PCLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		gIM_R2Y_Pclk_Ctrl_Cnt[1] = 1;
 		if( gIM_R2Y_Pclk_Ctrl_Disable[1] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Pclk_Ctrl_Cnt[1], D_IM_R2Y2_PCLK_REG_ADDR, D_IM_R2Y2_PCLK_REG_BIT );
 		}
 	}
 
@@ -277,24 +277,24 @@ INT32 im_r2y_clk_force_off_pclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y HCLK change to ON
  */
-INT32 im_r2y_clk_on_hclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_on_hclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_HCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_on_hclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_on_hclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		//TODO 查到这
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, ~D_IM_R2Y1_HCLK_REG_BIT );
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, ~D_IM_R2Y1_HCLK_REG_BIT );
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, ~D_IM_R2Y2_HCLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, ~D_IM_R2Y2_HCLK_REG_BIT );
 	}
 
 	Dd_ARM_Critical_Section_End(gOsUsr_Spin_Lock);
@@ -305,36 +305,36 @@ INT32 im_r2y_clk_on_hclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y HCLK change to OFF
  */
-INT32 im_r2y_clk_off_hclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_off_hclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_HCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_off_hclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_off_hclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		if( gIM_R2Y_Hclk_Ctrl_Cnt[0] == 1 ) {
 			if( gIM_R2Y_Hclk_Ctrl_Disable[0] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		if( gIM_R2Y_Hclk_Ctrl_Cnt[1] == 1 ) {
 			if( gIM_R2Y_Hclk_Ctrl_Disable[1] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
 		}
 	}
 
@@ -346,28 +346,28 @@ INT32 im_r2y_clk_off_hclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y HCLK change to OFF force
  */
-INT32 im_r2y_clk_force_off_hclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_force_off_hclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_HCLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_force_off_hclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_force_off_hclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		gIM_R2Y_Hclk_Ctrl_Cnt[0] = 1;
 		if( gIM_R2Y_Hclk_Ctrl_Disable[0] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[0], D_IM_R2Y1_HCLK_REG_ADDR, D_IM_R2Y1_HCLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		gIM_R2Y_Hclk_Ctrl_Cnt[1] = 1;
 		if( gIM_R2Y_Hclk_Ctrl_Disable[1] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Hclk_Ctrl_Cnt[1], D_IM_R2Y2_HCLK_REG_ADDR, D_IM_R2Y2_HCLK_REG_BIT );
 		}
 	}
 
@@ -379,23 +379,23 @@ INT32 im_r2y_clk_force_off_hclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y ICLK change to ON
  */
-INT32 im_r2y_clk_on_iclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_on_iclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_ICLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_on_iclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_on_iclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, ~D_IM_R2Y1_ICLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, ~D_IM_R2Y1_ICLK_REG_BIT );
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, ~D_IM_R2Y2_ICLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, ~D_IM_R2Y2_ICLK_REG_BIT );
 	}
 
 	Dd_ARM_Critical_Section_End(gOsUsr_Spin_Lock);
@@ -406,36 +406,36 @@ INT32 im_r2y_clk_on_iclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y ICLK change to OFF
  */
-INT32 im_r2y_clk_off_iclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_off_iclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_ICLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_off_iclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_off_iclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		if( gIM_R2Y_Iclk_Ctrl_Cnt[0] == 1 ) {
 			if( gIM_R2Y_Iclk_Ctrl_Disable[0] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		if( gIM_R2Y_Iclk_Ctrl_Cnt[1] == 1 ) {
 			if( gIM_R2Y_Iclk_Ctrl_Disable[1] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
 		}
 	}
 
@@ -447,28 +447,28 @@ INT32 im_r2y_clk_off_iclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2Y ICLK change to OFF force
  */
-INT32 im_r2y_clk_force_off_iclk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_force_off_iclk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_ICLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_force_off_iclk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_force_off_iclk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		gIM_R2Y_Iclk_Ctrl_Cnt[0] = 1;
 		if( gIM_R2Y_Iclk_Ctrl_Disable[0] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[0], D_IM_R2Y1_ICLK_REG_ADDR, D_IM_R2Y1_ICLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		gIM_R2Y_Iclk_Ctrl_Cnt[1] = 1;
 		if( gIM_R2Y_Iclk_Ctrl_Disable[1] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Iclk_Ctrl_Cnt[1], D_IM_R2Y2_ICLK_REG_ADDR, D_IM_R2Y2_ICLK_REG_BIT );
 		}
 	}
 
@@ -480,23 +480,23 @@ INT32 im_r2y_clk_force_off_iclk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2YCLK change to ON
  */
-INT32 im_r2y_clk_on_clk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_on_clk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_CLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_on_clk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_on_clk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, ~D_IM_R2Y1_CLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, ~D_IM_R2Y1_CLK_REG_BIT );
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, ~D_IM_R2Y2_CLK_REG_BIT );
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
+		Dd_Top_Start_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, ~D_IM_R2Y2_CLK_REG_BIT );
 	}
 
 	Dd_ARM_Critical_Section_End(gOsUsr_Spin_Lock);
@@ -507,36 +507,36 @@ INT32 im_r2y_clk_on_clk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2YCLK change to OFF
  */
-INT32 im_r2y_clk_off_clk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_off_clk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_CLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_off_clk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_off_clk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		if( gIM_R2Y_Clk_Ctrl_Cnt[0] == 1 ) {
 			if( gIM_R2Y_Clk_Ctrl_Disable[0] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		if( gIM_R2Y_Clk_Ctrl_Cnt[1] == 1 ) {
 			if( gIM_R2Y_Clk_Ctrl_Disable[1] == 0 ) {
-				Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
+				Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
 			}
 		}
 		else {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
 		}
 	}
 
@@ -548,28 +548,28 @@ INT32 im_r2y_clk_off_clk(ImR2yClk *self, UCHAR pipe_no )
 
 /* R2YCLK change to OFF force
  */
-INT32 im_r2y_clk_force_off_clk(ImR2yClk *self, UCHAR pipe_no )
+INT32 im_r2y_clk_force_off_clk(ImR2yClk *self, kuint16 pipeNo )
 {
 #ifdef CO_ACT_R2Y_CLOCK
 #ifdef CO_PARAM_CHECK
-	if( pipe_no > D_IM_R2Y_PIPE12 ){
-		Ddim_Assertion(( "im_r2y_clk_force_off_clk error. pipe_no>D_IM_R2Y_PIPE12\n" ));
-		return D_IM_R2Y_PARAM_ERROR;
+	if( pipeNo > ImR2yCtrl_PIPE12 ){
+		Ddim_Assertion(( "im_r2y_clk_force_off_clk error. pipeNo>ImR2yCtrl_PIPE12\n" ));
+		return ImR2yUtils_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	Dd_ARM_Critical_Section_Start(gOsUsr_Spin_Lock);
 
-	if( im_r2y_check_target_pipe_no_1( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_1( pipeNo ) ){
 		gIM_R2Y_Clk_Ctrl_Cnt[0] = 1;
 		if( gIM_R2Y_Clk_Ctrl_Disable[0] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[0], D_IM_R2Y1_CLK_REG_ADDR, D_IM_R2Y1_CLK_REG_BIT );
 		}
 	}
-	if( im_r2y_check_target_pipe_no_2( pipe_no ) ){
+	if( im_r2y_check_target_pipe_no_2( pipeNo ) ){
 		gIM_R2Y_Clk_Ctrl_Cnt[1] = 1;
 		if( gIM_R2Y_Clk_Ctrl_Disable[1] == 0 ) {
-			Dd_Top_Stop_Clock( (UCHAR*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
+			Dd_Top_Stop_Clock( (kuint16*)&gIM_R2Y_Clk_Ctrl_Cnt[1], D_IM_R2Y2_CLK_REG_ADDR, D_IM_R2Y2_CLK_REG_BIT );
 		}
 	}
 

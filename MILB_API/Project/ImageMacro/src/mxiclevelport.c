@@ -40,9 +40,9 @@ struct _MxicLevelPortPrivate
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
 #ifdef CO_PARAM_CHECK
-static INT32 imMxicCheckLevel( ImMxicWrArbiter wrArbiter, 
+static kint32 imMxicCheckLevel( ImMxicWrArbiter wrArbiter, 
 								ImMxicSpecArbiter arbiter, ImMxicLevel level );
-static INT32 imMxicCheckArbiter( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter );
+static kint32 imMxicCheckArbiter( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter );
 #endif // CO_PARAM_CHECK
 
 
@@ -77,10 +77,10 @@ Check level specifies parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckLevel( ImMxicWrArbiter wrArbiter, 
+static kint32 imMxicCheckLevel( ImMxicWrArbiter wrArbiter, 
 								ImMxicSpecArbiter arbiter, ImMxicLevel level )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -101,9 +101,9 @@ Check arbiter specifies parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-static INT32 imMxicCheckArbiter( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter )
+static kint32 imMxicCheckArbiter( ImMxicWrArbiter wrArbiter, ImMxicSpecArbiter arbiter )
 {
-	INT32 result;
+	kint32 result;
 
 	result = D_DDIM_OK;
 
@@ -129,14 +129,14 @@ This function set clock supply to a functional block.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_level_port_set_clock_enable( MxicLevelPort *self, ImMxicUnit unit, const ImMxicClock* const clock )
+kint32 mxic_level_port_set_clock_enable( MxicLevelPort *self, ImMxicUnit unit, const ImMxicClock* const clock )
 {
-	UCHAR						tckenp1;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_1.
-	UCHAR						tckenp2;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_2.
-	UCHAR						tckenp3;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_3.
-	UCHAR						tckenp4;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_4.
-	UCHAR						tgcksen;	// Write value of IO_MXIC.TGCKEN.bit.TGCKSEN.
-	INT32						result;
+	kuchar						tckenp1;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_1.
+	kuchar						tckenp2;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_2.
+	kuchar						tckenp3;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_3.
+	kuchar						tckenp4;	// Write value of IO_MXIC.TCKENP.bit.TCKENP_4.
+	kuchar						tgcksen;	// Write value of IO_MXIC.TGCKEN.bit.TGCKSEN.
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -303,9 +303,9 @@ This function get clock supply to a functional block.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_level_port_get_clock_enable( MxicLevelPort *self, ImMxicUnit unit, ImMxicClock* const clock )
+kint32 mxic_level_port_get_clock_enable( MxicLevelPort *self, ImMxicUnit unit, ImMxicClock* const clock )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -534,11 +534,11 @@ This function set the LevelPort(Port).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_set_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
-											UCHAR master, ImMxicPort port )
+kint32 mxic_level_port_set_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
+											kuchar master, ImMxicPort port )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -670,11 +670,11 @@ This function get the LevelPort(Port).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_get_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
-											UCHAR master, ImMxicPort* const port )
+kint32 mxic_level_port_get_levelport_port( MxicLevelPort *self, LevelPortArgs portArgs, 
+											kuchar master, ImMxicPort* const port )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -809,11 +809,11 @@ This function set the LevelPort(Level).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_set_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
-											UCHAR master, ImMxicLevel level )
+kint32 mxic_level_port_set_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
+											kuchar master, ImMxicLevel level )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -945,11 +945,11 @@ This function get the LevelPort(Level).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_get_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
-											UCHAR master, ImMxicLevel* const level )
+kint32 mxic_level_port_get_levelport_level( MxicLevelPort *self, LevelPortArgs levelArgs, 
+											kuchar master, ImMxicLevel* const level )
 {
-	UCHAR						regReadSw;
-	INT32						result;
+	kuchar						regReadSw;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -1079,11 +1079,11 @@ This function set the LevelPort(All).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_set_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
+kint32 mxic_level_port_set_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
 {
-	UCHAR						regReadSw;
-	INT32						result;
-	INT32						i, j;
+	kuchar						regReadSw;
+	kint32						result;
+	kint32						i, j;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 
@@ -1208,11 +1208,11 @@ This function get the LevelPort(All).<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_level_port_get_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
+kint32 mxic_level_port_get_levelport_all( MxicLevelPort *self, ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
 {
-	UCHAR						regReadSw;
-	INT32						result;
-	INT32						i, j;
+	kuchar						regReadSw;
+	kint32						result;
+	kint32						i, j;
 	volatile struct io_jdsmxic*	ioMxic;
 	MxicLevelPortPrivate *priv = MXIC_LEVEL_PORT_GET_PRIVATE(self);
 

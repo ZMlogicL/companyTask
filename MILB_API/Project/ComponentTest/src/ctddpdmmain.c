@@ -17,11 +17,18 @@
 #include "pdm.h"
 #include "dd_pdm.h"
 #include "ct_dd_pdm.h"
-#include "dd_top.h"
-#include "dd_cache.h"
-#include "dd_gic.h"
-#include "dd_audio.h"
-#include "dd_hdmac0.h"
+// #include "dd_top.h"
+// #include "dd_cache.h"
+// #include "dd_gic.h"
+// #include "dd_audio.h"
+// #include "dd_hdmac0.h"
+#include "../../DeviceDriver/Peripheral/src/ddpdm.h"
+#include "../../DeviceDriver/LSITop/src/ddtopone.h"
+#include "../../DeviceDriver/ARM/src/ddcacheasm.h"
+#include "../../DeviceDriver/ARM/src/ddgic.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudio.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac0.h"
+#include "../../../MILB_Header/Project/Top/src/kchiptop1.h"
 #include "peripheral.h"
 #include "ctddpdmcoretest.h"
 #include "ctddpdmdmatest.h"
@@ -66,7 +73,7 @@ static void ct_dd_pdm_main_destructor(CtDdPdmMain *self)
 void ct_dd_pdm_main_reg_init(void)
 {
 #ifdef PC_DEBUG
-	IO_CHIPTOP.PLLCNT1.bit.PL10ST = 1;
+	ioChiptop.IoChiptopPllcnt1.bit.pl10st = 1;
 	IO_PDM[0].CORE_CFG.word = 0x00084365;
 	IO_PDM[1].CORE_CFG.word = 0x00084365;
 	IO_PDM[0].DMA_CFG.word = 0x00000069;
@@ -80,28 +87,28 @@ void ct_dd_pdm_main_init_test(CtDdPdmMain *self)
 	
 	ct_dd_pdm_main_reg_init();
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	Ddim_Print(("PDM0.PDMCORE_EN=0x%x\n", IO_PDM[D_DD_PDM_CH0].CORE_CFG.bit.PDMCORE_EN));
-	Ddim_Print(("PDM1.PDMCORE_EN=0x%x\n", IO_PDM[D_DD_PDM_CH1].CORE_CFG.bit.PDMCORE_EN));
+	Ddim_Print(("PDM0.PDMCORE_EN=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].CORE_CFG.bit.PDMCORE_EN));
+	Ddim_Print(("PDM1.PDMCORE_EN=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].CORE_CFG.bit.PDMCORE_EN));
 	
-	Ddim_Print(("PDM0.DMA_EN=0x%x\n", IO_PDM[D_DD_PDM_CH0].DMA_CFG.bit.DMA_EN));
-	Ddim_Print(("PDM1.DMA_EN=0x%x\n", IO_PDM[D_DD_PDM_CH1].DMA_CFG.bit.DMA_EN));
+	Ddim_Print(("PDM0.DMA_EN=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].DMA_CFG.bit.DMA_EN));
+	Ddim_Print(("PDM1.DMA_EN=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].DMA_CFG.bit.DMA_EN));
 	
-	Ddim_Print(("PDM0.CLR_IRQ_FFOVF=0x%x\n", IO_PDM[D_DD_PDM_CH0].DMA_CFG.bit.CLR_IRQ_FFOVF));
-	Ddim_Print(("PDM1.CLR_IRQ_FFOVF=0x%x\n", IO_PDM[D_DD_PDM_CH1].DMA_CFG.bit.CLR_IRQ_FFOVF));
+	Ddim_Print(("PDM0.CLR_IRQ_FFOVF=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].DMA_CFG.bit.CLR_IRQ_FFOVF));
+	Ddim_Print(("PDM1.CLR_IRQ_FFOVF=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].DMA_CFG.bit.CLR_IRQ_FFOVF));
 	
-	Ddim_Print(("PDM0.CLR_IRQ_DMA1=0x%x\n", IO_PDM[D_DD_PDM_CH0].DMA_CFG.bit.CLR_IRQ_DMA1));
-	Ddim_Print(("PDM1.CLR_IRQ_DMA1=0x%x\n", IO_PDM[D_DD_PDM_CH1].DMA_CFG.bit.CLR_IRQ_DMA1));
+	Ddim_Print(("PDM0.CLR_IRQ_DMA1=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].DMA_CFG.bit.CLR_IRQ_DMA1));
+	Ddim_Print(("PDM1.CLR_IRQ_DMA1=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].DMA_CFG.bit.CLR_IRQ_DMA1));
 	
-	Ddim_Print(("PDM0.CLR_IRQ_DMA0=0x%x\n", IO_PDM[D_DD_PDM_CH0].DMA_CFG.bit.CLR_IRQ_DMA0));
-	Ddim_Print(("PDM1.CLR_IRQ_DMA0=0x%x\n", IO_PDM[D_DD_PDM_CH1].DMA_CFG.bit.CLR_IRQ_DMA0));
+	Ddim_Print(("PDM0.CLR_IRQ_DMA0=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].DMA_CFG.bit.CLR_IRQ_DMA0));
+	Ddim_Print(("PDM1.CLR_IRQ_DMA0=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].DMA_CFG.bit.CLR_IRQ_DMA0));
 	
-	Ddim_Print(("PDM0.DMA0_INT_REG=0x%x\n", IO_PDM[D_DD_PDM_CH0].STATUS.bit.DMA0_INT_REG));
-	Ddim_Print(("PDM1.DMA0_INT_REG=0x%x\n", IO_PDM[D_DD_PDM_CH1].STATUS.bit.DMA0_INT_REG));
+	Ddim_Print(("PDM0.DMA0_INT_REG=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].STATUS.bit.DMA0_INT_REG));
+	Ddim_Print(("PDM1.DMA0_INT_REG=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].STATUS.bit.DMA0_INT_REG));
 	
-	Ddim_Print(("PDM0.DMA1_INT_REG=0x%x\n", IO_PDM[D_DD_PDM_CH0].STATUS.bit.DMA1_INT_REG));
-	Ddim_Print(("PDM1.DMA1_INT_REG=0x%x\n", IO_PDM[D_DD_PDM_CH1].STATUS.bit.DMA1_INT_REG));
+	Ddim_Print(("PDM0.DMA1_INT_REG=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH0].STATUS.bit.DMA1_INT_REG));
+	Ddim_Print(("PDM1.DMA1_INT_REG=0x%x\n", IO_PDM[AudioPdm_D_AUDIO_PDM_CH1].STATUS.bit.DMA1_INT_REG));
 	
 	Ddim_Print(("<%s> End.\n", __FUNCTION__));
 }
@@ -135,8 +142,8 @@ void ct_dd_pdm_main(CtDdPdmMain *self,kint argc, kchar** argv)
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
 	/* Select PDM CLK */
-	Dd_Top_Set_CLKSEL7_PDM0SEL(4);
-	Dd_Top_Set_CLKSEL7_PDM1SEL(4);
+	DdTopone_SET_CLKSEL7_PDM0SEL(4);
+	DdTopone_SET_CLKSEL7_PDM1SEL(4);
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
@@ -210,12 +217,12 @@ void ct_dd_pdm_main(CtDdPdmMain *self,kint argc, kchar** argv)
 				ct_dd_pdm_coretest_ctrl(ct);
 				break;
 			case 18:
-				Dd_Pdm_Init();
+				dd_pdm_init(dd_pdm_get());
 				ct_dd_pdm_othertest_set_ch(test,0);
 				ct_dd_pdm_coretest_get_ctrl(ct);
 				break;
 			case 19:
-				Dd_Pdm_Init();
+				dd_pdm_init(dd_pdm_get());
 				ct_dd_pdm_othertest_set_ch(test,1);
 				ct_dd_pdm_coretest_get_ctrl(ct);
 				break;
@@ -244,12 +251,12 @@ void ct_dd_pdm_main(CtDdPdmMain *self,kint argc, kchar** argv)
 				ct_dd_pdm_dmatest_ctrl(dt);
 				break;
 			case 26:
-				Dd_Pdm_Init();
+				dd_pdm_init(dd_pdm_get());
 				ct_dd_pdm_othertest_set_ch(test,0);
 				ct_dd_pdm_dmatest_get_ctrl(dt);
 				break;
 			case 27:
-				Dd_Pdm_Init();
+				dd_pdm_init(dd_pdm_get());
 				ct_dd_pdm_othertest_set_ch(test,1);
 				ct_dd_pdm_dmatest_get_ctrl(dt);
 				break;
@@ -392,8 +399,8 @@ void ct_dd_pdm_main(CtDdPdmMain *self,kint argc, kchar** argv)
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
 	/* Select PDM CLK */
-	Dd_Top_Set_CLKSEL7_PDM0SEL(4);
-	Dd_Top_Set_CLKSEL7_PDM1SEL(4);
+	DdTopone_SET_CLKSEL7_PDM0SEL(4);
+	DdTopone_SET_CLKSEL7_PDM1SEL(4);
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE
@@ -623,12 +630,12 @@ void ct_dd_pdm_main(CtDdPdmMain *self,kint argc, kchar** argv)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH0_DMA0_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH0_DMA1_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH0_FIFO_OVERFLOW_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH1_DMA0_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH1_DMA1_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
-		DDIM_User_EnableInt((DDIM_USER_INTID)(E_DD_GIC_INTID_PDM_CH1_FIFO_OVERFLOW_INT), (DDIM_USER_INTID)D_DD_GIC_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH0_DMA0_INT), (DDIM_USER_INTID)C_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH0_DMA1_INT), (DDIM_USER_INTID)C_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH0_FIFO_OVERFLOW_INT), (DDIM_USER_INTID)C_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH1_DMA0_INT), (DDIM_USER_INTID)C_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH1_DMA1_INT), (DDIM_USER_INTID)C_PRI08);
+		DDIM_User_EnableInt((DDIM_USER_INTID)(DdGic_INTID_PDM_CH1_FIFO_OVERFLOW_INT), (DDIM_USER_INTID)C_PRI08);
 // --- REMOVE_ES3_HARDWARE END ---
 // --- REMOVE_ES_COMPILE_OPT BEGIN ---
 #endif // CO_ES3_HARDWARE

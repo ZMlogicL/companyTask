@@ -34,8 +34,9 @@ struct _CtDdWdogPrivate {
     kint i;
 };
 
-/*DECLS*/
-
+/*
+ *DECLS
+ */
 static void testCallback(void);
 
 static void ct_dd_wdog_constructor(CtDdWdog *self) 
@@ -47,9 +48,9 @@ static void ct_dd_wdog_destructor(CtDdWdog *self)
 {
 // CtDdWdogPrivate *priv = CT_DD_WDOG_GET_PRIVATE(self);
 }
-
-/*IMPL*/
-
+/*
+ *IMPL
+ */
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
@@ -80,9 +81,9 @@ static void ct_dd_wdog_destructor(CtDdWdog *self)
 /*----------------------------------------------------------------------*/
 static void testCallback(void)
 {
-	kuchar	rawWdogInt;
-	kuchar	wdogInt;
-	DdWdog 	*dWdog = dd_wdog_new();
+	kuchar		rawWdogInt;
+	kuchar		wdogInt;
+	DdWdog 	*	dWdog = dd_wdog_new();
 	
 	Ddim_Print(("Watchdog Timer Interrupt\n"));
 	dd_wdog_get_status(dWdog, &rawWdogInt, &wdogInt);
@@ -92,9 +93,9 @@ static void testCallback(void)
 	k_object_unref(dWdog);
 	dWdog = NULL;
 }
-
-/*PUBLIC*/
-
+/*
+ *PUBLIC
+ */
 /*----------------------------------------------------------------------*/
 /* Global Function														*/
 /*----------------------------------------------------------------------*/

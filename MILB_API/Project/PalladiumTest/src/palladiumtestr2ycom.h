@@ -34,34 +34,60 @@ struct _PalladiumTestR2yCom
 
 KConstType palladium_test_r2y_com_get_type(void);
 PalladiumTestR2yCom* palladium_test_r2y_com_new(void);
-PalladiumTestR2yCom* palladium_test_r2y_com_get(void);
 
-VOID pt_im_r2y_do_test_3_1( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_2( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_3( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_4( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_5( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_6( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_12( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_13( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_14( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_15( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_16( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_17( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_18( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_19( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_20( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_21( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_22( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_23( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_24( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_25( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_26( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_27( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_28( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_29( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_30( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_31( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
-VOID pt_im_r2y_do_test_3_32( const UINT32 ctIdx1st, const UINT32 ctIdx2nd, const UINT32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_1(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_2(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_3(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_4(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_5(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_6(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_12(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_13(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_14(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_15(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_16(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_17(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_18(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_19(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_20(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_21(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_22(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_23(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_24(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_25(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_26(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_27(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_28(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_29(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_30(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_31(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
+void  palladium_test_r2y_com_do_test_3_32(PalladiumTestR2yCom* self, const kuint32 ctIdx1st,
+					const kuint32 ctIdx2nd, const kuint32 ctIdx3rd );
 
 #endif /* __PALLADIUM_TEST_R2Y_COM_H__ */

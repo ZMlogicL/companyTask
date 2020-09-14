@@ -113,7 +113,7 @@ struct _AudioI2sCmmn {
 																	Default value : DdAudioI2s_AUCLK_DIV_16 */
 	AudioAulrDivClk		divLrclk;									/**< AULR Output Clock Division Ratio<BR><BR>
 																	Default value : DdAudioI2s_AULR_DIV_32 */
-	UINT8				clkDivEnable;								/**< Clock division enable <BR><BR>
+	kuint8				clkDivEnable;								/**< Clock division enable <BR><BR>
 																	 Value Range:DdAudio_DISABLE / DdAudio_ENABLE<BR>
 																	 <ul><li>@ref DdAudio_DISABLE
 																	 <li>@ref DdAudio_ENABLE</ul>	*/
@@ -171,7 +171,7 @@ Set I2S control information(Common Clock Setting)<br>
 @retval DdAudio_SYSTEM_ERROR			System Error
 @remarks This API uses DDIM_User_Dly_Tsk().
 */
-INT32			dd_audio_i2s_ctrl_i2s_cmmn(DdAudioI2s *self, UINT8 ch, AudioI2sCmmn* i2sSetting);
+kint32			dd_audio_i2s_ctrl_i2s_cmmn(DdAudioI2s *self, kuint8 ch, AudioI2sCmmn* i2sSetting);
 
 /**
 Get I2S control information(Common Clock Setting)<br>
@@ -186,7 +186,7 @@ Get I2S control information(Common Clock Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_i2s_get_ctrl_i2s_cmmn(DdAudioI2s *self, UINT8 ch, AudioI2sCmmn* i2sSetting);
+kint32 			dd_audio_i2s_get_ctrl_i2s_cmmn(DdAudioI2s *self, kuint8 ch, AudioI2sCmmn* i2sSetting);
 
 /**
 Set I2S control information(Input Data Setting)<br>
@@ -201,7 +201,7 @@ Set I2S control information(Input Data Setting)<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32			dd_audio_i2s_ctrl_i2s_in(DdAudioI2s *self, UINT8 ch, AudioI2sIn* i2sSetting);
+kint32			dd_audio_i2s_ctrl_i2s_in(DdAudioI2s *self, kuint8 ch, AudioI2sIn* i2sSetting);
 
 /**
 Get I2S control information(Input Data Setting)<br>
@@ -215,7 +215,7 @@ Get I2S control information(Input Data Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_i2s_get_ctrl_i2s_in(DdAudioI2s *self, UINT8 ch, AudioI2sIn* i2sSetting);
+kint32 			dd_audio_i2s_get_ctrl_i2s_in(DdAudioI2s *self, kuint8 ch, AudioI2sIn* i2sSetting);
 
 /**
 Set I2S control information(Output Data Setting)<br>
@@ -229,7 +229,7 @@ Set I2S control information(Output Data Setting)<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32			dd_audio_i2s_ctrl_i2s_out(DdAudioI2s *self, UINT8 ch, AudioI2sOut* i2sSetting);
+kint32			dd_audio_i2s_ctrl_i2s_out(DdAudioI2s *self, kuint8 ch, AudioI2sOut* i2sSetting);
 
 /**
 Get I2S control information(Output Data Setting)<br>
@@ -242,13 +242,13 @@ Get I2S control information(Output Data Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_i2s_get_ctrl_i2s_out(DdAudioI2s *self, UINT8 ch, AudioI2sOut* i2sSetting);
+kint32 			dd_audio_i2s_get_ctrl_i2s_out(DdAudioI2s *self, kuint8 ch, AudioI2sOut* i2sSetting);
 
 void 			dd_audio_i2s_set_master_clock(DdAudioI2s *self, AudioMasterClock clk);
-void 			dd_audio_i2s_cmmn_init(DdAudioI2s *self, UINT8 ch);
-AudioClkMode 	dd_audio_i2s_get_cmmn_master_slave(DdAudioI2s *self, UINT8 ch);
-void 			dd_audio_i2s_in_init(DdAudioI2s *self, UINT8 ch);
-void 			dd_audio_i2s_out_init(DdAudioI2s *self, UINT8 ch);
+void 			dd_audio_i2s_cmmn_init(DdAudioI2s *self, kuint8 ch);
+AudioClkMode 	dd_audio_i2s_get_cmmn_master_slave(DdAudioI2s *self, kuint8 ch);
+void 			dd_audio_i2s_in_init(DdAudioI2s *self, kuint8 ch);
+void 			dd_audio_i2s_out_init(DdAudioI2s *self, kuint8 ch);
 
 
 #ifdef __cplusplus

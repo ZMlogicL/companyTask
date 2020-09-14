@@ -12,10 +12,14 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "ksdramc2.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KSdramc2, k_sdramc2);
+
 #define K_SDRAMC2_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KSdramc2Private, K_TYPE_SDRAMC2))
+
 
 struct _KSdramc2Private
 {
@@ -41,4 +45,3 @@ KSdramc2* k_sdramc2_new(void)
     KSdramc2* self = k_object_new_with_private(K_TYPE_SDRAMC2, sizeof(KSdramc2Private));
     return self;
 }
-

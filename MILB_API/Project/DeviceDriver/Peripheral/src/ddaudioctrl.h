@@ -93,11 +93,11 @@ struct _AudioCtrlOut {
 																				 Default value : DdAudioCtrl_FIFO_STAGES_1 */
 	AudioAhbFrmt		ahbFormat;									/**< Output Data AHB Bus Format<BR><BR>
 																	 Default value : DdAudioCtrl_AHB_FRMT_R_JUST */
-	UINT8				lrCopy;									/**< Lch Data Rch Copy Enable <BR><BR>
+	kuint8				lrCopy;									/**< Lch Data Rch Copy Enable <BR><BR>
 																	 Value Range:DdAudio_DISABLE / DdAudio_ENABLE<BR>
 																	 In the case of a audio interface slave mode, It is prohibited to set DdAudio_ENABLE. <BR><BR>
 																	 Default value : DdAudio_DISABLE */
-	UINT8				mixPlay;									/**< Mix Output Enable <BR><BR>
+	kuint8				mixPlay;									/**< Mix Output Enable <BR><BR>
 																	DdAudio_ENABLE: The data mixed Lch / Rch is output.<BR>
 																	DdAudio_DISABLE: The normal data is output.<BR>
 																	Value Range:DdAudio_DISABLE / DdAudio_ENABLE<BR>
@@ -140,7 +140,7 @@ Set audio data control information(Common Setting)<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32			dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ctrlInf);
+kint32			dd_audio_ctrl_ctrl_common(DdAudioCtrl *self, kuint8 ch, AudioCtrlCommon* ctrlInf);
 
 /**
 Get audio data control information(Common Setting)<br>
@@ -155,7 +155,7 @@ Get audio data control information(Common Setting)<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_ctrl_get_ctrl_common(DdAudioCtrl *self, UINT8 ch, AudioCtrlCommon* ctrlInf);
+kint32 			dd_audio_ctrl_get_ctrl_common(DdAudioCtrl *self, kuint8 ch, AudioCtrlCommon* ctrlInf);
 
 /**
 Set audio input data control information<br>
@@ -170,7 +170,7 @@ Set audio input data control information<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32			dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrlInf);
+kint32			dd_audio_ctrl_ctrl_input(DdAudioCtrl *self, kuint8 ch, AudioCtrlIn* ctrlInf);
 
 /**
 Get audio input data control information<br>
@@ -184,7 +184,7 @@ Get audio input data control information<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_ctrl_get_ctrl_input(DdAudioCtrl *self, UINT8 ch, AudioCtrlIn* ctrlInf);
+kint32 			dd_audio_ctrl_get_ctrl_input(DdAudioCtrl *self, kuint8 ch, AudioCtrlIn* ctrlInf);
 
 /**
 Set audio output data control information<br>
@@ -198,7 +198,7 @@ Set audio output data control information<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32			dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrlInf);
+kint32			dd_audio_ctrl_ctrl_output(DdAudioCtrl *self, kuint8 ch, AudioCtrlOut* ctrlInf);
 
 /**
 Get audio output data control information<br>
@@ -211,7 +211,7 @@ Get audio output data control information<br>
 @retval D_DDIM_OK						OK
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 */
-INT32 			dd_audio_ctrl_get_ctrl_output(DdAudioCtrl *self, UINT8 ch, AudioCtrlOut* ctrlInf);
+kint32 			dd_audio_ctrl_get_ctrl_output(DdAudioCtrl *self, kuint8 ch, AudioCtrlOut* ctrlInf);
 
 void 			dd_audio_ctrl_set_cmmn_fifo_usage(DdAudioCtrl *self, int index, AudioFifoUsage fifoUsage);
 void 			dd_audio_ctrl_set_cmmn_channel(DdAudioCtrl *self, int index, AudioChannel channel);
@@ -227,8 +227,8 @@ AudioFifoStages dd_audio_ctrl_get_in_fifo_stages(DdAudioCtrl *self, int index);
 void 			dd_audio_ctrl_set_out_format(DdAudioCtrl *self, int index, AudioDataRegFrmt format);
 void 			dd_audio_ctrl_set_out_fifo_stages(DdAudioCtrl *self, int index, AudioFifoStages fifoStages);
 void 			dd_audio_ctrl_set_out_ahb_format(DdAudioCtrl *self, int index, AudioAhbFrmt ahbFormat);
-void 			dd_audio_ctrl_set_out_lr_copy(DdAudioCtrl *self, int index, UINT8 lrCopy);
-void 			dd_audio_ctrl_set_out_mix_play(DdAudioCtrl *self, int index, UINT8 mixPlay);
+void 			dd_audio_ctrl_set_out_lr_copy(DdAudioCtrl *self, int index, kuint8 lrCopy);
+void 			dd_audio_ctrl_set_out_mix_play(DdAudioCtrl *self, int index, kuint8 mixPlay);
 void 			dd_audio_ctrl_set_out_bit_shift(DdAudioCtrl *self, int index, AudioBitShift bitShift);
 AudioFifoStages dd_audio_ctrl_get_out_fifo_stages(DdAudioCtrl *self, int index);
 

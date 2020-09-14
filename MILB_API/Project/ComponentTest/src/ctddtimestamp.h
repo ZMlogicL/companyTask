@@ -23,7 +23,7 @@
 #define __CT_DD_TIMESTAMP_H__
 
 #include <klib.h>
-#include "ddim_typedef.h"
+#include "ddimtypedef.h"
 
 #define CT_TYPE_DD_TIMESTAMP                  (ct_dd_timestamp_get_type())
 #define CT_DD_TIMESTAMP(obj)                  (K_TYPE_CHECK_INSTANCE_CAST (obj, CtDdTimestamp)) 
@@ -33,14 +33,14 @@ typedef struct                                _CtDdTimestamp CtDdTimestamp;
 typedef struct                                _CtDdTimestampPrivate CtDdTimestampPrivate;
 
 struct _CtDdTimestamp {
-    KObject 			parent;
-    kint32 				dat;
-	TDdTimestampCtrl 	timestampCtrl;
-	TDdTimestampCtrl 	timestampCtrlGet;
-	kulonglong 			timestampCounter;
-	kulonglong 			timestampCounterGet;
-	kulong 				usec;
-	kulong 				frequency;
+    KObject 		parent;
+    kint32 			dat;
+	DdTimestamp 	timestampCtrl;
+	DdTimestamp 	timestampCtrlGet;
+	kulonglong 		timestampCounter;
+	kulonglong 		timestampCounterGet;
+	kulong 			usec;
+	kulong 			frequency;
 };
 
 KConstType              ct_dd_timestamp_get_type(void);

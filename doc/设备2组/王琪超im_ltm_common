@@ -1,0 +1,69 @@
+im_ltm_common.c删除新建类imltmcommon.c\imltmcommon.h ,从im_ltm.h抽出自己文件调用的宏定义和公有函数声明：
+
+公有函数：
+extern INT32 Im_LTM_On_Pclk( UCHAR pipe_no );
+INT32 im_ltm_common_on_pclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Off_Pclk( UCHAR pipe_no );
+INT32 im_ltm_common_off_pclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Force_Off_Pclk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_force_off_pclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_On_Hclk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_on_hclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Off_Hclk( UCHAR pipe_no );
+修改为： INT32 im_ltm_common_off_hclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Force_Off_Hclk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_force_off_hclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_On_Aclk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_on_aclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Off_Aclk( UCHAR pipe_no );
+修改为： INT32 im_ltm_common_off_aclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Force_Off_Aclk( UCHAR pipe_no );
+修改为： INT32 im_ltm_common_force_off_aclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_On_Clk( UCHAR pipe_no );
+修改为： INT32 im_ltm_common_on_clk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Off_Clk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_off_clk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Force_Off_Clk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_force_off_clk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_On_RBKClk( UCHAR pipe_no );
+修改为： INT32 im_ltm_common_on_rbkclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Off_RBKClk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_off_rbkclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Force_Off_RBKClk( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_force_off_rbkclk( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Init_All_Block( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_init_all_block( UCHAR pipe_no );
+
+extern INT32 Im_LTM_SW_Reset_All_Block( UCHAR pipe_no );
+修改为：INT32 im_ltm_common_sw_reset_all_block( UCHAR pipe_no );
+
+extern INT32 Im_LTM_Stop_All_Block( UCHAR pipe_no );
+ 修改为：INT32 im_ltm_common_stop_all_block( UCHAR pipe_no );
+
+从im_ltm.h:抽出的宏定义为：（因被多个.c文件引用没有更改类名）
+
+#define	D_IM_LTM_PIPE1						(0)						/**< Pipe1.							*/
+#define	D_IM_LTM_PIPE2						(1)						/**< Pipe2.							*/
+#define	D_IM_LTM_PIPE12						(2)						/**< Pipe1&2.						*/
+#define	D_IM_LTM_PIPE_MAX
+#define	D_IM_LTM_PARAM_ERROR				(D_IM_LTM | D_DDIM_INPUT_PARAM_ERROR)	/**< parameter error		*/
+
+
+无结构体和枚举定义
+
+

@@ -3,7 +3,7 @@
 *@date                :2020-09-07
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -14,42 +14,59 @@
 */
 
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "kchiptop3.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(KChiptop3, k_chiptop3);
-#define K_CHIPTOP3_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KChiptop3Private, K_TYPE_CHIPTOP3))
+G_DEFINE_TYPE(KChiptop3, k_chiptop3, G_TYPE_OBJECT);
+
+#define K_CHIPTOP3_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), K_TYPE_CHIPTOP3, KChiptop3Private));
 
 
 struct _KChiptop3Private
 {
-	kint a;
+	 gint preserved;
 };
-
-
-volatile IoChiptop	ioChiptop	__attribute__((section(".CHIPTOP")));
-/*
+/**
+ * DECLS
+ */
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+/**
  * IMPL
  */
-static void k_chiptop3_constructor(KChiptop3 *self)
+static void k_chiptop3_class_init(KChiptop3Class *klass)
 {
-	KChiptop3Private *priv = K_CHIPTOP3_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-	priv->a = 0;
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(KChiptop3Private));
 }
 
-static void k_chiptop3_destructor(KChiptop3 *self)
+static void k_chiptop3_init(KChiptop3 *self)
 {
 	KChiptop3Private *priv = K_CHIPTOP3_GET_PRIVATE(self);
 
-	priv->a = 0;
+	priv->preserved = 0;
+}
+
+static void dispose_od(GObject *object)
+{
+	G_OBJECT_CLASS(k_chiptop3_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+	G_OBJECT_CLASS(k_chiptop3_parent_class)->finalize(object);
 }
 /**
  * PUBLIC
  */
-KChiptop3 *k_chiptop3_new(void)
+KChiptop3 *k_chiptop3_new()
 {
-	KChiptop3* self = k_object_new_with_private(K_TYPE_CHIPTOP3,sizeof(KChiptop3Private));
+	KChiptop3 *self = g_object_new(K_TYPE_CHIPTOP3, NULL);
 
 	return self;
 }

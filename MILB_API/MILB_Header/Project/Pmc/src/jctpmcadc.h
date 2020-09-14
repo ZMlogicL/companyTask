@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_ADC_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_ADC			(jctpmc_adc_get_type())
-#define JCTPMC_ADC(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcAdc))
-#define JCTPMC_IS_ADC(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_ADC))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcAdcAdc1 IoPmcAdcAdc1;
@@ -34,87 +30,85 @@ typedef union 				_IoPmcAdcAdd IoPmcAdcAdd;
 typedef union 				_IoPmcAdcAdcrl IoPmcAdcAdcrl;
 typedef union 				_IoPmcAdcAdcrh IoPmcAdcAdcrh;
 typedef struct 				_IoPmcAdc IoPmcAdc;
-typedef struct 				_JctpmcAdc JctpmcAdc;
-typedef struct 				_JctpmcAdcPrivate JctpmcAdcPrivate;
 
 /* A/D Convertor */
 
 /* ADC1 */
 union _IoPmcAdcAdc1 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	adcs			:8;
-		kulong	strg			:1;
-		kulong	xpd				:1;
-		kulong	tgs				:2;
-		kulong	adrst			:1;
-		kulong	tsel			:1;
-		kulong	xpdctl			:1;
-		kulong					:17;
+		gulong	adcs			:8;
+		gulong	strg			:1;
+		gulong	xpd				:1;
+		gulong	tgs				:2;
+		gulong	adrst			:1;
+		gulong	tsel			:1;
+		gulong	xpdctl			:1;
+		gulong					:17;
 	}bit;
 };
 
 /* ADC2 */
 union _IoPmcAdcAdc2 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong					:12;
-		kulong	stg				:3;
-		kulong	etedg			:1;
-		kulong					:16;
+		gulong					:12;
+		gulong	stg				:3;
+		gulong	etedg			:1;
+		gulong					:16;
 	}bit;
 };
 
 /* ADMR */
 union _IoPmcAdcAdmr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	sts				:8;
-		kulong	md				:2;
-		kulong	intel			:1;
-		kulong	inteh			:1;
-		kulong	inte			:1;
-		kulong					:19;
+		gulong	sts				:8;
+		gulong	md				:2;
+		gulong	intel			:1;
+		gulong	inteh			:1;
+		gulong	inte			:1;
+		gulong					:19;
 	}bit;
 };
 
 /* ADST */
 union _IoPmcAdcAdst {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	busy			:1;
-		kulong	intl			:1;
-		kulong	inth			:1;
-		kulong	intf			:1;
-		kulong	cs				:3;
-		kulong					:25;
+		gulong	busy			:1;
+		gulong	intl			:1;
+		gulong	inth			:1;
+		gulong	intf			:1;
+		gulong	cs				:3;
+		gulong					:25;
 	}bit;
 };
 
 /* ADDx (x=0-6) */
 union _IoPmcAdcAdd {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	add				:10;
-		kulong					:22;
+		gulong	add				:10;
+		gulong					:22;
 	}bit;
 };
 
 /* ADCRL */
 union _IoPmcAdcAdcrl {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	adcrl			:10;
-		kulong					:22;
+		gulong	adcrl			:10;
+		gulong					:22;
 	}bit;
 };
 
 /* ADCRH */
 union _IoPmcAdcAdcrh {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	adcrh			:10;
-		kulong					:22;
+		gulong	adcrh			:10;
+		gulong					:22;
 	}bit;
 };
 
@@ -135,16 +129,8 @@ struct _IoPmcAdc {
 	/* 1DFF_(5034 - 5037h)	*/
 	IoPmcAdcAdcrh		adcrh;
 	/* 1DFF_(5038 - 5FFFh)	*/
-	kuchar					dmyPmcAdc038Fff[0x1000 - 0x038];
+	guchar					dmyPmcAdc038Fff[0x1000 - 0x038];
 };
-
-struct _JctpmcAdc {
-	KObject parent;
-};
-
-
-KConstType 			jctpmc_adc_get_type(void);
-JctpmcAdc*		        jctpmc_adc_new(void);
 
 
 #endif /* __JCTPMC_ADC_H__ */

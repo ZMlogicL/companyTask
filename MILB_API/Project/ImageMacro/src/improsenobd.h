@@ -86,25 +86,25 @@ ImproSenobd*		impro_senobd_new();
 Start OBD
 @param[in]	ch : Channel No.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobd_start( E_IM_PRO_OBD_CH ch );
+extern	INT32			impro_senobd_start( EimproObdCh ch );
 /**
 Stop OBD
 @param[in]	ch : Channel No.
 @param[in]	force : force stop option
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobd_stop( E_IM_PRO_OBD_CH ch, UCHAR force );
+extern	INT32			impro_senobd_stop( EimproObdCh ch, UCHAR force );
 /**
 The control parameter of OBD compensation is set.
 @param[in]	ch : Channel No.
 @param[in]	obCtrl	:	OBD Control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
-extern	INT32			impro_senobd_ctrl( E_IM_PRO_OBD_CH ch, TimproObdCtrl* obCtrl );
+extern	INT32			impro_senobd_ctrl( EimproObdCh ch, TimproObdCtrl* obCtrl );
 /**
 The area for OBD detection is set up.
 @param[in]	ch : Channel No.
@@ -118,27 +118,27 @@ The area for OBD detection is set up.
 					value range :lines[2 - 8192] 2pixel boundary<br>
 					target registor :@@OBDVW<br>
 @retval		D_DDIM_OK						: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR		: Setting NG
 */
-extern	INT32			impro_senobd_set_area( E_IM_PRO_OBD_CH ch, T_IM_PRO_AREA_INFO* obArea );
+extern	INT32			impro_senobd_set_area( EimproObdCh ch, TimproAreaInfo* obArea );
 /**
 Get OBD count
 @param[in]	ch : Channel No.
 @param[out]	obcnt :	OBCNT<br>
 			each colors count value range :0 - 0xFFFFF<br>
 @retval		D_DDIM_OK					: Getting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
 */
-extern	INT32			impro_senobd_get_ob_cnt( E_IM_PRO_OBD_CH ch, TimproRgb4* obcnt );
+extern	INT32			impro_senobd_get_ob_cnt( EimproObdCh ch, TimproRgb4* obcnt );
 /**
 Get OBD data
 @param[in]	ch : Channel No.
 @param[out]	obdata : OBD Data
 @retval		D_DDIM_OK					: Getting OK
 @retval		D_IM_PRO_NG					: Getting NG
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Getting NG
 */
-extern	INT32			impro_senobd_get_ob_data( E_IM_PRO_OBD_CH ch, TimproRgb4* obdata );
+extern	INT32			impro_senobd_get_ob_data( EimproObdCh ch, TimproRgb4* obdata );
 
 
 #endif /* __IMPRO_SENOBD_H__ */

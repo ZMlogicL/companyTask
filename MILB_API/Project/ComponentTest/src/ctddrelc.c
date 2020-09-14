@@ -15,7 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "_relc.h"
-#include "dd_relc.h"
+// #include "dd_relc.h"
+#include "../../DeviceDriver/Exs/src/ddrelc.h"
 #include "exstop.h"
 #include "chiptop.h"
 #include "dd_exs.h"
@@ -97,22 +98,22 @@ void ct_dd_relc_register_dump( void )
 void ct_dd_relc_cmd_cb(kuint32 int_factor)
 {
 	switch ( int_factor ) {
-		case D_DD_RELC_ERR:
+		case DdRelc_D_DD_RELC_ERR:
 			//Error interrupt
 			Ddim_Print(("[RELC INT] Error interrupt \n"));
 			break;
 
-		case D_DD_RELC_SLEEP:
+		case DdRelc_D_DD_RELC_SLEEP:
 			// Sleep interrupt
 			Ddim_Print(("[RELC INT] Sleep interrupt \n"));
 			break;
 
-		case D_DD_RELC_FINISH:
+		case DdRelc_D_DD_RELC_FINISH:
 			// Finish interrupt
 			Ddim_Print(("[RELC INT] Finish interrupt \n"));
 			break;
 
-		case D_DD_RELC_CR_FINISH:
+		case DdRelc_D_DD_RELC_CR_FINISH:
 			// Continuous run finish interrupt
 			Ddim_Print(("[RELC INT] Continuous run finish interrupt \n"));
 			break;
@@ -140,39 +141,39 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-2 : Dd_RELC_Open()\n"));
+	Ddim_Print(("[CT]01-01-2 : dd_relc_open()\n"));
 	argc = 2;
 	argv[ 1 ] = (kchar*)( "open" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-3 : Dd_RELC_Close()\n"));
+	Ddim_Print(("[CT]01-01-3 : dd_relc_close()\n"));
 	argc = 2;
 	argv[ 1 ] = (kchar*)( "close" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-4 : Dd_RELC_Start_Sync()\n"));
+	Ddim_Print(("[CT]01-01-4 : dd_relc_start_sync()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "start" );
 	argv[ 2 ] = (kchar*)( "sync" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-5 : Dd_RELC_Start_Async()\n"));
+	Ddim_Print(("[CT]01-01-5 : dd_relc_start_async()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "start" );
 	argv[ 2 ] = (kchar*)( "async" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-6 : Dd_RELC_Stop()\n"));
+	Ddim_Print(("[CT]01-01-6 : dd_relc_stop()\n"));
 	argc = 2;
 	argv[ 1 ] = (kchar*)( "stop" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-7 : Dd_RELC_Ctrl_Common()\n"));
+	Ddim_Print(("[CT]01-01-7 : dd_relc_ctrl_common()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "ctrlcomm" );
 	argv[ 2 ] = (kchar*)( "reg" );
@@ -181,7 +182,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-8 : Dd_RELC_Ctrl_Common()\n"));
+	Ddim_Print(("[CT]01-01-8 : dd_relc_ctrl_common()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "ctrlcomm" );
 	argv[ 2 ] = (kchar*)( "desc" );
@@ -190,7 +191,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-9 : Dd_RELC_Ctrl_Register()\n"));
+	Ddim_Print(("[CT]01-01-9 : dd_relc_ctrl_register()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "ctrlcomm" );
 	argv[ 2 ] = (kchar*)( "reg" );
@@ -209,7 +210,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-10 : Dd_RELC_Ctrl_Register()\n"));
+	Ddim_Print(("[CT]01-01-10 : dd_relc_ctrl_register()\n"));
 	argc = 8;
 	argv[ 1 ] = (kchar*)( "ctrlreg" );
 	argv[ 2 ] = (kchar*)( "imaxe" );
@@ -221,14 +222,14 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-11 : Dd_RELC_Ctrl_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-11 : dd_relc_ctrl_descriptor()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "ctrldesc" );
 	argv[ 2 ] = (kchar*)( "0x40408000" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-12 : Dd_RELC_Set_In_Start_Addr()\n"));
+	Ddim_Print(("[CT]01-01-12 : dd_relc_set_in_start_addr()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "set" );
 	argv[ 2 ] = (kchar*)( "in_sta_addr" );
@@ -236,15 +237,15 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-13 : Dd_RELC_Set_In_End_Addr()\n"));
+	Ddim_Print(("[CT]01-01-13 : dd_relc_set_in_end_addr()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "set" );
-	argv[ 2 ] = (kchar*)( "in_end_addr" );
+	argv[ 2 ] = (kchar*)( "inEndAddr" );
 	argv[ 3 ] = (kchar*)( "0x40103000" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-14 : Dd_RELC_Set_Out_Start_Addr()\n"));
+	Ddim_Print(("[CT]01-01-14 : dd_relc_set_out_start_addr()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "set" );
 	argv[ 2 ] = (kchar*)( "out_sta_addr" );
@@ -252,78 +253,78 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-15 : Dd_RELC_Set_Out_End_Addr()\n"));
+	Ddim_Print(("[CT]01-01-15 : dd_relc_set_out_end_addr()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "set" );
-	argv[ 2 ] = (kchar*)( "out_end_addr" );
+	argv[ 2 ] = (kchar*)( "outEndAddr" );
 	argv[ 3 ] = (kchar*)( "0x40907012" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-16 : Dd_RELC_Get_Ctrl_Common()\n"));
+	Ddim_Print(("[CT]01-01-16 : dd_relc_get_ctrl_common()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "ctrlcomm" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-17 : Dd_RELC_Get_Ctrl_Register()\n"));
+	Ddim_Print(("[CT]01-01-17 : dd_relc_get_ctrl_register()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "ctrlreg" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-18 : Dd_RELC_Get_Ctrl_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-18 : dd_relc_get_ctrl_descriptor()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "ctrldesc" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-19 : Dd_RELC_Get_Status()\n"));
+	Ddim_Print(("[CT]01-01-19 : dd_relc_get_status()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "msta" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-20 : Dd_RELC_Get_Sleep_Reason()\n"));
+	Ddim_Print(("[CT]01-01-20 : dd_relc_get_sleep_reason()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "sleep" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-21 : Dd_RELC_Get_Error_Status()\n"));
+	Ddim_Print(("[CT]01-01-21 : dd_relc_get_error_status()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "errsta" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-22 : Dd_RELC_Get_Error()\n"));
+	Ddim_Print(("[CT]01-01-22 : dd_relc_get_error()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "err" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-23 : Dd_RELC_Get_Process_Status()\n"));
+	Ddim_Print(("[CT]01-01-23 : dd_relc_get_process_status()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "psta" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-24 : Dd_RELC_Get_Buf_Size()\n"));
+	Ddim_Print(("[CT]01-01-24 : dd_relc_get_buf_size()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "bufsize" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 /*
-	Ddim_Print(("[CT]01-01-25 : Dd_RELC_Set_In_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-01-25 : dd_relc_set_in_buf_data()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "set" );
 	argv[ 2 ] = (kchar*)( "inbuf" );
@@ -332,7 +333,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-26 : Dd_RELC_Set_In_Buf_Data_Mirror()\n"));
+	Ddim_Print(("[CT]01-01-26 : dd_relc_set_in_buf_data_mirror()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "set" );
 	argv[ 2 ] = (kchar*)( "inbufm" );
@@ -341,7 +342,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-27 : Dd_RELC_Set_Ref_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-01-27 : dd_relc_set_ref_buf_data()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "set" );
 	argv[ 2 ] = (kchar*)( "relbuf" );
@@ -350,7 +351,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-28 : Dd_RELC_Get_In_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-01-28 : dd_relc_get_in_buf_data()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "inbuf" );
@@ -359,7 +360,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-29 : Dd_RELC_Get_In_Buf_Data_Mirror()\n"));
+	Ddim_Print(("[CT]01-01-29 : dd_relc_get_in_buf_data_mirror()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "inbufm" );
@@ -368,7 +369,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-30 : Dd_RELC_Get_Ref_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-01-30 : dd_relc_get_ref_buf_data()\n"));
 	argc = 5;
 	argv[ 1 ] = (kchar*)( "get" );
 	argv[ 2 ] = (kchar*)( "relbuf" );
@@ -377,7 +378,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-31 : Dd_RELC_Utility_Register()\n"));
+	Ddim_Print(("[CT]01-01-31 : dd_relc_utility_register()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "norm" );
 	argv[ 2 ] = (kchar*)( "async" );
@@ -385,7 +386,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-32 : Dd_RELC_Utility_Register()\n"));
+	Ddim_Print(("[CT]01-01-32 : dd_relc_utility_register()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "norm" );
 	argv[ 2 ] = (kchar*)( "async" );
@@ -393,7 +394,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-33 : Dd_RELC_Utility_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-33 : dd_relc_utility_descriptor()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "desc" );
 	argv[ 2 ] = (kchar*)( "async" );
@@ -401,7 +402,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-34 : Dd_RELC_Utility_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-34 : dd_relc_utility_descriptor()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "desc" );
 	argv[ 2 ] = (kchar*)( "async" );
@@ -409,7 +410,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-35 : Dd_RELC_Utility_Register()\n"));
+	Ddim_Print(("[CT]01-01-35 : dd_relc_utility_register()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "norm" );
 	argv[ 2 ] = (kchar*)( "sync" );
@@ -417,7 +418,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-36 : Dd_RELC_Utility_Register()\n"));
+	Ddim_Print(("[CT]01-01-36 : dd_relc_utility_register()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "norm" );
 	argv[ 2 ] = (kchar*)( "sync" );
@@ -425,7 +426,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-37 : Dd_RELC_Utility_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-37 : dd_relc_utility_descriptor()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "desc" );
 	argv[ 2 ] = (kchar*)( "sync" );
@@ -433,7 +434,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-01-38 : Dd_RELC_Utility_Descriptor()\n"));
+	Ddim_Print(("[CT]01-01-38 : dd_relc_utility_descriptor()\n"));
 	argc = 4;
 	argv[ 1 ] = (kchar*)( "desc" );
 	argv[ 2 ] = (kchar*)( "sync" );
@@ -441,7 +442,7 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 */
-	Ddim_Print(("[CT]01-01-39 : Dd_RELC_Int_Handler()\n"));
+	Ddim_Print(("[CT]01-01-39 : dd_relc_int_handler()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "inthdr" );
 	argv[ 2 ] = (kchar*)( "1" );
@@ -457,140 +458,140 @@ void ct_dd_relc_ps_sim(CtDdRelc *self)
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-1 : Dd_RELC_Open()\n"));
+	Ddim_Print(("[CT]01-02-1 : dd_relc_open()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "open" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-2 : Dd_RELC_Ctrl_Common()\n"));
+	Ddim_Print(("[CT]01-02-2 : dd_relc_ctrl_common()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "ctrlcomm" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-3 : Dd_RELC_Ctrl_Register()\n"));
+	Ddim_Print(("[CT]01-02-3 : dd_relc_ctrl_register()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "ctrlreg" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-4 : Dd_RELC_Ctrl_Descriptor()\n"));
+	Ddim_Print(("[CT]01-02-4 : dd_relc_ctrl_descriptor()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "ctrldesc" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-5 : Dd_RELC_Set_In_Start_Addr()\n"));
+	Ddim_Print(("[CT]01-02-5 : dd_relc_set_in_start_addr()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_in_sta_addr" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-6 : Dd_RELC_Set_In_End_Addr()\n"));
+	Ddim_Print(("[CT]01-02-6 : dd_relc_set_in_end_addr()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_in_end_addr" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-7 : Dd_RELC_Set_Out_Start_Addr()\n"));
+	Ddim_Print(("[CT]01-02-7 : dd_relc_set_out_start_addr()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_out_sta_addr" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-8 : Dd_RELC_Set_Out_End_Addr()\n"));
+	Ddim_Print(("[CT]01-02-8 : dd_relc_set_out_end_addr()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_out_end_addr" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-9 : Dd_RELC_Set_In_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-02-9 : dd_relc_set_in_buf_data()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_inbuf" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-10 : Dd_RELC_Set_In_Buf_Data_Mirror()\n"));
+	Ddim_Print(("[CT]01-02-10 : dd_relc_set_in_buf_data_mirror()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_inbufm" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-11 : Dd_RELC_Set_Ref_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-02-11 : dd_relc_set_ref_buf_data()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "set_refbuf" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-12 : Dd_RELC_Get_Ctrl_Common()\n"));
+	Ddim_Print(("[CT]01-02-12 : dd_relc_get_ctrl_common()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_ctrlcomm" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-13 : Dd_RELC_Get_Ctrl_Register()\n"));
+	Ddim_Print(("[CT]01-02-13 : dd_relc_get_ctrl_register()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_ctrlreg" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-14 : Dd_RELC_Get_Ctrl_Descriptor()\n"));
+	Ddim_Print(("[CT]01-02-14 : dd_relc_get_ctrl_descriptor()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_ctrldesc" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-15 : Dd_RELC_Get_Status()\n"));
+	Ddim_Print(("[CT]01-02-15 : dd_relc_get_status()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_psta" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-16 : Dd_RELC_Get_Buf_Size()\n"));
+	Ddim_Print(("[CT]01-02-16 : dd_relc_get_buf_size()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_bufsize1" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-17 : Dd_RELC_Get_Buf_Size()\n"));
+	Ddim_Print(("[CT]01-02-17 : dd_relc_get_buf_size()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_bufsize2" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-18 : Dd_RELC_Get_In_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-02-18 : dd_relc_get_in_buf_data()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_inbuf" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-19 : Dd_RELC_Get_In_Buf_Data_Mirror()\n"));
+	Ddim_Print(("[CT]01-02-19 : dd_relc_get_in_buf_data_mirror()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_inbufm" );
 	ct_dd_relc_main(priv->main, argc, argv);
 	Ddim_Print(("\n"));
 
-	Ddim_Print(("[CT]01-02-20 : Dd_RELC_Get_Ref_Buf_Data()\n"));
+	Ddim_Print(("[CT]01-02-20 : dd_relc_get_ref_buf_data()\n"));
 	argc = 3;
 	argv[ 1 ] = (kchar*)( "err" );
 	argv[ 2 ] = (kchar*)( "get_refbuf" );

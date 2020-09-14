@@ -11,7 +11,7 @@
 
 #include <string.h>
 #include "audio_if.h"
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "ddaudio.h"
 #include "ddaudioloopback.h"
 
@@ -25,20 +25,29 @@ struct _DdAudioLoopbackPrivate
 };
 
 
-static INT32 dd_audio_set_enable_loopback(DdAudioLoopback* self, UINT8 ch, UINT8 enable);
+static kint32 ddAudioSetEnableLoopback(DdAudioLoopback* self, kuint8 ch, kuint8 enable);
+
+static void dd_audio_loopback_constructor(DdAudioLoopback *self)
+{
+}
+
+static void dd_audio_loopback_destructor(DdAudioLoopback *self)
+{
+
+}
 
 /**
  * @brief  Set register LB.
- * @param  UINT8 ch
- * @param  UINT8 enable
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @param  kuint8 enable
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-static INT32 dd_audio_set_enable_loopback(DdAudioLoopback* self, UINT8 ch, UINT8 enable)
+static kint32 ddAudioSetEnableLoopback(DdAudioLoopback* self, kuint8 ch, kuint8 enable)
 {
 	DdAudio* ddAudio = dd_audio_get();
-	ULONG* pSpinLock  = dd_audio_get_spin_lock_addr(ddAudio);
-	volatile union io_audio_aulbe aulbe;
-	INT32 ret_val = D_DDIM_OK;
+	kulong* pSpinLock = dd_audio_get_spin_lock_addr(ddAudio);
+	volatile IoAudioAulbe aulbe;
+	kint32 retVal = D_DDIM_OK;
 
 #ifdef CO_PARAM_CHECK
 	if (enable > 1){
@@ -117,98 +126,89 @@ static INT32 dd_audio_set_enable_loopback(DdAudioLoopback* self, UINT8 ch, UINT8
 	// SpinLock
 	Dd_ARM_Critical_Section_Start(*pSpinLock);
 
-	aulbe.word = IO_AUDIO.AUDIOIF_CTRL.AULBE.word;
+	aulbe.word = ioAudio.audioifCtrl.aulbe.word;
 
 	switch (ch){
 		case DdAudio_IF_CH0 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE0 = 1;
+				aulbe.bit.aulbe0 = 1;
 			}
 			else {
-				aulbe.bit.AULBE0 = 2;
+				aulbe.bit.aulbe0 = 2;
 			}
 			break;
 		case DdAudio_IF_CH1 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE1 = 1;
+				aulbe.bit.aulbe1 = 1;
 			}
 			else {
-				aulbe.bit.AULBE1 = 2;
+				aulbe.bit.aulbe1 = 2;
 			}
 			break;
 		case DdAudio_IF_CH2 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE2 = 1;
+				aulbe.bit.aulbe2 = 1;
 			}
 			else {
-				aulbe.bit.AULBE2 = 2;
+				aulbe.bit.aulbe2 = 2;
 			}
 			break;
 		case DdAudio_IF_CH3 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE3 = 1;
+				aulbe.bit.aulbe3 = 1;
 			}
 			else {
-				aulbe.bit.AULBE3 = 2;
+				aulbe.bit.aulbe3 = 2;
 			}
 			break;
 		case DdAudio_IF_CH4 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE4 = 1;
+				aulbe.bit.aulbe4 = 1;
 			}
 			else {
-				aulbe.bit.AULBE4 = 2;
+				aulbe.bit.aulbe4 = 2;
 			}
 			break;
 		case DdAudio_IF_CH5 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE5 = 1;
+				aulbe.bit.aulbe5 = 1;
 			}
 			else {
-				aulbe.bit.AULBE5 = 2;
+				aulbe.bit.aulbe5 = 2;
 			}
 			break;
 		case DdAudio_IF_CH0_CH1 :
 			if (enable == DdAudio_ENABLE){
-				aulbe.bit.AULBE0 = 1;
-				aulbe.bit.AULBE1 = 1;
+				aulbe.bit.aulbe0 = 1;
+				aulbe.bit.aulbe1 = 1;
 			}
 			else {
-				aulbe.bit.AULBE0 = 2;
-				aulbe.bit.AULBE1 = 2;
+				aulbe.bit.aulbe0 = 2;
+				aulbe.bit.aulbe1 = 2;
 			}
 			break;
 		default :
 			Ddim_Print(("[DD_AUDIO]Set AULBE:input channel error : %d\n", ch));
-			ret_val = DdAudio_INPUT_PARAM_ERROR;
+			retVal = DdAudio_INPUT_PARAM_ERROR;
 			break;
 	}
 
-	if (ret_val == D_DDIM_OK){
-		IO_AUDIO.AUDIOIF_CTRL.AULBE.word = aulbe.word;
+	if (retVal == D_DDIM_OK){
+		ioAudio.audioifCtrl.aulbe.word = aulbe.word;
 	}
 
 	// SpinUnLock
 	Dd_ARM_Critical_Section_End(*pSpinLock);
 
-	return ret_val;
-}
-
-static void dd_audio_loopback_constructor(DdAudioLoopback *self)
-{
-}
-
-static void dd_audio_loopback_destructor(DdAudioLoopback *self)
-{
-
+	return retVal;
 }
 
 /**
  * @brief  Get register LB.
- * @param  UINT8 ch
+ * @param  kuint8 ch
  * @return TRUE/FALSE
  */
-BOOL dd_audio_loopback_flag_get(DdAudioLoopback* self, UINT8 ch)
+kboolean dd_audio_loopback_flag_get(DdAudioLoopback* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if (ch >= DdAudio_IF_CH_NUM_MAX){
@@ -217,7 +217,7 @@ BOOL dd_audio_loopback_flag_get(DdAudioLoopback* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 
-	if (IO_AUDIO.AUDIOIF[ch].AUMD.bit.LBF == 1){
+	if (ioAudio.audioif[ch].aumd.bit.lbf == 1){
 		return TRUE;
 	}
 	else {
@@ -227,10 +227,10 @@ BOOL dd_audio_loopback_flag_get(DdAudioLoopback* self, UINT8 ch)
 
 /**
  * @brief  Start LoopBack Operation.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_loopback_start(DdAudioLoopback* self, UINT8 ch)
+kint32 dd_audio_loopback_start(DdAudioLoopback* self, kuint8 ch)
 {
 	DdAudio* ddAudio = dd_audio_get();
 
@@ -259,15 +259,15 @@ INT32 dd_audio_loopback_start(DdAudioLoopback* self, UINT8 ch)
 		}
 	}
 	
-	return dd_audio_set_enable_loopback(self, ch, DdAudio_ENABLE);
+	return ddAudioSetEnableLoopback(self, ch, DdAudio_ENABLE);
 }
 
 /**
  * @brief  Stop LoopBack Operation.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-INT32 dd_audio_loopback_stop(DdAudioLoopback* self, UINT8 ch)
+kint32 dd_audio_loopback_stop(DdAudioLoopback* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECK
 	if ((ch >= DdAudio_IF_LB_CH_NUM_MAX) && (ch != DdAudio_IF_CH0_CH1)){
@@ -276,15 +276,15 @@ INT32 dd_audio_loopback_stop(DdAudioLoopback* self, UINT8 ch)
 	}
 #endif	// CO_PARAM_CHECK
 	
-	return dd_audio_set_enable_loopback(self, ch, DdAudio_DISABLE);
+	return ddAudioSetEnableLoopback(self, ch, DdAudio_DISABLE);
 }
 
 /**
  * @brief  Get Status of LoopBack Operation.
- * @param  UINT8 ch
- * @return INT32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
+ * @param  kuint8 ch
+ * @return kint32 D_DDIM_OK/DdAudio_INPUT_PARAM_ERROR
  */
-BOOL dd_audio_loopback_get_status(DdAudioLoopback* self, UINT8 ch)
+kboolean dd_audio_loopback_get_status(DdAudioLoopback* self, kuint8 ch)
 {
 #ifdef CO_PARAM_CHECKa
 	if (ch >= DdAudio_IF_LB_CH_NUM_MAX){

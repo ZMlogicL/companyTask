@@ -1,7 +1,7 @@
 /*
  *ctimdisp2e.c
  *@Copyright (C) 2010-2020 上海网用软件有限公司
- *@date:                2020-09-04
+ *@date:                2020-09-11
  *@author:            杨永济
  *@brief:                m10v-isp
  *@rely:                 klib
@@ -10,7 +10,9 @@
  *@version: 
  */
 
-
+/*
+ * 以下开始include语句
+ * */
 #include <stdlib.h>
 #include <string.h>
 #include "im_disp.h"
@@ -28,25 +30,49 @@
 #include "imdisp2group.h"
 #include "ctimdisp2e.h"
 
-K_TYPE_DEFINE_DERIVED_WITH_PRIVATE(CtImDisp2e, ct_im_disp2e, IM_TYPE_DISP2_PARENT)
-#define CT_IM_DISP2E_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE ((o), CtImDisp2ePrivate, CT_TYPE_IM_DISP2E))
+/*
+ * G_DEFINE_语句
+ * */
+G_DEFINE_TYPE (CtImDisp2e, ct_im_disp2e, IM_TYPE_DISP2_PARENT);
 
+/*
+ * 以下开始宏定义
+ * */
+#define CT_IM_DISP2E_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CT_TYPE_IM_DISP2E, CtImDisp2ePrivate))
+
+/*
+ * 内部结构体或类型定义
+ * */
 struct _CtImDisp2ePrivate
 {
-	kpointer qwertyu;
+	gpointer qwertyu;
 };
+
+/*
+ * 文件级全局变量定义
+ * */
 
 /*
  * DECLS
  * */
+static void dispose_od(GObject *object);
+static void finalize_od(GObject *object);
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv);
+static void disp2eDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv);
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 
 /*
  * IMPL
  * */
-static void ct_im_disp2e_constructor(CtImDisp2e *self)
+static void ct_im_disp2e_class_init(CtImDisp2eClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImDisp2ePrivate));
+}
+
+static void ct_im_disp2e_init(CtImDisp2e *self)
 {
 	//CtImDisp2ePrivate *priv = CT_IM_DISP2E_GET_PRIVATE(self);
 #ifdef CtImDisp_CO_DEBUG_DISP
@@ -55,19 +81,40 @@ static void ct_im_disp2e_constructor(CtImDisp2e *self)
 #endif /*CtImDisp_CO_DEBUG_DISP*/
 }
 
-static void ct_im_disp2e_destructor(CtImDisp2e *self)
+static void dispose_od(GObject *object)
 {
+//	CtImDisp2e *self = CT_IM_DISP2E(object);
+//	CtImDisp2ePrivate *priv = CT_IM_DISP2E_GET_PRIVATE(self);
+	/*释放创建的对象1*/
+//	if (priv->objectMine) {
+//		g_object_unref(priv->objectMine);
+//		priv->objectMine = NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2e_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImDisp2e *self = CT_IM_DISP2E(object);
+//	CtImDisp2ePrivate *priv = CT_IM_DISP2E_GET_PRIVATE(self);
+	/*释放创建的内存2*/
+//	if(self->name)
+//	{
+//		free(self->name);
+//		self->name =NULL;
+//	}
+	G_OBJECT_CLASS (ct_im_disp2e_parent_class)->finalize(object);
 }
 
 #ifdef CtImDisp_CO_DEBUG_DISP
-static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
+static void disp2eDoMain_od(ImDisp2Parent *parent, gint32 argc, char **argv)
 {
-	kint32 error = D_DDIM_OK;
+	gint32 error = D_DDIM_OK;
 	ImDisp2Group *imDisp2Group = (ImDisp2Group *)im_disp2_parent_get_group(parent);
-	kuchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
+	guchar *pImDispPclkCounter = im_disp2_group_get_pclk_counter(imDisp2Group);
 	CtImDisp3 *disp3 = (CtImDisp3 *)im_disp2_group_get_disp3(imDisp2Group);
 
-	if (strcmp((kchar*) argv[1], "SetRefTiming") == 0)
+	if (strcmp((gchar *) argv[1], "SetRefTiming") == 0)
 	{
 		//Im_DISP_Set_Parameter_Reflect_Timing
 
@@ -86,7 +133,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LRPGCTL = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LRPGCTL.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LRPGCTL.word)); /* pgr0539 */
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_Parameter_Reflect_Timing(block, timing); /* pgr0539 */
@@ -99,7 +146,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				Ddim_Print(("------- After Setting -------\n"));
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LRPGCTL = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LRPGCTL.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LRPGCTL.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -108,7 +155,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetRefTiming") == 0)
+	else if (strcmp((gchar *) argv[1], "GetRefTiming") == 0)
 	{
 		//Im_DISP_Get_Parameter_Reflect_Timing
 
@@ -146,9 +193,9 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[0].LCH.LRPGCTL = %08X\n",
-						(kuint32)IO_DISP.MAIN[0].LCH.LRPGCTL.word));
+						(guint32)IO_DISP.MAIN[0].LCH.LRPGCTL.word));
 				Ddim_Print(("IO_DISP.MAIN[1].LCH.LRPGCTL = %08X\n",
-						(kuint32)IO_DISP.MAIN[1].LCH.LRPGCTL.word));
+						(guint32)IO_DISP.MAIN[1].LCH.LRPGCTL.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 				Ddim_Print(("Reflect timing = %d\n", timing));
 			}
@@ -158,7 +205,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetITrans") == 0)
+	else if (strcmp((gchar *) argv[1], "SetITrans") == 0)
 	{
 		//Im_DISP_Set_Input_Data_Transfer
 
@@ -177,9 +224,9 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT0 = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT0.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LIDT0.word)); /* pgr0539 */
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT1 = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
+					block, (guint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			U_IM_DISP_LIDT lidt;
@@ -196,9 +243,9 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				Ddim_Print(("------- After Setting -------\n"));
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT0 = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT0.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIDT0.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT1 = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -207,7 +254,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetITrans") == 0)
+	else if (strcmp((gchar *) argv[1], "GetITrans") == 0)
 	{
 		//Im_DISP_Get_Input_Data_Transfer
 
@@ -244,9 +291,9 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT0 = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT0.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIDT0.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIDT1 = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIDT1.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("[U_IM_DISP_LIDT]\n"));
@@ -266,7 +313,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetISize") == 0)
+	else if (strcmp((gchar *) argv[1], "SetISize") == 0)
 	{
 		//Im_DISP_Set_Input_Size
 
@@ -284,7 +331,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LISIZE = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LISIZE.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LISIZE.word)); /* pgr0539 */
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 
@@ -300,7 +347,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				Ddim_Print(("------- After Setting -------\n"));
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LISIZE = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LISIZE.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LISIZE.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -309,7 +356,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetISize") == 0)
+	else if (strcmp((gchar *) argv[1], "GetISize") == 0)
 	{
 		//Im_DISP_Get_Input_Size
 
@@ -346,7 +393,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP[%d].MAIN.LCH.LISIZE = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LISIZE.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LISIZE.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("[U_IM_DISP_SIZE]\n"));
@@ -358,7 +405,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 2\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetAdd") == 0)
+	else if (strcmp((gchar *) argv[1], "SetAdd") == 0)
 	{
 		//Im_DISP_Set_Addr
 
@@ -377,11 +424,11 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			E_IM_DISP_SEL block = (E_IM_DISP_SEL) strtoul(argv[3], NULL, 0);
 			E_IM_DISP_BANK bank_no = (E_IM_DISP_BANK) strtoul(argv[4], NULL, 0);
 			T_IM_DISP_IMAGE_ADDR add;
-			add.y_addr = strtoul((kchar*) argv[5], NULL, 16);
-			add.c_addr = strtoul((kchar*) argv[6], NULL, 16);
+			add.y_addr = strtoul((gchar *) argv[5], NULL, 16);
+			add.c_addr = strtoul((gchar *) argv[6], NULL, 16);
 
 			Ddim_Print(("[input] bank=%d y_addr=%08x c_addr=%08x\n",
-					(kuint32)bank_no, (kuint32)add.y_addr, (kuint32)add.c_addr)); /* pgr0539 */
+					(guint32)bank_no, (guint32)add.y_addr, (guint32)add.c_addr)); /* pgr0539 */
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_dump_reg_addr(disp3);
@@ -414,7 +461,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 7\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetAdd") == 0)
+	else if (strcmp((gchar *) argv[1], "GetAdd") == 0)
 	{
 		//Im_DISP_Get_Addr
 
@@ -454,7 +501,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				ct_im_disp3_dump_reg_addr(disp3);
 
 				Ddim_Print(("Y data address = %08X, CbCr data address = %08X\n",
-						(kuint32)add.y_addr,(kuint32)add.c_addr));
+						(guint32)add.y_addr,(guint32)add.c_addr));
 			}
 		}
 		else
@@ -462,7 +509,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetLfd") == 0)
+	else if (strcmp((gchar *) argv[1], "SetLfd") == 0)
 	{
 		//Im_DISP_Set_Lfd
 
@@ -480,14 +527,14 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			ULONG y_hga = strtoul(argv[3], NULL, 0);
 			ULONG c_hga = strtoul(argv[4], NULL, 0);
 
-			Ddim_Print(("[input] y_hga = %08x, c_hga = %08x\n", (kuint32)y_hga, (kuint32)c_hga)); /* pgr0539 */
+			Ddim_Print(("[input] y_hga = %08x, c_hga = %08x\n", (guint32)y_hga, (guint32)c_hga)); /* pgr0539 */
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LYHGA = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LYHGA.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LYHGA.word)); /* pgr0539 */
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LCHGA = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
+					block, (guint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			error = Im_DISP_Set_Lfd(block, y_hga, c_hga);
@@ -500,9 +547,9 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 				Ddim_Print(("------- After Setting -------\n"));
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LYHGA = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LYHGA.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LYHGA.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LCHGA = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 			}
 		}
@@ -511,7 +558,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 3\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetLfd") == 0)
+	else if (strcmp((gchar *) argv[1], "GetLfd") == 0)
 	{
 		//Im_DISP_Get_Lfd
 
@@ -553,12 +600,12 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LYHGA = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LYHGA.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LYHGA.word));
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LCHGA = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LCHGA.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
-				Ddim_Print(("y_hga = %08X, c_hga = %08X\n", (kuint32)y_hga, (kuint32)c_hga));
+				Ddim_Print(("y_hga = %08X, c_hga = %08X\n", (guint32)y_hga, (guint32)c_hga));
 			}
 		}
 		else
@@ -566,7 +613,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetMBank") == 0)
+	else if (strcmp((gchar *) argv[1], "SetMBank") == 0)
 	{
 		//Im_DISP_Set_Main_Bank
 
@@ -584,7 +631,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- Before Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIBCTL = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LIBCTL.word)); /* pgr0539 */
+					block, (guint32)IO_DISP.MAIN[block].LCH.LIBCTL.word)); /* pgr0539 */
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 #endif	// CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
 			Im_DISP_Set_Main_Bank(block, bank_no); /* pgr0539 */
@@ -592,7 +639,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("------- After Setting -------\n"));
 			ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 			Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIBCTL = %08X\n",
-					block, (kuint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
+					block, (guint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
 			ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 		}
 		else
@@ -600,7 +647,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetMBank") == 0)
+	else if (strcmp((gchar *) argv[1], "GetMBank") == 0)
 	{
 		//Im_DISP_Get_Main_Bank
 
@@ -636,7 +683,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIBCTL = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("bank_no:%d\n",bank_no));
@@ -647,7 +694,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetMBkMon") == 0)
+	else if (strcmp((gchar *) argv[1], "GetMBkMon") == 0)
 	{
 		//Im_DISP_Get_Main_Bank_Monitor
 
@@ -683,7 +730,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			{
 				ct_im_disp3_pclk_counter_on(pImDispPclkCounter);
 				Ddim_Print(("IO_DISP.MAIN[%d].LCH.LIBCTL = %08X\n",
-						block, (kuint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
+						block, (guint32)IO_DISP.MAIN[block].LCH.LIBCTL.word));
 				ct_im_disp3_pclk_counter_off(pImDispPclkCounter);
 
 				Ddim_Print(("bank_no:%d\n",bank_no));
@@ -694,7 +741,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetRes") == 0)
+	else if (strcmp((gchar *) argv[1], "SetRes") == 0)
 	{
 		//Im_DISP_Set_Resize
 
@@ -748,7 +795,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 8\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetRes") == 0)
+	else if (strcmp((gchar *) argv[1], "GetRes") == 0)
 	{
 		//Im_DISP_Get_Resize
 
@@ -795,7 +842,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 4\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "SetYhlp") == 0)
+	else if (strcmp((gchar *) argv[1], "SetYhlp") == 0)
 	{
 		//Im_DISP_Set_Yhlp
 
@@ -821,10 +868,10 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			yhelp.lyhlpclr.dword = (ULLONG) strtoull(argv[8], NULL, 0);
 
 			Ddim_Print(("------- Input Value -------\n"));
-			Ddim_Print(("lyhlpcl        = 0x%08X\n", (kuint32)yhelp.lyhlpcl.word)); /* pgr0539 */
-			Ddim_Print(("lyhlpk.word[0] = 0x%08X\n", (kuint32)yhelp.lyhlpk.word[0]));
-			Ddim_Print(("lyhlpk.word[1] = 0x%08X\n", (kuint32)yhelp.lyhlpk.word[1]));
-			Ddim_Print(("lyhlpol        = 0x%08X\n", (kuint32)yhelp.lyhlpol.word)); /* pgr0539 */
+			Ddim_Print(("lyhlpcl        = 0x%08X\n", (guint32)yhelp.lyhlpcl.word)); /* pgr0539 */
+			Ddim_Print(("lyhlpk.word[0] = 0x%08X\n", (guint32)yhelp.lyhlpk.word[0]));
+			Ddim_Print(("lyhlpk.word[1] = 0x%08X\n", (guint32)yhelp.lyhlpk.word[1]));
+			Ddim_Print(("lyhlpol        = 0x%08X\n", (guint32)yhelp.lyhlpol.word)); /* pgr0539 */
 			Ddim_Print(("lyhlpclr       = 0x%llX\n", yhelp.lyhlpclr.dword)); /* pgr0539 */
 
 #ifdef CtImDisp_CO_DEBUG_PRINT_BEFORE_SETTING
@@ -859,7 +906,7 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 			Ddim_Print(("Parameter num shold be 5\n"));
 		}
 	}
-	else if (strcmp((kchar*) argv[1], "GetYhlp") == 0)
+	else if (strcmp((gchar *) argv[1], "GetYhlp") == 0)
 	{
 		//Im_DISP_Get_Yhlp
 
@@ -913,7 +960,6 @@ static void disp2eDoMain_od(ImDisp2Parent *parent, kint32 argc, char **argv)
 
 CtImDisp2e *ct_im_disp2e_new(void)
 {
-	CtImDisp2e *self = (CtImDisp2e *) k_object_new_with_private(CT_TYPE_IM_DISP2E,sizeof(CtImDisp2ePrivate));
+	CtImDisp2e *self = (CtImDisp2e *) g_object_new(CT_TYPE_IM_DISP2E, NULL);
 	return self;
 }
-

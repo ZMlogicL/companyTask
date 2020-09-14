@@ -15,7 +15,8 @@
 #ifndef __CT_DD_XDMAC_H_
 #define __CT_DD_XDMAC_H_
 
-#include "ddim_typedef.h"
+// #include "ddim_typedef.h"
+#include "../../DeviceDriver/ARM/src/ddimtypedef.h"
 #include <klib.h>
 
 #define CT_TYPE_DD_XDMAC					(ct_dd_xdmac_get_type())
@@ -50,7 +51,7 @@ CtDdXdmac* 		ct_dd_xdmac_new(void);
 /*----------------------------------------------------------------------*/
 /* Function Prototype Definition										*/
 /*----------------------------------------------------------------------*/
-void 			ct_dd_xdmac_main(int argc, char** argv);
+void 			ct_dd_xdmac_main(CtDdXdmac* self,int argc, char** argv);
 kuchar 			ct_dd_xdmac_get_num(CtDdXdmac *self);
 
 #endif /* __CT_DD_XDMAC_H_ */

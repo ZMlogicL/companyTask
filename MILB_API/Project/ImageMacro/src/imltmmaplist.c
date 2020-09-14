@@ -14,7 +14,7 @@
 
 #include "im_ltm.h"
 #include <string.h>
-#include "dd_arm.h"
+#include "ddarm.h"
 #include "jdsltm.h"
 #include "imltmmaplist.h"
 
@@ -52,19 +52,19 @@ static volatile struct io_ltm_map_sram* S_GIM_IO_LTM_MAP_TBL_PTR[D_IM_LTM_PIPE_M
 static const TImLtmMapIntflgTbl S_GIM_LTM_MAP_INTTBL[ImLtmMapList_D_IM_LTM_PIPE_COUNT][6] = {
 	{
 		{ 0x00000001, 0x00000001, D_IM_LTM_MAP1_INT_STATE_MAP_END,      D_IM_LTM_MAP1_INT_FLG_MAP_END      },	// FINEN
-		{ 0x00001000, 0x00001000, D_IM_LTM_MAP1_INT_STATE_LINE_END,     D_IM_LTM_MAP1_INT_FLG_LINE_END     },	// LCNTEN
-		{ 0x00010000, 0x00010000, D_IM_LTM_MAP1_INT_STATE_HISTINI_END,  D_IM_LTM_MAP1_INT_FLG_HISTINI_END  },	// LCNTEN
-		{ 0x00100000, 0x00100000, D_IM_LTM_MAP1_INT_STATE_AXR_ERR,      D_IM_LTM_MAP1_INT_FLG_AXR_ERR      },	// AXREEN
-		{ 0x00200000, 0x00200000, D_IM_LTM_MAP1_INT_STATE_AXW_ERR,      D_IM_LTM_MAP1_INT_FLG_AXW_ERR      },	// AXWEEN
-		{ 0x02000000, 0x02000000, D_IM_LTM_MAP1_INT_STATE_YLOG_ERR,     D_IM_LTM_MAP1_INT_FLG_YLOG_ERR     },	// RAMEEN
+		{ 0x00001000, 0x00001000, D_IM_LTM_MAP1_INT_STATE_LINE_END,     ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_LINE_END     },	// LCNTEN
+		{ 0x00010000, 0x00010000, ImLtmMapList_D_IM_LTM_MAP1_INT_STATE_HISTINI_END,  ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_HISTINI_END  },	// LCNTEN
+		{ 0x00100000, 0x00100000, D_IM_LTM_MAP1_INT_STATE_AXR_ERR,      ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_AXR_ERR      },	// AXREEN
+		{ 0x00200000, 0x00200000, D_IM_LTM_MAP1_INT_STATE_AXW_ERR,      ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_AXW_ERR      },	// AXWEEN
+		{ 0x02000000, 0x02000000, D_IM_LTM_MAP1_INT_STATE_YLOG_ERR,     ImLtmMapList_D_IM_LTM_MAP1_INT_FLG_YLOG_ERR     },	// RAMEEN
 	},
 	{
 		{ 0x00000001, 0x00000001, D_IM_LTM_MAP2_INT_STATE_MAP_END,      D_IM_LTM_MAP2_INT_FLG_MAP_END      },	// FINEN
-		{ 0x00001000, 0x00001000, D_IM_LTM_MAP2_INT_STATE_LINE_END,     D_IM_LTM_MAP2_INT_FLG_LINE_END     },	// LCNTEN
-		{ 0x00010000, 0x00010000, D_IM_LTM_MAP2_INT_STATE_HISTINI_END,  D_IM_LTM_MAP2_INT_FLG_HISTINI_END  },	// LCNTEN
-		{ 0x00100000, 0x00100000, D_IM_LTM_MAP2_INT_STATE_AXR_ERR,      D_IM_LTM_MAP2_INT_FLG_AXR_ERR      },	// AXREEN
-		{ 0x00200000, 0x00200000, D_IM_LTM_MAP2_INT_STATE_AXW_ERR,      D_IM_LTM_MAP2_INT_FLG_AXW_ERR      },	// AXWEEN
-		{ 0x02000000, 0x02000000, D_IM_LTM_MAP2_INT_STATE_YLOG_ERR,     D_IM_LTM_MAP2_INT_FLG_YLOG_ERR     },	// RAMEEN
+		{ 0x00001000, 0x00001000, D_IM_LTM_MAP2_INT_STATE_LINE_END,     ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_LINE_END     },	// LCNTEN
+		{ 0x00010000, 0x00010000, ImLtmMapList_D_IM_LTM_MAP2_INT_STATE_HISTINI_END,  ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_HISTINI_END  },	// LCNTEN
+		{ 0x00100000, 0x00100000, D_IM_LTM_MAP2_INT_STATE_AXR_ERR,      ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_AXR_ERR      },	// AXREEN
+		{ 0x00200000, 0x00200000, D_IM_LTM_MAP2_INT_STATE_AXW_ERR,      ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_AXW_ERR      },	// AXWEEN
+		{ 0x02000000, 0x02000000, D_IM_LTM_MAP2_INT_STATE_YLOG_ERR,     ImLtmMapList_D_IM_LTM_MAP2_INT_FLG_YLOG_ERR     },	// RAMEEN
 	},
 };
 
@@ -115,7 +115,7 @@ static void im_ltm_map_list_destructor(ImLtmMapList *self)
 /*----------------------------------------------------------------------*/
 /* PUBLIC															    */
 /*----------------------------------------------------------------------*/
- VOID im_ltm_map_get_loop_val( UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
+ VOID im_ltm_map_list_im_ltm_map_get_loop_val(ImLtmMapList*self,UCHAR pipe_no, UCHAR* loop_sta, UCHAR* loop_end )
 {
 	switch( pipe_no ){
 		case D_IM_LTM_PIPE1:
@@ -164,13 +164,13 @@ INT32 Im_LTM_MAP_Set_FrameStop( UCHAR pipe_no, UCHAR onoff )
 
 /* Set MAP parameter hold
 */
-INT32 Im_LTM_MAP_Set_ParamHold( UCHAR pipe_no, const UCHAR hold_enable )
+INT32 im_ltm_map_list_im_ltm_map_set_paramhold(ImLtmMapList*self,UCHAR pipe_no, const UCHAR hold_enable )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
 #ifdef CO_PARAM_CHECK
 	if( pipe_no > D_IM_LTM_PIPE12 ){
-		Ddim_Assertion(( "Im_LTM_MAP_Set_ParamHold error. pipe_no>D_IM_LTM_PIPE12\n" ));
+		Ddim_Assertion(( "im_ltm_map_list_im_ltm_map_set_paramhold error. pipe_no>D_IM_LTM_PIPE12\n" ));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -187,7 +187,7 @@ INT32 Im_LTM_MAP_Set_ParamHold( UCHAR pipe_no, const UCHAR hold_enable )
 
 /* Get MAP busy status.
  */
-INT32 Im_LTM_MAP_Get_MapBusy( UCHAR pipe_no, BOOL* const busy_status )
+INT32 im_ltm_map_list_im_ltm_map_get_mapbusy( UCHAR pipe_no, BOOL* const busy_status )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
@@ -196,11 +196,11 @@ INT32 Im_LTM_MAP_Get_MapBusy( UCHAR pipe_no, BOOL* const busy_status )
 #ifdef CO_PARAM_CHECK
 	if( busy_status == NULL ) {
 		// Parameter setting error
-		Ddim_Assertion(("Im_LTM_MAP_Get_MapBusy error. busy_status = NULL\n"));
+		Ddim_Assertion(("im_ltm_map_list_im_ltm_map_get_mapbusy error. busy_status = NULL\n"));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 	if( pipe_no >= D_IM_LTM_PIPE12 ){
-		Ddim_Assertion(( "Im_LTM_MAP_Get_MapBusy error. pipe_no>=D_IM_LTM_PIPE12\n" ));
+		Ddim_Assertion(( "im_ltm_map_list_im_ltm_map_get_mapbusy error. pipe_no>=D_IM_LTM_PIPE12\n" ));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
@@ -222,7 +222,7 @@ INT32 Im_LTM_MAP_Get_MapBusy( UCHAR pipe_no, BOOL* const busy_status )
 
 /* Restart MAP process.
  */
-INT32 Im_LTM_MAP_ContStart( UCHAR pipe_no )
+INT32 im_ltm_map_list_im_ltm_map_contstart(ImLtmMapList*self,UCHAR pipe_no )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
@@ -230,17 +230,17 @@ INT32 Im_LTM_MAP_ContStart( UCHAR pipe_no )
 
 #ifdef CO_PARAM_CHECK
 	if( pipe_no > D_IM_LTM_PIPE12 ){
-		Ddim_Assertion(( "Im_LTM_MAP_ContStart error. pipe_no>D_IM_LTM_PIPE12\n" ));
+		Ddim_Assertion(( "im_ltm_map_list_im_ltm_map_contstart error. pipe_no>D_IM_LTM_PIPE12\n" ));
 		return D_IM_LTM_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 
 	// P-clock control
 #ifdef CO_DEBUG_PRINT_IM_LTM_MAP
-	Ddim_Print(( "Im_LTM_MAP_ContStart on pclk\n" ));
+	Ddim_Print(( "im_ltm_map_list_im_ltm_map_contstart on pclk\n" ));
 #endif
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -265,7 +265,7 @@ INT32 Im_LTM_MAP_ContStart( UCHAR pipe_no )
 #endif
 
 #ifdef CO_DEBUG_PRINT_IM_LTM_MAP
-	Ddim_Print(( "Im_LTM_MAP_ContStart off pclk\n" ));
+	Ddim_Print(( "im_ltm_map_list_im_ltm_map_contstart off pclk\n" ));
 #endif
 	Im_LTM_Off_Pclk( pipe_no );
 	ImLtmMapList_Im_LTM_Dsb();
@@ -300,7 +300,7 @@ INT32 Im_LTM_MAP_Start( UCHAR pipe_no )
 	Ddim_Print(( "Im_LTM_MAP_Start on pclk\n" ));
 #endif
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -423,7 +423,7 @@ INT32 Im_LTM_MAP_Stop( UCHAR pipe_no )
 	}
 #endif	// CO_PARAM_CHECK
 
-	im_ltm_map_get_loop_val( pipe_no, &loop_sta, &loop_end );
+	im_ltm_map_list_im_ltm_map_get_loop_val(NULL,pipe_no, &loop_sta, &loop_end );
 
 	Im_LTM_On_Pclk( pipe_no );
 
@@ -455,7 +455,7 @@ INT32 Im_LTM_MAP_Stop( UCHAR pipe_no )
 	return D_DDIM_OK;
 }
 
-VOID Im_LTM_MAP_Int_Handler( UCHAR pipe_no )
+VOID Im_LTM_MAP_Int_Handler(UCHAR pipe_no )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
@@ -751,7 +751,7 @@ INT32 Im_LTM_MAP_Set_YLOG_Table( UCHAR pipe_no, UCHAR tbl_sel, const USHORT* con
 }
 
 #ifdef IM_LTM_MAP_STATUS_PRINT
-VOID Im_LTM_MAP_Print_Status( VOID )
+VOID im_ltm_map_list_im_ltm_map_print_status(ImLtmMapList*self )
 {
 	ImLtmMapList*imLtmMapList=im_ltm_map_list_get( );
 
@@ -770,7 +770,7 @@ VOID Im_LTM_MAP_Print_Status( VOID )
 	}
 }
 
-VOID Im_LTM_MAP_Print_AccEnStatus( VOID )
+VOID im_ltm_map_list_im_ltm_map_print_accenstatus(ImLtmMapList*self)
 {
 	UINT32 loopcnt;
 

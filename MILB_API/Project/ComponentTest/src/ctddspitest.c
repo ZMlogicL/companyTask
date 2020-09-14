@@ -19,8 +19,10 @@
 #include "dd_spi.h"
 #include "dd_top.h"
 #include "peripheral.h"
-#include "dd_hdmac1.h"
-#include "dd_tmr32.h"
+// #include "dd_hdmac1.h"
+// #include "dd_tmr32.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac1.h"
+#include "../../DeviceDriver/Peripheral/src/ddtmr32.h"
 #include "ctddspimain.h"
 #include "ctddspitest.h"
 
@@ -137,7 +139,7 @@ void ct_dd_spi_test_pc_set_send_data_1(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -161,7 +163,7 @@ void ct_dd_spi_test_pc_set_send_data_2(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   |+---ssout:0-3
 	//                                                      +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3          | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3          | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3         | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16  | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |           | | | |      || | | | |
@@ -185,7 +187,7 @@ void ct_dd_spi_test_pc_set_recv_data_1(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -209,7 +211,7 @@ void ct_dd_spi_test_pc_set_recv_data_2(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   |+---ssout:0-3
 	//                                                      +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3          | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3          | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3         | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16  | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |           | | | |      || | | | |
@@ -233,7 +235,7 @@ void ct_dd_spi_test_pc_start_send_1(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   | +---ssout:0-3
 	//                                                     +-dly:0-255   | | +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk   | | | | +---cb
 	//                                  | |     +-bit:4-16 | | |  +-rxwmk| | | | | +---cb_ss
 	//                                  | |     |          | | |  |      | | | | | |
@@ -265,7 +267,7 @@ void ct_dd_spi_test_pc_start_send_2(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   | +---ssout:0-3
 	//                                                     +-dly:0-255   | | +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk   | | | | +---cb
 	//                                  | |     +-bit:4-16 | | |  +-rxwmk| | | | | +---cb_ss
 	//                                  | |     |          | | |  |      | | | | | |
@@ -297,7 +299,7 @@ void ct_dd_spi_test_pc_start_send_3(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -331,7 +333,7 @@ void ct_dd_spi_test_pc_start_send_4(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -368,7 +370,7 @@ void ct_dd_spi_test_pc_start_send_5(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   | +---ssout:0-3
 	//                                                     +-dly:0-255   | | +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk   | | | | +---cb
 	//                                  | |     +-bit:4-16 | | |  +-rxwmk| | | | | +---cb_ss
 	//                                  | |     |          | | |  |      | | | | | |
@@ -400,7 +402,7 @@ void ct_dd_spi_test_pc_start_send_6(CtDdSpiTest *self)
 	//                                                                   +---dma_to:0-16777215
 	//                                                                   | +---ssout:0-3
 	//                                                     +-dly:0-255   | | +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1  | | | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk   | | | | +---cb
 	//                                  | |     +-bit:4-16 | | |  +-rxwmk| | | | | +---cb_ss
 	//                                  | |     |          | | |  |      | | | | | |
@@ -432,7 +434,7 @@ void ct_dd_spi_test_pc_start_send_7(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -467,7 +469,7 @@ void ct_dd_spi_test_pc_start_send_8(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -504,7 +506,7 @@ void ct_dd_spi_test_pc_start_send_9(CtDdSpiTest *self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -542,7 +544,7 @@ void ct_dd_spi_test_pc_start_recv_1(CtDdSpiTest * self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -577,7 +579,7 @@ void ct_dd_spi_test_pc_start_recv_2(CtDdSpiTest * self)
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -612,7 +614,7 @@ void ct_dd_spi_test_pc_start_recv_3( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -647,7 +649,7 @@ void ct_dd_spi_test_pc_start_recv_4( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -682,7 +684,7 @@ void ct_dd_spi_test_pc_start_recv_5( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -719,7 +721,7 @@ void ct_dd_spi_test_pc_start_recv_6( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -754,7 +756,7 @@ void ct_dd_spi_test_pc_start_recv_7( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -789,7 +791,7 @@ void ct_dd_spi_test_pc_start_recv_8( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -824,7 +826,7 @@ void ct_dd_spi_test_pc_start_recv_9( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -861,7 +863,7 @@ void ct_dd_spi_test_pc_start_recv_10( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |
@@ -896,7 +898,7 @@ void ct_dd_spi_test_pc_start_recv_11( CtDdSpiTest * self )
 	//                                                                  +---dma_to:0-16777215
 	//                                                                  |+---ssout:0-3
 	//                                                     +-dly:0-255  || +---sspol:0-1
-	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---cont_trans:0-2
+	//                                  +-mode:0-3         | +-Inhi:0-1 || | +---contTrans:0-2
 	//                                  | +-sig:0-3        | | +-txwmk  || | | +---cb
 	//                                  | |     +-bit:4-16 | | | +-rxwmk|| | | | +---cb_ss
 	//                                  | |     |          | | | |      || | | | |

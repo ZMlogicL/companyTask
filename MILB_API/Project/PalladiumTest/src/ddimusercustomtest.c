@@ -16,10 +16,8 @@
 
 #include "ddimusercustomtest.h"
 
-
 K_TYPE_DEFINE_WITH_PRIVATE(DdimUserCustomTest, ddim_user_custom_test)
 #define DDIM_USER_CUSTOM_TEST_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o), DdimUserCustomTestPrivate, DDIM_TYPE_USER_CUSTOM_TEST))
-
 
 struct _DdimUserCustomTestPrivate
 {

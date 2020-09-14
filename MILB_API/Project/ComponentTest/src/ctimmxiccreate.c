@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImMxicCreate类
 *@rely                :klib
@@ -12,45 +12,67 @@
 *
 */
 
-#include "ct_im_mxic.h"
-#include <string.h>
-#include <stdlib.h>
-
-#include "dd_top.h"
-
-#include "ddim_user_custom.h"
-
-#include "ctimmxicprint.h"
 #include "ctimmxiccreate.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicCreate, ct_im_mxic_create);
-#define CT_IM_MXIC_CREATE_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicCreatePrivate,CT_TYPE_IM_MXIC_CREATE))
+
+G_DEFINE_TYPE(CtImMxicCreate, ct_im_mxic_create, G_TYPE_OBJECT);
+#define CT_IM_MXIC_CREATE_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_CREATE, CtImMxicCreatePrivate))
 
 struct _CtImMxicCreatePrivate
 {
 
 };
 
+
 /*
 *DECLS
 */
-static void 			ctImMxicAccMonitor_cb(void);
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
+static void 	ctImMxicAccMonitor_cb(void);
 
 /*
 *IMPL
 */
-static void ct_im_mxic_create_constructor(CtImMxicCreate *self)
+
+static void ct_im_mxic_create_class_init(CtImMxicCreateClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicCreatePrivate));
 }
 
-static void ct_im_mxic_create_destructor(CtImMxicCreate *self)
+static void ct_im_mxic_create_init(CtImMxicCreate *self)
 {
+//	CtImMxicCreatePrivate *priv = CT_IM_MXIC_CREATE_GET_PRIVATE(self);
 }
 
+static void dispose_od(GObject *object)
+{
+//	CtImMxicCreate *self = (CtImMxicCreate*)object;
+//	CtImMxicCreatePrivate *priv = CT_IM_MXIC_CREATE_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImMxicCreate *self = (CtImMxicCreate*)object;
+//	CtImMxicCreatePrivate *priv = CT_IM_MXIC_CREATE_GET_PRIVATE(self);
+}
+
+// Callback function for monitor end.
+static void ctImMxicAccMonitor_cb(void)
+{
+	Ddim_Print(("The monitor end interrupt was generated.\n"));
+}
+
+/*
+*PUBLIC
+*/
 // Callback function for slave area decode error.
-void ct_im_mxic_create_dec_err_cb( kuchar chType)
+void ct_im_mxic_create_dec_err_cb( guchar chType)
 {
-	kint32 result;
+	gint32 result;
 	T_IM_MXIC_DEC_ERR decErr;
 
 	switch (chType) {
@@ -73,7 +95,7 @@ void ct_im_mxic_create_dec_err_cb( kuchar chType)
 
 	// Get error information.
 	result = Im_MXIC_Get_Decode_Error((E_IM_MXIC_UNIT)0, &decErr);
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		ct_im_mxic_print_dec_err(&decErr);
 	}
 	else {
@@ -82,20 +104,11 @@ void ct_im_mxic_create_dec_err_cb( kuchar chType)
 	return;
 }
 
-// Callback function for monitor end.
-static void ctImMxicAccMonitor_cb(void)
-{
-	Ddim_Print(("The monitor end interrupt was generated.\n"));
-}
-
-/*
-*PUBLIC
-*/
 // Create parameter for Im_MXIC_Set_Slot_Priority_All_Arbiter function test.
-kint32 ct_im_mxic_create_slot_priority_all_arbiter_param(
+gint32 ct_im_mxic_create_slot_priority_all_arbiter_param(
 		T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL* const allLevelCtrl)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	// Write Slave
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -126,12 +139,12 @@ kint32 ct_im_mxic_create_slot_priority_all_arbiter_param(
 		}
 	}
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
-kint32 ct_im_mxic_create_all_levelport_param( T_IM_MXIC_ALL_LEVELPORT* const allLevelport)
+gint32 ct_im_mxic_create_all_levelport_param( T_IM_MXIC_ALL_LEVELPORT* const allLevelport)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	for ( i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++ ) {
 
@@ -151,16 +164,16 @@ kint32 ct_im_mxic_create_all_levelport_param( T_IM_MXIC_ALL_LEVELPORT* const all
 		}
 	}
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 // Create parameter for Im_MXIC_Set_Access_Or_Trans_Monitor_Parameter function test.
-kint32 ct_im_mxic_create_access_or_trans_monitor_param( kuchar paramKind,
+gint32 ct_im_mxic_create_access_or_trans_monitor_param( guchar paramKind,
 		T_IM_MXIC_MONITOR_PARAMETER* const monParam)
 {
-	kint32 result;
+	gint32 result;
 
-	result = D_DDIM_OK;
+	result = DriverCommon_D_DDIM_OK;
 
 	switch (paramKind) {
 		case 0:
@@ -314,10 +327,10 @@ kint32 ct_im_mxic_create_access_or_trans_monitor_param( kuchar paramKind,
 }
 
 // Create parameter for Im_MXIC_Set_Master_W_Arbiter function test.
-kint32 ct_im_mxic_create_master_w_arbiter_param( E_IM_MXIC_UNIT unit,
+gint32 ct_im_mxic_create_master_w_arbiter_param( E_IM_MXIC_UNIT unit,
 		T_IM_MXIC_W_ARBITER_ASSIGN_PORT* const wArbiterAssign )
 {
-	kuint32 i, j;
+	guint32 i, j;
 
 	for ( i = E_IM_MXIC_PORT_0; i < E_IM_MXIC_PORT_MAX ; i++ ) {
 		for ( j = 0; j < D_IM_MXIC_SLOT_SIZE_8 ; j++ ) {
@@ -347,14 +360,14 @@ kint32 ct_im_mxic_create_master_w_arbiter_param( E_IM_MXIC_UNIT unit,
 			break;
 	}
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 // Create parameter for Im_MXIC_Set_Master_R_Arbiter function test.
-kint32 ct_im_mxic_create_master_r_arbiter_param(E_IM_MXIC_UNIT unit,
+gint32 ct_im_mxic_create_master_r_arbiter_param(E_IM_MXIC_UNIT unit,
 		T_IM_MXIC_R_ARBITER_ASSIGN_PORT* const rArbiterAssign )
 {
-	kuint32 i, j;
+	guint32 i, j;
 
 	for ( i = E_IM_MXIC_PORT_0; i < E_IM_MXIC_PORT_MAX; i++ ) {
 		for ( j = 0; j < D_IM_MXIC_SLOT_SIZE_8 ; j++ ) {
@@ -384,14 +397,14 @@ kint32 ct_im_mxic_create_master_r_arbiter_param(E_IM_MXIC_UNIT unit,
 			break;
 	}
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 // Create parameter for Im_MXIC_Set_Master_All_Arbiter function test.
-kint32 ct_im_mxic_create_master_all_arbiter_param( E_IM_MXIC_UNIT unit,
+gint32 ct_im_mxic_create_master_all_arbiter_param( E_IM_MXIC_UNIT unit,
 		T_IM_MXIC_ALL_ARBITER_ASSIGN* const allArbiterAssign )
 {
-	kuint32 i;
+	guint32 i;
 
 	for ( i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++ ) {
 		ct_im_mxic_create_master_w_arbiter_param( unit, &allArbiterAssign->w_arbiter[ i ] );
@@ -401,16 +414,16 @@ kint32 ct_im_mxic_create_master_all_arbiter_param( E_IM_MXIC_UNIT unit,
 		ct_im_mxic_create_master_r_arbiter_param( unit, &allArbiterAssign->r_arbiter[ i ] );
 	}
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 // Create start_trigger for Im_MXIC_Start_Memory_Access_Detect function test.
-kint32 ct_im_mxic_create_memory_access_start_trigger( kuint32 startParam,
+gint32 ct_im_mxic_create_memory_access_start_trigger( guint32 startParam,
 		T_IM_MXIC_MEMORY_ACCESS_SLAVE* const memacc_start)
 {
-	kint32 result;
+	gint32 result;
 
-	result = D_DDIM_OK;
+	result = DriverCommon_D_DDIM_OK;
 
 	memacc_start->slave[0].start_trigger = D_IM_MXIC_OFF;
 	memacc_start->slave[1].start_trigger = D_IM_MXIC_OFF;
@@ -445,15 +458,15 @@ kint32 ct_im_mxic_create_memory_access_start_trigger( kuint32 startParam,
 }
 
 // Create param for Im_MXIC_Set_Memory_Access_Detect function test.
-kint32 ct_im_mxic_create_memory_access_param( kuint32 startParam,
-		kuint32 paramPattern, T_IM_MXIC_MEMORY_ACCESS_SLAVE* const memaccParam)
+gint32 ct_im_mxic_create_memory_access_param( guint32 startParam,
+		guint32 paramPattern, T_IM_MXIC_MEMORY_ACCESS_SLAVE* const memaccParam)
 {
-	kint32 result;
+	gint32 result;
 
-	result = D_DDIM_OK;
+	result = DriverCommon_D_DDIM_OK;
 
 	result = ct_im_mxic_create_memory_access_start_trigger( startParam, memaccParam);
-	if (result == D_DDIM_OK) {
+	if (result == DriverCommon_D_DDIM_OK) {
 		switch (paramPattern) {
 			case 0:
 				memaccParam->slave[0].master47_1		= 0x00001000001E7BFE;
@@ -509,12 +522,12 @@ kint32 ct_im_mxic_create_memory_access_param( kuint32 startParam,
 }
 
 // Error test of Im_MXIC_Get_Access_Or_Trans_Monitor_All_Entry function.
-kint32 ct_im_mxic_create_all_port_set( kuint32 set_ptn,
+gint32 ct_im_mxic_create_all_port_set( guint32 set_ptn,
 		T_IM_MXIC_OUTPUT_PORT* const allPortAssign)
 {
-	kint32 result;
+	gint32 result;
 
-	result = D_DDIM_OK;
+	result = DriverCommon_D_DDIM_OK;
 
 	if(set_ptn == 0){
 		memset((T_IM_MXIC_OUTPUT_PORT*)allPortAssign, 0, sizeof(T_IM_MXIC_OUTPUT_PORT));
@@ -554,8 +567,8 @@ kint32 ct_im_mxic_create_all_port_set( kuint32 set_ptn,
 	return result;
 }
 
-CtImMxicCreate* ct_im_mxic_create_new(void) 
+CtImMxicCreate *ct_im_mxic_create_new(void) 
 {
-    CtImMxicCreate *self = k_object_new_with_private(CT_TYPE_IM_MXIC_CREATE, sizeof(CtImMxicCreatePrivate));
+    CtImMxicCreate *self = g_object_new(CT_TYPE_IM_MXIC_CREATE, NULL);
     return self;
 }

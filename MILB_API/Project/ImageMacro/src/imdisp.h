@@ -78,39 +78,39 @@ KConstType 		im_disp_get_type(void);
 ImDisp*	im_disp_new(void);
 
 typedef enum {
-	E_IM_DISP_INT_CB_VE = 0,	/**< VE: Vsync detection interruption.											*/
-	E_IM_DISP_INT_CB_VE2,		/**< VE2: Vsync detection interruption for 2nd field.							*/
-	E_IM_DISP_INT_CB_GR0EE,		/**< GR0EE: OSD data 0 input block forwarding error interruption.				*/
-	E_IM_DISP_INT_CB_GR1EE,		/**< GR1EE: OSD data 1 input block forwarding error interruption.				*/
-	E_IM_DISP_INT_CB_GA0EE,		/**< GA0EE: OSD data 0 input block A component forwarding error interruption.	*/
-	E_IM_DISP_INT_CB_GA1EE,		/**< GA1EE: OSD data 1 input block A component forwarding error interruption.	*/
-	E_IM_DISP_INT_CB_LEE,		/**< LEE: Main data input block forwarding error interruption.					*/
+	ImDisp_E_IM_DISP_INT_CB_VE = 0,	/**< VE: Vsync detection interruption.											*/
+	ImDisp_E_IM_DISP_INT_CB_VE2,		/**< VE2: Vsync detection interruption for 2nd field.							*/
+	ImDisp_E_IM_DISP_INT_CB_GR0EE,		/**< GR0EE: OSD data 0 input block forwarding error interruption.				*/
+	ImDisp_E_IM_DISP_INT_CB_GR1EE,		/**< GR1EE: OSD data 1 input block forwarding error interruption.				*/
+	ImDisp_E_IM_DISP_INT_CB_GA0EE,		/**< GA0EE: OSD data 0 input block A component forwarding error interruption.	*/
+	ImDisp_E_IM_DISP_INT_CB_GA1EE,		/**< GA1EE: OSD data 1 input block A component forwarding error interruption.	*/
+	ImDisp_E_IM_DISP_INT_CB_LEE,		/**< LEE: Main data input block forwarding error interruption.					*/
 
-	E_IM_DISP_INT_CB_GR0REE,	/**< GR0REE: OSD data 0 input block AXI error interruption.						*/
-	E_IM_DISP_INT_CB_GR1REE,	/**< GR1REE: OSD data 1 input block AXI error interruption.						*/
-	E_IM_DISP_INT_CB_GA0REE,	/**< GA0REE: OSD data 0 input block A component AXI error interruption.			*/
-	E_IM_DISP_INT_CB_GA1REE,	/**< GA1REE: OSD data 1 input block A component AXI error interruption.			*/
-	E_IM_DISP_INT_CB_LREE,		/**< LREE: Main data input block AXI error interruption.						*/
-	E_IM_DISP_INT_CB_MAX		/**< Stopper */
-} E_IM_DISP_INT_CB;
+	ImDisp_E_IM_DISP_INT_CB_GR0REE,	/**< GR0REE: OSD data 0 input block AXI error interruption.						*/
+	ImDisp_E_IM_DISP_INT_CB_GR1REE,	/**< GR1REE: OSD data 1 input block AXI error interruption.						*/
+	ImDisp_E_IM_DISP_INT_CB_GA0REE,	/**< GA0REE: OSD data 0 input block A component AXI error interruption.			*/
+	ImDisp_E_IM_DISP_INT_CB_GA1REE,	/**< GA1REE: OSD data 1 input block A component AXI error interruption.			*/
+	ImDisp_E_IM_DISP_INT_CB_LREE,		/**< LREE: Main data input block AXI error interruption.						*/
+	ImDisp_E_IM_DISP_INT_CB_MAX		/**< Stopper */
+} ImDispEImDispIntCb;
 
 // for Gamma table set/get
 typedef enum {
-	E_IM_DISP_ACCESS_GAMMA_SET = 0,	// copy the local gamma table to the gamma region registers
-	E_IM_DISP_ACCESS_GAMMA_GET,		// copy the gamma region registers to the local gamma table
-} E_IM_DISP_ACCESS_GAMMA;
+	ImDisp_E_IM_DISP_ACCESS_GAMMA_SET = 0,	// copy the local gamma table to the gamma region registers
+	ImDisp_E_IM_DISP_ACCESS_GAMMA_GET,		// copy the gamma region registers to the local gamma table
+} ImDispEImDispAccessGamma;
 
 // Startup status of layer
 typedef enum {
-	E_IM_DISP_TRG_WRITE_NO_ACT = 0x00000000,	// Set TRG to off at once
-	E_IM_DISP_TRG_WRITE_ACT,					// Set TRG to on
-	E_IM_DISP_TRG_READ_NO_ACT,					// TRG is not on or set to off by frame stop
-	E_IM_DISP_TRG_READ_ACT						// TRG is on
-} E_IM_DISP_TRG;
+	ImDisp_E_IM_DISP_TRG_WRITE_NO_ACT = 0x00000000,	// Set TRG to off at once
+	ImDisp_E_IM_DISP_TRG_WRITE_ACT,					// Set TRG to on
+	ImDisp_E_IM_DISP_TRG_READ_NO_ACT,					// TRG is not on or set to off by frame stop
+	ImDisp_E_IM_DISP_TRG_READ_ACT						// TRG is on
+} ImDispEImDispTrg;
 
-#define	D_IM_DISP_OSD_DISPLAY_AREA_COUNT			(10)	/**< Maximum number of OSD display area.	*/
-#define	D_IM_DISP_OSD_ADDR_0_BANK_SIZE				(4)		/**< Bank size of main image address 0.		*/
-#define	D_IM_DISP_OSD_ADDR_BANK_SIZE				(9)		/**< Bank size of main image address.		*/
+#define	ImDisp_D_IM_DISP_OSD_DISPLAY_AREA_COUNT			(10)	/**< Maximum number of OSD display area.	*/
+#define	ImDisp_D_IM_DISP_OSD_ADDR_0_BANK_SIZE				(4)		/**< Bank size of main image address 0.		*/
+#define	ImDisp_D_IM_DISP_OSD_ADDR_BANK_SIZE				(9)		/**< Bank size of main image address.		*/
 
 #ifdef CO_DDIM_UTILITY_USE
 /**
@@ -128,141 +128,141 @@ typedef enum {
 //---------------------- driver  section -------------------------------
 /** Control block selection. (Bit flag) */
 typedef enum {
-	E_IM_DISP_HDMI = 0,		/**< HDMI block     (Common block 0).	*/
-	E_IM_DISP_LCD_MIPI		/**< LCD/MIPI block (Common block 1).	*/
-} E_IM_DISP_SEL;
+	ImDisp_E_IM_DISP_HDMI = 0,		/**< HDMI block     (Common block 0).	*/
+	ImDisp_E_IM_DISP_LCD_MIPI		/**< LCD/MIPI block (Common block 1).	*/
+} ImDispEImDispSel;
 
 /** Gamma correct or Anti-Gamma correct or Luminance correct or Chroma correct. */
 typedef enum {
-	E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA			= 0x00000001,	/**< Anti-gamma correct						*/
-	E_IM_DISP_CORRECT_SELECT_GAMMA_IN			= 0x00000002,	/**< Gamma correct (Main data input block)	*/
-	E_IM_DISP_CORRECT_SELECT_GAMMA_OUT			= 0x00000004,	/**< Gamma correct (Data output block)		*/
-	E_IM_DISP_CORRECT_SELECT_LUMINANCE			= 0x00000008,	/**< Luminance correct						*/
-	E_IM_DISP_CORRECT_SELECT_CHROMA				= 0x00000010,	/**< Chroma correct							*/
-} E_IM_DISP_CORRECT_SELECT;
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ANTI_GAMMA			= 0x00000001,	/**< Anti-gamma correct						*/
+	ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_IN			= 0x00000002,	/**< Gamma correct (Main data input block)	*/
+	ImDisp_E_IM_DISP_CORRECT_SELECT_GAMMA_OUT			= 0x00000004,	/**< Gamma correct (Data output block)		*/
+	ImDisp_E_IM_DISP_CORRECT_SELECT_LUMINANCE			= 0x00000008,	/**< Luminance correct						*/
+	ImDisp_E_IM_DISP_CORRECT_SELECT_CHROMA				= 0x00000010,	/**< Chroma correct							*/
+} ImDispEImDispCorrectSelect;
 
 /** Table access enable setting of Gamma correct or Anti-Gamma correct or gradation adjustment. */
 typedef enum {
-	E_IM_DISP_TABLE_ACCESS_DISABLE = 0,		/**< Table access disable	*/
-	E_IM_DISP_TABLE_ACCESS_ENABLE			/**< Table access enable	*/
-} E_IM_DISP_TABLE_ACCESS;
+	ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE = 0,		/**< Table access disable	*/
+	ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE			/**< Table access enable	*/
+} ImDispEImDispTableAccess;
 
 /** Select interruption demand permission. */
 typedef enum {
-	E_IM_DISP_INTERRUPTION_SELECT_VE2    = 0x00100000,	/**< Vertical syschronization signal interruption for 2nd field permission */
-	E_IM_DISP_INTERRUPTION_SELECT_VE     = 0x00010000,	/**< Vertical syschronization signal interruption permission*/
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2    = 0x00100000,	/**< Vertical syschronization signal interruption for 2nd field permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE     = 0x00010000,	/**< Vertical syschronization signal interruption permission*/
 
-	E_IM_DISP_INTERRUPTION_SELECT_GA1REE = 0x00008000,	/**< GR1 A component AXI error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GA0REE = 0x00004000,	/**< GR0 A component AXI error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GR1REE = 0x00002000,	/**< GR1 AXI error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GR0REE = 0x00001000,	/**< GR0 AXI error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_LREE   = 0x00000100,	/**< Main AXI error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE = 0x00008000,	/**< GR1 A component AXI error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE = 0x00004000,	/**< GR0 A component AXI error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE = 0x00002000,	/**< GR1 AXI error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE = 0x00001000,	/**< GR0 AXI error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE   = 0x00000100,	/**< Main AXI error interruption permission */
 
-	E_IM_DISP_INTERRUPTION_SELECT_GA1EE  = 0x00000080,	/**< GR1 A component transmitte error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GA0EE  = 0x00000040,	/**< GR0 A component transmitte error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GR1EE  = 0x00000020,	/**< GR1 transmitte error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_GR0EE  = 0x00000010,	/**< GR0 transmitte error interruption permission */
-	E_IM_DISP_INTERRUPTION_SELECT_LEE    = 0x00000001,	/**< Main transmitte error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE  = 0x00000080,	/**< GR1 A component transmitte error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE  = 0x00000040,	/**< GR0 A component transmitte error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE  = 0x00000020,	/**< GR1 transmitte error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE  = 0x00000010,	/**< GR0 transmitte error interruption permission */
+	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE    = 0x00000001,	/**< Main transmitte error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_VE		=	E_IM_DISP_INTERRUPTION_SELECT_VE |
-											E_IM_DISP_INTERRUPTION_SELECT_VE2,/**< All Vertical syschronization signal interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_VE		=	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_VE2,/**< All Vertical syschronization signal interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_GRREE	=	E_IM_DISP_INTERRUPTION_SELECT_GA1REE |
-											E_IM_DISP_INTERRUPTION_SELECT_GA0REE |
-											E_IM_DISP_INTERRUPTION_SELECT_GR1REE |
-											E_IM_DISP_INTERRUPTION_SELECT_GR0REE,/**< All GR's AXI error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GRREE	=	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1REE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0REE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1REE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0REE,/**< All GR's AXI error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_GREE	=	E_IM_DISP_INTERRUPTION_SELECT_GA1EE |
-											E_IM_DISP_INTERRUPTION_SELECT_GA0EE |
-											E_IM_DISP_INTERRUPTION_SELECT_GR1EE |
-											E_IM_DISP_INTERRUPTION_SELECT_GR0EE,/**< All GR's transmitte error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GREE	=	ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA1EE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GA0EE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR1EE |
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_GR0EE,/**< All GR's transmitte error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_REE	=	E_IM_DISP_CORRECT_SELECT_ALL_GREE | 
-											E_IM_DISP_INTERRUPTION_SELECT_LREE,/**< Main and all GR's AXI error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_REE	=	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GREE | 
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE,/**< Main and all GR's AXI error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_EE		=	E_IM_DISP_CORRECT_SELECT_ALL_GREE | 
-											E_IM_DISP_INTERRUPTION_SELECT_LEE,/**< Main and all GR's transmitte error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_EE		=	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GREE | 
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE,/**< Main and all GR's transmitte error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR =	E_IM_DISP_CORRECT_SELECT_ALL_GREE |
-											E_IM_DISP_CORRECT_SELECT_ALL_GRREE,/**< All GR's transmitte error and AXI error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR =	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GREE |
+											ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GRREE,/**< All GR's transmitte error and AXI error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR=E_IM_DISP_INTERRUPTION_SELECT_LREE | 
-											E_IM_DISP_INTERRUPTION_SELECT_LEE,/**< Main's transmitte error interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR=ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LREE | 
+											ImDisp_E_IM_DISP_INTERRUPTION_SELECT_LEE,/**< Main's transmitte error interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL_ERROR	=	E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR | 
-											E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR,/**< Main and all GRs all errors interruption permission */
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_ERROR	=	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_GR_ERROR | 
+											ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_MIAN_ERROR,/**< Main and all GRs all errors interruption permission */
 
-	E_IM_DISP_CORRECT_SELECT_ALL		=	E_IM_DISP_CORRECT_SELECT_ALL_VE	|
-											E_IM_DISP_CORRECT_SELECT_ALL_ERROR	/**< All interruption permission */
-} E_IM_DISP_INTERRUPTION_SELECT;
+	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL		=	ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_VE	|
+											ImDisp_E_IM_DISP_CORRECT_SELECT_ALL_ERROR	/**< All interruption permission */
+} ImDispEImDispInterruptionSelect;
 
 /** LRPGCTL Register - RPGTMG (Register parameter internal taking timing selection)<br>
  RPGCTL Register - RPGTMG (Register parameter internal taking timing selection)<br>
  GRRPGCTL Register - RPGTMG (Register parameter internal taking timing selection)*/
 typedef enum {
-	E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP = 0,	/**< LRPGCTL.RPGTMG, RPGCTL.RPGTMG, GRRPGCTL.RPGTMG Register<br> 
+	ImDisp_E_IM_DISP_RPGTMG_VSYNC_FRAME_TOP = 0,	/**< LRPGCTL.RPGTMG, RPGCTL.RPGTMG, GRRPGCTL.RPGTMG Register<br> 
 												 When vertical synchronizing signal is generated at frame head.	*/
-	E_IM_DISP_RPGTMG_VSYNC_VSYNC			/**< LRPGCTL.RPGTMG, RPGCTL.RPGTMG, GRRPGCTL.RPGTMG Register<br>
+	ImDisp_E_IM_DISP_RPGTMG_VSYNC_VSYNC			/**< LRPGCTL.RPGTMG, RPGCTL.RPGTMG, GRRPGCTL.RPGTMG Register<br>
 												 When vertical synchronizing signal is generated.				*/
-}E_IM_DISP_RPGTMG;
+}ImDispEImDispRpgtmg;
 
 /** LRSZ0 Register - RSZSL (Horizontal resize method selection)<br>
  GRRSZ0 Register - RSZSL (Horizontal resize method selection)*/
 typedef enum {
-	E_IM_DISP_RSZSL_PADDING_THINNING = 0,	/**< LRSZ0.RSZSL, GRRSZ0.RSZSL Register<br> Padding and thinning out processing.	*/
-	E_IM_DISP_RSZSL_BILINEAR				/**< LRSZ0.RSZSL, GRRSZ0.RSZSL Register<br> Bilinear interpolation processing.		*/
-}E_IM_DISP_RSZSL;
+	ImDisp_E_IM_DISP_RSZSL_PADDING_THINNING = 0,	/**< LRSZ0.RSZSL, GRRSZ0.RSZSL Register<br> Padding and thinning out processing.	*/
+	ImDisp_E_IM_DISP_RSZSL_BILINEAR				/**< LRSZ0.RSZSL, GRRSZ0.RSZSL Register<br> Bilinear interpolation processing.		*/
+}ImDispEImDispRszsl;
 
 /** LYW0ST Register - YW0MD (Range 0 - warning processing mode select)<br>
  LYW1ST Register - YW1MD (Range 0 - warning processing mode select) */
 typedef enum {
-	E_IM_DISP_YWMD_BR_RGB = 0,	/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness reverse display or RGB pixel warning display.	*/
-	E_IM_DISP_YWMD_BW_R,		/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness warning display or R pixel warning display.		*/
-	E_IM_DISP_YWMD_G,			/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness G pixel warning display.						*/
-	E_IM_DISP_YWMD_B			/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness B pixel warning display.						*/
-}E_IM_DISP_YWMD;
+	ImDisp_E_IM_DISP_YWMD_BR_RGB = 0,	/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness reverse display or RGB pixel warning display.	*/
+	ImDisp_E_IM_DISP_YWMD_BW_R,		/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness warning display or R pixel warning display.		*/
+	ImDisp_E_IM_DISP_YWMD_G,			/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness G pixel warning display.						*/
+	ImDisp_E_IM_DISP_YWMD_B			/**< LYW0ST.YW0MD, LYW1ST.YW1MD Register<br> Brightness B pixel warning display.						*/
+}ImDispEImDispYwmd;
 
 /** GDISPEN Register - (Grid display enable)*/
 typedef enum {
-	E_IM_DISP_GDISPEN_NOT_DISPLAY = 0,	/**< GDISPEN Register<br> Not Display.	*/
-	E_IM_DISP_GDISPEN_DISPLAY			/**< GDISPEN Register<br> Display.		*/
-}E_IM_DISP_GDISPEN;
+	ImDisp_E_IM_DISP_GDISPEN_NOT_DISPLAY = 0,	/**< GDISPEN Register<br> Not Display.	*/
+	ImDisp_E_IM_DISP_GDISPEN_DISPLAY			/**< GDISPEN Register<br> Display.		*/
+}ImDispEImDispGdispen;
 
 /** GRSCCTL Register - IDSET (Input data area setting), IDM (Input data area monitor)*/
 typedef enum {
-	E_IM_DISP_INPUT_DATA_AREA_0 = 0,	/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 0.	*/
-	E_IM_DISP_INPUT_DATA_AREA_1,		/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 1.	*/
-	E_IM_DISP_INPUT_DATA_AREA_2,		/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 2.	*/
-	E_IM_DISP_INPUT_DATA_AREA_3			/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 3.	*/
-} E_IM_DISP_INPUT_DATA_AREA;
+	ImDisp_E_IM_DISP_INPUT_DATA_AREA_0 = 0,	/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 0.	*/
+	ImDisp_E_IM_DISP_INPUT_DATA_AREA_1,		/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 1.	*/
+	ImDisp_E_IM_DISP_INPUT_DATA_AREA_2,		/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 2.	*/
+	ImDisp_E_IM_DISP_INPUT_DATA_AREA_3			/**< GRSCCTL.IDSET, GRSCCTL.IDM Register<br> Input data area 3.	*/
+} ImDispEImDispInputDataArea;
 
 /** TRG Register - TGKMD (External start-up mode) */
 typedef enum {
-	E_IM_DISP_TGKMD_NORMAL		= 0,	/**< TRG.TGKMD Register<br> Normal start-up		*/
-	E_IM_DISP_TGKMD_EXTERNAL	= 1		/**< TRG.TGKMD Register<br> External start-up	*/
-} E_IM_DISP_TGKMD;
+	ImDisp_E_IM_DISP_TGKMD_NORMAL		= 0,	/**< TRG.TGKMD Register<br> Normal start-up		*/
+	ImDisp_E_IM_DISP_TGKMD_EXTERNAL	= 1		/**< TRG.TGKMD Register<br> External start-up	*/
+} ImDispEImDispTgkmd;
 
 /** P2MCTL Register - PLPF (LPF recording mode) */
 typedef enum {
-	E_IM_DISP_PLPF_INVALID	= 0,	/**< LPF invalid.	*/
-	E_IM_DISP_PLPF_SHORT,			/**< LPF(Short).	*/
-	E_IM_DISP_PLPF_MIDDLE,			/**< LPF(Middle).	*/
-	E_IM_DISP_PLPF_LONG				/**< LPF(Long).		*/
-} E_IM_DISP_PLPF;
+	ImDisp_E_IM_DISP_PLPF_INVALID	= 0,	/**< LPF invalid.	*/
+	ImDisp_E_IM_DISP_PLPF_SHORT,			/**< LPF(Short).	*/
+	ImDisp_E_IM_DISP_PLPF_MIDDLE,			/**< LPF(Middle).	*/
+	ImDisp_E_IM_DISP_PLPF_LONG				/**< LPF(Long).		*/
+} ImDispEImDispPlpf;
 
 /** P2MCTL Register - P2MTYP (P2M recording mode) */
 typedef enum {
-	E_IM_DISP_P2MTYP_8	= 0,	/**< 8 bit recording mode.			*/
-	E_IM_DISP_P2MTYP_10_PACK,	/**< 10 bit pack recording mode.	*/
-	E_IM_DISP_P2MTYP_12_PACK,	/**< 12 bit pack recording mode.	*/
-	E_IM_DISP_P2MTYP_16			/**< 16 bit recording mode.			*/
-} E_IM_DISP_P2MTYP;
+	ImDisp_E_IM_DISP_P2MTYP_8	= 0,	/**< 8 bit recording mode.			*/
+	ImDisp_E_IM_DISP_P2MTYP_10_PACK,	/**< 10 bit pack recording mode.	*/
+	ImDisp_E_IM_DISP_P2MTYP_12_PACK,	/**< 12 bit pack recording mode.	*/
+	ImDisp_E_IM_DISP_P2MTYP_16			/**< 16 bit recording mode.			*/
+} ImDispEImDispP2mtyp;
 
 /** P2M2PMD Register (P2M 1 pixel / 2 pixels input mode selection) */
 typedef enum {
-	E_IM_DISP_P2M2PMD_1	= 0,	/**< 1 pixel input mode.	*/
-	E_IM_DISP_P2M2PMD_2			/**< 2 pixels input mode.	*/
-} E_IM_DISP_P2M2PMD;
+	ImDisp_E_IM_DISP_P2M2PMD_1	= 0,	/**< 1 pixel input mode.	*/
+	ImDisp_E_IM_DISP_P2M2PMD_2			/**< 2 pixels input mode.	*/
+} ImDispEImDispP2m2pmd;
 
 /*----------------------------------------------------------------------*/
 /* Structure															*/
@@ -273,7 +273,7 @@ typedef union {
 	ULONG		word[2];	/**< All bits */
 	struct {
 		/* LIDT0 */
-		ULONG	IFMT	:5;		/**< Input format selection.<br>
+		ULONG	ifmt	:5;		/**< Input format selection.<br>
 									 <ul><li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_8BIT
 										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_12BIT_PACK
 										 <li>@ref D_IM_DISP_LIDT_IFMT_YCC422_RP_16BIT
@@ -285,298 +285,298 @@ typedef union {
 										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BIT
 										 <li>@ref D_IM_DISP_LIDT_IFMT_GENERAL_10BITx2</ul>							*/
 		ULONG			:3;		/**< Reserve																		*/
-		ULONG	NBT		:2;		/**< Burst size selection.<br>
+		ULONG	nbt		:2;		/**< Burst size selection.<br>
 									 <ul><li>@ref D_IM_DISP_NBT_128BYTE
 										 <li>@ref D_IM_DISP_NBT_256BYTE
 										 <li>@ref D_IM_DISP_NBT_512BYTE</ul>										*/
 		ULONG			:2;		/**< Reserve																		*/
-		ULONG	IFEW	:2;		/**< Input format effective bit width selection.<br>
+		ULONG	ifew	:2;		/**< Input format effective bit width selection.<br>
 									 <ul><li>@ref D_IM_DISP_IFEW_16BIT
 									     <li>@ref D_IM_DISP_IFEW_14BIT
 										 <li>@ref D_IM_DISP_IFEW_12BIT
 										 <li>@ref D_IM_DISP_IFEW_10BIT</ul>											*/
 		ULONG			:2;		/**< Reserve																		*/
-		ULONG	LVFM	:1;		/**< LVFM: Video format selection.<br>
+		ULONG	lvfm	:1;		/**< lvfm: Video format selection.<br>
 									 <ul><li>@ref D_IM_DISP_FORMAT_NORMAL
 										 <li>@ref D_IM_DISP_FORMAT_VIDEO</ul>											*/
 		ULONG			:15;	/**< Reserve																		*/
 		/* LIDT1 */
-		ULONG	PKGDV	:4;		/**< PKGDV: Continuous forwarding demand control.<br>
+		ULONG	pkgdv	:4;		/**< pkgdv: Continuous forwarding demand control.<br>
 									 Value : 0 (fix).																*/
-		ULONG	CACHE	:4;		/**< CACHE: Cache type.<br>
+		ULONG	cache	:4;		/**< cache: Cache type.<br>
 									 d[0]:Bufferable bit. Value 0:Nonbufferable, 1:Bufferable.<br>
 									 d[1]:Cacheable bit. Value 0:Noncacheable, 1:Cacheable.<br>
 									 d[2]:Read allocate bit. Value 0:Read through, 1:Allocate on Reads.<br>
 									 d[3]:Write allocate bit. Value 0:Write through, 1:Allocate on writes.<br>		*/
-		ULONG	PROT	:3;		/**< PROT: Protect type.<br>
+		ULONG	pROT	:3;		/**< pROT: Protect type.<br>
 									 d[0]:Normal or privileged. Value 0:Normal access, 1:Privileged access.<br>
 									 d[1]:Secure or non-secure. Value 0:Secure access, 1:Non-secure access.<br>
 									 d[2]:Instruction or Data. Value 0:Data access, 1:Instrauction access.<br>		*/
 		ULONG			:1;		/**< Reserve																		*/
-		ULONG	YSLVSL	:1;		/**< YSLVSL: Master interface selection of Y.<br>
+		ULONG	yslvsl	:1;		/**< yslvsl: Master interface selection of Y.<br>
 									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
 										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
-		ULONG	CSLVSL	:1;		/**< CSLVSL: Master interface selection of Cb/Cr.<br>
+		ULONG	cslvsl	:1;		/**< cslvsl: Master interface selection of Cb/Cr.<br>
 									 <ul><li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_0
 										 <li>@ref D_IM_DISP_SLVSL_MASTER_INTERFACE_1</ul>							*/
 		ULONG			:18;	/**< Reserve																		*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LIDT;
+} ImDispUImDispLidt;
 
 /** LRSZ1, GRRSZ1 register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	HRSZM	:5;		/**< HRSZM: Horizontal resize magnification setting (M of M/N)<br>
+		ULONG	hrszm	:5;		/**< hrszm: Horizontal resize magnification setting (M of M/N)<br>
 									 Value range:1~31.<br>
 									 Resize magnification range:M/N=1/2~8.																*/
 		ULONG			:3;		/**< Reserve																							*/
-		ULONG	HRSZN	:5;		/**< HRSZM: Horizontal resize magnification setting (N of M/N)<br>
+		ULONG	hrszn	:5;		/**< hrszm: Horizontal resize magnification setting (N of M/N)<br>
 									 Value range:1~31.<br>
 									 Resize magnification range:M/N=1/2~8.																*/
 		ULONG			:11;	/**< Reserve																							*/
-		ULONG	HRSZOF	:5;		/**< HRSZOF: Horizontal resize offset.<br>
+		ULONG	hrszof	:5;		/**< hrszof: Horizontal resize offset.<br>
 									 Value range:0~31.<br>
 									 fulfill the following conditions.<br>
-									 HRSZOF < (pixel count before resizing) * HRSZM - (pixel count before resizing - 1) * HRSZM.<br>
-									 HRSZOF < HRSZM.<br>
+									 hrszof < (pixel count before resizing) * hrszm - (pixel count before resizing - 1) * hrszm.<br>
+									 hrszof < hrszm.<br>
 									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL=0.<br>									*/
 		ULONG			:3;		/**< Reserve																							*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_RSZ1;
+} ImDispUImDispRsz1;
 
 /** LRSZ2, GRRSZ2 register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	VRSZM	:5;		/**< VRSZM: Vertical resize magnification setting (M of M/N)<br>
+		ULONG	vrszm	:5;		/**< vrszm: Vertical resize magnification setting (M of M/N)<br>
 									 Value range:1~31.<br>
 									 Resize magnification range:M/N=1/2~8.																*/
 		ULONG			:3;		/**< Reserve																							*/
 
-		ULONG	VRSZN	:5;		/**< VRSZN: Vertical resize magnification setting (N of M/N)<br>
+		ULONG	vrszn	:5;		/**< vrszn: Vertical resize magnification setting (N of M/N)<br>
 									 Value range:1~31.<br>
 									 Resize magnification range:M/N=1/2~8.																*/
 		ULONG			:11;	/**< Reserve																							*/
-		ULONG	VRSZOF	:5;		/**< VRSZOF: Vertical resize offset.<br>
+		ULONG	vrszof	:5;		/**< vrszof: Vertical resize offset.<br>
 									 Value range:0~31.<br>
 									 fulfill the following conditions.<br>
-									 VRSZOF < (pixel count before resizing) * VRSZM - (pixel count before resizing - 1) * VRSZM.<br>
-									 VRSZOF < VRSZM.<br>
+									 vrszof < (pixel count before resizing) * vrszm - (pixel count before resizing - 1) * vrszm.<br>
+									 vrszof < vrszm.<br>
 									 0 is set up when resize magnification is 1 or LRSZ0.RSZSL(GRRSZ0.RSZSL)=0.<br>						*/
 		ULONG			:3;		/**< Reserve																							*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_RSZ2;
+} ImDispUImDispRsz2;
 
 /** LRSZ3, GRRSZ3 register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	HCSTA	:6;		/**< HCSTA: Horizontal chrominance start position adjustment.<br>
+		ULONG	hcsta	:6;		/**< hcsta: Horizontal chrominance start position adjustment.<br>
 									 Value range:0~63.												*/
 		ULONG			:2;		/**< Reserve														*/
 
-		ULONG	VCSTA	:6;		/**< VCSTA: Vertical chrominance start position adjustment.<br>
+		ULONG	vcsta	:6;		/**< vcsta: Vertical chrominance start position adjustment.<br>
 									 Value range:0~63.												*/
 		ULONG			:18;	/**< Reserve														*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_RSZ3;
+} ImDispUImDispRsz3;
 
 /** LYHLPCTL register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	YHLPEN	:1;	/**< YHLPEN: YHLP enable<br>
+		ULONG	yhlpen	:1;	/**< yhlpen: YHLP enable<br>
 								 Value 0:disable, 1:enable.<br>								*/
 		ULONG			:7;	/**< Reserve													*/
-		ULONG	YHLPMD	:2;	/**< YHLPMD: YHLP mode<br>
+		ULONG	yhlpmd	:2;	/**< yhlpmd: YHLP mode<br>
 								 <ul><li>@ref E_IM_DISP_YHLPMD_HORIZONTAL_SPACE_FILTER
 									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_ENHANCEMENT
 									 <li>@ref E_IM_DISP_YHLPMD_OUTLINE_COLOR</ul>			*/
 		ULONG			:22;/**< Reserve													*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LYHLPCTL;
+} ImDispUImDispLyhlpctl;
 
 /** LYHLPK0/1 register structure. */
 typedef union {
 	ULONG		word[2];	/**< All bits */
 	struct {
-		ULONG	YHLPK0	:9;	/**< YHLPK0: YHLP filter coefficient 0<br>
+		ULONG	yhlpk0	:9;	/**< yhlpk0: YHLP filter coefficient 0<br>
 								 Value range:0~511.											*/
 		ULONG			:7;	/**< Reserve													*/
-		ULLONG	YHLPK1	:8;	/**< YHLPK1: YHLP filter coefficient 1<br>
+		ULLONG	yhlpk1	:8;	/**< yhlpk1: YHLP filter coefficient 1<br>
 								 Value range:0~255.											*/
 		ULONG			:8;/**< Reserve														*/
-		ULONG	YHLPK2	:8;	/**< YHLPK0: YHLP filter coefficient 2<br>
+		ULONG	yhlpk2	:8;	/**< yhlpk0: YHLP filter coefficient 2<br>
 								 Value range:0~255.											*/
 		ULONG			:8;	/**< Reserve													*/
-		ULONG	YHLPK3	:8;	/**< YHLPK3: YHLP filter coefficient 3<br>
+		ULONG	yhlpk3	:8;	/**< yhlpk3: YHLP filter coefficient 3<br>
 								 Value range:0~255.											*/
 		ULONG			:8;/**< Reserve														*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LYHLPK;
+} ImDispUImDispLyhlpk;
 
 /** LYHLPOL register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	YHLPCOR	:16;	/**< YHLPCOR: Outline coring value <br>
+		ULONG	yhlpcor	:16;	/**< yhlpcor: Outline coring value <br>
 									 Value range:0~65535.									*/
-		ULONG	YHLPTH	:16;	/**< YHLPTH: Outline color threshold<br>
+		ULONG	yhlpth	:16;	/**< yhlpth: Outline color threshold<br>
 									 Value range:0~65535.									*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LYHLPOL;
+} ImDispUImDispLyhlpol;
 
 /** LYHLPCLR register structure. */
 typedef union {
 	ULLONG		dword;	/**< All bits */
 	struct {
-		ULLONG	YHLPY	:16;	/**< YHLPY: Outline color pixel Y.<br>
+		ULLONG	yhlpy	:16;	/**< yhlpy: Outline color pixel Y.<br>
 									 Value range:0~65535.									*/
-		ULLONG	YHLPCB	:16;	/**< YHLPCB: Outline color pixel Cb.<br>
+		ULLONG	yhlpcb	:16;	/**< yhlpcb: Outline color pixel Cb.<br>
 									 Value range:0~65535.									*/
-		ULLONG	YHLPCR	:16;	/**< YHLPCR: Outline color pixel Cr.<br>
+		ULLONG	yhlpcr	:16;	/**< yhlpcr: Outline color pixel Cr.<br>
 									 Value range:0~65535.									*/
 		ULLONG			:16;	/**< Reserve												*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LYHLPCLR;
+} ImDispUImDispLyhlpclr;
 
 /**	 LYWCTL	register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	YWEN	:1;		/**< YWEN: Warning enable.<br>
+		ULONG	ywen	:1;		/**< ywen: Warning enable.<br>
 									 <ul><li>@ref D_IM_DISP_ENABLE_OFF
 										 <li>@ref D_IM_DISP_ENABLE_ON</ul>					*/
 		ULONG			:7;		/**< Reserve												*/
-		ULONG	YWSL	:2;		/**< YWSL: Warning type select.<br>
+		ULONG	ywsl	:2;		/**< ywsl: Warning type select.<br>
 									 <ul><li>@ref E_IM_DISP_YWSL_BRIGHTNESS_SPECIFIED_COLOR
 										 <li>@ref E_IM_DISP_YWSL_BRIGHTNESS_ZEBRA
 										 <li>@ref E_IM_DISP_YWSL_RGB_SPECIFIED_COLOR
 										 <li>@ref E_IM_DISP_YWSL_RGB_ZEBRA</ul>				*/
 		ULONG			:22;	/**< Reserve												*/
 	}bit;	/**< Bit field */
-} U_IM_DISP_LYWCTL;
+} ImDispUImDispLywctl;
 
 /**	LYW0TH/LYW1TH register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	YWTHH	:16;	/**< YW0THH/YW1THH: Warning level upper limit.<br>
+		ULONG	ywthh	:16;	/**< YW0THH/YW1THH: Warning level upper limit.<br>
 									 Value range:0~65535.									*/
-		ULONG	YWTHL	:16;	/**< YW0THL/YW1THL: Warning level lower limit.<br>
+		ULONG	ywthl	:16;	/**< YW0THL/YW1THL: Warning level lower limit.<br>
 									 Value range:0~65535.									*/
 	}bit;	/**< Bit field */
-} U_IM_DISP_LYWTH;
+} ImDispUImDispLywth;
 
 /** LYW0CA/LYW0CB/LYW1CA/LYW1CB register structure. */
 typedef union {
 	ULLONG		dword;	/**< All bits */
 	struct {
-		ULLONG	YWY		:16;	/**< YW0AY/YW0BY/YW1AY/YW1BY: Warning color Y(R).<br>
-									 LYWCTL.YWSL=0or1 -> Y data.<br>
-									 LYWCTL.YWSL=2or3 -> R data.<br>
+		ULLONG	ywy		:16;	/**< YW0AY/YW0BY/YW1AY/YW1BY: Warning color Y(R).<br>
+									 LYWCTL.ywsl=0or1 -> Y data.<br>
+									 LYWCTL.ywsl=2or3 -> R data.<br>
 									 Value range:0~65535.									*/
-		ULLONG	YWCB	:16;	/**< YW0ACB/YW0BCB/YW1ACB/YW1BCB: Warning color Cb(G).<br>
-									 LYWCTL.YWSL=0or1 -> Cb data.<br>
-									 LYWCTL.YWSL=2or3 -> G data.<br>
+		ULLONG	ywcb	:16;	/**< YW0ACB/YW0BCB/YW1ACB/YW1BCB: Warning color Cb(G).<br>
+									 LYWCTL.ywsl=0or1 -> Cb data.<br>
+									 LYWCTL.ywsl=2or3 -> G data.<br>
 									 Value range:0~65535.									*/
-		ULLONG	YWCR	:16;	/**< YW0ACR/YW0BCR/YW1ACR/YW1BCR: Warning color Cr(B).<br>
-									 LYWCTL.YWSL=0or1 -> Cr data.<br>
-									 LYWCTL.YWSL=2or3 -> B data.<br>
+		ULLONG	ywcr	:16;	/**< YW0ACR/YW0BCR/YW1ACR/YW1BCR: Warning color Cr(B).<br>
+									 LYWCTL.ywsl=0or1 -> Cr data.<br>
+									 LYWCTL.ywsl=2or3 -> B data.<br>
 									 Value range:0~65535.									*/
-		ULLONG	YWA		:8;		/**< YW0AA/YW0BA/YW1AA/YW1BA: Warning color A.<br>
+		ULLONG	ywa		:8;		/**< YW0AA/YW0BA/YW1AA/YW1BA: Warning color A.<br>
 									 Value range:0~255.										*/
 		ULLONG			:8;		/**< Reserve												*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LYWC;
+} ImDispUImDispLywc;
 
 /**	LBLTMR register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	BTIMH	:8;	/**< BTIMH: Setting of luminance warning display period.<br>
+		ULONG	btimh	:8;	/**< btimh: Setting of luminance warning display period.<br>
 								 Value range:0~255.<br>
-								 BTIMH = frame cout - 1.<br>									*/
-		ULONG	BTIML	:8;	/**< BTIML: Setting of luminance warning non-display period.<br>
+								 btimh = frame cout - 1.<br>									*/
+		ULONG	btiml	:8;	/**< btiml: Setting of luminance warning non-display period.<br>
 								 Value range:0~255.<br>
-								 BTIML = frame cout - 1.<br>									*/
-		ULONG	BTIMD	:1;	/**< BTIMD: Warning display period mode.<br>
+								 btiml = frame cout - 1.<br>									*/
+		ULONG	btimd	:1;	/**< btimd: Warning display period mode.<br>
 									 <ul><li>@ref D_IM_DISP_BTIMD_NORMAL
 										 <li>@ref D_IM_DISP_BTIMD_BLINK</ul>					*/
 		ULONG			:15;/**< Reserve														*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LBLTMR;
+} ImDispUImDispLbltmr;
 
 /** LZBWID register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	ZBHH	:8;		/**< ZBHH: Zebra warning horizontal high brightness width.<br>
+		ULONG	zbhh	:8;		/**< zbhh: Zebra warning horizontal high brightness width.<br>
 									 Value range : 2~255.<br>									*/
-		ULONG	ZBHL	:8;		/**< ZBHL: Zebra warning horizontal low brightness width.<br>
+		ULONG	zbhl	:8;		/**< zbhl: Zebra warning horizontal low brightness width.<br>
 									 Value range : 2~255.<br>									*/
 		ULONG			:16;	/**< Reserve													*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LZBWID;
+} ImDispUImDispLzbwid;
 
 /** LZBV register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	ZBVSTA	:1;		/**< ZBVSTA: Zebra warning dispay vertical start position.<br>
+		ULONG	zbvsta	:1;		/**< zbvsta: Zebra warning dispay vertical start position.<br>
 									 Value :0 or 1.												*/
 		ULONG			:7;		/**< Reserve													*/
-		ULONG	ZBVCYC	:1;		/**< ZBVCYC: Zebra warning dispay vertical cycle.<br>
+		ULONG	zbvcyc	:1;		/**< zbvcyc: Zebra warning dispay vertical cycle.<br>
 									 Value 0:a pixel cycle, 1:2 pixels cycle.<br>				*/
 		ULONG			:23;	/**< Reserve													*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LZBV;
+} ImDispUImDispLzbv;
 
 /** LZBPT register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	ZBDIR	:1;	/**< ZBDIR: Zebra warning dispay pattern direction.<br>
+		ULONG	zbdir	:1;	/**< zbdir: Zebra warning dispay pattern direction.<br>
 								 Value 0:right down, 1:left down.<br>							*/
 		ULONG			:31;/**< Reserve														*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LZBPT;
+} ImDispUImDispLzbpt;
 
 /**	LTBLASET register structure. */
 typedef union {
 	ULONG		word;	/**< All bits */
 	struct {
-		ULONG	IGTAEN	:1;		/**< IGTAEN : Inverse gamma table access enable.<br>
-									 <ul><li>@ref E_IM_DISP_TABLE_ACCESS_DISABLE
-										 <li>@ref E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
-		ULONG	IGEN	:1;		/**< IGEN: Inverse gamma correction enable.<br>
+		ULONG	igtaen	:1;		/**< igtaen : Inverse gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	igen	:1;		/**< igen: Inverse gamma correction enable.<br>
 									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
 										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
-		ULONG	IGTSL	:1;		/**< IGTSL: Inverse gamma correction table surface.<br>
+		ULONG	igtsl	:1;		/**< igtsl: Inverse gamma correction table surface.<br>
 									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
 		ULONG			:5;		/**< Reserve												*/
-		ULONG	GTAEN	:1;		/**< GTAEN : Gamma table access enable.<br>
-									 <ul><li>@ref E_IM_DISP_TABLE_ACCESS_DISABLE
-										 <li>@ref E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
-		ULONG	GMEN	:1;		/**< GMEN: Gamma correction enable.<br>
+		ULONG	gtaen	:1;		/**< gtaen : Gamma table access enable.<br>
+									 <ul><li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_DISABLE
+										 <li>@ref ImDisp_E_IM_DISP_TABLE_ACCESS_ENABLE</ul>		*/
+		ULONG	gmen	:1;		/**< gmen: Gamma correction enable.<br>
 									 <ul><li>@ref E_IM_DISP_CORRECT_PROC_DISABLE
 										 <li>@ref E_IM_DISP_CORRECT_PROC_ENABLE</ul>		*/
-		ULONG	GMTSL	:1;		/**< GMTSL: Gamma correction table surface.<br>
+		ULONG	gmtsl	:1;		/**< gmtsl: Gamma correction table surface.<br>
 									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
 		ULONG			:5;		/**< Reserve												*/
-		ULONG	IGTMN	:1;		/**< IGTMN: Inverse gamma correction monitor.<br>
+		ULONG	igtmn	:1;		/**< igtmn: Inverse gamma correction monitor.<br>
 									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
 		ULONG			:7;		/**< Reserve												*/
-		ULONG	GMTMN   :1;		/**< GMTMN: Gamma correction monitor.<br>
+		ULONG	gmtmn   :1;		/**< gmtmn: Gamma correction monitor.<br>
 									 <ul><li>@ref D_IM_DISP_TABLE_SURFACE_A
 										 <li>@ref D_IM_DISP_TABLE_SURFACE_B</ul>			*/
 		ULONG			:7;		/**< Reserve												*/
 	} bit;	/**< Bit field */
-} U_IM_DISP_LTBLASET;
+} ImDispUImDispLtblaset;
 
 /** LGMMD register structure. */
 typedef union {
@@ -769,31 +769,31 @@ typedef struct {
 
 /** Setting of YHLP data. */
 typedef struct {
-	U_IM_DISP_LYHLPCTL	lyhlpcl;	/**< YHLP processing setting register.				*/
-	U_IM_DISP_LYHLPK	lyhlpk;		/**< YHLP filter coefficient setting 0/1 register.	*/
-	U_IM_DISP_LYHLPOL	lyhlpol;	/**< Outline setting register.						*/
-	U_IM_DISP_LYHLPCLR	lyhlpclr;	/**< Outline color setting register.				*/
+	ImDispUImDispLyhlpctl	lyhlpcl;	/**< YHLP processing setting register.				*/
+	ImDispUImDispLyhlpk	lyhlpk;		/**< YHLP filter coefficient setting 0/1 register.	*/
+	ImDispUImDispLyhlpol	lyhlpol;	/**< Outline setting register.						*/
+	ImDispUImDispLyhlpclr	lyhlpclr;	/**< Outline color setting register.				*/
 } T_IM_DISP_YHLP;
 
 /** Setting of Warning processing data. */
 typedef struct {
-	U_IM_DISP_LYWCTL	lywctl;		/**< Warning processing setting register.				*/
-	U_IM_DISP_LYWTH		lyw0th;		/**< Range 0 - warning level setting register.			*/
-	U_IM_DISP_LYWTH		lyw1th;		/**< Range 1 - warning level setting register.			*/
-	E_IM_DISP_YWMD		lyw0st;		/**< Range 0 - warning processing mode select.<br>
-										 <ul><li>@ref E_IM_DISP_YWMD_BR_RGB
-											 <li>@ref E_IM_DISP_YWMD_BW_R
-											 <li>@ref E_IM_DISP_YWMD_G
-											 <li>@ref E_IM_DISP_YWMD_B</ul>					*/
-	U_IM_DISP_LYWC		lyw0ca;		/**< Range 0 - warning color A.							*/
-	U_IM_DISP_LYWC		lyw0cb;		/**< Range 0 - warning color B.							*/
-	E_IM_DISP_YWMD		lyw1st;		/**< Range 1 - warning processing mode select.<br>
-										 <ul><li>@ref E_IM_DISP_YWMD_BR_RGB
-											 <li>@ref E_IM_DISP_YWMD_BW_R
-											 <li>@ref E_IM_DISP_YWMD_G
-											 <li>@ref E_IM_DISP_YWMD_B</ul>					*/
-	U_IM_DISP_LYWC		lyw1ca;		/**< Range 1 - warning color A.							*/
-	U_IM_DISP_LYWC		lyw1cb;		/**< Range 1 - warning color B.							*/
+	ImDispUImDispLywctl	lywctl;		/**< Warning processing setting register.				*/
+	ImDispUImDispLywth		lyw0th;		/**< Range 0 - warning level setting register.			*/
+	ImDispUImDispLywth		lyw1th;		/**< Range 1 - warning level setting register.			*/
+	ImDispEImDispYwmd		lyw0st;		/**< Range 0 - warning processing mode select.<br>
+										 <ul><li>@ref ImDisp_E_IM_DISP_YWMD_BR_RGB
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_BW_R
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_G
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_B</ul>					*/
+	ImDispUImDispLywc		lyw0ca;		/**< Range 0 - warning color A.							*/
+	ImDispUImDispLywc		lyw0cb;		/**< Range 0 - warning color B.							*/
+	ImDispEImDispYwmd		lyw1st;		/**< Range 1 - warning processing mode select.<br>
+										 <ul><li>@ref ImDisp_E_IM_DISP_YWMD_BR_RGB
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_BW_R
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_G
+											 <li>@ref ImDisp_E_IM_DISP_YWMD_B</ul>					*/
+	ImDispUImDispLywc		lyw1ca;		/**< Range 1 - warning color A.							*/
+	ImDispUImDispLywc		lyw1cb;		/**< Range 1 - warning color B.							*/
 	ULONG				lbost;		/**< Warning display operation setting.<br>
 										 <ul><li>@ref D_IM_DISP_BOMD_MASTER
 											 <li>@ref D_IM_DISP_BOMD_SLAVE</ul>				*/
@@ -801,9 +801,9 @@ typedef struct {
 
 /** Setting of zebra warning (width, vertical, pattern). */
 typedef struct {
-	U_IM_DISP_LZBWID	lzbwid;		/**< LZBWID: Zebra width setting register.	*/
-	U_IM_DISP_LZBV		lzbv;		/**< LZBV: Zebra vertical setting register.	*/
-	U_IM_DISP_LZBPT		lzbpt;		/**< LZBPT: Zebra pattern setting register.	*/
+	ImDispUImDispLzbwid	lzbwid;		/**< LZBWID: Zebra width setting register.	*/
+	ImDispUImDispLzbv		lzbv;		/**< LZBV: Zebra vertical setting register.	*/
+	ImDispUImDispLzbpt		lzbpt;		/**< LZBPT: Zebra pattern setting register.	*/
 } T_IM_DISP_ZEBRA;
 
 /** Setting of grid. */
@@ -845,11 +845,17 @@ VOID im_disp_hclk_on(ImDisp *self);
 VOID im_disp_hclk_off(ImDisp *self);
 VOID im_disp_access_gamma_table(ImDisp *self, BYTE* table_top,
 									 const BYTE* register_table_top,
-									 const E_IM_DISP_CORRECT_SELECT correct,
-									 const E_IM_DISP_ACCESS_GAMMA access);
-INT32 im_disp_wait_trg_stop_start(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, UINT32 act);
-INT32 im_disp_set_trg(ImDisp *self, E_IM_DISP_SEL block, UINT32 layer, BYTE write_channel, E_IM_DISP_TRG start_stop);
-UINT32 im_disp_get_event_flag(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interrupt_type);
-INT32 im_disp_get_cb_index(ImDisp *self, E_IM_DISP_INTERRUPTION_SELECT interrupt_type);
+									 const ImDispEImDispCorrectSelect correct,
+									 const ImDispEImDispAccessGamma access);
+INT32 im_disp_wait_trg_stop_start(ImDisp *self, ImDispEImDispSel block, UINT32 layer, UINT32 act);
+INT32 im_disp_set_trg(ImDisp *self, ImDispEImDispSel block, UINT32 layer, BYTE write_channel, ImDispEImDispTrg start_stop);
+UINT32 im_disp_get_event_flag(ImDisp *self, ImDispEImDispInterruptionSelect interrupt_type);
+INT32 im_disp_get_cb_index(ImDisp *self, ImDispEImDispInterruptionSelect interrupt_type);
+
+
+
+
+
+
 
 #endif /* __IM_DISP1_H__ */

@@ -14,33 +14,52 @@
 #include "imiipslregister.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipSlRegister, im_iip_sl_register);
-#define IM_IIP_SL_REGISTER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipSlRegisterPrivate, IM_TYPE_IIP_SL_REGISTER))
+G_DEFINE_TYPE(ImIipSlRegister, im_iip_sl_register, G_TYPE_OBJECT);
+#define IM_IIP_SL_REGISTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_SL_REGISTER, ImIipSlRegisterPrivate));
 
 
 struct _ImIipSlRegisterPrivate
 {
-	kint a;
+	gint a;
 };
-
-
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_sl_register_constructor(ImIipSlRegister *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_sl_register_class_init(ImIipSlRegisterClass *klass)
 {
-//	ImIipSlRegisterPrivate *priv = IM_IIP_SL_REGISTER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipSlRegisterPrivate));
 }
 
-static void im_iip_sl_register_destructor(ImIipSlRegister *self)
+static void 		im_iip_sl_register_init(ImIipSlRegister *self)
 {
-//	ImIipSlRegisterPrivate *priv = IM_IIP_SL_REGISTER_GET_PRIVATE(self);
+	ImIipSlRegisterPrivate *priv = IM_IIP_SL_REGISTER_GET_PRIVATE(self);
 }
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipSlRegisterPrivate *priv = IM_IIP_SL_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_sl_register_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipSlRegisterPrivate *priv = IM_IIP_SL_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_sl_register_parent_class) -> dispose(object);
+}
+
 /**
  * PUBLIC
  */
-ImIipSlRegister* im_iip_sl_register_new(void)
+ImIipSlRegister* 		im_iip_sl_register_new(void)
 {
-	ImIipSlRegister *self = k_object_new_with_private(IM_TYPE_IIP_SL_REGISTER, sizeof(ImIipSlRegisterPrivate));
+	ImIipSlRegister *self = g_object_new(IM_TYPE_IIP_SL_REGISTER, NULL);
 	return self;
 }

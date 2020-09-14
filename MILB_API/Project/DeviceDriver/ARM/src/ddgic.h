@@ -49,11 +49,11 @@ extern "C" {
 
 /** Interrupt ID and Mask */
 #define	C_INTID_MAX							(320)					/**< Interrupt ID MAX */
-#define	C_INTID_SGI_MAX					(15)					/**< Interrupt ID SGI(Software Generated Interrupt) MAX */
-#define	C_INTID_PPI_MAX					(31)					/**< Interrupt ID PPI(Private Peripheral Interrupt) MAX */
+#define	C_INTID_SGI_MAX					(15)						/**< Interrupt ID SGI(Software Generated Interrupt) MAX */
+#define	C_INTID_PPI_MAX					(31)						/**< Interrupt ID PPI(Private Peripheral Interrupt) MAX */
 #define	C_INTID_SPI_MAX					(319)					/**< Interrupt ID SPI(Shared Peripheral Interrupt) MAX */
 #define	C_SPURIOUS_INTERRUPT		(1023)					/**< Spurious Interrupt ID */
-#define C_INTERRUPT_MASK				(0x000003FF)			/**< Interrupt Acknowledge Register MASK */
+#define C_INTERRUPT_MASK				(0x000003FF)		/**< Interrupt Acknowledge Register MASK */
 
 /** Interrupt Priority Value */
 #define	C_PRI00									(0x00)					/**< Interrupt Priority 00:(0x00) */
@@ -990,17 +990,17 @@ void			dd_gic_end(DdGic *self);
 /**
  Control Generic Interrupt Controller to set resource.
  @param [in]	intid					: Interrupt ID (0 to @ref C_INTID_SPI_MAX).
- @param [in]	set_enable				: Interrupt Set-Enable Value.
+ @param [in]	setEnable				: Interrupt Set-Enable Value.
  <ul>
  <li>0:disable
  <li>1:enable
  </ul>
- @param [in]	intrpt_pri				: Interrupt Priority Value (-1 to 248).
+ @param [in]	intrptPri				: Interrupt Priority Value (-1 to 248).
  <ul>
  <li>0, 8, 16, 24, ..., 248 (in steps of 8):priority
  <li>-1:Not set
  </ul>
- @param [in]	cpu_target				: Interrupt Processor Target (-1 to 15).
+ @param [in]	cpuTarget				: Interrupt Processor Target (-1 to 15).
  <ul>
  <li>bit0:CPU0
  <li>bit1:CPU1
@@ -1012,12 +1012,12 @@ void			dd_gic_end(DdGic *self);
  @retval	C_GIC_INPUT_PARAM_ERR	: Input Parameter Error
  @remarks	Disable interrupt is set after this function. If start, dd_gic_init1(NULL) should be used.
  */
-kint32			dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 intrpt_pri, kint64 cpu_target);
+kint32			dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong setEnable, kint64 intrptPri, kint64 cpuTarget);
 
 /**
  Control Set Interrupt Priority Registers.
  @param [in]	intid					: Interrupt ID (0 to @ref C_INTID_SPI_MAX).
- @param [in]	intrpt_pri				: Interrupt Priority Value (-1 to 248).
+ @param [in]	intrptPri				: Interrupt Priority Value (-1 to 248).
  <ul>
  <li>0, 8, 16, 24, ..., 248 (in steps of 8):priority
  <li>-1:Not set
@@ -1026,12 +1026,12 @@ kint32			dd_gic_ctrl(DdGic *self, DdGicIntid intid, kulong set_enable, kint64 in
  @retval	C_GIC_INPUT_PARAM_ERR	: Input Parameter Error
  @remarks	Disable interrupt is set after this function. If start, dd_gic_init1(NULL) should be used.
  */
-kint32			dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri);
+kint32			dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrptPri);
 
 /**
  Control Set Interrupt Processor Targets Registers.
  @param [in]	intid					: Interrupt ID (0 to @ref C_INTID_SPI_MAX).
- @param [in]	cpu_target				: Interrupt Processor Target (-1 to 15).
+ @param [in]	cpuTarget				: Interrupt Processor Target (-1 to 15).
  <ul>
  <li>bit0:CPU0
  <li>bit1:CPU1
@@ -1043,21 +1043,21 @@ kint32			dd_gic_set_priority(DdGic *self, DdGicIntid intid, kint64 intrpt_pri);
  @retval	C_GIC_INPUT_PARAM_ERR	: Input Parameter Error
  @remarks	Disable interrupt is set after this function. If start, dd_gic_init1(NULL) should be used.
  */
-kint32			dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpu_target);
+kint32			dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpuTarget);
 
 /**
  SGI(Software Generated Interrupt) send to target CPU.<br>
  Set Interrupt Software Generated Interrupt Register(ICDSGIR).
  @param [in]	intid					: Software Generated Interrupt ID (0 to @ref C_INTID_SGI_MAX).
- @param [in]	target_filter			: Target List Filter (0 to 2).
+ @param [in]	targetFilter			: Target List Filter (0 to 2).
  <ul>
- <li>0:Send the interrupt to the CPU interfaces specified in the CPUTargetList(cpu_target value).
+ <li>0:Send the interrupt to the CPU interfaces specified in the CPUTargetList(cpuTarget value).
  <li>1:Send the interrupt to all CPU interfaces except the CPU interface that requested the interrupt.
  <li>2:Send the interrupt only to the CPU interface that requested the interrupt.
  </ul>
- @param [in]	cpu_target				: CPU Target (0 to 15).
+ @param [in]	cpuTarget				: CPU Target (0 to 15).
  <ul>
- <li>0:No target (target_filter value 1 or 2)
+ <li>0:No target (targetFilter value 1 or 2)
  <li>1:CPU0 ([0]bit ON)
  <li>2:CPU1 ([1]bit ON)
  <li>4:CPU2 ([2]bit ON)
@@ -1068,7 +1068,7 @@ kint32			dd_gic_set_target_cpu(DdGic *self, DdGicIntid intid, kint64 cpu_target)
  @retval	C_GIC_INPUT_PARAM_ERR	: Input Parameter Error
  @remarks	When this API call, send the interrupt to target CPU.
  */
-kint32			dd_gic_send_sgi(DdGic *self, DdGicIntid intid, kulong target_filter, kulong cpu_target);
+kint32			dd_gic_send_sgi(DdGic *self, DdGicIntid intid, kulong targetFilter, kulong cpuTarget);
 
 /*@}*/
 
@@ -1106,7 +1106,7 @@ kint32			dd_gic_send_sgi(DdGic *self, DdGicIntid intid, kulong target_filter, ku
 
  Dd_ARM_Spin_Lock(&gic_spin_lock);
 
- dd_gic_ctrl(NULL, intid, set_enable, intrpt_pri, 0);
+ dd_gic_ctrl(NULL, intid, setEnable, intrptPri, 0);
 
  Dd_ARM_Spin_Unlock(&gic_spin_lock);
  @endcode

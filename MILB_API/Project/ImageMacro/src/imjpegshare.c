@@ -20,13 +20,13 @@
 #include "imjpegshare.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImJpegShare, im_jpeg_share);
-#define IM_JPEG_SHARE_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImJpegSharePrivate, IM_TYPE_JPEG_SHARE))
+G_DEFINE_TYPE(ImJpegShare, im_jpeg_share, G_TYPE_OBJECT);
+#define IM_JPEG_SHARE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_JPEG_SHARE, ImJpegSharePrivate));
 
 
 struct _ImJpegSharePrivate
 {
-	kint a;
+	gint a;
 };
 
 
@@ -34,11 +34,11 @@ struct _ImJpegSharePrivate
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
 // quantization table for the next frame
-static volatile kuchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
+static volatile guchar S_GIM_JPEG_UPDATE_QUANT_FLG = 0;
 
 // counter
-static volatile kushort S_GIM_JPEG_LINE_CNT = 0;
-static volatile kulong S_GIM_JPEG_SECT_CNT = 0;
+static volatile gushort S_GIM_JPEG_LINE_CNT = 0;
+static volatile gulong S_GIM_JPEG_SECT_CNT = 0;
 
 // encode setting table
 static TimgEncMng S_GIM_JPEG_ENC_MNG;
@@ -47,19 +47,44 @@ static TimgEncFrameMng S_GIM_JPEG_ENC_FRAME_MNG;
 // decode setting table
 static TimgDecMng S_GIM_JPEG_DEC_MNG;
 static TimgDecFrameMng S_GIM_JPEG_DEC_FRAME_MNG;
-static kint32 S_GIM_JPEG_RESULT_JUDGE = 0;
-
+static gint32 S_GIM_JPEG_RESULT_JUDGE = 0;
+/**
+ *DECLS
+ */
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
 /**
  *IMPL
  */
-static void im_jpeg_share_constructor(ImJpegShare *self)
+static void 		im_jpeg_share_class_init(ImJpegShareClass *klass)
 {
-//	ImJpegSharePrivate *priv = IM_JPEG_SHARE_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImJpegSharePrivate));
 }
 
-static void im_jpeg_share_destructor(ImJpegShare *self)
+static void 		im_jpeg_share_init(ImJpegShare *self)
 {
-//	ImJpegSharePrivate *priv = IM_JPEG_SHARE_GET_PRIVATE(self);
+	ImJpegSharePrivate *priv = IM_JPEG_SHARE_GET_PRIVATE(self);
+	self->ddimUserCustom = ddim_user_custom_new();
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImJpegSharePrivate *priv = IM_JPEG_SHARE_GET_PRIVATE(object);
+	ImJpegCommon *self = im_jpeg_common_new();
+	if(self->ddimUserCustom){
+		g_object_unref(self->ddimUserCustom);
+		self->ddimUserCustom = NULL;
+	}
+	G_OBJECT_CLASS(im_jpeg_share_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImJpegSharePrivate *priv = IM_JPEG_SHARE_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_jpeg_share_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
@@ -68,9 +93,9 @@ static void im_jpeg_share_destructor(ImJpegShare *self)
  * @brief		Frame configuration of the JPEG encoding process
  * @param[in]	TimgEncFrameMng*	pJpgEncFrmMng	: Pointer to JPEG Encode frame management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
+gint32 im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncFrmMng == NULL) {
@@ -82,7 +107,7 @@ kint32 im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 	// Set Jpeg frame management table to a global table
 	S_GIM_JPEG_ENC_FRAME_MNG = *pJpgEncFrmMng;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -114,14 +139,14 @@ kint32 im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 		Ddim_Print(("I:im_jpeg_ctrl_enc_frame() Warning : Limit size changed to 512 bytes.\n"));
 	}
 	else {
-		ioJpg7.jcodsv.word = (kulong) (pJpgEncFrmMng->limitSize / ImJpegCommon_D_IM_JPEG_SECT_CNT);
+		ioJpg7.jcodsv.word = (gulong) (pJpgEncFrmMng->limitSize / ImJpegCommon_D_IM_JPEG_SECT_CNT);
 	}
 
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -130,9 +155,9 @@ kint32 im_jpeg_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
  * @brief		get the base settings for Jpeg encode.
  * @param[in]	None
  * @param[out]	TimgEncMng* pJpgEncMng
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
+gint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncMng == NULL) {
@@ -141,7 +166,7 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -175,7 +200,7 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 	pJpgEncMng->jbufCtrl.endian = (EimgEndian) ioJpg7.jmode.bit.jjbendian;
 	pJpgEncMng->burstAlignment = (EimgBurstAl) ioJpg7.jmode.bit.jburstAlOn;
 	// JPBSTA
-	switch ((kuchar) ioJpg7.jpbsta.bit.jpissueset) {
+	switch ((guchar) ioJpg7.jpbsta.bit.jpissueset) {
 		case 0x01:
 			pJpgEncMng->pbufCtrl.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_2;
 			break;
@@ -189,7 +214,7 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 	pJpgEncMng->pbufCtrl.cacheType = ioJpg7.jpbsta.bit.jpacache;
 	pJpgEncMng->pbufCtrl.protType = ioJpg7.jpbsta.bit.jpaprot;
 	// JJBSTA
-	switch ((kuchar) ioJpg7.jjbsta.bit.jjissueset) {
+	switch ((guchar) ioJpg7.jjbsta.bit.jjissueset) {
 		case 0x01:
 			pJpgEncMng->jbufCtrl.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_2;
 			break;
@@ -204,14 +229,14 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 	pJpgEncMng->jbufCtrl.protType = ioJpg7.jjbsta.bit.japrot;
 
 	// jcctl
-	if ((kuchar) ioJpg7.jcctl.bit.jcrp == 0x2) {
+	if ((guchar) ioJpg7.jcctl.bit.jcrp == 0x2) {
 		pJpgEncMng->jburstLength = ImJpegCommon_E_IM_JPEG_BURST_INCR_8;
 	}
 	else {
 		pJpgEncMng->jburstLength = ImJpegCommon_E_IM_JPEG_BURST_INCR_16;
 	}
 	// JICTL
-	if ((kuchar) ioJpg7.jictl.bit.jirp == 0x2) {
+	if ((guchar) ioJpg7.jictl.bit.jirp == 0x2) {
 		pJpgEncMng->pburstLength = ImJpegCommon_E_IM_JPEG_BURST_INCR_8;
 	}
 	else {
@@ -236,7 +261,7 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -246,9 +271,9 @@ kint32	im_jpeg_get_ctrl_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng )
  * @brief		Get the frame settings for Jpeg encode.
  * @param[in]	None
  * @param[out]	TimgEncFrameMng* pJpgEncFrmMng
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
+gint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncFrmMng == NULL) {
@@ -257,7 +282,7 @@ kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmM
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -286,7 +311,7 @@ kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmM
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -296,13 +321,13 @@ kint32	im_jpeg_get_ctrl_enc_frame(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmM
  * @brief		JPEG Encoding process asynchronous.
  * @param[in]	None
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
  */
-kint32 im_jpeg_start_enc( ImJpegShare*self )
+gint32 im_jpeg_start_enc( ImJpegShare*self )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -313,7 +338,7 @@ kint32 im_jpeg_start_enc( ImJpegShare*self )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
@@ -322,7 +347,7 @@ kint32 im_jpeg_start_enc( ImJpegShare*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	// Initialize
 	// Size of JPEG Compressed data
@@ -334,11 +359,11 @@ kint32 im_jpeg_start_enc( ImJpegShare*self )
 	S_GIM_JPEG_SECT_CNT = 0;
 
 	ercd = DDIM_User_Clr_Flg( FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	if ( DdimUserCustom_E_OK != ercd) {
 		return ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR;
 	}
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -364,7 +389,7 @@ kint32 im_jpeg_start_enc( ImJpegShare*self )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -372,15 +397,15 @@ kint32 im_jpeg_start_enc( ImJpegShare*self )
 /**
  * @brief		Waiting to be processed JPEG encoding.
  * @param[out]	TimgEncMng*			pJpgEncMng		:Result of the JPEG encoding process
- * @param[in]	kint32						timeOut			:Time-out period
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR /
+ * @param[in]	gint32						timeOut			:Time-out period
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR /
  * ImJpegCommon_D_IM_JPEG_TIMEOUT / ImJpegCommon_D_IM_JPEG_ENCODE_ERR / ImJpegCommon_D_IM_JPEG_AXI_ERR
  */
-kint32 im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, kint32 timeOut )
+gint32 im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, gint32 timeOut )
 {
-	DDIM_USER_FLGPTN flgptn = 0;
-	DDIM_USER_ER ercd;
-	kint32 ret;
+	DdimUserCustom_FLGPTN flgptn = 0;
+	DdimUserCustom_ER ercd;
+	gint32 ret;
 
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncMng == NULL) {
@@ -393,13 +418,13 @@ kint32 im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, kint32 tim
 	}
 #endif // CO_PARAM_CHECK
 
-	ercd = DDIM_User_Twai_Flg( FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END, D_DDIM_USER_TWF_ORW, &flgptn, timeOut);
+	ercd = ddim_user_custom_twai_flg(self->ddimUserCustom, FID_IM_JPEG, ImJpegCommon_D_IM_JPEG_FLG_WAIT_END, DdimUserCustom_TWF_ORW, &flgptn, timeOut);
 
 	// Set Result
 	pJpgEncMng->codeSize = S_GIM_JPEG_ENC_MNG.codeSize;
 	pJpgEncMng->result = S_GIM_JPEG_ENC_MNG.result;
 
-	if (ercd != D_DDIM_USER_E_OK) {
+	if (ercd != DdimUserCustom_E_OK) {
 		ret = ImJpegCommon_D_IM_JPEG_TIMEOUT;
 	}
 	else {
@@ -429,12 +454,12 @@ kint32 im_jpeg_wait_end_enc(ImJpegShare*self, TimgEncMng* pJpgEncMng, kint32 tim
  * @brief		JPEG encode restart.(Restart from the state is paused encoding)
  * @param[in]	TimgEncFrameMng*	pJpgEncFrmMng	: Pointer to JPEG Encode frame management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG /
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG /
  *  ImJpegCommon_D_IM_JPEG_PARAM_ERROR / ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR
  */
-kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
+gint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 {
-	DDIM_USER_ER ercd;
+	DdimUserCustom_ER ercd;
 
 #ifdef CO_PARAM_CHECK
 	if (pJpgEncFrmMng == NULL) {
@@ -443,7 +468,7 @@ kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -453,7 +478,7 @@ kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// Coding not stopped
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -472,19 +497,19 @@ kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 	}
 	else {
 		ioJpg7.jinten.bit.jcpfen = 1;
-		ioJpg7.jcodsv.word = (kulong) (pJpgEncFrmMng->limitSize / ImJpegCommon_D_IM_JPEG_SECT_CNT);
+		ioJpg7.jcodsv.word = (gulong) (pJpgEncFrmMng->limitSize / ImJpegCommon_D_IM_JPEG_SECT_CNT);
 	}
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
-	ercd = DDIM_User_Clr_Flg( FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
-	if ( D_DDIM_USER_E_OK != ercd) {
+	ercd = ddim_user_custom_clr_flg(self->ddimUserCustom, FID_IM_JPEG, ~ImJpegCommon_D_IM_JPEG_FLG_WAIT_END);
+	if ( DdimUserCustom_E_OK != ercd) {
 		return ImJpegCommon_D_IM_JPEG_SYSTEMCALL_ERR;
 	}
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
@@ -496,7 +521,7 @@ kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -505,11 +530,11 @@ kint32 im_jpeg_restart_enc(ImJpegShare*self, TimgEncFrameMng* pJpgEncFrmMng )
  * @brief		Configuration of the JPEG decoding process for marker skip mode
  * @param[in]	None
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG
  */
-kint32 im_jpeg_set_skip_marker_dec( ImJpegShare*self )
+gint32 im_jpeg_set_skip_marker_dec( ImJpegShare*self )
 {
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -519,7 +544,7 @@ kint32 im_jpeg_set_skip_marker_dec( ImJpegShare*self )
 		// HCLK off
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -530,7 +555,7 @@ kint32 im_jpeg_set_skip_marker_dec( ImJpegShare*self )
 
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -539,9 +564,9 @@ kint32 im_jpeg_set_skip_marker_dec( ImJpegShare*self )
  * @brief		Base configuration of the JPEG decoding process
  * @param[in]	TimgDecMng*	pJpgDecMng	:Pointer to JPEG decode base management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_RUNNING_NG / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
+gint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecMng == NULL) {
@@ -550,7 +575,7 @@ kint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
@@ -558,7 +583,7 @@ kint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	if (ioJpg7.jpstatus.bit.jpstatus != 0) {
 		im_jpeg_off_hclk(NULL);
 		ImJpegCommon_IM_JPEG_DSB();
-		DDIM_User_AhbReg_SpinUnLock();
+		ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 		// macro running
 		return ImJpegCommon_D_IM_JPEG_RUNNING_NG;
 	}
@@ -666,9 +691,9 @@ kint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 	// SRAM power down control wait time.
-	Dd_ARM_Wait_ns(1000);
+	DD_ARM_WAIT_NS(1000);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -677,9 +702,9 @@ kint32 im_jpeg_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
  * @brief		Frame configuration of the JPEG decoding process
  * @param[in]	TimgDecFrameMng*	pJpgDecFrmMng	:Pointer to JPEG Decode frame management table
  * @param[out]	None
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32 im_jpeg_ctrl_dec_frame(ImJpegShare*self,  TimgDecFrameMng* pJpgDecFrmMng )
+gint32 im_jpeg_ctrl_dec_frame(ImJpegShare*self,  TimgDecFrameMng* pJpgDecFrmMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecFrmMng == NULL) {
@@ -691,7 +716,7 @@ kint32 im_jpeg_ctrl_dec_frame(ImJpegShare*self,  TimgDecFrameMng* pJpgDecFrmMng 
 	// Set Jpeg frame management table to a global table
 	S_GIM_JPEG_DEC_FRAME_MNG = *pJpgDecFrmMng;
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
 
@@ -711,13 +736,13 @@ kint32 im_jpeg_ctrl_dec_frame(ImJpegShare*self,  TimgDecFrameMng* pJpgDecFrmMng 
 		ioJpg7.jcodsv.word = 0;
 	}
 	else {
-		ioJpg7.jcodsv.word = (kulong) (pJpgDecFrmMng->codeSize / ImJpegCommon_D_IM_JPEG_SECT_CNT) + 1;
+		ioJpg7.jcodsv.word = (gulong) (pJpgDecFrmMng->codeSize / ImJpegCommon_D_IM_JPEG_SECT_CNT) + 1;
 	}
 
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
@@ -726,9 +751,9 @@ kint32 im_jpeg_ctrl_dec_frame(ImJpegShare*self,  TimgDecFrameMng* pJpgDecFrmMng 
  * @brief		Get the base settings for Jpeg decode.
  * @param[in]	None
  * @param[out]	TimgDecMng*	pJpgDecMng	:Pointer to JPEG Decode base management table
- * @return		kint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
+ * @return		gint32	ImJpegCommon_D_IM_JPEG_OK / ImJpegCommon_D_IM_JPEG_PARAM_ERROR
  */
-kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
+gint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 {
 #ifdef CO_PARAM_CHECK
 	if (pJpgDecMng == NULL) {
@@ -737,7 +762,7 @@ kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	}
 #endif // CO_PARAM_CHECK
 
-	DDIM_User_AhbReg_SpinLock();
+	ddim_user_custom_ahb_reg_spin_lock(self->ddimUserCustom);
 	// HCLK on
 	im_jpeg_on_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
@@ -750,7 +775,7 @@ kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	pJpgDecMng->jbufCtrl.endian = (EimgEndian) ioJpg7.jmode.bit.jjbendian;
 	pJpgDecMng->burstAlignment = (EimgBurstAl) ioJpg7.jmode.bit.jburstAlOn;
 	// JPBSTA
-	switch ((kuchar) ioJpg7.jpbsta.bit.jpissueset) {
+	switch ((guchar) ioJpg7.jpbsta.bit.jpissueset) {
 		case 0x01:
 			pJpgDecMng->pbufCtrl.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_2;
 			break;
@@ -764,7 +789,7 @@ kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	pJpgDecMng->pbufCtrl.cacheType = ioJpg7.jpbsta.bit.jpacache;
 	pJpgDecMng->pbufCtrl.protType = ioJpg7.jpbsta.bit.jpaprot;
 	// JJBSTA
-	switch ((kuchar) ioJpg7.jjbsta.bit.jjissueset) {
+	switch ((guchar) ioJpg7.jjbsta.bit.jjissueset) {
 		case 0x01:
 			pJpgDecMng->jbufCtrl.issueTranNum = ImJpegCommon_E_IM_JPEG_ISSUE_TRAN_2;
 			break;
@@ -814,13 +839,13 @@ kint32	im_jpeg_get_ctrl_dec(ImJpegShare*self, TimgDecMng* pJpgDecMng )
 	// HCLK off
 	im_jpeg_off_hclk(NULL);
 	ImJpegCommon_IM_JPEG_DSB();
-	DDIM_User_AhbReg_SpinUnLock();
+	ddim_user_custom_ahb_reg_spin_un_lock(self->ddimUserCustom);
 
 	return ImJpegCommon_D_IM_JPEG_OK;
 }
 
-ImJpegShare* im_jpeg_share_new(void)
+ImJpegShare* 		im_jpeg_share_new(void)
 {
-	ImJpegShare *self = k_object_new_with_private(IM_TYPE_JPEG_SHARE, sizeof(ImJpegSharePrivate));
+	ImJpegShare *self = g_object_new(IM_TYPE_JPEG_SHARE, NULL);
 	return self;
 }

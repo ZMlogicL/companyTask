@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kgic.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KGic, k_gic);
+
 #define K_GIC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KGicPrivate, K_TYPE_GIC))
+
 
 struct _KGicPrivate
 {
 
 };
+
 
 volatile IoGicDist ioGicDist __attribute__((section(".GIC_DIST")));
 volatile IoGicCpu ioGicCpu __attribute__((section(".GIC_CPU")));

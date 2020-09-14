@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-02
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtImRbkRun2类
 *@rely                :klib
@@ -11,6 +11,7 @@
 *@version
 *
 */
+
 #include "ct_im_ltm.h"
 
 #include "im_ltm.h"
@@ -29,12 +30,12 @@
 #include <string.h>
 
 #include "ctimltmrbk.h"
-#include "ctimrbkrun2.h"
 #include "ctimrbkrun3.h"
+#include "ctimrbkrun2.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImRbkRun2, ct_im_rbk_run2);
-#define CT_IM_RBK_RUN2_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImRbkRun2Private,CT_TYPE_IM_RBK_RUN2))
 
+G_DEFINE_TYPE(CtImRbkRun2, ct_im_rbk_run2, G_TYPE_OBJECT);
+#define CT_IM_RBK_RUN2_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_RBK_RUN2, CtImRbkRun2Private))
 
 struct _CtImRbkRun2Private
 {
@@ -63,36 +64,71 @@ T_IM_LTM_RBK_CTRL_SRO_DIRECT gctImLtmRbkCtrlSroDirectBase = {
 		.img_lines = 0,
 	},
 };
-
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_im_rbk_run2_constructor(CtImRbkRun2 *self) 
+
+static void ct_im_rbk_run2_class_init(CtImRbkRun2Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImRbkRun2Private));
+}
+
+static void ct_im_rbk_run2_init(CtImRbkRun2 *self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	priv->ctImRbkRun1=NULL;
-	priv->ctImRbkRun3=NULL;
+	priv->ctImRbkRun1=ct_im_rbk_run1_new();
+	priv->ctImRbkRun3=ct_im_rbk_run3_new();
 	priv->gctImLtmRbkCtrlSroDirectBase=&gctImLtmRbkCtrlSroDirectBase;
 }
 
-static void ct_im_rbk_run2_destructor(CtImRbkRun2 *self) 
+static void dispose_od(GObject *object)
 {
+	CtImRbkRun2 *self = (CtImRbkRun2*)object;
+	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
+
+	if(priv->ctImRbkRun1)
+		{
+			g_object_unref(priv->ctImRbkRun1);
+			priv->ctImRbkRun1 = NULL;
+		}
+	if(priv->ctImRbkRun3)
+		{
+			g_object_unref(priv->ctImRbkRun3);
+			priv->ctImRbkRun3 = NULL;
+		}
+	G_OBJECT_CLASS(ct_im_rbk_run2_parent_class)->dispose(object);
 }
+
+static void finalize_od(GObject *object)
+{
+	CtImRbkRun2 *self = (CtImRbkRun2*)object;
+	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
+	G_OBJECT_CLASS(ct_im_rbk_run2_parent_class)->finalize(object);
+}
+
 
 /*
 *PUBLIC
 */
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_1: "
-kint32 ct_im_rbk_run2_rbk_2_1(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_1(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Ctrl_Axi( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK ctrl axi error = 0x%x\n", ercd ));
 	}
 
@@ -101,15 +137,15 @@ kint32 ct_im_rbk_run2_rbk_2_1(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_2: "
-kint32 ct_im_rbk_run2_rbk_2_2(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_2(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Get_AxiReadStat( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK get axi read stat error = 0x%x\n", ercd ));
 	}
 
@@ -118,15 +154,15 @@ kint32 ct_im_rbk_run2_rbk_2_2(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_3: "
-kint32 ct_im_rbk_run2_rbk_2_3(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_3(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Get_AxiWriteStat( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK get axi write stat error = 0x%x\n", ercd ));
 	}
 
@@ -135,15 +171,15 @@ kint32 ct_im_rbk_run2_rbk_2_3(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_4: "
-kint32 ct_im_rbk_run2_rbk_2_4(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_4(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Get_AxiCtrlParam( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK get axi ctrl param error = 0x%x\n", ercd ));
 	}
 
@@ -152,15 +188,15 @@ kint32 ct_im_rbk_run2_rbk_2_4(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_5: "
-kint32 ct_im_rbk_run2_rbk_2_5(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_5(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Set_AxiCtrlParam( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK set axi ctrl param error = 0x%x\n", ercd ));
 	}
 
@@ -169,15 +205,15 @@ kint32 ct_im_rbk_run2_rbk_2_5(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_6: "
-kint32 ct_im_rbk_run2_rbk_2_6(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_6(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Ctrl_Common( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK set ctrl common error = 0x%x\n", ercd ));
 	}
 
@@ -186,15 +222,15 @@ kint32 ct_im_rbk_run2_rbk_2_6(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_7: "
-kint32 ct_im_rbk_run2_rbk_2_7(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_7(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Ctrl_ModeSDRAMInput( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK set ctrl sdram input error = 0x%x\n", ercd ));
 	}
 
@@ -203,15 +239,15 @@ kint32 ct_im_rbk_run2_rbk_2_7(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_8: "
-kint32 ct_im_rbk_run2_rbk_2_8(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_8(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Set_InAddr_Info( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK set inaddr error = 0x%x\n", ercd ));
 	}
 
@@ -220,15 +256,15 @@ kint32 ct_im_rbk_run2_rbk_2_8(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_9: "
-kint32 ct_im_rbk_run2_rbk_2_9(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_9(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Set_OutData_Info( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK set outdata error = 0x%x\n", ercd ));
 	}
 
@@ -237,15 +273,15 @@ kint32 ct_im_rbk_run2_rbk_2_9(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_10: "
-kint32 ct_im_rbk_run2_rbk_2_10(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_10(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Ctrl_ModeSRODirect( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK ctrl sro direct error = 0x%x\n", ercd ));
 	}
 
@@ -254,15 +290,15 @@ kint32 ct_im_rbk_run2_rbk_2_10(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_11: "
-kint32 ct_im_rbk_run2_rbk_2_11(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_11(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Get_RbkBusy( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK get rbk busy error = 0x%x\n", ercd ));
 	}
 
@@ -271,15 +307,15 @@ kint32 ct_im_rbk_run2_rbk_2_11(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_12: "
-kint32 ct_im_rbk_run2_rbk_2_12(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_12(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
 
 	ercd = Im_LTM_RBK_Ctrl_RGBTrimming( ct_im_rbk_run1_get_pipe_no(priv->ctImRbkRun1), NULL );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK ctrl rgb trimming error = 0x%x\n", ercd ));
 	}
 
@@ -288,9 +324,9 @@ kint32 ct_im_rbk_run2_rbk_2_12(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_2_13: "
-kint32 ct_im_rbk_run2_rbk_2_13(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_2_13(CtImRbkRun2* self)
 {
-	kint32 ercd = D_DDIM_OK;
+	gint32 ercd = DriverCommon_D_DDIM_OK;
 	DDIM_USER_FLGPTN flgptn;
 	DDIM_USER_FLGPTN waiptn;
 
@@ -298,7 +334,7 @@ kint32 ct_im_rbk_run2_rbk_2_13(CtImRbkRun2* self)
 
 	waiptn = 0x11110000;
 	ercd = Im_LTM_RBK_WaitEnd( &flgptn, waiptn, 100 );
-	if( ercd != D_DDIM_OK ){
+	if( ercd != DriverCommon_D_DDIM_OK ){
 		Ddim_Print(( D_IM_LTM_FUNC_NAME "RBK wait end error = 0x%x\n", ercd ));
 	}
 
@@ -307,7 +343,7 @@ kint32 ct_im_rbk_run2_rbk_2_13(CtImRbkRun2* self)
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_11: "
-kint32 ct_im_rbk_run2_rbk_3_11(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_11(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -316,7 +352,7 @@ kint32 ct_im_rbk_run2_rbk_3_11(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -379,12 +415,12 @@ kint32 ct_im_rbk_run2_rbk_3_11(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_12: "
-kint32 ct_im_rbk_run2_rbk_3_12(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_12(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -393,7 +429,7 @@ kint32 ct_im_rbk_run2_rbk_3_12(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -452,12 +488,12 @@ kint32 ct_im_rbk_run2_rbk_3_12(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_13: "
-kint32 ct_im_rbk_run2_rbk_3_13(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_13(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -466,7 +502,7 @@ kint32 ct_im_rbk_run2_rbk_3_13(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -531,12 +567,12 @@ kint32 ct_im_rbk_run2_rbk_3_13(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_14: "
-kint32 ct_im_rbk_run2_rbk_3_14(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_14(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -545,7 +581,7 @@ kint32 ct_im_rbk_run2_rbk_3_14(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -610,12 +646,12 @@ kint32 ct_im_rbk_run2_rbk_3_14(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_15: "
-kint32 ct_im_rbk_run2_rbk_3_15(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_15(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -624,7 +660,7 @@ kint32 ct_im_rbk_run2_rbk_3_15(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -700,12 +736,12 @@ kint32 ct_im_rbk_run2_rbk_3_15(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 #undef D_IM_LTM_FUNC_NAME
 #define D_IM_LTM_FUNC_NAME "ct_im_rbk_run2_rbk_3_16: "
-kint32 ct_im_rbk_run2_rbk_3_16(CtImRbkRun2* self)
+gint32 ct_im_rbk_run2_rbk_3_16(CtImRbkRun2* self)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
 
@@ -714,7 +750,7 @@ kint32 ct_im_rbk_run2_rbk_3_16(CtImRbkRun2* self)
 	T_IM_LTM_RBK_CTRL_SRO_DIRECT rbk_ctrl_sro_direct = gctImLtmRbkCtrlSroDirectBase;
 	DDIM_USER_FLGPTN flgptn = 0;
 #ifdef CO_MSG_PRINT_ON
-	kint32 ercd;
+	gint32 ercd;
 #endif
 
 	Ddim_Print(( "%s\n", D_IM_LTM_FUNC_NAME ));
@@ -777,7 +813,7 @@ kint32 ct_im_rbk_run2_rbk_3_16(CtImRbkRun2* self)
 
 	ct_im_ltm_rbk_print_all_reg();
 
-	return D_DDIM_OK;
+	return DriverCommon_D_DDIM_OK;
 }
 
 T_IM_LTM_RBK_CTRL_SRO_DIRECT *ct_im_rbk_run2_get_gct_im_ltm_rbk_ctrl_sro_direct_base(CtImRbkRun2* self)
@@ -789,12 +825,12 @@ T_IM_LTM_RBK_CTRL_SRO_DIRECT *ct_im_rbk_run2_get_gct_im_ltm_rbk_ctrl_sro_direct_
 void ct_im_rbk_run2_set_var1(CtImRbkRun2* self, CtImRbkRun1* var1)
 {
 	CtImRbkRun2Private *priv = CT_IM_RBK_RUN2_GET_PRIVATE(self);
-	priv->ctImRbkRun1=var1;
+	priv->ctImRbkRun1 = g_object_ref(var1);
+
 }
 
-CtImRbkRun2* ct_im_rbk_run2_new(void) 
+CtImRbkRun2 *ct_im_rbk_run2_new(void) 
 {
-    CtImRbkRun2 *self = k_object_new_with_private(CT_TYPE_IM_RBK_RUN2, sizeof(CtImRbkRun2Private));
+    CtImRbkRun2 *self = g_object_new(CT_TYPE_IM_RBK_RUN2, NULL);
     return self;
 }
-

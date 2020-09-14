@@ -17,7 +17,7 @@
 
 
 #include <klib.h>
-#include "internals.h"
+#include "checkheadermaindefs.h"
 
 
 #define PRO_TYPE_TEST3                  (pro_test3_get_type())

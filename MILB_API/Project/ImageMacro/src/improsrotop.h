@@ -20,12 +20,12 @@
 
 #include <klib.h>
 #include "jdspro.h"
-#include "im_pro_common.h"
-#include "dd_top.h"
+#include "improcommon.h"
+#include "ddtop.h"
 
-#define IMPRO_TYPE_SROTOP        (impro_srotop_get_type())
-#define IMPRO_SROTOP(obj)       (K_TYPE_CHECK_INSTANCE_CAST (obj, ImproSrotop))
-#define IMPRO_IS_SROTOP(obj)    (K_TYPE_CHECK_INSTANCE_TYPE (obj, IMPRO_TYPE_SROTOP))
+#define IMPRO_TYPE_SROTOP       	 (impro_srotop_get_type())
+#define IMPRO_SROTOP(obj)      	 (K_TYPE_CHECK_INSTANCE_CAST (obj, ImproSrotop))
+#define IMPRO_IS_SROTOP(obj)    	 (K_TYPE_CHECK_INSTANCE_TYPE (obj, IMPRO_TYPE_SROTOP))
 
 
 /*宏定义区域*/
@@ -34,7 +34,7 @@
 /*----------------------------------------------------------------------*/
 // PRO Channel/Macro start/stop status
 /**< Minimum setting of GENV	*/
-#define	ImproSrotop_D_IM_PRO_SROTOP_GENV_MIN			(2)
+#define	ImproSrotop_D_IM_PRO_SROTOP_GENV_MIN				(2)
 	/**< Maximum setting of GENV	*/
 #define	ImproSrotop_D_IM_PRO_SROTOP_GENV_MAX			(16382)
 /**< Minimum setting of GENH	*/
@@ -53,8 +53,7 @@
 /*其他结构体或类型定义区域*/
 static	volatile	ULONG	S_G_IM_SRO_START_Status[3] = {0x00000000};
 
-/** input mode of SRO unit.
-*/
+/** input mode of SRO unit.*/
 typedef enum {
 	/**< SEN direct connection mode	*/
 	ImproSrotop_E_IM_PRO_SROTOP_INPUT_MODE_DIRECT = 0,
@@ -62,8 +61,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_SROTOP_INPUT_MODE_REINPUT,
 } EimproSrotopInputMode;
 
-/** mode of SRO unit.
-*/
+/** mode of SRO unit.*/
 typedef enum {
 	/**< FF0/1: valid   FSHDL0: valid   FSHDL1: invalid	*/
 	ImproSrotop_E_IM_PRO_SROTOP_MODE0 = 0,
@@ -73,8 +71,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_SROTOP_MODE2,
 } EimproSrotopMode;
 
-/** select in which unit FFC/CAG macro are used, SRO or B2B.
-*/
+/** select in which unit FFC/CAG macro are used, SRO or B2B.*/
 typedef enum {
 	/**< FFC/CAG macro are used in SRO unit	*/
 	ImproSrotop_E_IM_PRO_SROTOP_CAG_TARGET_BLOCK_SRO = 0,
@@ -82,8 +79,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_SROTOP_CAG_TARGET_BLOCK_B2B,
 } EimproSrotopCagTargetBlock;
 
-/** select a path for P2M0/1 and PWCH0/1 of SRO unit.
-*/
+/** select a path for P2M0/1 and PWCH0/1 of SRO unit.*/
 typedef enum {
 	/**< Path without BayerResize	*/
 	ImproSrotop_E_IM_PRO_SROTOP_PATH_SEL_BAY_OUT_WITHOUT_BR = 0,
@@ -95,8 +91,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_SROTOP_PATH_SEL_BAY_OUT_CAG_OUT,
 } EimproSrotopPathSelBayOut;
 
-/** select a path for B2B direct connection I/F.
-*/
+/** select a path for B2B direct connection I/F.*/
 typedef enum {
 	/**< Path without BayerResize	*/
 	ImproSrotop_E_IM_PRO_SROTOP_PATH_SEL_B2B_CONN_WITHOUT_BR = 0,
@@ -113,10 +108,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_SROTOP_PATH_SEL_LTM_CONN_WITH_BR,
 } EimproSrotopPathSelLtmConn;
 
-
-
-/** WEITGEN Enable/Disable
-*/
+/** WEITGEN Enable/Disable*/
 typedef enum {
 	/**< Disable	*/
 	ImproSrotop_E_IM_PRO_WEITGEN_DIS = 0,
@@ -140,8 +132,7 @@ typedef enum {
 	ImproSrotop_E_IM_PRO_WEITGEN_CH1,
 } EimproWeitgenCh;
 
-/** SROTOP Macro Control Information
-*/
+/** SROTOP Macro Control Information*/
 typedef struct {
 	/**< Select the input mode of SRO unit. SROTOPCTL1@@SROISW */
 	EimproSrotopInputMode			inputMode;
@@ -156,11 +147,10 @@ typedef struct {
 	/**< Select a path for LTM direct connection I/F. SROTOPCTL1@@BRPSW2 */
 	EimproSrotopPathSelLtmConn	ltmConnectPathSel;
 	/**< Select an Bayer first pixel for each PAT block input SROTOPCTL2@@ORG0-@@ORG1 */
-	E_IM_PRO_ORG						firstPixel[2];
+	EimproOrg						firstPixel[2];
 } TimproSrotopCtrl;
 
-/** WEITGEN Macro Control Information
-*/
+/** WEITGEN Macro Control Information*/
 typedef struct {
 	/**< vertical position of WAIT signal occurs during vertical blanking. @@GENVx  value range  :[2 - 16382] */
 	USHORT								vWaitSignalPos;
@@ -196,7 +186,7 @@ extern	VOID			impro_srotop_init( E_IM_PRO_UNIT_NUM unitNo );
 /**
 SROTOP Macro software reset
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: All macro not stopped NG
 */
 extern	INT32			impro_srotop_sw_reset( E_IM_PRO_UNIT_NUM unitNo );
 /**
@@ -206,7 +196,7 @@ SROTOP Macro clock control
 @param[in]	onOff		: 0:clock on 1:clock off
 @param[in]	waitSkip	: 0:non wait 1:wait 1ms. for wait PROCLK/CDK 5 cycle.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srotop_control_clock( E_IM_PRO_UNIT_NUM unitNo, EimproSrotopClkType clkType,
 									UCHAR onOff, UCHAR waitSkip );
@@ -215,7 +205,7 @@ SROTOP macro control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	ctrl : SROTOP macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srotop_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproSrotopCtrl* ctrl );
 /**
@@ -224,7 +214,7 @@ WEITGEN macro control data setting
 @param[in]	ch : Channel No.
 @param[in]	weitgenCtrl : WEITGEN macro control information structure
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srotop_weitgen_ctrl( E_IM_PRO_UNIT_NUM unitNo, EimproWeitgenCh ch,
 									TimproSrotopWeitgenCtrl* weitgenCtrl );
@@ -234,7 +224,7 @@ setup of enable to WEITGEN macro.
 @param[in]	ch : Channel No.
 @param[in]	enabled : setup of enable to WEITGEN macro.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srotop_weitgen_enable( E_IM_PRO_UNIT_NUM unitNo, EimproWeitgenCh ch,
 									EimproWeitgenEnable enabled );

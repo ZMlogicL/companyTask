@@ -76,3 +76,10 @@ jdsdisplchtbl.h、jdsdisplch.h、jdsprop2m.h、jdspropwch.h中，并将fhdmitx2p
 规范类fmipidsi11txlp，修改联合名，结构体名，成员变量名和数据类型名，调整注释位置。
 规范类jdsdisplchtbl，修改联合名，结构体名，成员变量名和数据类型名，调整注释位置。
 规范类jdsdispdcoretbl，修改联合名，结构体名，成员变量名和数据类型名，调整注释位置。
+
+
+0914
+将以上所有类改成引用glib库，将jctpmcadc、jctpmccalendar、jctpmccrg11、jctpmcexiu、jctpmcgpio、jctpmchdmac、jctpmci2c、
+jctpmcpmu、jctpmcsensorif、jctpmcspi、jctpmcuart、jctpmcwatchdog、fmipidsi11txlp.h、jdsdispdbg.h、jdsdispdcoretbl.h、
+jdsdispdcore.h、jdsdispdsi.h、jdsdispgrch.h、jdsdisphdmi.h、jdsdisplchtbl.h、jdsdisplch.h、jdsprop2m.h、jdspropwch.h、fhdmitx2p0lp1、
+fhdmitx2p0lp2、fhdmitx2p0lp3的空.c文件删除（自己创类时创建的空.c文件）。

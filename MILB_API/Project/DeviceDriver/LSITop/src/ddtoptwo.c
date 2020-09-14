@@ -692,7 +692,7 @@ INT32 dd_toptwo_get_gpio_cm0_status(DdToptwo *self, DdTop_GPIO_CM0_PORT port, UC
 Get Frequency of DSP clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_dspclk(VOID)
+ULONG dd_toptwo_get_dspclk(DdToptwo *self)
 {
 	// 0:400MHz(=1600MHz/4)
 	// 1:266.666MHz(=1600MHz/6)
@@ -707,7 +707,7 @@ ULONG dd_toptwo_get_dspclk(VOID)
 Get Frequency of AXI bus clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_aclk(VOID)
+ULONG dd_toptwo_get_aclk(DdToptwo *self)
 {
 	// 3:200MHz(=1600MHz/8)
 	// 7:100MHz(=1600MHz/16)
@@ -731,7 +731,7 @@ ULONG dd_toptwo_get_aclk(VOID)
 Get Frequency of AXI bus EXS clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_aclkexs(VOID)
+ULONG dd_toptwo_get_aclkexs(DdToptwo *self)
 {
 	// 3:200MHz(=1600MHz/8)
 	// 4:160MHz(=1600MHz/10)
@@ -757,7 +757,7 @@ ULONG dd_toptwo_get_aclkexs(VOID)
 Get Frequency of AHB bus BMH clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_hclkbmh(VOID)
+ULONG dd_toptwo_get_hclkbmh(DdToptwo *self)
 {
 	// 3:200MHz(=1600MHz/8)
 	// 7:100MHz(=1600MHz/16)
@@ -781,7 +781,7 @@ ULONG dd_toptwo_get_hclkbmh(VOID)
 Get Frequency of AHB bus clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_hclk(VOID)
+ULONG dd_toptwo_get_hclk(DdToptwo *self)
 {
 	// 7:100MHz(=1600MHz/16)
 	// 15:50MHz(=1600MHz/32)
@@ -805,7 +805,7 @@ ULONG dd_toptwo_get_hclk(VOID)
 Get Frequency of APB bus clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_pclk(VOID)
+ULONG dd_toptwo_get_pclk(DdToptwo *self)
 {
 	// 15:50MHz(=1600MHz/32)
 	// 31:25MHz(=1600MHz/64)
@@ -829,7 +829,7 @@ ULONG dd_toptwo_get_pclk(VOID)
 Get Frequency of MXI bus 400 clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_mclk400(VOID)
+ULONG dd_toptwo_get_mclk400(DdToptwo *self)
 {
 	// 1:400MHz(=1600MHz/4)
 	// 3:200MHz(=1600MHz/8)
@@ -853,7 +853,7 @@ ULONG dd_toptwo_get_mclk400(VOID)
 Get Frequency of MXI bus 200 clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_mclk200(VOID)
+ULONG dd_toptwo_get_mclk200(DdToptwo *self)
 {
 	// 3:200MHz(=1600MHz/8)
 	// 7:100MHz(=1600MHz/16)
@@ -877,7 +877,7 @@ ULONG dd_toptwo_get_mclk200(VOID)
 Get Frequency of AXI bus 400 clock
 @retval	Hz
 */
-ULONG dd_toptwo_get_aclk400(VOID)
+ULONG dd_toptwo_get_aclk400(DdToptwo *self)
 {
 	// 1:400MHz(=1600MHz/4)
 	// 3:200MHz(=1600MHz/8)
@@ -905,7 +905,7 @@ Get Frequency of 3DNR clock
 #ifdef CO_ES1_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES1_HARDWARE BEGIN ---
-ULONG dd_toptwo_get_shdrclk(VOID)
+ULONG dd_toptwo_get_shdrclk(DdToptwo *self)
 {
 	// 0: 400MHz(=1600MHz/4)
 	// 1: 266.666MHz(=1600MHz/6)
@@ -925,7 +925,7 @@ ULONG dd_toptwo_get_shdrclk(VOID)
 #ifdef CO_ES3_HARDWARE
 // --- REMOVE_ES_COMPILE_OPT END ---
 // --- REMOVE_ES3_HARDWARE BEGIN ---
-ULONG dd_toptwo_get_shdrclk(VOID)
+ULONG dd_toptwo_get_shdrclk(DdToptwo *self)
 {
 	// 0: 432MHz(=864MHz/2)
 	// 8: 400MHz(=1600MHz/4)
@@ -938,14 +938,14 @@ ULONG dd_toptwo_get_shdrclk(VOID)
 	// 15: 66.666MHz(=1600MHz/24)
 	static const UCHAR S_ID[] = {0, 8, 9, 10, 11, 12, 13, 14, 15, 255};
 	static const UCHAR S_DIVID[] = {2, 4, 6, 8, 10, 12, 16, 20, 24};
-	static const ULONG pllid[] = {DdTopone_864_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT};
+	static const ULONG S_PLLID[] = {DdTopone_864_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT, DdTopone_1600_PLL_OUT};
 
 	int i;
 	ULONG clock = 0;
 
 	for (i = 0; S_ID[i] != 255; i ++) {
 		if (DdTopone_Get_CLKSEL12_SHDRCLK() == S_ID[i]) {
-			clock = (pllid[i] / S_DIVID[i]);
+			clock = (S_PLLID[i] / S_DIVID[i]);
 			break;
 		}
 	}

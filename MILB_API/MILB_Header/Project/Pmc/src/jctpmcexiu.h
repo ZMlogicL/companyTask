@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_EXIU_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_EXIU			(jctpmc_exiu_get_type())
-#define JCTPMC_EXIU(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcExiu))
-#define JCTPMC_IS_EXIU(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_EXIU))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcExiuEimask IoPmcExiuEimask;
@@ -35,206 +31,204 @@ typedef union 				_IoPmcExiuEilvl IoPmcExiuEilvl;
 typedef union 				_IoPmcExiuEiedg IoPmcExiuEiedg;
 typedef union 				_IoPmcExiuEisir IoPmcExiuEisir;
 typedef struct 				_IoPmcExiu IoPmcExiu;
-typedef struct 				_JctpmcExiu JctpmcExiu;
-typedef struct 				_JctpmcExiuPrivate JctpmcExiuPrivate;
 
 /* structure of EIMASK			(1DFF_3000h) */
 union _IoPmcExiuEimask {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eimask0 		:1;
-		kulong	eimask1 		:1;
-		kulong	eimask2 		:1;
-		kulong	eimask3 		:1;
-		kulong	eimask4 		:1;
-		kulong	eimask5 		:1;
-		kulong	eimask6 		:1;
-		kulong	eimask7 		:1;
-		kulong	eimask8 		:1;
-		kulong	eimask9 		:1;
-		kulong	eimask10		:1;
-		kulong	eimask11		:1;
-		kulong	eimask12		:1;
-		kulong	eimask13		:1;
-		kulong	eimask14		:1;
-		kulong	eimask15		:1;
-		kulong	eimask16		:1;
-		kulong					:15;
+		gulong	eimask0 		:1;
+		gulong	eimask1 		:1;
+		gulong	eimask2 		:1;
+		gulong	eimask3 		:1;
+		gulong	eimask4 		:1;
+		gulong	eimask5 		:1;
+		gulong	eimask6 		:1;
+		gulong	eimask7 		:1;
+		gulong	eimask8 		:1;
+		gulong	eimask9 		:1;
+		gulong	eimask10		:1;
+		gulong	eimask11		:1;
+		gulong	eimask12		:1;
+		gulong	eimask13		:1;
+		gulong	eimask14		:1;
+		gulong	eimask15		:1;
+		gulong	eimask16		:1;
+		gulong					:15;
 	}bit;
 };
 
 /* structure of EISRCSEL		(1DFF_3004h) */
 union _IoPmcExiuEisrcsel {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eisrcsel0		:1;
-		kulong	eisrcsel1		:1;
-		kulong	eisrcsel2		:1;
-		kulong	eisrcsel3		:1;
-		kulong	eisrcsel4		:1;
-		kulong	eisrcsel5		:1;
-		kulong	eisrcsel6		:1;
-		kulong	eisrcsel7		:1;
-		kulong	eisrcsel8		:1;
-		kulong	eisrcsel9		:1;
-		kulong	eisrcsel10		:1;
-		kulong	eisrcsel11		:1;
-		kulong	eisrcsel12		:1;
-		kulong	eisrcsel13		:1;
-		kulong	eisrcsel14		:1;
-		kulong	eisrcsel15		:1;
-		kulong	eisrcsel16		:1;
-		kulong					:15;
+		gulong	eisrcsel0		:1;
+		gulong	eisrcsel1		:1;
+		gulong	eisrcsel2		:1;
+		gulong	eisrcsel3		:1;
+		gulong	eisrcsel4		:1;
+		gulong	eisrcsel5		:1;
+		gulong	eisrcsel6		:1;
+		gulong	eisrcsel7		:1;
+		gulong	eisrcsel8		:1;
+		gulong	eisrcsel9		:1;
+		gulong	eisrcsel10		:1;
+		gulong	eisrcsel11		:1;
+		gulong	eisrcsel12		:1;
+		gulong	eisrcsel13		:1;
+		gulong	eisrcsel14		:1;
+		gulong	eisrcsel15		:1;
+		gulong	eisrcsel16		:1;
+		gulong					:15;
 	}bit;
 };
 
 /* structure of EIREQSTA		(1DFF_3008h) */
 union _IoPmcExiuEireqsta {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eireqsta0		:1;
-		kulong	eireqsta1		:1;
-		kulong	eireqsta2		:1;
-		kulong	eireqsta3		:1;
-		kulong	eireqsta4		:1;
-		kulong	eireqsta5		:1;
-		kulong	eireqsta6		:1;
-		kulong	eireqsta7		:1;
-		kulong	eireqsta8		:1;
-		kulong	eireqsta9		:1;
-		kulong	eireqsta10		:1;
-		kulong	eireqsta11		:1;
-		kulong	eireqsta12		:1;
-		kulong	eireqsta13		:1;
-		kulong	eireqsta14		:1;
-		kulong	eireqsta15		:1;
-		kulong	eireqsta16		:1;
-		kulong					:15;
+		gulong	eireqsta0		:1;
+		gulong	eireqsta1		:1;
+		gulong	eireqsta2		:1;
+		gulong	eireqsta3		:1;
+		gulong	eireqsta4		:1;
+		gulong	eireqsta5		:1;
+		gulong	eireqsta6		:1;
+		gulong	eireqsta7		:1;
+		gulong	eireqsta8		:1;
+		gulong	eireqsta9		:1;
+		gulong	eireqsta10		:1;
+		gulong	eireqsta11		:1;
+		gulong	eireqsta12		:1;
+		gulong	eireqsta13		:1;
+		gulong	eireqsta14		:1;
+		gulong	eireqsta15		:1;
+		gulong	eireqsta16		:1;
+		gulong					:15;
 	}bit;
 };
 
 /* structure of EIRAWREQSTA		(1DFF_300Ch) */
 union _IoPmcExiuEirawreqsta {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eirawreqsta0	:1;
-		kulong	eirawreqsta1	:1;
-		kulong	eirawreqsta2	:1;
-		kulong	eirawreqsta3	:1;
-		kulong	eirawreqsta4	:1;
-		kulong	eirawreqsta5	:1;
-		kulong	eirawreqsta6	:1;
-		kulong	eirawreqsta7	:1;
-		kulong	eirawreqsta8	:1;
-		kulong	eirawreqsta9	:1;
-		kulong	eirawreqsta10	:1;
-		kulong	eirawreqsta11	:1;
-		kulong	eirawreqsta12	:1;
-		kulong	eirawreqsta13	:1;
-		kulong	eirawreqsta14	:1;
-		kulong	eirawreqsta15	:1;
-		kulong	eirawreqsta16	:1;
-		kulong					:15;
+		gulong	eirawreqsta0	:1;
+		gulong	eirawreqsta1	:1;
+		gulong	eirawreqsta2	:1;
+		gulong	eirawreqsta3	:1;
+		gulong	eirawreqsta4	:1;
+		gulong	eirawreqsta5	:1;
+		gulong	eirawreqsta6	:1;
+		gulong	eirawreqsta7	:1;
+		gulong	eirawreqsta8	:1;
+		gulong	eirawreqsta9	:1;
+		gulong	eirawreqsta10	:1;
+		gulong	eirawreqsta11	:1;
+		gulong	eirawreqsta12	:1;
+		gulong	eirawreqsta13	:1;
+		gulong	eirawreqsta14	:1;
+		gulong	eirawreqsta15	:1;
+		gulong	eirawreqsta16	:1;
+		gulong					:15;
 	}bit;
 };
 
 /* structure of EIREQCLR		(1DFF_3010h) */
 union _IoPmcExiuEireqclr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eireqclr0		:1;
-		kulong	eireqclr1		:1;
-		kulong	eireqclr2		:1;
-		kulong	eireqclr3		:1;
-		kulong	eireqclr4		:1;
-		kulong	eireqclr5		:1;
-		kulong	eireqclr6		:1;
-		kulong	eireqclr7		:1;
-		kulong	eireqclr8		:1;
-		kulong	eireqclr9		:1;
-		kulong	eireqclr10		:1;
-		kulong	eireqclr11		:1;
-		kulong	eireqclr12		:1;
-		kulong	eireqclr13		:1;
-		kulong	eireqclr14		:1;
-		kulong	eireqclr15		:1;
-		kulong	eireqclr16		:1;
-		kulong					:15;
+		gulong	eireqclr0		:1;
+		gulong	eireqclr1		:1;
+		gulong	eireqclr2		:1;
+		gulong	eireqclr3		:1;
+		gulong	eireqclr4		:1;
+		gulong	eireqclr5		:1;
+		gulong	eireqclr6		:1;
+		gulong	eireqclr7		:1;
+		gulong	eireqclr8		:1;
+		gulong	eireqclr9		:1;
+		gulong	eireqclr10		:1;
+		gulong	eireqclr11		:1;
+		gulong	eireqclr12		:1;
+		gulong	eireqclr13		:1;
+		gulong	eireqclr14		:1;
+		gulong	eireqclr15		:1;
+		gulong	eireqclr16		:1;
+		gulong					:15;
 	}bit;
 };
 
 /* structure of EILVL			(1DFF_3014h) */
 union _IoPmcExiuEilvl {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eilvl0			:1;
-		kulong	eilvl1			:1;
-		kulong	eilvl2			:1;
-		kulong	eilvl3			:1;
-		kulong	eilvl4			:1;
-		kulong	eilvl5			:1;
-		kulong	eilvl6			:1;
-		kulong	eilvl7			:1;
-		kulong	eilvl8			:1;
-		kulong	eilvl9			:1;
-		kulong	eilvl10 		:1;
-		kulong	eilvl11 		:1;
-		kulong	eilvl12 		:1;
-		kulong	eilvl13 		:1;
-		kulong	eilvl14 		:1;
-		kulong	eilvl15 		:1;
-		kulong	eilvl16 		:1;
-		kulong			 		:15;
+		gulong	eilvl0			:1;
+		gulong	eilvl1			:1;
+		gulong	eilvl2			:1;
+		gulong	eilvl3			:1;
+		gulong	eilvl4			:1;
+		gulong	eilvl5			:1;
+		gulong	eilvl6			:1;
+		gulong	eilvl7			:1;
+		gulong	eilvl8			:1;
+		gulong	eilvl9			:1;
+		gulong	eilvl10 		:1;
+		gulong	eilvl11 		:1;
+		gulong	eilvl12 		:1;
+		gulong	eilvl13 		:1;
+		gulong	eilvl14 		:1;
+		gulong	eilvl15 		:1;
+		gulong	eilvl16 		:1;
+		gulong			 		:15;
 	}bit;
 };
 
 /* structure of EIEDG			(1DFF_3018h) */
 union _IoPmcExiuEiedg {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eiedg0			:1;
-		kulong	eiedg1			:1;
-		kulong	eiedg2			:1;
-		kulong	eiedg3			:1;
-		kulong	eiedg4			:1;
-		kulong	eiedg5			:1;
-		kulong	eiedg6			:1;
-		kulong	eiedg7			:1;
-		kulong	eiedg8			:1;
-		kulong	eiedg9			:1;
-		kulong	eiedg10 		:1;
-		kulong	eiedg11 		:1;
-		kulong	eiedg12 		:1;
-		kulong	eiedg13 		:1;
-		kulong	eiedg14 		:1;
-		kulong	eiedg15 		:1;
-		kulong	eiedg16 		:1;
-		kulong			 		:15;
+		gulong	eiedg0			:1;
+		gulong	eiedg1			:1;
+		gulong	eiedg2			:1;
+		gulong	eiedg3			:1;
+		gulong	eiedg4			:1;
+		gulong	eiedg5			:1;
+		gulong	eiedg6			:1;
+		gulong	eiedg7			:1;
+		gulong	eiedg8			:1;
+		gulong	eiedg9			:1;
+		gulong	eiedg10 		:1;
+		gulong	eiedg11 		:1;
+		gulong	eiedg12 		:1;
+		gulong	eiedg13 		:1;
+		gulong	eiedg14 		:1;
+		gulong	eiedg15 		:1;
+		gulong	eiedg16 		:1;
+		gulong			 		:15;
 	}bit;
 };
 
 /* structure of EISIR			(1DFF_301Ch) */
 union _IoPmcExiuEisir {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	eisir0			:1;
-		kulong	eisir1			:1;
-		kulong	eisir2			:1;
-		kulong	eisir3			:1;
-		kulong	eisir4			:1;
-		kulong	eisir5			:1;
-		kulong	eisir6			:1;
-		kulong	eisir7			:1;
-		kulong	eisir8			:1;
-		kulong	eisir9			:1;
-		kulong	eisir10 		:1;
-		kulong	eisir11 		:1;
-		kulong	eisir12 		:1;
-		kulong	eisir13 		:1;
-		kulong	eisir14 		:1;
-		kulong	eisir15 		:1;
-		kulong	eisir16 		:1;
-		kulong			 		:15;
+		gulong	eisir0			:1;
+		gulong	eisir1			:1;
+		gulong	eisir2			:1;
+		gulong	eisir3			:1;
+		gulong	eisir4			:1;
+		gulong	eisir5			:1;
+		gulong	eisir6			:1;
+		gulong	eisir7			:1;
+		gulong	eisir8			:1;
+		gulong	eisir9			:1;
+		gulong	eisir10 		:1;
+		gulong	eisir11 		:1;
+		gulong	eisir12 		:1;
+		gulong	eisir13 		:1;
+		gulong	eisir14 		:1;
+		gulong	eisir15 		:1;
+		gulong	eisir16 		:1;
+		gulong			 		:15;
 	}bit;
 };
 
@@ -257,16 +251,8 @@ struct _IoPmcExiu {
 	/* 1DFF_(301C - 301Fh) Software Interrupt Register */
 	IoPmcExiuEisir 			eisir;
 	/* 1DFF_3020 - 1DFF_3FFFh)	*/
-	kuchar						dmyPmcExiu30203fff[0x4000 - 0x3020];
+	guchar						dmyPmcExiu30203fff[0x4000 - 0x3020];
 };
-
-struct _JctpmcExiu {
-	KObject parent;
-};
-
-
-KConstType 				jctpmc_exiu_get_type(void);
-JctpmcExiu*		        jctpmc_exiu_new(void);
 
 
 #endif /* __JCTPMC_EXIU_H__ */

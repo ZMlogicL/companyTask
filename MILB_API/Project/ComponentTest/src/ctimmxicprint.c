@@ -1,6 +1,6 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-03
+*@date                :2020-09-11
 *@author              :jianghaodong
 *@brief               :CtImMxicPrint类
 *@rely                :klib
@@ -23,29 +23,56 @@
 #include "ctimmxiccreate.h"
 #include "ctimmxicprint.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtImMxicPrint, ct_im_mxic_print);
-#define CT_IM_MXIC_PRINT_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtImMxicPrintPrivate,CT_TYPE_IM_MXIC_PRINT))
+
+G_DEFINE_TYPE(CtImMxicPrint, ct_im_mxic_print, G_TYPE_OBJECT);
+#define CT_IM_MXIC_PRINT_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_IM_MXIC_PRINT, CtImMxicPrintPrivate))
 
 struct _CtImMxicPrintPrivate
 {
+
 };
 
+
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_im_mxic_print_constructor(CtImMxicPrint *self) 
+
+static void ct_im_mxic_print_class_init(CtImMxicPrintClass *klass) 
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtImMxicPrintPrivate));
 }
 
-static void ct_im_mxic_print_destructor(CtImMxicPrint *self) 
+static void ct_im_mxic_print_init(CtImMxicPrint *self)
 {
+	CtImMxicPrintPrivate *priv = CT_IM_MXIC_PRINT_GET_PRIVATE(self);
 }
+
+static void dispose_od(GObject *object)
+{
+//	CtImMxicPrint *self = (CtImMxicPrint*)object;
+//	CtImMxicPrintPrivate *priv = CT_IM_MXIC_PRINT_GET_PRIVATE(self);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtImMxicPrint *self = (CtImMxicPrint*)object;
+//	CtImMxicPrintPrivate *priv = CT_IM_MXIC_PRINT_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
 */
 // atoi (Hex)
-int ct_im_mxic_print_atoi_hex( kchar* ch)
+int ct_im_mxic_print_atoi_hex( gchar* ch)
 {
 	int ret = 0;
 	int temp[20];
@@ -119,7 +146,7 @@ int ct_im_mxic_print_atoi_hex( kchar* ch)
 // Print T_IM_MXIC_W_ARBITER_ASSIGN data.
 void ct_im_mxic_print_w_arbiter_assign( T_IM_MXIC_W_ARBITER_ASSIGN_PORT const* const wAssign)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_W_ARBITER_ASSIGN ----\n"));
 	for (i = E_IM_MXIC_PORT_0; i < E_IM_MXIC_PORT_MAX; i++) {
@@ -142,7 +169,7 @@ void ct_im_mxic_print_w_arbiter_assign( T_IM_MXIC_W_ARBITER_ASSIGN_PORT const* c
 // Print T_IM_MXIC_W_ARBITER_ASSIGN data.
 void ct_im_mxic_print_w_arbiter_assign_group( T_IM_MXIC_W_ARBITER_ASSIGN_GR const* const wAssign)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_W_ARBITER_ASSIGN ----\n"));
 	for (i = 0; i < D_IM_MXIC_SLOT_SIZE_8; i++) {
@@ -154,7 +181,7 @@ void ct_im_mxic_print_w_arbiter_assign_group( T_IM_MXIC_W_ARBITER_ASSIGN_GR cons
 // Print T_IM_MXIC_R_ARBITER_ASSIGN data.
 void ct_im_mxic_print_r_arbiter_assign( T_IM_MXIC_R_ARBITER_ASSIGN_PORT const* const rAssign)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_R_ARBITER_ASSIGN ----\n"));
 	for (i = E_IM_MXIC_PORT_0; i < E_IM_MXIC_PORT_MAX; i++) {
@@ -177,7 +204,7 @@ void ct_im_mxic_print_r_arbiter_assign( T_IM_MXIC_R_ARBITER_ASSIGN_PORT const* c
 // Print T_IM_MXIC_W_ARBITER_ASSIGN data.
 void ct_im_mxic_print_r_arbiter_assign_group( T_IM_MXIC_R_ARBITER_ASSIGN_GR const* const wAssign)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_W_ARBITER_ASSIGN ----\n"));
 	for (i = 0; i < D_IM_MXIC_SLOT_SIZE_8; i++) {
@@ -189,7 +216,7 @@ void ct_im_mxic_print_r_arbiter_assign_group( T_IM_MXIC_R_ARBITER_ASSIGN_GR cons
 // Print T_IM_MXIC_ALL_ARBITER_ASSIGN data.
 void ct_im_mxic_print_all_arbiter_assign( T_IM_MXIC_ALL_ARBITER_ASSIGN const* const allAssign)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_ARBITER_ASSIGN ----\n"));
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -206,7 +233,7 @@ void ct_im_mxic_print_all_arbiter_assign( T_IM_MXIC_ALL_ARBITER_ASSIGN const* co
 // Print T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL data.
 void ct_im_mxic_print_all_slot_priority_level( T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL const* const allArbiterAssign)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL ----\n"));
 	// Write Slave
@@ -266,7 +293,7 @@ void ct_im_mxic_print_all_slot_priority_level( T_IM_MXIC_ALL_SLOT_PRIORITY_LEVEL
 // Print T_IM_MXIC_ALL_SLOT_STATUS_MONITOR data.
 void ct_im_mxic_print_all_slot_status_monitor( T_IM_MXIC_ALL_SLOT_STATUS_MONITOR const* const allSlotStatus)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_SLOT_STATUS_MONITOR ----\n"));
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -291,7 +318,7 @@ void ct_im_mxic_print_all_slot_status_monitor( T_IM_MXIC_ALL_SLOT_STATUS_MONITOR
 // Print T_IM_MXIC_MASTER_STATUS_MONITOR data.
 void ct_im_mxic_print_master_status_monitor( T_IM_MXIC_MASTER_STATUS_MONITOR const* const masterStatus)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_MASTER_STATUS_MONITOR ----\n"));
 	for (i = 1; i < D_IM_MXIC_MAX_W_MASTER_NUM; i++) {
@@ -334,7 +361,7 @@ void ct_im_mxic_print_monitor_parameter( T_IM_MXIC_MONITOR_PARAMETER const* cons
 // Print T_IM_MXIC_ALL_ACCESS_OR_TRANS_MONITOR data.
 void ct_im_mxic_print_all_access_or_trans_monitor( T_IM_MXIC_ALL_ACCESS_OR_TRANS_MONITOR const* const allAccTrans)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_ACCESS_OR_TRANS_MONITOR ----\n"));
 	for (i = 0; i < D_IM_MXIC_MAX_MONITOR_TARGET_NUM; i++) {
@@ -365,7 +392,7 @@ void ct_im_mxic_print_all_port_assign( T_IM_MXIC_OUTPUT_PORT const* const allPor
 // Print T_IM_MXIC_ALL_ACCEPTANCE_CAPABILITY data.
 void ct_im_mxic_print_all_acceptance_capability(T_IM_MXIC_ALL_ACCEPTANCE_CAPABILITY const* const allCapability)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_ACCEPTANCE_CAPABILITY ----\n"));
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -405,7 +432,7 @@ void ct_im_mxic_print_slave_area(T_IM_MXIC_SLAVE_AREA const* const slaveArea)
 // Print T_IM_MXIC_ALL_SLAVE_AREA data
 void ct_im_mxic_print_all_slave_area(T_IM_MXIC_ALL_SLAVE_AREA const* const allSlaveArea)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_SLAVE_AREA ----\n"));
 
@@ -440,7 +467,7 @@ void ct_im_mxic_print_dec_err(T_IM_MXIC_DEC_ERR const* const decErr)
 // Print T_IM_MXIC_HISTORY_MONITOR data
 void ct_im_mxic_print_history_monitor(T_IM_MXIC_HISTORY_MONITOR const* const history)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_HISTORY_MONITOR ----\n"));
 	for (i = 0; i < D_IM_MXIC_MAX_MONITOR_HISTORY_NUM; i++) {
@@ -452,7 +479,7 @@ void ct_im_mxic_print_history_monitor(T_IM_MXIC_HISTORY_MONITOR const* const his
 // Print T_IM_MXIC_ALL_HISTORY_MONITOR data
 void ct_im_mxic_print_all_history_monitor(T_IM_MXIC_ALL_HISTORY_MONITOR const* const allHistory)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_HISTORY_MONITOR ----\n"));
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -473,7 +500,7 @@ void ct_im_mxic_print_all_history_monitor(T_IM_MXIC_ALL_HISTORY_MONITOR const* c
 // Print T_IM_MXIC_MEMORY_ACCESS_SLAVE data
 void ct_im_mxic_print_memory_access_param(T_IM_MXIC_MEMORY_ACCESS_SLAVE const* const memaccParam)
 {
-	kint32 i;
+	gint32 i;
 
 	Ddim_Print(("---- T_IM_MXIC_MEMORY_ACCESS_SLAVE ----\n"));
 	for (i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++) {
@@ -494,7 +521,7 @@ void ct_im_mxic_print_memory_access_param(T_IM_MXIC_MEMORY_ACCESS_SLAVE const* c
 // Print T_IM_MXIC_ALL_LEVELPORT  data
 void ct_im_mxic_print_all_levelport(T_IM_MXIC_ALL_LEVELPORT* const allLevelport)
 {
-	kint32 i, j;
+	gint32 i, j;
 
 	Ddim_Print(("---- T_IM_MXIC_ALL_LEVELPORT ----\n"));
 	for ( i = E_IM_MXIC_W_ARBITER_W1; i < E_IM_MXIC_W_ARBITER_MAX; i++ ) {
@@ -522,8 +549,8 @@ void ct_im_mxic_print_all_levelport(T_IM_MXIC_ALL_LEVELPORT* const allLevelport)
 	return;
 }
 
-CtImMxicPrint* ct_im_mxic_print_new(void) 
+CtImMxicPrint *ct_im_mxic_print_new(void) 
 {
-    CtImMxicPrint *self = k_object_new_with_private(CT_TYPE_IM_MXIC_PRINT, sizeof(CtImMxicPrintPrivate));
+    CtImMxicPrint *self = g_object_new(CT_TYPE_IM_MXIC_PRINT, NULL);
     return self;
 }

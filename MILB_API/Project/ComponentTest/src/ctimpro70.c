@@ -45,39 +45,39 @@ static void ct_impro_7_0_destructor(CtImpro70 *self)
  *PUBLIC
  */
 #ifndef CO_CT_IM_PRO_DISABLE
-void ct_im_pro_7_1(const kuint32 idx)
+void ct_im_pro_7_0_1(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_2(const kuint32 idx)
+void ct_im_pro_7_0_2(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_3(const kuint32 idx)
+void ct_im_pro_7_0_3(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_4(const kuint32 idx)
+void ct_im_pro_7_0_4(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_5(const kuint32 idx)
+void ct_im_pro_7_0_5(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_6(const kuint32 idx)
+void ct_im_pro_7_0_6(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_7(const kuint32 idx)
+void ct_im_pro_7_0_7(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_8(const kuint32 idx)
+void ct_im_pro_7_0_8(CtImpro70* self, const kuint32 idx)
 {
 }
 
-void ct_im_pro_7_9(const kuint32 idx)
+void ct_im_pro_7_0_9(CtImpro70* self, const kuint32 idx)
 {
 }
 #endif

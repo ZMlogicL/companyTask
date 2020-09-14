@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kipcu.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KIpcu, k_ipcu);
+
 #define K_IPCU_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KIpcuPrivate, K_TYPE_IPCU))
+
 
 struct _KIpcuPrivate
 {
 
 };
+
 
 volatile IoIpcu ioIpcu0 __attribute__((section(".IPCU0")));
 volatile IoIpcu ioIpcu1 __attribute__((section(".IPCU1")));

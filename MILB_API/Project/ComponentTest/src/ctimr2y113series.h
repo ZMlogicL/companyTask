@@ -29,6 +29,11 @@ typedef struct _CtImR2y113seriesPrivate CtImR2y113seriesPrivate;
 struct _CtImR2y113series 
 {
 	KObject parent;
+	ImR2yUtility4 *imR2yUtility4;
+	ImR2yUtility2 *imR2yUtility2;
+	ImR2yClk *imR2yClk;
+	ImR2yCtrl2 *imR2yCtrl2;
+	ImR2yUtility *imR2yUtility;
 };
 
 

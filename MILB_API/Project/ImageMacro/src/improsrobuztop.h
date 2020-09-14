@@ -20,8 +20,8 @@
 
 #include <klib.h>
 #include "jdspro.h"
-#include "im_pro_common.h"
-#include "dd_top.h"
+#include "improcommon.h"
+#include "ddtop.h"
 
 
 #define IMPRO_TYPE_SROBUZTOP        (impro_srobuztop_get_type())
@@ -104,14 +104,14 @@ ImproSrobuztop*	impro_srobuztop_new();
 Software reset of BUZTOP macro.
 @param[in]	unitNo : Unit number.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 extern	INT32			impro_srobuztop_sr( E_IM_PRO_UNIT_NUM unitNo );
 /**
 Software reset release of BUZTOP.
 @param[in]	unitNo : Unit number.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Processing NG
 */
 extern	INT32			impro_srobuztop_sr_rlease( E_IM_PRO_UNIT_NUM unitNo );
 /**
@@ -119,7 +119,7 @@ BUZTOP control data setting
 @param[in]	unitNo : Unit number.
 @param[in]	buzCtrl : BUZTOP control information
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srobuztop_ctrl( E_IM_PRO_UNIT_NUM unitNo, TimproBuztopCtrl* buzCtrl );
 /**
@@ -128,7 +128,7 @@ A setup of enable access to the built-in RAM of BUZTOP.
 @param[in]	paenTrg : RAM access control<br>
 				 value range :[0:Access inhibit  1:Permissions]<br>
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
 */
 extern	INT32			impro_srobuztop_set_paen( E_IM_PRO_UNIT_NUM unitNo, UCHAR paenTrg );
 /**
@@ -136,8 +136,8 @@ A setup of Resizer select.
 @param[in]	unitNo : Unit number.
 @param[in]	sel     : Raw resizer select.
 @retval		D_DDIM_OK					: Setting OK
-@retval		D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
-@retval		D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
+@retval		ImproBase_D_IM_PRO_INPUT_PARAM_ERROR	: Setting NG
+@retval		ImproBase_D_IM_PRO_MACRO_BUSY_NG		: Macro has not stopped.
 */
 extern	INT32			impro_srobuztop_set_resizer_sel( E_IM_PRO_UNIT_NUM unitNo, EimproBuztopSel sel );
 

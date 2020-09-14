@@ -49,11 +49,11 @@ K_TYPE_DEFINE_WITH_PRIVATE(ImMxic, im_mxic)
 /* Macro																*/
 /*----------------------------------------------------------------------*/
 // Shift operation for creating setting TPORTMW, TPORTMR
-#define ImMxic_SHIFT_TPORTMX(x, n)	((UINT64)(x & 0x01) << (n & 0x3F))
+#define ImMxic_SHIFT_TPORTMX(x, n)	((unsigned long long)(x & 0x01) << (n & 0x3F))
 
 // Output port of the master setting acquisition from TPORTMW, TPORTMR
 #define ImMxic_MASTER_OUT_PORT_TPORTMX(x, n)\
-	(((x & ((UINT64)0x01 << (n & 0x3F))) != 0) ? MxicUtlis_PORT_GR_1 : MxicUtlis_PORT_GR_0 )
+	(((x & ((unsigned long long)0x01 << (n & 0x3F))) != 0) ? MxicUtlis_PORT_GR_1 : MxicUtlis_PORT_GR_0 )
 
 
 struct _ImMxicPrivate
@@ -72,7 +72,7 @@ struct _ImMxicPrivate
 /*----------------------------------------------------------------------*/
 /* DECLS  															    */
 /*----------------------------------------------------------------------*/
-static INT32 imMxicInitAllLevelport( ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
+static kint32 imMxicInitAllLevelport( ImMxicUnit unit, ImMxicAllLevelport* allLevelport );
 
 
 /*----------------------------------------------------------------------*/
@@ -133,10 +133,10 @@ Init arbiter assign setting.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-static INT32 imMxicInitAllLevelport( ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
+static kint32 imMxicInitAllLevelport( ImMxicUnit unit, ImMxicAllLevelport* allLevelport )
 {
-	INT32	i, j;
-	INT32	result;
+	kint32	i, j;
+	kint32	result;
 
 	result = D_DDIM_OK;
 
@@ -216,10 +216,10 @@ This function set initial value to register.<br>
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 im_mxic_init( ImMxic *self, ImMxicUnit unit )
+kint32 im_mxic_init( ImMxic *self, ImMxicUnit unit )
 {
-	INT32										i, j, k;
-	INT32										result;
+	kint32										i, j, k;
+	kint32										result;
 	MxicAllArbiterAssign				allAssign;
 	MxicAllSlotPriority			slot;
 	ImMxicAllLevelport 					allLevelport;
@@ -412,7 +412,7 @@ INT32 im_mxic_init( ImMxic *self, ImMxicUnit unit )
 			}
 		}
 
-		(VOID)mxic_utlis_init_arbiter_assign( priv->mxicUtlis, unit, &allAssign );
+		(void)mxic_utlis_init_arbiter_assign( priv->mxicUtlis, unit, &allAssign );
 
 		mxic_utlis_on_pclk( priv->mxicUtlis, unit );
 
@@ -454,7 +454,7 @@ INT32 im_mxic_init( ImMxic *self, ImMxicUnit unit )
 		mxic_utlis_off_pclk( priv->mxicUtlis, unit );
 
 		if ( ( unit == MxicUtlis_UNIT_1 ) || ( unit == MxicUtlis_UNIT_2 ) || ( unit == MxicUtlis_UNIT_3 ) ) {
-			(VOID)mxic_utlis_get_unit_tbl_address( priv->mxicUtlis, unit, &ioMxicTbl );
+			(void)mxic_utlis_get_unit_tbl_address( priv->mxicUtlis, unit, &ioMxicTbl );
 
 			if ( unit == MxicUtlis_UNIT_3 ) {
 				DDIM_User_AhbReg_SpinLock();	// JPEG issue work around.
@@ -498,7 +498,7 @@ INT32 im_mxic_init( ImMxic *self, ImMxicUnit unit )
 				Ddim_Print(("E:im_mxic_init(): mxic_slot_set_slot_priority_all_arbiter error. result=%d\n", result));
 			}
 
-			(VOID)imMxicInitAllLevelport( unit, &allLevelport );
+			(void)imMxicInitAllLevelport( unit, &allLevelport );
 
 			result = mxic_level_port_set_levelport_all( priv->mxicLevelPort, unit, &allLevelport );
 
@@ -527,9 +527,9 @@ This function does software reset.<br>
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 im_mxic_reset( ImMxic *self, ImMxicUnit unit )
+kint32 im_mxic_reset( ImMxic *self, ImMxicUnit unit )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -563,9 +563,9 @@ This function select arbiters of executed "configration start" and start configu
 				In this case, this function returns the error.<br>
 				And, the allocation setting of the master is returned to the setting operating now.
 */
-INT32 im_mxic_start_config( ImMxic *self, ImMxicUnit unit, const ImMxicConfigArbiter* const targetArbiter )
+kint32 im_mxic_start_config( ImMxic *self, ImMxicUnit unit, const ImMxicConfigArbiter* const targetArbiter )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -637,11 +637,11 @@ Detection of Memory Access Area" are started with this function.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 im_mxic_start_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
+kint32 im_mxic_start_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
 											const MxicMemoryAccessSlave* const param )
 {
-	INT32						i;
-	INT32						result;
+	kint32						i;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -690,10 +690,10 @@ Detection of Memory Access Area" are stoped with this function.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 im_mxic_stop_memory_access_detect( ImMxic *self, ImMxicUnit unit )
+kint32 im_mxic_stop_memory_access_detect( ImMxic *self, ImMxicUnit unit )
 {
-	INT32						i;
-	INT32						result;
+	kint32						i;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -736,11 +736,11 @@ This function set the parameter of Detection parameters of slave each memory acc
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		Change of a parameter is reflected at the time of the detection start by @ref im_mxic_start_memory_access_detect function. 
 */
-INT32 im_mxic_set_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
+kint32 im_mxic_set_memory_access_detect( ImMxic *self, ImMxicUnit unit, 
 										const MxicMemoryAccessSlave* const param )
 {
-	INT32						i;
-	INT32						result;
+	kint32						i;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -761,19 +761,19 @@ INT32 im_mxic_set_memory_access_detect( ImMxic *self, ImMxicUnit unit,
 			mxic_utlis_on_pclk( priv->mxicUtlis, unit );
 
 			for ( i = MxicUtlis_W_ARBITER_W1; i < MxicUtlis_W_ARBITER_MAX; i++ ) {
-				memset((VOID*)&ioMxic->TSASETW[i], 0, sizeof(ioMxic->TSASETW[i]));
+				memset((void*)&ioMxic->TSASETW[i], 0, sizeof(ioMxic->TSASETW[i]));
 			}
 
 			// Set detection of memory access register. (TSASETW)
 			for ( i = MxicUtlis_W_ARBITER_W1; i < MxicUtlis_W_ARBITER_MAX; i++ ) {
 				if ( param->slave[i].startTrigger == MxicUtlis_ON ) {
-					ioMxic->TSASETW[i].bit.TSAMASW47_1_LO		= (ULONG)((param->slave[i].master47M1   
+					ioMxic->TSASETW[i].bit.TSAMASW47_1_LO		= (kulong)((param->slave[i].master47M1   
 																& ImMxic_MASTER_LO_MASK));
-					ioMxic->TSASETW[i].bit.TSAMASW47_1_HI		= (ULONG)((param->slave[i].master47M1   
+					ioMxic->TSASETW[i].bit.TSAMASW47_1_HI		= (kulong)((param->slave[i].master47M1   
 																& ImMxic_MASTER_HI_MASK) >> 32);
-					ioMxic->TSASETW[i].bit.TSAMASW127_64_LO	= (ULONG)((param->slave[i].master127M64 
+					ioMxic->TSASETW[i].bit.TSAMASW127_64_LO	= (kulong)((param->slave[i].master127M64 
 																& ImMxic_MASTER_LO_MASK));
-					ioMxic->TSASETW[i].bit.TSAMASW127_64_HI	= (ULONG)((param->slave[i].master127M64 
+					ioMxic->TSASETW[i].bit.TSAMASW127_64_HI	= (kulong)((param->slave[i].master127M64 
 																& ImMxic_MASTER_HI_MASK) >> 32);
 					ioMxic->TSASETW[i].bit.TSASADW				= param->slave[i].startAddress;
 					ioMxic->TSASETW[i].bit.TSAEADW				= param->slave[i].endAddress;
@@ -813,12 +813,12 @@ This function get the parameter of Detection parameters of slave each memory acc
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 @remarks		Change of a parameter is reflected at the time of the detection start by @ref im_mxic_start_memory_access_detect function. 
 */
-INT32 im_mxic_get_memory_access_detect( ImMxic *self, ImMxicUnit unit, MxicMemoryAccessSlave* const param )
+kint32 im_mxic_get_memory_access_detect( ImMxic *self, ImMxicUnit unit, MxicMemoryAccessSlave* const param )
 {
-	INT32						i;
-	INT32						result;
-	UINT64						w47W1		= 0;
-	UINT64						w127W64	= 0;
+	kint32						i;
+	kint32						result;
+	unsigned long long						w47W1		= 0;
+	unsigned long long						w127W64	= 0;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -890,9 +890,9 @@ Set switch of register read value.<br>
 						<li>TSLSW, TSLSR
 						<li>TGSLSW, TGSLSR</ul>
 */
-INT32	im_mxic_set_reg_read_switch( ImMxic *self, ImMxicUnit unit, UCHAR sw )
+kint32	im_mxic_set_reg_read_switch( ImMxic *self, ImMxicUnit unit, kuchar sw )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -922,9 +922,9 @@ Get switch of register read value.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_reg_read_switch( ImMxic *self, ImMxicUnit unit, UCHAR *const sw )
+kint32	im_mxic_get_reg_read_switch( ImMxic *self, ImMxicUnit unit, kuchar *const sw )
 {
-	INT32						result;
+	kint32						result;
 	volatile struct io_jdsmxic*	ioMxic;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
@@ -958,14 +958,14 @@ This function set output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_set_output_port( ImMxic *self, UCHAR target, ImMxicPortGr outputPort )
+kint32	im_mxic_set_output_port( ImMxic *self, kuchar target, ImMxicPortGr outputPort )
 {
-	UCHAR				regReadSw;
-	UCHAR				writeMaster;
-	UCHAR				readMaster;
-	UINT32				portSettingWorkLo;
-	UINT32				portSettingWorkHi;
-	UINT64				portSetMask = 1;
+	kuchar				regReadSw;
+	kuchar				writeMaster;
+	kuchar				readMaster;
+	kuint32				portSettingWorkLo;
+	kuint32				portSettingWorkHi;
+	unsigned long long				portSetMask = 1;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1099,12 +1099,12 @@ This function get output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_output_port( ImMxic *self, UCHAR target, ImMxicPortGr* const outputPort )
+kint32	im_mxic_get_output_port( ImMxic *self, kuchar target, ImMxicPortGr* const outputPort )
 {
-	UCHAR	writeMaster;
-	UCHAR	readMaster;
-	UINT32	portSettingWork;
-	UINT64	portMask = 1;
+	kuchar	writeMaster;
+	kuchar	readMaster;
+	kuint32	portSettingWork;
+	unsigned long long	portMask = 1;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1184,11 +1184,11 @@ This function set output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_set_output_port_all( ImMxic *self, const ImMxicOutputPort* const outPort )
+kint32	im_mxic_set_output_port_all( ImMxic *self, const ImMxicOutputPort* const outPort )
 {
-	UCHAR	regReadSw;
-	UINT64	portSettingW127W64 = 0;
-	UINT64	portSettingR127R64 = 0;
+	kuchar	regReadSw;
+	unsigned long long	portSettingW127W64 = 0;
+	unsigned long long	portSettingR127R64 = 0;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1246,10 +1246,10 @@ This function get output port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	im_mxic_get_output_port_all( ImMxic *self, ImMxicOutputPort *const outPort )
+kint32	im_mxic_get_output_port_all( ImMxic *self, ImMxicOutputPort *const outPort )
 {
-	UINT64	portSettingW127W64 = 0;
-	UINT64	portSettingR127R64 = 0;
+	unsigned long long	portSettingW127W64 = 0;
+	unsigned long long	portSettingR127R64 = 0;
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
 #ifdef CO_PARAM_CHECK
@@ -1291,14 +1291,14 @@ Interruption handler of MXIC.<br>
 @param[in]		unit					Target unit number.<br>
 										Please refer to @ref ImMxicUnit for a set value. <br>
 */
-VOID im_mxic_int_handler( ImMxicUnit unit )
+void im_mxic_int_handler( ImMxicUnit unit )
 {
-	INT32						decErrCh;
+	kint32						decErrCh;
 	volatile struct io_jdsmxic*	ioMxic = NULL;
 	ImMxic* self = k_object_new_with_private(IM_TYPE_MXIC, sizeof(ImMxicPrivate));
 	ImMxicPrivate *priv = IM_MXIC_GET_PRIVATE(self);
 
-	(VOID)mxic_utlis_get_unit_address( priv->mxicUtlis, unit, &ioMxic );
+	(void)mxic_utlis_get_unit_address( priv->mxicUtlis, unit, &ioMxic );
 
 	decErrCh  = 0;
 
@@ -1348,7 +1348,7 @@ VOID im_mxic_int_handler( ImMxicUnit unit )
 	if ( ( ioMxic->TMIE.bit.TSAWE == 1 ) && ( ioMxic->TMIF.bit.__TSAWF == 1 ) ) {
 		// Callback.
 		if ( priv->gImMxicMemoryAccessDetectCallback[unit] != NULL ) {
-			((VOID (*)()) priv->gImMxicMemoryAccessDetectCallback[unit])();
+			((void (*)()) priv->gImMxicMemoryAccessDetectCallback[unit])();
 		}
 		// Clear TSAWF interrupt flag.
 		ioMxic->TMIF.word &= ImMxic_TMIF_BIT_TSAWF;

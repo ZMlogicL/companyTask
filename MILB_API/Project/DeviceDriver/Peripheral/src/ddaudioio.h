@@ -51,7 +51,7 @@ Start input operation<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32		dd_audio_io_start_input(DdAudioIo* self, UINT8 ch);
+kint32		dd_audio_io_start_input(DdAudioIo* self, kuint8 ch);
 
 /**
 Stop input operation<br>
@@ -67,7 +67,7 @@ Stop input operation<br>
 @retval DdAudio_SYSTEM_ERROR			System Error
 @remarks This API uses DDIM_User_Dly_Tsk().
 */
-INT32		dd_audio_io_stop_input(DdAudioIo* self, UINT8 ch);
+kint32		dd_audio_io_stop_input(DdAudioIo* self, kuint8 ch);
 
 /**
 Get status of input operation of audio interface<br>
@@ -80,7 +80,7 @@ Get status of input operation of audio interface<br>
 @retval	TRUE:input operation is performed.
 @retval	FALSE:input operation is not performed.
 */
-BOOL		dd_audio_io_get_status_input(DdAudioIo* self, UINT8 ch);
+kboolean	dd_audio_io_get_status_input(DdAudioIo* self, kuint8 ch);
 
 /**
 Start output operation<br>
@@ -94,7 +94,7 @@ Start output operation<br>
 @retval DdAudio_INPUT_PARAM_ERROR	Input Parameter Error
 @retval DdAudio_SYSTEM_ERROR			System Error
 */
-INT32		dd_audio_io_start_output(DdAudioIo* self, UINT8 ch);
+kint32		dd_audio_io_start_output(DdAudioIo* self, kuint8 ch);
 
 /**
 Stop output operation<br>
@@ -109,7 +109,7 @@ Stop output operation<br>
 @retval DdAudio_SYSTEM_ERROR			System Error
 @remarks This API uses DDIM_User_Dly_Tsk().
 */
-INT32		dd_audio_io_stop_output(DdAudioIo* self, UINT8 ch);
+kint32		dd_audio_io_stop_output(DdAudioIo* self, kuint8 ch);
 
 /**
 Get status of output operation of audio interface<br>
@@ -121,7 +121,7 @@ Get status of output operation of audio interface<br>
 @retval	TRUE:output operation is performed.
 @retval	FALSE:output is fixed to "0".
 */
-BOOL		dd_audio_io_get_status_output(DdAudioIo* self, UINT8 ch);
+kboolean	dd_audio_io_get_status_output(DdAudioIo* self, kuint8 ch);
 
 
 #ifdef __cplusplus

@@ -12,15 +12,20 @@
  *1.0.0 2020年09月开始开发
  */
 
+
 #include "kmcc.h"
 
+
 K_TYPE_DEFINE_WITH_PRIVATE(KMcc, k_mcc);
+
 #define K_MCC_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), KMccPrivate, K_TYPE_MCC))
+
 
 struct _KMccPrivate
 {
 
 };
+
 
 volatile IoMcc ioMcc __attribute__((section(".MCC")));
 /**

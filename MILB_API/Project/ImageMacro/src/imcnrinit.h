@@ -33,32 +33,32 @@
 /*----------------------------------------------------------------------*/
 /* Definition															*/
 /*----------------------------------------------------------------------*/
-#define D_IM_CNR_ADDR_BANK_MAX			(4)				/**< Maximum output bank index number of WCTA */
-#define ADDR_BNK_LIMIT(pos, total) ((pos < total) ? pos : 0)
+#define ImCnrInit_D_IM_CNR_ADDR_BANK_MAX			(4)				/**< Maximum output bank index number of WCTA */
+#define ImCnrInit_ADDR_BNK_LIMIT(pos, total) ((pos < total) ? pos : 0)
 
 /*----------------------------------------------------------------------*/
 /* Structure															*/
 /*----------------------------------------------------------------------*/
-/** Im_CNR_OTF_Set_OutAddr_Info() parameter structure */
+/** im_cnr_init_otf_set_out_addr_info(im_cnr_init_new(),) parameter structure */
 typedef struct {
-	UCHAR				use_bank_num;						/**< CbCr address bank number @@WCTA
+	UCHAR				useBankNum;						/**< CbCr address bank number @@WCTA
 																	Use only one bank in the setting of 1 (d),
 																	and use of the four banks in the setting of 4 (d).	*/
-	ULONG				w_c_addr[D_IM_CNR_ADDR_BANK_MAX];	/**< CbCr address for write (aligned on 2bytes)		@@WCTA	*/
-} T_IM_CNR_OTF_OUTADDR_INFO;
+	ULONG				wCAddr[ImCnrInit_D_IM_CNR_ADDR_BANK_MAX];	/**< CbCr address for write (aligned on 2bytes)		@@WCTA	*/
+} TImCnrOtfOutaddrInfo;
 
 // Output address management information
 typedef struct {
-	UCHAR	use_bank_num;							// Output bank number
-	UCHAR	bank_area;								// Target bank number
-	ULONG	output_addr[D_IM_CNR_ADDR_BANK_MAX];	// Output bank address information.
-} T_IM_CNR_OUTPUT_MNG;
+	UCHAR	useBankNum;							// Output bank number
+	UCHAR	bankArea;								// Target bank number
+	ULONG	outputAddr[ImCnrInit_D_IM_CNR_ADDR_BANK_MAX];	// Output bank address information.
+} TImCnrOutputMng;
 
 // Output latest management information
 typedef struct {
-	UCHAR	bank_area;								// Latest bank number
+	UCHAR	bankArea;								// Latest bank number
 	ULONG	addr;									// Latest Output address.
-} T_IM_CNR_LATEST_MNG;
+} TImCnrLatestMng;
 
 typedef struct 				_ImCnrInit ImCnrInit;
 typedef struct 				_ImCnrInitPrivate ImCnrInitPrivate;
@@ -77,15 +77,15 @@ ImCnrInit*		        im_cnr_init_new(void);
 extern "C" {
 #endif
 //---------------------------- driver section ----------------------------
-VOID im_cnr_otf_int_handler( UCHAR ch );
-VOID im_cnr_ofl_int_handler( UCHAR ch );
+VOID im_cnr_init_otf_int_handler(ImCnrInit*self, UCHAR ch );
+VOID im_cnr_init_ofl_int_handler(ImCnrInit*self, UCHAR ch );
 
 /**
 Set software reset and operating mode for Off Line
 @param [in]	ch				channel[0 - 2]
 @retval		D_DDIM_OK						Success
 */
-INT32 Im_CNR_OFL_Init( UCHAR ch );
+INT32 im_cnr_init_ofl_init(ImCnrInit*self, UCHAR ch );
 
 /**
 Suppre Control for Off Line
@@ -96,14 +96,14 @@ Suppre Control for Off Line
 @remarks	The calcurate mode of the Suppre is set.
 			Please call Y, C or both setting after this function if necessary.
 */
-INT32 Im_CNR_OFL_Ctrl( UCHAR ch, const T_IM_CNR_OFL_CTRL* const cnr_ctrl );
+INT32 im_cnr_init_ofl_ctrl(ImCnrInit*self, UCHAR ch, const TImCnrOflCtrl* const cnr_ctrl );
 
 /**
 Set software reset and operating mode for On The Fly
 @param [in]	ch				channel[0 - 2]
 @retval		D_DDIM_OK						Success
 */
-INT32 Im_CNR_OTF_Init( UCHAR ch );
+INT32 im_cnr_init_otf_init(ImCnrInit*self, UCHAR ch );
 
 /**
 Suppre Control for On The Fly
@@ -114,7 +114,7 @@ Suppre Control for On The Fly
 @remarks	The calcurate mode of the Suppre is set.
 			Please call Y, C or both setting after this function if necessary.
 */
-INT32 Im_CNR_OTF_Ctrl( UCHAR ch, const T_IM_CNR_OTF_CTRL* const cnr_ctrl );
+INT32 im_cnr_init_otf_ctrl(ImCnrInit*self, UCHAR ch, const TImCnrOtfCtrl* const cnr_ctrl );
 
 /**
 Set Suppre output address information for On The Fly
@@ -123,7 +123,7 @@ Set Suppre output address information for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 Im_CNR_OTF_Set_OutAddr_Info( UCHAR ch, const T_IM_CNR_OTF_OUTADDR_INFO* const addr_info );
+INT32 im_cnr_init_otf_set_out_addr_info(ImCnrInit*self, UCHAR ch, const TImCnrOtfOutaddrInfo* const addr_info );
 
 /**
 Increment Suppre output address index for On The Fly
@@ -131,7 +131,7 @@ Increment Suppre output address index for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 Im_CNR_OTF_Increment_OutAddr_Index( UCHAR ch );
+INT32 im_cnr_init_otf_increment_out_addr_index(ImCnrInit*self, UCHAR ch );
 
 /**
 SPR Get Latest Address information for On The Fly
@@ -140,6 +140,6 @@ SPR Get Latest Address information for On The Fly
 @retval		D_DDIM_OK						Success
 @retval		D_IM_CNR_INPUT_PARAMETER_ERROR	parameter error.
 */
-INT32 Im_CNR_OTF_Get_Latest_OutAddr( UCHAR ch, ULONG* const latest_addr );
+INT32 im_cnr_init_otf_get_latest_out_addr(ImCnrInit*self, UCHAR ch, ULONG* const latest_addr );
 
 #endif// _IM_CNR_INIT_H_

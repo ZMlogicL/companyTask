@@ -15,8 +15,8 @@
 #include "driver_common.h"
 #include "jdsmxic.h"
 #include "dd_top.h"
+// #include "../Project/PalladiumTest/src/ddimusercustom.h"
 #include "ddim_user_custom.h"
-
 
 #define MXIC_TYPE_UTLIS    (mxic_utlis_get_type())
 #define MXIC_UTLIS(obj)    (K_TYPE_CHECK_INSTANCE_CAST(obj, MxicUtlis))
@@ -540,11 +540,11 @@ typedef enum {
 } ImMxicLevel;
 
 
-typedef VOID (*ImMxicDecErrFunc)(UCHAR chType);	/**< Type is defined to callback function pointer for decode error.<br>
+typedef void (*ImMxicDecErrFunc)(kuchar chType);	/**< Type is defined to callback function pointer for decode error.<br>
 															 Decode error information is initialized after the end of processing of a Callback function.<br>
 															 For this reason, please be sure to use an @ref mxic_master_slave_get_decode_error function from a Callback function and to refer to error information. <br>
 															 The meaning of the argument is as follows.<br>
-															 - UCHAR chType: The kind of channel which the error generated.<br>
+															 - kuchar chType: The kind of channel which the error generated.<br>
 																<ul><li>@ref MxicUtlis_DEC_ERR_CH_W
 																	<li>@ref MxicUtlis_DEC_ERR_CH_R
 																	<li>@ref MxicUtlis_DEC_ERR_CH_RW</ul> */
@@ -555,18 +555,18 @@ typedef VOID (*ImMxicDecErrFunc)(UCHAR chType);	/**< Type is defined to callback
 /*----------------------------------------------------------------------*/
 /** Master assignment into all the slave slots of W arbiter. */
 typedef struct{
-	UCHAR		slot0[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot0 */
-	UCHAR		slot1[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot1 */
-	UCHAR		slot2[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot2 */
-	UCHAR		slot3[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot3 */
+	kuchar		slot0[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot0 */
+	kuchar		slot1[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot1 */
+	kuchar		slot2[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot2 */
+	kuchar		slot3[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot3 */
 } MxicWArbiterAssign;
 
 /** Master assignment into all the slave slots of R arbiter. */
 typedef struct{
-	UCHAR		slot0[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot0 */
-	UCHAR		slot1[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot1 */
-	UCHAR		slot2[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot2 */
-	UCHAR		slot3[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot3 */
+	kuchar		slot0[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot0 */
+	kuchar		slot1[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot1 */
+	kuchar		slot2[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot2 */
+	kuchar		slot3[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot3 */
 } MxicRArbiterAssign;
 
 /** Master assignment into all the slave slots of each port of W arbiter. */
@@ -581,12 +581,12 @@ typedef struct{
 
 /** Master assignment into all the slave slots of W(group) arbiter. */
 typedef struct{
-	UCHAR		slot[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot0 */
+	kuchar		slot[MxicUtlis_SLOT_SIZE_8];	/**< Write master assignment in slot0 */
 } MxicWarbiterAssignGr;
 
 /** Master assignment into all the slave slots of R(group) arbiter. */
 typedef struct{
-	UCHAR		slot[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot0 */
+	kuchar		slot[MxicUtlis_SLOT_SIZE_8];	/**< Read master assignment in slot0 */
 } MxicRarbiterAssignGr;
 
 /** Master assignment into all the slots of all arbiter. */
@@ -597,174 +597,174 @@ typedef struct{
 
 /** Setting of configration start enable */
 typedef struct{
-	UCHAR		slW1ConfigOnFlg;			/**< TCFMD.bit.TENW_1: Configration start enable flag in slave W1 arbiter<br>
+	kuchar		slW1ConfigOnFlg;			/**< TCFMD.bit.TENW_1: Configration start enable flag in slave W1 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slW2ConfigOnFlg;			/**< TCFMD.bit.TENW_2: Configration start enable flag in slave W2 arbiter<br>
+	kuchar		slW2ConfigOnFlg;			/**< TCFMD.bit.TENW_2: Configration start enable flag in slave W2 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slW3ConfigOnFlg;			/**< TCFMD.bit.TENW_3: Configration start enable flag in slave W3 arbiter<br>
+	kuchar		slW3ConfigOnFlg;			/**< TCFMD.bit.TENW_3: Configration start enable flag in slave W3 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slW4ConfigOnFlg;			/**< TCFMD.bit.TENW_4: Configration start enable flag in slave W4 arbiter<br>
+	kuchar		slW4ConfigOnFlg;			/**< TCFMD.bit.TENW_4: Configration start enable flag in slave W4 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slR1ConfigOnFlg;			/**< TCFMD.bit.TENR_1: Configration start enable flag in slave R1 arbiter<br>
+	kuchar		slR1ConfigOnFlg;			/**< TCFMD.bit.TENR_1: Configration start enable flag in slave R1 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slR2ConfigOnFlg;			/**< TCFMD.bit.TENR_2: Configration start enable flag in slave R2 arbiter<br>
+	kuchar		slR2ConfigOnFlg;			/**< TCFMD.bit.TENR_2: Configration start enable flag in slave R2 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slR3ConfigOnFlg;			/**< TCFMD.bit.TENR_3: Configration start enable flag in slave R3 arbiter<br>
+	kuchar		slR3ConfigOnFlg;			/**< TCFMD.bit.TENR_3: Configration start enable flag in slave R3 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		slR4ConfigOnFlg;			/**< TCFMD.bit.TENR_4: Configration start enable flag in slave R4 arbiter<br>
+	kuchar		slR4ConfigOnFlg;			/**< TCFMD.bit.TENR_4: Configration start enable flag in slave R4 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW0ConfigOnFlg;			/**< TGCFMD.bit.TEGW_0: Configration start enable flag in group W0 arbiter<br>
+	kuchar		grW0ConfigOnFlg;			/**< TGCFMD.bit.TEGW_0: Configration start enable flag in group W0 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW1ConfigOnFlg;			/**< TGCFMD.bit.TEGW_1: Configration start enable flag in group W1 arbiter<br>
+	kuchar		grW1ConfigOnFlg;			/**< TGCFMD.bit.TEGW_1: Configration start enable flag in group W1 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW2ConfigOnFlg;			/**< TGCFMD.bit.TEGW_2: Configration start enable flag in group W2 arbiter<br>
+	kuchar		grW2ConfigOnFlg;			/**< TGCFMD.bit.TEGW_2: Configration start enable flag in group W2 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW3ConfigOnFlg;			/**< TGCFMD.bit.TEGW_3: Configration start enable flag in group W3 arbiter<br>
+	kuchar		grW3ConfigOnFlg;			/**< TGCFMD.bit.TEGW_3: Configration start enable flag in group W3 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW4ConfigOnFlg;			/**< TGCFMD.bit.TEGW_4: Configration start enable flag in group W4 arbiter<br>
+	kuchar		grW4ConfigOnFlg;			/**< TGCFMD.bit.TEGW_4: Configration start enable flag in group W4 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW5ConfigOnFlg;			/**< TGCFMD.bit.TEGW_5: Configration start enable flag in group W5 arbiter<br>
+	kuchar		grW5ConfigOnFlg;			/**< TGCFMD.bit.TEGW_5: Configration start enable flag in group W5 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW6ConfigOnFlg;			/**< TGCFMD.bit.TEGW_6: Configration start enable flag in group W6 arbiter<br>
+	kuchar		grW6ConfigOnFlg;			/**< TGCFMD.bit.TEGW_6: Configration start enable flag in group W6 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grW7ConfigOnFlg;			/**< TGCFMD.bit.TEGW_7: Configration start enable flag in group W7 arbiter<br>
+	kuchar		grW7ConfigOnFlg;			/**< TGCFMD.bit.TEGW_7: Configration start enable flag in group W7 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR0ConfigOnFlg;			/**< TGCFMD.bit.TEGR_0: Configration start enable flag in group R0 arbiter<br>
+	kuchar		grR0ConfigOnFlg;			/**< TGCFMD.bit.TEGR_0: Configration start enable flag in group R0 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR1ConfigOnFlg;			/**< TGCFMD.bit.TEGR_1: Configration start enable flag in group R1 arbiter<br>
+	kuchar		grR1ConfigOnFlg;			/**< TGCFMD.bit.TEGR_1: Configration start enable flag in group R1 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR2ConfigOnFlg;			/**< TGCFMD.bit.TEGR_2: Configration start enable flag in group R2 arbiter<br>
+	kuchar		grR2ConfigOnFlg;			/**< TGCFMD.bit.TEGR_2: Configration start enable flag in group R2 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR3ConfigOnFlg;			/**< TGCFMD.bit.TEGR_3: Configration start enable flag in group R3 arbiter<br>
+	kuchar		grR3ConfigOnFlg;			/**< TGCFMD.bit.TEGR_3: Configration start enable flag in group R3 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR4ConfigOnFlg;			/**< TGCFMD.bit.TEGR_4: Configration start enable flag in group R4 arbiter<br>
+	kuchar		grR4ConfigOnFlg;			/**< TGCFMD.bit.TEGR_4: Configration start enable flag in group R4 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR5ConfigOnFlg;			/**< TGCFMD.bit.TEGR_5: Configration start enable flag in group R5 arbiter<br>
+	kuchar		grR5ConfigOnFlg;			/**< TGCFMD.bit.TEGR_5: Configration start enable flag in group R5 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR6ConfigOnFlg;			/**< TGCFMD.bit.TEGR_6: Configration start enable flag in group R6 arbiter<br>
+	kuchar		grR6ConfigOnFlg;			/**< TGCFMD.bit.TEGR_6: Configration start enable flag in group R6 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		grR7ConfigOnFlg;			/**< TGCFMD.bit.TEGR_7: Configration start enable flag in group R7 arbiter<br>
+	kuchar		grR7ConfigOnFlg;			/**< TGCFMD.bit.TEGR_7: Configration start enable flag in group R7 arbiter<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
 } ImMxicConfigArbiter;
 
 /** Setting of clock enable */
 typedef struct {
-	UCHAR		clkEnSlave10;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-0 arbiter.<br>
+	kuchar		clkEnSlave10;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-0 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave11;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-1 arbiter.<br>
+	kuchar		clkEnSlave11;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-1 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave12;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-2 arbiter.<br>
+	kuchar		clkEnSlave12;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-2 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave13;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-3 arbiter.<br>
+	kuchar		clkEnSlave13;				/**< TCKENP.bit.TCKENP_1: Clock enable of slave-1 port-3 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave20;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-0 arbiter.<br>
+	kuchar		clkEnSlave20;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-0 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave21;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-1 arbiter.<br>
+	kuchar		clkEnSlave21;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-1 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave22;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-2 arbiter.<br>
+	kuchar		clkEnSlave22;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-2 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave23;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-3 arbiter.<br>
+	kuchar		clkEnSlave23;				/**< TCKENP.bit.TCKENP_2: Clock enable of slave-2 port-3 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave30;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-0 arbiter.<br>
+	kuchar		clkEnSlave30;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-0 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave31;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-1 arbiter.<br>
+	kuchar		clkEnSlave31;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-1 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave32;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-2 arbiter.<br>
+	kuchar		clkEnSlave32;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-2 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave33;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-3 arbiter.<br>
+	kuchar		clkEnSlave33;				/**< TCKENP.bit.TCKENP_3: Clock enable of slave-3 port-3 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave40;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-0 arbiter.<br>
+	kuchar		clkEnSlave40;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-0 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave41;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-1 arbiter.<br>
+	kuchar		clkEnSlave41;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-1 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave42;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-2 arbiter.<br>
+	kuchar		clkEnSlave42;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-2 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnSlave43;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-3 arbiter.<br>
+	kuchar		clkEnSlave43;				/**< TCKENP.bit.TCKENP_4: Clock enable of slave-4 port-3 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup0;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-0 arbiter.<br>
+	kuchar		clkEnGroup0;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-0 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup1;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-1 arbiter.<br>
+	kuchar		clkEnGroup1;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-1 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup2;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-2 arbiter.<br>
+	kuchar		clkEnGroup2;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-2 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup3;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-3 arbiter.<br>
+	kuchar		clkEnGroup3;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-3 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup4;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-4 arbiter.<br>
+	kuchar		clkEnGroup4;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-4 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup5;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-5 arbiter.<br>
+	kuchar		clkEnGroup5;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-5 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup6;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-6 arbiter.<br>
+	kuchar		clkEnGroup6;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-6 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnGroup7;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-7 arbiter.<br>
+	kuchar		clkEnGroup7;					/**< TGCKEN.bit.TGCKSEN: Clock enable of group-7 arbiter.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnDecErr;					/**< TCKEN.bit.TCKSEN: Clock enable of decode error block.<br>
+	kuchar		clkEnDecErr;					/**< TCKEN.bit.TCKSEN: Clock enable of decode error block.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR		clkEnMonitor;					/**< TCKEN.bit.TCKMEN: Clock enable of monitor and memory access function block.<br>
+	kuchar		clkEnMonitor;					/**< TCKEN.bit.TCKMEN: Clock enable of monitor and memory access function block.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
 } ImMxicClock;
 
 /** Setting of acceptance capability */
 typedef struct {
-	UCHAR		wCapability[MxicUtlis_W_ARBITER_MAX][MxicUtlis_PORT_MAX];				/**< TACPTCW.bit.TACPTCW*: Acceptance capability of write port. (1~8)<br> */
-	UCHAR		rCapability[MxicUtlis_R_ARBITER_MAX][MxicUtlis_PORT_MAX];				/**< TACPTCR.bit.TACPTCR*: Acceptance capability of read port. (1~8)<br> */
-	UCHAR		wCapabilityGr[MxicUtlis_W_ARBITER_GR_MAX][MxicUtlis_PORT_GR_MAX];		/**< TGACPTCW.bit.TGACPTCW*: Acceptance capability of write port.(group) (1~8)<br> */
-	UCHAR		rCapabilityGr[MxicUtlis_R_ARBITER_GR_MAX][MxicUtlis_PORT_GR_MAX];		/**< TGACPTCR.bit.TGACPTCR*: Acceptance capability of read port.(group) (1~8)<br> */
+	kuchar		wCapability[MxicUtlis_W_ARBITER_MAX][MxicUtlis_PORT_MAX];				/**< TACPTCW.bit.TACPTCW*: Acceptance capability of write port. (1~8)<br> */
+	kuchar		rCapability[MxicUtlis_R_ARBITER_MAX][MxicUtlis_PORT_MAX];				/**< TACPTCR.bit.TACPTCR*: Acceptance capability of read port. (1~8)<br> */
+	kuchar		wCapabilityGr[MxicUtlis_W_ARBITER_GR_MAX][MxicUtlis_PORT_GR_MAX];		/**< TGACPTCW.bit.TGACPTCW*: Acceptance capability of write port.(group) (1~8)<br> */
+	kuchar		rCapabilityGr[MxicUtlis_R_ARBITER_GR_MAX][MxicUtlis_PORT_GR_MAX];		/**< TGACPTCR.bit.TGACPTCR*: Acceptance capability of read port.(group) (1~8)<br> */
 } MxicAllAcceptanceCapability;
 
 /** Setting of slave area */
 typedef struct {
-	UINT32		size;							/**< TREGION.bit.TSIZE: Size of slave area.<br> */
-	UINT32		address;						/**< TREGION.bit.TSTAD: Start address of slave area.<br> */
+	kuint32		size;							/**< TREGION.bit.TSIZE: Size of slave area.<br> */
+	kuint32		address;						/**< TREGION.bit.TSTAD: Start address of slave area.<br> */
 } ImMxicSlaveArea;
 
 /** Setting of all slave area */
@@ -774,10 +774,10 @@ typedef struct {
 
 /** Setting of decoding error interruption */
 typedef struct {
-	UCHAR					wErrIntEn;		/**< TMIE.bit.TDEWE: Enable setting of interruption by the decode error of write channel.<br>
+	kuchar					wErrIntEn;		/**< TMIE.bit.TDEWE: Enable setting of interruption by the decode error of write channel.<br>
 													 <ul><li>@ref MxicUtlis_ON
 														 <li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR					rErrIntEn;		/**< TMIE.bit.TDERE: Enable setting of interruption by the decode error of read channel.<br>
+	kuchar					rErrIntEn;		/**< TMIE.bit.TDERE: Enable setting of interruption by the decode error of read channel.<br>
 													 <ul><li>@ref MxicUtlis_ON
 														 <li>@ref MxicUtlis_OFF</ul>  */
 	ImMxicDecErrFunc	pCallBack;			/**< Call Back function pointer	for decode error.	*/
@@ -785,10 +785,10 @@ typedef struct {
 
 /** Decode error status */
 typedef struct {
-	UINT32			wReqAddr;					/**< TDESTW.bit.TDEADW: Decode error demand address of write channel. */
-	UINT32			rReqAddr;					/**< TDESTR.bit.TDEADR: Decode error demand address of read channel. */
-	UCHAR			wReqMaster;				/**< TDESTW.bit.TDEMNW: Decode error demand master of write channel. */
-	UCHAR			rReqMaster;				/**< TDESTR.bit.TDEMNR: Decode error demand master of read channel. */
+	kuint32			wReqAddr;					/**< TDESTW.bit.TDEADW: Decode error demand address of write channel. */
+	kuint32			rReqAddr;					/**< TDESTR.bit.TDEADR: Decode error demand address of read channel. */
+	kuchar			wReqMaster;				/**< TDESTW.bit.TDEMNW: Decode error demand master of write channel. */
+	kuchar			rReqMaster;				/**< TDESTR.bit.TDEMNR: Decode error demand master of read channel. */
 } ImMxicDecErr;
 
 /** Setting of slot assigned to all ports */
@@ -799,14 +799,14 @@ typedef struct {
 
 /** Slot priority level */
 typedef struct{
-	UCHAR			priorityLevelType;		/**< TLVL*.bit.LPL*: Priority level type<br>
+	kuchar			priorityLevelType;		/**< TLVL*.bit.LPL*: Priority level type<br>
 													<ul><li>@ref MxicUtlis_SLOT_PRIORITY_UPPER
 														<li>@ref MxicUtlis_SLOT_PRIORITY_LOWWER
 														<li>@ref MxicUtlis_SLOT_PRIORITY_UPPER_ONLY
 														<li>@ref MxicUtlis_SLOT_PRIORITY_LOWWER_ONLY</ul> */
-	UCHAR			upperPriorityLevel;		/**< TLVL*.bit.LPCCL*: Upper priority ratio<br>
+	kuchar			upperPriorityLevel;		/**< TLVL*.bit.LPCCL*: Upper priority ratio<br>
 													 The setting priority ranges are from 1 to 64("0" value stands for 64) */
-	UCHAR			lowerPriorityLevel;		/**< TLVL*.bit.LPCSL*: Lower priority ratio<br>
+	kuchar			lowerPriorityLevel;		/**< TLVL*.bit.LPCSL*: Lower priority ratio<br>
 													 The setting priority ranges are from 1 to 64("0" value stands for 64) */
 } MxicSlotPriorityLevel;
 
@@ -828,9 +828,9 @@ typedef struct{
 
 /** Setting of master transfer mask */
 typedef struct{
-	USHORT		maskPeriod;					/**< TRMC*.bit.TRMCVP*: Mask period.<br>
+	kushort		maskPeriod;					/**< TRMC*.bit.TRMCVP*: Mask period.<br>
 													 The setting mask ranges are from 4 to 4096("0" value stands for 4096) */
-	UCHAR		maskType;						/**< TRMC*.bit.TRM*: Mask type.<br>
+	kuchar		maskType;						/**< TRMC*.bit.TRM*: Mask type.<br>
 													<ul><li>@ref MxicUtlis_MASTER_MASK_OFF
 														<li>@ref MxicUtlis_MASTER_MASK_ON
 														<li>@ref MxicUtlis_MASTER_MASK_PERIOD_ON</ul> */
@@ -838,7 +838,7 @@ typedef struct{
 
 /** Service history monitor result of port */
 typedef struct {
-	UCHAR		history[MxicUtlis_MAX_MONITOR_HISTORY_NUM];	/**< THST*.bit.THST*: Service history monitor result. */
+	kuchar		history[MxicUtlis_MAX_MONITOR_HISTORY_NUM];	/**< THST*.bit.THST*: Service history monitor result. */
 } ImMxicHistoryMonitor;
 
 /** Service history monitor result of all port */
@@ -857,33 +857,33 @@ typedef struct {
 
 /** All master status monitor result */
 typedef struct {
-	UCHAR		wMaster[MxicUtlis_MAX_W_MASTER_NUM];	/**< TMSTW.bit.TMSTW_*: write master request status.	*/
-	UCHAR		rMaster[MxicUtlis_MAX_R_MASTER_NUM];	/**< TMSTR.bit.TMSTR_*: read master request status.	*/
+	kuchar		wMaster[MxicUtlis_MAX_W_MASTER_NUM];	/**< TMSTW.bit.TMSTW_*: write master request status.	*/
+	kuchar		rMaster[MxicUtlis_MAX_R_MASTER_NUM];	/**< TMSTR.bit.TMSTR_*: read master request status.	*/
 } MxicMasterStatusMonitor;
 
 /** Selection monitor target */
 typedef struct {
-	UCHAR		monitorSel;					/**< TMSEL.bit.TMAS*: Selection monitor function.<br>
+	kuchar		monitorSel;					/**< TMSEL.bit.TMAS*: Selection monitor function.<br>
 													<ul><li>@ref MxicUtlis_MONITOR_TRANSFER
 														<li>@ref MxicUtlis_MONITOR_ACCESS</ul> */
-	UINT32		monitorTarget;					/**< TMSEL.bit.TMSEL*: Selection monitor target from all arbiter or all master.	*/
+	kuint32		monitorTarget;					/**< TMSEL.bit.TMSEL*: Selection monitor target from all arbiter or all master.	*/
 } ImMxicMonitorTarget;
 
 /** Access count or transfer amount monitor parameter */
 typedef struct{
-	UCHAR					startCondition;							/**< TMMD.bit.TMON: Selection monitor start condition.<br>
+	kuchar					startCondition;							/**< TMMD.bit.TMON: Selection monitor start condition.<br>
 																			<ul><li>@ref MxicUtlis_MONITOR_START_OFF
 																				<li>@ref MxicUtlis_MONITOR_START_ON
 																				<li>@ref MxicUtlis_MONITOR_START_ASSERT
 																				<li>@ref MxicUtlis_MONITOR_START_TRG</ul> */
-	UCHAR					endCondition;								/**< TMMD.bit.TMOFF: Selection monitor end condition.<br>
+	kuchar					endCondition;								/**< TMMD.bit.TMOFF: Selection monitor end condition.<br>
 																			<ul><li>@ref MxicUtlis_MONITOR_ENDLESS
 																				<li>@ref MxicUtlis_MONITOR_END_ASSERT
 																				<li>@ref MxicUtlis_MONITOR_END_LIMIT</ul> */
-	UCHAR					updateEnable;								/**< TMMD.bit.TMUP: Monitor update terminal enable.<br>
+	kuchar					updateEnable;								/**< TMMD.bit.TMUP: Monitor update terminal enable.<br>
 																			<ul><li>@ref MxicUtlis_ON
 																				<li>@ref MxicUtlis_OFF</ul> */
-	UCHAR					updateTriggerInterval;					/**< TMMD.bit.TMUPC: Update trigger generation interval.<br>
+	kuchar					updateTriggerInterval;					/**< TMMD.bit.TMUPC: Update trigger generation interval.<br>
 																			<ul><li>@ref MxicUtlis_MONITOR_UPDATE_1
 																				<li>@ref MxicUtlis_MONITOR_UPDATE_8
 																				<li>@ref MxicUtlis_MONITOR_UPDATE_16
@@ -892,19 +892,19 @@ typedef struct{
 																				<li>@ref MxicUtlis_MONITOR_UPDATE_128
 																				<li>@ref MxicUtlis_MONITOR_UPDATE_256
 																				<li>@ref MxicUtlis_MONITOR_UPDATE_512</ul> */
-	UCHAR					updateClearEn;							/**< TMMD.bit.TMCLR: Selection monitor clear by update trigger.<br>
+	kuchar					updateClearEn;							/**< TMMD.bit.TMCLR: Selection monitor clear by update trigger.<br>
 																			<ul><li>@ref MxicUtlis_ON
 																				<li>@ref MxicUtlis_OFF</ul> */
-	UCHAR					startClearEn;								/**< TMMD.bit.TMCLRC: Selection monitor clear by asserting of a monitor start terminal.<br>
+	kuchar					startClearEn;								/**< TMMD.bit.TMCLRC: Selection monitor clear by asserting of a monitor start terminal.<br>
 																			<ul><li>@ref MxicUtlis_ON
 																				<li>@ref MxicUtlis_OFF</ul> */
-	UCHAR					cntVal;									/**< TMMD.bit.TMRSEL: Selection switch of reading value.<br>
+	kuchar					cntVal;									/**< TMMD.bit.TMRSEL: Selection switch of reading value.<br>
 																			<ul><li>@ref MxicUtlis_VALUE_WHEN_UPDATE_TRG
 																				<li>@ref MxicUtlis_TRANS_COUNT_VALUE</ul> */
-	UCHAR					limitAccessTrans;							/**< TMLIMSEL.bit.TMALMS: Selection limit judgment<br>
+	kuchar					limitAccessTrans;							/**< TMLIMSEL.bit.TMALMS: Selection limit judgment<br>
 																			<ul><li>@ref MxicUtlis_MONITOR_TRANSFER
 																				<li>@ref MxicUtlis_MONITOR_ACCESS</ul> */
-	UINT32					limitDetectionTarget;						/**< TMLIMSEL.bit.TLIMSEL: Selection limit target from all arbiter or all master.<br>
+	kuint32					limitDetectionTarget;						/**< TMLIMSEL.bit.TLIMSEL: Selection limit target from all arbiter or all master.<br>
 																		<ul><li>@ref MxicUtlis_3_W_STAT
 																			<li>@ref MxicUtlis_3_W_IIP_A
 																			<li>@ref MxicUtlis_3_W_IIP_B
@@ -987,7 +987,7 @@ typedef struct{
 																			<li>@ref MxicUtlis_SLAVE_R4_PORT2
 																			<li>@ref MxicUtlis_SLAVE_R4_PORT3
 																			<li>@ref MxicUtlis_TARGET_NOTHING</ul> */
-	UINT32					limit;										/**< TMLIMIT.bit.TMLIMT: Limiting value of amount of transfer data.<br>
+	kuint32					limit;										/**< TMLIMIT.bit.TMLIMT: Limiting value of amount of transfer data.<br>
 																			 Setting values are from 0 to 256*256*256*256-1(bit). "0" value stands for no limit.<br>
 																			 When limitAccessTrans is MxicUtlis_MONITOR_TRANSFER, please set the value by the unit of 256 bytes.  */
 	ImMxicMonitorTarget	target[MxicUtlis_MAX_MONITOR_TARGET_NUM];	/**< Selection monitor target. */
@@ -998,7 +998,7 @@ typedef struct{
 
 /** All access count or transfer amount monitor */
 typedef struct {
-	UINT32					count[MxicUtlis_MAX_MONITOR_TARGET_NUM];		/**< TMCNT.bit.TMCNT: Monitor result of access count or transfer amount monitor */
+	kuint32					count[MxicUtlis_MAX_MONITOR_TARGET_NUM];		/**< TMCNT.bit.TMCNT: Monitor result of access count or transfer amount monitor */
 } AllAccessTransMonitor;
 
 /** Write master output port */
@@ -1037,18 +1037,18 @@ typedef struct{
 
 /** Detection parameters of memory access */
 typedef struct {
-	UCHAR				startTrigger;			/**< TSASETW.bit.TSATRGW: Start trigger of memory access.<br>
+	kuchar				startTrigger;			/**< TSASETW.bit.TSATRGW: Start trigger of memory access.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UINT64				master47M1;				/**< TSASETW.bit.TSAMASW47_1: Master of memory access.	*/
-	UINT64				master127M64;			/**< TSASETW.bit.TSAMASW127_64: Master of memory access.	*/
-	UINT32				startAddress;			/**< TSASETW.bit.TSASADW: Start address of memory access.	*/
-	UINT32				endAddress;			/**< TSASETW.bit.TSAEADW: End address of memory access.	*/
-	UCHAR				mode;					/**< TSASETW.bit.TSARW: Mode of memory access.<br>
+	unsigned long long				master47M1;				/**< TSASETW.bit.TSAMASW47_1: Master of memory access.	*/
+	unsigned long long				master127M64;			/**< TSASETW.bit.TSAMASW127_64: Master of memory access.	*/
+	kuint32				startAddress;			/**< TSASETW.bit.TSASADW: Start address of memory access.	*/
+	kuint32				endAddress;			/**< TSASETW.bit.TSAEADW: End address of memory access.	*/
+	kuchar				mode;					/**< TSASETW.bit.TSARW: Mode of memory access.<br>
 													<ul><li>@ref MxicUtlis_ON
 														<li>@ref MxicUtlis_OFF</ul>  */
-	UCHAR				detectMaster;			/**< TSASETW.bit.TSAMNSTW: Detection master of memory access.	*/
-	UCHAR				detectAddress;			/**< TSASETW.bit.TSAADSTW: Detection address of memory access.	*/
+	kuchar				detectMaster;			/**< TSASETW.bit.TSAMNSTW: Detection master of memory access.	*/
+	kuchar				detectAddress;			/**< TSASETW.bit.TSAADSTW: Detection address of memory access.	*/
 } MxicMemoryAccessParameter;
 
 /** Detection parameters of slave each memory access */
@@ -1078,7 +1078,7 @@ Check port specifies parameter.
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32 mxic_utlis_check_port( MxicUtlis *self, ImMxicWrArbiter wrArbiter, 
+kint32 mxic_utlis_check_port( MxicUtlis *self, ImMxicWrArbiter wrArbiter, 
 							ImMxicSpecArbiter arbiter, ImMxicPort port );
 #endif // CO_PARAM_CHECK
 
@@ -1089,7 +1089,7 @@ Get unit table address.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_get_unit_tbl_address( MxicUtlis *self, ImMxicUnit unit, 
+kint32 mxic_utlis_get_unit_tbl_address( MxicUtlis *self, ImMxicUnit unit, 
 									   volatile struct io_jdsmxic_tbl** ioMxicTbl );
 
 /**
@@ -1100,7 +1100,7 @@ Set TAEN register for power saving.
 @param[in]		enable					TRUE : Enable  TSL* access.<br>
 										FALSE: Disable TSL* access.<br>
 */
-VOID mxic_utlis_set_taen( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, BOOL enable );
+void mxic_utlis_set_taen( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic, kboolean enable );
 
 /**
 Init arbiter assign setting.<br>
@@ -1110,23 +1110,23 @@ Init arbiter assign setting.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_init_arbiter_assign( MxicUtlis *self, ImMxicUnit unit, MxicAllArbiterAssign* allAssign );
+kint32 mxic_utlis_init_arbiter_assign( MxicUtlis *self, ImMxicUnit unit, MxicAllArbiterAssign* allAssign );
 
 /* MXIC PCLK change to ON.
  */
-VOID mxic_utlis_on_pclk( MxicUtlis *self, ImMxicUnit unit );
+void mxic_utlis_on_pclk( MxicUtlis *self, ImMxicUnit unit );
 
 /* MXIC PCLK change to OFF.
  */
-VOID mxic_utlis_off_pclk( MxicUtlis *self, ImMxicUnit unit );
+void mxic_utlis_off_pclk( MxicUtlis *self, ImMxicUnit unit );
 
 /* MXIC HCLK change to ON.
  */
-VOID mxic_utlis_on_hclk( MxicUtlis *self, ImMxicUnit unit );
+void mxic_utlis_on_hclk( MxicUtlis *self, ImMxicUnit unit );
 
 /* MXIC HCLK change to OFF.
  */
-VOID mxic_utlis_off_hclk( MxicUtlis *self, ImMxicUnit unit );
+void mxic_utlis_off_hclk( MxicUtlis *self, ImMxicUnit unit );
 
 /**
 Get unit address.
@@ -1135,7 +1135,7 @@ Get unit address.
 @retval			D_DDIM_OK						Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR		Fail - Parameter error.
 */
-INT32 mxic_utlis_get_unit_address( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic** ioMxic );
+kint32 mxic_utlis_get_unit_address( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic** ioMxic );
 
 /**
 Waits until the command becomes executable. 
@@ -1143,13 +1143,13 @@ Waits until the command becomes executable.
 										Please refer to @ref ImMxicUnit for a set value. <br>
 @param[in]		ioMxic					MXIC address.<br>
 */
-VOID mxic_utlis_wait_command_enable( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic );
+void mxic_utlis_wait_command_enable( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic );
 
 /**
 Configuration start and wait complete.
 @param[in]		ioMxic					MXIC address.<br>
 */
-VOID mxic_utlis_process_configuration( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic );
+void mxic_utlis_process_configuration( MxicUtlis *self, ImMxicUnit unit, volatile struct io_jdsmxic* ioMxic );
 
 /**
 This function get acceptance capability of the specified port.<br> 
@@ -1165,7 +1165,7 @@ This function get acceptance capability of the specified port.<br>
 @retval			D_DDIM_OK					Success.
 @retval			MxicUtlis_INPUT_PARAM_ERROR	Fail - Parameter error.
 */
-INT32	mxic_utlis_get_acceptance_capability( MxicUtlis *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
-		ImMxicSpecArbiter arbiter, ImMxicPort port, UCHAR* capability);
+kint32	mxic_utlis_get_acceptance_capability( MxicUtlis *self, ImMxicUnit unit, ImMxicWrArbiter wrArbiter, 
+		ImMxicSpecArbiter arbiter, ImMxicPort port, kuchar* capability);
 
 #endif	// __MXIC_UTLIS_H__

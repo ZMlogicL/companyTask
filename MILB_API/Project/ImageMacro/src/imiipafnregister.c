@@ -14,31 +14,51 @@
 #include "imiipafnregister.h"
 
 
-K_TYPE_DEFINE_WITH_PRIVATE(ImIipAfnRegister, im_iip_afn_register);
-#define IM_IIP_AFN_REGISTER_GET_PRIVATE(o) (K_OBJECT_GET_PRIVATE((o), ImIipAfnRegisterPrivate, IM_TYPE_IIP_AFN_REGISTER	))
+G_DEFINE_TYPE(ImIipAfnRegister, im_iip_afn_register, G_TYPE_OBJECT);
+#define IM_IIP_AFN_REGISTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IM_TYPE_IIP_AFN_REGISTER, ImIipAfnRegisterPrivate));
 
 
 struct _ImIipAfnRegisterPrivate
 {
-	kint a;
+	gint a;
 };
 /**
- * IMPL
+ *DECLS
  */
-static void im_iip_afn_register_constructor(ImIipAfnRegister *self)
+static void 		dispose_od(GObject *object);
+static void 		finalize_od(GObject *object);
+/**
+ *IMPL
+ */
+static void 		im_iip_afn_register_class_init(ImIipAfnRegisterClass *klass)
 {
-//	ImIipAfnRegisterPrivate *priv = IM_IIP_AFN_REGISTER_GET_PRIVATE(self);
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class -> dispose = dispose_od;
+	object_class -> finalize = finalize_od;
+	g_type_class_aim_private(klass, sizeof(ImIipAfnRegisterPrivate));
 }
 
-static void im_iip_afn_register_destructor(ImIipAfnRegister *self)
+static void 		im_iip_afn_register_init(ImIipAfnRegister *self)
 {
-//	ImIipAfnRegisterPrivate *priv = IM_IIP_AFN_REGISTER_GET_PRIVATE(self);
+	ImIipAfnRegisterPrivate *priv = IM_IIP_AFN_REGISTER_GET_PRIVATE(self);
+}
+
+static void 		dispose_od(GObject *object)
+{
+	ImIipAfnRegisterPrivate *priv = IM_IIP_AFN_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_afn_register_parent_class) -> dispose(object);
+}
+
+static void 		finalize_od(GObject *object)
+{
+	ImIipAfnRegisterPrivate *priv = IM_IIP_AFN_REGISTER_GET_PRIVATE(object);
+	G_OBJECT_CLASS(im_iip_afn_register_parent_class) -> dispose(object);
 }
 /**
  * PUBLIC
  */
-ImIipAfnRegister* im_iip_afn_register_new(void)
+ImIipAfnRegister* 		im_iip_afn_register_new(void)
 {
-	ImIipAfnRegister *self = k_object_new_with_private(IM_TYPE_IIP_AFN_REGISTER, sizeof(ImIipAfnRegisterPrivate));
+	ImIipAfnRegister *self = g_object_new(IM_TYPE_IIP_AFN_REGISTER, NULL);
 	return self;
 }

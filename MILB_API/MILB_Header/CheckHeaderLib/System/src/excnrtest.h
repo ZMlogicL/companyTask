@@ -28,6 +28,7 @@
 typedef struct _ExCnrTest	        ExCnrTest;
 typedef struct _ExCnrTestPrivate	ExCnrTestPrivate;
 
+
 struct  _ExCnrTest
 {
 	KObject parent;

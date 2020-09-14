@@ -53,7 +53,7 @@
 *****************************************
 
 #define D_IP_SHDR_OK-------------->#define IpShdr_D_IP_SHDR_OK
-#define D_IP_SHDR_NG-------------->#define IpShdr_D_IP_SHDR_NG	
+#define D_IP_SHDR_NG-------------->#define IpShdr_D_IP_SHDR_NG
 
 
 =========================================================================================================
@@ -79,7 +79,7 @@ CT_Im_IIP_3_1_4------------------->ct_im_iip_afn1_3_1_4
 CT_Im_IIP_Run_3_1----------------->ct_im_iip_afn1_run_3_1
 ct_im_hdmi_pcsim_test------------->ct_im_hdmi1_pcsim_test
 CT_Im_IIP_6_1_1------------------->ct_im_iip_blend_6_1_1
-CT_Im_IIP_6_2_1------------------->ct_im_iip_blend_6_2_1		
+CT_Im_IIP_6_2_1------------------->ct_im_iip_blend_6_2_1
 CT_Im_IIP_Run_6_1----------------->ct_im_iip_blend_run_6_1
 CT_Im_IIP_Run_6_2----------------->ct_im_iip_blend_run_6_2
 CT_Im_IIP_7_1_1------------------->ct_im_iip_csc_7_1_1
@@ -88,6 +88,16 @@ CT_Im_IIP_Run_7_1----------------->ct_im_iip_csc_run_7_1
 CT_Im_IIP_12_1_1------------------>ct_im_iip_cfl_12_1_1
 CT_Im_IIP_12_1_1------------------>ct_im_iip_cfl_12_1_2
 CT_Im_IIP_Run_12_1---------------->ct_im_iip_cfl_run_12_1
+Im_HDMI_Set_Clock----------------->ct_im_hdmi_set_clock
+Im_HDMI_Get_Clock----------------->ct_im_hdmi_get_clock
+Im_HDMI_Set_Tx_Term--------------->ct_im_hdmi_set_tx_term
+Im_HDMI_Get_Tx_Term--------------->ct_im_hdmi_get_tx_term
+Im_HDMI_Get_Transmitter_Control--->ct_im_hdmi_get_transmitter_control
+Im_HDMI_Set_Transmitter_Control--->ct_im_hdmi_set_transmitter_control
+Im_HDMI_Set_Voltage_Level--------->ct_im_hdmi_set_voltage_level
+Im_HDMI_Get_Voltage_Level--------->ct_im_hdmi_get_voltage_level
+Im_HDMI_Set_Voltage_Level--------->ct_im_hdmi_set_voltage_level
+
 
 
 /target/cpu_tkernel/basefw/ip路径下
@@ -117,8 +127,8 @@ IP_MFNR_Calc_CropCornerPos-------->ip_mfnr2_calc_cropcornerpos
 =========================================================================================================
 
 *****************************************
-*					
-*	    结构体名更改          		
+* 
+*          结构体名更改           
 *                                       
 *****************************************
 
@@ -126,15 +136,13 @@ IP_MFNR_Calc_CropCornerPos-------->ip_mfnr2_calc_cropcornerpos
 typedef struct {                                          typedef struct {
         UINT32                       heapAddr;                    UINT32                       heapAddr;
         ULONG                        heapSize;                    ULONG                        heapSize;
-        FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm;                  FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm;			
+        FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm;                  FJ_STILL_IP_IMG_INFO_PRM     imgInfoPrm; 
 } IP_SHDR_INIT_PRM;-------------------------------------->} IpShdrInitPrm;
-
 
 
 typedef struct {                                          typedef struct {
         VOID*                        rsv0;                        VOID*                        rsv0;
-} IP_SHDR_SET_PRM;-------------------------------------->} IP_SHDR_SET_PRM;	
-
+} IP_SHDR_SET_PRM;--------------------------------------->} IP_SHDR_SET_PRM; 
 
 
 typedef struct {                                          typedef struct {
@@ -142,30 +150,126 @@ typedef struct {                                          typedef struct {
         FJ_STILL_IP_IMAGE            imgSrcM[ 2 ];                FJ_STILL_IP_IMAGE            imgSrcM[ 2 ];
         FJ_STILL_IP_IMAGE            imgSrcS[ 2 ];                FJ_STILL_IP_IMAGE            imgSrcS[ 2 ];
         FJ_STILL_IP_IMAGE            imgDst;                      FJ_STILL_IP_IMAGE            imgDst;
-} IP_SHDR_START_PRM;------------------------------------>} IpShdrStartPrm;
+} IP_SHDR_START_PRM;------------------------------------->} IpShdrStartPrm;
+
+
+typedef struct {                                         typedef struct {
+        INT32   RLf1;------------------------------------------->INT32   rlf1;
+        INT32   RLf2;------------------------------------------->INT32   rlf2;
+        INT32   RMid;------------------------------------------->INT32   rmid;
+        INT32   RRt1;------------------------------------------->INT32   rrt1;
+        INT32   RRt2;------------------------------------------->INT32   rrt2;
+}T_HIST_RANGE;------------------------------------------>} THistRange;
+
+
+typedef struct{                                          typedef struct{
+        signed char    Y1MaxAdj;                                 signed char    Y1MaxAdj;
+        signed char    Y1MinAdj;                                 signed char    Y1MinAdj;
+        signed char    Y2MaxAdj;                                 signed char    Y2MaxAdj;
+        signed char    Y2MinAdj;                                 signed char    Y2MinAdj;
+        signed char    Y3MaxAdj;                                 signed char    Y3MaxAdj;
+        signed char    Y3MinAdj;                                 signed char    Y3MinAdj;
+        signed char    Y4MaxAdj;                                 signed char    Y4MaxAdj;
+        signed char    Y4MinAdj;                                 signed char    Y4MinAdj;
+        signed char    Y1Toy2;                                   signed char    Y1Toy2;
+        signed char    Y2PixMul;                                 signed char    Y2PixMul;
+}T_MLP_ADJ;--------------------------------------------->} TMlpAdj;
+
+
+typedef struct {                                         typedef struct {
+        E_IP_MFNR_FIL_MARGIN       filMargin;------------------->E_IP_MFNR_FIL_MARGIN       filMargin;
+        FJ_STILL_IP_IMAGE          imgSrc_1st[ 3 ];------------->FJ_STILL_IP_IMAGE          imgSrc1st[ 3 ];
+        FJ_STILL_IP_IMAGE          imgSrc_2nd[ 2 ];------------->FJ_STILL_IP_IMAGE          imgSrc2nd[ 2 ];
+        FJ_STILL_IP_IMAGE          imgMe;                        FJ_STILL_IP_IMAGE          imgMe;
+        FJ_STILL_IP_IMAGE          imgDst;                       FJ_STILL_IP_IMAGE          imgDst;
+} IP_MFNR_START_PRM;------------------------------------>} IpMfnrStartPrm;
+
+
+typedef struct {                                        typedef struct {
+        FLOAT             pos_x;------------------------------->FLOAT             posX;
+        FLOAT             pos_y;------------------------------->FLOAT             posY;
+} IP_MFNR_CROP_XY_POS;---------------------------------->} IpMfnrCropXyPos;
+
+
+typedef struct {                                        typedef struct {
+        USHORT            width;------------------------------->USHORT            width;
+        USHORT            lines;------------------------------->USHORT            lines;
+} IP_MFNR_CROP_IMG_SIZE;-------------------------------->} IpMfnrCropImgSize;
+
+
+typedef struct {
+	IP_MFNR_CROP_XY_POS			left_top;
+	IP_MFNR_CROP_XY_POS			right_top;
+	IP_MFNR_CROP_XY_POS			left_bottom;
+	IP_MFNR_CROP_XY_POS			right_bottom;
+} IP_MFNR_CROP_CORNER_POS;
+
+
+=========================================================================================================
+
+*****************************************
+* 
+*           枚举名更改           
+*                                       
+*****************************************
+
+1.1.19 枚举定义
+枚举定义与宏定义类似.
+例:
+typedef enum
+{
+        Demo_MAX,
+        Demo_MIDDLE,
+        Demo_MIN
+}DemoTest;  //枚举定义单词数限制未找到
+
+
+//
+
+
+typedef enum {                                           typedef enum {
+        E_IP_MFNR_GMD_MODE_FPT = 0,----------------------------->IpMfnr_E_IP_MFNR_GMD_MODE_FPT = 0,
+        E_IP_MFNR_GMD_MODE_PRE_HRE,----------------------------->IpMfnr_E_IP_MFNR_GMD_MODE_PRE_HRE,
+        E_IP_MFNR_GMD_MODE_GYRO,-------------------------------->IpMfnr_E_IP_MFNR_GMD_MODE_GYRO,
+} E_IP_MFNR_GMD_MODE;----------------------------------->} IpMfnrEIpMfnrGmdMode
+
+
+typedef enum {                                           typedef enum {
+        IpMfnr_E_IP_MFNR_FIL_MARGIN_16 = 0,--------------------->IpMfnr_E_IP_MFNR_FIL_MARGIN_16 = 0,
+        IpMfnr_E_IP_MFNR_FIL_MARGIN_32,------------------------->IpMfnr_E_IP_MFNR_FIL_MARGIN_32,
+} E_IP_MFNR_FIL_MARGIN;--------------------------------->} IpMfnrEIpMfnrFilMargin
+
+
+
+
 
 
 
 =========================================================================================================
 
 *****************************************
-*					
-*	        全局变量          		
+*                         
+*             全局变量                        
 *                                       
 *****************************************
 
 get_reg---------------------->getReg
+read_data-------------------->readData
+tx_invid0-------------------->txInvid0
+ctrl_param------------------->ctrlParam
+
+
 
 =========================================================================================================
 
 *****************************************
-*					
-*	        其它          		
+*                                             
+*                 其它                            
 *                                       
 *****************************************
 
 
-一、引用外部结构未改
+一、引用外部结体未改
 
 
 二、引用外部函数未改
@@ -174,16 +278,29 @@ Im_FPT_Ctrl_LUTRAM
 Im_FPT_Start
 Im_FPT_WaitEnd
 Im_FPT_Stop
+T_IM_IIP_PIXFMTTBL
+T_IM_IIP_UNIT_CFG
 
 
 
 三、引用外部变量未改
+HDMI_TX
+
+VLEVCTRL
 
 
 四、引用外部宏未改
 Ddim_Print
 D_DDIM_OK
 D_DDIM_INPUT_PARAM_ERROR
+Im_DISP_APB_Clock_On
+Im_DISP_APB_Clock_Off
+D_IM_IIP_INT_FACTOR_AXIERR
+D_IM_IIP_INT_FACTOR_SL5END
+D_IM_IIP_PARAM_PLDUNIT_AFN0
+D_IM_IIP_PARAM_PLDUNIT_SL5
+
+
 
 =========================================================================================================
 -----------------------------------------------------------------------------------------------------------------------

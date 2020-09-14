@@ -15,13 +15,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pdm.h"
-#include "dd_pdm.h"
+// #include "dd_pdm.h"
 #include "ct_dd_pdm.h"
-#include "dd_top.h"
-#include "dd_cache.h"
-#include "dd_gic.h"
-#include "dd_audio.h"
-#include "dd_hdmac0.h"
+// #include "dd_top.h"
+// #include "dd_cache.h"
+// #include "dd_gic.h"
+// #include "dd_audio.h"
+// #include "dd_hdmac0.h"
+#include "../../DeviceDriver/Peripheral/src/ddpdm.h"
+#include "../../DeviceDriver/Peripheral/src/ddaudio.h"
+#include "../../DeviceDriver/Peripheral/src/ddhdmac0.h"
 #include "peripheral.h"
 #include "ctddpdmothertest.h"
 #include "ctddpdmstatustest.h"
@@ -59,7 +62,7 @@ void ct_dd_pdm_statustest_get(CtDdPdmStatustest *self)
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	result = Dd_Pdm_Get_Status(self->test->ch, E_DD_PDM_INT_TYPE_FFOVF, &status);
+	result = dd_pdm_get_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_FFOVF, &status);
 	
 	Ddim_Print(("status=0x%x\n", status));
 	
@@ -73,9 +76,9 @@ void ct_dd_pdm_statustest_get2(CtDdPdmStatustest *self)
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	result = Dd_Pdm_Get_Status(self->test->ch, E_DD_PDM_INT_TYPE_DMA0, &status);
+	result = dd_pdm_get_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_DMA0, &status);
 	
 	Ddim_Print(("status=0x%x\n", status));
 	
@@ -89,9 +92,9 @@ void ct_dd_pdm_statustest_get3(CtDdPdmStatustest *self)
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	Dd_Pdm_Init();
+	dd_pdm_init(dd_pdm_get());
 	
-	result = Dd_Pdm_Get_Status(self->test->ch, E_DD_PDM_INT_TYPE_DMA1, &status);
+	result = dd_pdm_get_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_DMA1, &status);
 	
 	Ddim_Print(("status=0x%x\n", status));
 	
@@ -104,7 +107,7 @@ void ct_dd_pdm_statustest_get_get_e1(CtDdPdmStatustest *self)
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	result = Dd_Pdm_Get_Status(self->test->ch, E_DD_PDM_INT_TYPE_FFOVF, NULL);
+	result = dd_pdm_get_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_FFOVF, NULL);
 	
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
@@ -115,7 +118,7 @@ void ct_dd_pdm_statustest_clear1(CtDdPdmStatustest *self)
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	result = Dd_Pdm_Clear_Status(self->test->ch, E_DD_PDM_INT_TYPE_FFOVF);
+	result = dd_pdm_clear_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_FFOVF);
 	
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
@@ -126,7 +129,7 @@ void ct_dd_pdm_statustest_clear2( CtDdPdmStatustest *self )
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	result = Dd_Pdm_Clear_Status(self->test->ch, E_DD_PDM_INT_TYPE_DMA0);
+	result = dd_pdm_clear_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_DMA0);
 	
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }
@@ -137,7 +140,7 @@ void ct_dd_pdm_statustest_clear3( CtDdPdmStatustest *self )
 	
 	Ddim_Print(( "<%s> Start\n", __FUNCTION__ ));
 	
-	result = Dd_Pdm_Clear_Status(self->test->ch, E_DD_PDM_INT_TYPE_DMA1);
+	result = dd_pdm_clear_status(dd_pdm_get(),self->test->ch, DdPdm_INT_TYPE_DMA1);
 	
 	Ddim_Print(("<%s> End. result=0x%x, self->test->ch=%d\n", __FUNCTION__, result, self->test->ch));
 }

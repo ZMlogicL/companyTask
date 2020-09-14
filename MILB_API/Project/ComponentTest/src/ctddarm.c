@@ -1,9 +1,9 @@
 /*
 *@Copyright (C) 2010-2019 上海网用软件有限公司
-*@date                :2020-09-02
+*@date                :2020-09-10
 *@author              :jianghaodong
 *@brief               :CtDdArm类
-*@rely                :klib
+*@rely                :glib
 *@function
 *
 *设计的主要功能:
@@ -11,21 +11,22 @@
 *@version
 *
 */
+
 #include <stdlib.h>
 #include <string.h>
 #include "driver_common.h"
-#include "dd_arm.h"
-#include "dd_timestamp.h"
+#include "ddarm.h"
+#include "ddtimestamp.h"
 
 #include "ctddarm.h"
 
-K_TYPE_DEFINE_WITH_PRIVATE(CtDdArm, ct_dd_arm);
-#define CT_DD_ARM_GET_PRIVATE(o)(K_OBJECT_GET_PRIVATE ((o),CtDdArmPrivate,CT_TYPE_DD_ARM))
+G_DEFINE_TYPE(CtDdArm, ct_dd_arm, G_TYPE_OBJECT);
+#define CT_DD_ARM_GET_PRIVATE(o)(G_TYPE_INSTANCE_GET_PRIVATE ((o),CT_TYPE_DD_ARM, CtDdArmPrivate))
 
 struct _CtDdArmPrivate
 {
+	DdTimestamp *ddTimestamp;
 };
-
 
 /*----------------------------------------------------------------------*/
 /* Definition															*/
@@ -45,30 +46,52 @@ struct _CtDdArmPrivate
 /*----------------------------------------------------------------------*/
 /* Global Data															*/
 /*----------------------------------------------------------------------*/
-static kulong S_GCT_ARM_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64)));
+static gulong S_GCT_ARM_SPIN_LOCK __attribute__((section(".LOCK_SECTION"), aligned(64)));
 
+/*
+*DECLS
+*/
+static void 	dispose_od(GObject *object);
+static void 	finalize_od(GObject *object);
 /*
 *IMPL
 */
-static void ct_dd_arm_constructor(CtDdArm *self) 
+
+static void ct_dd_arm_class_init(CtDdArmClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	object_class->dispose = dispose_od;
+	object_class->finalize = finalize_od;
+	g_type_class_add_private(klass, sizeof(CtDdArmPrivate));
 }
 
-static void ct_dd_arm_destructor(CtDdArm *self) 
+static void ct_dd_arm_init(CtDdArm *self)
 {
+	CtDdArmPrivate *priv = CT_DD_ARM_GET_PRIVATE(self);
+	priv->ddTimestamp=dd_timestamp_new();
 }
+
+static void dispose_od(GObject *object)
+{
+	CtDdArm *self = (CtDdArm*)object;
+	CtDdArmPrivate *priv = CT_DD_ARM_GET_PRIVATE(self);
+	if(priv->ddTimestamp){
+		g_object_unref(priv->ddTimestamp);
+		priv->ddTimestamp=NULL;
+	}
+	G_OBJECT_CLASS(fft_wrap_parent_class)->dispose(object);
+}
+
+static void finalize_od(GObject *object)
+{
+//	CtDdArm *self = (CtDdArm*)object;
+//	CtDdArmPrivate *priv = CT_DD_ARM_GET_PRIVATE(self);
+}
+
 
 /*
 *PUBLIC
 */
-/*----------------------------------------------------------------------*/
-/* Local Method Definition												*/
-/*----------------------------------------------------------------------*/
-// Nothing Special
-
-/*----------------------------------------------------------------------*/
-/* Function																*/
-/*----------------------------------------------------------------------*/
 /**
  * @brief  Command main function for ARM test.
  * @param  int argc	:The number of parameters
@@ -100,13 +123,15 @@ static void ct_dd_arm_destructor(CtDdArm *self)
  *		| waitns          |      |      |Wait nsec.                                                 |
  *		+-----------------+------+------+-----------------------------------------------------------+
  */
-void ct_dd_arm_main_main(CtDdArm* self, kint argc, kchar** argv)
+void ct_dd_arm_main_main(CtDdArm* self, gint argc, gchar** argv)
 {
-	kint32 ret;
-	kuint32 sr1;
-	kuint32 sr2;
-	kuint32 r0=0;
-	kuint32 r1=0;
+	gint32 ret;
+	guint32 sr1;
+	guint32 sr2;
+	guint32 r0=0;
+	guint32 r1=0;
+
+	CtDdArmPrivate *priv = CT_DD_ARM_GET_PRIVATE(self);
 
 	if( argc < 2 ) {
 		Ddim_Print(("please check 1st parameter!!\n"));
@@ -254,35 +279,35 @@ void ct_dd_arm_main_main(CtDdArm* self, kint argc, kchar** argv)
 	else if( 0 == strcmp( argv[1], "waitns" ) ) {
 		UINT64 timestamp_counter_1;
 		UINT64 timestamp_counter_2;
-		kulong timestamp;
+		gulong timestamp;
 
 		Ddim_Print(("Dd_ARM_Wait_ns start\n"));
 
-		Dd_TIMESTAMP_Get_Counter( &timestamp_counter_1 );
+		dd_timestamp_get_counter(priv->ddTimestamp, &timestamp_counter_1 );
 	    timestamp_counter_1 = (timestamp_counter_1 / 40) * 1000;  // 40MHz
 
 		Dd_ARM_Wait_ns(1000);
-		Dd_TIMESTAMP_Get_Counter( &timestamp_counter_2 );
+		dd_timestamp_get_counter(priv->ddTimestamp, &timestamp_counter_2 );
 	    timestamp_counter_2 = (timestamp_counter_2 / 40) * 1000;  // 40MHz
-	    timestamp = (kulong)(timestamp_counter_2 - timestamp_counter_1);
+	    timestamp = (gulong)(timestamp_counter_2 - timestamp_counter_1);
 	    Ddim_Print(("timestamp_counter %ld ns\n", timestamp));
 
 	    Dd_ARM_Wait_ns(10000);
-	    Dd_TIMESTAMP_Get_Counter( &timestamp_counter_1 );
+	    dd_timestamp_get_counter(priv->ddTimestamp, &timestamp_counter_1 );
 	    timestamp_counter_1 = (timestamp_counter_1 / 40) * 1000;  // 40MHz
-	    timestamp = (kulong)(timestamp_counter_1 - timestamp_counter_2);
+	    timestamp = (gulong)(timestamp_counter_1 - timestamp_counter_2);
 	    Ddim_Print(("timestamp_counter %ld ns\n", timestamp));
 
 		Dd_ARM_Wait_ns(100000);
-	    Dd_TIMESTAMP_Get_Counter( &timestamp_counter_2 );
+	    dd_timestamp_get_counter(priv->ddTimestamp, &timestamp_counter_2 );
 	    timestamp_counter_2 = (timestamp_counter_2 / 40) * 1000;  // 40MHz
-	    timestamp = (kulong)(timestamp_counter_2 - timestamp_counter_1);
+	    timestamp = (gulong)(timestamp_counter_2 - timestamp_counter_1);
 	    Ddim_Print(("timestamp_counter %ld ns\n", timestamp));
 
 		Dd_ARM_Wait_ns(200000);
-	    Dd_TIMESTAMP_Get_Counter( &timestamp_counter_1 );
+	    dd_timestamp_get_counter(priv->ddTimestamp, &timestamp_counter_1 );
 	    timestamp_counter_1 = (timestamp_counter_1 / 40) * 1000;  // 40MHz
-	    timestamp = (kulong)(timestamp_counter_1 - timestamp_counter_2);
+	    timestamp = (gulong)(timestamp_counter_1 - timestamp_counter_2);
 	    Ddim_Print(("timestamp_counter %ld ns\n", timestamp));
 
 		Ddim_Print(("Dd_ARM_Wait_ns end\n"));
@@ -295,6 +320,6 @@ void ct_dd_arm_main_main(CtDdArm* self, kint argc, kchar** argv)
 
 CtDdArm* ct_dd_arm_new(void) 
 {
-    CtDdArm *self = k_object_new_with_private(CT_TYPE_DD_ARM, sizeof(CtDdArmPrivate));
+    CtDdArm *self = g_object_new(CT_TYPE_DD_ARM, NULL);
     return self;
 }

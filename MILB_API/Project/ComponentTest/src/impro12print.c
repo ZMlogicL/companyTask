@@ -424,19 +424,19 @@ void im_pro_1_2_print_6(ImPro12Print *self,const char* string, E_IM_PRO_SLVS_STR
 
 void im_pro_1_2_print_7(ImPro12Print *self,const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType)
 {
-    if(((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg != D_IM_PRO_TRG_STATUS_RUNNING) { 
-        DriverCommon_DDIM_PRINT(("Im_PRO_SLVS_Start(%d) %s result:trgr (%d)\n", 
+    if(((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[ImPro_SLVS_STREAM_TYPE_A].trgr.bit.trg != D_IM_PRO_TRG_STATUS_RUNNING) { 
+        DriverCommon_DDIM_PRINT(("impro_senslvs_status(%d) %s result:trgr (%d)\n", 
         streamType, string, 
-        ((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg))
+        ((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[ImPro_SLVS_STREAM_TYPE_A].trgr.bit.trg))
     }; 
 }
 
 void im_pro_1_2_print_8(ImPro12Print *self,const char* string, E_IM_PRO_SLVS_STREAM_TYPE streamType, kuchar force)
 {
-    if(((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg != D_IM_PRO_TRG_STATUS_STOPPED) { 
+    if(((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[ImPro_SLVS_STREAM_TYPE_A].trgr.bit.trg != D_IM_PRO_TRG_STATUS_STOPPED) { 
         DriverCommon_DDIM_PRINT(("Im_PRO_SLVS_Stop(%u, %u) %s result:trgr (%d)\n", 
         streamType, force, string, 
-        ((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[E_IM_PRO_SLVS_STREAM_TYPE_A].trgr.bit.trg))
+        ((AbsImProPrint*)self)->ioPro->sen.slvsec.stream[ImPro_SLVS_STREAM_TYPE_A].trgr.bit.trg))
     }; 
 }
 #endif

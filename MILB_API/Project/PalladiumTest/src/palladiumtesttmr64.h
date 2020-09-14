@@ -34,8 +34,7 @@ struct _PalladiumTestTmr64
 
 KConstType 					palladium_test_tmr64_get_type(void);
 PalladiumTestTmr64* 	palladium_test_tmr64_new(void);
-PalladiumTestTmr64* 	palladium_test_tmr64_get(void);
 
-void 								palladium_test_tmr64_pt_dd_main(void);
+void 								palladium_test_tmr64_pt_dd_main(PalladiumTestTmr64* self);
 
 #endif /* __PALLADIUM_TEST_TMR64_H__ */

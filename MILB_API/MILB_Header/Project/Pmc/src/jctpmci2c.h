@@ -3,7 +3,7 @@
 *@date                :2020-09-08
 *@author              :申雨
 *@brief               :sns 索喜rtos
-*@rely                :klib
+*@rely                :glib
 *@function
 *sns 索喜rtos，采用ETK-C语言编写
 *设计的主要功能:
@@ -18,12 +18,8 @@
 #define __JCTPMC_I2C_H__
 
 
-#include <klib.h>
-
-
-#define JCTPMC_TYPE_I2C		(jctpmc_i2c_get_type())
-#define JCTPMC_I2C(obj)			(K_TYPE_CHECK_INSTANCE_CAST(obj, JctpmcI2c))
-#define JCTPMC_IS_I2C(obj)		(K_TYPE_CHECK_INSTANCE_TYPE(obj, JCTPMC_TYPE_I2C))
+#include <stdio.h>
+#include <glib-object.h>
 
 
 typedef union 				_IoPmcI2cSdat IoPmcI2cSdat;
@@ -35,90 +31,88 @@ typedef union 				_IoPmcI2cCtl2 IoPmcI2cCtl2;
 typedef union 				_IoPmcI2cTopr IoPmcI2cTopr;
 typedef union 				_IoPmcI2cCtl3 IoPmcI2cCtl3;
 typedef struct 				_IoPmcI2c IoPmcI2c;
-typedef struct 				_JctpmcI2c JctpmcI2c;
-typedef struct 				_JctpmcI2cPrivate JctpmcI2cPrivate;
 
 /* I2C */
 union _IoPmcI2cSdat {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	data		:8;
-		kulong				:24;
+		gulong	data		:8;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cSt {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	mode 		:5;
-		kulong				:2;
+		gulong	mode 		:5;
+		gulong				:2;
 		unsigned long	int 		:1;
-		kulong				:24;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cCst {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	bb			:1;
-		kulong	tocdiv		:2;
-		kulong	terr		:1;
-		kulong	tsda		:1;
-		kulong	tgscl		:1;
-		kulong	pecnext		:1;
-		kulong	pecfault	:1;
-		kulong				:24;
+		gulong	bb			:1;
+		gulong	tocdiv		:2;
+		gulong	terr		:1;
+		gulong	tsda		:1;
+		gulong	tgscl		:1;
+		gulong	pecnext		:1;
+		gulong	pecfault	:1;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cCtl1 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	start		:1;
-		kulong	stop		:1;
-		kulong	inten		:1;
-		kulong				:1;
-		kulong	ack			:1;
-		kulong	gcmen		:1;
-		kulong	smbare		:1;
-		kulong	clrst		:1;
-		kulong				:24;
+		gulong	start		:1;
+		gulong	stop		:1;
+		gulong	inten		:1;
+		gulong				:1;
+		gulong	ack			:1;
+		gulong	gcmen		:1;
+		gulong	smbare		:1;
+		gulong	clrst		:1;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cAddr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	addr		:7;
-		kulong	saen		:1;
-		kulong				:24;
+		gulong	addr		:7;
+		gulong	saen		:1;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cCtl2 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	enable		:1;
-		kulong	sclfrq		:7;
-		kulong				:24;
+		gulong	enable		:1;
+		gulong	sclfrq		:7;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cTopr {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	topr 		:8;
-		kulong				:24;
+		gulong	topr 		:8;
+		gulong				:24;
 	}bit;
 };
 
 union _IoPmcI2cCtl3 {
-	kulong		word;
+	gulong		word;
 	struct {
-		kulong	s10adr		:3;
-		kulong	s10en		:1;
-		kulong	hscdiv 		:4;
-		kulong				:24;
+		gulong	s10adr		:3;
+		gulong	s10en		:1;
+		gulong	hscdiv 		:4;
+		gulong				:24;
 	}bit;
 };
 
@@ -141,16 +135,8 @@ struct _IoPmcI2c {
 	/* 1DFF_(701C - 701Fh) */
 	IoPmcI2cCtl3		ctl3;
 	/* 1DFF_(7020 - 73FFh) */
-	kuchar		dmyPmcI2c702073ff[0x7400-0x7020];
+	guchar		dmyPmcI2c702073ff[0x7400-0x7020];
 };
-
-struct _JctpmcI2c {
-	KObject parent;
-};
-
-
-KConstType 			jctpmc_i2c_get_type(void);
-JctpmcI2c*		        jctpmc_i2c_new(void);
 
 
 #endif /* __JCTPMC_I2C_H__ */

@@ -283,29 +283,29 @@ VOID ct_im_r2y_run3_run(CtImR2yRun3 *self, const kuint32 ctIdx1st, const kuint32
 	gctImR2yInAddrRgb8bit.rgb.addrR  = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U8_R_ADDR_TOP;
 	gctImR2yInAddrRgb8bit.rgb.addrG  = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U8_G_ADDR_TOP;
 	gctImR2yInAddrRgb8bit.rgb.addrB  = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U8_B_ADDR_TOP;
-	gct_im_r2y_in_addr_rgb12bit.rgb.addrR = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_R_ADDR_TOP;
-	gct_im_r2y_in_addr_rgb12bit.rgb.addrG = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_G_ADDR_TOP;
-	gct_im_r2y_in_addr_rgb12bit.rgb.addrB = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_B_ADDR_TOP;
+	gctImR2yInAddrRgb12bit.rgb.addrR = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_R_ADDR_TOP;
+	gctImR2yInAddrRgb12bit.rgb.addrG = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_G_ADDR_TOP;
+	gctImR2yInAddrRgb12bit.rgb.addrB = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_P12_B_ADDR_TOP;
 	gctImR2yInAddrRgb16bit.rgb.addrR = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U16_R_ADDR_TOP;
 	gctImR2yInAddrRgb16bit.rgb.addrG = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U16_G_ADDR_TOP;
 	gctImR2yInAddrRgb16bit.rgb.addrB = (VOID*)D_IM_R2Y_IMG_MEM_IN_RGB_U16_B_ADDR_TOP;
-	gctImR2yOutAddrYcc422.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
+	gctImR2yOutAddrYcc422.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_Y_ADDR_TOP;
-	gctImR2yOutAddrYcc422.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
+	gctImR2yOutAddrYcc422.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CB_ADDR_TOP;
-	gctImR2yOutAddrYcc422.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCr
+	gctImR2yOutAddrYcc422.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCr
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC422_CR_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc444.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
+	gct_im_r2y_out_addr_ycc444.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_Y_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc444.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
+	gct_im_r2y_out_addr_ycc444.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_CB_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc444.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCr
+	gct_im_r2y_out_addr_ycc444.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCr
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC444_CR_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrY
+	gctImR2yOutAddrYcc420.outputAddr[ImR2y_YYW_BANK_0].ycc.addrY
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_Y_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCb
+	gctImR2yOutAddrYcc420.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCb
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CB_ADDR_TOP;
-	gct_im_r2y_out_addr_ycc420.outputAddr[D_IM_R2Y_YYW_BANK_0].ycc.addrCr
+	gctImR2yOutAddrYcc420.outputAddr[ImR2y_YYW_BANK_0].ycc.addrCr
 			= (VOID*)D_IM_R2Y_IMG_MEM_OUT_YCC420_CR_P_ADDR_TOP;
 
 	if(isInit == 0) {

@@ -16,7 +16,7 @@
 #include "imcnr.h"
 #include "driver_common.h"
 // #if defined(CO_ACT_CLOCK) || defined(CO_ACT_ICLOCK) || defined(CO_ACT_HCLOCK) || defined(CO_ACT_PCLOCK)
-#include "dd_top.h"
+#include "ddtop.h"
 // #endif
 #include "dd_arm.h"
 #include "ddim_user_custom.h"
@@ -83,16 +83,16 @@ struct _ImCnrPrivate{
 
 
 #ifdef CO_ACT_CNRCLOCK
-static volatile UCHAR gIM_CNR_Clk_Ctrl_Cnt1 = 0;
-static volatile UCHAR gIM_CNR_Clk_Ctrl_Cnt2 = 0;
+static volatile UCHAR S_IM_CNR_CLK_CTRL_CNT1 = 0;
+static volatile UCHAR S_IM_CNR_CLK_CTRL_CNT2 = 0;
 #endif //CO_ACT_CNRCLOCK
 #ifdef CO_ACT_CNR_ICLK
-static volatile UCHAR gIM_CNR_Iclk_Ctrl_Cnt1 = 0;
-static volatile UCHAR gIM_CNR_Iclk_Ctrl_Cnt2 = 0;
+static volatile UCHAR S_IM_CNR_ICLK_CTRL_CNT1 = 0;
+static volatile UCHAR S_IM_CNR_ICLK_CTRL_CNT2 = 0;
 #endif //CO_ACT_CNR_ICLK
 #ifdef CO_ACT_CNR_PCLK
-static volatile UCHAR gIM_CNR_Pclk_Ctrl_Cnt1 = 0;
-static volatile UCHAR gIM_CNR_Pclk_Ctrl_Cnt2 = 0;
+static volatile UCHAR S_IM_CNR_PCLK_CTRL_CNT1 = 0;
+static volatile UCHAR S_IM_CNR_PCLK_CTRL_CNT2 = 0;
 #endif //CO_ACT_CNR_PCLK
 
 
@@ -148,9 +148,9 @@ static VOID imCnrOflSetSpde(const UCHAR ch, const UCHAR onoff)
 
 	IO_CNR(ch)->OFL_REG_RW.SPRICE.word = spric.word;
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_2 ) {
-		IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICE.word = spric.word;
-		IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICE.word = spric.word;
+	if( ch == ImCnr_CH_2 ) {
+		IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICE.word = spric.word;
+		IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICE.word = spric.word;
 	}
 #endif	// CO_DEBUG_ON_PC
 }
@@ -166,9 +166,9 @@ static VOID imCnrOtfSetSpde(const UCHAR ch, const UCHAR onoff)
 
 	IO_CNR(ch)->OTF_REG_RW.SPRICE.word = spric.word;
 #ifdef CO_DEBUG_ON_PC
-	if( ch == D_IM_CNR_CH_2 ) {
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICE.word = spric.word;
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICE.word = spric.word;
+	if( ch == ImCnr_CH_2 ) {
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICE.word = spric.word;
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICE.word = spric.word;
 	}
 #endif	// CO_DEBUG_ON_PC
 }
@@ -178,9 +178,9 @@ static VOID imCnrOflClearAxif( UCHAR ch)
 {
 #ifdef CO_DEBUG_ON_PC
 	IO_CNR(ch)->OFL_REG_RW.SPRICF.bit.__AXIF = 0;
-	if( ch == D_IM_CNR_CH_2 ) {
-		IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__AXIF = 0;
-		IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__AXIF = 0;
+	if( ch == ImCnr_CH_2 ) {
+		IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__AXIF = 0;
+		IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__AXIF = 0;
 	}
 #else //!CO_DEBUG_ON_PC
 	union io_cnr_ofl_reg_rw_spricf spricf;
@@ -197,9 +197,9 @@ static VOID imCnrOtfClearAxif( UCHAR ch)
 {
 #ifdef CO_DEBUG_ON_PC
 	IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__AXIF = 0;
-	if( ch == D_IM_CNR_CH_2 ){
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__AXIF = 0;
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__AXIF = 0;
+	if( ch == ImCnr_CH_2 ){
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__AXIF = 0;
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__AXIF = 0;
 	}
 #else //!CO_DEBUG_ON_PC
 	union io_cnr_otf_reg_rw_spricf spricf;
@@ -216,9 +216,9 @@ static VOID imCnrOtfClearDrtf( UCHAR ch)
 {
 #ifdef CO_DEBUG_ON_PC
 	IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__DRTF = 0;
-	if( ch == D_IM_CNR_CH_2 ){
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__DRTF = 0;
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__DRTF = 0;
+	if( ch == ImCnr_CH_2 ){
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__DRTF = 0;
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__DRTF = 0;
 	}
 #else //!CO_DEBUG_ON_PC
 	union io_cnr_otf_reg_rw_spricf spricf;
@@ -235,9 +235,9 @@ static VOID imCnrOflClearSpdf( UCHAR ch)
 {
 #ifdef CO_DEBUG_ON_PC
 	IO_CNR(ch)->OFL_REG_RW.SPRICF.bit.__SPDF = 0;
-	if( ch == D_IM_CNR_CH_2 ){
-		IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 0;
-		IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 0;
+	if( ch == ImCnr_CH_2 ){
+		IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRICF.bit.__SPDF = 0;
+		IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRICF.bit.__SPDF = 0;
 	}
 #else //!CO_DEBUG_ON_PC
 	union io_cnr_ofl_reg_rw_spricf spricf;
@@ -254,9 +254,9 @@ static VOID imCnrOtfClearSpdf( UCHAR ch)
 {
 #ifdef CO_DEBUG_ON_PC
 	IO_CNR(ch)->OTF_REG_RW.SPRICF.bit.__SPDF = 0;
-	if( ch == D_IM_CNR_CH_2 ){
-		IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 0;
-		IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 0;
+	if( ch == ImCnr_CH_2 ){
+		IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRICF.bit.__SPDF = 0;
+		IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRICF.bit.__SPDF = 0;
 	}
 #else //!CO_DEBUG_ON_PC
 	union io_cnr_otf_reg_rw_spricf spricf;
@@ -277,30 +277,30 @@ static VOID imCnrOnSprClk(const UCHAR ch)
 	intkey = Dd_ARM_DI();
 #endif // CO_ACT_CNR_ICLK || CO_ACT_CNRCLOCK
 
-	if (ch == D_IM_CNR_CH_0) {
+	if (ch == ImCnr_CH_0) {
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1CK_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1AX_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 	}
-	else if (ch == D_IM_CNR_CH_1) {
+	else if (ch == ImCnr_CH_1) {
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2CK_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2AX_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 	}
 	else {
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1CK_BIT );
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2CK_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1CK_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1AX_BIT );
-		Dd_Top_Start_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2AX_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), ~D_DD_TOP_CNR1AX_BIT );
+		Dd_Top_Start_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), ~D_DD_TOP_CNR2AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 	}
 
@@ -318,33 +318,33 @@ static VOID imCnrOffSprClk(const UCHAR ch)
 	intkey = Dd_ARM_DI();
 #endif // CO_ACT_CNR_ICLK || CO_ACT_CNRCLOCK
 
-	if (ch == D_IM_CNR_CH_0) {
+	if (ch == ImCnr_CH_0) {
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1AX_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1CK_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 	}
-	else if (ch == D_IM_CNR_CH_1) {
+	else if (ch == ImCnr_CH_1) {
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2AX_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2CK_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 	}
 	else {
 #ifdef CO_ACT_CNR_ICLK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1AX_BIT );
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Iclk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2AX_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1AX_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_ICLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2AX_BIT );
 #endif //CO_ACT_CNR_ICLK
 
 #ifdef CO_ACT_CNRCLOCK
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1CK_BIT );
-		Dd_Top_Stop_Clock( (UCHAR*)&gIM_CNR_Clk_Ctrl_Cnt2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2CK_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT1, &Dd_Top_Get_CLKSTOP11(), D_DD_TOP_CNR1CK_BIT );
+		Dd_Top_Stop_Clock( (UCHAR*)&S_IM_CNR_CLK_CTRL_CNT2, &Dd_Top_Get_CLKSTOP13(), D_DD_TOP_CNR2CK_BIT );
 #endif //CO_ACT_CNRCLOCK
 	}
 
@@ -363,7 +363,7 @@ static VOID imCnrOflIntHandler( UCHAR ch)
 	union io_cnr_ofl_reg_rw_spricf spricf;
 
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	sprice.word = IO_CNR(ch)->OFL_REG_RW.SPRICE.word;
 	spricf.word = IO_CNR(ch)->OFL_REG_RW.SPRICF.word;
@@ -373,20 +373,20 @@ static VOID imCnrOflIntHandler( UCHAR ch)
 		imCnrOflClearAxif(ch);
 
 		// Set End Flag
-		if (ch == D_IM_CNR_CH_0) {
-			flg = D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR;
+		if (ch == ImCnr_CH_0) {
+			flg = ImCnr_FLG_0_OFL_SPR_AXI_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_0_OFL_SPR_AXI_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_0_OFL_SPR_AXI_ERR );
 		}
 		else {
-			flg = D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR;
+			flg = ImCnr_FLG_1_OFL_SPR_AXI_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_1_OFL_SPR_AXI_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_1_OFL_SPR_AXI_ERR );
 		}
 
 		// User Function Check
-		if( gIM_CNR_OFL_CallBack_Func[ch] != NULL ) {
-			gIM_CNR_OFL_CallBack_Func[ch]( ch, flg, gIM_CNR_OFL_UserParam[ch] );
+		if( S_IM_CNR_OFL_CALLBACK_FUNC[ch] != NULL ) {
+			S_IM_CNR_OFL_CALLBACK_FUNC[ch]( ch, flg, S_IM_CNR_OFL_USERPARAM[ch] );
 		}
 	}
 
@@ -396,24 +396,24 @@ static VOID imCnrOflIntHandler( UCHAR ch)
 
 		imCnrOffSprClk(ch);
 
-		if (ch == D_IM_CNR_CH_0) {
-			flg = D_IM_CNR_FLG_0_OFL_SPR_END;
+		if (ch == ImCnr_CH_0) {
+			flg = ImCnr_FLG_0_OFL_SPR_END;
 		}
-		else {	// D_IM_CNR_CH_1
-			flg = D_IM_CNR_FLG_1_OFL_SPR_END;
+		else {	// ImCnr_CH_1
+			flg = ImCnr_FLG_1_OFL_SPR_END;
 		}
 
 		// Set End Flag
 		(VOID)DDIM_User_Set_Flg( FID_IM_CNR, flg );
 
 		// User Function Check
-		if( gIM_CNR_OFL_CallBack_Func[ch] != NULL ) {
-			gIM_CNR_OFL_CallBack_Func[ch]( ch, flg, gIM_CNR_OFL_UserParam[ch] );
+		if( S_IM_CNR_OFL_CALLBACK_FUNC[ch] != NULL ) {
+			S_IM_CNR_OFL_CALLBACK_FUNC[ch]( ch, flg, S_IM_CNR_OFL_USERPARAM[ch] );
 		}
 	}
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 }
 
 /*
@@ -426,7 +426,7 @@ static VOID imCnrOtfIntHandler( UCHAR ch)
 	union io_cnr_otf_reg_rw_spricf spricf;
 
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	sprice.word = IO_CNR(ch)->OTF_REG_RW.SPRICE.word;
 	spricf.word = IO_CNR(ch)->OTF_REG_RW.SPRICF.word;
@@ -436,20 +436,20 @@ static VOID imCnrOtfIntHandler( UCHAR ch)
 		imCnrOtfClearAxif(ch);
 
 		// Set End Flag
-		if (ch == D_IM_CNR_CH_0) {
-			flg = D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR;
+		if (ch == ImCnr_CH_0) {
+			flg = ImCnr_FLG_0_OTF_SPR_AXI_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_0_OTF_SPR_AXI_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_0_OTF_SPR_AXI_ERR );
 		}
 		else {
-			flg = D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR;
+			flg = ImCnr_FLG_1_OTF_SPR_AXI_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_1_OTF_SPR_AXI_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_1_OTF_SPR_AXI_ERR );
 		}
 
 		// User Function Check
-		if( gIM_CNR_OTF_CallBack_Func[ch] != NULL ) {
-			gIM_CNR_OTF_CallBack_Func[ch]( ch, flg, gIM_CNR_OTF_UserParam[ch] );
+		if( S_IM_CNR_OTF_CALLBACK_FUNC[ch] != NULL ) {
+			S_IM_CNR_OTF_CALLBACK_FUNC[ch]( ch, flg, S_IM_CNR_OTF_USERPARAM[ch] );
 		}
 	}
 
@@ -458,20 +458,20 @@ static VOID imCnrOtfIntHandler( UCHAR ch)
 		imCnrOtfClearDrtf(ch);
 
 		// Set End Flag
-		if (ch == D_IM_CNR_CH_0) {
-			flg = D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR;
+		if (ch == ImCnr_CH_0) {
+			flg = ImCnr_FLG_0_OTF_SPR_DRT_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_0_OTF_SPR_DRT_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_0_OTF_SPR_DRT_ERR );
 		}
 		else {
-			flg = D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR;
+			flg = ImCnr_FLG_1_OTF_SPR_DRT_ERR;
 
-			DDIM_User_Set_Flg( FID_IM_CNR, D_IM_CNR_FLG_1_OTF_SPR_DRT_ERR );
+			DDIM_User_Set_Flg( FID_IM_CNR, ImCnr_FLG_1_OTF_SPR_DRT_ERR );
 		}
 
 		// User Function Check
-		if( gIM_CNR_OTF_CallBack_Func[ch] != NULL ) {
-			gIM_CNR_OTF_CallBack_Func[ch]( ch, flg, gIM_CNR_OTF_UserParam[ch] );
+		if( S_IM_CNR_OTF_CALLBACK_FUNC[ch] != NULL ) {
+			S_IM_CNR_OTF_CALLBACK_FUNC[ch]( ch, flg, S_IM_CNR_OTF_USERPARAM[ch] );
 		}
 	}
 
@@ -482,37 +482,30 @@ static VOID imCnrOtfIntHandler( UCHAR ch)
 //		imCnrOffSprClk(ch);
 
 		// Update latest address
-		gIM_CNR_Latest_Mng[ch].addr	= gIM_CNR_Output_Mng[ch].output_addr[gIM_CNR_Latest_Mng[ch].bank_area];
+		S_IM_CNR_LATEST_MNG[ch].addr	= S_IM_CNR_OUTPUT_MNG[ch].outputAddr[S_IM_CNR_LATEST_MNG[ch].bankArea];
 		// Update output address
-		++gIM_CNR_Latest_Mng[ch].bank_area;
-		gIM_CNR_Latest_Mng[ch].bank_area	= ADDR_BNK_LIMIT( gIM_CNR_Latest_Mng[ch].bank_area, gIM_CNR_Output_Mng[ch].use_bank_num );
+		++S_IM_CNR_LATEST_MNG[ch].bankArea;
+		S_IM_CNR_LATEST_MNG[ch].bankArea	= ImCnr_ADDR_BNK_LIMIT( S_IM_CNR_LATEST_MNG[ch].bankArea, S_IM_CNR_OUTPUT_MNG[ch].useBankNum );
 
-		if (ch == D_IM_CNR_CH_0) {
-			flg = D_IM_CNR_FLG_0_OTF_SPR_END;
+		if (ch == ImCnr_CH_0) {
+			flg = ImCnr_FLG_0_OTF_SPR_END;
 		}
-		else{	// D_IM_CNR_CH_1
-			flg = D_IM_CNR_FLG_1_OTF_SPR_END;
+		else{	// ImCnr_CH_1
+			flg = ImCnr_FLG_1_OTF_SPR_END;
 		}
 
 		// Set End Flag
 		(VOID)DDIM_User_Set_Flg( FID_IM_CNR, flg );
 
 		// User Function Check
-		if( gIM_CNR_OTF_CallBack_Func[ch] != NULL ) {
-			gIM_CNR_OTF_CallBack_Func[ch]( ch, flg, gIM_CNR_OTF_UserParam[ch] );
+		if( S_IM_CNR_OTF_CALLBACK_FUNC[ch] != NULL ) {
+			S_IM_CNR_OTF_CALLBACK_FUNC[ch]( ch, flg, S_IM_CNR_OTF_USERPARAM[ch] );
 		}
 	}
 
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 }
-
-#ifdef CO_DDIM_UTILITY_USE
-//---------------------------- utility section ---------------------------
-// Nothing Special
-//---------------------------- colabo section ----------------------------
-#endif
-
 
 /*----------------------------------------------------------------------*/
 /* Global Function														*/
@@ -525,18 +518,18 @@ Set software reset and operating mode for Off Line
 INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_ofl_init() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	imCnrOnSprClk(ch);
 	im_cnrone_on_pclk(ch);
 
-	if (ch == D_IM_CNR_CH_0) {
+	if (ch == ImCnr_CH_0) {
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -547,19 +540,19 @@ INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
-	else if (ch == D_IM_CNR_CH_1) {
+	else if (ch == ImCnr_CH_1) {
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -570,19 +563,19 @@ INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
 	else {
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -596,7 +589,7 @@ INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OFL_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
@@ -606,7 +599,7 @@ INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
 
 	imCnrOflClearSpdf(ch);	// Interrupt clear
@@ -615,7 +608,7 @@ INT32 im_cnr_ofl_init(ImCnr *self, UCHAR ch)
 
 	im_cnrone_off_pclk(ch);
 	imCnrOffSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	return D_DDIM_OK;
 }
@@ -626,18 +619,18 @@ Set software reset and operating mode for Off Line
 INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_otf_init() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif	// CO_PARAM_CHECK
 	imCnrOnSprClk(ch);
 	im_cnrone_on_pclk(ch);
 
-	if (ch == D_IM_CNR_CH_0) {
+	if (ch == ImCnr_CH_0) {
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -648,19 +641,19 @@ INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP11();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
-	else if (ch == D_IM_CNR_CH_1) {
+	else if (ch == ImCnr_CH_1) {
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -671,19 +664,19 @@ INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
 	else {
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 1;	// Software reset assert
 
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		// CNRCLK        = MAX 252.0MHz		MIN 31.5MHz
 		// APB clock     = MAX  66.7MHz		MIN 20.8MHz
@@ -697,7 +690,7 @@ INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 
 		IO_CNR(ch)->OTF_REG_RW.SPRSR.bit.SR = 0;	// Software reset de-assert
 
@@ -707,7 +700,7 @@ INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
 		Dd_Top_Get_CLKSTOP13();	/* pgr0695 */
-		Im_CNR_Dsb();
+		ImCnr_DSB();
 	}
 
 	imCnrOtfClearSpdf(ch);	// Interrupt clear
@@ -717,16 +710,16 @@ INT32 im_cnr_otf_init(ImCnr *self, UCHAR ch)
 
 	im_cnrone_off_pclk(ch);
 	imCnrOffSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	// Initialize of Address management information
-	if( ch == D_IM_CNR_CH_2 ){
-		memset( (VOID*)&gIM_CNR_Output_Mng[D_IM_CNR_CH_0], 0, sizeof(T_IM_CNR_OUTPUT_MNG) * 2 );
-		memset( (VOID*)&gIM_CNR_Latest_Mng[D_IM_CNR_CH_0], 0, sizeof(T_IM_CNR_LATEST_MNG) * 2 );
+	if( ch == ImCnr_CH_2 ){
+		memset( (VOID*)&S_IM_CNR_OUTPUT_MNG[ImCnr_CH_0], 0, sizeof(ImCnrOutputMng) * 2 );
+		memset( (VOID*)&S_IM_CNR_LATEST_MNG[ImCnr_CH_0], 0, sizeof(ImCnrLatestMng) * 2 );
 	}
 	else{
-		memset( (VOID*)&gIM_CNR_Output_Mng[ch], 0, sizeof(T_IM_CNR_OUTPUT_MNG) );
-		memset( (VOID*)&gIM_CNR_Latest_Mng[ch], 0, sizeof(T_IM_CNR_LATEST_MNG) );
+		memset( (VOID*)&S_IM_CNR_OUTPUT_MNG[ch], 0, sizeof(ImCnrOutputMng) );
+		memset( (VOID*)&S_IM_CNR_LATEST_MNG[ch], 0, sizeof(ImCnrLatestMng) );
 	}
 
 	return D_DDIM_OK;
@@ -738,26 +731,26 @@ CNR(OFL) Stop
 INT32 im_cnr_ofl_stop(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_ofl_stop() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	if( IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG == 3 ) {
-		Im_CNR_OFL_Disable(ch);
+		ImCnr_OFL_DISABLE(ch);
 #ifdef CO_DEBUG_ON_PC
-		if( ch == D_IM_CNR_CH_0 ){
+		if( ch == ImCnr_CH_0 ){
 			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
-		else if( ch == D_IM_CNR_CH_1 ){
+		else if( ch == ImCnr_CH_1 ){
 			IO_CNR(ch)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
 		else{
-			IO_CNR(D_IM_CNR_CH_0)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
-			IO_CNR(D_IM_CNR_CH_1)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
+			IO_CNR(ImCnr_CH_0)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
+			IO_CNR(ImCnr_CH_1)->OFL_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
 #endif //CO_DEBUG_ON_PC
 	}
@@ -767,7 +760,7 @@ INT32 im_cnr_ofl_stop(ImCnr *self, UCHAR ch)
 
 	imCnrOffSprClk(ch);
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 //	Ddim_Print("I: [SPR] func disable.\n");
 
 	return D_DDIM_OK;
@@ -779,26 +772,26 @@ CNR(OTF) Stop
 INT32 im_cnr_otf_stop(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_otf_stop() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_cnrone_on_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
 	if( IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG == 3 ) {
-		Im_CNR_OTF_Disable(ch);
+		ImCnr_OTF_DISABLE(ch);
 #ifdef CO_DEBUG_ON_PC
-		if( ch == D_IM_CNR_CH_0 ){
+		if( ch == ImCnr_CH_0 ){
 			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
-		else if( ch == D_IM_CNR_CH_1 ){
+		else if( ch == ImCnr_CH_1 ){
 			IO_CNR(ch)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
 		else{
-			IO_CNR(D_IM_CNR_CH_0)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
-			IO_CNR(D_IM_CNR_CH_1)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
+			IO_CNR(ImCnr_CH_0)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
+			IO_CNR(ImCnr_CH_1)->OTF_REG_RW.SPRTRG.bit.SPRTRG = 2;
 		}
 #endif //CO_DEBUG_ON_PC
 	}
@@ -808,7 +801,7 @@ INT32 im_cnr_otf_stop(ImCnr *self, UCHAR ch)
 
 	imCnrOffSprClk(ch);
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 //	Ddim_Print("I: [SPR] func disable.\n");
 
 	return D_DDIM_OK;
@@ -822,22 +815,22 @@ INT32 im_cnr_ofl_close(ImCnr *self, UCHAR ch)
 	DDIM_USER_ER ercd;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_ofl_close() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	imCnrOffSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
-	if (ch == D_IM_CNR_CH_2) {
-		for( UCHAR loop = D_IM_CNR_CH_0; loop <= D_IM_CNR_CH_1; loop++ ){
+	if (ch == ImCnr_CH_2) {
+		for( UCHAR loop = ImCnr_CH_0; loop <= ImCnr_CH_1; loop++ ){
 			ercd = DDIM_User_Sig_Sem( SID_IM_CNR_OFL(loop) );				// sig_sem()
 
 			if( D_DDIM_USER_E_OK != ercd ) {
 				// SPR processing error
 				Ddim_Print(("I:im_cnr_ofl_close() Error.\n"));
-				return D_IM_CNR_SEM_NG;
+				return ImCnr_SEM_NG;
 			}
 		}
 	}
@@ -847,7 +840,7 @@ INT32 im_cnr_ofl_close(ImCnr *self, UCHAR ch)
 		if( D_DDIM_USER_E_OK != ercd ) {
 			// SPR processing error
 			Ddim_Print(("I:im_cnr_ofl_close() Error.\n"));
-			return D_IM_CNR_SEM_NG;
+			return ImCnr_SEM_NG;
 		}
 	}
 	return D_DDIM_OK;
@@ -861,22 +854,22 @@ INT32 im_cnr_otf_close(ImCnr *self, UCHAR ch)
 	DDIM_USER_ER ercd;
 
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_otf_close() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	imCnrOffSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
-	if (ch == D_IM_CNR_CH_2) {
-		for( UCHAR loop = D_IM_CNR_CH_0; loop <= D_IM_CNR_CH_1; loop++ ){
+	if (ch == ImCnr_CH_2) {
+		for( UCHAR loop = ImCnr_CH_0; loop <= ImCnr_CH_1; loop++ ){
 			ercd = DDIM_User_Sig_Sem( SID_IM_CNR_OTF(loop) );				// sig_sem()
 
 			if( D_DDIM_USER_E_OK != ercd ) {
 				// SPR processing error
 				Ddim_Print(("I:im_cnr_otf_close() Error.\n"));
-				return D_IM_CNR_SEM_NG;
+				return ImCnr_SEM_NG;
 			}
 		}
 	}
@@ -886,7 +879,7 @@ INT32 im_cnr_otf_close(ImCnr *self, UCHAR ch)
 		if( D_DDIM_USER_E_OK != ercd ) {
 			// SPR processing error
 			Ddim_Print(("I:im_cnr_otf_close() Error.\n"));
-			return D_IM_CNR_SEM_NG;
+			return ImCnr_SEM_NG;
 		}
 	}
 	return D_DDIM_OK;
@@ -898,20 +891,20 @@ CNR(OFL) Reset
 INT32 im_cnr_ofl_reset(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_ofl_reset() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_cnrone_on_pclk(ch);
 	imCnrOnSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
-	Im_CNR_OFL_Softreset(ch);
+	ImCnr_OFL_SOFTRESET(ch);
 
 	imCnrOffSprClk(ch);
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 //	Ddim_Print("I: [SPR] func soft reset.\n");
 
 	return D_DDIM_OK;
@@ -923,41 +916,41 @@ CNR(OTF) Reset
 INT32 im_cnr_otf_reset(ImCnr *self, UCHAR ch)
 {
 #ifdef CO_PARAM_CHECK
-	if (ch >= D_IM_CNR_CH_NUM_MAX) {
+	if (ch >= ImCnr_CH_NUM_MAX) {
 		Ddim_Assertion(("im_cnr_otf_reset() error. input channel error : %d\n", ch));
-		return D_IM_CNR_INPUT_PARAM_ERROR;
+		return ImCnr_INPUT_PARAM_ERROR;
 	}
 #endif
 	im_cnrone_on_pclk(ch);
 	imCnrOnSprClk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 
-	Im_CNR_OTF_Softreset(ch);
+	ImCnr_OTF_SOFTRESET(ch);
 
 	imCnrOffSprClk(ch);
 	im_cnrone_off_pclk(ch);
-	Im_CNR_Dsb();
+	ImCnr_DSB();
 //	Ddim_Print("I: [SPR] func soft reset.\n");
 
 	return D_DDIM_OK;
 }
 
-VOID im_cnr_0_int_handler( VOID)
+VOID im_cnr_0_int_handler( ImCnr *self)
 {
-	if( gim_cnr_mode[D_IM_CNR_CH_0] == D_IM_CNR_MODE_OFL ){
-		imCnrOflIntHandler( D_IM_CNR_CH_0 );
+	if( S_IM_CNR_MODE[ImCnr_CH_0] == ImCnr_MODE_OFL ){
+		imCnrOflIntHandler( ImCnr_CH_0 );
 	}
 	else{
-		imCnrOtfIntHandler( D_IM_CNR_CH_0 );
+		imCnrOtfIntHandler( ImCnr_CH_0 );
 	}
 }
 
-VOID im_cnr_1_int_handler( VOID )
+VOID im_cnr_1_int_handler( ImCnr *self )
 {
-	if (gim_cnr_mode[D_IM_CNR_CH_1] == D_IM_CNR_MODE_OFL) {
-		imCnrOflIntHandler( D_IM_CNR_CH_1);
+	if (S_IM_CNR_MODE[ImCnr_CH_1] == ImCnr_MODE_OFL) {
+		imCnrOflIntHandler( ImCnr_CH_1);
 	} else {
-		imCnrOtfIntHandler( D_IM_CNR_CH_1);
+		imCnrOtfIntHandler( ImCnr_CH_1);
 	}
 }
 
